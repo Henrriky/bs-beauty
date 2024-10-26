@@ -21,4 +21,51 @@ model Customer {
   phone     String   @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  role      Role     @default(CUSTOMER)
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  category    String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+}
+
+model Employee {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  shifts       Shift[]
+  role         Role     @default(EMPLOYEE)
+}
+
+model Shift {
+  id         String   @id @default(uuid())
+  weekDay    WeekDays @map("week_day")
+  isBusy     Boolean  @default(false) @map("is_busy")
+  shiftStart DateTime @map("shift_start")
+  shiftEnd   DateTime @map("shift_end")
+  Employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId String   @map("employee_id")
+}
+
+enum WeekDays {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+enum Role {
+  MANAGER
+  CUSTOMER
+  EMPLOYEE
 }
