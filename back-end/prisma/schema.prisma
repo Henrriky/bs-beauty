@@ -24,11 +24,11 @@ model Customer {
   birthdate    DateTime
   email        String         @unique
   phone        String         @unique
+  notification Notification[]
+  appointments Appointment[]
+  role         Role           @default(CUSTOMER)
   createdAt    DateTime       @default(now()) @map("created_at")
   updatedAt    DateTime       @updatedAt @map("updated_at")
-  role         Role           @default(CUSTOMER)
-  appointments Appointment[]
-  notification Notification[]
 }
 
 model Appointment {
@@ -37,20 +37,22 @@ model Appointment {
   status             Status               @default(PENDING)
   createdAt          DateTime             @default(now()) @map("created_at")
   updatedAt          DateTime             @updatedAt @map("updated_at")
-  customer           Customer             @relation(fields: [customerId], references: [id])
   customerId         String               @map("customer_id")
   appointmentService AppointmentService[]
+
+  customer Customer @relation(fields: [customerId], references: [id])
 }
 
 model AppointmentService {
-  id              String      @id @default(uuid())
+  id              String   @id @default(uuid())
   observation     String?
-  status          Status      @default(PENDING)
-  appointmentDate DateTime    @map("appointment_date")
-  appointment     Appointment @relation(fields: [appointmentId], references: [id])
+  status          Status   @default(PENDING)
+  appointmentDate DateTime @map("appointment_date")
   appointmentId   String
-  service         Service     @relation(fields: [serviceId], references: [id])
   serviceId       String
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  service     Service     @relation(fields: [serviceId], references: [id])
 }
 
 model Service {
@@ -58,22 +60,23 @@ model Service {
   name               String
   description        String?
   category           String
-  createdAt          DateTime             @default(now()) @map("created_at")
-  updatedAt          DateTime             @updatedAt @map("updated_at")
   appointmentService AppointmentService[]
   offers             Offer[]
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
 }
 
 model Offer {
   id            String   @id @default(uuid())
   estimatedTime Int      @map("estimated_time")
   price         Decimal  @db.Decimal(10, 2)
+  serviceId     String   @map("service_id")
+  employeeId    String   @map("employee_id")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
-  service       Service  @relation(fields: [serviceId], references: [id])
-  serviceId     String   @map("service_id")
-  employee      Employee @relation(fields: [employeeId], references: [id])
-  employeeId    String   @map("employee_id")
+
+  service  Service  @relation(fields: [serviceId], references: [id])
+  employee Employee @relation(fields: [employeeId], references: [id])
 }
 
 model Employee {
@@ -81,12 +84,12 @@ model Employee {
   name         String
   email        String         @unique
   passwordHash String         @map("password_hash")
-  createdAt    DateTime       @default(now()) @map("created_at")
-  updatedAt    DateTime       @updatedAt @map("updated_at")
-  shifts       Shift[]
   role         Role           @default(EMPLOYEE)
+  shifts       Shift[]
   offers       Offer[]
   notification Notification[]
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
 }
 
 model Shift {
@@ -95,20 +98,22 @@ model Shift {
   isBusy     Boolean  @default(false) @map("is_busy")
   shiftStart DateTime @map("shift_start")
   shiftEnd   DateTime @map("shift_end")
-  employee   Employee @relation(fields: [employeeId], references: [id])
   employeeId String   @map("employee_id")
+
+  employee Employee @relation(fields: [employeeId], references: [id])
 }
 
 model Notification {
   id         String    @id @default(uuid())
   title      String
   content    String
-  createdAt  DateTime  @default(now()) @map("created_at")
-  readAt     DateTime? @map("read_at")
-  employee   Employee? @relation(fields: [employeeId], references: [id])
-  customer   Customer? @relation(fields: [customerId], references: [id])
   employeeId String?
   customerId String?
+  readAt     DateTime? @map("read_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  employee Employee? @relation(fields: [employeeId], references: [id])
+  customer Customer? @relation(fields: [customerId], references: [id])
 }
 
 enum WeekDays {
