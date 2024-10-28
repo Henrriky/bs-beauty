@@ -8,21 +8,27 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  theme    = "forest"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model Customer {
-  id           String        @id @default(uuid())
+  id           String         @id @default(uuid())
   name         String
   birthdate    DateTime
-  email        String        @unique
-  phone        String        @unique
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
-  role         Role          @default(CUSTOMER)
+  email        String         @unique
+  phone        String         @unique
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  role         Role           @default(CUSTOMER)
   appointments Appointment[]
+  notification Notification[]
 }
 
 model Appointment {
@@ -55,17 +61,32 @@ model Service {
   createdAt          DateTime             @default(now()) @map("created_at")
   updatedAt          DateTime             @updatedAt @map("updated_at")
   appointmentService AppointmentService[]
+  offers             Offer[]
+}
+
+model Offer {
+  id            String   @id @default(uuid())
+  estimatedTime Int      @map("estimated_time")
+  price         Decimal  @db.Decimal(10, 2)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  service       Service  @relation(fields: [serviceId], references: [id])
+  serviceId     String   @map("service_id")
+  employee      Employee @relation(fields: [employeeId], references: [id])
+  employeeId    String   @map("employee_id")
 }
 
 model Employee {
-  id           String   @id @default(uuid())
+  id           String         @id @default(uuid())
   name         String
-  email        String   @unique
-  passwordHash String   @map("password_hash")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  email        String         @unique
+  passwordHash String         @map("password_hash")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
   shifts       Shift[]
-  role         Role     @default(EMPLOYEE)
+  role         Role           @default(EMPLOYEE)
+  offers       Offer[]
+  notification Notification[]
 }
 
 model Shift {
@@ -74,8 +95,20 @@ model Shift {
   isBusy     Boolean  @default(false) @map("is_busy")
   shiftStart DateTime @map("shift_start")
   shiftEnd   DateTime @map("shift_end")
-  Employee   Employee @relation(fields: [employeeId], references: [id])
+  employee   Employee @relation(fields: [employeeId], references: [id])
   employeeId String   @map("employee_id")
+}
+
+model Notification {
+  id         String    @id @default(uuid())
+  title      String
+  content    String
+  createdAt  DateTime  @default(now()) @map("created_at")
+  readAt     DateTime? @map("read_at")
+  employee   Employee? @relation(fields: [employeeId], references: [id])
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  employeeId String?
+  customerId String?
 }
 
 enum WeekDays {
