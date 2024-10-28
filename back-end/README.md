@@ -11,7 +11,8 @@
 ## Execução do projeto
 
 - Iniciar o banco de dados do docker compose através do comando `docker compose up -d`
-- Com o banco de dados executando, aplicar as migrations do prisma com o comando: `npx prisma migrate dev`
+- Com o banco de dados executando, aplicar as migrations do prisma com o seguinte comando: `npx prisma migrate dev`
+- Para iniciar o projeto em modo desenvolvimento: `npm run start:dev`
 
 ## Recomendações para VSCODE
 

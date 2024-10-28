@@ -29,6 +29,8 @@ model Customer {
   role         Role           @default(CUSTOMER)
   createdAt    DateTime       @default(now()) @map("created_at")
   updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@map("customer")
 }
 
 model Appointment {
@@ -41,6 +43,8 @@ model Appointment {
   appointmentService AppointmentService[]
 
   customer Customer @relation(fields: [customerId], references: [id])
+
+  @@map("appointment")
 }
 
 model AppointmentService {
@@ -53,6 +57,8 @@ model AppointmentService {
 
   appointment Appointment @relation(fields: [appointmentId], references: [id])
   service     Service     @relation(fields: [serviceId], references: [id])
+
+  @@map("appointment_service")
 }
 
 model Service {
@@ -64,6 +70,8 @@ model Service {
   offers             Offer[]
   createdAt          DateTime             @default(now()) @map("created_at")
   updatedAt          DateTime             @updatedAt @map("updated_at")
+
+  @@map("service")
 }
 
 model Offer {
@@ -77,6 +85,8 @@ model Offer {
 
   service  Service  @relation(fields: [serviceId], references: [id])
   employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("offer")
 }
 
 model Employee {
@@ -90,6 +100,8 @@ model Employee {
   notification Notification[]
   createdAt    DateTime       @default(now()) @map("created_at")
   updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@map("employee")
 }
 
 model Shift {
@@ -101,6 +113,8 @@ model Shift {
   employeeId String   @map("employee_id")
 
   employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("shift")
 }
 
 model Notification {
@@ -114,6 +128,8 @@ model Notification {
 
   employee Employee? @relation(fields: [employeeId], references: [id])
   customer Customer? @relation(fields: [customerId], references: [id])
+
+  @@map("notification")
 }
 
 enum WeekDays {
