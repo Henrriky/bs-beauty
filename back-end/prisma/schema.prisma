@@ -52,8 +52,8 @@ model AppointmentService {
   observation     String?
   status          Status   @default(PENDING)
   appointmentDate DateTime @map("appointment_date")
-  appointmentId   String
-  serviceId       String
+  appointmentId   String   @map("appointment_id")
+  serviceId       String   @map("service_id")
 
   appointment Appointment @relation(fields: [appointmentId], references: [id])
   service     Service     @relation(fields: [serviceId], references: [id])
@@ -123,8 +123,8 @@ model Notification {
   id         String    @id @default(uuid())
   title      String
   content    String
-  employeeId String?
-  customerId String?
+  employeeId String?   @map("employee_id")
+  customerId String?   @map("customer_id")
   readAt     DateTime? @map("read_at")
   createdAt  DateTime  @default(now()) @map("created_at")
 
