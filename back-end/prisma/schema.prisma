@@ -94,7 +94,7 @@ model Employee {
   name         String
   email        String         @unique
   passwordHash String         @map("password_hash")
-  socialMedia  Json?
+  socialMedia  Json?          @map("social_media")
   contact      String?
   role         Role           @default(EMPLOYEE)
   shifts       Shift[]
