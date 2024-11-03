@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  theme    = "forest"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id           String         @id @default(uuid())
+  name         String
+  birthdate    DateTime
+  email        String         @unique
+  phone        String         @unique
+  notification Notification[]
+  appointments Appointment[]
+  role         Role           @default(CUSTOMER)
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@map("customer")
+}
+
+model Appointment {
+  id                 String               @id @default(uuid())
+  observation        String?
+  status             Status               @default(PENDING)
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+  customerId         String               @map("customer_id")
+  appointmentService AppointmentService[]
+
+  customer Customer @relation(fields: [customerId], references: [id])
+
+  @@map("appointment")
+}
+
+model AppointmentService {
+  id              String   @id @default(uuid())
+  observation     String?
+  status          Status   @default(PENDING)
+  appointmentDate DateTime @map("appointment_date")
+  appointmentId   String   @map("appointment_id")
+  serviceId       String   @map("service_id")
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  service     Service     @relation(fields: [serviceId], references: [id])
+
+  @@map("appointment_service")
+}
+
+model Service {
+  id                 String               @id @default(uuid())
+  name               String
+  description        String?
+  category           String
+  appointmentService AppointmentService[]
+  offers             Offer[]
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+
+  @@map("service")
+}
+
+model Offer {
+  id            String   @id @default(uuid())
+  estimatedTime Int      @map("estimated_time")
+  price         Decimal  @db.Decimal(10, 2)
+  serviceId     String   @map("service_id")
+  employeeId    String   @map("employee_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  service  Service  @relation(fields: [serviceId], references: [id])
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("offer")
+}
+
+model Employee {
+  id           String         @id @default(uuid())
+  name         String
+  email        String         @unique
+  passwordHash String         @map("password_hash")
+  socialMedia  Json?          @map("social_media")
+  contact      String?
+  role         Role           @default(EMPLOYEE)
+  shifts       Shift[]
+  offers       Offer[]
+  notification Notification[]
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@map("employee")
+}
+
+model Shift {
+  id         String   @id @default(uuid())
+  weekDay    WeekDays @map("week_day")
+  isBusy     Boolean  @default(false) @map("is_busy")
+  shiftStart DateTime @map("shift_start")
+  shiftEnd   DateTime @map("shift_end")
+  employeeId String   @map("employee_id")
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("shift")
+}
+
+model Notification {
+  id         String    @id @default(uuid())
+  title      String
+  content    String
+  employeeId String?   @map("employee_id")
+  customerId String?   @map("customer_id")
+  readAt     DateTime? @map("read_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  employee Employee? @relation(fields: [employeeId], references: [id])
+  customer Customer? @relation(fields: [customerId], references: [id])
+
+  @@map("notification")
+}
+
+enum WeekDays {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+enum Role {
+  MANAGER
+  CUSTOMER
+  EMPLOYEE
+}
+
+enum Status {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  RESCHEDULED
+  FINISHED
+  NO_SHOW
+}
