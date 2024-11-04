@@ -1,8 +1,8 @@
-import { InMemoryServiceRepository } from '../repository/in-memory-service.repository'
+import { PrismaServiceRepository } from '../repository/prisma/prisma-service.repository'
 import { FetchServicesUseCase } from '../services/fetch-services.use-case'
 
 function makeFetchServiceUseCaseFactory () {
-  const repository = new InMemoryServiceRepository()
+  const repository = new PrismaServiceRepository()
   const usecase = new FetchServicesUseCase(
     repository
   )

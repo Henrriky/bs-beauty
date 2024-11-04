@@ -3,7 +3,6 @@ import cors from 'cors'
 import { appRoutes } from './router'
 
 const app = express()
-
 app.use(cors({
   origin: '*'
 }))

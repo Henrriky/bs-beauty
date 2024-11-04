@@ -1,11 +1,15 @@
-import { type Service } from '../entities/service'
+import { type Service } from '@prisma/client'
 import { type ServiceRepository } from './protocols/service.repository'
 
 class InMemoryServiceRepository implements ServiceRepository {
   private readonly items: Service[] = [
     {
+      id: '123123',
       name: 'Serviço 1',
-      category: 'Unha'
+      category: 'Unha',
+      description: 'Serviço de unha',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
   ]
 

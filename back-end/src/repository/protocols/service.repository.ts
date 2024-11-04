@@ -1,4 +1,4 @@
-import { type Service } from '../../entities/service'
+import { type Service } from '@prisma/client'
 
 interface ServiceRepository {
   fetchAll: () => Promise<Service[]>
