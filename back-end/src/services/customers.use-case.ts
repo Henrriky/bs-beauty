@@ -14,8 +14,8 @@ class CustomersUseCase {
     return { customers }
   }
 
-  public async executeFindById (id: string): Promise<Customer | null> {
-    const customer = await this.customerRepository.findById(id)
+  public async executeFindById (customerId: string): Promise<Customer | null> {
+    const customer = await this.customerRepository.findById(customerId)
 
     this.validateCustomerExistenceInRepository(customer)
 
