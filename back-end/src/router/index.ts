@@ -6,7 +6,7 @@ import { employeeRoutes } from './routes/employees.routes'
 const appRoutes = Router()
 
 appRoutes.use('/employees', employeeRoutes)
-appRoutes.use(serviceRoutes)
+appRoutes.use('/services', serviceRoutes)
 appRoutes.use('/customers', customerRoutes)
 
 export { appRoutes }
