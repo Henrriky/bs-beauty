@@ -9,6 +9,7 @@ class CustomersController {
     try {
       const useCase = makeCustomersUseCaseFactory()
       const { customers } = await useCase.executeFindAll()
+
       res.send({ customers })
     } catch (error) {
       next(error)
@@ -20,6 +21,7 @@ class CustomersController {
       const customerId = req.params.id
       const useCase = makeCustomersUseCaseFactory()
       const customer = await useCase.executeFindById(customerId)
+
       res.send(customer)
     } catch (error) {
       next(error)
@@ -31,6 +33,7 @@ class CustomersController {
       const customerToCreate: Prisma.CustomerCreateInput = req.body
       const useCase = makeCustomersUseCaseFactory()
       const customer = await useCase.executeCreate(customerToCreate)
+
       res.send(customer)
     } catch (error) {
       next(error)
@@ -43,6 +46,7 @@ class CustomersController {
       const customerId: string = req.params.id
       const useCase = makeCustomersUseCaseFactory()
       const customerUpdated = await useCase.executeUpdate(customerId, customerToUpdate)
+
       res.send(customerUpdated)
     } catch (error) {
       next(error)
@@ -54,6 +58,7 @@ class CustomersController {
       const customerId = req.params.id
       const useCase = makeCustomersUseCaseFactory()
       const customerDeleted = await useCase.executeDelete(customerId)
+
       res.send(customerDeleted)
     } catch (error) {
       next(error)

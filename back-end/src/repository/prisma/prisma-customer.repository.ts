@@ -20,6 +20,7 @@ class PrismaCustomerRepository implements CustomerRepository {
     const customer = await prismaClient.customer.findFirst({
       where: { OR: [{ email }, { phone }] }
     })
+
     return customer
   }
 
