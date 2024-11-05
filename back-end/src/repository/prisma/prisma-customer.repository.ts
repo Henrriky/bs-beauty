@@ -16,6 +16,13 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
+  public async findByEmailOrPhone (email: string, phone: string) {
+    const customer = await prismaClient.customer.findFirst({
+      where: { OR: [{ email }, { phone }] }
+    })
+    return customer
+  }
+
   public async create (newCustomer: Prisma.CustomerCreateInput) {
     const customer = await prismaClient.customer.create({
       data: { ...newCustomer }

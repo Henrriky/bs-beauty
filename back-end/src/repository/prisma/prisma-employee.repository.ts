@@ -16,6 +16,13 @@ class PrismaEmployeeRepository implements EmployeeRepository {
     return employee
   }
 
+  public async findByEmail (email: string) {
+    const employee = await prismaClient.employee.findFirst({
+      where: { email }
+    })
+    return employee
+  }
+
   public async create (newEmployee: Prisma.EmployeeCreateInput) {
     const employee = await prismaClient.employee.create({
       data: { ...newEmployee }
