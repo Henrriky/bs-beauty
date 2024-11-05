@@ -1,12 +1,12 @@
 import { Router } from 'express'
-import { FetchServicesController } from '../../controllers/fetch-services.controller'
+import { ServicesController } from '../../controllers/services.controller'
 
 const serviceRoutes = Router()
 
-serviceRoutes.use((req, res, next) => {
-  console.log('REQUEST PARA O FetchServicesController, informação: ')
-  next()
-})
-serviceRoutes.get('/services', FetchServicesController.handle)
+serviceRoutes.get('/services', ServicesController.handleFindAll)
+serviceRoutes.get('/services/:id', ServicesController.handleFindById)
+serviceRoutes.post('/services', ServicesController.handleCreate)
+serviceRoutes.put('/services/:id', ServicesController.handleUpdate)
+serviceRoutes.delete('/services/:id', ServicesController.handleDelete)
 
 export { serviceRoutes }
