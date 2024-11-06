@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
 import { z } from 'zod'
-import { formatValidationErrors } from '../utils/formatting/format-validation-errors.formatting.util'
+import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
 
 const socialMediaSchema = z.object({
   name: z.string(),

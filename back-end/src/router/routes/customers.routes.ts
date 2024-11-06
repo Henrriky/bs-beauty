@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { CustomersController } from '../../controllers/customers.controller'
 import { errorHandlerMiddleware } from '../../middlewares/error-handler.middleware'
-import { validateCreateCustomer } from '../../middlewares/validate-create-customer.middleware'
-import { validateUpdateCustomer } from '../../middlewares/validate-update-customer.middleware'
+import { validateCreateCustomer } from '../../middlewares/data-validation/create/validate-create-customer.middleware'
+import { validateUpdateCustomer } from '../../middlewares/data-validation/update/validate-update-customer.middleware'
 
 const customerRoutes = Router()
 
