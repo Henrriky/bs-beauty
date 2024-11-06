@@ -1,5 +1,6 @@
 import { type Service, type Prisma } from '@prisma/client'
 import { type ServiceRepository } from '../repository/protocols/service.repository'
+import { CustomError } from '../utils/errors/custom.error.util'
 
 interface ServicesOutput {
   services: Service[]
@@ -10,12 +11,14 @@ class ServicesUseCase {
 
   public async executeFindAll (): Promise<ServicesOutput> {
     const services = await this.serviceRepository.findAll()
-
     return { services }
   }
 
   public async executeFindById (serviceId: string): Promise<Service | null> {
     const service = await this.serviceRepository.findById(serviceId)
+    if (service == null) {
+      throw new CustomError('Bad Request', 400, 'Specified service not found')
+    }
     return service
   }
 
@@ -25,15 +28,22 @@ class ServicesUseCase {
   }
 
   public async executeUpdate (serviceId: string, updatedService: Prisma.ServiceUpdateInput) {
-    // verify existence
+    await this.verifyExistence(serviceId)
     const service = await this.serviceRepository.update(serviceId, updatedService)
     return service
   }
 
   public async executeDelete (serviceId: string) {
-    // verify existence
+    await this.verifyExistence(serviceId)
     const service = await this.serviceRepository.delete(serviceId)
     return service
+  }
+
+  private async verifyExistence (id: string) {
+    const verifiedService = await this.serviceRepository.findById(id)
+    if (verifiedService == null) {
+      throw new CustomError('Not found', 400, 'Service doesn\'t exist')
+    }
   }
 }
 

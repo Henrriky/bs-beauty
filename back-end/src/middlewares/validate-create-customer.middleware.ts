@@ -4,7 +4,7 @@ import { formatValidationErrors } from '../utils/formatting/format-validation-er
 import { formatDate } from '../utils/formatting/format-date.formatting.util'
 
 const createCustomerSchema = z.object({
-  name: z.string().min(3).refine((string) => /^[^\d]*$/.test(string)),
+  name: z.string().min(3).refine((string) => /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$/.test(string)),
   birthdate: z.date().refine((date) => !isNaN(date.getTime()) && date < new Date()),
   email: z.string().email(),
   phone: z.string().refine((value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value))
