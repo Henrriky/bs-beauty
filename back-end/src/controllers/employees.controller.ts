@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import { makeEmployeesUseCaseFactory } from '../factory/make-employees-use-case.factory'
 import type { Prisma } from '@prisma/client'
+import { AuthService } from '../utils/auth/auth-service.auth.util'
 
 class EmployeesController {
   public static useCase = makeEmployeesUseCaseFactory()
@@ -31,6 +32,7 @@ class EmployeesController {
   public static async handleCreate (req: Request, res: Response, next: NextFunction) {
     try {
       const newEmployee: Prisma.EmployeeCreateInput = req.body
+      newEmployee.passwordHash = await AuthService.hashPassword(newEmployee.passwordHash)
       const useCase = makeEmployeesUseCaseFactory()
       const employee = await useCase.executeCreate(newEmployee)
 

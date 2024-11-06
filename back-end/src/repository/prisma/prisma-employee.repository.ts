@@ -18,7 +18,7 @@ class PrismaEmployeeRepository implements EmployeeRepository {
   }
 
   public async findByEmail (email: string) {
-    const employee = await prismaClient.employee.findFirst({
+    const employee = await prismaClient.employee.findUnique({
       where: { email }
     })
     return employee

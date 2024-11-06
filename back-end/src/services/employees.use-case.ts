@@ -26,9 +26,9 @@ class EmployeesUseCase {
   }
 
   public async executeCreate (employeeToCreate: Prisma.EmployeeCreateInput) {
-    const doesEmployeeExist = this.employeeRepository.findByEmail(employeeToCreate.email)
+    const doesEmployeeExist = await this.employeeRepository.findByEmail(employeeToCreate.email)
     if (doesEmployeeExist != null) {
-      throw new CustomError('Bad Request', 400, 'Customer already exists.')
+      throw new CustomError('Bad Request', 400, 'Employee already exists.')
     }
     const newEmployee = await this.employeeRepository.create(employeeToCreate)
 

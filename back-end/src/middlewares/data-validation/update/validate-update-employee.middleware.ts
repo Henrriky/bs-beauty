@@ -10,6 +10,7 @@ const socialMediaSchema = z.object({
 const updateEmployeeSchema = z.object({
   name: z.string().min(3).refine((string) => /^[^\d]*$/.test(string)).optional(),
   email: z.string().email().optional(),
+  passwordHash: z.string(),
   socialMedia: socialMediaSchema.optional(),
   contact: z.string().refine((value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value)).optional()
 })

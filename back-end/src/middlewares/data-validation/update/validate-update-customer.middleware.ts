@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import { z } from 'zod'
-import { formatValidationErrors } from '../utils/formatting/format-validation-errors.formatting.util'
-import { formatDate } from '../utils/formatting/format-date.formatting.util'
+import { formatDate } from '../../../utils/formatting/format-date.formatting.util'
+import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
 
 const updateCustomerSchema = z.object({
   name: z.string().min(3).refine((string) => /^[^\d]*$/.test(string)).optional(),
