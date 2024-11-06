@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import { z } from 'zod'
 import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
+import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
 
 const updateServiceSchema = z.object({
   name: z.string().min(3).refine((string) => /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$/.test(string)).optional(),
@@ -8,8 +9,10 @@ const updateServiceSchema = z.object({
   category: z.string().min(2).refine((string) => /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$/.test(string)).optional()
 })
 
-const validateUpdateService = (req: Request, res: Response, next: NextFunction): void => {
+const validateUpdateService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    await SpecialFieldsValidation.verifyIdInBody(req)
+    await SpecialFieldsValidation.verifyTimestampsInBody(req)
     updateServiceSchema.parse(req.body)
     next()
   } catch (error) {

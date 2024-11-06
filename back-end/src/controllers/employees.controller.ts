@@ -45,6 +45,10 @@ class EmployeesController {
   public static async handleUpdate (req: Request, res: Response, next: NextFunction) {
     try {
       const employeeToUpdate: Prisma.EmployeeUpdateInput = req.body
+      if (employeeToUpdate.passwordHash != null) {
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+        employeeToUpdate.passwordHash = await AuthService.hashPassword(employeeToUpdate.passwordHash.toString())
+      }
       const employeeId: string = req.params.id
       const useCase = makeEmployeesUseCaseFactory()
       const employeeUpdated = await useCase.executeUpdate(employeeId, employeeToUpdate)

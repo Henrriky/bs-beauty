@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import { z } from 'zod'
 import { formatDate } from '../../../utils/formatting/format-date.formatting.util'
 import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
+import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
 
 const updateCustomerSchema = z.object({
   name: z.string().min(3).refine((string) => /^[^\d]*$/.test(string)).optional(),
@@ -10,8 +11,11 @@ const updateCustomerSchema = z.object({
   phone: z.string().refine((value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value)).optional()
 })
 
-const validateUpdateCustomer = (req: Request, res: Response, next: NextFunction): void => {
+const validateUpdateCustomer = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    await SpecialFieldsValidation.verifyIdInBody(req)
+    await SpecialFieldsValidation.verifyRoleInBody(req)
+    await SpecialFieldsValidation.verifyTimestampsInBody(req)
     if (req.body.birthdate != null) {
       req.body.birthdate = formatDate(req)
     }

@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import { z } from 'zod'
 import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
+import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
 
 const socialMediaSchema = z.object({
   name: z.string().min(1),
@@ -10,13 +11,19 @@ const socialMediaSchema = z.object({
 const createEmployeeSchema = z.object({
   name: z.string().min(3).refine((string) => /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$/.test(string)),
   email: z.string().email(),
-  passwordHash: z.string(),
+  passwordHash: z.string().refine((pass) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(pass)),
   socialMedia: socialMediaSchema.optional(),
-  contact: z.string().refine((value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value)).optional()
+  contact: z.string().refine((value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value)).optional(),
+  role: z.enum(['MANAGER', 'EMPLOYEE'])
 })
 
-const validateCreateEmployee = (req: Request, res: Response, next: NextFunction): void => {
+const validateCreateEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    await SpecialFieldsValidation.verifyIdInBody(req)
+    if (req.headers.role !== 'MANAGER') {
+      await SpecialFieldsValidation.verifyRoleInBody(req)
+    }
+    await SpecialFieldsValidation.verifyTimestampsInBody(req)
     createEmployeeSchema.parse(req.body)
     next()
   } catch (error) {
