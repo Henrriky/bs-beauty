@@ -3,11 +3,14 @@ import type { Prisma } from '@prisma/client'
 import { makeServiceUseCaseFactory } from '../factory/make-service-use-case.factory'
 
 class ServicesController {
-  public static async handleFindAll (req: Request, res: Response) {
-    const useCase = makeServiceUseCaseFactory()
-    const { services } = await useCase.executeFindAll()
-
-    res.send({ services })
+  public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeServiceUseCaseFactory()
+      const { services } = await useCase.executeFindAll()
+      res.send({ services })
+    } catch (error) {
+      next(error)
+    }
   }
 
   public static async handleFindById (req: Request, res: Response, next: NextFunction) {

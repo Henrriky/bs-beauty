@@ -11,8 +11,8 @@ const updateServiceSchema = z.object({
 
 const validateUpdateService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await SpecialFieldsValidation.verifyIdInBody(req)
-    await SpecialFieldsValidation.verifyTimestampsInBody(req)
+    SpecialFieldsValidation.verifyIdInBody(req)
+    SpecialFieldsValidation.verifyTimestampsInBody(req)
     updateServiceSchema.parse(req.body)
     next()
   } catch (error) {

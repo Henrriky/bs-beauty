@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from 'express'
+import { type NextFunction, type Request, type Response } from 'express'
 import { z } from 'zod'
 import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
 import { formatDate } from '../../../utils/formatting/format-date.formatting.util'
@@ -13,9 +13,9 @@ const createCustomerSchema = z.object({
 
 const validateCreateCustomer = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await SpecialFieldsValidation.verifyIdInBody(req)
-    await SpecialFieldsValidation.verifyRoleInBody(req)
-    await SpecialFieldsValidation.verifyTimestampsInBody(req)
+    SpecialFieldsValidation.verifyIdInBody(req)
+    SpecialFieldsValidation.verifyRoleInBody(req)
+    SpecialFieldsValidation.verifyTimestampsInBody(req)
     req.body.birthdate = formatDate(req)
     createCustomerSchema.parse(req.body)
     next()

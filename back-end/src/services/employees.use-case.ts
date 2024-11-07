@@ -1,59 +1,50 @@
 import { type Employee, type Prisma } from '@prisma/client'
 import { type EmployeeRepository } from '../repository/protocols/employee.repository'
-import { CustomError } from '../utils/errors/custom.error.util'
+import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 
 interface EmployeesOutput {
   employees: Employee[]
 }
 
 class EmployeesUseCase {
+  private readonly entityName = 'Employee'
+
   constructor (private readonly employeeRepository: EmployeeRepository) { }
 
   public async executeFindAll (): Promise<EmployeesOutput> {
     const employees = await this.employeeRepository.findAll()
-    if (employees.length === 0) {
-      throw new CustomError('Not Found', 404, 'No employees found.')
-    }
+    RecordExistence.validateManyRecordsExistence(employees, 'employees')
 
     return { employees }
   }
 
   public async executeFindById (employeeId: string): Promise<Employee | null> {
     const employee = await this.employeeRepository.findById(employeeId)
-    this.validateEmployeeExistence(employee)
+    RecordExistence.validateRecordExistence(employee, this.entityName)
 
     return employee
   }
 
   public async executeCreate (employeeToCreate: Prisma.EmployeeCreateInput) {
-    const doesEmployeeExist = await this.employeeRepository.findByEmail(employeeToCreate.email)
-    if (doesEmployeeExist != null) {
-      throw new CustomError('Bad Request', 400, 'Employee already exists.')
-    }
+    const employee = await this.employeeRepository.findByEmail(employeeToCreate.email)
+    RecordExistence.validateRecordNonExistence(employee, this.entityName)
     const newEmployee = await this.employeeRepository.create(employeeToCreate)
 
     return newEmployee
   }
 
   public async executeUpdate (employeeId: string, employeeToUpdate: Prisma.EmployeeUpdateInput) {
-    const employee = await this.employeeRepository.update(employeeId, employeeToUpdate)
-    this.validateEmployeeExistence(employee)
+    await this.executeFindById(employeeId)
+    const updatedEmployee = await this.employeeRepository.update(employeeId, employeeToUpdate)
 
-    return employee
+    return updatedEmployee
   }
 
   public async executeDelete (employeeId: string) {
-    const employeeToDelete = await this.employeeRepository.findById(employeeId)
-    this.validateEmployeeExistence(employeeToDelete)
-    const employeeDeleted = await this.employeeRepository.delete(employeeId)
+    await this.employeeRepository.findById(employeeId)
+    const deletedEmployee = await this.employeeRepository.delete(employeeId)
 
-    return employeeDeleted
-  }
-
-  private validateEmployeeExistence (employee: Employee | null) {
-    if (employee == null) {
-      throw new CustomError('Not Found', 404, 'Employee not found.')
-    }
+    return deletedEmployee
   }
 }
 

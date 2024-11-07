@@ -19,11 +19,11 @@ const updateEmployeeSchema = z.object({
 
 const validateUpdateEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await SpecialFieldsValidation.verifyIdInBody(req)
+    SpecialFieldsValidation.verifyIdInBody(req)
     if (req.headers.role !== 'MANAGER') {
-      await SpecialFieldsValidation.verifyRoleInBody(req)
+      SpecialFieldsValidation.verifyRoleInBody(req)
     }
-    await SpecialFieldsValidation.verifyTimestampsInBody(req)
+    SpecialFieldsValidation.verifyTimestampsInBody(req)
 
     updateEmployeeSchema.parse(req.body)
     next()

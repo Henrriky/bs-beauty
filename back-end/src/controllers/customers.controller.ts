@@ -1,10 +1,8 @@
-import type { NextFunction, Request, Response } from 'express'
+import { type NextFunction, type Request, type Response } from 'express'
 import { makeCustomersUseCaseFactory } from '../factory/make-customers-use-case.factory'
 import { type Prisma } from '@prisma/client'
 
 class CustomersController {
-  public static useCase = makeCustomersUseCaseFactory()
-
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeCustomersUseCaseFactory()

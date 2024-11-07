@@ -4,8 +4,6 @@ import type { Prisma } from '@prisma/client'
 import { AuthService } from '../utils/auth/auth-service.auth.util'
 
 class EmployeesController {
-  public static useCase = makeEmployeesUseCaseFactory()
-
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeEmployeesUseCaseFactory()
