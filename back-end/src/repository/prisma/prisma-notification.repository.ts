@@ -32,6 +32,15 @@ class PrismaNotificationRepository implements NotificationRepository {
 
     return deletedNotification
   }
+
+  public async markAsRead (id: string) {
+    const readNotification = await prismaClient.notification.update({
+      where: { id },
+      data: { readAt: new Date() }
+    })
+
+    return readNotification
+  }
 }
 
 export { PrismaNotificationRepository }

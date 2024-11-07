@@ -49,6 +49,18 @@ class NotificationsController {
       next(error)
     }
   }
+
+  public static async handleMarkAsRead (req: Request, res: Response, next: NextFunction) {
+    try {
+      const notificationId: string = req.params.id
+      const useCase = makeNotificationsUseCaseFactory()
+      const readNotification = await useCase.executeMarkAsRead(notificationId)
+
+      res.send(readNotification)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { NotificationsController }

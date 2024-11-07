@@ -34,6 +34,16 @@ class NotificationsUseCase {
 
     return deletedNotification
   }
+
+  public async executeMarkAsRead (notificationId: string) {
+    const notification = await this.executeFindById(notificationId)
+    if (notification?.readAt != null) {
+      return notification
+    }
+    const readNotification = await this.notificationRepository.markAsRead(notificationId)
+
+    return readNotification
+  }
 }
 
 export { NotificationsUseCase }
