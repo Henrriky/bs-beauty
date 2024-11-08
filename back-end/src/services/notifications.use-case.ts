@@ -25,6 +25,7 @@ class NotificationsUseCase {
 
   public async executeCreate (notificationToCreate: Prisma.NotificationCreateInput) {
     const newNotification = await this.notificationRepository.create(notificationToCreate)
+
     return newNotification
   }
 

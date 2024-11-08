@@ -39,6 +39,24 @@ class SpecialFieldsValidation {
       throw new CustomError(this.message, this.statusCode, 'Cannot set CustomerID or EmployeeID.')
     }
   }
+
+  public static verifyCustomerId (req: Request) {
+    if (req.body.customerId != null) {
+      throw new CustomError(this.message, this.statusCode, 'Cannot set CustomerID')
+    }
+  }
+
+  public static verifyObservation (req: Request) {
+    if (req.body.observation != null) {
+      throw new CustomError('Forbidden', 403, 'Cannot set Observation. Access denied.')
+    }
+  }
+
+  public static verifyStatus (req: Request) {
+    if (req.body.status != null) {
+      throw new CustomError('Forbidden', 403, 'Cannot set Status. Access denied.')
+    }
+  }
 }
 
 export { SpecialFieldsValidation }

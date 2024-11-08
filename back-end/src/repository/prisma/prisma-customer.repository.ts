@@ -5,6 +5,7 @@ import { type CustomerRepository } from '../protocols/customer.repository'
 class PrismaCustomerRepository implements CustomerRepository {
   public async findAll () {
     const customers = await prismaClient.customer.findMany()
+
     return customers
   }
 
