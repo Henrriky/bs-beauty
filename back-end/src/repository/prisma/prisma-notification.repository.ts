@@ -17,6 +17,14 @@ class PrismaNotificationRepository implements NotificationRepository {
     return notification
   }
 
+  public async findByUserId (userId: string) {
+    const notifications = await prismaClient.notification.findMany({
+      where: { OR: [{ customerId: userId }, { employeeId: userId }] }
+    })
+
+    return notifications
+  }
+
   public async create (notificationToCreate: Prisma.NotificationCreateInput) {
     const newNotification = await prismaClient.notification.create({
       data: { ...notificationToCreate }

@@ -6,6 +6,7 @@ import { validateCreateNotification } from '../../middlewares/data-validation/cr
 const notificationRoutes = Router()
 
 notificationRoutes.get('/', NotificationsController.handleFindAll)
+notificationRoutes.get('/user/:userId', NotificationsController.handleFindByUserId)
 notificationRoutes.get('/:id', NotificationsController.handleFindById)
 notificationRoutes.post('/', validateCreateNotification, NotificationsController.handleCreate)
 notificationRoutes.put('/:id/read', NotificationsController.handleMarkAsRead)

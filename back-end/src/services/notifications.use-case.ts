@@ -23,6 +23,13 @@ class NotificationsUseCase {
     return notification
   }
 
+  public async executeFindByUserId (userId: string): Promise<NotificationsOutput> {
+    const notifications = await this.notificationRepository.findByUserId(userId)
+    RecordExistence.validateManyRecordsExistence(notifications, 'notifications')
+
+    return { notifications }
+  }
+
   public async executeCreate (notificationToCreate: Prisma.NotificationCreateInput) {
     const newNotification = await this.notificationRepository.create(notificationToCreate)
 

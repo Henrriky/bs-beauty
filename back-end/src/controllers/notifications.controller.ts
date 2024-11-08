@@ -26,6 +26,18 @@ class NotificationsController {
     }
   }
 
+  public static async handleFindByUserId (req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = req.params.userId
+      const useCase = makeNotificationsUseCaseFactory()
+      const { notifications } = await useCase.executeFindByUserId(userId)
+
+      res.send({ notifications })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   public static async handleCreate (req: Request, res: Response, next: NextFunction) {
     try {
       const notificationToCreate: Prisma.NotificationCreateInput = req.body
