@@ -3,12 +3,13 @@ import { z } from 'zod'
 import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
 import { formatDate } from '../../../utils/formatting/format-date.formatting.util'
 import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
+import { RegexPatterns } from '../../../utils/validation/regex.validation.util'
 
 const createCustomerSchema = z.object({
-  name: z.string().min(3).refine((string) => /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$/.test(string)),
+  name: z.string().min(3).refine((string) => RegexPatterns.names.test(string)),
   birthdate: z.date().refine((date) => !isNaN(date.getTime()) && date < new Date()),
   email: z.string().email(),
-  phone: z.string().refine((value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value))
+  phone: z.string().refine((value) => RegexPatterns.phone.test(value))
 })
 
 const validateCreateCustomer = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

@@ -2,10 +2,11 @@ import { type NextFunction, type Request, type Response } from 'express'
 import { z } from 'zod'
 import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
 import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
+import { RegexPatterns } from '../../../utils/validation/regex.validation.util'
 
 const createNotificationSchema = z.object({
-  title: z.string().min(3).refine((string) => /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$/.test(string)),
-  content: z.string().min(3).refine((string) => /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$/.test(string)),
+  title: z.string().min(3).refine((string) => RegexPatterns.names.test(string)),
+  content: z.string().min(3).refine((string) => RegexPatterns.content.test(string)),
   employeeId: z.string().uuid().optional().nullable(),
   customerId: z.string().uuid().optional().nullable()
 })

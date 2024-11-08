@@ -3,9 +3,10 @@ import { z } from 'zod'
 import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
 import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
 import { Status } from '@prisma/client'
+import { RegexPatterns } from '../../../utils/validation/regex.validation.util'
 
 const updateAppointmentSchema = z.object({
-  observation: z.string().min(3).refine((string) => /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$/.test(string)).optional(),
+  observation: z.string().min(3).refine((string) => RegexPatterns.content.test(string)).optional(),
   status: z.enum([Status.CANCELLED, Status.CONFIRMED, Status.FINISHED, Status.NO_SHOW, Status.PENDING, Status.RESCHEDULED]).optional()
 })
 

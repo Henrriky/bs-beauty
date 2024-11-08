@@ -2,18 +2,19 @@ import type { NextFunction, Request, Response } from 'express'
 import { z } from 'zod'
 import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
 import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
+import { RegexPatterns } from '../../../utils/validation/regex.validation.util'
 
 const socialMediaSchema = z.object({
   name: z.string(),
-  url: z.string().refine((value) => /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/[^\s]*)?$/.test(value))
+  url: z.string().refine((value) => RegexPatterns.url.test(value))
 })
 
 const updateEmployeeSchema = z.object({
-  name: z.string().min(3).refine((string) => /^[^\d]*$/.test(string)).optional(),
+  name: z.string().min(3).refine((string) => RegexPatterns.names.test(string)).optional(),
   email: z.string().email().optional(),
-  passwordHash: z.string().refine((pass) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(pass)).optional(),
+  passwordHash: z.string().refine((pass) => RegexPatterns.password.test(pass)).optional(),
   socialMedia: socialMediaSchema.optional(),
-  contact: z.string().refine((value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value)).optional(),
+  contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
   role: z.enum(['MANAGER', 'EMPLOYEE']).optional()
 })
 
