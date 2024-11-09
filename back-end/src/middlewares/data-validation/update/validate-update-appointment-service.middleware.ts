@@ -1,32 +1,25 @@
 import { z } from 'zod'
 import { type Request, type Response, type NextFunction } from 'express'
-import { RegexPatterns } from '../../../utils/validation/regex.validation.util'
-import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
 import { formatValidationErrors } from '../../../utils/formatting/zod-validation-errors.formatting.util'
 import { DateFormatter } from '../../../utils/formatting/date.formatting.util'
-import { Role, Status } from '@prisma/client'
-
-const updateAppointmentServiceSchema = z.object({
-  observation: z.string().min(3).refine((string) => RegexPatterns.content.test(string)).optional(),
-  status: z.nativeEnum(Status).optional(),
-  appointmentDate: z.date().refine((date) => !isNaN(date.getTime()) && date < new Date()).optional()
-})
+import { Role } from '@prisma/client'
+import { AppointmentServiceSchemas } from '../../../utils/validation/zod-schemas/appointment-service.zod-schemas.validation.util'
 
 const validateUpdateAppointmentService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const roles: Role[] = [Role.MANAGER, Role.EMPLOYEE]
     const role = req.headers.role as Role
-    SpecialFieldsValidation.verifyIdInBody(req)
-    SpecialFieldsValidation.verifyAppointmentId(req)
-    SpecialFieldsValidation.verifyServiceId(req)
-    if (role !== Role.CUSTOMER) {
-      SpecialFieldsValidation.verifyObservation(req)
+    const requestBody = req.body
+
+    if (role === Role.CUSTOMER) {
+      AppointmentServiceSchemas.customerUpdateSchema.parse(requestBody)
     }
-    if (!roles.includes(role)) {
-      SpecialFieldsValidation.verifyStatus(req)
+
+    if (roles.includes(role)) {
+      AppointmentServiceSchemas.employeeUpdateSchema.parse(requestBody)
     }
-    req.body.appointmentDate = DateFormatter.formatAppointmentDate(req)
-    updateAppointmentServiceSchema.parse(req)
+
+    requestBody.appointmentDate = DateFormatter.formatAppointmentDate(req)
     next()
   } catch (error) {
     if (error instanceof z.ZodError) {
