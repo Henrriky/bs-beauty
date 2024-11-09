@@ -2,8 +2,8 @@ import { z } from 'zod'
 import { type Request, type Response, type NextFunction } from 'express'
 import { RegexPatterns } from '../../../utils/validation/regex.validation.util'
 import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
-import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
-import { formatDate } from '../../../utils/formatting/format-date.formatting.util'
+import { formatValidationErrors } from '../../../utils/formatting/zod-validation-errors.formatting.util'
+import { formatDate } from '../../../utils/formatting/date.formatting.util'
 import { Role, Status } from '@prisma/client'
 
 const updateAppointmentServiceSchema = z.object({

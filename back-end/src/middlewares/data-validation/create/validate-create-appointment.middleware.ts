@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { z } from 'zod'
 import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
-import { formatValidationErrors } from '../../../utils/formatting/format-validation-errors.formatting.util'
+import { formatValidationErrors } from '../../../utils/formatting/zod-validation-errors.formatting.util'
 import { Status } from '@prisma/client'
 import { RegexPatterns } from '../../../utils/validation/regex.validation.util'
 
