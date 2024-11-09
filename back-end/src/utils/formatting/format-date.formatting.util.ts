@@ -1,10 +1,17 @@
 import type { Request } from 'express'
 
 const formatDate = (req: Request) => {
-  const birthdate: string = req.body.birthdate
-  const birthdateFormatted = new Date(birthdate)
+  let date: string = ''
+  if (req.body.birthdate != null) {
+    date = req.body.birthdate
+  }
+  if (req.body.appointmentDate != null) {
+    date = req.body.appointmentDate
+  }
+  const formattedDate = new Date(date)
+  formattedDate.setHours(formattedDate.getHours() - formattedDate.getTimezoneOffset() / 60)
 
-  return birthdateFormatted
+  return formattedDate
 }
 
 export { formatDate }

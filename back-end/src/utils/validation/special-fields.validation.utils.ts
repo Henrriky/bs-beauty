@@ -57,6 +57,18 @@ class SpecialFieldsValidation {
       throw new CustomError('Forbidden', 403, 'Cannot set Status. Access denied.')
     }
   }
+
+  public static verifyAppointmentId (req: Request) {
+    if (req.body.appointmentId != null) {
+      throw new CustomError(this.message, this.statusCode, 'Cannot set AppointmentID')
+    }
+  }
+
+  public static verifyServiceId (req: Request) {
+    if (req.body.serviceId != null) {
+      throw new CustomError(this.message, this.statusCode, 'Cannot set ServiceID')
+    }
+  }
 }
 
 export { SpecialFieldsValidation }
