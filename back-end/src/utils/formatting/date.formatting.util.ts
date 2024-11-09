@@ -33,12 +33,16 @@ class DateFormatter {
 
   public static formatShiftEnd = (req: Request) => {
     const time = req.body.shiftEnd
-    const [hours, minutes] = time.split(':').map(Number)
-    const formattedTime = new Date()
-    formattedTime.setHours(hours as number, minutes as number, 0, 0)
-    formattedTime.setHours(formattedTime.getHours() - formattedTime.getTimezoneOffset() / 60)
+    if (typeof time === 'string') {
+      const [hours, minutes] = time.split(':').map(Number)
+      const formattedTime = new Date()
+      formattedTime.setHours(hours, minutes, 0, 0)
+      formattedTime.setHours(formattedTime.getHours() - formattedTime.getTimezoneOffset() / 60)
 
-    return formattedTime
+      return formattedTime
+    }
+
+    return new Date()
   }
 }
 

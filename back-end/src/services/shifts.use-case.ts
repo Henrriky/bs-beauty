@@ -1,4 +1,4 @@
-import { type Prisma, type Shift } from '@prisma/client'
+import { type WeekDays, type Prisma, type Shift } from '@prisma/client'
 import { type ShiftRepository } from '../repository/protocols/shift.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 
@@ -43,8 +43,14 @@ class ShiftUseCase {
 
   public async executeUpdate (shiftId: string, shiftToUpdate: Prisma.ShiftUpdateInput) {
     const existingShift = await this.executeFindById(shiftId)
-    const shifts = await this.executeFindByEmployeeId(existingShift?.employeeId)
-    RecordExistence.validateUniqueWeekDayInShifts(shifts, shiftToUpdate, 'Shift')
+    const updatedWeekDay = shiftToUpdate.weekDay as unknown as WeekDays
+
+    if (updatedWeekDay != null) {
+      const employeeId = existingShift?.employeeId as unknown as string
+      const shiftFound = await this.shiftRepository.findByEmployeeAndWeekDay(employeeId, updatedWeekDay)
+      RecordExistence.validateRecordNonExistence(shiftFound, 'Shift')
+    }
+
     const updatedShift = await this.shiftRepository.update(shiftId, shiftToUpdate)
 
     return updatedShift

@@ -42,9 +42,10 @@ class PrismaShiftRepository implements ShiftRepository {
   }
 
   public async update (id: string, shiftToUpdate: Prisma.ShiftUpdateInput) {
+    const { shiftStart, shiftEnd, ...otherFields } = shiftToUpdate
     const updatedShift = await prismaClient.shift.update({
       where: { id },
-      data: { ...shiftToUpdate }
+      data: { ...otherFields, ...(shiftStart instanceof Date && !isNaN(shiftStart.getTime()) ? { shiftStart } : {}), ...(shiftEnd instanceof Date && !isNaN(shiftEnd.getTime()) ? { shiftEnd } : {}) }
     })
 
     return updatedShift
