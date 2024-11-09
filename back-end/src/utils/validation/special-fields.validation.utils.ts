@@ -69,6 +69,12 @@ class SpecialFieldsValidation {
       throw new CustomError(this.message, this.statusCode, 'Cannot set ServiceID')
     }
   }
+
+  public static verifyEmployeeId (req: Request) {
+    if (req.body.employeeId != null) {
+      throw new CustomError(this.message, this.statusCode, 'Cannot set EmployeeID')
+    }
+  }
 }
 
 export { SpecialFieldsValidation }

@@ -17,7 +17,7 @@ class PrismaShiftRepository implements ShiftRepository {
     return shift
   }
 
-  public async findByEmployeeId (employeeId: string) {
+  public async findByEmployeeId (employeeId: string | undefined) {
     const shifts = await prismaClient.shift.findMany({
       where: { employeeId }
     })

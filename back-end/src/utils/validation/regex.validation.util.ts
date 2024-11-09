@@ -4,6 +4,7 @@ class RegexPatterns {
   public static readonly content = /^[a-zA-Z0-9À-ÿ\s.,?!\-()]{10,500}$/
   public static readonly url = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/[^\s]*)?$/
   public static readonly password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+  public static readonly time = /^([01]\d|2[0-3]):([0-5]\d)$/
 }
 
 export { RegexPatterns }

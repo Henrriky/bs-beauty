@@ -23,7 +23,7 @@ class ShiftUseCase {
     return shift
   }
 
-  public async executeFindByEmployeeId (employeeId: string): Promise<ShiftOutput> {
+  public async executeFindByEmployeeId (employeeId: string | undefined): Promise<ShiftOutput> {
     const shifts = await this.shiftRepository.findByEmployeeId(employeeId)
     RecordExistence.validateManyRecordsExistence(shifts, 'shifts')
 
@@ -42,7 +42,9 @@ class ShiftUseCase {
   }
 
   public async executeUpdate (shiftId: string, shiftToUpdate: Prisma.ShiftUpdateInput) {
-    await this.executeFindById(shiftId)
+    const existingShift = await this.executeFindById(shiftId)
+    const shifts = await this.executeFindByEmployeeId(existingShift?.employeeId)
+    RecordExistence.validateUniqueWeekDayInShifts(shifts, shiftToUpdate, 'Shift')
     const updatedShift = await this.shiftRepository.update(shiftId, shiftToUpdate)
 
     return updatedShift
