@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { OffersController } from '../../controllers/offers.controller'
-import { validateCreateOffer } from '../../middlewares/data-validation/create/validate-create-offer.middleware'
-import { validateUpdateOffer } from '../../middlewares/data-validation/update/validate-update-offer.middleware'
+import { validateCreateOffer } from '../../middlewares/data-validation/offer/create-offer.validation.middleware'
+import { validateUpdateOffer } from '../../middlewares/data-validation/offer/update-offer.validation.middleware'
 import { routeAuthMiddleware } from '../../middlewares/route-auth.middleware'
 import { Role } from '@prisma/client'
 

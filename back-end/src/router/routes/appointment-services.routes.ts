@@ -1,10 +1,10 @@
 import { Router } from 'express'
 import { AppointmentServiceController } from '../../controllers/appointment-services.controller'
 import { errorHandlerMiddleware } from '../../middlewares/error-handler.middleware'
-import { validateCreateAppointmentService } from '../../middlewares/data-validation/create/validate-create-appointment-service.middleware'
+import { validateCreateAppointmentService } from '../../middlewares/data-validation/appointment-service/create-appointment-service.validation.middleware'
 import { routeAuthMiddleware } from '../../middlewares/route-auth.middleware'
 import { Role } from '@prisma/client'
-import { validateUpdateAppointmentService } from '../../middlewares/data-validation/update/validate-update-appointment-service.middleware'
+import { validateUpdateAppointmentService } from '../../middlewares/data-validation/appointment-service/update-appointment-service.validation.middleware'
 
 const appointmentServiceRoutes = Router()
 

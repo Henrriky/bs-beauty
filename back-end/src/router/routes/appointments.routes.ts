@@ -3,8 +3,8 @@ import { AppointmentController } from '../../controllers/appointments.controller
 import { errorHandlerMiddleware } from '../../middlewares/error-handler.middleware'
 import { routeAuthMiddleware } from '../../middlewares/route-auth.middleware'
 import { Role } from '@prisma/client'
-import { validateCreateAppointment } from '../../middlewares/data-validation/create/validate-create-appointment.middleware'
-import { validateUpdateAppointment } from '../../middlewares/data-validation/update/validate-update-appointment.middleware'
+import { validateCreateAppointment } from '../../middlewares/data-validation/appointment/create-appointment.validation.middleware'
+import { validateUpdateAppointment } from '../../middlewares/data-validation/appointment/update-appointment.validation.middleware'
 
 const appointmentRoutes = Router()
 

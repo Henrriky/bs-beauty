@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { ServicesController } from '../../controllers/services.controller'
 import { errorHandlerMiddleware } from '../../middlewares/error-handler.middleware'
-import { validateCreateService } from '../../middlewares/data-validation/create/validate-create-service.middleware'
-import { validateUpdateService } from '../../middlewares/data-validation/update/validate-update-service.middleware'
+import { validateCreateService } from '../../middlewares/data-validation/service/create-service.validation.middleware'
+import { validateUpdateService } from '../../middlewares/data-validation/service/update-service.validation.middleware'
 import { routeAuthMiddleware } from '../../middlewares/route-auth.middleware'
 
 const serviceRoutes = Router()

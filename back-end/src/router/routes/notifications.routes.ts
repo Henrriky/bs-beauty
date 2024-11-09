@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { NotificationsController } from '../../controllers/notifications.controller'
 import { errorHandlerMiddleware } from '../../middlewares/error-handler.middleware'
-import { validateCreateNotification } from '../../middlewares/data-validation/create/validate-create-notification.middleware'
+import { validateCreateNotification } from '../../middlewares/data-validation/notification/create-notification.validation.middleware'
 
 const notificationRoutes = Router()
 
