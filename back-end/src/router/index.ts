@@ -5,6 +5,7 @@ import { employeeRoutes } from './routes/employees.routes'
 import { notificationRoutes } from './routes/notifications.routes'
 import { appointmentRoutes } from './routes/appointments.routes'
 import { appointmentServiceRoutes } from './routes/appointment-services.routes'
+import { shiftRoutes } from './routes/shift.routes'
 
 const appRoutes = Router()
 
@@ -14,5 +15,6 @@ appRoutes.use('/customers', customerRoutes)
 appRoutes.use('/notifications', notificationRoutes)
 appRoutes.use('/appointments', appointmentRoutes)
 appRoutes.use('/appointment-services', appointmentServiceRoutes)
+appRoutes.use('/shifts', shiftRoutes)
 
 export { appRoutes }
