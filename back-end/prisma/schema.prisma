@@ -8,11 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  theme    = "forest"
-}
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -78,9 +73,9 @@ model Offer {
   id            String   @id @default(uuid())
   estimatedTime Int      @map("estimated_time")
   price         Decimal  @db.Decimal(10, 2)
+  isOffering    Boolean  @default(false) @map("is_offering")
   serviceId     String   @map("service_id")
   employeeId    String   @map("employee_id")
-  isOffering    Boolean  @map("is_offering")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
