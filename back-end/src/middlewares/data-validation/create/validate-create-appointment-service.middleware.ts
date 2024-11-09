@@ -3,7 +3,7 @@ import { type Request, type Response, type NextFunction } from 'express'
 import { RegexPatterns } from '../../../utils/validation/regex.validation.util'
 import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
 import { formatValidationErrors } from '../../../utils/formatting/zod-validation-errors.formatting.util'
-import { formatDate } from '../../../utils/formatting/date.formatting.util'
+import { DateFormatter } from '../../../utils/formatting/date.formatting.util'
 
 const createAppointmentServiceSchema = z.object({
   observation: z.string().min(3).refine((string) => RegexPatterns.content.test(string)).optional(),
@@ -16,7 +16,7 @@ const validateCreateAppointmentService = async (req: Request, res: Response, nex
   try {
     SpecialFieldsValidation.verifyIdInBody(req)
     SpecialFieldsValidation.verifyStatus(req)
-    req.body.appointmentDate = formatDate(req)
+    req.body.appointmentDate = DateFormatter.formatAppointmentDate(req)
     createAppointmentServiceSchema.parse(req.body)
     console.log('PORRA')
     next()

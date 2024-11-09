@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { z } from 'zod'
-import { formatDate } from '../../../utils/formatting/date.formatting.util'
+import { DateFormatter } from '../../../utils/formatting/date.formatting.util'
 import { formatValidationErrors } from '../../../utils/formatting/zod-validation-errors.formatting.util'
 import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
 import { RegexPatterns } from '../../../utils/validation/regex.validation.util'
@@ -18,7 +18,7 @@ const validateUpdateCustomer = async (req: Request, res: Response, next: NextFun
     SpecialFieldsValidation.verifyRoleInBody(req)
     SpecialFieldsValidation.verifyTimestampsInBody(req)
     if (req.body.birthdate != null) {
-      req.body.birthdate = formatDate(req)
+      req.body.birthdate = DateFormatter.formatBirthdate(req)
     }
     updateCustomerSchema.parse(req.body)
     next()

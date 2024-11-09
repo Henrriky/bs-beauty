@@ -3,7 +3,7 @@ import { type Request, type Response, type NextFunction } from 'express'
 import { RegexPatterns } from '../../../utils/validation/regex.validation.util'
 import { SpecialFieldsValidation } from '../../../utils/validation/special-fields.validation.utils'
 import { formatValidationErrors } from '../../../utils/formatting/zod-validation-errors.formatting.util'
-import { formatDate } from '../../../utils/formatting/date.formatting.util'
+import { DateFormatter } from '../../../utils/formatting/date.formatting.util'
 import { Role, Status } from '@prisma/client'
 
 const updateAppointmentServiceSchema = z.object({
@@ -25,7 +25,7 @@ const validateUpdateAppointmentService = async (req: Request, res: Response, nex
     if (!roles.includes(role)) {
       SpecialFieldsValidation.verifyStatus(req)
     }
-    req.body.appointmentDate = formatDate(req)
+    req.body.appointmentDate = DateFormatter.formatAppointmentDate(req)
     updateAppointmentServiceSchema.parse(req)
     next()
   } catch (error) {
