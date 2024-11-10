@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import { AppointmentController } from '../../controllers/appointments.controller'
-import { errorHandlerMiddleware } from '../../middlewares/error-handler.middleware'
 import { routeAuthMiddleware } from '../../middlewares/route-auth.middleware'
 import { Role } from '@prisma/client'
 import { validateCreateAppointment } from '../../middlewares/data-validation/appointment/create-appointment.validation.middleware'
@@ -14,6 +13,5 @@ appointmentRoutes.get('/:id', AppointmentController.handleFindById)
 appointmentRoutes.post('/', routeAuthMiddleware([Role.CUSTOMER]), routeAuthMiddleware([Role.CUSTOMER, Role.EMPLOYEE, Role.MANAGER]), validateCreateAppointment, AppointmentController.handleCreate)
 appointmentRoutes.put('/:id', routeAuthMiddleware([Role.CUSTOMER, Role.EMPLOYEE, Role.MANAGER]), validateUpdateAppointment, AppointmentController.handleUpdate)
 appointmentRoutes.delete('/:id', AppointmentController.handleDelete)
-appointmentRoutes.use(errorHandlerMiddleware)
 
 export { appointmentRoutes }
