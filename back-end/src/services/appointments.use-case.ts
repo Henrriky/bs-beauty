@@ -47,7 +47,7 @@ class AppointmentsUseCase {
   }
 
   public async executeDelete (appointmentId: string) {
-    await this.appointmentRepository.findById(appointmentId)
+    await this.executeFindById(appointmentId)
     const deletedAppointment = await this.appointmentRepository.delete(appointmentId)
 
     return deletedAppointment

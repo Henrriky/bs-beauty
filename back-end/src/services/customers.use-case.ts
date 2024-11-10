@@ -41,7 +41,7 @@ class CustomersUseCase {
   }
 
   public async executeDelete (customerId: string) {
-    await this.customerRepository.findById(customerId)
+    await this.executeFindById(customerId)
     const deletedCustomer = await this.customerRepository.delete(customerId)
 
     return deletedCustomer

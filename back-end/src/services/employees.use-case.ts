@@ -41,7 +41,7 @@ class EmployeesUseCase {
   }
 
   public async executeDelete (employeeId: string) {
-    await this.employeeRepository.findById(employeeId)
+    await this.executeFindById(employeeId)
     const deletedEmployee = await this.employeeRepository.delete(employeeId)
 
     return deletedEmployee
