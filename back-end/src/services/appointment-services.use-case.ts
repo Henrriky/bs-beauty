@@ -51,16 +51,14 @@ class AppointmentServicesUseCase {
   }
 
   public async executeUpdate (appointmentServiceId: string, appointmentServiceToUpdate: Prisma.AppointmentServiceUpdateInput) {
-    const appointmentService = await this.executeFindById(appointmentServiceId)
-    RecordExistence.validateRecordExistence(appointmentService, 'Appointment service')
+    await this.executeFindById(appointmentServiceId)
     const updatedAppointmentService = await this.appointmentServiceRepository.update(appointmentServiceId, appointmentServiceToUpdate)
 
     return updatedAppointmentService
   }
 
   public async executeDelete (appointmentServiceId: string) {
-    const appointmentService = await this.executeFindById(appointmentServiceId)
-    RecordExistence.validateRecordExistence(appointmentService, 'Appointment service')
+    await this.executeFindById(appointmentServiceId)
     const deletedAppointmentService = await this.appointmentServiceRepository.delete(appointmentServiceId)
 
     return deletedAppointmentService

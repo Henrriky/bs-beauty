@@ -26,7 +26,6 @@ class AppointmentsUseCase {
   }
 
   public async executeFindByCustomerId (customerId: string): Promise<AppointmentOutput> {
-    console.log(customerId)
     const appointments = await this.appointmentRepository.findByCustomerId(customerId)
     RecordExistence.validateManyRecordsExistence(appointments, 'appointments')
 
