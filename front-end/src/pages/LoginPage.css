@@ -8,7 +8,7 @@
 }
 
 .form {
-    width: 350px;
+    width: 326px;
     display: flex;
     flex-direction: column;
     margin: 213px auto 0 auto;
@@ -36,9 +36,15 @@ hr {
 }
 
 input {
+    width: 326px;
     height: 25px;
     background-color: transparent;
     border: transparent;
+    color: #A8A6A6
+}
+
+input::placeholder {
+    color: #A8A6A6;
 }
 
 button {
@@ -52,7 +58,11 @@ button {
     display: flex;
     flex-direction: column;
     gap: 13px;
-    width: 80%;
+    width: 90.8%;
+}
+
+.loginButtons button {
+    box-shadow: 0px 4px 4px 0px #3A3027;
 }
 
 .mailLogin {
@@ -67,15 +77,14 @@ button {
     background-color: #DBDBDB;
 }
 
-.auxiliaryOptions {
+.auxOptions {
     margin-top: 13px;
     width: 80%;
     display: flex;
     justify-content: space-between;
 }
 
-.auxiliaryOptions a {
+.auxOptionsItem {
     color: #A8A6A6;
     text-decoration: none;
 }
-

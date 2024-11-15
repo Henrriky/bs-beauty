@@ -27,9 +27,9 @@ function LoginPage() {
                     <button className="mailLogin" type="submit">Login</button>
                     <button className="googleLogin"><img src={googleIcon} alt="" />Logar com o Google</button>
                 </div>
-                <div className='auxiliaryOptions'>
-                    <a href="">Esqueceu a senha</a>
-                    <a href="">Entrar</a>
+                <div className='auxOptions'>
+                    <a className='auxOptionsItem' href="">Esqueceu a senha</a>
+                    <a className='auxOptionsItem' href="">Entrar</a>
                 </div>
             </form>
         </>
