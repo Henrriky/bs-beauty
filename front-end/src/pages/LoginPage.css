@@ -1,0 +1,81 @@
+@import url(https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap);
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Kumbh Sans", sans-serif;
+}
+
+.form {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    margin: 213px auto 0 auto;
+    align-items: center;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    width: inherit;
+}
+
+.inputItem div {
+    display: flex;
+    gap: 12px;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #424242;
+    padding: 0;
+}
+
+input {
+    height: 25px;
+    background-color: transparent;
+    border: transparent;
+}
+
+button {
+    border: transparent;
+    height: 38px;
+    border-radius: 24px 2px 24px 2px;
+}
+
+.loginButtons {
+    margin-top: 177px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    width: 80%;
+}
+
+.mailLogin {
+    background-color: #A4978A;
+}
+
+.googleLogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: #DBDBDB;
+}
+
+.auxiliaryOptions {
+    margin-top: 13px;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.auxiliaryOptions a {
+    color: #A8A6A6;
+    text-decoration: none;
+}
+
