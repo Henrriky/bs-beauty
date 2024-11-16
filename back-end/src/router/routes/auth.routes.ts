@@ -1,12 +1,12 @@
 import { Router } from 'express'
-import { GenerateGoogleRedirectUriController } from '../../controllers/generate-google-redirect-uri.controller'
+import { GenerateGoogleRedirectUriController } from '../../controllers/auth/generate-google-redirect-uri.controller'
 
 const authRoutes = Router()
 
 authRoutes.get('/google/redirect-uri', GenerateGoogleRedirectUriController.handle)
 authRoutes.post('/customer')
 
-
+export { authRoutes }
 // app.get('/auth/google/callback', async (req, res) => {
 //   const error = req.query.error as string | undefined
 //   const code = req.query.code as string | undefined

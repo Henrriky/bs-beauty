@@ -8,9 +8,11 @@ import { appointmentServiceRoutes } from './routes/appointment-services.routes'
 import { shiftRoutes } from './routes/shift.routes'
 import { offerRoutes } from './routes/offers.routes'
 import { errorHandlerMiddleware } from '../middlewares/error-handler.middleware'
+import { authRoutes } from './routes/auth.routes'
 
 const appRoutes = Router()
 
+appRoutes.use('/auth', authRoutes)
 appRoutes.use('/employees', employeeRoutes)
 appRoutes.use('/services', serviceRoutes)
 appRoutes.use('/customers', customerRoutes)
