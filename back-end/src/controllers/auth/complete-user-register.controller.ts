@@ -33,7 +33,8 @@ class CompleteUserRegisterController {
       const customerOrEmployee = schema.parse(req.body)
 
       if (!req.user.sub) {
-        return res.status(StatusCodes.BAD_REQUEST).send({ message: 'User ID is missing' })
+        res.status(StatusCodes.BAD_REQUEST).send({ message: 'User ID is missing' })
+        return
       }
 
       const usecase = makeCompleteUserRegisterUseCase()
