@@ -41,6 +41,15 @@ class PrismaEmployeeRepository implements EmployeeRepository {
     return employeeUpdated
   }
 
+  public async updateEmployeeByEmail (email: string, employeeToUpdate: Prisma.EmployeeUpdateInput) {
+    const employeeUpdated = await prismaClient.employee.update({
+      where: { email },
+      data: { ...employeeToUpdate }
+    })
+
+    return employeeUpdated
+  }
+
   public async delete (employeeId: string) {
     const employeeDeleted = await prismaClient.employee.delete({
       where: { id: employeeId }

@@ -6,6 +6,7 @@ interface EmployeeRepository {
   findByEmail: (email: string) => Promise<Employee | null>
   create: (newCustomer: Prisma.EmployeeCreateInput) => Promise<Employee>
   update: (id: string, customerUpdated: Prisma.EmployeeUpdateInput) => Promise<Employee>
+  updateEmployeeByEmail: (email: string, customerUpdated: Prisma.EmployeeUpdateInput) => Promise<Employee>
   delete: (id: string) => Promise<Employee>
 }
 
