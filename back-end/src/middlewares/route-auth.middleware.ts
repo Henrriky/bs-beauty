@@ -3,7 +3,7 @@ import type { NextFunction, Request, Response } from 'express'
 
 const routeAuthMiddleware = (roles: Role[]) => (req: Request, res: Response, next: NextFunction) => {
   let isAbleToCallNext = true
-  const role = req.headers.role
+  const role = req.user.role
   if (role == null) {
     res.status(401).send({ statusCode: 401, message: 'Unauthorized', details: 'Role is required.' })
     isAbleToCallNext = false
