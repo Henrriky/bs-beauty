@@ -1,12 +1,21 @@
 import 'dotenv/config'
+import { z } from 'zod'
 
-const ENV = {
-  GOOGLE: {
-    CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? new Error('Please, define GOOGLE_CLIENT_ID enviroment variable'),
-    CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ?? new Error('Please, define GOOGLE_CLIENT_SECRET enviroment variable'),
-    REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI ?? new Error('Please, define GOOGLE_REDIRECT_URI enviroment variable'),
-    SCOPES: process.env.GOOGLE_SCOPES?.split(',') ?? new Error('Please, define GOOGLE_SCOPES enviroment variable')
-  }
+const envSchema = z.object({
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+  GOOGLE_REDIRECT_URI: z.string(),
+  GOOGLE_SCOPES: z.string(),
+  JWT_SECRET: z.string(),
+  JWT_EXPIRES_IN: z.string()
+})
+
+const _env = envSchema.safeParse(process.env)
+
+if (!_env.success) {
+  console.error('❌ Invalid enviroment variables', _env.error.format())
+
+  throw new Error('❌ Invalid enviroment variables.')
 }
 
-export { ENV }
+export const ENV = _env.data
