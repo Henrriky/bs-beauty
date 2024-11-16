@@ -2,10 +2,10 @@ import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
 
 class EmployeeSchemas {
-  private static readonly socialMediaSchema = z.object({
+  public static readonly socialMediaSchema = z.array(z.object({
     name: z.string().min(1),
     url: z.string().url()
-  }).strict()
+  }).strict())
 
   public static createSchema = z.object({
     name: z.string().min(3).refine((string) => RegexPatterns.names.test(string)),

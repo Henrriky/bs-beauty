@@ -11,7 +11,7 @@ class GoogleAuthIdentityProvider implements OAuthIdentityProvider {
       throw new Error('Email or user id not exists on google token')
     }
 
-    return { userId: 'asda', email: 'asdasd' }
+    return { userId: userId, email: email }
   }
 
   generateRedirectUri () {
