@@ -1,6 +1,6 @@
-import { type Prisma } from '@prisma/client'
+import { type Customer, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
-import { type CustomerRepository } from '../protocols/customer.repository'
+import { type UpdateOrCreateParams, type CustomerRepository } from '../protocols/customer.repository'
 
 class PrismaCustomerRepository implements CustomerRepository {
   public async findAll () {
@@ -37,6 +37,22 @@ class PrismaCustomerRepository implements CustomerRepository {
     const customerUpdated = await prismaClient.customer.update({
       where: { id: customerId },
       data: { ...customerToUpdate }
+    })
+
+    return customerUpdated
+  }
+
+  public async updateOrCreate (identifiers: UpdateOrCreateParams, data: Prisma.CustomerCreateInput): Promise<Customer> {
+    const customerUpdated = await prismaClient.customer.upsert({
+      where: {
+        email: identifiers.email,
+        googleId: identifiers.googleId,
+        id: identifiers.id
+      },
+      update: {},
+      create: {
+        ...data
+      }
     })
 
     return customerUpdated
