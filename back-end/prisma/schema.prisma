@@ -14,16 +14,18 @@ datasource db {
 }
 
 model Customer {
-  id           String         @id @default(uuid())
-  name         String
-  birthdate    DateTime
-  email        String         @unique
-  phone        String         @unique
-  notification Notification[]
-  appointments Appointment[]
-  role         Role           @default(CUSTOMER)
-  createdAt    DateTime       @default(now()) @map("created_at")
-  updatedAt    DateTime       @updatedAt @map("updated_at")
+  id                String         @id @default(uuid())
+  name              String?        @default("Usuário")
+  registerCompleted Boolean        @default(false) @map("register_completed")
+  birthdate         DateTime?
+  email             String         @unique
+  googleId          String?        @unique @map("google_id")
+  phone             String?        @unique
+  notification      Notification[]
+  appointments      Appointment[]
+  role              Role           @default(CUSTOMER)
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
 
   @@map("customer")
 }
@@ -86,18 +88,19 @@ model Offer {
 }
 
 model Employee {
-  id           String         @id @default(uuid())
-  name         String
-  email        String         @unique
-  passwordHash String         @map("password_hash")
-  socialMedia  Json?          @map("social_media")
-  contact      String?        @unique
-  role         Role           @default(EMPLOYEE)
-  shifts       Shift[]
-  offers       Offer[]
-  notification Notification[]
-  createdAt    DateTime       @default(now()) @map("created_at")
-  updatedAt    DateTime       @updatedAt @map("updated_at")
+  id                String         @id @default(uuid())
+  name              String?        @default("Usuário")
+  email             String         @unique
+  googleId          String?        @unique @map("google_id")
+  registerCompleted Boolean        @default(false) @map("register_completed")
+  socialMedia       Json?          @map("social_media")
+  contact           String?        @unique
+  role              Role           @default(EMPLOYEE)
+  shifts            Shift[]
+  offers            Offer[]
+  notification      Notification[]
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
 
   @@map("employee")
 }
