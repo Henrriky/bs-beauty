@@ -9,18 +9,19 @@ import { shiftRoutes } from './routes/shift.routes'
 import { offerRoutes } from './routes/offers.routes'
 import { errorHandlerMiddleware } from '../middlewares/error-handler.middleware'
 import { authRoutes } from './routes/auth.routes'
+import { verifyJwtTokenMiddleware } from '../middlewares/auth/verify-jwt-token.middleware'
 
 const appRoutes = Router()
 
 appRoutes.use('/auth', authRoutes)
-appRoutes.use('/employees', employeeRoutes)
-appRoutes.use('/services', serviceRoutes)
-appRoutes.use('/customers', customerRoutes)
-appRoutes.use('/notifications', notificationRoutes)
-appRoutes.use('/appointments', appointmentRoutes)
-appRoutes.use('/appointment-services', appointmentServiceRoutes)
-appRoutes.use('/shifts', shiftRoutes)
-appRoutes.use('/offers', offerRoutes)
+appRoutes.use('/employees', verifyJwtTokenMiddleware, employeeRoutes)
+appRoutes.use('/services', verifyJwtTokenMiddleware, serviceRoutes)
+appRoutes.use('/customers', verifyJwtTokenMiddleware, customerRoutes)
+appRoutes.use('/notifications', verifyJwtTokenMiddleware, notificationRoutes)
+appRoutes.use('/appointments', verifyJwtTokenMiddleware, appointmentRoutes)
+appRoutes.use('/appointment-services', verifyJwtTokenMiddleware, appointmentServiceRoutes)
+appRoutes.use('/shifts', verifyJwtTokenMiddleware, shiftRoutes)
+appRoutes.use('/offers', verifyJwtTokenMiddleware, offerRoutes)
 appRoutes.use(errorHandlerMiddleware)
 
 export { appRoutes }
