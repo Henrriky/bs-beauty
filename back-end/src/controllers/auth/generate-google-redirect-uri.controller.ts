@@ -1,10 +1,13 @@
 import { type Response, type Request } from 'express'
-import { GenerateGoogleRedirectUriService } from '../../services/external/google/generate-google-redirect-uri.service'
+import { GenerateOAuthRedirectUriUseCase } from '../../services/use-cases/generate-oauth-redirect-uri.use-case'
+import { GoogleAuthIdentityProvider } from '../../services/identity-providers/google-oauth-identity-provider.service'
 
 class GenerateGoogleRedirectUriController {
   public static async handle (req: Request, res: Response) {
     try {
-      const service = new GenerateGoogleRedirectUriService()
+      const service = new GenerateOAuthRedirectUriUseCase(
+        new GoogleAuthIdentityProvider()
+      )
       const { authorizationUrl } = service.execute()
 
       res.status(200).send({ authorizationUrl })
