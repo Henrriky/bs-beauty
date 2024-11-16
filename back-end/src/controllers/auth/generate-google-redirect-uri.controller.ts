@@ -1,5 +1,5 @@
 import { type Response, type Request } from 'express'
-import { GenerateOAuthRedirectUriUseCase } from '../../services/use-cases/generate-oauth-redirect-uri.use-case'
+import { GenerateOAuthRedirectUriUseCase } from '../../services/use-cases/auth/generate-oauth-redirect-uri.use-case'
 import { GoogleAuthIdentityProvider } from '../../services/identity-providers/google-oauth-identity-provider.service'
 
 class GenerateGoogleRedirectUriController {

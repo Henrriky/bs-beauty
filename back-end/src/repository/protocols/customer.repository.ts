@@ -12,6 +12,7 @@ interface CustomerRepository {
   findByEmailOrPhone: (email: string, phone: string) => Promise<Customer | null>
   create: (newCustomer: Prisma.CustomerCreateInput) => Promise<Customer>
   update: (id: string, customerUpdated: Prisma.CustomerUpdateInput) => Promise<Customer>
+  updateByEmailAndGoogleId: (googleId: string, email: string, customerData: Prisma.CustomerUpdateInput) => Promise<Customer>
   updateOrCreate: (identifiers: UpdateOrCreateParams, data: Prisma.CustomerCreateInput) => Promise<Customer>
   delete: (id: string) => Promise<Customer>
 }

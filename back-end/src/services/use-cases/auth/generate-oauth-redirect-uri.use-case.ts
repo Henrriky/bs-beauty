@@ -1,4 +1,4 @@
-import { type OAuthIdentityProvider } from '../protocols/oauth-identity-provider.protocol'
+import { type OAuthIdentityProvider } from '../../protocols/oauth-identity-provider.protocol'
 
 interface GenerateOAuthRedirectUriUseCaseOutput { authorizationUrl: string }
 

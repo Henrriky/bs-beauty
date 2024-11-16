@@ -1,8 +1,8 @@
-import { type Encrypter } from '../protocols/encrypter.protocol'
-import { type CustomerRepository } from '../../repository/protocols/customer.repository'
-import { type EmployeeRepository } from '../../repository/protocols/employee.repository'
-import { type CustomerOrEmployee } from '../../types/customer-or-employee.type'
-import { type OAuthIdentityProvider } from '../protocols/oauth-identity-provider.protocol'
+import { type Encrypter } from '../../protocols/encrypter.protocol'
+import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
+import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
+import { type CustomerOrEmployee } from '../../../types/customer-or-employee.type'
+import { type OAuthIdentityProvider } from '../../protocols/oauth-identity-provider.protocol'
 
 interface LoginUseCaseInput {
   token: string

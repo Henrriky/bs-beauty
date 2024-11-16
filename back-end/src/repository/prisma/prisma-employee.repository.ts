@@ -1,4 +1,4 @@
-import { type Prisma } from '@prisma/client'
+import { type Employee, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type EmployeeRepository } from '../protocols/employee.repository'
 
@@ -39,6 +39,25 @@ class PrismaEmployeeRepository implements EmployeeRepository {
     })
 
     return employeeUpdated
+  }
+
+  async updateByEmailAndGoogleId (
+    googleId: string,
+    email: string,
+    employeeData: Prisma.EmployeeUpdateInput
+  ): Promise<Employee> {
+    const employee = await prismaClient.employee.update({
+      where: {
+        email,
+        googleId
+      },
+      data: {
+        ...employeeData,
+        registerCompleted: true
+      }
+    })
+
+    return employee
   }
 
   public async updateEmployeeByEmail (email: string, employeeToUpdate: Prisma.EmployeeUpdateInput) {

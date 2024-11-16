@@ -42,6 +42,25 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customerUpdated
   }
 
+  async updateByEmailAndGoogleId (
+    googleId: string,
+    email: string,
+    customerData: Prisma.CustomerUpdateInput
+  ): Promise<Customer> {
+    const customer = await prismaClient.customer.update({
+      where: {
+        email,
+        googleId
+      },
+      data: {
+        ...customerData,
+        registerCompleted: true
+      }
+    })
+
+    return customer
+  }
+
   public async updateOrCreate (identifiers: UpdateOrCreateParams, data: Prisma.CustomerCreateInput): Promise<Customer> {
     const customerUpdated = await prismaClient.customer.upsert({
       where: {

@@ -7,6 +7,12 @@ class EmployeeSchemas {
     url: z.string().url()
   }).strict())
 
+  public static readonly employeeCompleteRegisterBodySchema = z.object({
+    name: z.string().min(3).refine((string) => RegexPatterns.names.test(string)),
+    socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
+    contact: z.string().refine((value) => RegexPatterns.phone.test(value))
+  }).strict()
+
   public static createSchema = z.object({
     name: z.string().min(3).refine((string) => RegexPatterns.names.test(string)),
     email: z.string().email(),
