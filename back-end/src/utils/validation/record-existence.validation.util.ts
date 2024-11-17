@@ -1,4 +1,3 @@
-import { type Shift } from '@prisma/client'
 import { CustomError } from '../errors/custom.error.util'
 
 class RecordExistence {
@@ -18,14 +17,6 @@ class RecordExistence {
     if (records.length === 0) {
       throw new CustomError('Not Found', 404, `No ${entity} found.`)
     }
-  }
-
-  public static validateUniqueWeekDayInShifts (records: any, shiftToUpdate: any, entity: string) {
-    records.shifts.forEach((shift: Shift) => {
-      if (shift.weekDay === shiftToUpdate?.weekDay) {
-        throw new CustomError('Bad Request', 400, `${entity} already exists.`)
-      }
-    })
   }
 }
 
