@@ -69,13 +69,12 @@ button {
     background-color: #A4978A;
 }
 
-.googleLogin {
-    display: flex;
+/* .googleLogin {
     justify-content: center;
     align-items: center;
     gap: 10px;
     background-color: #DBDBDB;
-}
+} */
 
 .auxOptions {
     margin-top: 13px;
