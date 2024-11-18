@@ -1,14 +1,34 @@
+import { FormEvent, useState } from 'react'
 import googleIcon from '../assets/google.svg'
 import loginBackgroundBottom from '../assets/login-background-bottom.svg'
 import loginBackgroundTop from '../assets/login-background-top.svg'
+import { axiosInstance } from '../lib/axios'
 
 function LoginPage() {
+
+    const [error, setError] = useState<string | null>(null)
+
+    async function handleButtonClick () {
+        console.log('vampeatao');
+        try {
+            const response = await axiosInstance.get<{ authorizationUrl: string }>('/auth/google/redirect-uri')
+            console.log(response);
+            
+            window.location.href = response.data.authorizationUrl
+        } catch (error) {
+            console.error(error)
+            setError('Erro ao buscar a URL de Autenticação')
+        }
+    }
+
     return (
         <>
             <div className='flex justify-center items-center h-screen flex-col relative'>
                 <img src={loginBackgroundTop} alt="Ícone do Google" className='absolute right-0 top-0'/>
                 <div>
+                    { error && <p className='text-red-400'>{error}</p>}
                     <button 
+                        onClick={handleButtonClick}
                         className="flex justify-center items-center gap-2.5 bg-[#DBDBDB] p-2 rounded w-[320px] text-[#1E1E1E] text-sm font-medium rounded-tl-3xl rounded-tr-sm rounded-br-3xl rounded-bl-sm"
                     >
                         <img src={googleIcon} alt="Ícone do Google" />
