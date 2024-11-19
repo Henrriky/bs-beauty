@@ -23,11 +23,11 @@ class OffersUseCase {
     return offer
   }
 
-  public async executeFindByServiceId (serviceId: string): Promise<OfferOutput> {
-    const offers = await this.offerRepository.findByServiceId(serviceId)
-    RecordExistence.validateManyRecordsExistence(offers, 'offers')
+  public async executeFindByServiceId (serviceId: string) {
+    const offer = await this.offerRepository.findByServiceId(serviceId)
+    RecordExistence.validateRecordExistence(offer, 'Offer')
 
-    return { offers }
+    return offer
   }
 
   public async executeFindByEmployeeId (employeeId: string): Promise<OfferOutput> {
