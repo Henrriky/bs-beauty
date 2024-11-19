@@ -1,20 +1,19 @@
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
 import googleIcon from '../assets/google.svg'
 import loginBackgroundBottom from '../assets/login-background-bottom.svg'
 import loginBackgroundTop from '../assets/login-background-top.svg'
-import { axiosInstance } from '../lib/axios'
+import * as AuthAPI from '../api/auth-api'
+
+
 
 function LoginPage() {
 
     const [error, setError] = useState<string | null>(null)
 
     async function handleButtonClick () {
-        console.log('vampeatao');
         try {
-            const response = await axiosInstance.get<{ authorizationUrl: string }>('/auth/google/redirect-uri')
-            console.log(response);
-            
-            window.location.href = response.data.authorizationUrl
+            const { authorizationUrl }  = await AuthAPI.fetchGoogleRedirectUri()
+            window.location.href = authorizationUrl
         } catch (error) {
             console.error(error)
             setError('Erro ao buscar a URL de Autenticação')
