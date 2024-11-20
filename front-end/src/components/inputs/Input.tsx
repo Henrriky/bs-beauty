@@ -14,7 +14,7 @@ export function Input(props: InputProps) {
         {props.label}
       </label>
       <input
-        className="text-sm text-[#A5A5A5] border-none bg-transparent focus:outline-none cursor-text"
+        className="text-sm text-[#A5A5A5] border-none bg-transparent focus:outline-none cursor-text w-full"
         {...props}
         type={props.type}
         name={props.name}
