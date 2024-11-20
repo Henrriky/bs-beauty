@@ -27,4 +27,27 @@ const exchangeCodeForToken = async (
   return { accessToken: response.data.accessToken }
 }
 
-export { fetchGoogleRedirectUri, exchangeCodeForToken }
+type LoginWithGoogleAccessTokenInput = string
+type LoginWithGoogleAccessTokenAPIResponse = { accessToken: string }
+
+const loginWithGoogleAccessToken = async (
+  googleAccessToken: LoginWithGoogleAccessTokenInput,
+): Promise<ExchangeCodeForTokenAPIResponse> => {
+  const response =
+    await axiosInstance.post<LoginWithGoogleAccessTokenAPIResponse>(
+      API_VARIABLES.AUTH_ENDPOINTS.LOGIN_WITH_GOOGLE_ACCESS_TOKEN,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${googleAccessToken}`,
+        },
+      },
+    )
+  return { accessToken: response.data.accessToken }
+}
+
+export {
+  fetchGoogleRedirectUri,
+  exchangeCodeForToken,
+  loginWithGoogleAccessToken,
+}

@@ -1,19 +1,17 @@
-import { useState } from 'react'
-import googleIcon from '../assets/google.svg'
-import loginBackgroundBottom from '../assets/login-background-bottom.svg'
-import loginBackgroundTop from '../assets/login-background-top.svg'
-import * as AuthAPI from '../api/auth-api'
+import googleIcon from '../../assets/google.svg'
+import loginBackgroundBottom from '../../assets/login-background-bottom.svg'
+import loginBackgroundTop from '../../assets/login-background-top.svg'
+import * as AuthAPI from '../../api/auth-api'
+import { toast } from 'react-toastify'
 
-function LoginPage() {
-  const [error, setError] = useState<string | null>(null)
-
+function Login() {
   async function handleButtonClick() {
     try {
       const { authorizationUrl } = await AuthAPI.fetchGoogleRedirectUri()
       window.location.href = authorizationUrl
     } catch (error) {
       console.error(error)
-      setError('Erro ao buscar a URL de Autenticação')
+      toast.error('Erro ao buscar a URL de Autenticação')
     }
   }
 
@@ -26,7 +24,6 @@ function LoginPage() {
           className="absolute right-0 top-0"
         />
         <div>
-          {error && <p className="text-red-400">{error}</p>}
           <button
             onClick={handleButtonClick}
             className="flex justify-center items-center gap-2.5 bg-[#DBDBDB] p-2 rounded w-[320px] text-[#1E1E1E] text-sm font-medium rounded-tl-3xl rounded-tr-sm rounded-br-3xl rounded-bl-sm"
@@ -46,4 +43,4 @@ function LoginPage() {
   )
 }
 
-export default LoginPage
+export default Login

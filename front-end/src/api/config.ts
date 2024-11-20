@@ -3,5 +3,6 @@ export const API_VARIABLES = {
   AUTH_ENDPOINTS: {
     FETCH_GOOGLE_REDIRECT_URI: '/auth/google/redirect-uri',
     EXCHANGE_CODE_FOR_TOKEN: '/auth/google/exchange-code',
+    LOGIN_WITH_GOOGLE_ACCESS_TOKEN: '/auth/login',
   },
 } as const
