@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { decodeUserToken } from "../../utils/decode-token"
-import { CustomerOrEmployee } from "./types"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { decodeUserToken } from '../../utils/decode-token'
+import { CustomerOrEmployee } from './types'
 
 type TokenParams = {
   accessToken: string
@@ -13,27 +13,26 @@ type AuthState = {
 }
 
 const initialState = (): AuthState => {
-
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem('accessToken')
 
   if (!accessToken) {
     console.error('Access token from localstorage not found')
 
     return {
       token: null,
-      user: null
+      user: null,
     }
   }
 
-  const tokenInformations = decodeUserToken(accessToken);
+  const tokenInformations = decodeUserToken(accessToken)
   return {
     token: {
       accessToken,
-      expiresAt: tokenInformations.exp!
+      expiresAt: tokenInformations.exp!,
     },
     user: {
-      ...tokenInformations
-    }
+      ...tokenInformations,
+    },
   }
 }
 
@@ -41,14 +40,17 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setToken: (state, action: PayloadAction<{ token: TokenParams, user: CustomerOrEmployee }>) => {
-      localStorage.setItem('accessToken', action.payload.token.accessToken);
-      return { 
+    setToken: (
+      state,
+      action: PayloadAction<{ token: TokenParams; user: CustomerOrEmployee }>,
+    ) => {
+      localStorage.setItem('accessToken', action.payload.token.accessToken)
+      return {
         ...state,
-        ...action.payload
+        ...action.payload,
       }
     },
-  }
+  },
 })
 
 export const { setToken } = authSlice.actions

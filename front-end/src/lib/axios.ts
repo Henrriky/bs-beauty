@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios from 'axios'
+import { API_VARIABLES } from '../api/config'
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api'
+  baseURL: API_VARIABLES.BASE_URL,
 })
 
 export { axiosInstance }

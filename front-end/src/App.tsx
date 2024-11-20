@@ -6,15 +6,14 @@ import Layout from './layouts/Layout'
 import LoginPage from './pages/LoginPage'
 
 function App() {
-
   return (
     <>
       <Provider store={store}>
-        <Router>s
+        <Router>
           <Routes>
-            <Route path="/" element={<Layout/>}>
-              <Route index element={<LoginPage/>}/>
-              <Route path="/callback" element={<Callback/>}/>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<LoginPage />} />
+              <Route path="/callback" element={<Callback />} />
             </Route>
           </Routes>
         </Router>
