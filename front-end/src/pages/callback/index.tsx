@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router'
 import useAppDispatch from '../../hooks/use-app-dispatch'
 import { setToken } from '../../store/auth/auth-slice'
 import { TokenPayload, decodeUserToken } from '../../utils/decode-token'
-import useAppSelector from '../../hooks/use-app-selector'
 import { toast } from 'react-toastify'
 
 // https://chatgpt.com/c/673be240-c094-8004-aeaa-c06ca029b0b5
@@ -13,7 +12,6 @@ import { toast } from 'react-toastify'
 // https://medium.com/@ravipatel.it/building-a-layout-with-react-router-v6-step-by-step-guide-75b9637f1fbe
 function Callback() {
   const dispatchRedux = useAppDispatch()
-  const user = useAppSelector((state) => state.auth.user)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -56,7 +54,7 @@ function Callback() {
         const decodedToken = decodeUserToken(accessToken)
         storeDecodedTokenOnAuthState(decodedToken, accessToken)
         localStorage.setItem('token', accessToken)
-        navigate('/profile')
+        navigate('/complete-register')
       })
       .catch((error) => {
         console.error(error)

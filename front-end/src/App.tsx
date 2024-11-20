@@ -20,7 +20,8 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index path="/login" element={<Login />} />
+              <Route index element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/auth/google/callback" element={<Callback />} />
               <Route element={<PrivateRoute />}>
                 <Route path="/profile" element={<Profile />} />

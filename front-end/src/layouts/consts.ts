@@ -1,0 +1,5 @@
+const LAYOUT_CONFIG = {
+  MAIN_HORIZONTAL_PADDING: 4,
+}
+
+export default LAYOUT_CONFIG

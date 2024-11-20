@@ -3,6 +3,7 @@ import loginBackgroundBottom from '../../assets/login-background-bottom.svg'
 import loginBackgroundTop from '../../assets/login-background-top.svg'
 import * as AuthAPI from '../../api/auth-api'
 import { toast } from 'react-toastify'
+import LAYOUT_CONFIG from '../../layouts/consts'
 
 function Login() {
   async function handleButtonClick() {
@@ -21,7 +22,7 @@ function Login() {
         <img
           src={loginBackgroundTop}
           alt="Ícone do Google"
-          className="absolute right-0 top-0"
+          className={`absolute right-[-${LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING * 4}px] top-0`}
         />
         <div>
           <button
@@ -36,7 +37,7 @@ function Login() {
         <img
           src={loginBackgroundBottom}
           alt="Ícone do Google"
-          className="absolute left-0 bottom-0 max-h- object-cover w-full"
+          className="absolute left-0 bottom-0 w-full h-auto object-contain"
         />
       </div>
     </>
