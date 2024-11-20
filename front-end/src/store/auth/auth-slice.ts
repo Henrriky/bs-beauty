@@ -13,10 +13,10 @@ type AuthState = {
 }
 
 const initialState = (): AuthState => {
-  const accessToken = localStorage.getItem('accessToken')
+  const accessToken = localStorage.getItem('token')
 
   if (!accessToken) {
-    console.error('Access token from localstorage not found')
+    console.warn('Access token from localStorage not found')
 
     return {
       token: null,
@@ -25,6 +25,17 @@ const initialState = (): AuthState => {
   }
 
   const tokenInformations = decodeUserToken(accessToken)
+
+  const tokenIsExpired = tokenInformations.exp! * 1000 < Date.now()
+
+  if (tokenIsExpired) {
+    console.warn('Access token expired')
+    return {
+      token: null,
+      user: null,
+    }
+  }
+
   return {
     token: {
       accessToken,
@@ -44,7 +55,6 @@ const authSlice = createSlice({
       state,
       action: PayloadAction<{ token: TokenParams; user: CustomerOrEmployee }>,
     ) => {
-      localStorage.setItem('accessToken', action.payload.token.accessToken)
       return {
         ...state,
         ...action.payload,
