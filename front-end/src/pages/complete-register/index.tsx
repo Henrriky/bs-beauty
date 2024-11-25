@@ -1,43 +1,32 @@
-import { useState } from 'react'
 import Title from '../../components/texts/Title'
-import { Button } from './components/Button'
-import InputContainer from './components/InputContainer'
+import { Role } from '../../store/auth/types'
+import useAppSelector from '../../hooks/use-app-selector'
+import CustomerInputContainer from './components/CustomerInputContainer'
+import EmployeeInputContainer from './components/EmployeeInputContainer'
+import { OnSubmitEmployeeOrCustomerForm } from './components/types'
+import { authAPI } from '../../store/auth/auth-api'
+
+const rolesToInputContainers = {
+  [Role.CUSTOMER]: CustomerInputContainer,
+  [Role.EMPLOYEE]: EmployeeInputContainer,
+  [Role.MANAGER]: () => <></>,
+}
 
 function CompleteRegister() {
-  const [loading, setLoading] = useState(false)
+  const [completeRegister, { isError, isSuccess, isLoading }] =
+    authAPI.useCompleteRegisterMutation()
 
-  const handleSubmit = async () => {
-    setLoading(true)
+  const userRole = useAppSelector((state) => state.auth.user!.role)
+  const InputContainer = rolesToInputContainers[userRole]
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      alert('Cadastro finalizado com sucesso!')
-    } catch (error) {
-      console.error(error)
-      alert('Ocorreu um erro!')
-    } finally {
-      setLoading(false)
-    }
+  const handleSubmit: OnSubmitEmployeeOrCustomerForm = async (data) => {
+    await completeRegister(data)
   }
 
   return (
     <div className="flex justify-center items-center flex-col h-full gap-12">
       <Title align="center">Quase lá, finalize seu cadastro</Title>
-      <InputContainer />
-      <Button
-        label={
-          loading ? (
-            <div className="flex justify-center items-center gap-4">
-              <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
-              <p className="text-sm">Finalizar cadastro</p>
-            </div>
-          ) : (
-            'Finalizar cadastro'
-          )
-        }
-        onClick={handleSubmit}
-        disabled={loading}
-      />
+      <InputContainer handleSubmit={handleSubmit} isLoading={isLoading} />
     </div>
   )
 }
