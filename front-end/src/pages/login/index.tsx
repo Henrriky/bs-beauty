@@ -22,7 +22,7 @@ function Login() {
         <img
           src={loginBackgroundTop}
           alt="Ícone do Google"
-          className={`absolute right-[-${LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING * 4}px] top-0`}
+          className={`absolute right-[-${(LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING * 4).toString()}] top-0`}
         />
         <div>
           <button

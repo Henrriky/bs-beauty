@@ -17,6 +17,15 @@ class CustomerSchemas {
       birthdate: z.preprocess(
         (arg) => {
           if (typeof arg === 'string' || arg instanceof Date) {
+            const isDayMonthYearFormat = arg
+              .toString()
+              .match(RegexPatterns.dayMonthYearFormat)
+
+            if (isDayMonthYearFormat) {
+              const [, day, month, year] = isDayMonthYearFormat
+              return new Date(`${year}-${month}-${day}`)
+            }
+
             return new Date(arg)
           }
           return arg

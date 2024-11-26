@@ -5,7 +5,7 @@ function Layout() {
   return (
     <div className="bg-[#1E1E1E] text-[$D9D9D9] h-screen">
       <main
-        className={`px-${LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING.toString()} h-full`}
+        className={`${'px-' + LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING.toString()} h-full`}
       >
         {<Outlet />}
       </main>

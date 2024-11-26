@@ -8,6 +8,7 @@ import {
   CustomerCompleteRegisterFormData,
   OnSubmitEmployeeOrCustomerForm,
 } from './types'
+import { Formatter } from '../../../utils/formatter/formatter.util'
 
 interface CustomerInputContainerProps {
   isLoading: boolean
@@ -24,14 +25,14 @@ function CustomerInputContainer(props: CustomerInputContainerProps) {
   })
 
   const user = useAppSelector((state) => state.auth.user!)
-  console.log(errors)
+
   return (
     <form
       className="flex flex-col gap-10 w-full"
       onSubmit={handleSubmit(props.handleSubmit)}
     >
       <Input
-        {...register('name')}
+        registration={{ ...register('name') }}
         label="Nome"
         id="name"
         type="text"
@@ -39,7 +40,14 @@ function CustomerInputContainer(props: CustomerInputContainerProps) {
         error={errors?.name?.message?.toString()}
       />
       <Input
-        {...register('birthdate')}
+        registration={{
+          ...register('birthdate', {
+            onChange: (e) => {
+              const value = Formatter.formatBirthdayWithSlashes(e.target.value)
+              e.target.value = value
+            },
+          }),
+        }}
         label="Data de nascimento"
         id="birthdate"
         type="text"
@@ -47,7 +55,14 @@ function CustomerInputContainer(props: CustomerInputContainerProps) {
         error={errors?.birthdate?.message?.toString()}
       />
       <Input
-        {...register('phone')}
+        registration={{
+          ...register('phone', {
+            onChange: (e) => {
+              const value = Formatter.formatPhoneNumber(e.target.value)
+              e.target.value = value
+            },
+          }),
+        }}
         label="Telefone"
         id="phone"
         type="text"
