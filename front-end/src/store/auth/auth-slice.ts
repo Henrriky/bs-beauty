@@ -29,6 +29,8 @@ const initialState = (): AuthState => {
   const tokenIsExpired = tokenInformations.exp! * 1000 < Date.now()
 
   if (tokenIsExpired) {
+    //TODO: Add toast info that token expire
+    //TODO: If Provider not work redirect user to /login with window.location.href
     console.warn('Access token expired')
     return {
       token: null,
@@ -60,9 +62,16 @@ const authSlice = createSlice({
         ...action.payload,
       }
     },
+    setRegisterCompleted: (
+      state,
+    ) => {
+      if (state.user) {
+        state.user.registerCompleted = true 
+      }
+    }
   },
 })
 
-export const { setToken } = authSlice.actions
-
+export { authSlice }
+export const { setToken, setRegisterCompleted } = authSlice.actions
 export default authSlice.reducer
