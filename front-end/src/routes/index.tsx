@@ -5,6 +5,7 @@ import Callback from '../pages/callback'
 import PrivateRoute from '../pages/private-route'
 import Profile from '../pages/profile'
 import CompleteRegister from '../pages/complete-register'
+import NotFound from '../pages/not-found'
 
 function BSBeautyRouter() {
   return (
@@ -18,6 +19,7 @@ function BSBeautyRouter() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/complete-register" element={<CompleteRegister />} />
           </Route>
+          <Route path="*" element={<NotFound/>} />
         </Route>
       </Routes>
     </Router>
