@@ -54,7 +54,11 @@ function Callback() {
         const decodedToken = decodeUserToken(accessToken)
         storeDecodedTokenOnAuthState(decodedToken, accessToken)
         localStorage.setItem('token', accessToken)
-        navigate('/complete-register')
+        if (decodedToken.registerCompleted) {
+          navigate('/home')
+        } else {
+          navigate('/complete-register')
+        }
       })
       .catch((error) => {
         console.error(error)

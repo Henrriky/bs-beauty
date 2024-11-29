@@ -3,9 +3,27 @@ import loginBackgroundBottom from '../../assets/login-background-bottom.svg'
 import loginBackgroundTop from '../../assets/login-background-top.svg'
 import * as AuthAPI from '../../api/auth-api'
 import { toast } from 'react-toastify'
-import LAYOUT_CONFIG from '../../layouts/consts'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router'
+import useAppSelector from '../../hooks/use-app-selector'
 
 function Login() {
+
+  const navigate = useNavigate()
+  const authInformations = useAppSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (authInformations.token?.accessToken) {
+      if (authInformations.user?.registerCompleted) {
+        navigate('/home')
+      } else {
+        navigate('/')
+      }
+    }
+  }, [])
+
+
+
   async function handleButtonClick() {
     try {
       const { authorizationUrl } = await AuthAPI.fetchGoogleRedirectUri()
@@ -22,7 +40,8 @@ function Login() {
         <img
           src={loginBackgroundTop}
           alt="Ícone do Google"
-          className={`absolute right-[-${(LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING * 4).toString()}] top-0`}
+          className={`absolute right-[-16px] top-0`}
+          // className={`absolute right-[-${(LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING * 4).toString()}px] top-0`}
         />
         <div>
           <button
