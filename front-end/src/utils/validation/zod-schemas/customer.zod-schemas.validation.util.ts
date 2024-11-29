@@ -31,7 +31,11 @@ class CustomerSchemas {
           return arg
         },
         z
-          .date({ message: 'A data de nascimento é obrigatória' })
+          .date({
+            errorMap: (issue, { defaultError }) => ({
+              message: issue.code === "invalid_date" ? 'Por favor, forneça uma data de nascimento válida' : defaultError,
+            }),
+          })
           .refine(
             (date) => !isNaN(date.getTime()) && date < new Date(),
             'Por favor, forneça uma data de nascimento válida',
