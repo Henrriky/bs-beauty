@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router'
 import useAppSelector from '../../hooks/use-app-selector'
 
 function Login() {
-
   const navigate = useNavigate()
   const authInformations = useAppSelector((state) => state.auth)
 
@@ -20,9 +19,11 @@ function Login() {
         navigate('/')
       }
     }
-  }, [])
-
-
+  }, [
+    authInformations.token?.accessToken,
+    authInformations.user?.registerCompleted,
+    navigate,
+  ])
 
   async function handleButtonClick() {
     try {

@@ -16,26 +16,26 @@ const rolesToInputContainers = {
 }
 
 function CompleteRegister() {
-  const [completeRegister, { isLoading }] = authAPI.useCompleteRegisterMutation()
-  
+  const [completeRegister, { isLoading }] =
+    authAPI.useCompleteRegisterMutation()
+
   const dispatchRedux = useAppDispatch()
   const userRole = useAppSelector((state) => state.auth.user!.role)
   const InputContainer = rolesToInputContainers[userRole]
 
-
-  //REFACTOR TODO: Extract bellow function and useEffect to an customHook
+  // REFACTOR TODO: Extract bellow function and useEffect to an customHook
   const handleSubmit: OnSubmitEmployeeOrCustomerForm = async (data) => {
     await completeRegister(data)
       .unwrap()
       .then(() => {
         toast.success('Parabéns, seu cadastro foi concluído com sucesso!')
         dispatchRedux(
-          //TODO: Improve this refreshing token by complete register route
-          setRegisterCompleted()
+          // TODO: Improve this refreshing token by complete register route
+          setRegisterCompleted(),
         )
       })
-      .catch((error: any) => {
-        console.log('Error trying to complete register', error);
+      .catch((error: unknown) => {
+        console.log('Error trying to complete register', error)
         toast.error('Ocorreu um erro ao completar o seu cadastro.')
       })
   }

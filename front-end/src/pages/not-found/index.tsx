@@ -9,7 +9,9 @@ function NotFound() {
       <Title align="center">Ops, parece que essa rota não existe</Title>
       <Button
         label="Ir para o menu principal"
-        onClick={() => { navigate('/') }}
+        onClick={() => {
+          navigate('/')
+        }}
       />
     </div>
   )
