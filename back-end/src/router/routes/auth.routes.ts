@@ -8,7 +8,7 @@ import { ExchangeCodeByTokenController } from '../../controllers/auth/exchange-c
 const authRoutes = Router()
 
 authRoutes.get('/google/redirect-uri', GenerateGoogleRedirectUriController.handle)
-authRoutes.get('/google/exchange-code', ExchangeCodeByTokenController.handle)
+authRoutes.post('/google/exchange-code', ExchangeCodeByTokenController.handle)
 authRoutes.post('/login', LoginController.handle)
 authRoutes.post('/register/complete', verifyJwtTokenMiddleware, CompleteUserRegisterController.handle)
 
