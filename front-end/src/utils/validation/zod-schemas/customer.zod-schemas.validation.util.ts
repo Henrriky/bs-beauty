@@ -33,7 +33,10 @@ class CustomerSchemas {
         z
           .date({
             errorMap: (issue, { defaultError }) => ({
-              message: issue.code === "invalid_date" ? 'Por favor, forneça uma data de nascimento válida' : defaultError,
+              message:
+                issue.code === 'invalid_date'
+                  ? 'Por favor, forneça uma data de nascimento válida'
+                  : defaultError,
             }),
           })
           .refine(
