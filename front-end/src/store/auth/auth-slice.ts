@@ -4,6 +4,7 @@ import { CustomerOrEmployee } from './types'
 
 type TokenParams = {
   accessToken: string
+  googleAccessToken: string
   expiresAt: number
 }
 
@@ -14,9 +15,12 @@ type AuthState = {
 
 const initialState = (): AuthState => {
   const accessToken = localStorage.getItem('token')
+  const googleAccessToken = localStorage.getItem('googleAccessToken')
 
-  if (!accessToken) {
-    console.warn('Access token from localStorage not found')
+  if (!accessToken || !googleAccessToken) {
+    console.warn(
+      'Access token or Google Access Token from localStorage not found',
+    )
 
     return {
       token: null,
@@ -29,8 +33,8 @@ const initialState = (): AuthState => {
   const tokenIsExpired = tokenInformations.exp! * 1000 < Date.now()
 
   if (tokenIsExpired) {
-    //TODO: Add toast info that token expire
-    //TODO: If Provider not work redirect user to /login with window.location.href
+    // TODO: Add toast info that token expire
+    // TODO: If Provider not work redirect user to /login with window.location.href
     console.warn('Access token expired')
     return {
       token: null,
@@ -40,6 +44,7 @@ const initialState = (): AuthState => {
 
   return {
     token: {
+      googleAccessToken,
       accessToken,
       expiresAt: tokenInformations.exp!,
     },
@@ -62,16 +67,20 @@ const authSlice = createSlice({
         ...action.payload,
       }
     },
-    setRegisterCompleted: (
-      state,
-    ) => {
-      if (state.user) {
-        state.user.registerCompleted = true 
+    logout: () => {
+      return {
+        user: null,
+        token: null,
       }
-    }
+    },
+    setRegisterCompleted: (state) => {
+      if (state.user) {
+        state.user.registerCompleted = true
+      }
+    },
   },
 })
 
 export { authSlice }
-export const { setToken, setRegisterCompleted } = authSlice.actions
+export const { setToken, setRegisterCompleted, logout } = authSlice.actions
 export default authSlice.reducer
