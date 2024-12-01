@@ -149,7 +149,7 @@ function EmployeeInputContainer(props: EmployeeInputContainerProps) {
                     </div>
                   }
                   disabled={props.isLoading}
-                  className="max-w-10 border-none hover:text-[#B19B86] rounded-none hover:bg-opacity-0"
+                  className="max-w-10 border-none hover:text-[#B19B86] rounded-none hover:bg-opacity-0 hover:bg-transparent"
                 />
               </div>
             )
