@@ -6,6 +6,7 @@ import PrivateRoute from '../pages/private-route'
 import Profile from '../pages/profile'
 import CompleteRegister from '../pages/complete-register'
 import NotFound from '../pages/not-found'
+import RegistrationCompleted from '../pages/complete-register/components/RegistrationCompleted'
 
 function BSBeautyRouter() {
   return (
@@ -18,6 +19,10 @@ function BSBeautyRouter() {
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
             <Route path="/complete-register" element={<CompleteRegister />} />
+            <Route
+              path="/register-completed"
+              element={<RegistrationCompleted />}
+            />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>
