@@ -37,17 +37,17 @@ function Login() {
 
   return (
     <>
-      <div className="flex justify-center items-center h-screen flex-col relative animate-fadeIn">
+      <div className="flex justify-center items-center h-screen flex-col animate-fadeIn">
         <img
           src={loginBackgroundTop}
           alt="Ícone do Google"
-          className={`absolute right-[-16px] top-0`}
+          className={`absolute top-0 right-0`}
           // className={`absolute right-[-${(LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING * 4).toString()}px] top-0`}
         />
         <div>
           <button
             onClick={handleButtonClick}
-            className="flex justify-center items-center gap-2.5 bg-[#DBDBDB] p-2 rounded w-[320px] text-[#1E1E1E] text-sm font-medium rounded-tl-3xl rounded-tr-sm rounded-br-3xl rounded-bl-sm"
+            className="flex justify-center items-center gap-2.5 bg-[#DBDBDB] p-2 rounded w-[320px] text-[#1E1E1E] text-sm font-medium rounded-tl-3xl rounded-tr-sm rounded-br-3xl rounded-bl-sm z-10"
           >
             <img src={googleIcon} alt="Ícone do Google" />
             Logar com o Google
