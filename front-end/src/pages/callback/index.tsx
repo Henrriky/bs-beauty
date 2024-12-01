@@ -24,6 +24,7 @@ function Callback() {
     const storeDecodedTokenOnAuthState = (
       decodedToken: TokenPayload,
       accessToken: string,
+      googleAccessToken: string,
     ) => {
       dispatchRedux(
         setToken({
@@ -34,6 +35,7 @@ function Callback() {
             registerCompleted: decodedToken.registerCompleted,
           },
           token: {
+            googleAccessToken,
             accessToken,
             expiresAt: decodedToken.exp!,
           },
@@ -52,8 +54,13 @@ function Callback() {
           await AuthAPI.loginWithGoogleAccessToken(googleAccessToken)
 
         const decodedToken = decodeUserToken(accessToken)
-        storeDecodedTokenOnAuthState(decodedToken, accessToken)
+        storeDecodedTokenOnAuthState(
+          decodedToken,
+          accessToken,
+          googleAccessToken,
+        )
         localStorage.setItem('token', accessToken)
+        localStorage.setItem('googleAccessToken', googleAccessToken)
         if (decodedToken.registerCompleted) {
           navigate('/home')
         } else {
@@ -63,8 +70,10 @@ function Callback() {
       .catch((error) => {
         console.error(error)
         toast.error('Erro ao trocar o código')
+        setTimeout(() => navigate('/'), 500)
       })
   }, [])
+
   return <></>
 }
 
