@@ -37,7 +37,7 @@ function Login() {
 
   return (
     <>
-      <div className="flex justify-center items-center h-screen flex-col relative">
+      <div className="flex justify-center items-center h-screen flex-col relative animate-fadeIn">
         <img
           src={loginBackgroundTop}
           alt="Ícone do Google"
