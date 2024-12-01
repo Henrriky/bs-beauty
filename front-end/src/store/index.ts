@@ -7,8 +7,8 @@ export const store = configureStore({
   reducer: {
     [themeSlice.name]: themeReducer,
     [authSlice.name]: authReducer,
-    [authAPI.reducerPath]: authAPI.reducer
+    [authAPI.reducerPath]: authAPI.reducer,
   },
-  middleware: (getDefaultMiddleware) => 
-      getDefaultMiddleware().concat(authAPI.middleware)
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(authAPI.middleware),
 })
