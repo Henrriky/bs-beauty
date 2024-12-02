@@ -1,11 +1,10 @@
+import { faker } from "@faker-js/faker";
 import { Role } from "@prisma/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { z } from "zod";
+import { makeCompleteUserRegisterUseCase } from "../../../factory/auth/make-complete-user-register.use-case.factory";
 import { CustomerSchemas } from "../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util";
 import { CompleteUserRegisterController } from "../complete-user-register.controller";
-import { makeCompleteUserRegisterUseCase } from "../../../factory/auth/make-complete-user-register.use-case.factory";
-import { faker } from "@faker-js/faker";
-import { z } from "zod";
-import { json } from "stream/consumers";
 
 vi.mock('../../../factory/auth/make-complete-user-register.use-case.factory', () => ({
     makeCompleteUserRegisterUseCase: vi.fn(),
