@@ -4,6 +4,7 @@ import {
 } from '../../pages/complete-register/components/types'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
+import { API_VARIABLES } from '../../api/config'
 
 export const authAPI = createApi({
   reducerPath: 'api',
@@ -14,7 +15,7 @@ export const authAPI = createApi({
       CustomerCompleteRegisterFormData | EmployeeCompleteRegisterFormData
     >({
       query: (data) => ({
-        url: '/auth/register/complete',
+        url: API_VARIABLES.AUTH_ENDPOINTS.COMPLETE_REGISTER,
         method: 'POST',
         body: data,
       }),
