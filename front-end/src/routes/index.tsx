@@ -7,6 +7,7 @@ import Profile from '../pages/profile'
 import CompleteRegister from '../pages/complete-register'
 import NotFound from '../pages/not-found'
 import RegistrationCompleted from '../pages/complete-register/components/RegistrationCompleted'
+import MenuLayout from '../layouts/MenuLayout'
 
 function BSBeautyRouter() {
   return (
@@ -17,7 +18,9 @@ function BSBeautyRouter() {
           <Route path="/login" element={<Login />} />
           <Route path="/auth/google/callback" element={<Callback />} />
           <Route element={<PrivateRoute />}>
-            <Route path="/profile" element={<Profile />} />
+            <Route element={<MenuLayout />}>
+              <Route path="/profile" element={<Profile />} />
+            </Route>
             <Route path="/complete-register" element={<CompleteRegister />} />
             <Route
               path="/register-completed"
