@@ -6,8 +6,16 @@ interface TitleProps {
 }
 
 function Title({ children, align = 'center' }: TitleProps) {
+  const alignment =
+    align === 'center'
+      ? 'text-center'
+      : align === 'left'
+        ? 'text-left'
+        : align === 'right'
+          ? 'text-right'
+          : ''
   return (
-    <h1 className={`text-2xl text-[#D9D9D9] text-${align} font-medium`}>
+    <h1 className={`text-2xl text-[#D9D9D9] ${alignment} font-medium`}>
       {children}
     </h1>
   )
