@@ -8,7 +8,7 @@ function ProfilePicture() {
         alt="Profile"
         className="w-full object-cover rounded-full"
       />
-      <button className="absolute bottom-4 right-4 rounded-full shadow-md z-50">
+      <button className="absolute bottom-4 right-4 rounded-full shadow-md z-10">
         <svg
           width="14"
           height="14"
