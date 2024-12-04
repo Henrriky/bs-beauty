@@ -1,10 +1,12 @@
-function ProfilePicture() {
-  const imageUrl = 'https://picsum.photos/150?random=1'
+interface ProfilePictureProps {
+  profilePhotoUrl: string
+}
 
+function ProfilePicture({ profilePhotoUrl }: ProfilePictureProps) {
   return (
     <div className="relative w-16 h-16 pr-4 overflow-hidden">
       <img
-        src={imageUrl}
+        src={profilePhotoUrl}
         alt="Profile"
         className="w-full object-cover rounded-full"
       />

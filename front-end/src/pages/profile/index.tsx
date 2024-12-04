@@ -8,9 +8,21 @@ import ProfilePicture from './components/ProfilePicture'
 import { useForm } from 'react-hook-form'
 import { Formatter } from '../../utils/formatter/formatter.util'
 import { Button } from '../../components/button/Button'
+import { authAPI } from '../../store/auth/auth-api'
+import { toast } from 'react-toastify'
 
 function Profile() {
   const user = useAppSelector((state) => state.auth.user!)
+
+  const { data, isLoading, isError } = authAPI.useFetchUserInfoQuery()
+
+  if (isLoading) {
+    return <div>Carregando...</div>
+  }
+
+  if (isError) {
+    toast.error('Erro ao carregar informações do usuário')
+  }
 
   const {
     register,
@@ -27,63 +39,8 @@ function Profile() {
           <Subtitle align="left" color="primary-golden">
             Perfil
           </Subtitle>
-          <ProfilePicture />
+          <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} />
         </div>
-        <form
-          className="flex flex-col gap-10 w-full"
-          // onSubmit={handleSubmit(props.handleSubmit)}
-        >
-          <Input
-            registration={{ ...register('name') }}
-            label="Nome"
-            id="name"
-            type="text"
-            placeholder="Digite seu nome"
-            error={errors?.name?.message?.toString()}
-            value={user.name || ''}
-          />
-          <Input
-            registration={{
-              ...register('birthdate', {
-                onChange: (e) => {
-                  const value = Formatter.formatBirthdayWithSlashes(
-                    e.target.value,
-                  )
-                  e.target.value = value
-                },
-              }),
-            }}
-            label="Data de nascimento"
-            id="birthdate"
-            type="text"
-            placeholder="Digite sua data de nascimento"
-            error={errors?.birthdate?.message?.toString()}
-            value={'18/03/2005'}
-          />
-          <Input
-            registration={{
-              ...register('phone', {
-                onChange: (e) => {
-                  const value = Formatter.formatPhoneNumber(e.target.value)
-                  e.target.value = value
-                },
-              }),
-            }}
-            label="Telefone"
-            id="phone"
-            type="text"
-            placeholder="Digite seu telefone"
-            error={errors?.phone?.message?.toString()}
-            value={'11954056219'}
-          />
-          <Input
-            label="Email"
-            id="email"
-            type="email"
-            value={user.email}
-            disabled
-          />
-        </form>
       </div>
       <Button
         type="submit"

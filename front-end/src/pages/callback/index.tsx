@@ -33,6 +33,7 @@ function Callback() {
             email: decodedToken.email,
             name: decodedToken.name,
             registerCompleted: decodedToken.registerCompleted,
+            profilePhotoUrl: decodedToken.profilePhotoUrl,
           },
           token: {
             googleAccessToken,
