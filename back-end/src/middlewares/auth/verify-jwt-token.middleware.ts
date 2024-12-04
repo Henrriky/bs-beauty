@@ -14,14 +14,14 @@ const verifyJwtTokenMiddleware = (req: Request, res: Response, next: NextFunctio
     const authorizationHeader = req.headers?.authorization
 
     if (authorizationHeader == null) {
-      res.status(StatusCodes.UNAUTHORIZED).send({ message: 'Access Denied!', errors: AppErrorCodes.TOKEN_INVALID})
+      res.status(StatusCodes.UNAUTHORIZED).send({ message: 'Access Denied!', errors: AppErrorCodes.TOKEN_INVALID })
       return
     }
 
     const token = ((authorizationHeader?.split(' ')) != null) ? authorizationHeader?.split(' ')[1] : null
 
     if (token == null) {
-      res.status(StatusCodes.UNAUTHORIZED).send({ message: 'Access Denied!', errors: AppErrorCodes.TOKEN_INVALID})
+      res.status(StatusCodes.UNAUTHORIZED).send({ message: 'Access Denied!', errors: AppErrorCodes.TOKEN_INVALID })
       return
     }
 
@@ -31,7 +31,7 @@ const verifyJwtTokenMiddleware = (req: Request, res: Response, next: NextFunctio
     next()
   } catch (error: any) {
     console.error(`Error trying to verify jwt token.\nReason: ${error?.message}`)
-    res.status(StatusCodes.UNAUTHORIZED).send({ message: 'Access Denied!', errors: AppErrorCodes.TOKEN_INVALID})
+    res.status(StatusCodes.UNAUTHORIZED).send({ message: 'Access Denied!', errors: AppErrorCodes.TOKEN_INVALID })
   }
 }
 

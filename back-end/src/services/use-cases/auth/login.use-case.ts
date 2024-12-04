@@ -23,7 +23,7 @@ class LoginUseCase {
   }
 
   async execute ({ token }: LoginUseCaseInput): Promise<LoginUseCaseOutput> {
-    const { userId, email } = await this.identityProvider.fetchEmailAndUserIdFromToken(token)
+    const { userId, email, profilePhotoUrl } = await this.identityProvider.fetchUserInformationsFromToken(token)
 
     let customerOrEmployee: CustomerOrEmployee
     const employeeAlreadyExists = await this.employeeRepository.findByEmail(email)
@@ -47,7 +47,8 @@ class LoginUseCase {
       role: customerOrEmployee.role,
       email: customerOrEmployee.email,
       name: customerOrEmployee.name,
-      registerCompleted: customerOrEmployee.registerCompleted
+      registerCompleted: customerOrEmployee.registerCompleted,
+      profilePhotoUrl
     })
 
     return { accessToken }

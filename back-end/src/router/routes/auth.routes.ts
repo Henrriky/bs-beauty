@@ -4,6 +4,7 @@ import { GenerateGoogleRedirectUriController } from '../../controllers/auth/gene
 import { LoginController } from '../../controllers/auth/login.controller'
 import { verifyJwtTokenMiddleware } from '../../middlewares/auth/verify-jwt-token.middleware'
 import { ExchangeCodeByTokenController } from '../../controllers/auth/exchange-code-by-token.controller'
+import { FetchUserInfoController } from '../../controllers/auth/fetch-user-info.controller'
 
 const authRoutes = Router()
 
@@ -11,5 +12,6 @@ authRoutes.get('/google/redirect-uri', GenerateGoogleRedirectUriController.handl
 authRoutes.post('/google/exchange-code', ExchangeCodeByTokenController.handle)
 authRoutes.post('/login', LoginController.handle)
 authRoutes.post('/register/complete', verifyJwtTokenMiddleware, CompleteUserRegisterController.handle)
+authRoutes.get('/user', verifyJwtTokenMiddleware, FetchUserInfoController.handle)
 
 export { authRoutes }
