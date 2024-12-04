@@ -6,7 +6,7 @@ function ServicesPage () {
     return (
         <>
             <SideBar />
-            <h1 className="text-primary-400 w-40">Bem vindo(a) ao seu perfil</h1>
+            <h1 className="text-primary-300 w-40">Bem vindo(a) ao seu perfil</h1>
         </>
     )
 }

@@ -8,7 +8,8 @@ import CompleteRegister from '../pages/complete-register'
 import NotFound from '../pages/not-found'
 import RegistrationCompleted from '../pages/complete-register/components/RegistrationCompleted'
 import MenuLayout from '../layouts/MenuLayout'
-import ServicesPage from '../pages/servicesPage/servicesPage'
+import ServicesPage from '../pages/services-page'
+import ManagerHome from '../pages/manager-home'
 
 function BSBeautyRouter() {
   return (
@@ -28,6 +29,7 @@ function BSBeautyRouter() {
               element={<RegistrationCompleted />}
             />
             <Route path='/services' element={<ServicesPage />} />
+            <Route path='/manager/home' element={<ManagerHome />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>

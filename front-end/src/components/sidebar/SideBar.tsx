@@ -25,7 +25,7 @@ function SideBar() {
         <div className={`${isSideBarOpen ? 'flex flex-row w-full h-full absolute left-0 top-[0px]' : ''} `}>
             <nav className={`bg-primary-900 mb-5 ${isSideBarOpen ? 'h-full w-9/12 z-20' : 'w-full z-0 absolute left-0 top-[0px]'}`}>
                 <div className={`text-[12px] transition-all ${isSideBarOpen ? 'mt-11 ml-[37px] flex flex-col gap-5' : 'flex flex-row gap-2 justify-center pt-5 mx-7'}`}>
-                    <button className={`transition-all w-[25px] text-primary-300  hover:w-[30px] hover:text-primary-200 ${isSideBarOpen ? 'place-self-end mr-5 absolute top-[54px]' : 'mr-auto'} `} onClick={toggleSideBar}>{isSideBarOpen ? <XMarkIcon /> : <Bars3Icon />}</button>
+                    <button className={`transition-all w-[25px] text-primary-400  hover:w-[30px] hover:text-primary-200 ${isSideBarOpen ? 'place-self-end mr-5 absolute top-[54px]' : 'mr-auto'} `} onClick={toggleSideBar}>{isSideBarOpen ? <XMarkIcon /> : <Bars3Icon />}</button>
                     <UserCircleIcon className={`text-primary-200 ${isSideBarOpen ? 'size-[45px]' : 'size-[30px]'}`} />
                     {isSideBarOpen && (<h2 className='text-primary-0 mb-[37px]'>{user.name}</h2>)}
                 </div>
@@ -50,7 +50,7 @@ function SideBarItem(props: SideBarItemProps) {
     const navigate = useNavigate()
     return (
         <>
-            <li className='transition-all py-2 px-4 rounded-full flex flex-row gap-[18px] cursor-pointer h-[35px] w-[289px] items-center hover:bg-primary-400 hover:text-white' onClick={() => { navigate(`${props.path}`); }}>
+            <li className='transition-all py-2 px-4 rounded-full flex flex-row gap-[18px] cursor-pointer h-[35px] w-[289px] items-center hover:bg-primary-300 hover:text-white' onClick={() => { navigate(`${props.path}`); }}>
                 {props.icon}
                 <p className='text-primary-0'>{props.children}</p>
             </li>
