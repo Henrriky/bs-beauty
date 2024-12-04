@@ -9,7 +9,7 @@ import { authAPI } from "../../../store/auth/auth-api"
 function CustomerProfile {
   
   const [updateProfile, { isLoading }] =
-    authAPI.useCompleteRegisterMutation()
+    authAPI.upda()
 
   const {
     register,
