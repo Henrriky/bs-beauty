@@ -17,7 +17,7 @@ function ListServices() {
   }
 
   return (
-    <div className="relative top-[90px] left-[3px] animate-fadeIn w-full mb-8 h-[163px] scroll overflow-y-auto">
+    <div className="relative top-[90px] left-[3px] animate-fadeIn w-full mb-8 h-[161px] scroll overflow-y-auto">
       <div className="flex flex-col justify-center items-center gap-2 p-[2px]">
         {data?.services.map((service, index) => (
           <Button
