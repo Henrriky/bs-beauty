@@ -17,8 +17,8 @@ function ListServices() {
   }
 
   return (
-    <div className="relative top-[90px] left-[3px] animate-fadeIn w-full mb-8 h-[140px] scroll overflow-y-auto">
-      <div className="flex flex-col justify-center items-center gap-2 p-[20px]">
+    <div className="relative top-[90px] left-[3px] animate-fadeIn w-full mb-8 h-[163px] scroll overflow-y-auto">
+      <div className="flex flex-col justify-center items-center gap-2 p-[2px]">
         {data?.services.map((service, index) => (
           <Button
             label={service.name}
@@ -26,7 +26,7 @@ function ListServices() {
             variant="outline"
             outlineVariantBorderStyle="dashed"
             onClick={() => setSelected(index)}
-            buttonClassName={`bg-[#222222] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] w-full max-w-[370px] text-left px-4 py-[6px] ${selected !== index ? 'border-none' : ''}`}
+            buttonClassName={`bg-[#222222] w-full max-w-[370px] text-left px-4 py-[6px] ${selected !== index ? 'border-none' : ''}`}
           />
         ))}
       </div>
