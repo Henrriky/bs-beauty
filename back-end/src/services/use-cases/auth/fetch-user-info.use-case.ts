@@ -2,10 +2,11 @@ import { Role, type Employee, type Customer } from '@prisma/client'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
 import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
 import { InvalidRoleUseCaseError } from '../errors/invalid-role-use-case-error'
+import { NotFoundUseCaseError } from '../errors/not-found-error'
 
 interface FetchUserInfoUseCaseInput {
   role: string
-  userId: string
+  email: string
 }
 
 interface FetchUserInfoUseCaseOutput {
@@ -18,17 +19,18 @@ class FetchUserInfoUseCase {
     private readonly employeeRepository: EmployeeRepository
   ) {}
 
-  async execute ({ role, userId }: FetchUserInfoUseCaseInput): Promise<FetchUserInfoUseCaseOutput> {
+  async execute ({ role, email }: FetchUserInfoUseCaseInput): Promise<FetchUserInfoUseCaseOutput> {
+    
     if (role === Role.CUSTOMER) {
-      const customer = await this.customerRepository.findById(userId)
+      const customer = await this.customerRepository.findByEmailOrPhone(email)
       if (customer == null) {
-        throw new Error('Customer not found')
+        throw new NotFoundUseCaseError('Customer not found')
       }
       return { user: customer }
     } else if (role === Role.EMPLOYEE || role === Role.MANAGER) {
-      const employee = await this.employeeRepository.findById(userId)
+      const employee = await this.employeeRepository.findByEmailOrPhone(email)
       if (employee == null) {
-        throw new Error('Employee not found')
+        throw new NotFoundUseCaseError('Employee not found')
       }
       return { user: employee }
     } else {
