@@ -13,7 +13,7 @@ import EmployeeProfile from './components/EmployeeProfile'
 const roleToProfileComponents = {
   [Role.CUSTOMER]: CustomerProfile,
   [Role.EMPLOYEE]: EmployeeProfile,
-  [Role.MANAGER]: CustomerProfile,
+  [Role.MANAGER]: EmployeeProfile,
 }
 
 function Profile() {
