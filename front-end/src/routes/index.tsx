@@ -10,6 +10,7 @@ import RegistrationCompleted from '../pages/complete-register/components/Registr
 import MenuLayout from '../layouts/MenuLayout'
 import ServicesPage from '../pages/services-page'
 import ManagerHome from '../pages/manager-home'
+import { ServiceDashboard } from '../pages/services'
 
 function BSBeautyRouter() {
   return (
@@ -28,8 +29,9 @@ function BSBeautyRouter() {
               path="/register-completed"
               element={<RegistrationCompleted />}
             />
-            <Route path='/services' element={<ServicesPage />} />
-            <Route path='/manager/home' element={<ManagerHome />} />
+            <Route path="management/services" element={<ServiceDashboard />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/manager/home" element={<ManagerHome />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>
