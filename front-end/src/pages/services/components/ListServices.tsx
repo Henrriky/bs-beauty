@@ -3,7 +3,7 @@ import { Button } from '../../../components/button/Button'
 import { serviceAPI } from '../../../store/service/service-api'
 import '../../../../src/index.css'
 
-function NewComponent() {
+function ListServices() {
   const [selected, setSelected] = useState(null)
 
   const { data, isLoading, isError } = serviceAPI.useGetServicesQuery()
@@ -34,4 +34,4 @@ function NewComponent() {
   )
 }
 
-export default NewComponent
+export default ListServices

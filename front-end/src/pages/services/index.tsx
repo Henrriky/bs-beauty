@@ -3,7 +3,7 @@ import Title from '../../components/texts/Title'
 import { serviceAPI } from '../../store/service/service-api'
 import CreateServiceForm from './components/CreateServiceForm'
 import ExpansiveItem from './components/ExpansiveItem'
-import NewComponent from './components/NewComponent'
+import ListServices from './components/ListServices'
 import { OnSubmitCreateServiceForm } from './components/types'
 
 function ServiceDashboard() {
@@ -27,7 +27,7 @@ function ServiceDashboard() {
           <ExpansiveItem
             text="Oferecer um serviço já criado"
             top="70px"
-            node={<NewComponent />}
+            node={<ListServices />}
           />
           <ExpansiveItem
             text="Criar serviço"
