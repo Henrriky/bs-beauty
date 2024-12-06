@@ -8,6 +8,7 @@ class JwtEncrypterService implements Encrypter {
     const accessToken = jwt.sign(
       {
         sub: params.userId,
+        userId: params.id,
         role: params.role,
         email: params.email,
         name: params.name,
