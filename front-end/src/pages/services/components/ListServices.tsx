@@ -9,11 +9,19 @@ function ListServices() {
   const { data, isLoading, isError } = serviceAPI.useGetServicesQuery()
 
   if (isLoading) {
-    return <p className="text-gray-500">Carregando serviços...</p>
+    return (
+      <p className="text-[#D9D9D9] relative top-[90px] left-[48px] animate-fadeIn w-full mb-8 text-sm">
+        Carregando serviços...
+      </p>
+    )
   }
 
   if (isError) {
-    return <p className="text-red-500">Erro ao carregar os serviços.</p>
+    return (
+      <p className="text-[#CC3636] relative top-[90px] left-[48px] animate-fadeIn w-full mb-8 text-sm">
+        Erro ao carregar os serviços.
+      </p>
+    )
   }
 
   return (
