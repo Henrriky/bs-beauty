@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { SharedSchemas } from './shared-zod-schemas.validation.utils'
 
 class EmployeeSchemas {
   public static readonly socialMediaSchema = z
@@ -59,12 +60,7 @@ class EmployeeSchemas {
 
   public static managerUpdateSchema = z
     .object({
-      name: z
-        .string()
-        .min(3)
-        .max(100)
-        .refine((string) => RegexPatterns.names.test(string))
-        .optional(),
+      name: SharedSchemas.nameSchema,
       email: z.string().email().optional(),
       socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
       contact: z
@@ -77,12 +73,7 @@ class EmployeeSchemas {
 
   public static employeeUpdateSchema = z
     .object({
-      name: z
-        .string()
-        .min(3)
-        .max(100)
-        .refine((string) => RegexPatterns.names.test(string))
-        .optional(),
+      name: SharedSchemas.nameSchema,
       email: z.string().email().optional(),
       socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
       contact: z

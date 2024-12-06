@@ -15,6 +15,8 @@ interface CustomerInputContainerProps {
   handleSubmit: OnSubmitEmployeeOrCustomerForm
 }
 
+// TODO: Separate Social Media to a Component
+
 function CustomerInputContainer(props: CustomerInputContainerProps) {
   const {
     register,

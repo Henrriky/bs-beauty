@@ -8,10 +8,11 @@ import { authAPI } from '../../store/auth/auth-api'
 import { toast } from 'react-toastify'
 import CustomerProfile from './components/CustomerProfile'
 import { Role } from '../../store/auth/types'
+import EmployeeProfile from './components/EmployeeProfile'
 
 const roleToProfileComponents = {
   [Role.CUSTOMER]: CustomerProfile,
-  [Role.EMPLOYEE]: CustomerProfile,
+  [Role.EMPLOYEE]: EmployeeProfile,
   [Role.MANAGER]: CustomerProfile,
 }
 

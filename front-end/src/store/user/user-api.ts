@@ -21,13 +21,25 @@ export const userAPI = createApi({
           | ManagerUpdateProfileFormData
       }
     >({
-      query: (data) => ({
+      query: (data) => {
+        let url = ''
+        const isEmployeeProfileUpdate =
+          'contact' in data.profileData || !('phone' in data.profileData)
+
+        if (isEmployeeProfileUpdate) {
+          url = `${API_VARIABLES.USER_ENDPOINTS.UPDATE_EMPLOYEE_PROFILE}/${data.userId}`
+        } else {
+          url = `${API_VARIABLES.USER_ENDPOINTS.UPDATE_CUSTOMER_PROFILE}/${data.userId}`
+        }
+
         // TODO (IMPORTANT): Change this to pass dynamic
         // userId with token information on getState (state.auth.user.id)
-        url: API_VARIABLES.USER_ENDPOINTS.UPDATE_PROFILE + `/${data.userId}`,
-        method: 'PUT',
-        body: data.profileData,
-      }),
+        return {
+          url,
+          method: 'PUT',
+          body: data.profileData,
+        }
+      },
     }),
   }),
 })

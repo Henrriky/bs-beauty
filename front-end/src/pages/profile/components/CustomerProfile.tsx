@@ -108,6 +108,7 @@ function CustomerProfile({ userInfo }: CustomerProfileProps) {
         error={errors?.phone?.message?.toString()}
       />
       <Input
+        registration={{ ...register('email') }}
         label="Email"
         id="email"
         type="email"
