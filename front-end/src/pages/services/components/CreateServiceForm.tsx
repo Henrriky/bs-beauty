@@ -45,7 +45,7 @@ function CreateServiceForm(props: ServiceInputContainerProps) {
           inputClassName={
             errors.name
               ? `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-10`
-              : `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-0`
+              : `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-[0]`
           }
           wrapperClassName="w-full max-w-[370px]"
         />
@@ -59,7 +59,7 @@ function CreateServiceForm(props: ServiceInputContainerProps) {
           inputClassName={
             errors.category
               ? `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-10`
-              : `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-0`
+              : `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-[0]`
           }
           wrapperClassName="w-full max-w-[370px]"
         />
@@ -72,8 +72,8 @@ function CreateServiceForm(props: ServiceInputContainerProps) {
           variant="solid"
           inputClassName={
             errors.description
-              ? `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-10 w-full`
-              : `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-0 w-full`
+              ? `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-10`
+              : `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-[0]`
           }
           wrapperClassName="w-full max-w-[370px]"
         />
