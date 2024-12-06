@@ -9,7 +9,7 @@ import { Button } from '../../../components/button/Button'
 import {
   EmployeeCompleteRegisterFormData,
   OnSubmitEmployeeOrCustomerForm,
-} from './types'
+} from '../types'
 import { EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
 import { PlusIcon } from '@heroicons/react/16/solid'
 import { getErrorMessageFromErrorsAttr } from '../../../utils/react-hook-form/get-error-message-from-errors-attr'

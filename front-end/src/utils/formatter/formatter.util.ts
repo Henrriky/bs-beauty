@@ -3,6 +3,7 @@ import { RegexPatterns } from '../validation/regex.validation.util'
 class Formatter {
   public static formatBirthdayWithSlashes(value: string) {
     if (value.length > 10) return value.slice(0, 10)
+    if (value.length === 2) return value
 
     value = value.replace(RegexPatterns.formatOnlyNumericChar, '')
     value = value.replace(RegexPatterns.formatDayWithMonth, '$1/$2')

@@ -78,9 +78,23 @@ const authSlice = createSlice({
         state.user.registerCompleted = true
       }
     },
+    updateUserInformations: (
+      state,
+      action: PayloadAction<{ user: Partial<CustomerOrEmployee> }>,
+    ) => {
+      return {
+        ...state,
+        ...action.payload.user,
+      }
+    },
   },
 })
 
 export { authSlice }
-export const { setToken, setRegisterCompleted, logout } = authSlice.actions
+export const {
+  setToken,
+  setRegisterCompleted,
+  logout,
+  updateUserInformations,
+} = authSlice.actions
 export default authSlice.reducer

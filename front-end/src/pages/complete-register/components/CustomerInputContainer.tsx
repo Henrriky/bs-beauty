@@ -7,7 +7,7 @@ import { Button } from '../../../components/button/Button'
 import {
   CustomerCompleteRegisterFormData,
   OnSubmitEmployeeOrCustomerForm,
-} from './types'
+} from '../types'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 
 interface CustomerInputContainerProps {
