@@ -1,23 +1,27 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 import expandArrow from '../../../assets/expand-arrow.svg'
 
 interface ExpansiveItemProps {
   text: string
   top: string
   node: ReactNode
+  div: string
+  expandedDiv: 'string' | null
+  toggleDiv: () => void
 }
 
-function ExpansiveItem({ text, top, node }: ExpansiveItemProps) {
-  const [isExpanded, setExpanded] = useState(false)
-
-  const toggleRotation = () => {
-    setExpanded(!isExpanded)
-  }
-
+function ExpansiveItem({
+  text,
+  top,
+  node,
+  div,
+  expandedDiv,
+  toggleDiv,
+}: ExpansiveItemProps) {
   return (
     <div className="w-full">
       <button
-        onClick={toggleRotation}
+        onClick={toggleDiv}
         className={`relative left-[20px] flex justify-center items-center`}
         style={{ top }}
       >
@@ -25,12 +29,12 @@ function ExpansiveItem({ text, top, node }: ExpansiveItemProps) {
           src={expandArrow}
           alt="Ícone de seta"
           className={`transition-transform duration-500 ${
-            isExpanded ? 'rotate-180' : 'rotate-0'
+            expandedDiv === div ? 'rotate-180' : 'rotate-0'
           }`}
         />
         <span className="text-[#B19B86] text-sm ml-[13px]">{text}</span>
       </button>
-      {isExpanded && node}
+      {expandedDiv === div && node}
     </div>
   )
 }

@@ -1,3 +1,5 @@
+// import { useState } from 'react'
+import { useState } from 'react'
 import GoBackButton from '../../components/button/GoBackButton'
 import Title from '../../components/texts/Title'
 import { serviceAPI } from '../../store/service/service-api'
@@ -11,6 +13,16 @@ function ServiceDashboard() {
 
   const handleSubmit: OnSubmitCreateServiceForm = async (data) => {
     await createService(data).unwrap()
+  }
+
+  const [expandedDiv, setExpandedDiv] = useState(null)
+
+  const toggleDiv = (div) => {
+    if (expandedDiv === div) {
+      setExpandedDiv(null)
+      return
+    }
+    setExpandedDiv(div)
   }
 
   return (
@@ -28,6 +40,11 @@ function ServiceDashboard() {
             text="Oferecer um serviço já criado"
             top="70px"
             node={<ListServices />}
+            div="div1"
+            expandedDiv={expandedDiv}
+            toggleDiv={() => toggleDiv('div1')}
+            // isTheOtherExpanded={isTheOtherExpanded}
+            // shrinkOther={handleShrink}
           />
           <ExpansiveItem
             text="Criar serviço"
@@ -38,6 +55,11 @@ function ServiceDashboard() {
                 isLoading={isLoading}
               />
             }
+            div="div2"
+            expandedDiv={expandedDiv}
+            toggleDiv={() => toggleDiv('div2')}
+            // isTheOtherExpanded={!isTheOtherExpanded}
+            // shrinkOther={handleShrink}
           />
         </div>
       </div>
