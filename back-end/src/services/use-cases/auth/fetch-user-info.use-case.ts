@@ -22,13 +22,13 @@ class FetchUserInfoUseCase {
   async execute ({ role, email }: FetchUserInfoUseCaseInput): Promise<FetchUserInfoUseCaseOutput> {
     
     if (role === Role.CUSTOMER) {
-      const customer = await this.customerRepository.findByEmailOrPhone(email)
+      const customer = await this.customerRepository.findByEmailOrPhone(email, '')
       if (customer == null) {
         throw new NotFoundUseCaseError('Customer not found')
       }
       return { user: customer }
     } else if (role === Role.EMPLOYEE || role === Role.MANAGER) {
-      const employee = await this.employeeRepository.findByEmailOrPhone(email)
+      const employee = await this.employeeRepository.findByEmail(email)
       if (employee == null) {
         throw new NotFoundUseCaseError('Employee not found')
       }
