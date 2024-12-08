@@ -64,6 +64,11 @@ class SharedSchemas {
       (value) => RegexPatterns.phone.test(value),
       'Por favor, forneça um número de telefone válido',
     )
+
+  public static specializationSchema = z
+    .string()
+    .max(50, 'A especialização deve ter no máximo 50 caracteres')
+    .optional()
 }
 
 export { SharedSchemas }

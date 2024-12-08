@@ -34,6 +34,7 @@ function EmployeeProfile({ userInfo }: EmployeeProfileProps) {
       contact: userInfo.contact || undefined,
       email: userInfo.email || undefined,
       socialMedia: userInfo.socialMedia || undefined,
+      specialization: userInfo.specialization || undefined,
     },
   })
   const {
@@ -97,10 +98,24 @@ function EmployeeProfile({ userInfo }: EmployeeProfileProps) {
         error={errors?.contact?.message?.toString()}
       />
       <Input
+        registration={{ ...register('specialization') }}
+        label="Specialization"
+        id="specialization"
+        type="specialization"
+        placeholder="Digite sua especialização"
+      />
+      <Input
         registration={{ ...register('email') }}
         label="Email"
         id="email"
         type="email"
+        disabled
+      />
+      <Input
+        label="Função"
+        id="role"
+        type="role"
+        value={userInfo.role}
         disabled
       />
       <SocialMediaContainerInput

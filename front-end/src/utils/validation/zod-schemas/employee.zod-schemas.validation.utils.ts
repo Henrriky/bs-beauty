@@ -68,6 +68,7 @@ class EmployeeSchemas {
         .refine((value) => RegexPatterns.phone.test(value))
         .optional(),
       role: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
+      specialization: SharedSchemas.specializationSchema,
     })
     .strict()
 
@@ -80,6 +81,7 @@ class EmployeeSchemas {
         .string()
         .refine((value) => RegexPatterns.phone.test(value))
         .optional(),
+      specialization: SharedSchemas.specializationSchema,
     })
     .strict()
 }

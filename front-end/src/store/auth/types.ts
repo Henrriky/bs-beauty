@@ -36,5 +36,6 @@ export type Employee = {
   updatedAt: Date;
   socialMedia: { name: string, url: string }[] | null;
   contact: string | null;
+  specialization: string | null;
 }
 
