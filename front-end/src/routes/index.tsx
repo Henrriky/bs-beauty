@@ -11,6 +11,7 @@ import MenuLayout from '../layouts/MenuLayout'
 import ServicesPage from '../pages/services-page'
 import ManagerHome from '../pages/manager-home'
 import { ServiceDashboard } from '../pages/services'
+import { Role } from '../store/auth/types'
 
 function BSBeautyRouter() {
   return (
@@ -20,7 +21,13 @@ function BSBeautyRouter() {
           <Route index element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth/google/callback" element={<Callback />} />
-          <Route element={<PrivateRoute />}>
+          <Route
+            element={
+              <PrivateRoute
+                allowedRoles={[Role.MANAGER, Role.EMPLOYEE, Role.CUSTOMER]}
+              />
+            }
+          >
             <Route element={<MenuLayout />}>
               <Route path="/profile" element={<Profile />} />
             </Route>
@@ -29,7 +36,7 @@ function BSBeautyRouter() {
               path="/register-completed"
               element={<RegistrationCompleted />}
             />
-            <Route path="management/services" element={<ServiceDashboard />} />
+            <Route path="/management/services" element={<ServiceDashboard />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/manager/home" element={<ManagerHome />} />
           </Route>
