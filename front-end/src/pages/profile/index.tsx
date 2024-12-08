@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import CustomerProfile from './components/CustomerProfile'
 import { Role } from '../../store/auth/types'
 import EmployeeProfile from './components/EmployeeProfile'
+import BSBeautyLoading from '../../components/feedback/Loading'
 
 const roleToProfileComponents = {
   [Role.CUSTOMER]: CustomerProfile,
@@ -19,9 +20,12 @@ const roleToProfileComponents = {
 function Profile() {
   const user = useAppSelector((state) => state.auth.user!)
 
-  const { data, isLoading, isError, error } = authAPI.useFetchUserInfoQuery()
+  let { data, isLoading, isError, error } = authAPI.useFetchUserInfoQuery()
+
+  isLoading = true
+
   if (isLoading) {
-    return <div>Carregando...</div>
+    return <BSBeautyLoading />
   }
 
   if (isError) {
