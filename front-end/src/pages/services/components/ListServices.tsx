@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Button } from '../../../components/button/Button'
 import { serviceAPI } from '../../../store/service/service-api'
-import '../../../../src/index.css'
 
 function ListServices() {
   const [selected, setSelected] = useState(null)
