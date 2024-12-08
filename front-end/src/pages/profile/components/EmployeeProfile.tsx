@@ -13,6 +13,7 @@ import { EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.
 import { ErrorMessage } from '../../../components/feedback/ErrorMessage'
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { getErrorMessageFromErrorsAttr } from '../../../utils/react-hook-form/get-error-message-from-errors-attr'
+import SocialMediaContainerInput from '../../../components/inputs/social-media-input/SocialMediaContainerInput'
 
 interface EmployeeProfileProps {
   userInfo: Employee
@@ -105,7 +106,14 @@ function EmployeeProfile({ userInfo }: EmployeeProfileProps) {
         type="email"
         disabled
       />
-      <div className="flex gap-3 flex-col items-start">
+      <SocialMediaContainerInput
+        socialMediaFields={socialMediaFields}
+        removeSocialMedia={removeSocialMedia}
+        register={register}
+        errors={errors}
+        appendNewSocialMedia={appendNewSocialMedia}
+      />
+      {/* <div className="flex gap-3 flex-col items-start">
         <label className="text-sm text-[#D9D9D9]" htmlFor="socialMedia">
           Redes sociais
         </label>
@@ -183,7 +191,7 @@ function EmployeeProfile({ userInfo }: EmployeeProfileProps) {
             )
           })}
         </div>
-      </div>
+      </div> */}
       <Button
         type="submit"
         label={
