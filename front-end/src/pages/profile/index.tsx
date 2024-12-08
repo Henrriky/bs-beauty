@@ -20,12 +20,10 @@ const roleToProfileComponents = {
 function Profile() {
   const user = useAppSelector((state) => state.auth.user!)
 
-  let { data, isLoading, isError, error } = authAPI.useFetchUserInfoQuery()
-
-  isLoading = true
+  const { data, isLoading, isError, error } = authAPI.useFetchUserInfoQuery()
 
   if (isLoading) {
-    return <BSBeautyLoading />
+    return <BSBeautyLoading title="Carregando as informações..." />
   }
 
   if (isError) {
