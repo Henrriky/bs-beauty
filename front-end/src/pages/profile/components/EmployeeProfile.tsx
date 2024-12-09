@@ -137,7 +137,7 @@ function EmployeeProfile({ userInfo }: EmployeeProfileProps) {
             'Salvar'
           )
         }
-        className="mt-8"
+        className=""
         disabled={isLoading}
       />
     </form>

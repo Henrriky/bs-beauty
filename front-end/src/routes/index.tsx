@@ -7,11 +7,11 @@ import Profile from '../pages/profile'
 import CompleteRegister from '../pages/complete-register'
 import NotFound from '../pages/not-found'
 import RegistrationCompleted from '../pages/complete-register/components/RegistrationCompleted'
-import MenuLayout from '../layouts/MenuLayout'
 import ServicesPage from '../pages/services-page'
 import ManagerHome from '../pages/manager-home'
 import { ServiceDashboard } from '../pages/services'
 import { Role } from '../store/auth/types'
+import SideBar from '../components/sidebar/SideBar'
 
 function BSBeautyRouter() {
   return (
@@ -28,7 +28,7 @@ function BSBeautyRouter() {
               />
             }
           >
-            <Route element={<MenuLayout />}>
+            <Route element={<SideBar />}>
               <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="/complete-register" element={<CompleteRegister />} />

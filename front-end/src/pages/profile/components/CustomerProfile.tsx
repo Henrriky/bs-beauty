@@ -127,7 +127,6 @@ function CustomerProfile({ userInfo }: CustomerProfileProps) {
             'Salvar'
           )
         }
-        className="mt-8"
         disabled={isLoading}
       />
     </form>
