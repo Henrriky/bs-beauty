@@ -113,7 +113,7 @@ model Shift {
   shiftEnd   DateTime @map("shift_end")
   employeeId String   @map("employee_id")
 
-  employee Employee @relation(fields: [employeeId], references: [id])
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
   @@map("shift")
 }
