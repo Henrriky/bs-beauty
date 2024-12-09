@@ -8,7 +8,6 @@ class ShiftSchemas {
     isBusy: z.boolean().optional(),
     shiftStart: z.string().refine((string) => RegexPatterns.time.test(string)),
     shiftEnd: z.string().refine((string) => RegexPatterns.time.test(string)),
-    employeeId: z.string().uuid()
   }).strict()
 
   public static updateSchema = z.object({

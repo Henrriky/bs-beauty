@@ -1,8 +1,9 @@
-import { type WeekDays, type Prisma } from '@prisma/client'
+import { type WeekDays, type Prisma, Shift } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type ShiftRepository } from '../protocols/shift.repository'
 
 class PrismaShiftRepository implements ShiftRepository {
+
   public async findAll () {
     const shifts = await prismaClient.shift.findMany()
 
@@ -14,6 +15,13 @@ class PrismaShiftRepository implements ShiftRepository {
       where: { id }
     })
 
+    return shift
+  }
+
+  async findByIdAndEmployeeId(id: string, employeeId: string) {
+    const shift = await prismaClient.shift.findFirst({
+      where: { id, employeeId }
+    })
     return shift
   }
 

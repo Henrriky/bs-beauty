@@ -42,7 +42,7 @@ class ShiftUseCase {
   }
 
   public async executeUpdate (shiftId: string, shiftToUpdate: Prisma.ShiftUpdateInput) {
-    const existingShift = await this.executeFindById(shiftId)
+    const existingShift = await this.executeFindByIdAndEmployeeId(shiftId, shiftToUpdate.employee?.connect?.id as unknown as string)
     const updatedWeekDay = shiftToUpdate.weekDay as unknown as WeekDays
 
     if (updatedWeekDay != null) {
@@ -62,6 +62,14 @@ class ShiftUseCase {
 
     return deletedShift
   }
+
+  public async executeFindByIdAndEmployeeId(shiftId: string, employeeId: string) {
+    const shift = await this.shiftRepository.findByIdAndEmployeeId(shiftId, employeeId)
+    RecordExistence.validateRecordExistence(shift, 'Shift');
+
+    return shift
+  }
+
 }
 
 export { ShiftUseCase }
