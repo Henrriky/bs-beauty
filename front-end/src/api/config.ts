@@ -10,4 +10,10 @@ export const API_VARIABLES = {
   USER_ENDPOINTS: {
     UPDATE_PROFILE: '/customer/profile',
   },
+  EMPLOYEE_ENDPOINTS: '/employees',
+  SHIFT_ENDPOINTS: {
+    CREATE_AND_UPDATE: '/shifts',
+    FETCH_FROM_EMPLOYEE: '/shifts/employee',
+  },
+
 } as const

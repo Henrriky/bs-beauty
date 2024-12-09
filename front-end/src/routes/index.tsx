@@ -10,6 +10,8 @@ import RegistrationCompleted from '../pages/complete-register/components/Registr
 import MenuLayout from '../layouts/MenuLayout'
 import ServicesPage from '../pages/services-page'
 import ManagerHome from '../pages/manager-home'
+import EmployeesManagement from "../pages/employees-management";
+import EmployeeShifts from "../pages/employee-shifts";
 
 function BSBeautyRouter() {
   return (
@@ -28,14 +30,19 @@ function BSBeautyRouter() {
               path="/register-completed"
               element={<RegistrationCompleted />}
             />
-            <Route path='/services' element={<ServicesPage />} />
-            <Route path='/manager/home' element={<ManagerHome />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/manager/home" element={<ManagerHome />} />
+            <Route
+              path="/employees-management"
+              element={<EmployeesManagement />}
+            />
+            <Route path="/employee-shifts" element={<EmployeeShifts />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </Router>
-  )
+  );
 }
 
 export default BSBeautyRouter
