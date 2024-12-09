@@ -30,7 +30,7 @@ function CreateServiceForm(props: ServiceInputContainerProps) {
   }, [isSubmitSuccessful, reset])
 
   return (
-    <div className="relative top-[100px] left-[3px] animate-fadeIn w-full">
+    <div className="animate-fadeIn w-full">
       <form
         className="flex flex-col justify-center items-center gap-10 w-full"
         onSubmit={handleSubmit(props.handleSubmit)}
@@ -90,7 +90,7 @@ function CreateServiceForm(props: ServiceInputContainerProps) {
             )
           }
           disabled={props.isLoading}
-          buttonClassName="w-[full] max-w-[190px] text-[#A9A9A9] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)]"
+          className="w-[full] max-w-[190px] text-[#A9A9A9] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)]"
         />
       </form>
     </div>

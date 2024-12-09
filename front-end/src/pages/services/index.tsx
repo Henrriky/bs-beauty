@@ -26,44 +26,46 @@ function ServiceDashboard() {
   }
 
   return (
-    <div className="flex flex-col h-full gap-12 animate-fadeIn">
+    <>
       <GoBackButton />
-      <div>
-        <div className="relative top-[40px] left-[18px] max-w-[340px]">
-          <Title align="left">Serviços</Title>
-          <p className="text-[#979797] text-sm mt-2">
-            Selecione algum serviço já criado ou crie o seu caso não exista.
-          </p>
-        </div>
-        <div className="">
-          <ExpansiveItem
-            text="Oferecer um serviço já criado"
-            top="70px"
-            node={<ListServices />}
-            div="div1"
-            expandedDiv={expandedDiv}
-            toggleDiv={() => toggleDiv('div1')}
-            // isTheOtherExpanded={isTheOtherExpanded}
-            // shrinkOther={handleShrink}
-          />
-          <ExpansiveItem
-            text="Criar serviço"
-            top="80px"
-            node={
-              <CreateServiceForm
-                handleSubmit={handleSubmit}
-                isLoading={isLoading}
-              />
-            }
-            div="div2"
-            expandedDiv={expandedDiv}
-            toggleDiv={() => toggleDiv('div2')}
-            // isTheOtherExpanded={!isTheOtherExpanded}
-            // shrinkOther={handleShrink}
-          />
+      <div className="flex flex-col h-full gap-12 animate-fadeIn">
+        <div>
+          <div className="max-w-[340px]">
+            <Title align="left">Serviços</Title>
+            <p className="text-[#979797] text-sm mt-2">
+              Selecione algum serviço já criado ou crie o seu caso não exista.
+            </p>
+          </div>
+          <div>
+            <ExpansiveItem
+              text="Oferecer um serviço já criado"
+              top="70px"
+              node={<ListServices />}
+              div="div1"
+              expandedDiv={expandedDiv}
+              toggleDiv={() => toggleDiv('div1')}
+              // isTheOtherExpanded={isTheOtherExpanded}
+              // shrinkOther={handleShrink}
+            />
+            <ExpansiveItem
+              text="Criar serviço"
+              top="80px"
+              node={
+                <CreateServiceForm
+                  handleSubmit={handleSubmit}
+                  isLoading={isLoading}
+                />
+              }
+              div="div2"
+              expandedDiv={expandedDiv}
+              toggleDiv={() => toggleDiv('div2')}
+              // isTheOtherExpanded={!isTheOtherExpanded}
+              // shrinkOther={handleShrink}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

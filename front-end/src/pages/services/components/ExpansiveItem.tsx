@@ -19,10 +19,10 @@ function ExpansiveItem({
   toggleDiv,
 }: ExpansiveItemProps) {
   return (
-    <div className="w-full">
+    <div className="w-full ml-5 mt-6">
       <button
         onClick={toggleDiv}
-        className={`relative left-[20px] flex justify-center items-center`}
+        className={`flex justify-center items-center`}
         style={{ top }}
       >
         <img

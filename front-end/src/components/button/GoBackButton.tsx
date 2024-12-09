@@ -1,17 +1,29 @@
 import { useNavigate } from 'react-router'
-import goBackArrow from '../../assets/go-back-arrow.svg'
+import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
+import { Button } from './Button'
 
 function GoBackButton() {
   const navigate = useNavigate()
 
   return (
     <>
-      <button
-        className="absolute top-[16px] hover:bg-[#3A3027]"
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => navigate(-1)}
+        label={
+          <div className="">
+            <ArrowLongLeftIcon className="size-8 text-[#B19B86] hover:text-[#D9D9D9] transition-colors" />
+          </div>
+        }
+        className="max-w-10 border-none rounded-none hover:bg-opacity-0 hover:bg-transparent"
+      />
+      {/* <button
+        className="hover:bg-[#3A3027] max-w-2"
         onClick={() => navigate(-1)}
       >
-        <img src={goBackArrow} alt="Seta de voltar" />
-      </button>
+        <TrashIcon className="size-6" />
+      </button> */}
     </>
   )
 }
