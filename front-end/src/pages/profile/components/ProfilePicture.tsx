@@ -4,7 +4,7 @@ interface ProfilePictureProps {
 }
 
 function ProfilePicture({ profilePhotoUrl, size = 'md' }: ProfilePictureProps) {
-  const iconSize = size === 'md' ? 'h-12 w-12' : 'h-10 w-10'
+  const iconSize = size === 'md' ? 'h-12 w-12' : 'h-9 w-9'
 
   return (
     <div className={`relative ${iconSize} overflow-hidden`}>
