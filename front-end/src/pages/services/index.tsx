@@ -7,11 +7,14 @@ import ListServices from './components/ListServices'
 import Modal from './components/Modal'
 import { Service } from '../../store/service/types'
 import CreateOfferForm from './components/CreateOfferForm'
+import { authAPI } from '../../store/auth/auth-api'
 
 function ServiceDashboard() {
   const [openModal, setOpenModal] = useState(false)
   const [expandedDiv, setExpandedDiv] = useState(null)
-  const [service, setService] = useState(null)
+  const [service, setService] = useState()
+  const { data } = authAPI.useFetchUserInfoQuery()
+  const employeeId = data?.user.id
 
   const toggleDiv = (div: string | SetStateAction<null>) => {
     if (expandedDiv === div) {
@@ -37,9 +40,7 @@ function ServiceDashboard() {
             node={
               <ListServices
                 openModal={() => setOpenModal(true)}
-                selectService={(service) =>
-                  setService(service as unknown as SetStateAction<null>)
-                }
+                selectService={(service) => setService(service)}
               />
             }
             div="div1"
@@ -66,7 +67,10 @@ function ServiceDashboard() {
           onClose={() => setOpenModal(false)}
           service={service as unknown as Service}
         >
-          <CreateOfferForm service={service as unknown as Service} />
+          <CreateOfferForm
+            service={service as unknown as Service}
+            employeeId={employeeId}
+          />
         </Modal>
       </div>
     </>

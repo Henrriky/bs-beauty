@@ -22,6 +22,14 @@ function ListServices({ openModal, selectService }: ListServicesProps) {
     )
   }
 
+  if (isError && data == null) {
+    return (
+      <p className="text-[#CC3636] animate-fadeIn w-full mt-2 text-sm">
+        Não há serviços disponíveis.
+      </p>
+    )
+  }
+
   if (isError) {
     return (
       <p className="text-[#CC3636] animate-fadeIn w-full mt-2 text-sm">

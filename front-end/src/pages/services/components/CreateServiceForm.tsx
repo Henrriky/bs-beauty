@@ -50,6 +50,7 @@ function CreateServiceForm() {
           error={errors?.name?.message?.toString()}
           variant="outline"
           wrapperClassName="w-full"
+          autoComplete="off"
         />
         <Input
           registration={{ ...register('category') }}
@@ -59,6 +60,7 @@ function CreateServiceForm() {
           error={errors?.category?.message?.toString()}
           variant="outline"
           wrapperClassName="w-full"
+          autoComplete="off"
         />
         <Input
           registration={{ ...register('description') }}
@@ -68,6 +70,7 @@ function CreateServiceForm() {
           error={errors?.description?.message?.toString()}
           variant="outline"
           wrapperClassName="w-full"
+          autoComplete="off"
         />
         <Button
           type="submit"

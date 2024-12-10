@@ -9,16 +9,14 @@ import { offerAPI } from '../../../store/offer/offer-api'
 import { toast } from 'react-toastify'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import { Service } from '../../../store/service/types'
-import { authAPI } from '../../../store/auth/auth-api'
 
 interface CreateOfferFormInputProps {
   service: Service
+  employeeId: string | undefined
 }
 
-function CreateOfferForm({ service }: CreateOfferFormInputProps) {
+function CreateOfferForm({ service, employeeId }: CreateOfferFormInputProps) {
   const [createOffer, { isLoading }] = offerAPI.useCreateOfferMutation()
-  const { data } = authAPI.useFetchUserInfoQuery()
-  const employeeId = data?.user.id
 
   const handleSubmitCreateOffer: OnSubmitCreateOfferForm = async (
     offerData,
@@ -55,6 +53,8 @@ function CreateOfferForm({ service }: CreateOfferFormInputProps) {
     setValue(formattedValue)
   }
 
+  console.log(errors)
+
   return (
     <form
       className="flex flex-col items-center w-full"
@@ -77,6 +77,7 @@ function CreateOfferForm({ service }: CreateOfferFormInputProps) {
         onChange={handleInputChange}
         value={value}
         inputMode="numeric"
+        autoComplete="off"
       />
       <Input
         registration={{ ...register('estimatedTime') }}
@@ -87,6 +88,7 @@ function CreateOfferForm({ service }: CreateOfferFormInputProps) {
         variant="outline"
         inputClassName="pb-0"
         wrapperClassName="w-full max-w-[295px] mb-4"
+        autoComplete="off"
       />
       <Input
         type="hidden"
