@@ -11,6 +11,7 @@ import { Outlet, useNavigate } from 'react-router'
 import useAppSelector from '../../hooks/use-app-selector'
 import ProfilePicture from '../../pages/profile/components/ProfilePicture'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
+import sideBarItems from './consts'
 
 interface SideBarItemProps {
   path: string
@@ -54,24 +55,19 @@ function SideBar() {
             <div className="">
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
               <ul className="text-primary-200 mt-8 text-[12px]">
-                <SideBarItem
-                  icon={<HomeIcon className="size-6" />}
-                  path="/home"
-                >
-                  Home
-                </SideBarItem>
-                <SideBarItem icon={<BellIcon className="size-6" />} path="#">
-                  Notificações
-                </SideBarItem>
-                <SideBarItem icon={<UserIcon className="size-6" />} path="#">
-                  Perfil
-                </SideBarItem>
-                <SideBarItem
-                  icon={<CalendarDaysIcon className="size-6" />}
-                  path="#"
-                >
-                  Agendamentos
-                </SideBarItem>
+                {sideBarItems.COMMON.concat(sideBarItems[user.role!]).map(
+                  (sideBarItem) => {
+                    return (
+                      <SideBarItem
+                        key={sideBarItem.name}
+                        icon={sideBarItem.icon}
+                        path={sideBarItem.navigateTo}
+                      >
+                        {sideBarItem.name}
+                      </SideBarItem>
+                    )
+                  },
+                )}
               </ul>
             </div>
           )}
