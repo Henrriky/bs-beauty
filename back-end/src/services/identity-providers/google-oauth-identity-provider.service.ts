@@ -31,7 +31,7 @@ class GoogleAuthIdentityProvider implements OAuthIdentityProvider {
     const { tokens } = await oauth2Client.getToken(code)
     oauth2Client.setCredentials(tokens)
 
-    if (!tokens.access_token) {
+    if (tokens.access_token == null) {
       throw new Error(`Error trying to exchange code by token: access_token property null or undefined ${tokens}`)
     }
 

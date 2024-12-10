@@ -5,7 +5,7 @@ interface CustomerOrEmployee {
   email: string
   name: string | null
   registerCompleted: boolean
-  profilePhotoUrl: string
+  profilePhotoUrl: string | null
 }
 
 export type { CustomerOrEmployee }

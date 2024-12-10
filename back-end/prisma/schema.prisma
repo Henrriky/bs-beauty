@@ -21,6 +21,7 @@ model Customer {
   email             String         @unique
   googleId          String?        @unique @map("google_id")
   phone             String?        @unique
+  profilePhotoUrl   String?
   notification      Notification[]
   appointments      Appointment[]
   role              Role           @default(CUSTOMER)
@@ -96,6 +97,7 @@ model Employee {
   socialMedia       Json?          @map("social_media")
   contact           String?        @unique
   specialization    String?
+  profilePhotoUrl   String?
   role              Role           @default(EMPLOYEE)
   shifts            Shift[]
   offers            Offer[]

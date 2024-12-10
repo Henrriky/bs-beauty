@@ -34,11 +34,13 @@ class LoginUseCase {
         email
       }, {
         email,
-        googleId: userId
+        googleId: userId,
+        profilePhotoUrl
       })
     } else {
       customerOrEmployee = await this.employeeRepository.updateEmployeeByEmail(email, {
-        googleId: userId
+        googleId: userId,
+        profilePhotoUrl
       })
     }
 
