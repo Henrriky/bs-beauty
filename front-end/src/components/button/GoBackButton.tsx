@@ -18,12 +18,6 @@ function GoBackButton() {
         }
         className="max-w-10 border-none rounded-none hover:bg-opacity-0 hover:bg-transparent"
       />
-      {/* <button
-        className="hover:bg-[#3A3027] max-w-2"
-        onClick={() => navigate(-1)}
-      >
-        <TrashIcon className="size-6" />
-      </button> */}
     </>
   )
 }

@@ -3,7 +3,6 @@ import expandArrow from '../../../assets/expand-arrow.svg'
 
 interface ExpansiveItemProps {
   text: string
-  top: string
   node: ReactNode
   div: string
   expandedDiv: 'string' | null
@@ -12,18 +11,16 @@ interface ExpansiveItemProps {
 
 function ExpansiveItem({
   text,
-  top,
   node,
   div,
   expandedDiv,
   toggleDiv,
 }: ExpansiveItemProps) {
   return (
-    <div className="w-full ml-5 mt-6">
+    <div className="w-full mt-6">
       <button
         onClick={toggleDiv}
         className={`flex justify-center items-center`}
-        style={{ top }}
       >
         <img
           src={expandArrow}

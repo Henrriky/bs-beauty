@@ -1,69 +1,73 @@
-// import { useState } from 'react'
-import { useState } from 'react'
+import { SetStateAction, useState } from 'react'
 import GoBackButton from '../../components/button/GoBackButton'
 import Title from '../../components/texts/Title'
-import { serviceAPI } from '../../store/service/service-api'
 import CreateServiceForm from './components/CreateServiceForm'
 import ExpansiveItem from './components/ExpansiveItem'
 import ListServices from './components/ListServices'
-import { OnSubmitCreateServiceForm } from './components/types'
+import Modal from './components/Modal'
+import { Service } from '../../store/service/types'
+import CreateOfferForm from './components/CreateOfferForm'
 
 function ServiceDashboard() {
-  const [createService, { isLoading }] = serviceAPI.useCreateServiceMutation()
-
-  const handleSubmit: OnSubmitCreateServiceForm = async (data) => {
-    await createService(data).unwrap()
-  }
-
+  const [openModal, setOpenModal] = useState(false)
   const [expandedDiv, setExpandedDiv] = useState(null)
+  const [service, setService] = useState(null)
 
-  const toggleDiv = (div) => {
+  const toggleDiv = (div: string | SetStateAction<null>) => {
     if (expandedDiv === div) {
       setExpandedDiv(null)
       return
     }
-    setExpandedDiv(div)
+    setExpandedDiv(div as SetStateAction<null>)
   }
 
   return (
     <>
       <GoBackButton />
-      <div className="flex flex-col h-full gap-12 animate-fadeIn">
+      <div className="w-full">
         <div>
-          <div className="max-w-[340px]">
-            <Title align="left">Serviços</Title>
-            <p className="text-[#979797] text-sm mt-2">
-              Selecione algum serviço já criado ou crie o seu caso não exista.
-            </p>
-          </div>
-          <div>
-            <ExpansiveItem
-              text="Oferecer um serviço já criado"
-              top="70px"
-              node={<ListServices />}
-              div="div1"
-              expandedDiv={expandedDiv}
-              toggleDiv={() => toggleDiv('div1')}
-              // isTheOtherExpanded={isTheOtherExpanded}
-              // shrinkOther={handleShrink}
-            />
-            <ExpansiveItem
-              text="Criar serviço"
-              top="80px"
-              node={
-                <CreateServiceForm
-                  handleSubmit={handleSubmit}
-                  isLoading={isLoading}
-                />
-              }
-              div="div2"
-              expandedDiv={expandedDiv}
-              toggleDiv={() => toggleDiv('div2')}
-              // isTheOtherExpanded={!isTheOtherExpanded}
-              // shrinkOther={handleShrink}
-            />
-          </div>
+          <Title align="left">Serviços</Title>
+          <p className="text-[#979797] text-sm mt-2">
+            Selecione algum serviço já criado ou crie o seu caso não exista.
+          </p>
         </div>
+        <div className="w-full">
+          <ExpansiveItem
+            text="Serviços já criados"
+            node={
+              <ListServices
+                openModal={() => setOpenModal(true)}
+                selectService={(service) =>
+                  setService(service as unknown as SetStateAction<null>)
+                }
+              />
+            }
+            div="div1"
+            expandedDiv={expandedDiv}
+            toggleDiv={() => toggleDiv('div1')}
+          />
+          <ExpansiveItem
+            text="Criar serviço"
+            node={<CreateServiceForm />}
+            div="div2"
+            expandedDiv={expandedDiv}
+            toggleDiv={() => toggleDiv('div2')}
+          />
+        </div>
+      </div>
+      <Modal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        service={service as unknown as Service}
+      />
+      <div className="absolute top-[0px]">
+        <Modal
+          isOpen={openModal}
+          onClose={() => setOpenModal(false)}
+          service={service as unknown as Service}
+        >
+          <CreateOfferForm service={service as unknown as Service} />
+        </Modal>
       </div>
     </>
   )

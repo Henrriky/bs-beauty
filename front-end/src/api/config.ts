@@ -17,4 +17,7 @@ export const API_VARIABLES = {
   SERVICES_ENDPOINTS: {
     ENDPOINT: '/services',
   },
+  OFFERS_ENDPOINTS: {
+    ENDPOINT: '/offers',
+  },
 } as const

@@ -3,16 +3,24 @@ import { CreateServiceFormData, OnSubmitCreateServiceForm } from './types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ServiceSchemas } from '../../../utils/validation/zod-schemas/service.zod-schemas.validation.utils'
 import { useEffect } from 'react'
-import { toast } from 'react-toastify'
 import { Input } from '../../../components/inputs/Input'
 import { Button } from '../../../components/button/Button'
+import { serviceAPI } from '../../../store/service/service-api'
+import { toast } from 'react-toastify'
 
-interface ServiceInputContainerProps {
-  isLoading: boolean
-  handleSubmit: OnSubmitCreateServiceForm
-}
+function CreateServiceForm() {
+  const [createService, { isLoading }] = serviceAPI.useCreateServiceMutation()
 
-function CreateServiceForm(props: ServiceInputContainerProps) {
+  const handleSubmitCreateService: OnSubmitCreateServiceForm = async (data) => {
+    await createService(data)
+      .unwrap()
+      .then(() => toast.success('Serviço criado com sucesso!'))
+      .catch((error: unknown) => {
+        console.error('Error trying to create service', error)
+        toast.error('Ocorreu um erro ao criar o serviço.')
+      })
+  }
+
   const {
     reset,
     register,
@@ -25,15 +33,14 @@ function CreateServiceForm(props: ServiceInputContainerProps) {
   useEffect(() => {
     if (isSubmitSuccessful) {
       reset()
-      toast.success('Serviço criado com sucesso!')
     }
   }, [isSubmitSuccessful, reset])
 
   return (
-    <div className="animate-fadeIn w-full">
+    <div className="animate-fadeIn w-full mt-8 flex flex-col justify-center items-center">
       <form
         className="flex flex-col justify-center items-center gap-10 w-full"
-        onSubmit={handleSubmit(props.handleSubmit)}
+        onSubmit={handleSubmit(handleSubmitCreateService)}
       >
         <Input
           registration={{ ...register('name') }}
@@ -41,13 +48,8 @@ function CreateServiceForm(props: ServiceInputContainerProps) {
           id="name"
           type="text"
           error={errors?.name?.message?.toString()}
-          variant="solid"
-          inputClassName={
-            errors.name
-              ? `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-10`
-              : `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-[0]`
-          }
-          wrapperClassName="w-full max-w-[370px]"
+          variant="outline"
+          wrapperClassName="w-full"
         />
         <Input
           registration={{ ...register('category') }}
@@ -55,13 +57,8 @@ function CreateServiceForm(props: ServiceInputContainerProps) {
           id="category"
           type="text"
           error={errors?.category?.message?.toString()}
-          variant="solid"
-          inputClassName={
-            errors.category
-              ? `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-10`
-              : `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-[0]`
-          }
-          wrapperClassName="w-full max-w-[370px]"
+          variant="outline"
+          wrapperClassName="w-full"
         />
         <Input
           registration={{ ...register('description') }}
@@ -69,18 +66,13 @@ function CreateServiceForm(props: ServiceInputContainerProps) {
           id="description"
           type="text"
           error={errors?.description?.message?.toString()}
-          variant="solid"
-          inputClassName={
-            errors.description
-              ? `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-10`
-              : `bg-[#222222] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)] border-[1px] border-opacity-[0]`
-          }
-          wrapperClassName="w-full max-w-[370px]"
+          variant="outline"
+          wrapperClassName="w-full"
         />
         <Button
           type="submit"
           label={
-            props.isLoading ? (
+            isLoading ? (
               <div className="flex justify-center items-center gap-4">
                 <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
                 <p className="text-sm">Criar serviço</p>
@@ -89,8 +81,7 @@ function CreateServiceForm(props: ServiceInputContainerProps) {
               'Criar serviço'
             )
           }
-          disabled={props.isLoading}
-          className="w-[full] max-w-[190px] text-[#A9A9A9] rounded-[9px] shadow-[-1px_5px_26.5px_rgba(0,0,0,0.25)]"
+          disabled={isLoading}
         />
       </form>
     </div>
