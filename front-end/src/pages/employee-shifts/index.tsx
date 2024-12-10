@@ -12,6 +12,9 @@ import useAppSelector from "../../hooks/use-app-selector";
 import { Shift } from "../../store/auth/types";
 import DaysRow from "./components/DaysRow";
 import ShiftsRow from "./components/ShiftsRow";
+import { useNavigate } from "react-router";
+
+
 
 const WeekDayMapping: { [key: string]: string } = {
   Domingo: "SUNDAY",
@@ -100,14 +103,14 @@ const EmployeeShifts = () => {
 
           existingShift
             ? await updateShift(
-                {
-                  shiftStart: payload.shiftStart,
-                  shiftEnd: payload.shiftEnd,
-                  isBusy: payload.isBusy,
-                },
-                existingShift.id,
-                accessToken
-              )
+              {
+                shiftStart: payload.shiftStart,
+                shiftEnd: payload.shiftEnd,
+                isBusy: payload.isBusy,
+              },
+              existingShift.id,
+              accessToken
+            )
             : await createShift(payload, accessToken);
         }
       );
@@ -120,9 +123,11 @@ const EmployeeShifts = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <>
-      <ArrowLongLeftIcon className="size-[30px] fill-secondary-200 position absolute top-[25px] left-[25px]" />
+      <ArrowLongLeftIcon className="size-[30px] hover:size-9 transition-all fill-secondary-200 position absolute top-[25px] left-[25px] cursor-pointer" onClick={() => navigate("/home")} />
       <div className="p-4">
         <div className="flex flex-col gap-4">
           <h2 className="text-[#D9D9D9] text-lg">Horários</h2>

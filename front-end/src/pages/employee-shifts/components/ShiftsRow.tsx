@@ -65,7 +65,7 @@ const ShiftsRow = ({
                 />
                 <label
                   htmlFor={`checkbox-${day}`}
-                  className={`flex items-center justify-center w-5 h-5 border-2 rounded-xl transition-all duration-200 
+                  className={`flex items-center justify-center w-5 h-5 border-2 rounded-xl transition-all duration-200 cursor-pointer 
                             ${shift?.isBusy ? "border-secondary-200" : "border-[#A4978A]"}`}
                 >
                   {!shift?.isBusy && <CheckIcon />}
