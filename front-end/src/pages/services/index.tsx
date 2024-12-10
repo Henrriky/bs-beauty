@@ -68,6 +68,7 @@ function ServiceDashboard() {
         >
           <CreateOfferForm
             service={service as unknown as Service}
+            onClose={() => setOpenModal(false)}
             employeeId={employeeId}
           />
         </Modal>

@@ -13,9 +13,14 @@ import { Service } from '../../../store/service/types'
 interface CreateOfferFormInputProps {
   service: Service
   employeeId: string | undefined
+  onClose: () => void
 }
 
-function CreateOfferForm({ service, employeeId }: CreateOfferFormInputProps) {
+function CreateOfferForm({
+  service,
+  employeeId,
+  onClose,
+}: CreateOfferFormInputProps) {
   const [createOffer, { isLoading }] = offerAPI.useCreateOfferMutation()
 
   const handleSubmitCreateOffer: OnSubmitCreateOfferForm = async (
@@ -39,12 +44,6 @@ function CreateOfferForm({ service, employeeId }: CreateOfferFormInputProps) {
     resolver: zodResolver(OfferSchemas.createSchema),
   })
 
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset()
-    }
-  }, [isSubmitSuccessful, reset])
-
   const [value, setValue] = useState<string>('R$ 0,01')
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +52,13 @@ function CreateOfferForm({ service, employeeId }: CreateOfferFormInputProps) {
     setValue(formattedValue)
   }
 
-  console.log(errors)
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset()
+      setValue('R$ 0,01')
+      onClose()
+    }
+  }, [isSubmitSuccessful, reset, onClose])
 
   return (
     <form
