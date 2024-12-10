@@ -17,6 +17,7 @@ interface SideBarItemProps {
   path: string
   icon: ReactNode
   children?: ReactNode
+  toggleSideBar: () => void
 }
 
 function SideBar() {
@@ -59,6 +60,7 @@ function SideBar() {
                   (sideBarItem) => {
                     return (
                       <SideBarItem
+                        toggleSideBar={toggleSideBar}
                         key={sideBarItem.name}
                         icon={sideBarItem.icon}
                         path={sideBarItem.navigateTo}
@@ -93,6 +95,7 @@ function SideBarItem(props: SideBarItemProps) {
         className="transition-all py-2 px-4 rounded-full flex text-sm flex-row gap-[18px] cursor-pointer h-[35px] w-[289px] items-center hover:bg-primary-300 hover:text-white"
         onClick={() => {
           navigate(`${props.path}`)
+          props.toggleSideBar()
         }}
       >
         {props.icon}
