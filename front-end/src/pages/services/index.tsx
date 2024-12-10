@@ -8,12 +8,14 @@ import Modal from './components/Modal'
 import { Service } from '../../store/service/types'
 import CreateOfferForm from './components/CreateOfferForm'
 import { authAPI } from '../../store/auth/auth-api'
+import { Role } from '../../store/auth/types'
 
 function ServiceDashboard() {
   const [openModal, setOpenModal] = useState(false)
   const [expandedDiv, setExpandedDiv] = useState(null)
   const [service, setService] = useState()
   const { data } = authAPI.useFetchUserInfoQuery()
+  const isManager = data?.user.role === Role.MANAGER
   const employeeId = data?.user.id
 
   const toggleDiv = (div: string | SetStateAction<null>) => {
@@ -47,20 +49,17 @@ function ServiceDashboard() {
             expandedDiv={expandedDiv}
             toggleDiv={() => toggleDiv('div1')}
           />
-          <ExpansiveItem
-            text="Criar serviço"
-            node={<CreateServiceForm />}
-            div="div2"
-            expandedDiv={expandedDiv}
-            toggleDiv={() => toggleDiv('div2')}
-          />
+          {isManager && (
+            <ExpansiveItem
+              text="Criar serviço"
+              node={<CreateServiceForm />}
+              div="div2"
+              expandedDiv={expandedDiv}
+              toggleDiv={() => toggleDiv('div2')}
+            />
+          )}
         </div>
       </div>
-      <Modal
-        isOpen={openModal}
-        onClose={() => setOpenModal(false)}
-        service={service as unknown as Service}
-      />
       <div className="absolute top-[0px]">
         <Modal
           isOpen={openModal}
