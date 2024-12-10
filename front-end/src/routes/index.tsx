@@ -12,6 +12,7 @@ import ManagerHome from '../pages/manager-home'
 import { ServiceDashboard } from '../pages/services'
 import { Role } from '../store/auth/types'
 import SideBar from '../components/sidebar/SideBar'
+import Customers from '../pages/customers'
 
 function BSBeautyRouter() {
   return (
@@ -30,15 +31,20 @@ function BSBeautyRouter() {
           >
             <Route element={<SideBar />}>
               <Route path="/profile" element={<Profile />} />
+              <Route path="/customers" element={<Customers />} />
             </Route>
+            {/* COMPLETE REGISTER ROUTES */}
             <Route path="/complete-register" element={<CompleteRegister />} />
             <Route
               path="/register-completed"
               element={<RegistrationCompleted />}
             />
-            <Route path="/management/services" element={<ServiceDashboard />} />
-            <Route path="/services" element={<ServicesPage />} />
+            {/* MANAGER ROUTES */}
             <Route path="/manager/home" element={<ManagerHome />} />
+            {/* SERVICES ROUTES */}
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/management/services" element={<ServiceDashboard />} />
+            {/* SERVICES ROUTES */}
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>

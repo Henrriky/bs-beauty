@@ -20,6 +20,7 @@ export type Customer = {
   email: string;
   googleId: string | null;
   phone: string | null;
+  profilePhotoUrl: string | null;
   role: Role;
   createdAt: Date;
   updatedAt: Date;

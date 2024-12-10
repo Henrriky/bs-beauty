@@ -11,6 +11,9 @@ export const API_VARIABLES = {
     UPDATE_CUSTOMER_PROFILE: '/customers',
     UPDATE_EMPLOYEE_PROFILE: '/employees',
   },
+  CUSTOMERS_ENDPOINTS: {
+    FETCH_CUSTOMERS: '/customers',
+  },
   SERVICES_ENDPOINTS: {
     ENDPOINT: '/services',
   },

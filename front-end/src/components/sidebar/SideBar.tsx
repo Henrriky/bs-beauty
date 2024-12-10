@@ -10,6 +10,7 @@ import { ReactNode, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 import useAppSelector from '../../hooks/use-app-selector'
 import ProfilePicture from '../../pages/profile/components/ProfilePicture'
+import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
 
 interface SideBarItemProps {
   path: string
@@ -45,15 +46,7 @@ function SideBar() {
             <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} size="sm" />
             {isSideBarOpen && (
               <h2 className="text-primary-0 mb-9 text-sm capitalize">
-                {user.name
-                  ? user.name
-                      .toLowerCase()
-                      .split(' ')
-                      .map(
-                        (word) => word.charAt(0).toUpperCase() + word.slice(1),
-                      )
-                      .join(' ')
-                  : ''}
+                {user.name ? firstLetterOfWordToUpperCase(user.name) : ''}
               </h2>
             )}
           </div>
