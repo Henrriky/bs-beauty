@@ -3,6 +3,7 @@ import { Button } from '../../../components/button/Button'
 import { serviceAPI } from '../../../store/service/service-api'
 import { toast } from 'react-toastify'
 import { Service } from '../../../store/service/types'
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 
 interface ListServicesProps {
   openModal: () => void
@@ -47,7 +48,15 @@ function ListServices({ openModal, selectService }: ListServicesProps) {
         <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
           {data?.services.map((service, index) => (
             <Button
-              label={service.name}
+              label={
+                <div className="flex flex-row items-center">
+                  {service.name}
+                  <div className="ml-auto flex gap-3 justify-center items-center">
+                    <PencilSquareIcon className="size-4 hover:text-primary-0 hover:size-5 transition-all" onClick={() => alert('PALMEIRAS')} />
+                    <TrashIcon className="size-4 hover:text-primary-0 hover:size-5 transition-all" onClick={() => alert('VASCO')} />
+                  </div>
+                </div>
+              }
               key={index}
               variant="outline"
               outlineVariantBorderStyle="dashed"
@@ -68,9 +77,9 @@ function ListServices({ openModal, selectService }: ListServicesProps) {
           onClick={
             selected !== null
               ? () => {
-                  openModal()
-                  setSelected(null)
-                }
+                openModal()
+                setSelected(null)
+              }
               : () => toast.info('Selecione um serviço.')
           }
         />
