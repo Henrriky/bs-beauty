@@ -9,13 +9,10 @@ import { Button } from '../../../components/button/Button'
 import {
   EmployeeCompleteRegisterFormData,
   OnSubmitEmployeeOrCustomerForm,
-} from './types'
+} from '../types'
 import { EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
-import { PlusIcon } from '@heroicons/react/16/solid'
-import { getErrorMessageFromErrorsAttr } from '../../../utils/react-hook-form/get-error-message-from-errors-attr'
-import { ErrorMessage } from '../../../components/feedback/ErrorMessage'
-import { TrashIcon } from '@heroicons/react/24/outline'
 import { Formatter } from '../../../utils/formatter/formatter.util'
+import SocialMediaContainerInput from '../../../components/inputs/social-media-input/SocialMediaContainerInput'
 
 interface EmployeeInputContainerProps {
   isLoading: boolean
@@ -77,85 +74,13 @@ function EmployeeInputContainer(props: EmployeeInputContainerProps) {
         value={user.email}
         disabled
       />
-      <div className="flex gap-3 flex-col items-start">
-        <label className="text-sm text-[#D9D9D9]" htmlFor="socialMedia">
-          Redes sociais
-        </label>
-        <Button
-          type="button"
-          variant="outline"
-          disabled={socialMediaFields.length >= 5}
-          outlineVariantBorderStyle="dashed"
-          onClick={() => appendNewSocialMedia({ name: '', url: '' })}
-          label={
-            <div className="flex justify-center items-center gap-1">
-              <PlusIcon className="size-5" />
-              <p className="text-sm">
-                {socialMediaFields.length >= 5
-                  ? 'Limite atingido'
-                  : 'Clique para uma nova'}
-              </p>
-            </div>
-          }
-        />
-        {errors?.socialMedia?.message && (
-          <ErrorMessage message={errors.socialMedia.message} />
-        )}
-        <div className="pl-4 w-full max-h-80 overflow-y-scroll scroll">
-          {socialMediaFields.map((field, index) => {
-            const socialMediaNameField =
-              `socialMedia.${index}.name` as `socialMedia.${number}.name`
-            const socialMediaUrlField =
-              `socialMedia.${index}.url` as `socialMedia.${number}.url`
-
-            return (
-              <div
-                key={field.id}
-                className="flex mt-4 gap-2 justify-start items-center"
-              >
-                <div className="flex gap-2 w-full">
-                  <Input
-                    registration={{ ...register(socialMediaNameField) }}
-                    id={socialMediaNameField}
-                    type="text"
-                    placeholder="Nome da rede social"
-                    variant="solid"
-                    error={getErrorMessageFromErrorsAttr(
-                      errors,
-                      socialMediaNameField,
-                    )}
-                    wrapperClassName="w-full"
-                  />
-                  <Input
-                    registration={{ ...register(socialMediaUrlField) }}
-                    id={socialMediaUrlField}
-                    type="text"
-                    placeholder="Link da rede social"
-                    variant="solid"
-                    error={getErrorMessageFromErrorsAttr(
-                      errors,
-                      socialMediaUrlField,
-                    )}
-                    wrapperClassName="w-full"
-                  />
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => removeSocialMedia(index)}
-                  label={
-                    <div className="flex justify-center items-center gap-1">
-                      <TrashIcon className="size-6" />
-                    </div>
-                  }
-                  disabled={props.isLoading}
-                  className="max-w-10 border-none hover:text-[#B19B86] rounded-none hover:bg-opacity-0 hover:bg-transparent"
-                />
-              </div>
-            )
-          })}
-        </div>
-      </div>
+      <SocialMediaContainerInput
+        socialMediaFields={socialMediaFields}
+        removeSocialMedia={removeSocialMedia}
+        register={register}
+        errors={errors}
+        appendNewSocialMedia={appendNewSocialMedia}
+      />
       <Button
         type="submit"
         label={

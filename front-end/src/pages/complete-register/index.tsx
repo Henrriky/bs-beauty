@@ -10,9 +10,9 @@ import { authAPI } from '../../store/auth/auth-api'
 import { setRegisterCompleted } from '../../store/auth/auth-slice'
 
 import { Role } from '../../store/auth/types'
-import { OnSubmitEmployeeOrCustomerForm } from './components/types'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
+import { OnSubmitEmployeeOrCustomerForm } from './types'
 
 const rolesToInputContainers = {
   [Role.CUSTOMER]: CustomerInputContainer,

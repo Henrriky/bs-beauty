@@ -8,7 +8,17 @@ export const API_VARIABLES = {
     FETCH_USER_INFO: '/auth/user',
   },
   USER_ENDPOINTS: {
-    UPDATE_PROFILE: '/customer/profile',
+    UPDATE_CUSTOMER_PROFILE: '/customers',
+    UPDATE_EMPLOYEE_PROFILE: '/employees',
+  },
+  CUSTOMERS_ENDPOINTS: {
+    FETCH_CUSTOMERS: '/customers',
+  },
+  SERVICES_ENDPOINTS: {
+    ENDPOINT: '/services',
+  },
+  OFFERS_ENDPOINTS: {
+    ENDPOINT: '/offers',
   },
   EMPLOYEE_ENDPOINTS: '/employees',
   SHIFT_ENDPOINTS: {

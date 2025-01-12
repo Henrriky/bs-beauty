@@ -22,7 +22,7 @@ const baseQueryWithAuth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  const result = await baseQuery(args, api, extraOptions);
+  const result = await baseQuery(args, api, extraOptions)
   const isUnauthorizedCode = result.meta?.response?.status === 401
   if (result.error && isUnauthorizedCode) {
     switch (

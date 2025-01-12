@@ -129,7 +129,7 @@ const EmployeeShifts = () => {
     <>
       <ArrowLongLeftIcon className="size-[30px] hover:size-9 transition-all fill-secondary-200 position absolute top-[25px] left-[25px] cursor-pointer" onClick={() => navigate("/home")} />
       <div className="p-4">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 mt-11">
           <h2 className="text-[#D9D9D9] text-lg">Horários</h2>
           <p className="text-primary-200 text-sm">
             Defina seus horários de expediente

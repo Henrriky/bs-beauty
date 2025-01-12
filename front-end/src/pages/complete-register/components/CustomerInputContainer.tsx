@@ -7,13 +7,15 @@ import { Button } from '../../../components/button/Button'
 import {
   CustomerCompleteRegisterFormData,
   OnSubmitEmployeeOrCustomerForm,
-} from './types'
+} from '../types'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 
 interface CustomerInputContainerProps {
   isLoading: boolean
   handleSubmit: OnSubmitEmployeeOrCustomerForm
 }
+
+// TODO: Separate Social Media to a Component
 
 function CustomerInputContainer(props: CustomerInputContainerProps) {
   const {

@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   return (
-    <div className="bg-[#1E1E1E] h-screen flex justify-center">
+    <div className="bg-[#1E1E1E] min-h-[100vh] flex justify-center">
       <Provider store={store}>
         <BSBeautyRouter />
         <ToastContainer

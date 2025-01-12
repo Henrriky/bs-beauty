@@ -15,7 +15,7 @@ function MenuLayout() {
           </li>
         </ul>
       </nav>
-      <section className="w-full">
+      <section className="w-full h-max">
         <Outlet />
       </section>
     </>

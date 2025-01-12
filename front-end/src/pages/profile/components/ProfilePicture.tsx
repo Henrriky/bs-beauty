@@ -1,16 +1,19 @@
 interface ProfilePictureProps {
   profilePhotoUrl: string
+  size?: 'sm' | 'md'
 }
 
-function ProfilePicture({ profilePhotoUrl }: ProfilePictureProps) {
+function ProfilePicture({ profilePhotoUrl, size = 'md' }: ProfilePictureProps) {
+  const iconSize = size === 'md' ? 'h-12 w-12' : 'h-9 w-9'
+
   return (
-    <div className="relative w-16 h-16 pr-4 overflow-hidden">
+    <div className={`relative ${iconSize} overflow-hidden`}>
       <img
         src={profilePhotoUrl}
         alt="Profile"
         className="w-full object-cover rounded-full"
       />
-      <button className="absolute bottom-4 right-4 rounded-full shadow-md z-10">
+      {/* <button className="absolute bottom-4 right-4 rounded-full shadow-md z-10">
         <svg
           width="14"
           height="14"
@@ -30,7 +33,7 @@ function ProfilePicture({ profilePhotoUrl }: ProfilePictureProps) {
             fill="#1E1E1E"
           />
         </svg>
-      </button>
+      </button> */}
     </div>
   )
 }

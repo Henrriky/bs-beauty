@@ -22,6 +22,7 @@ export type Customer = {
   email: string;
   googleId: string | null;
   phone: string | null;
+  profilePhotoUrl: string | null;
   role: Role;
   createdAt: Date;
   updatedAt: Date;
@@ -38,6 +39,7 @@ export type Employee = {
   updatedAt: Date;
   socialMedia: { name: string, url: string }[] | null;
   contact: string | null;
+  specialization: string | null;
 }
 
 export type Shift = {
