@@ -16,8 +16,17 @@ export const API_VARIABLES = {
   },
   SERVICES_ENDPOINTS: {
     ENDPOINT: '/services',
+    FETCH_EMPLOYEES_OFFERING_SERVICE: (serviceId: string) =>
+      `/services/${serviceId}/offer/employees`,
   },
   OFFERS_ENDPOINTS: {
     ENDPOINT: '/offers',
+    FETCH_FOR_AVAILABLE_SCHEDULES_FROM_EMPLOYEE_OFFER: (
+      serviceOfferedId: string,
+    ) => `/offers/${serviceOfferedId}/scheduling`,
+  },
+  SHIFTS_ENDPOINTS: {
+    ENDPOINT: '/shifts',
+    FIND_SHIFTS_BY_EMPLOYEE: (employeeId: string) => `/shifts/${employeeId}`,
   },
 } as const

@@ -1,5 +1,7 @@
+import { ReactNode } from 'react'
+
 export interface ErrorMessageProps {
-  message: string
+  message: string | ReactNode
 }
 
 export function ErrorMessage({ message }: ErrorMessageProps) {
