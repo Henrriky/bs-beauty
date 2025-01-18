@@ -1,6 +1,7 @@
 import { type Service, type Prisma } from '@prisma/client'
 import { type ServiceRepository } from '../repository/protocols/service.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { type EmployeesOfferingService } from '../repository/types/service-repository.types'
 
 interface ServicesOutput {
   services: Service[]
@@ -21,6 +22,14 @@ class ServicesUseCase {
     RecordExistence.validateRecordExistence(service, 'Service')
 
     return service
+  }
+
+  public async fetchEmployeesOfferingService (serviceId: string): Promise<{ employeesOfferingService: EmployeesOfferingService }> {
+    const { employeesOfferingService } = await this.serviceRepository.fetchEmployeesOfferingService(serviceId)
+    RecordExistence.validateRecordExistence(employeesOfferingService, 'Service')
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return { employeesOfferingService: employeesOfferingService! }
   }
 
   public async executeCreate (newService: Prisma.ServiceCreateInput) {

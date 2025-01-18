@@ -4,10 +4,12 @@ import { validateCreateOffer } from '../../middlewares/data-validation/offer/cre
 import { validateUpdateOffer } from '../../middlewares/data-validation/offer/update-offer.validation.middleware'
 import { routeAuthMiddleware } from '../../middlewares/route-auth.middleware'
 import { Role } from '@prisma/client'
+import { validateFetchAvailableSchedulling } from '../../middlewares/data-validation/offer/fetch-available-schedulling.validation.middleware'
 
 const offerRoutes = Router()
 
 offerRoutes.get('/', OffersController.handleFindAll)
+offerRoutes.get('/:id/schedulling', validateFetchAvailableSchedulling, OffersController.handleFetchAvailableSchedulingToOfferByDay)
 offerRoutes.get('/service/:id', OffersController.handleFindByServiceId)
 offerRoutes.get('/employee/:id', OffersController.handleFindByEmployeeId)
 offerRoutes.get('/:id', OffersController.handleFindById)

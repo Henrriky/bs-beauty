@@ -8,6 +8,7 @@ const serviceRoutes = Router()
 
 serviceRoutes.get('/', ServicesController.handleFindAll)
 serviceRoutes.get('/:id', ServicesController.handleFindById)
+serviceRoutes.get('/:id/offer/employees', ServicesController.handleFetchEmployeesOfferingService)
 serviceRoutes.post('/', routeAuthMiddleware(['MANAGER', 'EMPLOYEE']), validateCreateService, ServicesController.handleCreate)
 serviceRoutes.put('/:id', routeAuthMiddleware(['MANAGER', 'EMPLOYEE']), validateUpdateService, ServicesController.handleUpdate)
 serviceRoutes.delete('/:id', routeAuthMiddleware(['MANAGER', 'EMPLOYEE']), ServicesController.handleDelete)

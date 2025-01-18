@@ -14,7 +14,39 @@ class PrismaServiceRepository implements ServiceRepository {
         id: serviceId
       }
     })
+
     return service
+  }
+
+  public async fetchEmployeesOfferingService (serviceId: string) {
+    const employeesOfferingService = await prismaClient.service.findUnique({
+      where: {
+        id: serviceId
+      },
+      select: {
+        id: true,
+        offers: {
+          where: {
+            isOffering: true
+          },
+          select: {
+            id: true,
+            estimatedTime: true,
+            price: true,
+            employee: {
+              select: {
+                id: true,
+                name: true,
+                specialization: true,
+                profilePhotoUrl: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    return { employeesOfferingService }
   }
 
   public async create (newService: Prisma.ServiceCreateInput) {

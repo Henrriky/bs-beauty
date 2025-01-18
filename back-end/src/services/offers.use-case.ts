@@ -1,13 +1,19 @@
 import { type Prisma, type Offer } from '@prisma/client'
 import { type OfferRepository } from '../repository/protocols/offer.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { CustomError } from '../utils/errors/custom.error.util'
+import { type ShiftRepository } from '../repository/protocols/shift.repository'
+import { DateFormatter } from '../utils/formatting/date.formatting.util'
 
 interface OfferOutput {
   offers: Offer[]
 }
 
 class OffersUseCase {
-  constructor (private readonly offerRepository: OfferRepository) {}
+  constructor (
+    private readonly offerRepository: OfferRepository,
+    private readonly shiftRepository: ShiftRepository
+  ) {}
 
   public async executeFindAll (): Promise<OfferOutput> {
     const offers = await this.offerRepository.findAll()
@@ -60,6 +66,75 @@ class OffersUseCase {
     const deletedOffer = await this.offerRepository.delete(offerId)
 
     return deletedOffer
+  }
+
+  public async executeFetchAvailableSchedulingToOfferByDay (serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) {
+    const serviceOffering = await this.offerRepository.findById(serviceOfferingId)
+    const isValidServiceOffering = serviceOffering != null && serviceOffering?.isOffering
+
+    if (!isValidServiceOffering) {
+      throw new CustomError('Unable to fetch available scheduling because offer not exists or is not being offering', 400)
+    }
+
+    const employeeShiftByDay = await this.shiftRepository.findByEmployeeAndWeekDay(serviceOffering.employeeId, DateFormatter.formatDayOfDateToWeekDay(dayToFetchAvailableSchedulling))
+    const isValidEmployeeShiftByDay = (employeeShiftByDay !== null) && !employeeShiftByDay.isBusy
+
+    if (!isValidEmployeeShiftByDay) {
+      throw new CustomError('Unable to fetch available scheduling because employee does not work on this day or not exists', 400, '')
+    }
+
+    const { validAppointmentsToOfferOnDay } = await this.offerRepository.fetchValidAppointmentsByOfferAndDay(serviceOfferingId, dayToFetchAvailableSchedulling)
+    const availableSchedulling: Array<{ startTimestamp: number, endTimestamp: number, isBusy: boolean }> = []
+    const { shiftEnd, shiftStart } = employeeShiftByDay
+    const { estimatedTime: estimatedTimeInMinutes } = serviceOffering
+
+    const estimatedTimeInMilisseconds = (estimatedTimeInMinutes * 60000)
+    let currentStartTime = shiftStart.getTime()
+
+    if (validAppointmentsToOfferOnDay == null) {
+      while ((currentStartTime + estimatedTimeInMilisseconds) <= shiftEnd.getTime()) {
+        const startTimestamp = currentStartTime
+        const endTimestamp = currentStartTime + estimatedTimeInMilisseconds
+        availableSchedulling.push({
+          startTimestamp,
+          endTimestamp,
+          isBusy: false
+        })
+        currentStartTime += estimatedTimeInMilisseconds + 60000
+      }
+      return {
+        availableSchedulling
+      }
+    }
+
+    while ((currentStartTime + estimatedTimeInMilisseconds) <= shiftEnd.getTime()) {
+      const startTimestamp = currentStartTime
+      const endTimestamp = currentStartTime + estimatedTimeInMilisseconds
+      const scheduleIsAlreadyBusy = validAppointmentsToOfferOnDay.appointments.some((appointment) => {
+        const appointmentStartTimestamp = appointment.appointmentDate.getTime()
+        const isBusy = appointmentStartTimestamp === currentStartTime
+        return isBusy
+      })
+
+      if (scheduleIsAlreadyBusy) {
+        currentStartTime += estimatedTimeInMilisseconds + 60000
+        availableSchedulling.push({
+          startTimestamp,
+          endTimestamp,
+          isBusy: true
+        })
+        continue
+      }
+      availableSchedulling.push({
+        startTimestamp,
+        endTimestamp,
+        isBusy: false
+      })
+
+      currentStartTime += estimatedTimeInMilisseconds + 60000
+    }
+
+    return { availableSchedulling }
   }
 }
 
