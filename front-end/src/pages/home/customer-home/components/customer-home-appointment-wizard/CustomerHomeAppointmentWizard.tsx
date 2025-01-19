@@ -7,6 +7,7 @@ import { AppointmentServiceSchemas } from '../../../../../utils/validation/zod-s
 import { CreateAppointmentFormData } from './types'
 import { Button } from '../../../../../components/button/Button'
 import CustomerHomeSelectEmployeeContainer from './customer-home-select-employee-step/CustomerHomeSelectEmployee'
+import CustomerHomeSelectTimeContainer from './customer-home-select-time-step/CustomerHomeSelectTime'
 
 type Step = {
   currentStepName: string
@@ -31,7 +32,7 @@ const selectEmployeeStep: Step = {
 
 const selectAppointmentTimeStep: Step = {
   currentStepName: 'Selecionar horário',
-  currentStepAppointmentForm: CustomerHomeSelectServiceContainer,
+  currentStepAppointmentForm: CustomerHomeSelectTimeContainer,
   nextStep: null,
   previousStep: null,
 }

@@ -27,6 +27,7 @@ export const API_VARIABLES = {
   },
   SHIFTS_ENDPOINTS: {
     ENDPOINT: '/shifts',
-    FIND_SHIFTS_BY_EMPLOYEE: (employeeId: string) => `/shifts/${employeeId}`,
+    FIND_SHIFTS_BY_EMPLOYEE: (employeeId: string) =>
+      `/shifts/employee/${employeeId}`,
   },
 } as const

@@ -3,6 +3,8 @@ import { AppointmentServiceSchemas } from '../../../../../../utils/validation/zo
 
 type CreateAppointmentFormData = z.infer<
   typeof AppointmentServiceSchemas.createSchema
->
+> & {
+  employeeId: string | null
+}
 
 export type { CreateAppointmentFormData }

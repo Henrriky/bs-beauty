@@ -9,7 +9,8 @@ import { FaceFrownIcon } from '@heroicons/react/24/outline'
 import CustomerHomeEmployeeCard from './CustomerHomeEmployeeCard'
 
 function CustomerHomeSelectEmployeeContainer() {
-  const { register, watch } = useFormContext<CreateAppointmentFormData>()
+  const { register, watch, setValue } =
+    useFormContext<CreateAppointmentFormData>()
   const serviceId = watch('serviceId')
   const serviceOfferedId = watch('serviceOfferedId')
 
@@ -83,6 +84,7 @@ function CustomerHomeSelectEmployeeContainer() {
                 key={offer.id}
                 for={offer.id}
                 {...offer}
+                onClick={() => setValue('employeeId', offer.employee.id)}
               />
             </>
           )

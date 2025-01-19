@@ -6,6 +6,7 @@ interface CustomerHomeEmployeeCardProps extends EmployeesOfferingServiceOffer {
   key: string
   for: string
   isSelected: boolean
+  onClick?: React.MouseEventHandler<HTMLLabelElement> | undefined
 }
 
 function CustomerHomeEmployeeCard(props: CustomerHomeEmployeeCardProps) {
@@ -15,6 +16,7 @@ function CustomerHomeEmployeeCard(props: CustomerHomeEmployeeCardProps) {
                   transition-all duration-300 ease-in-out
                   ${props.isSelected ? 'border-[1px] border-[#A4978A]' : 'border-[0px] border-transparent'}`}
       htmlFor={props.for}
+      onClick={props.onClick}
     >
       <CustomerHomeEmployeeCardPersonalInfo
         employeeName={props.employee.name || 'Não definido'}
