@@ -1,8 +1,8 @@
 import { StatusCodes } from "http-status-codes";
-import { ExchangeCodeByTokenUseCase } from "../../../services/use-cases/auth/exchange-code-by-token.use-case";
-import { ExchangeCodeByTokenController } from "../exchange-code-by-token.controller";
+import { ExchangeCodeByTokenUseCase } from "../../../../src/services/use-cases/auth/exchange-code-by-token.use-case";
+import { ExchangeCodeByTokenController } from "../../../../src/controllers/auth/exchange-code-by-token.controller";
 
-vi.mock('../../../services/use-cases/auth/exchange-code-by-token.use-case');
+vi.mock('../../../../src/services/use-cases/auth/exchange-code-by-token.use-case');
 vi.mock('../../../services/identity-providers/google-oauth-identity-provider.service');
 
 describe('ExchangeCodeByTokenController', () => {

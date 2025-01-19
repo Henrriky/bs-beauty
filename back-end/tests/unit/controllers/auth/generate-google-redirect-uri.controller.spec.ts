@@ -1,9 +1,9 @@
 import { StatusCodes } from "http-status-codes";
-import { GenerateOAuthRedirectUriUseCase } from "../../../services/use-cases/auth/generate-oauth-redirect-uri.use-case";
-import { GenerateGoogleRedirectUriController } from "../generate-google-redirect-uri.controller";
+import { GenerateOAuthRedirectUriUseCase } from "../../../../src/services/use-cases/auth/generate-oauth-redirect-uri.use-case";
+import { GenerateGoogleRedirectUriController } from "../../../../src/controllers/auth/generate-google-redirect-uri.controller";
 
 
-vi.mock('../../../services/use-cases/auth/generate-oauth-redirect-uri.use-case');
+vi.mock('../../../../src/services/use-cases/auth/generate-oauth-redirect-uri.use-case');
 
 describe('GenerateGoogleRedirectUriController', () => {
 

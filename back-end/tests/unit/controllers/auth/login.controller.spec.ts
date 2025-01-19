@@ -1,9 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { makeLoginUseCase } from '../../../factory/make-login-use-case.factory';
-import { LoginController } from '../login.controller';
+import { makeLoginUseCase } from '../../../../src/factory/make-login-use-case.factory';
+import { LoginController } from '../../../../src/controllers/auth/login.controller';
 
-vi.mock('../../../factory/make-login-use-case.factory', () => ({
+vi.mock('../../../../src/factory/make-login-use-case.factory', () => ({
     makeLoginUseCase: vi.fn(),
 }));
 
