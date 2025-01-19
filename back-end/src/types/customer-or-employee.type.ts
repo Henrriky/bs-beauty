@@ -6,6 +6,7 @@ interface CustomerOrEmployee {
   email: string
   name: string | null
   registerCompleted: boolean
+  userId: string
 }
 
 export type { CustomerOrEmployee }
