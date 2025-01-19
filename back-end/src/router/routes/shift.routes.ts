@@ -7,8 +7,7 @@ import { validateUpdateShift } from '../../middlewares/data-validation/shift/upd
 
 const shiftRoutes = Router()
 
-// shiftRoutes.get('/', ShiftController.handleFindAll)
-shiftRoutes.get('/employee', ShiftController.handleFindByEmployeeId)
+shiftRoutes.get('/', ShiftController.handleFindAllByEmployeeId)
 shiftRoutes.get('/:id', ShiftController.handleFindById)
 shiftRoutes.post('/', routeAuthMiddleware([Role.EMPLOYEE, Role.MANAGER]), validateCreateShift, ShiftController.handleCreate)
 shiftRoutes.put('/:id', routeAuthMiddleware([Role.EMPLOYEE, Role.MANAGER]), validateUpdateShift, ShiftController.handleUpdateByIdAndEmployeeId)

@@ -9,8 +9,8 @@ interface ShiftOutput {
 class ShiftUseCase {
   constructor (private readonly shiftRepository: ShiftRepository) {}
 
-  public async executeFindAll (): Promise<ShiftOutput> {
-    const shifts = await this.shiftRepository.findAll()
+  public async executeFindAllByEmployeeId(employeeId: string | undefined): Promise<ShiftOutput> {
+    const shifts = await this.shiftRepository.findManyByEmployeeId(employeeId)
     RecordExistence.validateManyRecordsExistence(shifts, 'shifts')
 
     return { shifts }
@@ -21,13 +21,6 @@ class ShiftUseCase {
     RecordExistence.validateRecordExistence(shift, 'Shift')
 
     return shift
-  }
-
-  public async executeFindByEmployeeId (employeeId: string | undefined): Promise<ShiftOutput> {
-    const shifts = await this.shiftRepository.findByEmployeeId(employeeId)
-    RecordExistence.validateManyRecordsExistence(shifts, 'shifts')
-
-    return { shifts }
   }
 
   public async executeCreate (shiftToCreate: Prisma.ShiftCreateInput) {
