@@ -1,4 +1,5 @@
 import { Employee, Role } from "../../../store/auth/types";
+import { TrashIcon } from '@heroicons/react/24/outline'
 
 interface EmployeeCardProps {
   employee: Employee;
@@ -7,7 +8,7 @@ interface EmployeeCardProps {
 
 export function EmployeeCard({ employee, onDelete }: EmployeeCardProps) {
   return (
-    <div className="p-4 mb-4 bg-secondary-100 text-primary-300 rounded-lg shadow-md relative">
+    <div className="p-4 mb-4 bg-[#222222] text-primary-0 rounded-lg shadow-md relative">
       <p className="text-sm font-bold ">Nome:</p>
       <p className="text-xs">
         {employee.name === "Usuário"
@@ -26,8 +27,9 @@ export function EmployeeCard({ employee, onDelete }: EmployeeCardProps) {
           className="absolute top-2 right-2"
           onClick={() => onDelete(employee)}
         >
-          X
+          <TrashIcon className="size-5 transition-all" onClick={() => onDelete(employee)} />
         </button>
+
       )}
     </div>
   );
