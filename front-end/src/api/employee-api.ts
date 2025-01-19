@@ -5,7 +5,7 @@ import { API_VARIABLES } from "./config"
 const fetchEmployees = async (token: string): Promise<{ employees: Employee[] }> => {
   await new Promise((resolve) => setTimeout(resolve, 1000))
   const response = await axiosInstance.get<{ employees: Employee[] }>(
-    API_VARIABLES.EMPLOYEE_ENDPOINTS,
+    API_VARIABLES.EMPLOYEE_ENDPOINTS.FETCH_EMPLOYEES,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -16,7 +16,7 @@ const fetchEmployees = async (token: string): Promise<{ employees: Employee[] }>
 }
 
 const deleteEmployee = async (id: string, token: string): Promise<any> => {
-  const response = await axiosInstance.delete(`${API_VARIABLES.EMPLOYEE_ENDPOINTS}/${id}`, {
+  const response = await axiosInstance.delete(`${API_VARIABLES.EMPLOYEE_ENDPOINTS.FETCH_EMPLOYEES}/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -26,7 +26,7 @@ const deleteEmployee = async (id: string, token: string): Promise<any> => {
 
 const insertEmployee = async (email: string, token: string): Promise<Employee> => {
   const response = await axiosInstance.post<Employee>(
-    API_VARIABLES.EMPLOYEE_ENDPOINTS,
+    API_VARIABLES.EMPLOYEE_ENDPOINTS.FETCH_EMPLOYEES,
     { email },
     {
       headers: {
@@ -37,9 +37,6 @@ const insertEmployee = async (email: string, token: string): Promise<Employee> =
   return response.data;
 };
 
-
 export {
-  fetchEmployees,
-  deleteEmployee,
-  insertEmployee
+  deleteEmployee, fetchEmployees, insertEmployee
 }

@@ -124,7 +124,7 @@ function EmployeesManagement() {
 
   return (
     <div className="p-4">
-      <h2 className="text-lg font-medium text-secondary-200 mb-4">
+      <h2 className="text-lg font-medium text-secondary-200 mb-4 mt-4">
         Gerenciamento de Funcionários
       </h2>
       <span className="text-sm text-[#D9D9D9]">

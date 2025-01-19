@@ -20,10 +20,11 @@ export const API_VARIABLES = {
   OFFERS_ENDPOINTS: {
     ENDPOINT: '/offers',
   },
-  EMPLOYEE_ENDPOINTS: '/employees',
+  EMPLOYEE_ENDPOINTS: {
+    FETCH_EMPLOYEES: '/employees',
+  },
   SHIFT_ENDPOINTS: {
-    CREATE_AND_UPDATE: '/shifts',
-    FETCH_FROM_EMPLOYEE: '/shifts/employee',
+    FETCH_CREATE_AND_UPDATE: '/shifts',
   },
 
 } as const

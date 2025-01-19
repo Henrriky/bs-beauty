@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   createShift,
-  fetchShiftsFromEmployee,
+  fetchEmployeeShifts,
   updateShift,
 } from "../../api/shifts-api";
 import { Button } from "../../components/button/Button";
@@ -13,8 +13,6 @@ import { Shift } from "../../store/auth/types";
 import DaysRow from "./components/DaysRow";
 import ShiftsRow from "./components/ShiftsRow";
 import { useNavigate } from "react-router";
-
-
 
 const WeekDayMapping: { [key: string]: string } = {
   Domingo: "SUNDAY",
@@ -51,9 +49,9 @@ const EmployeeShifts = () => {
   >({});
   const weekDays = Object.values(WeekDays);
 
-  const fetchEmployeeShifts = async () => {
+  const setEmployeeShiftsList = async () => {
     try {
-      const response = await fetchShiftsFromEmployee(accessToken);
+      const response = await fetchEmployeeShifts(accessToken);
       setShifts(response.shifts);
     } catch (error) {
       console.error("Error fetching shifts:", error);
@@ -75,7 +73,7 @@ const EmployeeShifts = () => {
 
   useEffect(() => {
     document.title = "BS Beauty - Seus Horários";
-    fetchEmployeeShifts();
+    setEmployeeShiftsList();
   }, []);
 
   useEffect(() => {
@@ -116,6 +114,9 @@ const EmployeeShifts = () => {
       );
 
       await Promise.all(updates);
+
+      await setEmployeeShiftsList();
+
       toast.success("Alterações salvas com sucesso!");
     } catch (error) {
       console.error("Erro ao salvar alterações:", error);
