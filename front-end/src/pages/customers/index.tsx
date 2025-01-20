@@ -7,6 +7,7 @@ import Subtitle from '../../components/texts/Subtitle'
 import { customerAPI } from '../../store/customer/customer-api'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
 import UserCard from './components/UserCard'
+import { ErrorMessage } from '../../components/feedback/ErrorMessage'
 
 function Customers() {
   const { data, isLoading, isError, error } =
@@ -21,9 +22,7 @@ function Customers() {
     console.error(error)
 
     return (
-      <div className="flex justify-center items-center h-full text-red-500">
-        Erro ao carregar informações. Tente novamente mais tarde.
-      </div>
+      <ErrorMessage message="Erro ao carregar informações. Tente novamente mais tarde." />
     )
   }
 

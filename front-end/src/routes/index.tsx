@@ -15,6 +15,7 @@ import Profile from '../pages/profile'
 import { ServiceDashboard } from '../pages/services'
 import ServicesPage from '../pages/services-page'
 import { Role } from '../store/auth/types'
+import CustomerHome from '../pages/home/customer-home'
 
 function BSBeautyRouter() {
   return (
@@ -32,6 +33,9 @@ function BSBeautyRouter() {
             }
           >
             <Route element={<SideBar />}>
+              <Route path="/manager/home" element={<Profile />} />
+              <Route path="/customer/home" element={<CustomerHome />} />
+              <Route path="/employee/home" element={<Profile />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/customers" element={<Customers />} />
             </Route>

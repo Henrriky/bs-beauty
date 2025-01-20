@@ -34,3 +34,88 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   -webkit-appearance: none;
 
 }
+.react-calendar__navigation {
+  display: flex;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  font-family: Kumbh Sans;
+  font-weight: 400;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #5B5B5B;
+  text-transform: uppercase;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none !important;
+}
+
+.react-calendar__navigation__prev2-button:disabled {
+  visibility: hidden;
+}
+.react-calendar__navigation__prev-button:disabled {
+  visibility: hidden;
+}
+.react-calendar__navigation__next2-button:disabled {
+  visibility: hidden;
+}
+.react-calendar__navigation__next-button:disabled {
+  visibility: hidden;
+}
+
+.react-calendar__month-view__days__day {
+  margin-bottom: 16px;
+  overflow: visible !important;
+  height: max-content !important;
+  /* border: 1px solid #A4978A; */
+  justify-content: center;
+  align-items: center;
+}
+
+.react-calendar__month-view__days__day abbr {
+  /* border-2 border-[#A4978A] rounded-md */
+  display: flex;
+  border: 2px solid #A4978A;
+  border-radius: 10px;
+  padding-inline: 6px;
+  padding-block: 6px;
+  width: 40px;
+  height: 40px;
+  line-height: 20px;
+  font-weight: 500;
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  margin-inline: auto
+}
+
+.react-calendar__month-view__days__day:disabled abbr {
+  color: #717171;
+  border: none;
+  border-radius: 10px;
+  background-color: #2D2D2D;
+}
+
+/* .react-calendar__month-view__days__day:disabled abbr {
+  display: contents;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #A4978A;
+  border-radius: 10px;
+  padding-inline: 6px;
+  padding-block: 6px;
+  line-height: 20px;
+  justify-content: center;
+  align-items: center;
+
+
+
+  /* color: #717171;
+  border: none;
+  border-radius: 10px;
+  background-color: #2D2D2D; */
+/* } */

@@ -14,5 +14,19 @@ export const offerAPI = createApi({
         body: data,
       }),
     }),
+    fetchForAvailableSchedulesFromEmployeeOffer: builder.query<
+      { offer: string },
+      { serviceOfferedId: string; dayToFetchAvailableSchedulling: string }
+    >({
+      query: ({ serviceOfferedId, dayToFetchAvailableSchedulling }) => ({
+        url: API_VARIABLES.OFFERS_ENDPOINTS.FETCH_FOR_AVAILABLE_SCHEDULES_FROM_EMPLOYEE_OFFER(
+          serviceOfferedId,
+        ),
+        method: 'GET',
+        body: {
+          dayToFetchAvailableSchedulling,
+        },
+      }),
+    }),
   }),
 })

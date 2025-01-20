@@ -1,11 +1,4 @@
-import {
-  BellIcon,
-  HomeIcon,
-  UserIcon,
-  CalendarDaysIcon,
-  XMarkIcon,
-  Bars3Icon,
-} from '@heroicons/react/24/outline'
+import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import { ReactNode, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 import useAppSelector from '../../hooks/use-app-selector'

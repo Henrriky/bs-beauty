@@ -31,6 +31,11 @@ const sideBarItems: SideBarOptions = {
   ],
   [Role.CUSTOMER]: [
     {
+      name: 'Home',
+      icon: <HomeIcon className="size-6" />,
+      navigateTo: '/customer/home',
+    },
+    {
       name: 'Agendamentos',
       icon: <CalendarDaysIcon className="size-6" />,
       navigateTo: '/appointments',
@@ -40,7 +45,7 @@ const sideBarItems: SideBarOptions = {
     {
       name: 'Home',
       icon: <HomeIcon className="size-6" />,
-      navigateTo: '/home',
+      navigateTo: '/manager/home',
     },
     {
       name: 'Clientes',
@@ -53,7 +58,13 @@ const sideBarItems: SideBarOptions = {
       navigateTo: '/notifications',
     },
   ],
-  [Role.EMPLOYEE]: [],
+  [Role.EMPLOYEE]: [
+    {
+      name: 'Home',
+      icon: <HomeIcon className="size-6" />,
+      navigateTo: '/customer/home',
+    },
+  ],
 }
 
 export default sideBarItems
