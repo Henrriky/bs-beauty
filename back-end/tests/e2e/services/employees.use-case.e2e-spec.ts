@@ -19,6 +19,10 @@ describe('EmployeesUseCase', () => {
     await prismaClient.$disconnect();
   });
 
+  it('should be defined', () => {
+    expect(employeesUseCase).toBeDefined();
+  });
+
   it('should retrieve all employees', async () => {
     const employee1 = await prismaClient.employee.create({
       data: { name: 'John Doe', email: 'john.doe@example.com' },

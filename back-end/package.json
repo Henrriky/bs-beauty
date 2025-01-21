@@ -9,10 +9,12 @@
     "build": "tsup src --out-dir build",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
-    "test": "vitest",
+    "test": "DATABASE_URL=mysql://root:mypass@127.0.0.1:3307/bsbeauty_test_db cross-env NODE_ENV=test vitest",
     "test:unit": "cross-env NODE_ENV=test TEST_TYPE=unit vitest",
     "test:e2e": "DATABASE_URL=mysql://root:mypass@127.0.0.1:3307/bsbeauty_test_db cross-env NODE_ENV=test TEST_TYPE=e2e vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "DATABASE_URL=mysql://root:mypass@127.0.0.1:3307/bsbeauty_test_db cross-env NODE_ENV=test vitest run --coverage",
+    "coverage:unit": "cross-env NODE_ENV=test TEST_TYPE=unit vitest run --coverage",
+    "coverage:e2e": "DATABASE_URL=mysql://root:mypass@127.0.0.1:3307/bsbeauty_test_db cross-env NODE_ENV=test TEST_TYPE=e2e vitest run --coverage"
   },
   "keywords": [],
   "author": "",
