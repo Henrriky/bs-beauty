@@ -89,10 +89,17 @@ class OffersUseCase {
     const { estimatedTime: estimatedTimeInMinutes } = serviceOffering
 
     const estimatedTimeInMilisseconds = (estimatedTimeInMinutes * 60000)
-    let currentStartTime = shiftStart.getTime()
+    // let currentStartTime = shiftStart.getTime()
+    const currentDayShiftEndTimeAsDate = new Date(dayToFetchAvailableSchedulling)
+    currentDayShiftEndTimeAsDate.setHours(shiftEnd.getHours(), shiftEnd.getMinutes(), shiftEnd.getSeconds(), shiftEnd.getMilliseconds())
+    const currentDayShiftEndTime = currentDayShiftEndTimeAsDate.getTime()
 
-    if (validAppointmentsToOfferOnDay == null) {
-      while ((currentStartTime + estimatedTimeInMilisseconds) <= shiftEnd.getTime()) {
+    const currentStartTimeAsDate = new Date(dayToFetchAvailableSchedulling)
+    currentStartTimeAsDate.setHours(shiftStart.getHours(), shiftStart.getMinutes(), shiftStart.getSeconds(), shiftStart.getMilliseconds())
+    let currentStartTime = currentStartTimeAsDate.getTime()
+
+    if (validAppointmentsToOfferOnDay == null || validAppointmentsToOfferOnDay.appointments.length === 0) {
+      while ((currentStartTime + estimatedTimeInMilisseconds) <= currentDayShiftEndTime) {
         const startTimestamp = currentStartTime
         const endTimestamp = currentStartTime + estimatedTimeInMilisseconds
         availableSchedulling.push({
@@ -100,14 +107,14 @@ class OffersUseCase {
           endTimestamp,
           isBusy: false
         })
-        currentStartTime += estimatedTimeInMilisseconds + 60000
+        currentStartTime += estimatedTimeInMilisseconds
       }
       return {
         availableSchedulling
       }
     }
 
-    while ((currentStartTime + estimatedTimeInMilisseconds) <= shiftEnd.getTime()) {
+    while ((currentStartTime + estimatedTimeInMilisseconds) <= currentDayShiftEndTime) {
       const startTimestamp = currentStartTime
       const endTimestamp = currentStartTime + estimatedTimeInMilisseconds
       const scheduleIsAlreadyBusy = validAppointmentsToOfferOnDay.appointments.some((appointment) => {
@@ -117,7 +124,7 @@ class OffersUseCase {
       })
 
       if (scheduleIsAlreadyBusy) {
-        currentStartTime += estimatedTimeInMilisseconds + 60000
+        currentStartTime += estimatedTimeInMilisseconds
         availableSchedulling.push({
           startTimestamp,
           endTimestamp,
@@ -131,7 +138,7 @@ class OffersUseCase {
         isBusy: false
       })
 
-      currentStartTime += estimatedTimeInMilisseconds + 60000
+      currentStartTime += estimatedTimeInMilisseconds
     }
 
     return { availableSchedulling }

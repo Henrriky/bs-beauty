@@ -91,7 +91,7 @@ class OffersController {
     try {
       const useCase = makeOffersUseCaseFactory()
       const serviceOfferingId = req.params.id
-      const dayToFetchAvailableSchedulling: Date = req.body.dayToFetchAvailableSchedulling
+      const dayToFetchAvailableSchedulling: Date = new Date((req.query.dayToFetchAvailableSchedulling as string))
 
       const { availableSchedulling } = await useCase.executeFetchAvailableSchedulingToOfferByDay(
         serviceOfferingId,

@@ -5,7 +5,7 @@ import { OfferSchemas } from '../../../utils/validation/zod-schemas/offer.zod-sc
 
 const validateFetchAvailableSchedulling = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    OfferSchemas.fetchAvailableSchedullings.parse(req.body)
+    OfferSchemas.fetchAvailableSchedullings.parse(req.query)
     next()
   } catch (error) {
     if (error instanceof z.ZodError) {

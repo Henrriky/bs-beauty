@@ -67,15 +67,9 @@ class PrismaOfferRepository implements OfferRepository {
   }
 
   public async fetchValidAppointmentsByOfferAndDay (serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) {
-    /**
-     * Buscar horários disponíveis (isOffering = true) para realizar o agendamento do serviço
-     *  - [ ] Filtrar apenas por horários de expediente disponíveis (Shift)
-     *  - [ ] Filtrar apenas por horários que não tiver agendamentos
-     *  - [ ] Projetar apenas intervalos baseado no tempo de execução da oferta
-     */
-
     const startOfDay = new Date(dayToFetchAvailableSchedulling)
     startOfDay.setHours(0, 0, 0, 0)
+
     const endOfDay = new Date(dayToFetchAvailableSchedulling)
     endOfDay.setHours(23, 59, 59, 999)
 
