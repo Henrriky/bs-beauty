@@ -14,7 +14,7 @@ function Login() {
   useEffect(() => {
     if (authInformations.token?.accessToken) {
       if (authInformations.user?.registerCompleted) {
-        navigate('/home')
+        navigate(`/${authInformations.user.role.toString().toLowerCase()}/home`)
       } else {
         navigate('/')
       }
@@ -22,6 +22,7 @@ function Login() {
   }, [
     authInformations.token?.accessToken,
     authInformations.user?.registerCompleted,
+    authInformations.user?.role,
     navigate,
   ])
 

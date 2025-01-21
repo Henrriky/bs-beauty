@@ -49,8 +49,8 @@ function SideBar() {
             <div className="">
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
               <ul className="text-primary-200 mt-8 text-[12px]">
-                {sideBarItems.COMMON.concat(sideBarItems[user.role!]).map(
-                  (sideBarItem) => {
+                {sideBarItems.COMMON.concat(sideBarItems[user.role!])
+                  .map((sideBarItem) => {
                     return (
                       <SideBarItem
                         toggleSideBar={toggleSideBar}
@@ -61,8 +61,8 @@ function SideBar() {
                         {sideBarItem.name}
                       </SideBarItem>
                     )
-                  },
-                )}
+                  })
+                  .reverse()}
               </ul>
             </div>
           )}

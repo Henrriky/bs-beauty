@@ -2,9 +2,11 @@ import { useNavigate } from 'react-router'
 import { Button } from '../../../components/button/Button'
 import Subtitle from '../../../components/texts/Subtitle'
 import Title from '../../../components/texts/Title'
+import useAppSelector from '../../../hooks/use-app-selector'
 
 function RegistrationCompleted() {
   const navigate = useNavigate()
+  const user = useAppSelector((state) => state.auth.user!)
 
   return (
     <div className="flex justify-center items-center flex-col h-full opacity-0 animate-fadeIn">
@@ -20,7 +22,7 @@ function RegistrationCompleted() {
       <Button
         variant="solid"
         label="Ir para o Painel Inicial"
-        onClick={() => navigate('/home')}
+        onClick={() => navigate(`/${user.role.toString().toLowerCase()}/home`)}
         className="animate-moveUp"
       />
     </div>
