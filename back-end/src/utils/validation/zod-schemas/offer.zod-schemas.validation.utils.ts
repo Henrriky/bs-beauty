@@ -1,6 +1,16 @@
 import { z } from 'zod'
 
 class OfferSchemas {
+  public static fetchAvailableSchedullings = z.object({
+    dayToFetchAvailableSchedulling: z.preprocess((arg) => {
+      if (typeof arg === 'string' || arg instanceof Date) {
+        return new Date(arg)
+      }
+
+      return arg
+    }, z.date().refine((date) => !isNaN(date.getTime())))
+  }).strict()
+
   public static createSchema = z.object({
     estimatedTime: z.number().int(),
     price: z.number().multipleOf(0.01),

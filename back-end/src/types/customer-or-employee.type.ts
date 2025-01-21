@@ -7,6 +7,7 @@ interface CustomerOrEmployee {
   name: string | null
   registerCompleted: boolean
   userId: string
+  profilePhotoUrl: string | null
 }
 
 export type { CustomerOrEmployee }

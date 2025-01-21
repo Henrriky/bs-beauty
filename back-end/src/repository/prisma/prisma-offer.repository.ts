@@ -1,4 +1,4 @@
-import { type Prisma } from '@prisma/client'
+import { Status, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type OfferRepository } from '../protocols/offer.repository'
 
@@ -64,6 +64,49 @@ class PrismaOfferRepository implements OfferRepository {
     })
 
     return deletedOffer
+  }
+
+  public async fetchValidAppointmentsByOfferAndDay (serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) {
+    const startOfDay = new Date(dayToFetchAvailableSchedulling)
+    startOfDay.setHours(0, 0, 0, 0)
+
+    const endOfDay = new Date(dayToFetchAvailableSchedulling)
+    endOfDay.setHours(23, 59, 59, 999)
+
+    const validAppointmentsToOfferOnDay = await prismaClient.offer.findUnique({
+      where: {
+        id: serviceOfferingId,
+        isOffering: true,
+        appointments: {
+          every: {
+            appointmentDate: {
+              gte: startOfDay,
+              lte: endOfDay
+            },
+            status: {
+              in: [Status.PENDING, Status.RESCHEDULED, Status.CONFIRMED]
+            }
+          }
+        }
+      },
+      select: {
+        id: true,
+        price: true,
+        isOffering: true,
+        estimatedTime: true,
+        appointments: true
+      }
+    })
+
+    if (validAppointmentsToOfferOnDay == null) {
+      return {
+        validAppointmentsToOfferOnDay: null
+      }
+    }
+
+    return {
+      validAppointmentsToOfferOnDay
+    }
   }
 }
 

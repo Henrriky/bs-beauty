@@ -28,6 +28,18 @@ class ShiftController {
     }
   }
 
+  public static async handleFindByEmployeeId(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeShiftUseCaseFactory()
+      const employeeId = req.params.id
+      const { shifts } = await useCase.executeFindByEmployeeId(employeeId)
+
+      res.send({ shifts })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   public static async handleCreate (req: Request, res: Response, next: NextFunction) {
     try {
 

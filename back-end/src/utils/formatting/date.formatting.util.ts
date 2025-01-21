@@ -1,3 +1,4 @@
+import { WeekDays } from '@prisma/client'
 import { type Request } from 'express'
 
 class DateFormatter {
@@ -43,6 +44,20 @@ class DateFormatter {
     }
 
     return new Date()
+  }
+
+  public static formatDayOfDateToWeekDay = (date: Date): WeekDays => {
+    const days: Record<number, WeekDays> = {
+      0: WeekDays.SUNDAY,
+      1: WeekDays.MONDAY,
+      2: WeekDays.TUESDAY,
+      3: WeekDays.WEDNESDAY,
+      4: WeekDays.THURSDAY,
+      5: WeekDays.FRIDAY,
+      6: WeekDays.SATURDAY
+    }
+
+    return days[date.getDay()]
   }
 }
 

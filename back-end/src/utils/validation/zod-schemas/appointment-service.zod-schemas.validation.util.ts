@@ -7,7 +7,7 @@ class AppointmentServiceSchemas {
     observation: z.string().min(3).max(255).refine((string) => RegexPatterns.content.test(string)).optional(),
     appointmentDate: z.date().refine((date) => !isNaN(date.getTime()) && date > new Date()),
     appointmentId: z.string().uuid(),
-    serviceId: z.string().uuid()
+    serviceOfferedId: z.string().uuid()
   }).strict()
 
   public static customerUpdateSchema = z.object({

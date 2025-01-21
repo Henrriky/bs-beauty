@@ -4,6 +4,14 @@ import { type ShiftRepository } from '../protocols/shift.repository'
 
 class PrismaShiftRepository implements ShiftRepository {
 
+  public async findAllByEmployeeId(employeeId: string | undefined) {
+    const shifts = await prismaClient.shift.findMany({
+      where: { employeeId }
+    })
+
+    return shifts
+  }
+
   public async findById (id: string) {
     const shift = await prismaClient.shift.findUnique({
       where: { id }
@@ -19,7 +27,7 @@ class PrismaShiftRepository implements ShiftRepository {
     return shift
   }
 
-  public async findManyByEmployeeId(employeeId: string | undefined) {
+  public async findByEmployeeId(employeeId: string | undefined) {
     const shifts = await prismaClient.shift.findMany({
       where: { employeeId }
     })

@@ -68,7 +68,9 @@ class PrismaCustomerRepository implements CustomerRepository {
         googleId: identifiers.googleId,
         id: identifiers.id
       },
-      update: {},
+      update: {
+        profilePhotoUrl: data.profilePhotoUrl
+      },
       create: {
         ...data
       }

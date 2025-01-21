@@ -21,6 +21,7 @@ model Customer {
   email             String         @unique
   googleId          String?        @unique @map("google_id")
   phone             String?        @unique
+  profilePhotoUrl   String?
   notification      Notification[]
   appointments      Appointment[]
   role              Role           @default(CUSTOMER)
@@ -45,41 +46,41 @@ model Appointment {
 }
 
 model AppointmentService {
-  id              String   @id @default(uuid())
-  observation     String?
-  status          Status   @default(PENDING)
-  appointmentDate DateTime @map("appointment_date")
-  appointmentId   String   @map("appointment_id")
-  serviceId       String   @map("service_id")
+  id               String   @id @default(uuid())
+  observation      String?
+  status           Status   @default(PENDING)
+  appointmentDate  DateTime @map("appointment_date")
+  appointmentId    String   @map("appointment_id")
+  serviceOfferedId String   @map("service_id")
 
-  appointment Appointment @relation(fields: [appointmentId], references: [id])
-  service     Service     @relation(fields: [serviceId], references: [id])
+  appointment    Appointment @relation(fields: [appointmentId], references: [id])
+  serviceOffered Offer       @relation(fields: [serviceOfferedId], references: [id])
 
   @@map("appointment_service")
 }
 
 model Service {
-  id                 String               @id @default(uuid())
-  name               String
-  description        String?
-  category           String
-  appointmentService AppointmentService[]
-  offers             Offer[]
-  createdAt          DateTime             @default(now()) @map("created_at")
-  updatedAt          DateTime             @updatedAt @map("updated_at")
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  category    String
+  offers      Offer[]
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("service")
 }
 
 model Offer {
-  id            String   @id @default(uuid())
-  estimatedTime Int      @map("estimated_time")
-  price         Decimal  @db.Decimal(10, 2)
-  isOffering    Boolean  @default(false) @map("is_offering")
-  serviceId     String   @map("service_id")
-  employeeId    String   @map("employee_id")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id            String               @id @default(uuid())
+  estimatedTime Int                  @map("estimated_time")
+  price         Decimal              @db.Decimal(10, 2)
+  isOffering    Boolean              @default(false) @map("is_offering")
+  serviceId     String               @map("service_id")
+  employeeId    String               @map("employee_id")
+  createdAt     DateTime             @default(now()) @map("created_at")
+  updatedAt     DateTime             @updatedAt @map("updated_at")
+  appointments  AppointmentService[]
 
   service  Service  @relation(fields: [serviceId], references: [id])
   employee Employee @relation(fields: [employeeId], references: [id])
@@ -95,6 +96,8 @@ model Employee {
   registerCompleted Boolean        @default(false) @map("register_completed")
   socialMedia       Json?          @map("social_media")
   contact           String?        @unique
+  specialization    String?
+  profilePhotoUrl   String?
   role              Role           @default(EMPLOYEE)
   shifts            Shift[]
   offers            Offer[]

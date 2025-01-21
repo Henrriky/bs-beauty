@@ -15,7 +15,10 @@ class EmployeeSchemas {
 
   public static createSchema = z.object({
     email: z.string().email(),
-    role: z.enum(['MANAGER', 'EMPLOYEE']).optional()
+    socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
+    contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
+    role: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
+    specialization: z.string().min(3).max(3).optional()
   }).strict()
 
   public static managerUpdateSchema = z.object({
@@ -23,14 +26,16 @@ class EmployeeSchemas {
     email: z.string().email().optional(),
     socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
     contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
-    role: z.enum(['MANAGER', 'EMPLOYEE']).optional()
+    role: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
+    specialization: z.string().min(3).max(3).optional()
   }).strict()
 
   public static employeeUpdateSchema = z.object({
     name: z.string().min(3).max(100).refine((string) => RegexPatterns.names.test(string)).optional(),
     email: z.string().email().optional(),
     socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
-    contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional()
+    contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
+    specialization: z.string().min(3).max(3).optional()
   }).strict()
 }
 
