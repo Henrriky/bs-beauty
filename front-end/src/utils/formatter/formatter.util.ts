@@ -29,6 +29,11 @@ class Formatter {
       currency: 'BRL',
     })
   }
+
+  public static formatTimeOfDay(hour: number) {
+    const formattedHour = hour < 10 ? `0${hour}` : `${hour}`
+    return `${formattedHour}:00`
+  }
 }
 
 export { Formatter }

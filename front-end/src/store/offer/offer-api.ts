@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import { CreateOfferFormData } from '../../pages/services/components/types'
 import { API_VARIABLES } from '../../api/config'
+import { AvailableSchedulling } from './types'
 
 export const offerAPI = createApi({
   reducerPath: 'offers',
@@ -15,17 +16,15 @@ export const offerAPI = createApi({
       }),
     }),
     fetchForAvailableSchedulesFromEmployeeOffer: builder.query<
-      { offer: string },
+      { availableSchedulling: AvailableSchedulling[] },
       { serviceOfferedId: string; dayToFetchAvailableSchedulling: string }
     >({
       query: ({ serviceOfferedId, dayToFetchAvailableSchedulling }) => ({
         url: API_VARIABLES.OFFERS_ENDPOINTS.FETCH_FOR_AVAILABLE_SCHEDULES_FROM_EMPLOYEE_OFFER(
           serviceOfferedId,
+          dayToFetchAvailableSchedulling,
         ),
         method: 'GET',
-        body: {
-          dayToFetchAvailableSchedulling,
-        },
       }),
     }),
   }),

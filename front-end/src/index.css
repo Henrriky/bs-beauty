@@ -76,14 +76,29 @@ body {
   border-radius: 10px;
   padding-inline: 6px;
   padding-block: 6px;
-  width: 40px;
-  height: 40px;
+  width: 80%;
+  height: 100%;
+  /* width: 40px;
+  height: 40px; */
   line-height: 20px;
   font-weight: 500;
   /* display: flex; */
   justify-content: center;
   align-items: center;
-  margin-inline: auto
+  margin-inline: auto;
+  background-color: transparent;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.react-calendar__month-view__days__day abbr:hover {
+  background-color: #2c231e;
+  /* background-color: #3d3630; */
+}
+
+.react-calendar__month-view__days__day.abbr-selected abbr {
+  background-color: #3A3027;
+  transition: all;
+  transition: background-color 0.3s ease, color 0.3 ease;
 }
 
 .react-calendar__month-view__days__day:disabled abbr {

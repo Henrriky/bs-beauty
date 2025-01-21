@@ -33,7 +33,7 @@ function CustomerHomeSelectServiceContainer() {
       {data?.services &&
         data.services.map((service) => {
           return (
-            <>
+            <div key={`service-label-${service.id}`}>
               <input
                 className="invisible"
                 type="radio"
@@ -45,11 +45,10 @@ function CustomerHomeSelectServiceContainer() {
                 isSelected={serviceSelectedId === service.id}
                 name={service.name}
                 description={service.description}
-                key={service.id}
                 id={service.id}
                 for={service.id}
               />
-            </>
+            </div>
           )
         })}
     </>

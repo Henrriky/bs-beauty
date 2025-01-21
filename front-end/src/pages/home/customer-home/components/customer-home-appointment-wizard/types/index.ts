@@ -5,6 +5,7 @@ type CreateAppointmentFormData = z.infer<
   typeof AppointmentServiceSchemas.createSchema
 > & {
   employeeId: string | null
+  appointmentDayPicked: Date | null
 }
 
 export type { CreateAppointmentFormData }

@@ -5,7 +5,6 @@ import CustomerHomeServiceCardDescription from './CustomerHomeServiceCardDescrip
 
 interface CustomerHomeServiceCardProps
   extends Pick<Service, 'name' | 'id' | 'description'> {
-  key: string
   for: string
   isSelected: boolean
 }
