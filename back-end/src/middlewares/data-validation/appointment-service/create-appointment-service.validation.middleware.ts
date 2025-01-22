@@ -1,12 +1,10 @@
 import { z } from 'zod'
 import { type Request, type Response, type NextFunction } from 'express'
 import { formatValidationErrors } from '../../../utils/formatting/zod-validation-errors.formatting.util'
-import { DateFormatter } from '../../../utils/formatting/date.formatting.util'
 import { AppointmentServiceSchemas } from '../../../utils/validation/zod-schemas/appointment-service.zod-schemas.validation.util'
 
 const validateCreateAppointmentService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    req.body.appointmentDate = DateFormatter.formatAppointmentDate(req)
     AppointmentServiceSchemas.createSchema.parse(req.body)
     next()
   } catch (error) {

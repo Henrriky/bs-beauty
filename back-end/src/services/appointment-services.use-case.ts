@@ -37,8 +37,8 @@ class AppointmentServicesUseCase {
     return { appointmentServices }
   }
 
-  public async executeFindByServiceId (appointmentId: string): Promise<AppointmentServiceOutput> {
-    const appointmentServices = await this.appointmentServiceRepository.findByServiceId(appointmentId)
+  public async executeFindByServiceOfferedId (appointmentId: string): Promise<AppointmentServiceOutput> {
+    const appointmentServices = await this.appointmentServiceRepository.findByServiceOfferedId(appointmentId)
     RecordExistence.validateManyRecordsExistence(appointmentServices, 'appointment services')
 
     return { appointmentServices }

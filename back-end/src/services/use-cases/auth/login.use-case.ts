@@ -46,6 +46,7 @@ class LoginUseCase {
 
     const { accessToken } = await this.encrypter.encrypt({
       userId,
+      id: customerOrEmployee.id,
       role: customerOrEmployee.role,
       email: customerOrEmployee.email,
       name: customerOrEmployee.name,
