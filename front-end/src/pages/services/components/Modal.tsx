@@ -1,14 +1,14 @@
 import { ReactNode } from 'react'
-import { Service } from '../../../store/service/types'
+import clsx from 'clsx'
 
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
   children?: ReactNode
-  service: Service
+  className?: string
 }
 
-function Modal({ isOpen, onClose, children }: ModalProps) {
+function Modal({ isOpen, onClose, children, className }: ModalProps) {
   if (isOpen) {
     return (
       <div
@@ -17,7 +17,10 @@ function Modal({ isOpen, onClose, children }: ModalProps) {
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="bg-[#1E1E1E] rounded-2xl shadow p-6 w-full h-full max-w-[343px] max-h-[320px] flex justify-center items-center"
+          className={clsx(
+            'bg-[#1E1E1E] rounded-2xl shadow p-6 w-full h-full max-w-[343px] max-h-[320px] flex justify-center items-center',
+            className,
+          )}
         >
           {children}
         </div>

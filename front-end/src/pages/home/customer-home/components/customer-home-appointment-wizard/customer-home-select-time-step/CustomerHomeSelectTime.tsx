@@ -167,13 +167,6 @@ function CustomerHomeSelectTimeContainer() {
         </div>
         <div className="bg-[#595149] w-full h-0.5 mb-4"></div>
         <div>
-          <Subtitle
-            align="left"
-            className="text-[#A4978A] font-medium !text-lg flex items-center justify-center mb-4 gap-2"
-          >
-            <ClockIcon className="size-7" />
-            Selecionar horário
-          </Subtitle>
           {schedullingIsLoading ? (
             <BSBeautyLoading title="Carregando os horários do funcionários escolhido..." />
           ) : schedullingIsError ? (
@@ -183,38 +176,51 @@ function CustomerHomeSelectTimeContainer() {
               }
             />
           ) : (
-            <div className="flex gap-2 flex-wrap justify-center">
-              {schedullingData?.availableSchedulling &&
-                schedullingData.availableSchedulling.map(
-                  (schedullingDate, index) => {
-                    return (
-                      <div key={`time-${index}`}>
-                        <input
-                          className="invisible"
-                          type="radio"
-                          id={schedullingDate.startTimestamp.toString()}
-                          value={schedullingDate.startTimestamp}
-                        />
-                        <CustomerHomeSelectTimeCard
-                          isSelected={
-                            appointmentDate?.getTime() ===
-                            schedullingDate.startTimestamp
-                          }
-                          for={schedullingDate.startTimestamp.toString()}
-                          startDate={schedullingDate.startTimestamp}
-                          isBusy={schedullingDate.isBusy}
-                          onClick={() => {
-                            setValue(
-                              'appointmentDate',
-                              new Date(Number(schedullingDate.startTimestamp)),
-                            )
-                          }}
-                        />
-                      </div>
-                    )
-                  },
-                )}
-            </div>
+            <>
+              {schedullingData?.availableSchedulling && (
+                <Subtitle
+                  align="left"
+                  className="text-[#A4978A] font-medium !text-lg flex items-center justify-center mb-4 gap-2"
+                >
+                  <ClockIcon className="size-7" />
+                  Selecionar horário
+                </Subtitle>
+              )}
+              <div className="flex gap-2 flex-wrap justify-center">
+                {schedullingData?.availableSchedulling &&
+                  schedullingData.availableSchedulling.map(
+                    (schedullingDate, index) => {
+                      return (
+                        <div key={`time-${index}`}>
+                          <input
+                            className="invisible"
+                            type="radio"
+                            id={schedullingDate.startTimestamp.toString()}
+                            value={schedullingDate.startTimestamp}
+                          />
+                          <CustomerHomeSelectTimeCard
+                            isSelected={
+                              appointmentDate?.getTime() ===
+                              schedullingDate.startTimestamp
+                            }
+                            for={schedullingDate.startTimestamp.toString()}
+                            startDate={schedullingDate.startTimestamp}
+                            isBusy={schedullingDate.isBusy}
+                            onClick={() => {
+                              setValue(
+                                'appointmentDate',
+                                new Date(
+                                  Number(schedullingDate.startTimestamp),
+                                ),
+                              )
+                            }}
+                          />
+                        </div>
+                      )
+                    },
+                  )}
+              </div>
+            </>
           )}
         </div>
       </section>

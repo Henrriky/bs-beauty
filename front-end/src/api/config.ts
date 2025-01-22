@@ -32,4 +32,8 @@ export const API_VARIABLES = {
     FIND_SHIFTS_BY_EMPLOYEE: (employeeId: string) =>
       `/shifts/employee/${employeeId}`,
   },
+  APPOINTMENTS_ENDPOINTS: {
+    CREATE_APPOINTMENT: '/appointments',
+    ASSOCIATE_APPOINTMENT_WITH_OFFER: '/appointment-services',
+  },
 } as const
