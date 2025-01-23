@@ -31,7 +31,7 @@ function BSBeautyRouter() {
             }
           >
             <Route element={<SideBar />}>
-              <Route path="/manager/home" element={<Profile />} />
+              <Route path="/manager/home" element={<ManagerHome />} />
               <Route path="/customer/home" element={<CustomerHome />} />
               <Route path="/employee/home" element={<Profile />} />
               <Route path="/profile" element={<Profile />} />
