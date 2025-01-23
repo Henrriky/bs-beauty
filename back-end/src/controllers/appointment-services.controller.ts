@@ -50,11 +50,11 @@ class AppointmentServiceController {
     }
   }
 
-  public static async handleFindByServiceId (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByServiceOfferedId (req: Request, res: Response, next: NextFunction) {
     try {
-      const serviceId = req.params.serviceId
+      const serviceId = req.params.serviceOfferedId
       const useCase = makeAppointmentServicesUseCaseFactory()
-      const { appointmentServices } = await useCase.executeFindByServiceId(serviceId)
+      const { appointmentServices } = await useCase.executeFindByServiceOfferedId(serviceId)
 
       res.send({ appointmentServices })
     } catch (error) {

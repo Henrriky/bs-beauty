@@ -76,9 +76,15 @@ class PrismaOfferRepository implements OfferRepository {
     const validAppointmentsToOfferOnDay = await prismaClient.offer.findUnique({
       where: {
         id: serviceOfferingId,
+        isOffering: true
+      },
+      select: {
+        id: true,
+        price: true,
         isOffering: true,
+        estimatedTime: true,
         appointments: {
-          every: {
+          where: {
             appointmentDate: {
               gte: startOfDay,
               lte: endOfDay
@@ -88,13 +94,6 @@ class PrismaOfferRepository implements OfferRepository {
             }
           }
         }
-      },
-      select: {
-        id: true,
-        price: true,
-        isOffering: true,
-        estimatedTime: true,
-        appointments: true
       }
     })
 

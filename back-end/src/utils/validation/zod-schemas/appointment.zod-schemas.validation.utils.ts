@@ -5,7 +5,7 @@ import { Status } from '@prisma/client'
 class AppointmentSchemas {
   public static createSchema = z.object({
     observation: z.string().min(3).max(255).refine((string) => RegexPatterns.content.test(string)).optional(),
-    customerId: z.string().uuid()
+    customerId: z.string()
   }).strict()
 
   public static customerUpdateSchema = z.object({

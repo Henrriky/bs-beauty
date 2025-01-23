@@ -7,6 +7,7 @@ class JwtEncrypterService implements Encrypter {
   async encrypt (params: CustomerOrEmployee & { userId: string, profilePhotoUrl: string }): Promise<{ accessToken: string }> {
     const accessToken = jwt.sign(
       {
+        id: params.id,
         sub: params.userId,
         userId: params.id,
         role: params.role,

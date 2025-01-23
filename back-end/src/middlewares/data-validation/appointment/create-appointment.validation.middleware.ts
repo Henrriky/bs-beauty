@@ -5,6 +5,7 @@ import { AppointmentSchemas } from '../../../utils/validation/zod-schemas/appoin
 
 const validateCreateAppointment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    req.body.customerId = req.user.id
     AppointmentSchemas.createSchema.parse(req.body)
     next()
   } catch (error) {
