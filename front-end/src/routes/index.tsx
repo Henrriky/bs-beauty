@@ -38,6 +38,13 @@ function BSBeautyRouter() {
               <Route path="/employee/home" element={<Profile />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/customers" element={<Customers />} />
+              <Route element={<PrivateRoute allowedRoles={[Role.MANAGER]} />}>
+                <Route
+                  path="/employees-management"
+                  element={<EmployeesManagement />}
+                />
+              </Route>
+              <Route path="/employee-shifts" element={<EmployeeShifts />} />
             </Route>
             {/* COMPLETE REGISTER ROUTES */}
             <Route path="/complete-register" element={<CompleteRegister />} />
@@ -45,18 +52,11 @@ function BSBeautyRouter() {
               path="/register-completed"
               element={<RegistrationCompleted />}
             />
-            <Route path="/manager/home" element={<ManagerHome />} />
-            <Route
-              path="/employees-management"
-              element={<EmployeesManagement />}
-            />
-            <Route path="/employee-shifts" element={<EmployeeShifts />} />
             {/* MANAGER ROUTES */}
             <Route path="/manager/home" element={<ManagerHome />} />
             {/* SERVICES ROUTES */}
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/management/services" element={<ServiceDashboard />} />
-            {/* SERVICES ROUTES */}
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>

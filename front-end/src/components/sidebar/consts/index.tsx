@@ -1,6 +1,8 @@
 import {
   BellIcon,
   CalendarDaysIcon,
+  ClipboardDocumentCheckIcon,
+  ClockIcon,
   HomeIcon,
   UserIcon,
   UsersIcon,
@@ -57,12 +59,27 @@ const sideBarItems: SideBarOptions = {
       icon: <BellIcon className="size-6" />,
       navigateTo: '/notifications',
     },
+    {
+      name: 'Funcionários',
+      icon: <ClipboardDocumentCheckIcon className="size-6" />,
+      navigateTo: '/employees-management',
+    },
+    {
+      name: 'Turnos',
+      icon: <ClockIcon className="size-6" />,
+      navigateTo: '/employee-shifts',
+    },
   ],
   [Role.EMPLOYEE]: [
     {
       name: 'Home',
       icon: <HomeIcon className="size-6" />,
       navigateTo: '/customer/home',
+    },
+    {
+      name: 'Turnos',
+      icon: <ClockIcon className="size-6" />,
+      navigateTo: '/employee-shifts',
     },
   ],
 }

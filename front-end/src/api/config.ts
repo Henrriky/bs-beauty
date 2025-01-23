@@ -29,12 +29,11 @@ export const API_VARIABLES = {
     ENDPOINT: '/shifts',
     FIND_SHIFTS_BY_EMPLOYEE: (employeeId: string) =>
       `/shifts/employee/${employeeId}`,
+    UPDATE_SHIFT: (shiftId: string) => `/shifts/${shiftId}`,
   },
-  EMPLOYEE_ENDPOINTS: {
+  EMPLOYEES_ENDPOINTS: {
     FETCH_EMPLOYEES: '/employees',
+    CREATE_EMPLOYEE: '/employees',
+    DELETE_EMPLOYEE: (employeeId: string) => `/employees/${employeeId}`,
   },
-  SHIFT_ENDPOINTS: {
-    FETCH_CREATE_AND_UPDATE: '/shifts',
-  },
-
 } as const

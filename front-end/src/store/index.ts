@@ -7,6 +7,7 @@ import { serviceAPI } from './service/service-api'
 import { customerAPI } from './customer/customer-api'
 import { offerAPI } from './offer/offer-api'
 import { shiftAPI } from './shift/shift-api'
+import { employeeAPI } from './employee/employee-api'
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     [customerAPI.reducerPath]: customerAPI.reducer,
     [offerAPI.reducerPath]: offerAPI.reducer,
     [shiftAPI.reducerPath]: shiftAPI.reducer,
+    [employeeAPI.reducerPath]: employeeAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -26,5 +28,6 @@ export const store = configureStore({
       .concat(serviceAPI.middleware)
       .concat(customerAPI.middleware)
       .concat(offerAPI.middleware)
-      .concat(shiftAPI.middleware),
+      .concat(shiftAPI.middleware)
+      .concat(employeeAPI.middleware),
 })

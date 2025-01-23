@@ -1,136 +1,151 @@
-import { ArrowLongLeftIcon } from "@heroicons/react/16/solid";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import {
-  createShift,
-  fetchEmployeeShifts,
-  updateShift,
-} from "../../api/shifts-api";
-import { Button } from "../../components/button/Button";
-import { WeekDays } from "../../enums/enums";
-import useAppSelector from "../../hooks/use-app-selector";
-import { Shift } from "../../store/auth/types";
-import DaysRow from "./components/DaysRow";
-import ShiftsRow from "./components/ShiftsRow";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import { Button } from '../../components/button/Button'
+import { WeekDays } from '../../enums/enums'
+import { Shift } from '../../store/auth/types'
+import { shiftAPI } from '../../store/shift/shift-api'
+import DaysRow from './components/DaysRow'
+import ShiftsRow from './components/ShiftsRow'
 
 const WeekDayMapping: { [key: string]: string } = {
-  Domingo: "SUNDAY",
-  Segunda: "MONDAY",
-  Terça: "TUESDAY",
-  Quarta: "WEDNESDAY",
-  Quinta: "THURSDAY",
-  Sexta: "FRIDAY",
-  Sábado: "SATURDAY",
-};
+  Domingo: 'SUNDAY',
+  Segunda: 'MONDAY',
+  Terça: 'TUESDAY',
+  Quarta: 'WEDNESDAY',
+  Quinta: 'THURSDAY',
+  Sexta: 'FRIDAY',
+  Sábado: 'SATURDAY',
+}
 
 const formatTime = (isoTime: string) => {
-  if (!isoTime) return "";
+  if (!isoTime) return ''
   try {
-    const date = new Date(isoTime);
-    return date.toISOString().slice(11, 16);
+    const date = new Date(isoTime)
+    return date.toISOString().slice(11, 16)
   } catch (error) {
-    console.error("Invalid ISO time:", isoTime);
-    return "";
+    console.error('Invalid ISO time:', isoTime)
+    return ''
   }
-};
+}
 
 interface EditableShift {
-  shiftStart: string;
-  shiftEnd: string;
-  isBusy: boolean;
+  shiftStart: string
+  shiftEnd: string
+  isBusy: boolean
 }
 
 const EmployeeShifts = () => {
-  const accessToken = useAppSelector((state) => state.auth.token?.accessToken!);
-  const [shifts, setShifts] = useState<Shift[]>([]);
+  const { data, refetch } = shiftAPI.useFindShiftsByAuthenticatedUserQuery()
+  const [createShift] = shiftAPI.useCreateShiftMutation()
+  const [updateShift] = shiftAPI.useUpdateShiftMutation()
+
   const [editableShifts, setEditableShifts] = useState<
     Record<string, { shiftStart: string; shiftEnd: string; isBusy: boolean }>
-  >({});
-  const weekDays = Object.values(WeekDays);
+  >({})
+  const weekDays = Object.values(WeekDays)
 
-  const setEmployeeShiftsList = async () => {
-    try {
-      const response = await fetchEmployeeShifts(accessToken);
-      setShifts(response.shifts);
-    } catch (error) {
-      console.error("Error fetching shifts:", error);
+  useEffect(() => {
+    document.title = 'BS Beauty - Seus Horários'
+  }, [])
+
+  useEffect(() => {
+    if (data?.shifts) {
+      initializeEditableShifts(data.shifts)
+    } else {
+      const defaultShifts: Record<string, EditableShift> = {}
+      weekDays.forEach((day) => {
+        defaultShifts[day] = {
+          shiftStart: '',
+          shiftEnd: '',
+          isBusy: true,
+        }
+      })
+      setEditableShifts(defaultShifts)
     }
-  };
+  }, [data])
 
-  const initializeEditableShifts = () => {
-    const initialShifts: Record<string, EditableShift> = {};
+  const initializeEditableShifts = (shifts: Shift[]) => {
+    const initialShifts: Record<string, EditableShift> = {}
     weekDays.forEach((day) => {
-      const shift = getShiftByDay(day);
+      const shift = shifts?.length ? getShiftByDay(shifts, day) : null
       initialShifts[day] = {
-        shiftStart: shift ? formatTime(shift.shiftStart) : "",
-        shiftEnd: shift ? formatTime(shift.shiftEnd) : "",
-        isBusy: shift ? shift.isBusy : true,
-      };
-    });
-    setEditableShifts(initialShifts);
-  };
+        shiftStart: shift ? formatTime(shift.shiftStart) : '',
+        shiftEnd: shift ? formatTime(shift.shiftEnd) : '',
+        isBusy: shift ? shift.isBusy : false,
+      }
+    })
+    setEditableShifts(initialShifts)
+  }
 
-  useEffect(() => {
-    document.title = "BS Beauty - Seus Horários";
-    setEmployeeShiftsList();
-  }, []);
-
-  useEffect(() => {
-    initializeEditableShifts();
-  }, [shifts]);
-
-  const getShiftByDay = (day: string) => {
-    const backendDay = WeekDayMapping[day];
-    return shifts.find((shift) => shift.weekDay === backendDay);
-  };
+  const getShiftByDay = (shifts: Shift[], day: string) => {
+    const backendDay = WeekDayMapping[day]
+    return shifts.find((shift) => shift.weekDay === backendDay)
+  }
 
   const handleSaveChanges = async () => {
+    if (!validateShifts()) {
+      return
+    }
     try {
       const updates = Object.entries(editableShifts).map(
         async ([day, shiftData]) => {
-          const backendDay: WeekDays = WeekDayMapping[day] as WeekDays;
-          const existingShift = getShiftByDay(day);
+          const backendDay: WeekDays = WeekDayMapping[day] as WeekDays
+          const existingShift = getShiftByDay(data?.shifts || [], day)
 
           const payload = {
             weekDay: backendDay,
-            shiftStart: shiftData.shiftStart || "00:00",
-            shiftEnd: shiftData.shiftEnd || "00:00",
+            shiftStart: shiftData.shiftStart || '00:00',
+            shiftEnd: shiftData.shiftEnd || '00:00',
             isBusy: shiftData.isBusy,
-          };
+          }
 
-          existingShift
-            ? await updateShift(
-              {
-                shiftStart: payload.shiftStart,
-                shiftEnd: payload.shiftEnd,
-                isBusy: payload.isBusy,
-              },
-              existingShift.id,
-              accessToken
-            )
-            : await createShift(payload, accessToken);
+          if (existingShift) {
+            console.log('updateShift')
+            await updateShift({
+              id: existingShift.id,
+              shiftStart: payload.shiftStart,
+              shiftEnd: payload.shiftEnd,
+              isBusy: payload.isBusy,
+            })
+          } else {
+            await createShift(payload)
+          }
         }
-      );
+      )
 
-      await Promise.all(updates);
-
-      await setEmployeeShiftsList();
-
-      toast.success("Alterações salvas com sucesso!");
+      await Promise.all(updates)
+      refetch()
+      toast.success('Alterações salvas com sucesso!')
     } catch (error) {
-      console.error("Erro ao salvar alterações:", error);
-      toast.error("Erro ao salvar alterações.");
+      console.error('Erro ao salvar alterações:', error)
+      toast.error('Erro ao salvar alterações.')
     }
-  };
+  }
 
-  const navigate = useNavigate();
+  const validateShifts = (): boolean => {
+    let isValid = true
+
+    for (const { shiftStart, shiftEnd } of Object.values(editableShifts)) {
+      console.log(shiftStart, shiftEnd)
+      if (shiftStart && shiftEnd && shiftStart > shiftEnd) {
+        isValid = false
+        break
+      }
+    }
+
+    if (!isValid) {
+      toast.error(
+        'Alguns turnos não estão configurados corretamente. Confira os horários de início e fim.'
+      )
+    }
+
+    return isValid
+  }
 
   return (
     <>
-      <ArrowLongLeftIcon className="size-[30px] hover:size-9 transition-all fill-secondary-200 position absolute top-[25px] left-[25px] cursor-pointer" onClick={() => navigate("/home")} />
       <div className="p-4">
-        <div className="flex flex-col gap-4 mt-11">
+        <div className="flex flex-col gap-4">
           <h2 className="text-[#D9D9D9] text-lg">Horários</h2>
           <p className="text-primary-200 text-sm">
             Defina seus horários de expediente
@@ -139,7 +154,7 @@ const EmployeeShifts = () => {
         <div className="mt-6 flex flex-col items-center gap-6">
           <div
             className="grid grid-cols-2 w-full gap-x-4 text-[#D9D9D9] text-sm"
-            style={{ gridTemplateColumns: "3fr 1fr" }}
+            style={{ gridTemplateColumns: '3fr 1fr' }}
           >
             <div>
               <DaysRow weekDays={weekDays} editableShifts={editableShifts} />
@@ -161,7 +176,7 @@ const EmployeeShifts = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default EmployeeShifts;
+export default EmployeeShifts
