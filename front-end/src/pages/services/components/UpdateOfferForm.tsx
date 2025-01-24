@@ -1,37 +1,32 @@
+import { toast } from 'react-toastify'
+import { offerAPI } from '../../../store/offer/offer-api'
+import { Offer } from '../../../store/offer/types'
+import { OnSubmitUpdateOfferForm, UpdateOfferFormData } from './types'
 import { useForm } from 'react-hook-form'
-import { CreateOfferFormData, OnSubmitCreateOfferForm } from './types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { OfferSchemas } from '../../../utils/validation/zod-schemas/offer.zod-schemas.validation.utils'
 import { useEffect, useState } from 'react'
+import { Formatter } from '../../../utils/formatter/formatter.util'
 import { Input } from '../../../components/inputs/Input'
 import { Button } from '../../../components/button/Button'
-import { offerAPI } from '../../../store/offer/offer-api'
-import { toast } from 'react-toastify'
-import { Formatter } from '../../../utils/formatter/formatter.util'
-import { Service } from '../../../store/service/types'
 
-interface CreateOfferFormInputProps {
-  service: Service
-  employeeId: string | undefined
+interface UpdateOfferFormInputProps {
+  offer: Offer
   onClose: () => void
 }
 
-function CreateOfferForm({
-  service,
-  employeeId,
-  onClose,
-}: CreateOfferFormInputProps) {
-  const [createOffer, { isLoading }] = offerAPI.useCreateOfferMutation()
+function UpdateOfferForm({ offer, onClose }: UpdateOfferFormInputProps) {
+  const [updateOffer, { isLoading }] = offerAPI.useUpdateOfferMutation()
 
-  const handleSubmitCreateOffer: OnSubmitCreateOfferForm = async (
+  const handleSubmitUpdateOffer: OnSubmitUpdateOfferForm = async (
     offerData,
   ) => {
-    await createOffer(offerData)
+    await updateOffer({ data: offerData, id: offer.id })
       .unwrap()
-      .then(() => toast.success('Oferta criada com sucesso!'))
+      .then(() => toast.success('Oferta atualizada com sucesso!'))
       .catch((error: unknown) => {
-        console.error('Error trying to create offer', error)
-        toast.error('Ocorreu um erro ao criar a oferta.')
+        console.error('Error trying to update offer', error)
+        toast.error('Ocorreu um erro ao atualizar a oferta')
       })
   }
 
@@ -39,23 +34,32 @@ function CreateOfferForm({
     reset,
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitSuccessful },
-  } = useForm<CreateOfferFormData>({
-    resolver: zodResolver(OfferSchemas.createSchema),
+  } = useForm<UpdateOfferFormData>({
+    resolver: zodResolver(OfferSchemas.updateSchema),
   })
 
-  const [value, setValue] = useState<string>('R$ 0,01')
+  const price = parseFloat(offer.price + '').toFixed(2)
+
+  const [priceValue, setPriceValue] = useState<string>(
+    ('R$ ' + price).replace('.', ','),
+  )
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value
     const formattedValue = Formatter.formatCurrency(inputValue)
-    setValue(formattedValue)
+    setPriceValue(formattedValue)
   }
+
+  const [offerState, setOfferState] = useState(offer)
+
+  const [estimative, setEstimative] = useState(offer.estimatedTime)
 
   useEffect(() => {
     if (isSubmitSuccessful) {
       reset()
-      setValue('R$ 0,01')
+      setPriceValue('')
       onClose()
     }
   }, [isSubmitSuccessful, reset, onClose])
@@ -63,10 +67,10 @@ function CreateOfferForm({
   return (
     <form
       className="flex flex-col items-center w-full"
-      onSubmit={handleSubmit(handleSubmitCreateOffer)}
+      onSubmit={handleSubmit(handleSubmitUpdateOffer)}
     >
       <p className="text-[#D9D9D9] text-base text-center mb-4">
-        Oferecer serviço
+        Atualizar oferta
       </p>
       <Input
         registration={{ ...register('price') }}
@@ -80,7 +84,7 @@ function CreateOfferForm({
         inputClassName="pb-0"
         wrapperClassName="w-full max-w-[295px] mb-5"
         onChange={handleInputChange}
-        value={value}
+        value={priceValue}
         inputMode="numeric"
         autoComplete="off"
       />
@@ -94,6 +98,15 @@ function CreateOfferForm({
         inputClassName="pb-0"
         wrapperClassName="w-full max-w-[295px] mb-4"
         autoComplete="off"
+        value={estimative}
+        onChange={(e) => {
+          let estimative = parseInt(e.target.value)
+          if (isNaN(estimative)) {
+            estimative = ''
+          }
+          setEstimative(estimative)
+          setValue('estimatedTime', estimative)
+        }}
       />
       <div className="flex items-center justify-between w-full mb-4">
         <label htmlFor="isOffering" className="text-sm text-[#D9D9D9]">
@@ -102,23 +115,16 @@ function CreateOfferForm({
         <Input
           id="isOffering"
           type="checkbox"
-          error={errors?.estimatedTime?.message?.toString()}
           registration={{ ...register('isOffering') }}
-          inputClassName="appearance-none w-5 h-5 rounded-full border-2 border-[#A4978A] checked:bg-[#A4978A] focus:outline-none cursor-pointer"
+          checked={offerState.isOffering}
+          inputClassName="appearance-none w-5 h-5 rounded-full border-2 border-[#A4978A] checked:bg-[#A4978A] focus:outline-none"
+          onChange={(e) => {
+            const isChecked = e.target.checked
+            setOfferState((prev) => ({ ...prev, isOffering: isChecked }))
+            setValue('isOffering', isChecked)
+          }}
         />
       </div>
-      <Input
-        type="hidden"
-        value={employeeId}
-        id="employeeId"
-        registration={{ ...register('employeeId') }}
-      />
-      <Input
-        type="hidden"
-        value={service.id}
-        id="serviceId"
-        registration={{ ...register('serviceId') }}
-      />
       <Button
         type="submit"
         label={
@@ -138,4 +144,4 @@ function CreateOfferForm({
   )
 }
 
-export default CreateOfferForm
+export default UpdateOfferForm

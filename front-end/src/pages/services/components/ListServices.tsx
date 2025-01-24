@@ -8,9 +8,18 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 interface ListServicesProps {
   openModal: () => void
   selectService: (param: Service) => void
+  isManager: boolean
+  openUpdateModal: () => void
+  openDeleteModal: () => void
 }
 
-function ListServices({ openModal, selectService }: ListServicesProps) {
+function ListServices({
+  openModal,
+  selectService,
+  isManager,
+  openDeleteModal,
+  openUpdateModal,
+}: ListServicesProps) {
   const [selected, setSelected] = useState(null)
 
   const { data, isLoading, isError } = serviceAPI.useGetServicesQuery()
@@ -23,7 +32,7 @@ function ListServices({ openModal, selectService }: ListServicesProps) {
     )
   }
 
-  if (isError && data == null) {
+  if (isError && !data == null) {
     return (
       <p className="text-[#CC3636] animate-fadeIn w-full mt-2 text-sm">
         Não há serviços disponíveis.
@@ -32,6 +41,7 @@ function ListServices({ openModal, selectService }: ListServicesProps) {
   }
 
   if (isError) {
+    console.log(data)
     return (
       <p className="text-[#CC3636] animate-fadeIn w-full mt-2 text-sm">
         Erro ao carregar os serviços.
@@ -51,16 +61,18 @@ function ListServices({ openModal, selectService }: ListServicesProps) {
               label={
                 <div className="flex flex-row items-center">
                   {service.name}
-                  <div className="ml-auto flex gap-3 justify-center items-center">
-                    <PencilSquareIcon
-                      className="size-4 hover:text-primary-0 hover:size-5 transition-all"
-                      onClick={() => alert('PALMEIRAS')}
-                    />
-                    <TrashIcon
-                      className="size-4 hover:text-primary-0 hover:size-5 transition-all"
-                      onClick={() => alert('VASCO')}
-                    />
-                  </div>
+                  {isManager && (
+                    <div className="ml-auto flex gap-3 justify-center items-center">
+                      <PencilSquareIcon
+                        className="size-4 hover:text-primary-0 hover:size-5 transition-all"
+                        onClick={() => openUpdateModal()}
+                      />
+                      <TrashIcon
+                        className="size-4 hover:text-primary-0 hover:size-5 transition-all"
+                        onClick={() => openDeleteModal()}
+                      />
+                    </div>
+                  )}
                 </div>
               }
               key={index}
