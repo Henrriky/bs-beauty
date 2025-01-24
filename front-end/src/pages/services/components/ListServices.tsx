@@ -52,8 +52,14 @@ function ListServices({ openModal, selectService }: ListServicesProps) {
                 <div className="flex flex-row items-center">
                   {service.name}
                   <div className="ml-auto flex gap-3 justify-center items-center">
-                    <PencilSquareIcon className="size-4 hover:text-primary-0 hover:size-5 transition-all" onClick={() => alert('PALMEIRAS')} />
-                    <TrashIcon className="size-4 hover:text-primary-0 hover:size-5 transition-all" onClick={() => alert('VASCO')} />
+                    <PencilSquareIcon
+                      className="size-4 hover:text-primary-0 hover:size-5 transition-all"
+                      onClick={() => alert('PALMEIRAS')}
+                    />
+                    <TrashIcon
+                      className="size-4 hover:text-primary-0 hover:size-5 transition-all"
+                      onClick={() => alert('VASCO')}
+                    />
                   </div>
                 </div>
               }
@@ -77,9 +83,9 @@ function ListServices({ openModal, selectService }: ListServicesProps) {
           onClick={
             selected !== null
               ? () => {
-                openModal()
-                setSelected(null)
-              }
+                  openModal()
+                  setSelected(null)
+                }
               : () => toast.info('Selecione um serviço.')
           }
         />

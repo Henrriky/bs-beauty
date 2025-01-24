@@ -71,7 +71,7 @@ function CustomerHomeSelectEmployeeContainer() {
       {data?.employeesOfferingService &&
         data.employeesOfferingService.offers.map((offer) => {
           return (
-            <>
+            <div key={`employee-${offer.employee.id}`}>
               <input
                 className="invisible"
                 type="radio"
@@ -86,7 +86,7 @@ function CustomerHomeSelectEmployeeContainer() {
                 {...offer}
                 onClick={() => setValue('employeeId', offer.employee.id)}
               />
-            </>
+            </div>
           )
         })}
     </>

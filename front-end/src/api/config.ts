@@ -23,7 +23,9 @@ export const API_VARIABLES = {
     ENDPOINT: '/offers',
     FETCH_FOR_AVAILABLE_SCHEDULES_FROM_EMPLOYEE_OFFER: (
       serviceOfferedId: string,
-    ) => `/offers/${serviceOfferedId}/scheduling`,
+      dayToFetchAvailableSchedulling: string,
+    ) =>
+      `/offers/${serviceOfferedId}/schedulling?dayToFetchAvailableSchedulling=${encodeURIComponent(dayToFetchAvailableSchedulling)}`,
   },
   SHIFTS_ENDPOINTS: {
     ENDPOINT: '/shifts',
@@ -35,5 +37,9 @@ export const API_VARIABLES = {
     FETCH_EMPLOYEES: '/employees',
     CREATE_EMPLOYEE: '/employees',
     DELETE_EMPLOYEE: (employeeId: string) => `/employees/${employeeId}`,
+  },
+  APPOINTMENTS_ENDPOINTS: {
+    CREATE_APPOINTMENT: '/appointments',
+    ASSOCIATE_APPOINTMENT_WITH_OFFER: '/appointment-services',
   },
 } as const

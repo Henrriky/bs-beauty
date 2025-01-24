@@ -33,21 +33,21 @@ const sideBarItems: SideBarOptions = {
   ],
   [Role.CUSTOMER]: [
     {
-      name: 'Home',
-      icon: <HomeIcon className="size-6" />,
-      navigateTo: '/customer/home',
-    },
-    {
       name: 'Agendamentos',
       icon: <CalendarDaysIcon className="size-6" />,
       navigateTo: '/appointments',
     },
-  ],
-  [Role.MANAGER]: [
     {
       name: 'Home',
       icon: <HomeIcon className="size-6" />,
-      navigateTo: '/manager/home',
+      navigateTo: '/customer/home',
+    },
+  ],
+  [Role.MANAGER]: [
+    {
+      name: 'Notificações',
+      icon: <BellIcon className="size-6" />,
+      navigateTo: '/notifications',
     },
     {
       name: 'Clientes',
@@ -55,9 +55,9 @@ const sideBarItems: SideBarOptions = {
       navigateTo: '/customers',
     },
     {
-      name: 'Notificações',
-      icon: <BellIcon className="size-6" />,
-      navigateTo: '/notifications',
+      name: 'Home',
+      icon: <HomeIcon className="size-6" />,
+      navigateTo: '/manager/home',
     },
     {
       name: 'Funcionários',
