@@ -35,5 +35,6 @@ export const API_VARIABLES = {
   APPOINTMENTS_ENDPOINTS: {
     CREATE_APPOINTMENT: '/appointments',
     ASSOCIATE_APPOINTMENT_WITH_OFFER: '/appointment-services',
+    FETCH_CUSTOMER_APPOINTMENTS: '/appointment-services/customer',
   },
 } as const

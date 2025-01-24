@@ -1,3 +1,4 @@
+import { Status } from '../../store/appointment/types'
 import { RegexPatterns } from '../validation/regex.validation.util'
 
 class Formatter {
@@ -33,6 +34,19 @@ class Formatter {
   public static formatTimeOfDay(hour: number) {
     const formattedHour = hour < 10 ? `0${hour}` : `${hour}`
     return `${formattedHour}:00`
+  }
+
+  public static formatApplicationStatusToPrettyRepresentation(status: Status) {
+    const statusToPretty = {
+      [Status.FINISHED]: 'Finalizado',
+      [Status.CANCELLED]: 'Cancelado',
+      [Status.CONFIRMED]: 'Confirmado',
+      [Status.NO_SHOW]: 'Não mostrar',
+      [Status.PENDING]: 'Agendado',
+      [Status.RESCHEDULED]: 'Reagendado',
+    }
+
+    return statusToPretty[status]
   }
 }
 
