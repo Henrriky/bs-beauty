@@ -14,6 +14,7 @@ function CustomerAppointments(props: CustomerAppointmentsProps) {
         return (
           <CustomerAppointmentCard
             appointment={appointment}
+            switchButtonStatus={props.switchButtonStatus}
             key={appointment.id}
           />
         )

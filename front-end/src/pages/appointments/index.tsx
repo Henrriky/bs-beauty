@@ -7,6 +7,9 @@ import { Role } from '../../store/auth/types'
 import { CustomerAppointments } from './components/CustomerAppointments'
 import { ErrorMessage } from '../../components/feedback/ErrorMessage'
 import { appointmentAPI } from '../../store/appointment/appointment-api'
+import { ListAppointmentsButtonStatus } from './types'
+import { useMemo, useState } from 'react'
+import { Status } from '../../store/appointment/types'
 
 const roleToAppointmentComponents = {
   [Role.CUSTOMER]: CustomerAppointments,
@@ -15,6 +18,8 @@ const roleToAppointmentComponents = {
 }
 
 function Appointments() {
+  const [switchButtonStatus, setSwitchButtonStatus] =
+    useState<ListAppointmentsButtonStatus>('finished')
   const user = useAppSelector((state) => state.auth.user!)
 
   const { data, isLoading, isError, error } =
@@ -26,6 +31,28 @@ function Appointments() {
   }
 
   const AppointmentContainer = roleToAppointmentComponents[user.role]
+
+  const filteredAppointments = useMemo(() => {
+    if (!data) return []
+
+    const schedulledStatuses = new Set([
+      Status.PENDING.toString(),
+      Status.CONFIRMED.toString(),
+      Status.RESCHEDULED.toString(),
+    ])
+
+    const finishedStatuses = new Set([
+      Status.CANCELLED.toString(),
+      Status.FINISHED.toString(),
+      Status.NO_SHOW.toString(),
+    ])
+
+    return data.appointments.filter((appointment) =>
+      switchButtonStatus === 'schedulled'
+        ? schedulledStatuses.has(appointment.status.toString())
+        : finishedStatuses.has(appointment.status.toString()),
+    )
+  }, [data, switchButtonStatus])
 
   return (
     <div className="h-full flex flex-col justify-between">
@@ -41,9 +68,21 @@ function Appointments() {
         </div>
       </header>
       {/* SWITCH BUTTONS */}
-      <div className="flex gap-2">
-        <Button label="Agendados" />
-        <Button label="Finalizados" />
+      <div className="flex">
+        <Button
+          label="Agendados"
+          variant="outline"
+          outlineVariantBorderStyle="solid"
+          className={`rounded-r-none ${switchButtonStatus === 'schedulled' && 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default'}`}
+          onClick={() => setSwitchButtonStatus('schedulled')}
+        />
+        <Button
+          label="Finalizados"
+          variant="outline"
+          outlineVariantBorderStyle="solid"
+          className={`rounded-l-none ${switchButtonStatus === 'finished' && 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default'}`}
+          onClick={() => setSwitchButtonStatus('finished')}
+        />
       </div>
       <section>
         {isLoading ? (
@@ -60,8 +99,8 @@ function Appointments() {
           </div>
         ) : (
           <AppointmentContainer
-            appointmentsService={data.appointments}
-            switchButtonStatus="schedulled"
+            appointmentsService={filteredAppointments}
+            switchButtonStatus={switchButtonStatus}
           />
         )}
       </section>

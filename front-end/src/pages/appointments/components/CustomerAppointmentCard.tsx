@@ -6,11 +6,15 @@ import {
   CheckBadgeIcon,
   ClockIcon,
   PencilSquareIcon,
+  XCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Formatter } from '../../../utils/formatter/formatter.util'
+import { Button } from '../../../components/button/Button'
+import { ListAppointmentsButtonStatus } from '../types'
 
 interface CustomerAppointmentCardProps {
   appointment: FindAppointmentServiceByCustomerId
+  switchButtonStatus: ListAppointmentsButtonStatus
 }
 
 function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
@@ -38,7 +42,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
         </div>
       </div>
       <div
-        className={`flex items-center justify-between h-24 py-4 px-6 rounded-2xl mt-5 bg-[#262626] hover:cursor-pointer 
+        className={`flex items-center justify-between h-24 py-4 px-6 rounded-2xl mt-5 bg-[#262626]
               transition-all duration-300 ease-in-out flex-grow`}
       >
         <div className="flex items-center gap-4">
@@ -66,7 +70,11 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <CheckBadgeIcon className="size-5 text-[#A4978A]" />
+            {props.switchButtonStatus === 'schedulled' ? (
+              <CheckBadgeIcon className="size-5 text-[#A4978A]" />
+            ) : (
+              <XCircleIcon className="size-5 text-[#A4978A]" />
+            )}
             <h3 className="text-[#A4978A] text-sm text-opacity-85 font-semibold">
               {Formatter.formatApplicationStatusToPrettyRepresentation(
                 props.appointment.status,
@@ -80,10 +88,15 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
             </h3>
           </div>
           <div className="flex items-center gap-2">
-            <PencilSquareIcon className="size-5 text-[#A4978A]" />
-            <h3 className="text-[#A4978A] text-sm text-opacity-85 font-semibold">
-              Editar
-            </h3>
+            <Button
+              className="flex items-center gap-2 text-[#A4978A] text-sm text-opacity-85 font-semibold !pt-0 pb-1"
+              variant="text-only"
+              label={
+                <>
+                  <PencilSquareIcon className="size-5 text-[#A4978A]" /> Editar
+                </>
+              }
+            ></Button>
           </div>
         </div>
       </div>
