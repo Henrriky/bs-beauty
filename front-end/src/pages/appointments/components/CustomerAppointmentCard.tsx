@@ -5,6 +5,7 @@ import { firstLetterOfWordToUpperCase } from '../../../utils/formatter/first-let
 import {
   CheckBadgeIcon,
   ClockIcon,
+  MagnifyingGlassCircleIcon,
   PencilSquareIcon,
   XCircleIcon,
 } from '@heroicons/react/24/outline'
@@ -18,6 +19,8 @@ interface CustomerAppointmentCardProps {
 }
 
 function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
+  const isSchedulled = props.switchButtonStatus === 'schedulled'
+
   return (
     <label className="flex gap-12 text-[#C0C0C0] mt-2 items-center">
       <div className="text-lg">
@@ -53,6 +56,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
                 props.appointment.serviceOffered.employee.profilePhotoUrl ??
                 'https://cdn-site-assets.veed.io/cdn-cgi/image/width=256,quality=75,format=auto/Fish_6e8d209905/Fish_6e8d209905.webp'
               }
+              filter={isSchedulled ? 'none' : 'black-white'}
             />
           </div>
           <div className="flex flex-col">
@@ -70,7 +74,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            {props.switchButtonStatus === 'schedulled' ? (
+            {isSchedulled ? (
               <CheckBadgeIcon className="size-5 text-[#A4978A]" />
             ) : (
               <XCircleIcon className="size-5 text-[#A4978A]" />
@@ -93,7 +97,17 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
               variant="text-only"
               label={
                 <>
-                  <PencilSquareIcon className="size-5 text-[#A4978A]" /> Editar
+                  {isSchedulled ? (
+                    <>
+                      <PencilSquareIcon className="size-5 text-[#A4978A]" />{' '}
+                      Editar
+                    </>
+                  ) : (
+                    <>
+                      <MagnifyingGlassCircleIcon className="size-5 text-[#A4978A]" />{' '}
+                      Visualizar
+                    </>
+                  )}
                 </>
               }
             ></Button>
