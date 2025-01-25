@@ -36,5 +36,7 @@ export const API_VARIABLES = {
     CREATE_APPOINTMENT: '/appointments',
     ASSOCIATE_APPOINTMENT_WITH_OFFER: '/appointment-services',
     FETCH_CUSTOMER_APPOINTMENTS: '/appointment-services/customer',
+    FIND_BY_SERVICE_OFFERED: (serviceOfferedId: string) =>
+      `/appointment-services/offer/${serviceOfferedId}`,
   },
 } as const

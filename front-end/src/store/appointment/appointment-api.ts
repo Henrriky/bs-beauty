@@ -52,5 +52,52 @@ export const appointmentAPI = createApi({
             ]
           : [{ type: 'Appointments', id: 'LIST' }],
     }),
+    findAppointmentsByServiceOfferedId: builder.query<
+      AppointmentService[],
+      { serviceOfferedId: string }
+    >({
+      query: ({ serviceOfferedId }) => ({
+        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.FIND_BY_SERVICE_OFFERED(
+          serviceOfferedId,
+        ),
+        method: 'GET',
+      }),
+    }),
+    fetchEmployeeAppointmentsByAllOffers: builder.query<
+      AppointmentService[],
+      string
+    >({
+      // query: ({ serviceOfferedId }) => ({
+      //   url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.FIND_BY_SERVICE_OFFERED(
+      //     serviceOfferedId,
+      //   ),
+      //   method: 'GET',
+      // }),
+      async queryFn(userId, _queryApi, _extraOptions, fetchWithBQ) {
+        try {
+          const offersResponse = await fetchWithBQ({
+            url: `/offers?userId=${userId}`,
+          })
+          const serviceOfferedIds =
+            offersResponse.data?.offers.map((offer) => offer.id) || []
+
+          const appointmentPromises = serviceOfferedIds.map((id) =>
+            fetchWithBQ({
+              url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.FIND_BY_SERVICE_OFFERED(id),
+            }),
+          )
+
+          const appointmentResponses = await Promise.all(appointmentPromises)
+
+          const allAppointments = appointmentResponses
+            .filter((response) => response.data)
+            .flatMap((response) => response.data.appointmentServices)
+
+          return { data: { appointments: allAppointments } }
+        } catch (error) {
+          return { error }
+        }
+      },
+    }),
   }),
 })

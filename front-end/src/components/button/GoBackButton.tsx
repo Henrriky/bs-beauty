@@ -2,7 +2,11 @@ import { useNavigate } from 'react-router'
 import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
 import { Button } from './Button'
 
-function GoBackButton() {
+interface props {
+  label?: string | undefined
+}
+
+function GoBackButton({ label }: props) {
   const navigate = useNavigate()
 
   return (
@@ -12,11 +16,14 @@ function GoBackButton() {
         variant="outline"
         onClick={() => navigate(-1)}
         label={
-          <div className="">
-            <ArrowLongLeftIcon className="size-8 text-[#B19B86] hover:text-[#D9D9D9] transition-colors" />
+          <div className="flex items-center gap-3 mb-1">
+            <div>
+              <ArrowLongLeftIcon className="size-7 text-[#B19B86] hover:text-[#D9D9D9] transition-colors" />
+            </div>
+            <p className="text-lg">{label}</p>
           </div>
         }
-        className="max-w-10 border-none rounded-none hover:bg-opacity-0 hover:bg-transparent"
+        className="border-none rounded-none hover:bg-opacity-0 hover:bg-transparent"
       />
     </>
   )
