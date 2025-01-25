@@ -205,7 +205,10 @@ function CustomerHomeSelectTimeContainer() {
                             }
                             for={schedullingDate.startTimestamp.toString()}
                             startDate={schedullingDate.startTimestamp}
-                            isBusy={schedullingDate.isBusy}
+                            isBusy={
+                              schedullingDate.isBusy ||
+                              schedullingDate.startTimestamp < Date.now()
+                            }
                             onClick={() => {
                               setValue(
                                 'appointmentDate',
