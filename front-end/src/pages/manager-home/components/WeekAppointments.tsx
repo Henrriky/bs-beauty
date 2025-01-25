@@ -1,7 +1,49 @@
 import { addDays } from 'date-fns'
+import useAppSelector from '../../../hooks/use-app-selector'
+import { CalendarIcon } from '@heroicons/react/24/outline'
+import { appointmentAPI } from '../../../store/appointment/appointment-api'
+
+function getDifferenceInDays(date1: Date, date2: Date) {
+  const diffInMilliseconds = Math.abs(
+    new Date(date2).getTime() - new Date(date1).getTime(),
+  )
+  return Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24))
+}
 
 const WeekAppointments = () => {
+  const user = useAppSelector((state) => state.auth.user!).id
+
+  const { data, error, isLoading } =
+    appointmentAPI.useFetchEmployeeAppointmentsByAllOffersQuery(user)
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Error fetching appointments:</div>
+  }
+
+  const daysWithAppointments = Array(7).fill(false)
+
   const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const sevenDaysFromNow = new Date(today)
+  sevenDaysFromNow.setDate(today.getDate() + 7)
+
+  data.appointments.forEach((element) => {
+    const currentdate = new Date(element.appointmentDate)
+    if (currentdate >= today && currentdate < sevenDaysFromNow) { 
+      const currentDay = new Date(currentdate)
+      currentDay.setHours(0, 0, 0, 0)
+      console.log(currentDay)
+      const difference = getDifferenceInDays(currentDay, today)
+      console.log(difference)
+      daysWithAppointments[difference] = true
+    }
+  })
+
   const formatter = new Intl.DateTimeFormat('pt-br', { weekday: 'short' })
 
   const weekDays = Array.from({ length: 7 }, (_, i) => {
@@ -14,10 +56,19 @@ const WeekAppointments = () => {
 
   return (
     <div className="flex justify-between mt-7">
-      {weekDays.map((day) => (
+      {weekDays.map((day, index) => (
         <div key={day.date} className="text-center flex flex-col gap-6 text-xs">
           <div className="text-secondary-700">{day.day}</div>
-          <div className="text-primary-900">{day.date}</div>
+          {daysWithAppointments[index] ? (
+            <div className="flex flex-col text-secondary-300">
+              <CalendarIcon className="size-8 mt-[-10px] mb-[-20px]"></CalendarIcon>
+              <div className="size-8 ">{day.date}</div>
+            </div>
+          ) : (
+            <div className="flex flex-col">
+              <div className="text-primary-900 size-8 ">{day.date}</div>
+            </div>
+          )}
         </div>
       ))}
     </div>

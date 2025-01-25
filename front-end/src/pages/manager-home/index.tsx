@@ -1,5 +1,5 @@
 import { ClockIcon, UserGroupIcon } from '@heroicons/react/24/outline'
-import WeekView from './components/WeekAppointments'
+import WeekAppointments from './components/WeekAppointments'
 
 function ManagerHome() {
   return (
@@ -17,7 +17,7 @@ function ManagerHome() {
             na semana
           </p>
         </div>
-        <WeekView />
+        <WeekAppointments />
       </div>
       <div className="text-secondary-400 mt-12 flex flex-row items-center gap-2.5 ">
         <UserGroupIcon className="size-8" />
