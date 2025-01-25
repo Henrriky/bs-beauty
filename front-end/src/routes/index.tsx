@@ -15,6 +15,7 @@ import SideBar from '../components/sidebar/SideBar'
 import Customers from '../pages/customers'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
+import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
 
 function BSBeautyRouter() {
   return (
@@ -36,6 +37,10 @@ function BSBeautyRouter() {
               <Route path="/customer/home" element={<CustomerHome />} />
               <Route path="/employee/home" element={<Profile />} />
               <Route path="/appointments" element={<Appointments />} />
+              <Route
+                path="/appointments/:appointmentId"
+                element={<AppointmentDetails />}
+              />
               <Route path="/profile" element={<Profile />} />
               <Route path="/customers" element={<Customers />} />
             </Route>

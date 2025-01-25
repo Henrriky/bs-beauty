@@ -12,6 +12,7 @@ import {
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import { Button } from '../../../components/button/Button'
 import { ListAppointmentsButtonStatus } from '../types'
+import { Link } from 'react-router-dom'
 
 interface CustomerAppointmentCardProps {
   appointment: FindAppointmentServiceByCustomerId
@@ -92,25 +93,27 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
             </h3>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              className="flex items-center gap-2 text-[#A4978A] text-sm text-opacity-85 font-semibold !pt-0 pb-1"
-              variant="text-only"
-              label={
-                <>
-                  {isSchedulled ? (
-                    <>
-                      <PencilSquareIcon className="size-5 text-[#A4978A]" />{' '}
-                      Editar
-                    </>
-                  ) : (
-                    <>
-                      <MagnifyingGlassCircleIcon className="size-5 text-[#A4978A]" />{' '}
-                      Visualizar
-                    </>
-                  )}
-                </>
-              }
-            ></Button>
+            <Link to={`/appointments/${props.appointment.id}`}>
+              <Button
+                className="flex items-center gap-2 text-[#A4978A] text-sm text-opacity-85 font-semibold !pt-0 pb-1"
+                variant="text-only"
+                label={
+                  <>
+                    {isSchedulled ? (
+                      <>
+                        <PencilSquareIcon className="size-5 text-[#A4978A]" />{' '}
+                        Editar
+                      </>
+                    ) : (
+                      <>
+                        <MagnifyingGlassCircleIcon className="size-5 text-[#A4978A]" />{' '}
+                        Visualizar
+                      </>
+                    )}
+                  </>
+                }
+              ></Button>
+            </Link>
           </div>
         </div>
       </div>
