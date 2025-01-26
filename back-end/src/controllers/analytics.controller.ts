@@ -1,16 +1,20 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use-case.factory'
 import { makeCustomersUseCaseFactory } from '../factory/make-customers-use-case.factory'
-import { z } from 'zod'
+import { number, z } from 'zod'
 import { makeServiceUseCaseFactory } from '../factory/make-service-use-case.factory'
 import { makeEmployeesUseCaseFactory } from '../factory/make-employees-use-case.factory'
+import { makeAppointmentServicesUseCaseFactory } from '../factory/make-appointment-services-use-case.factory'
+import { makeOffersUseCaseFactory } from '../factory/make-offers-use-case.factory'
+import { Decimal } from '@prisma/client/runtime/library'
 
 const schema = z.object({
   totalAppointments: z.number(),
   finishedAppointments: z.number(),
   totalCustomers: z.number(),
   numberOfServices: z.number(),
-  numberOfEmployees: z.number()
+  numberOfEmployees: z.number(),
+  totalRevenue: z.number()
 })
 
 type Analytics = z.infer<typeof schema>
@@ -21,13 +25,13 @@ class AnalyticsController {
       const analytics: Partial<Analytics> = {}
 
       // TODO: maybe filter by date, so it retrieves the appointments that were not complete.
-      const appointmentUseCase = makeAppointmentsUseCaseFactory()
-      const { appointments } = await appointmentUseCase.executeFindAll()
-      analytics.totalAppointments = appointments.length
+      const appointmentServicesUseCase = makeAppointmentServicesUseCaseFactory()
+      const { appointmentServices } = await appointmentServicesUseCase.executeFindAll()
+      analytics.totalAppointments = appointmentServices.length
 
       let finishedAppointmentsCount = 0
-      appointments.forEach(appointment => {
-        if (appointment.status === 'FINISHED') {
+      appointmentServices.forEach(appointmentService => {
+        if (appointmentService.status === 'FINISHED') {
           finishedAppointmentsCount++
         }
       })
@@ -44,6 +48,16 @@ class AnalyticsController {
       const employeeUseCase = makeEmployeesUseCaseFactory()
       const { employees } = await employeeUseCase.executeFindAll()
       analytics.numberOfEmployees = employees.length
+
+      let revenueCount = Number(0)
+      const offerUseCase = makeOffersUseCaseFactory()
+      for (const appointmentService of appointmentServices) {
+        const offers = await offerUseCase.executeFindById(appointmentService.serviceOfferedId)
+        if (offers?.price !== undefined && offers?.price !== null) {
+          revenueCount += Number(offers.price)
+        }
+      }
+      analytics.totalRevenue = revenueCount
 
       const parseResult = schema.parse(analytics)
 
