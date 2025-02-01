@@ -1,7 +1,7 @@
 import { addDays } from 'date-fns'
-import useAppSelector from '../../../hooks/use-app-selector'
 import { CalendarIcon } from '@heroicons/react/24/outline'
 import { appointmentAPI } from '../../../store/appointment/appointment-api'
+import { authAPI } from '../../../store/auth/auth-api'
 
 function getDifferenceInDays(date1: Date, date2: Date) {
   const diffInMilliseconds = Math.abs(
@@ -11,17 +11,22 @@ function getDifferenceInDays(date1: Date, date2: Date) {
 }
 
 const WeekAppointments = () => {
-  const user = useAppSelector((state) => state.auth.user!).id
+  const { data: userData } = authAPI.useFetchUserInfoQuery()
+  const id = userData?.user?.id
 
   const { data, error, isLoading } =
-    appointmentAPI.useFetchEmployeeAppointmentsByAllOffersQuery(user)
+    appointmentAPI.useFetchEmployeeAppointmentsByAllOffersQuery(id)
 
   if (isLoading) {
     return <div>Loading...</div>
   }
 
   if (error) {
-    return <div>Error fetching appointments:</div>
+    return <div>Error fetching appointments</div>
+  }
+
+  if (!data) {
+    return <div>No data could be provided</div>
   }
 
   const daysWithAppointments = Array(7).fill(false)
@@ -34,12 +39,10 @@ const WeekAppointments = () => {
 
   data.appointments.forEach((element) => {
     const currentdate = new Date(element.appointmentDate)
-    if (currentdate >= today && currentdate < sevenDaysFromNow) { 
+    if (currentdate >= today && currentdate < sevenDaysFromNow) {
       const currentDay = new Date(currentdate)
       currentDay.setHours(0, 0, 0, 0)
-      console.log(currentDay)
       const difference = getDifferenceInDays(currentDay, today)
-      console.log(difference)
       daysWithAppointments[difference] = true
     }
   })

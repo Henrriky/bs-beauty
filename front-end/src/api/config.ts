@@ -39,4 +39,9 @@ export const API_VARIABLES = {
     FIND_BY_SERVICE_OFFERED: (serviceOfferedId: string) =>
       `/appointment-services/offer/${serviceOfferedId}`,
   },
+  ANALYTICS_ENDPOINTS: {
+    FETCH_ANALYTICS: '/analytics',
+    FETCH_ANALYTICS_BY_EMPLOYEE: (employeeId: string) =>
+      `/analytics/${employeeId}`,
+  },
 } as const

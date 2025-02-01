@@ -67,16 +67,10 @@ export const appointmentAPI = createApi({
       AppointmentService[],
       string
     >({
-      // query: ({ serviceOfferedId }) => ({
-      //   url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.FIND_BY_SERVICE_OFFERED(
-      //     serviceOfferedId,
-      //   ),
-      //   method: 'GET',
-      // }),
       async queryFn(userId, _queryApi, _extraOptions, fetchWithBQ) {
         try {
           const offersResponse = await fetchWithBQ({
-            url: `/offers?userId=${userId}`,
+            url: `/offers/employee/${userId}`,
           })
           const serviceOfferedIds =
             offersResponse.data?.offers.map((offer) => offer.id) || []

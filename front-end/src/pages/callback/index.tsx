@@ -63,7 +63,7 @@ function Callback() {
         localStorage.setItem('token', accessToken)
         localStorage.setItem('googleAccessToken', googleAccessToken)
         if (decodedToken.registerCompleted) {
-          navigate('/home')
+          navigate('/')
         } else {
           navigate('/complete-register')
         }
