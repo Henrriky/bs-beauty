@@ -1,13 +1,18 @@
 import { type Prisma, type AppointmentService } from '@prisma/client'
 import { type AppointmentServiceRepository } from '../repository/protocols/appointment-service.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { type CustomerRepository } from '../repository/protocols/customer.repository'
+import { CustomError } from '../utils/errors/custom.error.util'
 
 interface AppointmentServiceOutput {
   appointmentServices: AppointmentService[]
 }
 
 class AppointmentServicesUseCase {
-  constructor (private readonly appointmentServiceRepository: AppointmentServiceRepository) { }
+  constructor (
+    private readonly appointmentServiceRepository: AppointmentServiceRepository,
+    private readonly customerServiceRepository: CustomerRepository
+  ) { }
 
   public async executeFindAll (): Promise<AppointmentServiceOutput> {
     const appointmentServices = await this.appointmentServiceRepository.findAll()
@@ -62,6 +67,18 @@ class AppointmentServicesUseCase {
     const deletedAppointmentService = await this.appointmentServiceRepository.delete(appointmentServiceId)
 
     return deletedAppointmentService
+  }
+
+  public async executeFindByCustomerId (customerId: string) {
+    const customer = await this.customerServiceRepository.findById(customerId)
+
+    if (customer === null) {
+      throw new CustomError('Customer not found', 404, 'Please, provide a valid customer')
+    }
+
+    const { appointments } = await this.appointmentServiceRepository.findByCustomerId(customerId)
+
+    return { appointments }
   }
 }
 
