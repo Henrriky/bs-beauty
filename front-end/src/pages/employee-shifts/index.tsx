@@ -6,6 +6,7 @@ import { Shift } from '../../store/auth/types'
 import { shiftAPI } from '../../store/shift/shift-api'
 import DaysRow from './components/DaysRow'
 import ShiftsRow from './components/ShiftsRow'
+import { DateTime } from 'luxon'
 
 const WeekDayMapping: { [key: string]: string } = {
   Domingo: 'SUNDAY',
@@ -15,17 +16,6 @@ const WeekDayMapping: { [key: string]: string } = {
   Quinta: 'THURSDAY',
   Sexta: 'FRIDAY',
   Sábado: 'SATURDAY',
-}
-
-const formatTime = (isoTime: string) => {
-  if (!isoTime) return ''
-  try {
-    const date = new Date(isoTime)
-    return date.toISOString().slice(11, 16)
-  } catch (error) {
-    console.error('Invalid ISO time:', isoTime)
-    return ''
-  }
 }
 
 interface EditableShift {
@@ -55,8 +45,8 @@ const EmployeeShifts = () => {
       const defaultShifts: Record<string, EditableShift> = {}
       weekDays.forEach((day) => {
         defaultShifts[day] = {
-          shiftStart: '',
-          shiftEnd: '',
+          shiftStart: '00:00',
+          shiftEnd: '00:00',
           isBusy: true,
         }
       })
@@ -92,15 +82,24 @@ const EmployeeShifts = () => {
           const backendDay: WeekDays = WeekDayMapping[day] as WeekDays
           const existingShift = getShiftByDay(data?.shifts || [], day)
 
+          const toUtcTime = (time: string) => {
+            if (!time) return '00:00'
+            const [hour, minute] = time.split(':').map(Number)
+
+            const localTime = DateTime.local().set({ hour, minute })
+            const utcTime = localTime.toUTC()
+
+            return utcTime.toFormat('HH:mm')
+          }
+
           const payload = {
             weekDay: backendDay,
-            shiftStart: shiftData.shiftStart || '00:00',
-            shiftEnd: shiftData.shiftEnd || '00:00',
+            shiftStart: toUtcTime(shiftData.shiftStart),
+            shiftEnd: toUtcTime(shiftData.shiftEnd),
             isBusy: shiftData.isBusy,
           }
 
           if (existingShift) {
-            console.log('updateShift')
             await updateShift({
               id: existingShift.id,
               shiftStart: payload.shiftStart,
@@ -122,12 +121,29 @@ const EmployeeShifts = () => {
     }
   }
 
+  const formatTime = (isoTime: string) => {
+    if (!isoTime) return ''
+    try {
+      const date = new Date(isoTime)
+
+      const localDate = new Date(date.getTime() - 3 * 60 * 60 * 1000)
+
+      const hours = localDate.getUTCHours()
+      const minutes = localDate.getUTCMinutes()
+
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+    } catch (error) {
+      console.error('Invalid ISO time:', isoTime)
+      return ''
+    }
+  }
+
   const validateShifts = (): boolean => {
     let isValid = true
 
     for (const { shiftStart, shiftEnd } of Object.values(editableShifts)) {
-      console.log(shiftStart, shiftEnd)
       if (shiftStart && shiftEnd && shiftStart > shiftEnd) {
+        console.log('teste')
         isValid = false
         break
       }

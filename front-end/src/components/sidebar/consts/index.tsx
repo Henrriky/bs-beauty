@@ -1,4 +1,5 @@
 import {
+  ArrowLeftStartOnRectangleIcon,
   BellIcon,
   CalendarDaysIcon,
   ClipboardDocumentCheckIcon,
@@ -29,6 +30,11 @@ const sideBarItems: SideBarOptions = {
       name: 'Perfil',
       icon: <UserIcon className="size-6" />,
       navigateTo: '/profile',
+    },
+    {
+      name: 'Sair',
+      icon: <ArrowLeftStartOnRectangleIcon className="size-6" />,
+      navigateTo: '/',
     },
   ],
   [Role.CUSTOMER]: [

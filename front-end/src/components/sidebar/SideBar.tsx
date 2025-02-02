@@ -5,6 +5,8 @@ import useAppSelector from '../../hooks/use-app-selector'
 import ProfilePicture from '../../pages/profile/components/ProfilePicture'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
 import sideBarItems from './consts'
+import { useDispatch } from 'react-redux'
+import { logout } from '../../store/auth/auth-slice'
 
 interface SideBarItemProps {
   path: string
@@ -82,14 +84,25 @@ function SideBar() {
 
 function SideBarItem(props: SideBarItemProps) {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const handleClick = () => {
+    if (props.children === 'Sair') {
+      dispatch(logout())
+      localStorage.removeItem('token')
+      localStorage.removeItem('googleAccessToken')
+      navigate('/')
+    } else {
+      navigate(`${props.path}`)
+    }
+    props.toggleSideBar()
+  }
+
   return (
     <>
       <li
         className="transition-all py-2 px-4 rounded-full flex text-sm flex-row gap-[18px] cursor-pointer h-[35px] w-[289px] items-center hover:bg-primary-300 hover:text-white"
-        onClick={() => {
-          navigate(`${props.path}`)
-          props.toggleSideBar()
-        }}
+        onClick={handleClick}
       >
         {props.icon}
         <p className="text-primary-0">{props.children}</p>
