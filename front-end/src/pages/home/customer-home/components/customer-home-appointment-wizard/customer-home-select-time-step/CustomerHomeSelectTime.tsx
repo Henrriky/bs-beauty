@@ -16,7 +16,6 @@ import { ErrorMessage } from '../../../../../../components/feedback/ErrorMessage
 import { shiftAPI } from '../../../../../../store/shift/shift-api'
 import { weekDaysEnumToNumberRepresentation } from '../../../../../../utils/formatter/week-days-enum-to-number-representation'
 import { offerAPI } from '../../../../../../store/offer/offer-api'
-import { useEffect } from 'react'
 import Subtitle from '../../../../../../components/texts/Subtitle'
 import CustomerHomeSelectTimeCard from './CustomerHomeSelectTimeCard'
 
@@ -36,7 +35,6 @@ function CustomerHomeSelectTimeContainer() {
     data: schedullingData,
     isLoading: schedullingIsLoading,
     isError: schedullingIsError,
-    refetch,
   } = offerAPI.useFetchForAvailableSchedulesFromEmployeeOfferQuery(
     {
       serviceOfferedId,
@@ -46,12 +44,6 @@ function CustomerHomeSelectTimeContainer() {
       skip: !appointmentDayPicked,
     },
   )
-
-  useEffect(() => {
-    if (appointmentDayPicked) {
-      refetch()
-    }
-  }, [appointmentDayPicked, refetch])
 
   if (!serviceOfferedId || !employeeId) {
     toast.error(
@@ -205,7 +197,10 @@ function CustomerHomeSelectTimeContainer() {
                             }
                             for={schedullingDate.startTimestamp.toString()}
                             startDate={schedullingDate.startTimestamp}
-                            isBusy={schedullingDate.isBusy}
+                            isBusy={
+                              schedullingDate.isBusy ||
+                              schedullingDate.startTimestamp < Date.now()
+                            }
                             onClick={() => {
                               setValue(
                                 'appointmentDate',

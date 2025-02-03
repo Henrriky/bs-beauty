@@ -2,12 +2,14 @@ interface ProfilePictureProps {
   profilePhotoUrl: string
   size?: 'sm' | 'md'
   variation?: 'rounded' | 'square-with-bg'
+  filter?: 'black-white' | 'none'
 }
 
 function ProfilePicture({
   profilePhotoUrl,
   size = 'md',
   variation = 'rounded',
+  filter = 'none',
 }: ProfilePictureProps) {
   const iconSize = size === 'md' ? 'h-12 w-12' : 'h-9 w-9'
 
@@ -22,7 +24,7 @@ function ProfilePicture({
       <img
         src={profilePhotoUrl}
         alt="Profile"
-        className={`absolute w-full object-cover ${variation === 'rounded' ? 'rounded-full' : 'rounded-md'}`}
+        className={`absolute w-full object-cover ${variation === 'rounded' ? 'rounded-full' : 'rounded-md'} ${filter === 'black-white' ? 'grayscale' : ''}`}
       />
     </div>
   )

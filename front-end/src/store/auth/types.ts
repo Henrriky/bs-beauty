@@ -38,6 +38,7 @@ export type Employee = {
   role: Role;
   createdAt: Date;
   updatedAt: Date;
+  profilePhotoUrl: string;
   socialMedia: { name: string, url: string }[] | null;
   contact: string | null;
   specialization: string | null;

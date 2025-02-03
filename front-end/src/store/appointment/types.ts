@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { AppointmentSchemas } from "../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils"
 import { AppointmentServiceSchemas } from "../../utils/validation/zod-schemas/appointment-service.zod-schemas.validation.util"
+import { Employee } from "../auth/types"
 
 export enum Status {
   PENDING = "PENDING",
@@ -28,11 +29,27 @@ export interface Appointment {
 
 export interface AppointmentService {
   observation: string | null;
-  appointmentDate: Date;
+  appointmentDate: string;
   status: Status;
   appointmentId: string;
   serviceOfferedId: string;
   id: string;
+}
+
+export interface FindAppointmentServiceByCustomerId {
+  id: string
+  observation: string | null
+  status: Status
+  appointmentDate: string
+  appointment: Appointment
+  serviceOffered: {
+    id: string
+    estimatedTime: number
+    employee: Employee
+    service: {
+      name: string
+    }
+  }
 }
 
 export type CreateAppointmentAPIData = z.infer<typeof AppointmentSchemas.createSchema>

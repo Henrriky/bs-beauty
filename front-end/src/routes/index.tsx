@@ -16,6 +16,8 @@ import { ServiceDashboard } from '../pages/services'
 import ServicesPage from '../pages/services-page'
 import { Role } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
+import Appointments from '../pages/appointments'
+import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
 
 function BSBeautyRouter() {
   return (
@@ -33,9 +35,14 @@ function BSBeautyRouter() {
             }
           >
             <Route element={<SideBar />}>
-              <Route path="/manager/home" element={<Profile />} />
+              <Route path="/manager/home" element={<ManagerHome />} />
               <Route path="/customer/home" element={<CustomerHome />} />
-              <Route path="/employee/home" element={<Profile />} />
+              <Route path="/employee/home" element={<ManagerHome />} />
+              <Route path="/appointments" element={<Appointments />} />
+              <Route
+                path="/appointments/:appointmentId"
+                element={<AppointmentDetails />}
+              />
               <Route path="/profile" element={<Profile />} />
               <Route path="/customers" element={<Customers />} />
               <Route element={<PrivateRoute allowedRoles={[Role.MANAGER]} />}>
@@ -52,8 +59,6 @@ function BSBeautyRouter() {
               path="/register-completed"
               element={<RegistrationCompleted />}
             />
-            {/* MANAGER ROUTES */}
-            <Route path="/manager/home" element={<ManagerHome />} />
             {/* SERVICES ROUTES */}
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/management/services" element={<ServiceDashboard />} />
@@ -62,7 +67,7 @@ function BSBeautyRouter() {
         </Route>
       </Routes>
     </Router>
-  );
+  )
 }
 
 export default BSBeautyRouter

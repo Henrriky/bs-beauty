@@ -9,6 +9,7 @@ import { offerAPI } from './offer/offer-api'
 import { shiftAPI } from './shift/shift-api'
 import { employeeAPI } from './employee/employee-api'
 import { appointmentAPI } from './appointment/appointment-api'
+import { analyticsAPI } from './analytics/analytics-api'
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     [shiftAPI.reducerPath]: shiftAPI.reducer,
     [employeeAPI.reducerPath]: employeeAPI.reducer,
     [appointmentAPI.reducerPath]: appointmentAPI.reducer,
+    [analyticsAPI.reducerPath]: analyticsAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -33,4 +35,5 @@ export const store = configureStore({
       .concat(shiftAPI.middleware)
       .concat(employeeAPI.middleware)
       .concat(appointmentAPI.middleware)
+      .concat(analyticsAPI.middleware),
 })
