@@ -52,6 +52,10 @@ function BSBeautyRouter() {
                 />
               </Route>
               <Route path="/employee-shifts" element={<EmployeeShifts />} />
+              <Route
+                path="/management/services"
+                element={<ServiceDashboard />}
+              />
             </Route>
             {/* COMPLETE REGISTER ROUTES */}
             <Route path="/complete-register" element={<CompleteRegister />} />
@@ -61,7 +65,6 @@ function BSBeautyRouter() {
             />
             {/* SERVICES ROUTES */}
             <Route path="/services" element={<ServicesPage />} />
-            <Route path="/management/services" element={<ServiceDashboard />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>

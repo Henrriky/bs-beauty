@@ -42,7 +42,6 @@ function ServiceDashboard() {
 
   return (
     <>
-      <GoBackButton />
       <div className="w-full">
         <div>
           <Title align="left">Serviços</Title>
