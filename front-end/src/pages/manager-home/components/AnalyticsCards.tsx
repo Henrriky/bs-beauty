@@ -41,7 +41,7 @@ const AnalyticsCards = () => {
   }
 
   if (error) {
-    return <p>Error while fetching data.</p>
+    if (error.data.statusCode === 404) return <p>Error while fetching data.</p>
   }
 
   if (!analytics) {

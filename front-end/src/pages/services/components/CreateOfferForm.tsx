@@ -104,7 +104,8 @@ function CreateOfferForm({
           type="checkbox"
           error={errors?.estimatedTime?.message?.toString()}
           registration={{ ...register('isOffering') }}
-          inputClassName="appearance-none w-5 h-5 rounded-full border-2 border-[#A4978A] checked:bg-[#A4978A] focus:outline-none cursor-pointer"
+          inputClassName="appearance-none size-5 rounded-full border-2 border-[#A4978A] checked:bg-[#A4978A] focus:outline-none cursor-pointer"
+          wrapperClassName="size-5"
         />
       </div>
       <Input
