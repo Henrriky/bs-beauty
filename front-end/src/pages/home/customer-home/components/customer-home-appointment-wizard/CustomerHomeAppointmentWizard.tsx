@@ -14,7 +14,9 @@ import { toast } from 'react-toastify'
 import Modal from '../../../../services/components/Modal'
 import { useNavigate } from 'react-router'
 import Subtitle from '../../../../../components/texts/Subtitle'
+
 import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-appointment-success.svg'
+
 
 type Step = {
   currentStepName: string
