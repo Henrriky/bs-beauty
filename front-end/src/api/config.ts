@@ -31,6 +31,12 @@ export const API_VARIABLES = {
     ENDPOINT: '/shifts',
     FIND_SHIFTS_BY_EMPLOYEE: (employeeId: string) =>
       `/shifts/employee/${employeeId}`,
+    UPDATE_SHIFT: (shiftId: string) => `/shifts/${shiftId}`,
+  },
+  EMPLOYEES_ENDPOINTS: {
+    FETCH_EMPLOYEES: '/employees',
+    CREATE_EMPLOYEE: '/employees',
+    DELETE_EMPLOYEE: (employeeId: string) => `/employees/${employeeId}`,
   },
   APPOINTMENTS_ENDPOINTS: {
     CREATE_APPOINTMENT: '/appointments',
