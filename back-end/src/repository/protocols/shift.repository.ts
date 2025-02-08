@@ -1,8 +1,9 @@
 import { type WeekDays, type Prisma, type Shift } from '@prisma/client'
 
 interface ShiftRepository {
-  findAll: () => Promise<Shift[]>
+  findAllByEmployeeId: (employeeId: string | undefined) => Promise<Shift[]>
   findById: (id: string) => Promise<Shift | null>
+  findByIdAndEmployeeId: (id: string, employeeId: string) => Promise<Shift | null>
   findByEmployeeId: (employeeId: string | undefined) => Promise<Shift[]>
   findByEmployeeAndWeekDay: (employeeId: string, weekDay: WeekDays) => Promise<Shift | null>
   create: (shift: Prisma.ShiftCreateInput) => Promise<Shift>

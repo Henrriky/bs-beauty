@@ -9,6 +9,7 @@ class JwtEncrypterService implements Encrypter {
       {
         id: params.id,
         sub: params.userId,
+        userId: params.id,
         role: params.role,
         email: params.email,
         name: params.name,

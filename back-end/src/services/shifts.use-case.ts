@@ -9,8 +9,8 @@ interface ShiftOutput {
 class ShiftUseCase {
   constructor (private readonly shiftRepository: ShiftRepository) {}
 
-  public async executeFindAll (): Promise<ShiftOutput> {
-    const shifts = await this.shiftRepository.findAll()
+  public async executeFindAllByEmployeeId(employeeId: string | undefined): Promise<ShiftOutput> {
+    const shifts = await this.shiftRepository.findAllByEmployeeId(employeeId)
     RecordExistence.validateManyRecordsExistence(shifts, 'shifts')
 
     return { shifts }
@@ -23,7 +23,7 @@ class ShiftUseCase {
     return shift
   }
 
-  public async executeFindByEmployeeId (employeeId: string | undefined): Promise<ShiftOutput> {
+  public async executeFindByEmployeeId(employeeId: string | undefined): Promise<ShiftOutput> {
     const shifts = await this.shiftRepository.findByEmployeeId(employeeId)
     RecordExistence.validateManyRecordsExistence(shifts, 'shifts')
 
@@ -42,7 +42,7 @@ class ShiftUseCase {
   }
 
   public async executeUpdate (shiftId: string, shiftToUpdate: Prisma.ShiftUpdateInput) {
-    const existingShift = await this.executeFindById(shiftId)
+    const existingShift = await this.executeFindByIdAndEmployeeId(shiftId, shiftToUpdate.employee?.connect?.id as unknown as string)
     const updatedWeekDay = shiftToUpdate.weekDay as unknown as WeekDays
 
     if (updatedWeekDay != null) {
@@ -62,6 +62,14 @@ class ShiftUseCase {
 
     return deletedShift
   }
+
+  public async executeFindByIdAndEmployeeId(shiftId: string, employeeId: string) {
+    const shift = await this.shiftRepository.findByIdAndEmployeeId(shiftId, employeeId)
+    RecordExistence.validateRecordExistence(shift, 'Shift');
+
+    return shift
+  }
+
 }
 
 export { ShiftUseCase }

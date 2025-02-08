@@ -4,7 +4,9 @@ import { type EmployeeRepository } from '../protocols/employee.repository'
 
 class PrismaEmployeeRepository implements EmployeeRepository {
   public async findAll () {
-    const employees = await prismaClient.employee.findMany()
+    const employees = await prismaClient.employee.findMany({
+      orderBy: { createdAt: 'asc' }
+    })
 
     return employees
   }

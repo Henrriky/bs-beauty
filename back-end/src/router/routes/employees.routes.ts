@@ -6,8 +6,8 @@ import { routeAuthMiddleware } from '../../middlewares/route-auth.middleware'
 
 const employeeRoutes = Router()
 
-employeeRoutes.get('/', EmployeesController.handleFindAll)
-employeeRoutes.get('/:id', EmployeesController.handleFindById)
+employeeRoutes.get('/', routeAuthMiddleware(['MANAGER']), EmployeesController.handleFindAll)
+employeeRoutes.get('/:id', routeAuthMiddleware(['MANAGER']), EmployeesController.handleFindById)
 employeeRoutes.post('/', routeAuthMiddleware(['MANAGER']), validateCreateEmployee, EmployeesController.handleCreate)
 employeeRoutes.put('/:id', routeAuthMiddleware(['MANAGER', 'EMPLOYEE']), validateUpdateEmployee, EmployeesController.handleUpdate)
 employeeRoutes.delete('/:id', routeAuthMiddleware(['MANAGER']), EmployeesController.handleDelete)
