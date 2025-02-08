@@ -21,12 +21,12 @@ export const serviceAPI = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.services.map(({ id }) => ({
-                type: 'Services' as const,
-                id,
-              })),
-              { type: 'Services', id: 'LIST' },
-            ]
+            ...result.services.map(({ id }) => ({
+              type: 'Services' as const,
+              id,
+            })),
+            { type: 'Services', id: 'LIST' },
+          ]
           : [{ type: 'Services', id: 'LIST' }],
     }),
     fetchEmployeesOfferingService: builder.query<

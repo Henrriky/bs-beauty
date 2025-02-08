@@ -1,6 +1,10 @@
 import {
+  ArrowLeftStartOnRectangleIcon,
   BellIcon,
+  BriefcaseIcon,
   CalendarDaysIcon,
+  ClipboardDocumentCheckIcon,
+  ClockIcon,
   HomeIcon,
   UserIcon,
   UsersIcon,
@@ -12,6 +16,7 @@ type SideBarItem = {
   name: string
   navigateTo: string
   icon: React.ReactNode
+  order?: number
 }
 
 type SideBarOptions = {
@@ -24,9 +29,16 @@ type SideBarOptions = {
 const sideBarItems: SideBarOptions = {
   COMMON: [
     {
+      name: 'Sair',
+      icon: <ArrowLeftStartOnRectangleIcon className="size-6" />,
+      navigateTo: '/',
+      order: 99,
+    },
+    {
       name: 'Perfil',
       icon: <UserIcon className="size-6" />,
       navigateTo: '/profile',
+      order: 98,
     },
   ],
   [Role.CUSTOMER]: [
@@ -39,18 +51,34 @@ const sideBarItems: SideBarOptions = {
       name: 'Home',
       icon: <HomeIcon className="size-6" />,
       navigateTo: '/customer/home',
+      order: 1,
     },
   ],
   [Role.MANAGER]: [
+    {
+      name: 'Clientes',
+      icon: <UsersIcon className="size-6" />,
+      navigateTo: '/customers',
+    },
+    {
+      name: 'Funcionários',
+      icon: <ClipboardDocumentCheckIcon className="size-6" />,
+      navigateTo: '/employees-management',
+    },
     {
       name: 'Notificações',
       icon: <BellIcon className="size-6" />,
       navigateTo: '/notifications',
     },
     {
-      name: 'Clientes',
-      icon: <UsersIcon className="size-6" />,
-      navigateTo: '/customers',
+      name: 'Serviços',
+      icon: <BriefcaseIcon className="size-6" />,
+      navigateTo: '/management/services',
+    },
+    {
+      name: 'Turnos',
+      icon: <ClockIcon className="size-6" />,
+      navigateTo: '/employee-shifts',
     },
     {
       name: 'Home',
@@ -60,9 +88,19 @@ const sideBarItems: SideBarOptions = {
   ],
   [Role.EMPLOYEE]: [
     {
+      name: 'Serviços',
+      icon: <BriefcaseIcon className="size-6" />,
+      navigateTo: '/management/services',
+    },
+    {
+      name: 'Turnos',
+      icon: <ClockIcon className="size-6" />,
+      navigateTo: '/employee-shifts',
+    },
+    {
       name: 'Home',
       icon: <HomeIcon className="size-6" />,
-      navigateTo: '/customer/home',
+      navigateTo: '/employee/home',
     },
   ],
 }

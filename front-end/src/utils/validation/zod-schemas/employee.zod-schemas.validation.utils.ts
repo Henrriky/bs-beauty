@@ -43,17 +43,7 @@ class EmployeeSchemas {
 
   public static createSchema = z
     .object({
-      name: z
-        .string()
-        .min(3)
-        .max(100)
-        .refine((string) => RegexPatterns.names.test(string)),
-      email: z.string().email(),
-      socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
-      contact: z
-        .string()
-        .refine((value) => RegexPatterns.phone.test(value))
-        .optional(),
+      email: z.string({ required_error: 'O e-mail é obrigatório' }).email("Formato de e-mail inválido."),
       role: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
     })
     .strict()
