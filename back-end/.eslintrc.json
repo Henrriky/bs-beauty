@@ -15,5 +15,9 @@
     "es2021": true
   },
   "rules": {
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/unbound-method": "off",
+    "@typescript-eslint/no-extraneous-class": "off",
+    "no-useless-return": "off"
   }
 }
