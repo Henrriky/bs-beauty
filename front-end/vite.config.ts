@@ -6,4 +6,8 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   base: './',
   plugins: [react(), svgr()],
+  build: {
+    outDir: 'build',
+    emptyOutDir: true,
+  },
 })
