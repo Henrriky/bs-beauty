@@ -17,7 +17,7 @@ import { OnSubmitEmployeeOrCustomerForm } from './types'
 const rolesToInputContainers = {
   [Role.CUSTOMER]: CustomerInputContainer,
   [Role.EMPLOYEE]: EmployeeInputContainer,
-  [Role.MANAGER]: () => <></>,
+  [Role.MANAGER]: EmployeeInputContainer,
 }
 
 function CompleteRegister() {

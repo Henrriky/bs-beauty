@@ -33,7 +33,7 @@ class CompleteUserRegisterUseCase {
         userEmail,
         data
       )
-    } else if (userRole === Role.EMPLOYEE) {
+    } else if (userRole === Role.EMPLOYEE || userRole === Role.MANAGER) {
       await this.employeeRepository.updateByEmailAndGoogleId(
         userId,
         userEmail,
