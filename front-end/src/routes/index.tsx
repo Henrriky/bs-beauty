@@ -5,8 +5,8 @@ import Callback from '../pages/callback'
 import CompleteRegister from '../pages/complete-register'
 import RegistrationCompleted from '../pages/complete-register/components/RegistrationCompleted'
 import Customers from '../pages/customers'
-import EmployeeShifts from "../pages/employee-shifts"
-import EmployeesManagement from "../pages/employees-management"
+import EmployeeShifts from '../pages/employee-shifts'
+import EmployeesManagement from '../pages/employees-management'
 import Login from '../pages/login'
 import ManagerHome from '../pages/manager-home'
 import NotFound from '../pages/not-found'

@@ -13,7 +13,7 @@ import { InvalidRoleUseCaseError } from '../../services/use-cases/errors/invalid
 const rolesToSchemas = {
   [Role.CUSTOMER]: CustomerSchemas.customerCompleteRegisterBodySchema,
   [Role.EMPLOYEE]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
-  [Role.MANAGER]: null
+  [Role.MANAGER]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
 }
 
 class CompleteUserRegisterController {

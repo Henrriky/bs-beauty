@@ -1,5 +1,5 @@
 import { SVGAttributes } from 'react'
-import Logo from '../../assets/logo.svg?react'
+import Logo from '../../assets/logo.svg'
 
 type BSBeautyLogoProps = SVGAttributes<SVGElement>
 
