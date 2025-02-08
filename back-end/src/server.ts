@@ -1,3 +1,4 @@
+import path from 'path'
 import express from 'express'
 import cors from 'cors'
 import { appRoutes } from './router'
@@ -34,6 +35,12 @@ app.get('/auth/google/callback', async (req, res) => {
 })
 
 app.use('/api', appRoutes)
+
+app.use(express.static(path.join(__dirname, '..', 'front-end', 'build')))
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'build', 'index.html'))
+})
+
 
 app.listen(3000, () => {
   console.log(`HTTP Server listening on port ${3000}`)
