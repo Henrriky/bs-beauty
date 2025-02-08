@@ -41,7 +41,9 @@ const AnalyticsCards = () => {
   }
 
   if (error) {
-    return <p>Error while fetching data.</p>
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    if (error.data.statusCode === 404) return <p>Error while fetching data.</p>
   }
 
   if (!analytics) {
@@ -85,7 +87,7 @@ const AnalyticsCards = () => {
       <Card
         icon={<CurrencyDollarIcon />}
         text="Faturamento total"
-        count={Number(analytics?.totalRevenue).toFixed(2)}
+        count={Number(Number(analytics?.totalRevenue).toFixed(2))}
       />
     </div>
   )

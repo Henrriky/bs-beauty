@@ -3,6 +3,7 @@ import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import {
   CreateOfferFormData,
   UpdateOfferFormData,
+  // UpdateOfferFormData,
 } from '../../pages/services/components/types'
 import { API_VARIABLES } from '../../api/config'
 import { AvailableSchedulling, Offer } from './types'
@@ -27,14 +28,17 @@ export const offerAPI = createApi({
       }),
       invalidatesTags: ['Offers'],
     }),
-    updateOffer: builder.mutation<{ success: boolean }, UpdateOfferFormData>({
+    updateOffer: builder.mutation<
+      { success: boolean },
+      { data: UpdateOfferFormData; id: string }
+    >({
       query: ({ id, data }) => ({
         url: `${API_VARIABLES.OFFERS_ENDPOINTS.ENDPOINT}/${id}`,
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [
-        { type: 'Offer', id },
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Offers', id },
         { type: 'Offers' },
       ],
     }),

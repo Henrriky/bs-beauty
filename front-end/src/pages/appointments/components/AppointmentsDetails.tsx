@@ -1,13 +1,10 @@
-import { useParams } from 'react-router'
-import { shiftAPI } from '../../../store/shift/shift-api'
-
 function AppointmentDetails() {
-  const { appointmentId } = useParams()
+  // const { appointmentId } = useParams()
 
-  const { data, isLoading, isError, error } =
-    shiftAPI.useFindShiftsByEmployeeQuery({
-      employeeId: appointmentId!,
-    })
+  // const { data, isLoading, isError, error } =
+  //   shiftAPI.useFindShiftsByEmployeeQuery({
+  //     employeeId: appointmentId!,
+  //   })
 
   // const [switchButtonStatus, setSwitchButtonStatus] =
   //   useState<ListAppointmentDetailsButtonStatus>('finished')

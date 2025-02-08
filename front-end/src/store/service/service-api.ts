@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { API_VARIABLES } from '../../api/config'
 import {
   CreateServiceFormData,
+  UpdateServiceFormData,
   // UpdateServiceFormData,
 } from '../../pages/services/components/types'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
@@ -20,12 +21,12 @@ export const serviceAPI = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.services.map(({ id }) => ({
-                type: 'Services' as const,
-                id,
-              })),
-              { type: 'Services', id: 'LIST' },
-            ]
+            ...result.services.map(({ id }) => ({
+              type: 'Services' as const,
+              id,
+            })),
+            { type: 'Services', id: 'LIST' },
+          ]
           : [{ type: 'Services', id: 'LIST' }],
     }),
     fetchEmployeesOfferingService: builder.query<
@@ -44,7 +45,7 @@ export const serviceAPI = createApi({
         url: `${API_VARIABLES.SERVICES_ENDPOINTS.ENDPOINT}/${serviceId}`,
         method: 'GET',
       }),
-      providesTags: (result, error, id) => [{ type: 'Service', id }],
+      providesTags: (_result, _error, id) => [{ type: 'Services', id }],
     }),
     createService: builder.mutation<
       { success: boolean },
@@ -57,20 +58,20 @@ export const serviceAPI = createApi({
       }),
       invalidatesTags: ['Services'],
     }),
-    // updateService: builder.mutation<
-    //   { success: boolean },
-    //   UpdateServiceFormData
-    // >({
-    //   query: ({ id, data }) => ({
-    //     url: `${API_VARIABLES.SERVICES_ENDPOINTS.ENDPOINT}/${id}`,
-    //     method: 'PUT',
-    //     body: data,
-    //   }),
-    //   invalidatesTags: (result, error, { id }) => [
-    //     { type: 'Service', id },
-    //     { type: 'Services' },
-    //   ],
-    // }),
+    updateService: builder.mutation<
+      { success: boolean },
+      { data: UpdateServiceFormData; id: string }
+    >({
+      query: ({ id, data }) => ({
+        url: `${API_VARIABLES.SERVICES_ENDPOINTS.ENDPOINT}/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Services', id },
+        { type: 'Services' },
+      ],
+    }),
     deleteService: builder.mutation<{ success: boolean }, string>({
       query: (id) => ({
         url: `${API_VARIABLES.SERVICES_ENDPOINTS.ENDPOINT}/${id}`,

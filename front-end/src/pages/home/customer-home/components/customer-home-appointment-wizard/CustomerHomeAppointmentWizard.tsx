@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 import Modal from '../../../../services/components/Modal'
 import { useNavigate } from 'react-router'
 import Subtitle from '../../../../../components/texts/Subtitle'
-import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-appointment-success.svg'
+import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-appointment-success.svg?react'
 
 type Step = {
   currentStepName: string
@@ -61,10 +61,8 @@ function CustomerHomeAppointmentWizard() {
 
   const [makeAppointment, { isLoading: isLoadingMakeAppointment }] =
     appointmentAPI.useMakeAppointmentMutation()
-  const [
-    associateOfferWithAppointment,
-    { isLoading: isLoadingAssociateOfferWithAppointment },
-  ] = appointmentAPI.useAssociateOfferWithAppointmentMutation()
+  const [associateOfferWithAppointment] =
+    appointmentAPI.useAssociateOfferWithAppointmentMutation()
 
   const handleSubmitConcrete = async (data: CreateAppointmentFormData) => {
     await makeAppointment({

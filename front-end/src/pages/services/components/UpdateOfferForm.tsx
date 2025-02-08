@@ -100,9 +100,9 @@ function UpdateOfferForm({ offer, onClose }: UpdateOfferFormInputProps) {
         autoComplete="off"
         value={estimative}
         onChange={(e) => {
-          let estimative = parseInt(e.target.value)
+          const estimative = parseInt(e.target.value)
           if (isNaN(estimative)) {
-            estimative = ''
+            return
           }
           setEstimative(estimative)
           setValue('estimatedTime', estimative)
@@ -117,7 +117,8 @@ function UpdateOfferForm({ offer, onClose }: UpdateOfferFormInputProps) {
           type="checkbox"
           registration={{ ...register('isOffering') }}
           checked={offerState.isOffering}
-          inputClassName="appearance-none w-5 h-5 rounded-full border-2 border-[#A4978A] checked:bg-[#A4978A] focus:outline-none"
+          inputClassName="appearance-none rounded-full border-2 border-[#A4978A] checked:bg-[#A4978A] focus:outline-none size-5"
+          wrapperClassName="size-5"
           onChange={(e) => {
             const isChecked = e.target.checked
             setOfferState((prev) => ({ ...prev, isOffering: isChecked }))
