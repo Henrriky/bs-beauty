@@ -41,7 +41,7 @@ function Login() {
       <div className="flex justify-center items-center h-screen flex-col">
         <img
           src={loginBackgroundTop}
-          alt="Ícone do Google"
+          alt="Plano de fundo"
           className={`absolute top-0 right-0`}
           // className={`absolute right-[-${(LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING * 4).toString()}px] top-0`}
         />
@@ -57,7 +57,7 @@ function Login() {
 
         <img
           src={loginBackgroundBottom}
-          alt="Ícone do Google"
+          alt="Plano de fundo"
           className="absolute left-0 bottom-0 w-full h-auto object-contain"
         />
       </div>

@@ -5,10 +5,11 @@ import { toast } from 'react-toastify'
 import { serviceAPI } from '../../../store/service/service-api'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { Service } from '../../../store/service/types'
+import { Offer } from '../../../store/offer/types'
 
 interface ListOffersProps {
   employeeId: string
-  selectOffer: (param: Service) => void
+  selectOffer: (param: Offer) => void
   openUpdateModal: () => void
   openDeleteModal: () => void
 }
@@ -104,7 +105,7 @@ function ListOffers({
                 outlineVariantBorderStyle="dashed"
                 onClick={(e) => {
                   setSelected(index as unknown as SetStateAction<null>)
-                  selectOffer(offer as unknown as Service)
+                  selectOffer(offer as unknown as Offer)
                   e.stopPropagation()
                 }}
                 className={`bg-[#222222] w-full text-left px-4 py-[6px] ${selected !== index ? 'border-none' : ''}`}

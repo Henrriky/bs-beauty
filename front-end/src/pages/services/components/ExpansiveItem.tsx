@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import expandArrow from '../../../assets/expand-arrow.svg'
+import expandArrow from '../../../assets/expand-arrow.svg?react'
 
 interface ExpansiveItemProps {
   text: string

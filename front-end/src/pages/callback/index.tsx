@@ -29,6 +29,7 @@ function Callback() {
       dispatchRedux(
         setToken({
           user: {
+            id: decodedToken.id,
             role: decodedToken.role,
             email: decodedToken.email,
             name: decodedToken.name,

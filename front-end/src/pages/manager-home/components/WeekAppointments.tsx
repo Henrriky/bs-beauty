@@ -12,10 +12,12 @@ function getDifferenceInDays(date1: Date, date2: Date) {
 
 const WeekAppointments = () => {
   const { data: userData } = authAPI.useFetchUserInfoQuery()
-  const id = userData?.user?.id
+  const id = userData?.user.id
 
   const { data, error, isLoading } =
-    appointmentAPI.useFetchEmployeeAppointmentsByAllOffersQuery(id)
+    appointmentAPI.useFetchEmployeeAppointmentsByAllOffersQuery(
+      id as unknown as string,
+    )
 
   if (isLoading) {
     return <div>Loading...</div>

@@ -105,7 +105,7 @@ function UpdateServiceForm({ service, onClose }: UpdateServiceFormInputProps) {
           inputClassName="pb-0"
           wrapperClassName="w-full max-w-[295px] mb-3"
           autoComplete="off"
-          value={serviceDescription}
+          value={serviceDescription || undefined}
           onChange={(e) => {
             const description = e.target.value
             setServiceDescription(description)

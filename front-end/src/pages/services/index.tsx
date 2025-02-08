@@ -25,8 +25,8 @@ function ServiceDashboard() {
   const [openUpdateServiceModal, setOpenUpdateServiceModal] = useState(false)
 
   const [expandedDiv, setExpandedDiv] = useState(null)
-  const [service, setService] = useState()
-  const [offer, setOffer] = useState()
+  const [service, setService] = useState<Service>()
+  const [offer, setOffer] = useState<Offer>()
   const { data } = authAPI.useFetchUserInfoQuery()
   const user = useAppSelector((state) => state.auth.user!)
   const isManager = user.role === Role.MANAGER

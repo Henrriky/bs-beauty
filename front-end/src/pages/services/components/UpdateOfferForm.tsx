@@ -100,9 +100,9 @@ function UpdateOfferForm({ offer, onClose }: UpdateOfferFormInputProps) {
         autoComplete="off"
         value={estimative}
         onChange={(e) => {
-          let estimative = parseInt(e.target.value)
+          const estimative = parseInt(e.target.value)
           if (isNaN(estimative)) {
-            estimative = ''
+            return
           }
           setEstimative(estimative)
           setValue('estimatedTime', estimative)

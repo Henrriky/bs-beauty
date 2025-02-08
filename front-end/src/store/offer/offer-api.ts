@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import {
   CreateOfferFormData,
+  UpdateOfferFormData,
   // UpdateOfferFormData,
 } from '../../pages/services/components/types'
 import { API_VARIABLES } from '../../api/config'
@@ -27,17 +28,20 @@ export const offerAPI = createApi({
       }),
       invalidatesTags: ['Offers'],
     }),
-    // updateOffer: builder.mutation<{ success: boolean }, UpdateOfferFormData>({
-    //   query: ({ id, data }) => ({
-    //     url: `${API_VARIABLES.OFFERS_ENDPOINTS.ENDPOINT}/${id}`,
-    //     method: 'PUT',
-    //     body: data,
-    //   }),
-    //   invalidatesTags: (result, error, { id }) => [
-    //     { type: 'Offer', id },
-    //     { type: 'Offers' },
-    //   ],
-    // }),
+    updateOffer: builder.mutation<
+      { success: boolean },
+      { data: UpdateOfferFormData; id: string }
+    >({
+      query: ({ id, data }) => ({
+        url: `${API_VARIABLES.OFFERS_ENDPOINTS.ENDPOINT}/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Offers', id },
+        { type: 'Offers' },
+      ],
+    }),
     deleteOffer: builder.mutation<{ success: boolean }, string>({
       query: (id) => ({
         url: `${API_VARIABLES.OFFERS_ENDPOINTS.ENDPOINT}/${id}`,
