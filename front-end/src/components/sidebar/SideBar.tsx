@@ -23,31 +23,46 @@ function SideBar() {
     setIsSideBarOpen(!isSideBarOpen)
   }
 
+  const navigate = useNavigate()
+
   return (
     <>
-      <div
-        className={`${isSideBarOpen ? 'flex flex-row w-full h-full absolute left-0 top-[0px]' : ''} `}
-      >
-        <nav
-          className={`bg-primary-900 mb-5 ${isSideBarOpen ? 'h-full w-9/12 z-20' : 'w-full z-0 left-0 top-[0px]'}`}
-        >
-          <div
-            className={`text-[12px] transition-all ${isSideBarOpen ? 'mt-11 flex flex-col gap-5' : 'flex flex-row gap-2 justify-center pt-5'}`}
-          >
+      <div>
+        <nav className={`transition-opacity ease-in-out bg-primary-900 mb-5 w-full z-0 left-0 top-[0px]`}>
+          <div className={`text-[12px] transition-all flex flex-row gap-2 justify-center pt-5`}>
             <button
-              className={`transition-all w-[25px] text-primary-400 hover:w-[30px] hover:text-primary-200 ${isSideBarOpen ? 'place-self-end mr-5 absolute' : 'mr-auto'} `}
+              className={`transition-all w-[25px] text-primary-400 hover:w-[30px] hover:text-primary-200 mr-auto`}
               onClick={toggleSideBar}
             >
-              {isSideBarOpen ? <XMarkIcon /> : <Bars3Icon className="size-7" />}
+              <Bars3Icon className="size-7" />
             </button>
-            <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} size="sm" />
-            {isSideBarOpen && (
+            <div className={'hover:cursor-pointer'} onClick={() => navigate('/profile')}>
+              <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} size="sm" />
+            </div>
+          </div>
+        </nav>
+      </div>
+      <section className="w-full h-max">
+        <Outlet />
+      </section>
+
+      {isSideBarOpen &&
+        <div className={'transition-all flex flex-row w-full h-full absolute left-0 top-[0px]'}>
+          <nav className={'bg-primary-900 mb-5 h-full w-9/12 z-20'}>
+            <div className={`text-[12px] transition-all pl-4 mt-11 flex flex-col gap-5`}>
+              <button
+                className={`transition-all w-[25px] text-primary-400 hover:w-[30px] hover:text-primary-200 place-self-end mr-5 absolute `}
+                onClick={toggleSideBar}
+              >
+                <XMarkIcon />
+              </button>
+              <div className={'hover:cursor-pointer'} onClick={() => navigate('/profile')}>
+                <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} size="sm" />
+              </div>
               <h2 className="text-primary-0 mb-9 text-sm capitalize">
                 {user.name ? firstLetterOfWordToUpperCase(user.name) : ''}
               </h2>
-            )}
-          </div>
-          {isSideBarOpen && (
+            </div>
             <div className="">
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
               <ul className="text-primary-200 mt-8 text-[12px]">
@@ -67,17 +82,13 @@ function SideBar() {
                   .reverse()}
               </ul>
             </div>
-          )}
-        </nav>
-        <div
-          id="blur"
-          onClick={() => toggleSideBar()}
-          className={`${isSideBarOpen ? 'w-full h-full backdrop-blur-sm' : 'hidden'}`}
-        ></div>
-      </div>
-      <section className="w-full h-max">
-        <Outlet />
-      </section>
+          </nav>
+          <div
+            onClick={() => toggleSideBar()}
+            className={`${isSideBarOpen ? 'w-full h-full backdrop-blur-sm z-10' : 'hidden'}`}
+          ></div>
+        </div>
+      }
     </>
   )
 }
