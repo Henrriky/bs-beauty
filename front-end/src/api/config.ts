@@ -1,5 +1,8 @@
+import ENV from '../config/config'
+
 export const API_VARIABLES = {
-  BASE_URL: '/api',
+  BASE_URL:
+    ENV.ENVIRONMENT === 'dev' ? `http://localhost:${ENV.PORT}/api` : '/api',
   AUTH_ENDPOINTS: {
     COMPLETE_REGISTER: '/auth/register/complete',
     FETCH_GOOGLE_REDIRECT_URI: '/auth/google/redirect-uri',

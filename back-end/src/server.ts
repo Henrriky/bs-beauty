@@ -2,16 +2,18 @@ import path from 'path'
 import express from 'express'
 import cors from 'cors'
 import { appRoutes } from './router'
-import { oauth2Client } from './lib/google'
 
-
-console.log(path.join(__dirname, '..', '..', 'front-end', 'build', 'index.html'))
 const app = express()
+
+/*=========BACK-END-END======*/
 app.use(cors({
   origin: '*'
 }))
 app.use(express.json())
 app.use('/api', appRoutes)
+
+
+/*=========FRONT-END======*/
 app.use(express.static(path.join(__dirname, '..', '..', 'front-end', 'build')))
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'front-end', 'build', 'index.html'))

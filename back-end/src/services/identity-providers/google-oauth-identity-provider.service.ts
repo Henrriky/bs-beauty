@@ -43,7 +43,7 @@ class GoogleAuthIdentityProvider implements OAuthIdentityProvider {
       access_type: 'offline',
       scope: ENV.GOOGLE_SCOPES.split(','),
       include_granted_scopes: true,
-      redirect_uri: 'http://bsbeauty.duckdns.org/auth/google/callback'
+      redirect_uri: ENV.GOOGLE_REDIRECT_URI
     })
 
     return authorizationUrl
