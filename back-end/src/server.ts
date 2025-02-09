@@ -4,6 +4,8 @@ import cors from 'cors'
 import { appRoutes } from './router'
 import { oauth2Client } from './lib/google'
 
+
+console.log(path.join(__dirname, '..', '..', 'front-end', 'build', 'index.html'))
 const app = express()
 app.use(cors({
   origin: '*'
@@ -36,9 +38,9 @@ app.get('/auth/google/callback', async (req, res) => {
 
 app.use('/api', appRoutes)
 
-app.use(express.static(path.join(__dirname, '..', 'front-end', 'build')))
+app.use(express.static(path.join(__dirname, '..', '..', 'front-end', 'build')))
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'build', 'index.html'))
+  res.sendFile(path.join(__dirname, '..', '..', 'front-end', 'build', 'index.html'))
 })
 
 
