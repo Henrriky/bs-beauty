@@ -13,7 +13,6 @@ import NotFound from '../pages/not-found'
 import PrivateRoute from '../pages/private-route'
 import Profile from '../pages/profile'
 import { ServiceDashboard } from '../pages/services'
-import ServicesPage from '../pages/services-page'
 import { Role } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
@@ -35,36 +34,53 @@ function BSBeautyRouter() {
             }
           >
             <Route element={<SideBar />}>
-              <Route path="/manager/home" element={<ManagerHome />} />
-              <Route path="/customer/home" element={<CustomerHome />} />
-              <Route path="/employee/home" element={<ManagerHome />} />
-              <Route path="/appointments" element={<Appointments />} />
-              <Route
-                path="/appointments/:appointmentId"
-                element={<AppointmentDetails />}
-              />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/customers" element={<Customers />} />
+              {/* CUSTOMER ROUTES */}
+              <Route element={<PrivateRoute allowedRoles={[Role.CUSTOMER]} />}>
+                <Route path="/customer/home" element={<CustomerHome />} />
+                <Route path="/appointments" element={<Appointments />} />
+              </Route>
+
+              {/* EMPLOYEE ROUTES */}
+              <Route element={<PrivateRoute allowedRoles={[Role.EMPLOYEE]} />}>
+                <Route path="/employee/home" element={<ManagerHome />} />
+              </Route>
+
+              {/* MANAGER ROUTES */}
               <Route element={<PrivateRoute allowedRoles={[Role.MANAGER]} />}>
+                <Route path="/manager/home" element={<ManagerHome />} />
+                <Route path="/customers" element={<Customers />} />
                 <Route
                   path="/employees-management"
                   element={<EmployeesManagement />}
                 />
               </Route>
-              <Route path="/employee-shifts" element={<EmployeeShifts />} />
+
+              {/* EMPLOYEE/MANAGER ROUTES */}
               <Route
-                path="/management/services"
-                element={<ServiceDashboard />}
+                element={
+                  <PrivateRoute allowedRoles={[Role.MANAGER, Role.EMPLOYEE]} />
+                }
+              >
+                <Route
+                  path="/management/services"
+                  element={<ServiceDashboard />}
+                />
+                <Route path="/employee-shifts" element={<EmployeeShifts />} />
+              </Route>
+
+              <Route
+                path="/appointments/:appointmentId"
+                element={<AppointmentDetails />}
               />
+              <Route path="/profile" element={<Profile />} />
             </Route>
+
             {/* COMPLETE REGISTER ROUTES */}
             <Route path="/complete-register" element={<CompleteRegister />} />
             <Route
               path="/register-completed"
               element={<RegistrationCompleted />}
             />
-            {/* SERVICES ROUTES */}
-            <Route path="/services" element={<ServicesPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>
