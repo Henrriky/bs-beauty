@@ -1,5 +1,5 @@
 export const API_VARIABLES = {
-  BASE_URL: 'http://localhost:3000/api',
+  BASE_URL: '/api',
   AUTH_ENDPOINTS: {
     COMPLETE_REGISTER: '/auth/register/complete',
     FETCH_GOOGLE_REDIRECT_URI: '/auth/google/redirect-uri',

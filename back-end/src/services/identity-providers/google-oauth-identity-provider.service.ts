@@ -42,7 +42,8 @@ class GoogleAuthIdentityProvider implements OAuthIdentityProvider {
     const authorizationUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: ENV.GOOGLE_SCOPES.split(','),
-      include_granted_scopes: true
+      include_granted_scopes: true,
+      redirect_uri: 'http://bsbeauty.duckdns.org/auth/google/callback'
     })
 
     return authorizationUrl

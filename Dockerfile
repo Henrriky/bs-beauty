@@ -21,11 +21,7 @@ WORKDIR /home/node/app/front-end
 
 COPY ./front-end .
 
-RUN npm install -g vite@latest
-
-RUN npm install -g typescript
-
-RUN npm install --omit=dev
+RUN npm install
 
 RUN npm run build
 
