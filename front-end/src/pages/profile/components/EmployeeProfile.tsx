@@ -1,25 +1,23 @@
-import { useFieldArray, useForm } from 'react-hook-form'
-import { Input } from '../../../components/inputs/Input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Formatter } from '../../../utils/formatter/formatter.util'
-import { Employee } from '../../../store/auth/types'
-import useAppDispatch from '../../../hooks/use-app-dispatch'
-import { updateUserInformations } from '../../../store/auth/auth-slice'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { Button } from '../../../components/button/Button'
-import { userAPI } from '../../../store/user/user-api'
-import { EmployeeUpdateProfileFormData } from '../types'
-import { EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
+import { Input } from '../../../components/inputs/Input'
 import SocialMediaContainerInput from '../../../components/inputs/social-media-input/SocialMediaContainerInput'
+import { Employee } from '../../../store/auth/types'
+import { userAPI } from '../../../store/user/user-api'
+import { Formatter } from '../../../utils/formatter/formatter.util'
+import { EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
+import { EmployeeUpdateProfileFormData } from '../types'
 
 interface EmployeeProfileProps {
   userInfo: Employee
+  onProfileUpdate: () => void
 }
 
 // TODO: Separate Social Media to a Component
 
-function EmployeeProfile({ userInfo }: EmployeeProfileProps) {
-  const dispatchRedux = useAppDispatch()
+function EmployeeProfile({ userInfo, onProfileUpdate }: EmployeeProfileProps) {
   const [updateProfile, { isLoading }] = userAPI.useUpdateProfileMutation()
 
   const {
@@ -53,15 +51,8 @@ function EmployeeProfile({ userInfo }: EmployeeProfileProps) {
     })
       .unwrap()
       .then(() => {
-        dispatchRedux(
-          updateUserInformations({
-            user: {
-              name: data.name,
-              email: data.email,
-            },
-          }),
-        )
         toast.success('Perfil atualizado com sucesso!')
+        onProfileUpdate()
       })
       .catch((error: unknown) => {
         console.error('Error trying to complete register', error)
@@ -99,7 +90,7 @@ function EmployeeProfile({ userInfo }: EmployeeProfileProps) {
       />
       <Input
         registration={{ ...register('specialization') }}
-        label="Specialization"
+        label="Especialização"
         id="specialization"
         type="specialization"
         placeholder="Digite sua especialização"
@@ -115,7 +106,7 @@ function EmployeeProfile({ userInfo }: EmployeeProfileProps) {
         label="Função"
         id="role"
         type="role"
-        value={userInfo.role}
+        value={userInfo.role === 'MANAGER' ? 'Gerente' : 'Funcionario'}
         disabled
       />
       <SocialMediaContainerInput

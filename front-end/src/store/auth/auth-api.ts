@@ -10,6 +10,7 @@ import { Customer, Employee } from './types'
 export const authAPI = createApi({
   reducerPath: 'auth-api',
   baseQuery: baseQueryWithAuth,
+  tagTypes: ['User'],
   endpoints: (builder) => ({
     completeRegister: builder.mutation<
       { success: boolean },
@@ -26,6 +27,7 @@ export const authAPI = createApi({
         url: API_VARIABLES.AUTH_ENDPOINTS.FETCH_USER_INFO,
         method: 'GET',
       }),
+      providesTags: ['User'],
     }),
   }),
 })
