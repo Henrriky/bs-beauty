@@ -58,7 +58,7 @@ export const appointmentAPI = createApi({
         body: data,
       }),
     }),
-    findAppointmentsByCustomerId: builder.query<
+    findAppointmentsByCustomerOrEmployeeId: builder.query<
       {
         appointments: FindAppointmentServiceByCustomerId[]
       },

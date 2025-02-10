@@ -7,7 +7,7 @@ interface AppointmentServiceRepository {
   findByAppointmentDate: (date: Date) => Promise<AppointmentService[]>
   findByAppointmentId: (id: string) => Promise<AppointmentService[]>
   findByServiceOfferedId: (id: string) => Promise<AppointmentService[]>
-  findByCustomerId: (customerId: string) => Promise<{ appointments: FindAppointmentServiceByCustomerId[] } >
+  findByCustomerOrEmployeeId: (customerOrEmployeeId: string) => Promise<{ appointments: FindAppointmentServiceByCustomerId[] } >
   create: (appointmentService: Prisma.AppointmentServiceCreateInput) => Promise<AppointmentService>
   update: (id: string, appointmentService: Prisma.AppointmentServiceUpdateInput) => Promise<AppointmentService>
   delete: (id: string) => Promise<AppointmentService>

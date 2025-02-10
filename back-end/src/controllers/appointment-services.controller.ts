@@ -99,14 +99,14 @@ class AppointmentServiceController {
     }
   }
 
-  public static async handleFindByCustomerId (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByCustomerOrEmployeeId (req: Request, res: Response, next: NextFunction) {
     // TODO: Create pagination
     try {
       console.log('eae')
       const useCase = makeAppointmentServicesUseCaseFactory()
       const customerId = req.user.id
 
-      const { appointments } = await useCase.executeFindByCustomerId(customerId)
+      const { appointments } = await useCase.findByCustomerOrEmployeeId(customerId)
 
       res.send({ appointments }).status(200)
     } catch (error) {

@@ -23,7 +23,7 @@ function Appointments() {
   const user = useAppSelector((state) => state.auth.user!)
 
   const { data, isLoading, isError, error } =
-    appointmentAPI.useFindAppointmentsByCustomerIdQuery()
+    appointmentAPI.useFindAppointmentsByCustomerOrEmployeeIdQuery()
 
   if (isError) {
     toast.error('Erro ao carregar os agendamentos')

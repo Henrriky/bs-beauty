@@ -103,7 +103,7 @@ function AppointmentDetails() {
         )
         dispatchRedux(
           appointmentAPI.util.updateQueryData(
-            'findAppointmentsByCustomerId',
+            'findAppointmentsByCustomerOrEmployeeId',
             undefined,
             (draft) => {
               if (!data.status) return

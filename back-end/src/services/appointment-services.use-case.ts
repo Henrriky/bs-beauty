@@ -70,14 +70,14 @@ class AppointmentServicesUseCase {
     return deletedAppointmentService
   }
 
-  public async executeFindByCustomerId (customerId: string) {
+  public async findByCustomerOrEmployeeId (customerId: string) {
     const customer = await this.customerServiceRepository.findById(customerId)
 
     if (customer === null) {
       throw new CustomError('Customer not found', 404, 'Please, provide a valid customer')
     }
 
-    const { appointments } = await this.appointmentServiceRepository.findByCustomerId(customerId)
+    const { appointments } = await this.appointmentServiceRepository.findByCustomerOrEmployeeId(customerId)
 
     return { appointments }
   }

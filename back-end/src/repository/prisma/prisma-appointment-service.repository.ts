@@ -92,12 +92,16 @@ class PrismaAppointmentServiceRepository implements AppointmentServiceRepository
     return deletedAppointmentService
   }
 
-  public async findByCustomerId (customerId: string) {
+  public async findByCustomerOrEmployeeId (customerOrEmployeeId: string) {
     const appointments = await prismaClient.appointmentService.findMany({
       where: {
         appointment: {
-          customerId
+          customerId: customerOrEmployeeId
+        },
+        serviceOffered: {
+          employeeId: customerOrEmployeeId
         }
+        
       },
       select: {
         id: true,
