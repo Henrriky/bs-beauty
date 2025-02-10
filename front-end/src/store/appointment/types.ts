@@ -51,6 +51,22 @@ export interface FindAppointmentServiceByCustomerId {
     }
   }
 }
+export interface FindAppointmentServiceById {
+  id: string
+  observation: string | null
+  status: Status
+  appointmentDate: string
+  appointment: Appointment
+  serviceOffered: {
+    id: string
+    estimatedTime: number
+    price: string
+    employee: Employee
+    service: {
+      name: string
+    }
+  }
+}
 
 export type CreateAppointmentAPIData = z.infer<typeof AppointmentSchemas.createSchema>
 export type AssociateAppointmentAPIData = z.infer<typeof AppointmentServiceSchemas.createSchema>

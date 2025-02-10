@@ -3,6 +3,7 @@ import { type AppointmentServiceRepository } from '../repository/protocols/appoi
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { type CustomerRepository } from '../repository/protocols/customer.repository'
 import { CustomError } from '../utils/errors/custom.error.util'
+import { FindAppointmentServiceById } from '../repository/types/appointment-repository.types'
 
 interface AppointmentServiceOutput {
   appointmentServices: AppointmentService[]
@@ -21,7 +22,7 @@ class AppointmentServicesUseCase {
     return { appointmentServices }
   }
 
-  public async executeFindById (appointmentServiceId: string): Promise<AppointmentService | null> {
+  public async executeFindById (appointmentServiceId: string): Promise<FindAppointmentServiceById | null> {
     const appointmentService = await this.appointmentServiceRepository.findById(appointmentServiceId)
     RecordExistence.validateRecordExistence(appointmentService, 'Appointment service')
 

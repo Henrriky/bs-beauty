@@ -19,7 +19,7 @@ const roleToAppointmentComponents = {
 
 function Appointments() {
   const [switchButtonStatus, setSwitchButtonStatus] =
-    useState<ListAppointmentsButtonStatus>('finished')
+    useState<ListAppointmentsButtonStatus>('schedulled')
   const user = useAppSelector((state) => state.auth.user!)
 
   const { data, isLoading, isError, error } =

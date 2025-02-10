@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { Status } from '../../../store/appointment/types'
 
 class AppointmentServiceSchemas {
   public static createSchemaForm = z
@@ -33,6 +34,24 @@ class AppointmentServiceSchemas {
         .refine((date) => !isNaN(date.getTime()) && date > new Date()),
       appointmentId: z.string().uuid(),
       serviceOfferedId: z.string().uuid(),
+    })
+    .strict()
+
+  public static customerUpdateSchema = z
+    .object({
+      observation: z
+        .string()
+        .min(3)
+        .max(255)
+        .refine((string) => RegexPatterns.content.test(string))
+        .optional(),
+      status: z.nativeEnum(Status).optional(),
+    })
+    .strict()
+
+  public static employeeUpdateSchema = z
+    .object({
+      status: z.nativeEnum(Status).optional(),
     })
     .strict()
 }

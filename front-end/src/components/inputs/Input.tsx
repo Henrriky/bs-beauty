@@ -1,10 +1,10 @@
-import { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
+import { HTMLInputTypeAttribute, InputHTMLAttributes, ReactNode } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { ErrorMessage } from '../feedback/ErrorMessage'
 import clsx from 'clsx'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string
+  label?: string | ReactNode
   id: string
   type: HTMLInputTypeAttribute
   error?: string | null
@@ -47,7 +47,7 @@ export function Input({
           variant === 'outline'
             ? `text-sm text-[#A5A5A5] bg-transparent focus:outline-none cursor-text w-full border-solid border-b-2 ${borderColor} pb-2 focus-within:border-[#B19B86] transition-colors duration-300`
             : variant === 'solid'
-              ? `w-full text-sm text-[#A5A5A5] bg-[#1a1a1a] focus:outline-none cursor-text ${borderColor} border-[1px] border-opacity-10 rounded-2xl px-2 py-[10px] focus-within:border-[#B19B86] transition-colors duration-300 `
+              ? `w-full text-sm text-[#A5A5A5] bg-[#1a1a1a] focus:outline-none cursor-text ${borderColor} border-[1px] border-opacity-10 rounded-2xl px-2 py-[10px] focus-within:border-[#B19B86] transition-colors duration-300 disabled:bg-[#272727]`
               : '',
           inputClassName,
         )}

@@ -10,11 +10,30 @@ class PrismaAppointmentServiceRepository implements AppointmentServiceRepository
   }
 
   public async findById (id: string) {
-    const appointmentService = await prismaClient.appointmentService.findUnique({
-      where: { id }
+    const appointmentServices = await prismaClient.appointmentService.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        status: true,
+        observation: true,
+        appointmentDate: true,
+        serviceOffered: {
+          select: {
+            id: true,
+            estimatedTime: true,
+            employee: true,
+            price: true,
+            service: {
+              select: {
+                name: true
+              }
+            }
+          }
+        },
+      }
     })
 
-    return appointmentService
+    return appointmentServices
   }
 
   public async findByAppointmentDate (appointmentDate: Date) {
@@ -53,7 +72,13 @@ class PrismaAppointmentServiceRepository implements AppointmentServiceRepository
     const { appointmentDate, ...otherFields } = appointmentServiceToUpdate
     const updatedAppointmentService = await prismaClient.appointmentService.update({
       where: { id },
-      data: { ...otherFields, ...(appointmentDate instanceof Date && !isNaN(appointmentDate.getTime()) ? { appointmentDate } : {}) }
+      data: { ...otherFields, ...(appointmentDate instanceof Date && !isNaN(appointmentDate.getTime()) ? { appointmentDate } : {}),
+      appointment: {
+        update: {
+          status: otherFields.status
+        }
+      }
+    }
     })
 
     return updatedAppointmentService

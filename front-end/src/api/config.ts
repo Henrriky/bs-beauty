@@ -47,6 +47,10 @@ export const API_VARIABLES = {
     FETCH_CUSTOMER_APPOINTMENTS: '/appointment-services/customer',
     FIND_BY_SERVICE_OFFERED: (serviceOfferedId: string) =>
       `/appointment-services/offer/${serviceOfferedId}`,
+    FIND_APPOINTMENT_SERVICE_BY_ID: (appointmentServiceId: string) =>
+      `/appointment-services/${appointmentServiceId}`,
+    UPDATE_APPOINTMENT_SERVICE: (appointmentServiceId: string) =>
+      `/appointment-services/${appointmentServiceId}`,
   },
   ANALYTICS_ENDPOINTS: {
     FETCH_ANALYTICS: '/analytics',

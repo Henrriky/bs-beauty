@@ -109,7 +109,7 @@ const EmployeeShifts = () => {
           } else {
             await createShift(payload)
           }
-        }
+        },
       )
 
       await Promise.all(updates)
@@ -151,7 +151,7 @@ const EmployeeShifts = () => {
 
     if (!isValid) {
       toast.error(
-        'Alguns turnos não estão configurados corretamente. Confira os horários de início e fim.'
+        'Alguns turnos não estão configurados corretamente. Confira os horários de início e fim.',
       )
     }
 

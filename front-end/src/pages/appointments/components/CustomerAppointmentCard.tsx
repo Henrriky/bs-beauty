@@ -46,10 +46,10 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
         </div>
       </div>
       <div
-        className={`flex items-center justify-between h-24 py-4 px-6 rounded-2xl mt-5 bg-[#262626]
-              transition-all duration-300 ease-in-out flex-grow`}
+        className={`flex justify-between py-4 px-6 rounded-2xl mt-5 bg-[#262626]
+              transition-all duration-300 ease-in-out flex-grow flex-col sm:flex-row sm:items-center`}
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items gap-4">
           <div className="">
             <ProfilePicture
               size="md"
@@ -73,7 +73,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
             </h3>
           </div>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-wrap mt-4 gap-2 sm:flex-col sm:mt-0">
           <div className="flex items-center gap-2">
             {isSchedulled ? (
               <CheckBadgeIcon className="size-5 text-[#A4978A]" />
@@ -93,7 +93,9 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
             </h3>
           </div>
           <div className="flex items-center gap-2">
-            <Link to={`/appointments/${props.appointment.id}`}>
+            <Link
+              to={`/appointments/${props.appointment.id}?action=${isSchedulled ? 'edit' : 'view'}`}
+            >
               <Button
                 className="flex items-center gap-2 text-[#A4978A] text-sm text-opacity-85 font-semibold !pt-0 pb-1"
                 variant="text-only"
