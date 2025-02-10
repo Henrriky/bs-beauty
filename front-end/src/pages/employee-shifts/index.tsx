@@ -7,6 +7,7 @@ import { shiftAPI } from '../../store/shift/shift-api'
 import DaysRow from './components/DaysRow'
 import ShiftsRow from './components/ShiftsRow'
 import { DateTime } from 'luxon'
+import Title from '../../components/texts/Title'
 
 const WeekDayMapping: { [key: string]: string } = {
   Domingo: 'SUNDAY',
@@ -33,10 +34,6 @@ const EmployeeShifts = () => {
     Record<string, { shiftStart: string; shiftEnd: string; isBusy: boolean }>
   >({})
   const weekDays = Object.values(WeekDays)
-
-  useEffect(() => {
-    document.title = 'BS Beauty - Seus Horários'
-  }, [])
 
   useEffect(() => {
     if (data?.shifts) {
@@ -160,36 +157,34 @@ const EmployeeShifts = () => {
 
   return (
     <>
-      <div className="p-4">
-        <div className="flex flex-col gap-4">
-          <h2 className="text-[#D9D9D9] text-lg">Horários</h2>
-          <p className="text-primary-200 text-sm">
-            Defina seus horários de expediente
-          </p>
-        </div>
-        <div className="mt-6 flex flex-col items-center gap-6">
-          <div
-            className="grid grid-cols-2 w-full gap-x-4 text-[#D9D9D9] text-sm"
-            style={{ gridTemplateColumns: '3fr 1fr' }}
-          >
-            <div>
-              <DaysRow weekDays={weekDays} editableShifts={editableShifts} />
-            </div>
-            <div>
-              <ShiftsRow
-                weekDays={weekDays}
-                editableShifts={editableShifts}
-                setEditableShifts={setEditableShifts}
-              />
-            </div>
+      <div className="flex flex-col gap-2">
+        <Title align="left">Horários</Title>
+        <p className="text-primary-200 text-sm">
+          Defina seus horários de expediente
+        </p>
+      </div>
+      <div className="mt-6 flex flex-col items-center gap-6">
+        <div
+          className="grid grid-cols-2 w-full gap-x-4 text-[#D9D9D9] text-sm"
+          style={{ gridTemplateColumns: '3fr 1fr' }}
+        >
+          <div>
+            <DaysRow weekDays={weekDays} editableShifts={editableShifts} />
           </div>
-          <Button
-            label="Salvar alterações"
-            variant="solid"
-            className="w-[50%]"
-            onClick={handleSaveChanges}
-          />
+          <div>
+            <ShiftsRow
+              weekDays={weekDays}
+              editableShifts={editableShifts}
+              setEditableShifts={setEditableShifts}
+            />
+          </div>
         </div>
+        <Button
+          label="Salvar alterações"
+          variant="solid"
+          className="w-[50%]"
+          onClick={handleSaveChanges}
+        />
       </div>
     </>
   )

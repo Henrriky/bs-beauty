@@ -1,22 +1,20 @@
-import { useForm } from 'react-hook-form'
-import { Input } from '../../../components/inputs/Input'
-import { CustomerUpdateProfileFormData } from './types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
-import { Formatter } from '../../../utils/formatter/formatter.util'
-import { Customer } from '../../../store/auth/types'
-import useAppDispatch from '../../../hooks/use-app-dispatch'
-import { updateUserInformations } from '../../../store/auth/auth-slice'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { Button } from '../../../components/button/Button'
+import { Input } from '../../../components/inputs/Input'
+import { Customer } from '../../../store/auth/types'
 import { userAPI } from '../../../store/user/user-api'
+import { Formatter } from '../../../utils/formatter/formatter.util'
+import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
+import { CustomerUpdateProfileFormData } from './types'
 
 interface CustomerProfileProps {
   userInfo: Customer
+  onProfileUpdate: () => void
 }
 
-function CustomerProfile({ userInfo }: CustomerProfileProps) {
-  const dispatchRedux = useAppDispatch()
+function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
   const [updateProfile, { isLoading }] = userAPI.useUpdateProfileMutation()
 
   const {
@@ -48,15 +46,8 @@ function CustomerProfile({ userInfo }: CustomerProfileProps) {
     })
       .unwrap()
       .then(() => {
-        dispatchRedux(
-          updateUserInformations({
-            user: {
-              name: data.name,
-              email: data.email,
-            },
-          }),
-        )
         toast.success('Perfil atualizado com sucesso!')
+        onProfileUpdate()
       })
       .catch((error: unknown) => {
         console.error('Error trying to complete register', error)
