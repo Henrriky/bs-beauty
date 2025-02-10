@@ -169,20 +169,22 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
                     <div className="flex justify-center items-center gap-4">
                       <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
                       <p className="flex gap-1 items-center justify-center">
-                        {<operation.Icon className="size-5" />}
                         {operation.name}
                       </p>
                     </div>
                   ) : (
-                    operation.name
+                    <div className={`flex items-center justify-center gap-2`}>
+                      {<operation.Icon className="size-5" />}
+                      {operation.name}
+                    </div>
                   )
                 }
                 key={index}
-                className={operation.style}
+                className={`${operation.style}`}
+                borderColor={operation.style}
                 variant="outline"
                 onClick={(e) => {
                   e.preventDefault()
-                  console.log()
                   setValue('status', operation.value)
                   handleSubmit(props.handleSubmitConcrete)()
                 }}

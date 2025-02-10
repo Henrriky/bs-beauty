@@ -90,7 +90,7 @@ class PrismaOfferRepository implements OfferRepository {
               lte: endOfDay
             },
             status: {
-              in: [Status.PENDING, Status.RESCHEDULED, Status.CONFIRMED]
+              in: [Status.PENDING, Status.RESCHEDULED, Status.CONFIRMED, Status.FINISHED]
             }
           }
         }
