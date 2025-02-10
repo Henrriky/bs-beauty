@@ -34,14 +34,16 @@ function BSBeautyRouter() {
             }
           >
             <Route element={<SideBar />}>
+              {/* ALL ROLES ROUTES */}
+              <Route path="/appointments" element={<Appointments />} />
+              <Route
+                path="/appointments/:appointmentId"
+                element={<AppointmentDetails />}
+              />
+
               {/* CUSTOMER ROUTES */}
               <Route element={<PrivateRoute allowedRoles={[Role.CUSTOMER]} />}>
                 <Route path="/customer/home" element={<CustomerHome />} />
-                <Route path="/appointments" element={<Appointments />} />
-                <Route
-                  path="/appointments/:appointmentId"
-                  element={<AppointmentDetails />}
-                />
               </Route>
 
               {/* EMPLOYEE ROUTES */}

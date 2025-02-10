@@ -95,13 +95,18 @@ class PrismaAppointmentServiceRepository implements AppointmentServiceRepository
   public async findByCustomerOrEmployeeId (customerOrEmployeeId: string) {
     const appointments = await prismaClient.appointmentService.findMany({
       where: {
-        appointment: {
-          customerId: customerOrEmployeeId
-        },
-        serviceOffered: {
-          employeeId: customerOrEmployeeId
-        }
-        
+        OR: [
+          {
+            appointment: {
+              customerId: customerOrEmployeeId
+            }
+          },
+          {
+            serviceOffered: {
+              employeeId: customerOrEmployeeId
+            }
+          }
+        ]
       },
       select: {
         id: true,

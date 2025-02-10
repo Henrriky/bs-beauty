@@ -102,7 +102,6 @@ class AppointmentServiceController {
   public static async handleFindByCustomerOrEmployeeId (req: Request, res: Response, next: NextFunction) {
     // TODO: Create pagination
     try {
-      console.log('eae')
       const useCase = makeAppointmentServicesUseCaseFactory()
       const customerId = req.user.id
 

@@ -11,7 +11,7 @@ appointmentServiceRoutes.get('/', AppointmentServiceController.handleFindAll)
 appointmentServiceRoutes.get('/date/:appointmentDate', AppointmentServiceController.handleFindByAppointmentDate)
 appointmentServiceRoutes.get('/appointment/:appointmentId', AppointmentServiceController.handleFindByAppointmentId)
 appointmentServiceRoutes.get('/offer/:serviceOfferedId', AppointmentServiceController.handleFindByServiceOfferedId)
-appointmentServiceRoutes.get('/customer', routeAuthMiddleware([Role.CUSTOMER]), AppointmentServiceController.handleFindByCustomerOrEmployeeId)
+appointmentServiceRoutes.get('/customer', routeAuthMiddleware([Role.CUSTOMER, Role.EMPLOYEE, Role.MANAGER]), AppointmentServiceController.handleFindByCustomerOrEmployeeId)
 appointmentServiceRoutes.get('/:id', AppointmentServiceController.handleFindById)
 
 appointmentServiceRoutes.post('/', routeAuthMiddleware([Role.CUSTOMER]), validateCreateAppointmentService, AppointmentServiceController.handleCreate)

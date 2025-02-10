@@ -4,6 +4,7 @@ import { RecordExistence } from '../utils/validation/record-existence.validation
 import { type CustomerRepository } from '../repository/protocols/customer.repository'
 import { CustomError } from '../utils/errors/custom.error.util'
 import { FindAppointmentServiceById } from '../repository/types/appointment-repository.types'
+import { EmployeeRepository } from '../repository/protocols/employee.repository'
 
 interface AppointmentServiceOutput {
   appointmentServices: AppointmentService[]
@@ -12,7 +13,8 @@ interface AppointmentServiceOutput {
 class AppointmentServicesUseCase {
   constructor (
     private readonly appointmentServiceRepository: AppointmentServiceRepository,
-    private readonly customerServiceRepository: CustomerRepository
+    private readonly customerServiceRepository: CustomerRepository,
+    private readonly employeeServiceRepository: EmployeeRepository
   ) { }
 
   public async executeFindAll (): Promise<AppointmentServiceOutput> {
@@ -70,14 +72,14 @@ class AppointmentServicesUseCase {
     return deletedAppointmentService
   }
 
-  public async findByCustomerOrEmployeeId (customerId: string) {
-    const customer = await this.customerServiceRepository.findById(customerId)
-
-    if (customer === null) {
-      throw new CustomError('Customer not found', 404, 'Please, provide a valid customer')
+  public async findByCustomerOrEmployeeId (customerOrEmployeeId: string) {
+    const customer = await this.customerServiceRepository.findById(customerOrEmployeeId)
+    const employee = await this.employeeServiceRepository.findById(customerOrEmployeeId)
+    if (customer === null && employee === null) {
+      throw new CustomError('Customer or Employee not found', 404, 'Please, provide a valid customer or employee')
     }
 
-    const { appointments } = await this.appointmentServiceRepository.findByCustomerOrEmployeeId(customerId)
+    const { appointments } = await this.appointmentServiceRepository.findByCustomerOrEmployeeId(customerOrEmployeeId)
 
     return { appointments }
   }

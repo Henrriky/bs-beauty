@@ -39,13 +39,13 @@ const sideBarItems: SideBarOptions = {
       navigateTo: '/profile',
       order: 98,
     },
-  ],
-  [Role.CUSTOMER]: [
     {
       name: 'Agendamentos',
       icon: <CalendarDaysIcon className="size-6" />,
       navigateTo: '/appointments',
     },
+  ],
+  [Role.CUSTOMER]: [
     {
       name: 'Home',
       icon: <HomeIcon className="size-6" />,
