@@ -16,6 +16,11 @@ class PrismaAppointmentServiceRepository implements AppointmentServiceRepository
         id: true,
         status: true,
         observation: true,
+        appointment: {
+          select: {
+            customerId: true
+          }
+        },
         appointmentDate: true,
         serviceOffered: {
           select: {
@@ -112,6 +117,11 @@ class PrismaAppointmentServiceRepository implements AppointmentServiceRepository
         id: true,
         status: true,
         observation: true,
+        appointment: {
+          select: {
+            customerId: true
+          }
+        },
         serviceOffered: {
           select: {
             id: true,

@@ -56,7 +56,9 @@ export interface FindAppointmentServiceById {
   observation: string | null
   status: Status
   appointmentDate: string
-  appointment: Appointment
+  appointment: {
+    customerId: string
+  }
   serviceOffered: {
     id: string
     estimatedTime: number

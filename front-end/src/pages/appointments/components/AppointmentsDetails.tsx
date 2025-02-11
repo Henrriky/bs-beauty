@@ -11,11 +11,12 @@ import {
   OnSubmitAppointmentDetailsUpdateForm,
 } from '../types'
 import useAppDispatch from '../../../hooks/use-app-dispatch'
+import EmployeeAppointmentDetails from './EmployeeAppointmentDetails'
 
 const roleToAppointmentDetailsComponents = {
   [Role.CUSTOMER]: CustomerAppointmentDetails,
-  [Role.EMPLOYEE]: CustomerAppointmentDetails,
-  [Role.MANAGER]: CustomerAppointmentDetails,
+  [Role.EMPLOYEE]: EmployeeAppointmentDetails,
+  [Role.MANAGER]: EmployeeAppointmentDetails,
 }
 
 function AppointmentDetails() {

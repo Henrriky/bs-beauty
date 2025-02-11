@@ -15,11 +15,16 @@ import {
   BriefcaseIcon,
   CalendarDaysIcon,
   ChatBubbleOvalLeftIcon,
+  CheckIcon,
   CurrencyDollarIcon,
+  EllipsisHorizontalIcon,
   InformationCircleIcon,
   UserIcon,
   XCircleIcon,
 } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router'
+import { customerAPI } from '../../../store/customer/customer-api'
+
 
 const actionToOperations = {
   edit: {
@@ -27,9 +32,30 @@ const actionToOperations = {
       {
         name: 'Cancelar agendamento',
         value: Status.CANCELLED,
-        style: 'border-[#7a3d3d]',
+        style: 'border-secondary-200 hover:border-red-700 hover:text-red-700 hover:font-semibold',
         Icon: XCircleIcon,
         status: Status.CANCELLED,
+      },
+      {
+        name: 'Confirmar agendamento',
+        value: Status.CONFIRMED,
+        style: 'border-secondary-200 hover:border-blue-500 hover:text-blue-500 hover:font-semibold',
+        Icon: CalendarDaysIcon,
+        status: Status.CONFIRMED,
+      },
+      {
+        name: 'Agendamento Concluído',
+        value: Status.FINISHED,
+        style: 'border-secondary-200 hover:border-green-500 hover:text-green-500 hover:font-semibold',
+        Icon: CheckIcon,
+        status: Status.FINISHED,
+      },
+      {
+        name: 'Agendamento Pendente',
+        value: Status.PENDING,
+        style: 'border-secondary-200 hover:border-yellow-500 hover:text-yellow-500 hover:font-semibold',
+        Icon: EllipsisHorizontalIcon,
+        status: Status.PENDING,
       },
     ],
   },
@@ -38,7 +64,12 @@ const actionToOperations = {
   },
 }
 
-function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
+
+function EmployeeAppointmentDetails(props: AppointmentDetailsComponentProps) {
+  const navigate = useNavigate()
+
+  const { data: customerData } = customerAPI.useGetCustomerByIdQuery(props.appointmentService.appointment.customerId)
+
   const operationInformations = actionToOperations[props.action]
   const {
     register,
@@ -60,20 +91,20 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
     <>
       <Title align="left">Detalhes do Agendamento</Title>
       <form
-        className="flex flex-col gap-4 w-full mt-8 px-1"
+        className="flex flex-col gap-4 w-full my-8 px-1"
         onSubmit={handleSubmit(props.handleSubmitConcrete)}
       >
         <Input
           label={
             <p className="flex gap-1 items-center">
               <UserIcon className="size-5" />
-              Profissional
+              Cliente
             </p>
           }
-          id="professional"
+          id="client"
           type="text"
           variant="solid"
-          value={props.appointmentService.serviceOffered.employee.name ?? ''}
+          value={customerData?.name ?? ''}
           disabled
         />
 
@@ -149,13 +180,13 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
           variant="solid"
           placeholder={
             props.action !== 'view'
-              ? 'Escreva algo que você deseja que o profissional veja'
+              ? 'Observações do cliente aparecerão aqui'
               : ''
           }
-          disabled={props.action === 'view'}
+          disabled
           error={errors?.observation?.message?.toString()}
         />
-        <div className="flex gap-2 flex-grow mb-4">
+        <div className="gap-2 mb-4 grid-cols-2 grid">
           {operationInformations.operations.map((operation, index) => {
             return (
               <Button
@@ -181,7 +212,9 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
                 onClick={(e) => {
                   e.preventDefault()
                   setValue('status', operation.value)
+                  console.log(errors.observation);
                   handleSubmit(props.handleSubmitConcrete)()
+                  navigate('/appointments')
                 }}
                 disabled={props.handleSubmitConcreteIsLoading}
               />
@@ -209,4 +242,4 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
   )
 }
 
-export default CustomerAppointmentDetails
+export default EmployeeAppointmentDetails

@@ -1,4 +1,4 @@
-import { type $Enums, type Employee } from '@prisma/client'
+import { Appointment, type $Enums, type Employee } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 
 export interface FindAppointmentServiceByCustomerId {
@@ -6,6 +6,9 @@ export interface FindAppointmentServiceByCustomerId {
   observation: string | null
   status: $Enums.Status
   appointmentDate: Date
+  appointment: {
+    customerId: string
+  }
   serviceOffered: {
     id: string
     estimatedTime: number
@@ -22,6 +25,9 @@ export interface FindAppointmentServiceById {
   observation: string | null
   status: $Enums.Status
   appointmentDate: Date
+  appointment: {
+    customerId: string
+  }
   serviceOffered: {
     id: string
     estimatedTime: number
