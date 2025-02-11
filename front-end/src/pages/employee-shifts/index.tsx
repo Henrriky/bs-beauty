@@ -158,7 +158,7 @@ const EmployeeShifts = () => {
   return (
     <>
       <div className="flex flex-col gap-2">
-        <Title align="left">Horários</Title>
+        <Title align="left">Turnos</Title>
         <p className="text-primary-200 text-sm">
           Defina seus horários de expediente
         </p>
