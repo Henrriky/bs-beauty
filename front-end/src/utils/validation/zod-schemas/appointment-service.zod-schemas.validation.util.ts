@@ -7,7 +7,6 @@ class AppointmentServiceSchemas {
     .object({
       observation: z
         .string()
-        .min(3)
         .max(255)
         .refine((string) => RegexPatterns.content.test(string))
         .optional(),
@@ -25,7 +24,6 @@ class AppointmentServiceSchemas {
     .object({
       observation: z
         .string()
-        .min(3)
         .max(255)
         .refine((string) => RegexPatterns.content.test(string))
         .optional(),
@@ -42,7 +40,7 @@ class AppointmentServiceSchemas {
       observation: z
         .string()
         .max(255)
-        .refine((string) => RegexPatterns.observation.test(string))
+        .nullable()
         .optional(),
       status: z.nativeEnum(Status).optional(),
     })
