@@ -74,7 +74,6 @@ function EmployeeAppointmentDetails(props: AppointmentDetailsComponentProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     setValue,
   } = useForm<CustomerUpdateAppointmentFormData>({
     resolver: zodResolver(AppointmentServiceSchemas.customerUpdateSchema),
@@ -184,7 +183,6 @@ function EmployeeAppointmentDetails(props: AppointmentDetailsComponentProps) {
               : ''
           }
           disabled
-          error={errors?.observation?.message?.toString()}
         />
         <div className="gap-2 mb-4 grid-cols-2 grid">
           {operationInformations.operations.map((operation, index) => {
@@ -212,7 +210,6 @@ function EmployeeAppointmentDetails(props: AppointmentDetailsComponentProps) {
                 onClick={(e) => {
                   e.preventDefault()
                   setValue('status', operation.value)
-                  console.log(errors.observation);
                   handleSubmit(props.handleSubmitConcrete)()
                   navigate('/appointments')
                 }}
@@ -221,22 +218,6 @@ function EmployeeAppointmentDetails(props: AppointmentDetailsComponentProps) {
             )
           })}
         </div>
-        {props.action !== 'view' && (
-          <Button
-            type="submit"
-            label={
-              props.handleSubmitConcreteIsLoading ? (
-                <div className="flex justify-center items-center gap-4">
-                  <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
-                  <p className="text-sm">Salvar</p>
-                </div>
-              ) : (
-                'Salvar'
-              )
-            }
-            disabled={props.handleSubmitConcreteIsLoading}
-          />
-        )}
       </form>
     </>
   )

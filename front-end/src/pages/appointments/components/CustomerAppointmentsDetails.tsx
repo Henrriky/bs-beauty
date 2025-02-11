@@ -60,7 +60,7 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
     <>
       <Title align="left">Detalhes do Agendamento</Title>
       <form
-        className="flex flex-col gap-4 w-full mt-8 px-1"
+        className="flex flex-col gap-4 w-full my-8 px-1"
         onSubmit={handleSubmit(props.handleSubmitConcrete)}
       >
         <Input
