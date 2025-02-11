@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react'
 type Props = {
   icon: ReactNode
   text: string
-  count: number
+  count: string | number
 }
 
 const Card: React.FC<Props> = ({ icon, text, count }) => {
