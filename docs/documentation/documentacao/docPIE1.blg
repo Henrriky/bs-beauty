@@ -1,0 +1,79 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: docPIE1.aux
+Reallocating 'name_of_file' (item size: 1) to 36 items.
+I couldn't open auxiliary file abntex2-modelo-include-comandos.aux
+---line 76 of file docPIE1.aux
+ : \@input{abntex2-modelo-include-comandos.aux
+ :                                            }
+I'm skipping whatever remains of this command
+Reallocating 'name_of_file' (item size: 1) to 16 items.
+Reallocating 'name_of_file' (item size: 1) to 27 items.
+Reallocating 'name_of_file' (item size: 1) to 12 items.
+The style file: abntex2-alf.bst
+Illegal, another \bibstyle command---line 186 of file docPIE1.aux
+ : \bibstyle
+ :          {abntex2-num}
+I'm skipping whatever remains of this command
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 9000 items.
+Database file #1: abntex2-options.bib
+Database file #2: referencias-bibliograficas.bib
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'glb_str_end' (item size: 4) to 20 items.
+Reallocating 'glb_str_ptr' (item size: 4) to 20 items.
+Reallocating 'global_strs' (item size: 1) to 4000000 items.
++---------------------------------------------------------+
+| Estilo bibliográfico abntex2-alf.bst versão v-1.9.7           |
+| Em caso de dúvidas ou problemas com este estilo procure |
+| http://www.abntex.net.br/                               |
++---------------------------------------------------------+
+You've used 5 entries,
+            6714 wiz_defined-function locations,
+            1227 strings with 10128 characters,
+and the built_in function-call counts, 3865 in all, are:
+= -- 502
+> -- 31
+< -- 46
++ -- 101
+- -- 10
+* -- 218
+:= -- 533
+add.period$ -- 19
+call.type$ -- 5
+change.case$ -- 29
+chr.to.int$ -- 8
+cite$ -- 4
+duplicate$ -- 259
+empty$ -- 269
+format.name$ -- 46
+if$ -- 889
+int.to.chr$ -- 0
+int.to.str$ -- 0
+missing$ -- 73
+newline$ -- 27
+num.names$ -- 10
+pop$ -- 88
+preamble$ -- 1
+purify$ -- 15
+quote$ -- 0
+skip$ -- 329
+stack$ -- 1
+substring$ -- 165
+swap$ -- 98
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 17
+width$ -- 0
+write$ -- 71
+(There were 2 error messages)

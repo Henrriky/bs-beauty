@@ -1,0 +1,35 @@
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\setlength{\labelsep}{0pt}\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{v-1.9.7 }
+
+\bibitem[Associa{\c c}\~ao Brasileira de Normas T\'ecnicas 2003]{NBR6028:2003}
+\abntrefinfo{ABNT}{ABNT}{2003}
+{ASSOCIA{\c C}\~AO BRASILEIRA DE NORMAS T\'ECNICAS. \emph{{NBR} 6028}: Resumo -
+  apresenta{\c c}{\~a}o.
+Rio de Janeiro, 2003. 2~p.}
+
+\bibitem[Associa{\c c}\~ao Brasileira de Normas T\'ecnicas 2011]{NBR14724:2011}
+\abntrefinfo{ABNT}{ABNT}{2011}
+{ASSOCIA{\c C}\~AO BRASILEIRA DE NORMAS T\'ECNICAS. \emph{{NBR} 14724}:
+  Informa{\c c}\~ao e documenta{\c c}\~ao --- trabalhos acad\^emicos ---
+  apresenta{\c c}\~ao.
+Rio de Janeiro, 2011. 15~p. Substitui a Ref.~\citeonline{NBR14724:2005}.}
+
+\bibitem[Braams 2008]{babel}
+\abntrefinfo{Braams}{BRAAMS}{2008}
+{BRAAMS, J. \emph{Babel, a multilingual package for use with LATEX's standard
+  document classes}.
+[S.l.], 2008. Dispon{\'\i}vel em:
+  \url{http://mirrors.ctan.org/info/babel/babel.pdf}. Acesso em: 17 fev. 2013.}
+
+\bibitem[IBGE 1993]{ibge1993}
+\abntrefinfo{IBGE}{IBGE}{1993}
+{IBGE. \emph{Normas de apresenta{\c c}{\~a}o tabular}. 3. ed. Rio de Janeiro:
+  Centro de Documenta{\c c}{\~a}o e Dissemina{\c c}{\~a}o de Informa{\c
+  c}{\~o}es. Funda{\c c}{\~a}o Intituto Brasileiro de Geografia e
+  Estat{\'\i}stica, 1993. Acesso em: 21 ago 2013.}
+
+\end{thebibliography}
