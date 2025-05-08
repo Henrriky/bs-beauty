@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.4.29)  7 MAY 2025 20:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.4.29)  7 MAY 2025 23:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1449,7 +1449,7 @@ Package rerunfilecheck Info: File `docPIE1.brf' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  20171 strings out of 469959
- 340196 string characters out of 5458247
+ 340366 string characters out of 5458247
  879719 words of memory out of 5000000
  46175 multiletter control sequences out of 15000+600000
  736909 words of font info for 208 fonts, out of 8000000 for 9000
@@ -1483,7 +1483,7 @@ agio/PIE1/miktex/fonts/type1/public/lm/lmsso12.pfb><C:/Users/GCARVA24/OneDrive
 Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type1/p
 ublic/lm/lmsy8.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PI
 E1/miktex/fonts/type1/public/lm/lmtt12.pfb>
-Output written on docPIE1.pdf (65 pages, 883138 bytes).
+Output written on docPIE1.pdf (65 pages, 883155 bytes).
 PDF statistics:
  1273 PDF objects out of 1440 (max. 8388607)
  249 named destinations out of 1000 (max. 500000)
