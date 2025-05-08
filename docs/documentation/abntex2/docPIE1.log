@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.4.29)  29 APR 2025 21:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.4.29)  7 MAY 2025 20:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -894,7 +894,7 @@ Writing index file docPIE1.idx
 (docPIE1.aux
 Package babel Info: 'brazil' activates 'portuges' shorthands.
 (babel)             Reported  on input line 19.
-)
+ (abntex2-modelo-include-comandos.aux))
 \openout1 = `docPIE1.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 156.
@@ -1032,8 +1032,8 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.182 
-       [1
+l.182 	
+        [1
 
 
 ]
@@ -1069,8 +1069,8 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.235 E
-       lemento opcional da citeonline \citeonline[4.2.1.2]{NBR14724:2011}. E...
+l.235 		E
+         lemento opcional da citeonline \citeonline[4.2.1.2]{NBR14724:2011}....
 [2]
 
 [3
@@ -1159,22 +1159,27 @@ ford/Documents/estagio/PIE1/miktex/fonts/enc/dvips/lm/lm-mathsy.enc}]
 ] (docPIE1.toc
 
 [27]
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <14.4> on input line 83.
-)
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <12> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 88.
+
+Underfull \vbox (badness 1005) has occurred while \output is active []
+
+
 
 [28]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <14.4> on input line 118.
+)
 
-[29
-
-
-]
+[29]
 
 [30
 
 ]
 
-[31]
+[31
+
+]
 
 [32
 
@@ -1185,84 +1190,241 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 [34
 
 ]
+
+[35]
+
+[36
+
+]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[35]
+[37]
 
 Package babel Info: 'brazil' activates 'portuges' shorthands.
 (babel)             Reported  on input line 564.
-[36]
-<imagens/salaoImagem.jpg, id=361, 281.05pt x 180.675pt>
+[38]
+<imagens/salaoImagem.jpg, id=452, 281.05pt x 180.675pt>
 File: imagens/salaoImagem.jpg Graphic file (type jpg)
 <use imagens/salaoImagem.jpg>
 Package pdftex.def Info: imagens/salaoImagem.jpg  used on input line 568.
 (pdftex.def)             Requested size: 364.00139pt x 234.01456pt.
+ (tabela-custos.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-[37
+
+[39
 
  <./imagens/salaoImagem.jpg>]
 
-[38
+[40]
 
-] (docPIE1.bbl (docPIE1.brf)
+[41
+
+]
+\openout2 = `abntex2-modelo-include-comandos.aux'.
+
+ (abntex2-modelo-include-comandos.tex
+
+[42
+
+
+]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 3
+7.
+
+(C:\Users\GCARVA24\OneDrive - azureford\Documents\estagio\PIE1\miktex\tex/latex
+/lm\t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `lmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+
+Overfull \hbox (20.47523pt too wide) in paragraph at lines 60--60
+[]\T1/lmtt/m/n/12 As citações diretas, no texto, com mais de três linhas [...] 
+deve-se observar[] 
+ []
+
+
+
+[43]
+
+[44]
+<abntex2-modelo-img-grafico.pdf, id=510, 847.165pt x 314.17375pt>
+File: abntex2-modelo-img-grafico.pdf Graphic file (type pdf)
+<use abntex2-modelo-img-grafico.pdf>
+Package pdftex.def Info: abntex2-modelo-img-grafico.pdf  used on input line 226
+.
+(pdftex.def)             Requested size: 423.58145pt x 157.08649pt.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <14.4> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 232.
+<abntex2-modelo-img-marca.pdf, id=517, 227.51701pt x 72.2695pt>
+File: abntex2-modelo-img-marca.pdf Graphic file (type pdf)
+<use abntex2-modelo-img-marca.pdf>
+Package pdftex.def Info: abntex2-modelo-img-marca.pdf  used on input line 245.
+(pdftex.def)             Requested size: 204.76341pt x 65.04192pt.
+
+Overfull \hbox (22.76619pt too wide) in paragraph at lines 245--246
+ [][] 
+ []
+
+File: abntex2-modelo-img-grafico.pdf Graphic file (type pdf)
+<use abntex2-modelo-img-grafico.pdf>
+Package pdftex.def Info: abntex2-modelo-img-grafico.pdf  used on input line 252
+.
+(pdftex.def)             Requested size: 169.43pt x 62.83363pt.
+
+
+[45]
+
+[46 <./abntex2-modelo-img-grafico.pdf> <./abntex2-modelo-img-marca.pdf>]
+
+[47{C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/
+enc/dvips/lm/lm-mathex.enc}]
+Overfull \hbox (26.65024pt too wide) in paragraph at lines 382--382
+[]   \T1/lmtt/m/n/12 \usepackage{indentfirst}      % Indenta o primeiro parágra
+fo de cada seção.[] 
+ []
+
+
+
+[48]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <17.28> on input line 435.
+
+Overfull \hbox (1.95023pt too wide) in paragraph at lines 452--452
+[]   \T1/lmtt/m/n/12 makeindex ARQUIVO_PRINCIPAL.nlo -s nomencl.ist -o ARQUIVO_
+PRINCIPAL.nls[] 
+ []
+
+
+Overfull \hbox (8.12523pt too wide) in paragraph at lines 474--474
+[]\T1/lmtt/m/n/12 Ao nomear a \autoref{tab-nivinv} e a \autoref{fig_circulo}, a
+presentamos um[] 
+ []
+
+
+
+[49]
+Overfull \hbox (26.65024pt too wide) in paragraph at lines 476--476
+[]\T1/lmtt/m/n/12 \autoref{cap_exemplos}, que tem o nome \emph{\nameref{cap_exe
+mplos}}. O número[] 
+ []
+
+
+Overfull \hbox (32.82524pt too wide) in paragraph at lines 478--478
+[]\T1/lmtt/m/n/12 \autopageref{cap_exemplos}\footnote{O número da página de uma
+ remissão pode ser[] 
+ []
+
+
+Overfull \hbox (26.65024pt too wide) in paragraph at lines 481--481
+[]\T1/lmtt/m/n/12 Veja a \autoref{sec-divisoes} para outros exemplos de remissõ
+es internas entre[] 
+ []
+
+
+
+[50]
+
+
+Class memoir Warning: The material used in the headers is too large
+(28.99998pt) for the given head height (14.5pt), it is recommended to
+either increase the head height or redesign the header
+(in both cases you will find help in the memoir manual). on input line 583.
+
+
+Overfull \vbox (14.49998pt too high) has occurred while \output is active []
+
+
+[51]
+Overfull \hbox (205.0856pt too wide) in paragraph at lines 614--614
+ [][] [][][]\T1/lmr/m/n/10 (-20) Extraído de: [][]$<[]http : / / bigbrowser . b
+log . lemonde . fr / 2013 / 02 / 17 / tu-[]ne-[]tweeteras-[]point-[]le-[]vatica
+n-[]interdit-[]aux-[]cardinaux-[]de-[]tweeter-[]pendant-[]le-[]conclave /
+ []
+
+Package babel Info: 'french' activates 'french' shorthands.
+(babel)             Reported  on input line 616.
+LaTeX Info: Redefining \. on input line 632.
+LaTeX Info: Redefining \% on input line 632.
+Package babel Info: 'spanish' activates 'spanish' shorthands.
+(babel)             Reported  on input line 632.
+
+
+[52]
+
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 695.
+[53]
+Overfull \hbox (6.91217pt too wide) in paragraph at lines 705--708
+[]\T1/lmr/m/n/12 (-20) Inscreva-se no grupo de usu-á-rios L[]T[]X: [][]$<[]http
+ : / / groups . google . com / group / latex-[]br>[]$[][],
+ []
+
+)
+
+[54] (docPIE1.bbl (docPIE1.brf)
 \tf@brf=\write5
 \openout5 = `docPIE1.brf'.
 
 
-
-[39]
-
-[40
-
-]
 bibitemlist
-
-LaTeX Warning: Citation `NBR14724:2005' on page 41 undefined on input line 20.
-
 )
 
-[41]
+[55
 
-[42
+
+
+]
+
+[56
 
 ]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\uppercase' on input line 614.
+(hyperref)                removing `\uppercase' on input line 622.
 
 
 
-[43
-
-]
-
-[44]
-
-[45
+[57
 
 ]
 
-[46
+[58]
+
+[59
+
+]
+
+[60
 
 ]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\uppercase' on input line 631.
+(hyperref)                removing `\uppercase' on input line 639.
 
 
 
-[47
+[61
 
 ]
 
-[48]
+[62]
 No file docPIE1.ind.
 
+Class memoir Warning: The material used in the headers is too large
+(28.99998pt) for the given head height (14.5pt), it is recommended to
+either increase the head height or redesign the header
+(in both cases you will find help in the memoir manual). on input line 653.
 
-[49
+
+
+[63
 
 ]
 \tf@lof=\write6
@@ -1277,56 +1439,53 @@ No file docPIE1.ind.
 \tf@toc=\write9
 \openout9 = `docPIE1.toc'.
 
- (docPIE1.aux)
+ (docPIE1.aux (abntex2-modelo-include-comandos.aux))
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2020/03/25>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `docPIE1.brf' has changed.
-(rerunfilecheck)                Rerun to get bibliographical references right.
-
-Package rerunfilecheck Info: Checksums for `docPIE1.brf':
-(rerunfilecheck)             Before: 679EBA2079A16C798A0AA8B15786ECD4;245
-(rerunfilecheck)             After:  015536392E5685CA52A8DCB67ABEC9D0;245.
+Package rerunfilecheck Info: File `docPIE1.brf' has not changed.
+(rerunfilecheck)             Checksum: 60687CDE573BE61030EA85CB0CAEFE7F;1161.
  ) 
 Here is how much of TeX's memory you used:
- 19658 strings out of 469959
- 330996 string characters out of 5458247
- 870712 words of memory out of 5000000
- 45860 multiletter control sequences out of 15000+600000
- 717074 words of font info for 155 fonts, out of 8000000 for 9000
+ 20171 strings out of 469959
+ 340196 string characters out of 5458247
+ 879719 words of memory out of 5000000
+ 46175 multiletter control sequences out of 15000+600000
+ 736909 words of font info for 208 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,12n,107p,1006b,662s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,13n,107p,2014b,805s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/t
-ype1/public/lm/lmbx10.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/est
-agio/PIE1/miktex/fonts/type1/public/lm/lmbx12.pfb><C:/Users/GCARVA24/OneDrive -
- azureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmmi12.pfb><C:/U
-sers/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type1/pu
-blic/lm/lmr10.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE
-1/miktex/fonts/type1/public/lm/lmr12.pfb><C:/Users/GCARVA24/OneDrive - azurefor
-d/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmr7.pfb><C:/Users/GCARVA
-24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmr
-8.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fon
-ts/type1/public/lm/lmri10.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents
-/estagio/PIE1/miktex/fonts/type1/public/lm/lmri12.pfb><C:/Users/GCARVA24/OneDri
-ve - azureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmss10.pfb><
-C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type
-1/public/lm/lmss12.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagi
-o/PIE1/miktex/fonts/type1/public/lm/lmss17.pfb><C:/Users/GCARVA24/OneDrive - az
-ureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmssbx10.pfb><C:/Us
-ers/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type1/pub
-lic/lm/lmsy10.pfb>
-Output written on docPIE1.pdf (51 pages, 441079 bytes).
+ype1/public/amsfonts/latxfont/line10.pfb><C:/Users/GCARVA24/OneDrive - azurefor
+d/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmbx10.pfb><C:/Users/GCAR
+VA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/l
+mbx12.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex
+/fonts/type1/public/lm/lmex10.pfb><C:/Users/GCARVA24/OneDrive - azureford/Docum
+ents/estagio/PIE1/miktex/fonts/type1/public/lm/lmmi12.pfb><C:/Users/GCARVA24/On
+eDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmmi8.pf
+b><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/t
+ype1/public/lm/lmr10.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/esta
+gio/PIE1/miktex/fonts/type1/public/lm/lmr12.pfb><C:/Users/GCARVA24/OneDrive - a
+zureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmr7.pfb><C:/Users
+/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type1/public
+/lm/lmr8.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/mik
+tex/fonts/type1/public/lm/lmri10.pfb><C:/Users/GCARVA24/OneDrive - azureford/Do
+cuments/estagio/PIE1/miktex/fonts/type1/public/lm/lmri12.pfb><C:/Users/GCARVA24
+/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmss1
+0.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fon
+ts/type1/public/lm/lmss12.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents
+/estagio/PIE1/miktex/fonts/type1/public/lm/lmss17.pfb><C:/Users/GCARVA24/OneDri
+ve - azureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmssbx10.pfb
+><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/ty
+pe1/public/lm/lmsso10.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/est
+agio/PIE1/miktex/fonts/type1/public/lm/lmsso12.pfb><C:/Users/GCARVA24/OneDrive 
+- azureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmsy10.pfb><C:/
+Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type1/p
+ublic/lm/lmsy8.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PI
+E1/miktex/fonts/type1/public/lm/lmtt12.pfb>
+Output written on docPIE1.pdf (65 pages, 883138 bytes).
 PDF statistics:
- 767 PDF objects out of 1000 (max. 8388607)
- 159 named destinations out of 1000 (max. 500000)
- 53886 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 1273 PDF objects out of 1440 (max. 8388607)
+ 249 named destinations out of 1000 (max. 500000)
+ 64896 words of extra memory for PDF output out of 74296 (max. 10000000)
 

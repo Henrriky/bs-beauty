@@ -10,88 +10,123 @@
 \setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
 \setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
-\contentsline {chapter}{\chapternumberline {1}\MakeTextUppercase []{Introdução}}{29}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Objetivos}{29}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Problema e Solução Proposta}{29}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Justificativa}{29}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Análise da Concorrência}{29}{section.1.4}%
-\contentsline {subsection}{\numberline {1.4.1}Concorrente 1}{29}{subsection.1.4.1}%
-\contentsline {subsection}{\numberline {1.4.2}Concorrente 2}{29}{subsection.1.4.2}%
-\contentsline {subsection}{\numberline {1.4.3}Concorrente 3}{29}{subsection.1.4.3}%
-\contentsline {subsection}{\numberline {1.4.4}Quadro comparativo}{29}{subsection.1.4.4}%
+\contentsline {chapter}{\chapternumberline {1}\MakeTextUppercase []{Introdução}}{31}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Objetivos}{31}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Problema e Solução Proposta}{31}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Justificativa}{31}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Análise da Concorrência}{31}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Concorrente 1}{31}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Concorrente 2}{31}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.3}Concorrente 3}{31}{subsection.1.4.3}%
+\contentsline {subsection}{\numberline {1.4.4}Quadro comparativo}{31}{subsection.1.4.4}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
-\contentsline {chapter}{\chapternumberline {2}\MakeTextUppercase []{Revisão da Literatura}}{31}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Histórico do assunto}{31}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Atualidade do assunto}{31}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Outros contextos do assunto (opcional)}{31}{section.2.3}%
+\contentsline {chapter}{\chapternumberline {2}\MakeTextUppercase []{Revisão da Literatura}}{33}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Histórico do assunto}{33}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Atualidade do assunto}{33}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Outros contextos do assunto (opcional)}{33}{section.2.3}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
-\contentsline {chapter}{\chapternumberline {3}\MakeTextUppercase []{Gestão do Projeto}}{33}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Organização da equipe}{33}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Responsabilidades/papéis/atividades}{33}{subsection.3.1.1}%
-\contentsline {section}{\numberline {3.2}Metodologias de Gestão e Desenvolvimento}{33}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Scrum}{33}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Sprints}{33}{subsection.3.2.2}%
-\contentsline {section}{\numberline {3.3}Repositórios da aplicação}{33}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Definição do Repositório da Aplicação}{33}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Link do repositório e especificações para acesso}{33}{subsection.3.3.2}%
+\contentsline {chapter}{\chapternumberline {3}\MakeTextUppercase []{Gestão do Projeto}}{35}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Organização da equipe}{35}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Responsabilidades/papéis/atividades}{35}{subsection.3.1.1}%
+\contentsline {section}{\numberline {3.2}Metodologias de Gestão e Desenvolvimento}{35}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Scrum}{35}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Sprints}{35}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Repositórios da aplicação}{35}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Definição do Repositório da Aplicação}{35}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Link do repositório e especificações para acesso}{35}{subsection.3.3.2}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
-\contentsline {chapter}{\chapternumberline {4}\MakeTextUppercase []{Desenvolvimento do projeto}}{35}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Escopo do Projeto}{35}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Regras de Negócio}{35}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Requisitos Funcionais}{35}{subsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.1.3}Requisitos Não Funcionais}{35}{subsection.4.1.3}%
-\contentsline {section}{\numberline {4.2}Histórias de usuário}{35}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Descrição das Histórias de Usuário}{35}{subsection.4.2.1}%
-\contentsline {section}{\numberline {4.3}Arquitetura}{35}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Definições da arquitetura}{35}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Diagrama da arquitetura}{35}{subsection.4.3.2}%
-\contentsline {section}{\numberline {4.4}Tecnologias}{35}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Front-End}{35}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Back-End}{35}{subsection.4.4.2}%
-\contentsline {subsection}{\numberline {4.4.3}Banco de dados}{35}{subsection.4.4.3}%
-\contentsline {subsection}{\numberline {4.4.4}Infraestrutura}{35}{subsection.4.4.4}%
-\contentsline {subsubsection}{\numberline {4.4.4.1}Amazon Web Services (AWS)}{35}{subsubsection.4.4.4.1}%
-\contentsline {section}{\numberline {4.5}Testes e Manutenibilidade}{36}{section.4.5}%
-\contentsline {subsection}{\numberline {4.5.1}Testes Automatizados}{36}{subsection.4.5.1}%
-\contentsline {subsection}{\numberline {4.5.2}Análise Estática}{36}{subsection.4.5.2}%
-\contentsline {subsection}{\numberline {4.5.3}Logs}{36}{subsection.4.5.3}%
-\contentsline {subsection}{\numberline {4.5.4}Code Convention}{36}{subsection.4.5.4}%
-\contentsline {section}{\numberline {4.6}Segurança, Privacidade e Legislação}{36}{section.4.6}%
-\contentsline {subsection}{\numberline {4.6.1}Critérios de segurança e privacidade}{36}{subsection.4.6.1}%
-\contentsline {subsection}{\numberline {4.6.2}Observância à Legislação}{36}{subsection.4.6.2}%
-\contentsline {section}{\numberline {4.7}Modelo de Banco de Dados}{36}{section.4.7}%
-\contentsline {subsection}{\numberline {4.7.1}Modelo Entidade Relacionamento - MER}{36}{subsection.4.7.1}%
-\contentsline {subsection}{\numberline {4.7.2}DIagrama Entidade Relacionamento - DER}{36}{subsection.4.7.2}%
-\contentsline {subsection}{\numberline {4.7.3}Dicionário de Dados}{36}{subsection.4.7.3}%
-\contentsline {section}{\numberline {4.8}Cronograma}{36}{section.4.8}%
-\contentsline {subsection}{\numberline {4.8.1}Análise da Duração do Projeto}{36}{subsection.4.8.1}%
+\contentsline {chapter}{\chapternumberline {4}\MakeTextUppercase []{Desenvolvimento do projeto}}{37}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Escopo do Projeto}{37}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Regras de Negócio}{37}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Requisitos Funcionais}{37}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Requisitos Não Funcionais}{37}{subsection.4.1.3}%
+\contentsline {section}{\numberline {4.2}Histórias de usuário}{37}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Descrição das Histórias de Usuário}{37}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.3}Arquitetura}{37}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Definições da arquitetura}{37}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Diagrama da arquitetura}{37}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4.4}Tecnologias}{37}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Front-End}{37}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Back-End}{37}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Banco de dados}{37}{subsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.4.4}Infraestrutura}{37}{subsection.4.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.4.1}Amazon Web Services (AWS)}{37}{subsubsection.4.4.4.1}%
+\contentsline {section}{\numberline {4.5}Testes e Manutenibilidade}{38}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Testes Automatizados}{38}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Análise Estática}{38}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Logs}{38}{subsection.4.5.3}%
+\contentsline {subsection}{\numberline {4.5.4}Code Convention}{38}{subsection.4.5.4}%
+\contentsline {section}{\numberline {4.6}Segurança, Privacidade e Legislação}{38}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Critérios de segurança e privacidade}{38}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Observância à Legislação}{38}{subsection.4.6.2}%
+\contentsline {section}{\numberline {4.7}Modelo de Banco de Dados}{38}{section.4.7}%
+\contentsline {subsection}{\numberline {4.7.1}Modelo Entidade Relacionamento - MER}{38}{subsection.4.7.1}%
+\contentsline {subsection}{\numberline {4.7.2}DIagrama Entidade Relacionamento - DER}{38}{subsection.4.7.2}%
+\contentsline {subsection}{\numberline {4.7.3}Dicionário de Dados}{38}{subsection.4.7.3}%
+\contentsline {section}{\numberline {4.8}Cronograma}{38}{section.4.8}%
+\contentsline {subsection}{\numberline {4.8.1}Análise da Duração do Projeto}{38}{subsection.4.8.1}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
-\contentsline {chapter}{\chapternumberline {5}\MakeTextUppercase []{Viabilidade Financeira}}{37}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Custos}{37}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Receitas}{37}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Cenário realista}{37}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Cenário Otimista}{37}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Cenário Pessimista}{37}{section.5.5}%
+\contentsline {chapter}{\chapternumberline {5}\MakeTextUppercase []{Viabilidade Financeira}}{39}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Custos}{39}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Receitas}{40}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Cenário realista}{40}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Cenário Otimista}{40}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Cenário Pessimista}{40}{section.5.5}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
-\contentsline {chapter}{\chapternumberline {6}\MakeTextUppercase []{Considerações Finais}}{39}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Dificuldades, escolhas e Descartes}{39}{section.6.1}%
+\contentsline {chapter}{\chapternumberline {6}\MakeTextUppercase []{Considerações Finais}}{41}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Dificuldades, escolhas e Descartes}{41}{section.6.1}%
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\contentsline {chapter}{\chapternumberline {7}\MakeTextUppercase []{Resultados de comandos}}{43}{chapter.7}%
+\precistoctext {Isto é uma sinopse de capítulo. A ABNT não traz nenhuma normatização a respeito desse tipo de resumo, que é mais comum em romances e livros técnicos.}
+\contentsline {section}{\numberline {7.1}Codificação dos arquivos: UTF8}{43}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Citações diretas}{43}{section.7.2}%
+\babel@toc {english}{}\relax 
+\babel@toc {brazil}{}\relax 
+\contentsline {section}{\numberline {7.3}Notas de rodapé}{44}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Tabelas}{44}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Figuras}{45}{section.7.5}%
+\contentsline {subsection}{\numberline {7.5.1}Figuras em \emph {minipages}}{45}{subsection.7.5.1}%
+\contentsline {section}{\numberline {7.6}Expressões matemáticas}{46}{section.7.6}%
+\contentsline {section}{\numberline {7.7}Enumerações: alíneas e subalíneas}{47}{section.7.7}%
+\contentsline {section}{\numberline {7.8}Espaçamento entre parágrafos e linhas}{48}{section.7.8}%
+\contentsline {section}{\numberline {7.9}Inclusão de outros arquivos}{49}{section.7.9}%
+\contentsline {section}{\numberline {7.10}Compilar o documento \LaTeX }{49}{section.7.10}%
+\contentsline {section}{\numberline {7.11}Remissões internas}{49}{section.7.11}%
+\contentsline {section}{\numberline {7.12}Divisões do documento: seção}{50}{section.7.12}%
+\contentsline {subsection}{\numberline {7.12.1}Divisões do documento: subseção}{50}{subsection.7.12.1}%
+\contentsline {subsubsection}{\numberline {7.12.1.1}Divisões do documento: subsubseção}{50}{subsubsection.7.12.1.1}%
+\contentsline {subsubsection}{\numberline {7.12.1.2}Divisões do documento: subsubseção}{50}{subsubsection.7.12.1.2}%
+\contentsline {subsection}{\numberline {7.12.2}Divisões do documento: subseção}{50}{subsection.7.12.2}%
+\contentsline {subsubsection}{\numberline {7.12.2.1}Divisões do documento: subsubseção}{50}{subsubsection.7.12.2.1}%
+\contentsline {paragraph}{\numberline {7.12.2.1.1}Esta é uma subseção de quinto nível}{50}{paragraph.7.12.2.1.1}%
+\contentsline {paragraph}{\numberline {7.12.2.1.2}Esta é outra subseção de quinto nível}{51}{paragraph.7.12.2.1.2}%
+\contentsline {paragraph}{\numberline {7.12.2.1.3}Este é um parágrafo numerado}{51}{paragraph.7.12.2.1.3}%
+\contentsline {paragraph}{\numberline {7.12.2.1.4}Esta é outro parágrafo numerado}{51}{paragraph.7.12.2.1.4}%
+\contentsline {section}{\numberline {7.13}Este é um exemplo de nome de seção longo. Ele deve estar alinhado à esquerda e a segunda e demais linhas devem iniciar logo abaixo da primeira palavra da primeira linha}{51}{section.7.13}%
+\contentsline {section}{\numberline {7.14}Diferentes idiomas e hifenizações}{51}{section.7.14}%
+\contentsline {section}{\numberline {7.15}Consulte o manual da classe \textsf {abntex2}}{53}{section.7.15}%
+\contentsline {section}{\numberline {7.16}Referências bibliográficas}{53}{section.7.16}%
+\contentsline {subsection}{\numberline {7.16.1}Acentuação de referências bibliográficas}{53}{subsection.7.16.1}%
+\contentsline {section}{\numberline {7.17}Precisa de ajuda?}{54}{section.7.17}%
+\contentsline {section}{\numberline {7.18}Você pode ajudar?}{54}{section.7.18}%
+\contentsline {section}{\numberline {7.19}Quer customizar os modelos do abn\TeX 2\ para sua instituição ou universidade?}{54}{section.7.19}%
 \setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
-\contentsline {chapter}{\MakeTextUppercase []{Referências Bibliográficas}}{41}{section*.20}%
+\contentsline {chapter}{\MakeTextUppercase []{Referências Bibliográficas}}{55}{section*.20}%
 \renewcommand *{\cftappendixname }{AP\^ENDICE \space }
 \setlength {\cftpartindent }{\cftlastnumwidth } \setlength {\cftpartnumwidth }{2em}
 \cftinsert {A}
-\contentsline {part}{\uppercase {Ap\^endices}}{43}{section*.21}%
+\contentsline {part}{\uppercase {Ap\^endices}}{57}{section*.21}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
 \setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
 \cftinsert {A}
-\contentsline {appendix}{\chapternumberline {A}\MakeTextUppercase []{exemplo 1}}{45}{appendix.A}%
+\contentsline {appendix}{\chapternumberline {A}\MakeTextUppercase []{exemplo 1}}{59}{appendix.A}%
 \cftinsert {AAA}
 \renewcommand *{\cftappendixname }{ANEXO \space }
 \setlength {\cftpartindent }{\cftlastnumwidth } \setlength {\cftpartnumwidth }{2em}
 \cftinsert {A}
-\contentsline {part}{\uppercase {Anexos}}{47}{section*.22}%
+\contentsline {part}{\uppercase {Anexos}}{61}{section*.22}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
 \setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
 \cftinsert {A}
-\contentsline {appendix}{\chapternumberline {A}\MakeTextUppercase []{exemplo 1}}{49}{appendix.anexochapback.1}%
+\contentsline {appendix}{\chapternumberline {A}\MakeTextUppercase []{exemplo 1}}{63}{appendix.anexochapback.1}%
 \vspace {\cftbeforechapterskip }

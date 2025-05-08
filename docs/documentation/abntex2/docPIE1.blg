@@ -2,16 +2,12 @@ This is BibTeX, Version 0.99d
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: docPIE1.aux
 Reallocating 'name_of_file' (item size: 1) to 36 items.
-I couldn't open auxiliary file abntex2-modelo-include-comandos.aux
----line 76 of file docPIE1.aux
- : \@input{abntex2-modelo-include-comandos.aux
- :                                            }
-I'm skipping whatever remains of this command
+A level-1 auxiliary file: abntex2-modelo-include-comandos.aux
 Reallocating 'name_of_file' (item size: 1) to 16 items.
 Reallocating 'name_of_file' (item size: 1) to 27 items.
 Reallocating 'name_of_file' (item size: 1) to 12 items.
 The style file: abntex2-alf.bst
-Illegal, another \bibstyle command---line 186 of file docPIE1.aux
+Illegal, another \bibstyle command---line 271 of file docPIE1.aux
  : \bibstyle
  :          {abntex2-num}
 I'm skipping whatever remains of this command
@@ -35,45 +31,45 @@ Reallocating 'global_strs' (item size: 1) to 4000000 items.
 | Em caso de dúvidas ou problemas com este estilo procure |
 | http://www.abntex.net.br/                               |
 +---------------------------------------------------------+
-You've used 5 entries,
+You've used 14 entries,
             6714 wiz_defined-function locations,
-            1227 strings with 10128 characters,
-and the built_in function-call counts, 3865 in all, are:
-= -- 502
-> -- 31
-< -- 46
-+ -- 101
-- -- 10
-* -- 218
-:= -- 533
-add.period$ -- 19
-call.type$ -- 5
-change.case$ -- 29
-chr.to.int$ -- 8
-cite$ -- 4
-duplicate$ -- 259
-empty$ -- 269
-format.name$ -- 46
-if$ -- 889
-int.to.chr$ -- 0
+            1269 strings with 11386 characters,
+and the built_in function-call counts, 11552 in all, are:
+= -- 1316
+> -- 156
+< -- 191
++ -- 290
+- -- 50
+* -- 712
+:= -- 1499
+add.period$ -- 54
+call.type$ -- 14
+change.case$ -- 93
+chr.to.int$ -- 18
+cite$ -- 13
+duplicate$ -- 927
+empty$ -- 734
+format.name$ -- 232
+if$ -- 2552
+int.to.chr$ -- 2
 int.to.str$ -- 0
-missing$ -- 73
-newline$ -- 27
-num.names$ -- 10
-pop$ -- 88
+missing$ -- 206
+newline$ -- 73
+num.names$ -- 40
+pop$ -- 218
 preamble$ -- 1
-purify$ -- 15
+purify$ -- 44
 quote$ -- 0
-skip$ -- 329
+skip$ -- 1018
 stack$ -- 1
-substring$ -- 165
-swap$ -- 98
-text.length$ -- 1
+substring$ -- 470
+swap$ -- 345
+text.length$ -- 8
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
+type$ -- 4
 warning$ -- 0
-while$ -- 17
+while$ -- 61
 width$ -- 0
-write$ -- 71
-(There were 2 error messages)
+write$ -- 210
+(There was 1 error message)
