@@ -1,13 +1,11 @@
 This is BibTeX, Version 0.99d
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: docPIE1.aux
-Reallocating 'name_of_file' (item size: 1) to 36 items.
-A level-1 auxiliary file: abntex2-modelo-include-comandos.aux
 Reallocating 'name_of_file' (item size: 1) to 16 items.
 Reallocating 'name_of_file' (item size: 1) to 27 items.
 Reallocating 'name_of_file' (item size: 1) to 12 items.
 The style file: abntex2-alf.bst
-Illegal, another \bibstyle command---line 271 of file docPIE1.aux
+Illegal, another \bibstyle command---line 216 of file docPIE1.aux
  : \bibstyle
  :          {abntex2-num}
 I'm skipping whatever remains of this command
@@ -22,6 +20,9 @@ Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'wiz_functions' (item size: 4) to 9000 items.
 Database file #1: abntex2-options.bib
 Database file #2: referencias-bibliograficas.bib
+Warning--I didn't find a database entry for "NBR14724:2011"
+Warning--I didn't find a database entry for "NBR6028:2003"
+Warning--I didn't find a database entry for "babel"
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'glb_str_end' (item size: 4) to 20 items.
 Reallocating 'glb_str_ptr' (item size: 4) to 20 items.
@@ -31,45 +32,45 @@ Reallocating 'global_strs' (item size: 1) to 4000000 items.
 | Em caso de dúvidas ou problemas com este estilo procure |
 | http://www.abntex.net.br/                               |
 +---------------------------------------------------------+
-You've used 14 entries,
+You've used 3 entries,
             6714 wiz_defined-function locations,
-            1269 strings with 11386 characters,
-and the built_in function-call counts, 11552 in all, are:
-= -- 1316
-> -- 156
-< -- 191
-+ -- 290
-- -- 50
-* -- 712
-:= -- 1499
-add.period$ -- 54
-call.type$ -- 14
-change.case$ -- 93
-chr.to.int$ -- 18
-cite$ -- 13
-duplicate$ -- 927
-empty$ -- 734
-format.name$ -- 232
-if$ -- 2552
-int.to.chr$ -- 2
+            1217 strings with 9896 characters,
+and the built_in function-call counts, 4316 in all, are:
+= -- 631
+> -- 31
+< -- 113
++ -- 168
+- -- 10
+* -- 228
+:= -- 583
+add.period$ -- 11
+call.type$ -- 3
+change.case$ -- 17
+chr.to.int$ -- 6
+cite$ -- 2
+duplicate$ -- 409
+empty$ -- 163
+format.name$ -- 46
+if$ -- 859
+int.to.chr$ -- 0
 int.to.str$ -- 0
-missing$ -- 206
-newline$ -- 73
-num.names$ -- 40
-pop$ -- 218
+missing$ -- 47
+newline$ -- 17
+num.names$ -- 10
+pop$ -- 72
 preamble$ -- 1
-purify$ -- 44
+purify$ -- 9
 quote$ -- 0
-skip$ -- 1018
+skip$ -- 480
 stack$ -- 1
-substring$ -- 470
-swap$ -- 345
-text.length$ -- 8
+substring$ -- 199
+swap$ -- 144
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 4
+type$ -- 0
 warning$ -- 0
-while$ -- 61
+while$ -- 15
 width$ -- 0
-write$ -- 210
+write$ -- 40
 (There was 1 error message)

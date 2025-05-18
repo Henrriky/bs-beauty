@@ -64,9 +64,9 @@ brazil				% o último idioma é o principal do documento
 % Informações de dados para CAPA e FOLHA DE ROSTO
 % ---
 \titulo{Projeto Integrado de Extensão I}
-\autor{grupo BS Beauty}
-\local{Brasil}
-\data{2025, v-1}
+\autor{BS Beauty Academy}
+\local{São Paulo, SP - Brasil}
+\data{2025}
 \orientador{Marcelo Tavares}
 \instituicao{%
 	Instituto Federal de Educação, Ciência e\\ Tecnologia de São Paulo -- IFSP
@@ -77,7 +77,7 @@ brazil				% o último idioma é o principal do documento
 \tipotrabalho{Projeto Integrado de Extensão}
 % O preambulo deve conter o tipo do trabalho, o objetivo, 
 % o nome da instituição e a área de concentração 
-\preambulo{Este projeto integrado de extensão, desenvolvido como parte do curso de Tecnologia em Análise e Desenvolvimento de Sistemas do Instituto Federal de Educação, Ciência e Tecnologia de São Paulo, tem como objetivo desenvolver uma aplicação para otimizar a gestão e o agendamento de serviços de um salão de beleza organizado como um espaço "co-working". A área de concentração do projeto é a inovação tecnológica aplicada ao setor de serviços.}
+\preambulo{Este projeto integrado de extensão, desenvolvido como parte do curso de Tecnologia em Análise e Desenvolvimento de Sistemas do Instituto Federal de Educação, Ciência e Tecnologia de São Paulo, tem como objetivo desenvolver uma aplicação para otimizar a gestão e o agendamento de serviços de um salão de beleza organizado como um espaço "co-working". A área de concentração do projeto é a inovação tecnológica aplicada ao setor de serviços de beleza.}
 % ---
 
 
@@ -205,9 +205,9 @@ brazil				% o último idioma é o principal do documento
 					%Sobrenome, Nome do autor
 					
 					\hspace{0.5cm} \imprimirtitulo  / \imprimirautor. --
-					\imprimirlocal, \imprimirdata-
+					\imprimirlocal, \imprimirdata
 					
-					\hspace{0.5cm} \thelastpage p. : il. (algumas color.) ; 30 cm.\\
+					\hspace{0.5cm} \thelastpage p. il. color; 30cm 
 					
 					\hspace{0.5cm} \imprimirorientadorRotulo~\imprimirorientador\\
 					
@@ -216,13 +216,13 @@ brazil				% o último idioma é o principal do documento
 						\imprimirdata.}\\
 					
 					\hspace{0.5cm}
-					1. Palavra-chave1.
-					2. Palavra-chave2.
-					3. Palavra-chave3. \\
-					I. Orientador.
-					II. Universidade IFSP.
-					III. Faculdade de Análise e Desenvolvimento de Sistemas. 
-					IV. Título: PIE1 			
+					1. Graduação
+					2. Extensão
+					3. Integrado \\
+					I. Marcelo Tavares.
+					II. IFSP.
+					III. Análise e Desenvolvimento de Sistemas. 
+					IV. PIE1 			
 			\end{minipage}}
 		\end{center}
 	\end{fichacatalografica}
@@ -236,11 +236,7 @@ brazil				% o último idioma é o principal do documento
 		
 		\vspace{\onelineskip}
 		
-		FERRIGNO, C. R. A. \textbf{Tratamento de neoplasias ósseas apendiculares com
-			reimplantação de enxerto ósseo autólogo autoclavado associado ao plasma
-			rico em plaquetas}: estudo crítico na cirurgia de preservação de membro em
-		cães. 2011. 128 f. Tese (Livre-Docência) - Faculdade de Medicina Veterinária e
-		Zootecnia, Universidade de São Paulo, São Paulo, 2011.
+		pagina opcional para descrever algum correção que deve ser feita no documento.
 		
 		\begin{table}[htb]
 			\center
@@ -323,22 +319,7 @@ brazil				% o último idioma é o principal do documento
 	% Agradecimentos
 	% ---
 	\begin{agradecimentos}
-		Os agradecimentos principais são direcionados à Gerald Weber, Miguel Frasson,
-		Leslie H. Watter, Bruno Parente Lima, Flávio de Vasconcellos Corrêa, Otavio Real
-		Salvador, Renato Machnievscz\footnote{Os nomes dos integrantes do primeiro
-			projeto abn\TeX\ foram extraídos de
-			\url{http://codigolivre.org.br/projects/abntex/}} e todos aqueles que
-		contribuíram para que a produção de trabalhos acadêmicos conforme
-		as normas ABNT com \LaTeX\ fosse possível.
-		
-		Agradecimentos especiais são direcionados ao Centro de Pesquisa em Arquitetura
-		da Informação\footnote{\url{http://www.cpai.unb.br/}} da Universidade de
-		Brasília (CPAI), ao grupo de usuários
-		\emph{latex-br}\footnote{\url{http://groups.google.com/group/latex-br}} e aos
-		novos voluntários do grupo
-		\emph{\abnTeX}\footnote{\url{http://groups.google.com/group/abntex2} e
-			\url{http://www.abntex.net.br/}}~que contribuíram e que ainda
-		contribuirão para a evolução do \abnTeX.
+	escrever agradecimentos (um paragrafo para cada?)
 		
 	\end{agradecimentos}
 	% ---
@@ -453,7 +434,9 @@ brazil				% o último idioma é o principal do documento
 	\chapter{Introdução}
 	% ----------------------------------------------------------
 	
-	Precisa de paragrafo. nunca um topico sem conteudo. teste com vs code 1.
+Reportagem online na Gazeta do Povo destaca que o coworking vem se consolidando como um dos modelos de negócio que mais crescem no Brasil, oferecendo ao profissional autônomo flexibilidade, troca de experiências e uma infraestrutura completa sem burocracia nem custos inesperados \cite{gazeta-coworking}. Nesse ambiente, o prestador de serviços tem o benefício de não precisar arcar com despesas de instalação ou manutenção de um salão próprio; basta utilizar o espaço, atender seus clientes e agendar a próxima sessão, preservando o controle sobre seus horários e ganhos.
+
+À medida que esse formato de trabalho se expande, aumenta também a necessidade de maximizar a autonomia e a rentabilidade de cada profissional. Portanto, surge o desafio de gerir agendas, espaços e custos de forma ágil e intuitiva, evitando conflitos de reserva ou falhas de cobrança. Este projeto propõe-se a desenvolver uma aplicação mobile que atenda exatamente a essa demanda.
 	
 	% ----------------------------------------------------------
 	
@@ -540,8 +523,18 @@ brazil				% o último idioma é o principal do documento
 	exemplo, colocar todos, abrindo demais itens
 	%---
 	\section{Testes e Manutenibilidade}
-	\subsection{Testes Automatizados}
+	\subsection{Plano de Testes}
 	\subsection{Análise Estática}
+	\subsection{Testes Funcionais}
+	\subsection{Testes Unitários}
+	\subsection{Testes de Componente}
+	\subsection{Testes de Integração}
+	\subsection{Testes end-to-end}
+	\subsection{Testes não Funcionais}
+	\subsection{Testes de Performance}
+	\subsection{Testes de Carga}
+	\subsection{Testes de Configuração}
+	\subsection{Testes Automatizados}
 	\subsection{Logs}
 	\subsection{Code Convention}
 	%---
@@ -565,7 +558,7 @@ brazil				% o último idioma é o principal do documento
 	%inicio de figura
 	\begin{figure}[htb]
 		\centering
-		\includegraphics[width=0.8\textwidth]{imagens/salaoImagem.jpg}
+		\includegraphics[width=0.8\textwidth]{images/salaoImagem.jpg}
 		\caption{teste figura 1}
 		\label{fig:imagem}
 	\end{figure}
@@ -588,9 +581,7 @@ brazil				% o último idioma é o principal do documento
 	\cite{ibge1993}
 	% ----------------------------------------------------------
 	
-	% Capitulo com exemplos de comandos inseridos de arquivo externo 
-	% ---
-	\include{abntex2-modelo-include-comandos}
+	ver documento "abntex2-modelo-include-comandos" para dicas e tutoriais de como fazer tabelas, graficos, quadros, inserir imagens e documentos externos etc aqui. 
 	% ---
 	
 	%Página de referencias
