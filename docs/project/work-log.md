@@ -3,7 +3,7 @@ O presente documento tem por objetivo servir como um *diário de bordo* do proje
 
 ## Semana 1 – 18.03 a 23.03
 
-Começamos oficialmente o projeto esta semana, então tudo ainda está ganhando forma. A primeira tarefa foi definir os integrantes do grupo e combinar as responsabilidades de cada um. **Alyson** será o gestor do projeto; **Giovanna** ficará encarregada da documentação; já **Henrriky, Eliel, Henrique** e **Bruno** atuarão como desenvolvedores de software.
+Começamos oficialmente o projeto esta semana, então tudo ainda está ganhando forma. A primeira tarefa foi definir os integrantes do grupo e combinar as responsabilidades de cada um. **Alyson** será o gestor do projeto; **Giovanna** ficará encarregada da saúde da documentação; **Henrriky** será o Tech Lead já **Eliel, Henrique** e **Bruno** atuarão como desenvolvedores de software.
 
 Na sequência retomamos a parceria com a mesma cliente da disciplina de *Engenharia de Software IV*: o salão de beleza da **Bruna**, um coworking onde vários profissionais alugam cabines por hora. Bruna, a proprietária, faz a ponte com cabeleireiros, manicures e demais prestadores. Nossa primeira reunião com ela ocorreu no dia **22/03** para entender que problema precisa ser resolvido, quais regras de negócio já existem e o que mudou desde o semestre passado. A conversa gerou vários insights sobre como organizar as agendas dos profissionais e controlar o rateio de despesas. 
 
