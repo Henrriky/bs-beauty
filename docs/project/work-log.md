@@ -57,6 +57,13 @@ No dia **29/04**, apresentamos ao professor orientador e à turma os **diagramas
 > **Resumo:** diagramas apresentados e ajustados; documentação formal iniciada com abnTeX2.
 
 ## Semana 8 – 05.04 a 11.05
+Começamos a semana ajustando a estrutura do repositório no **GitHub** para atender às orientações do professor orientador quanto à arquitetura de pastas do projeto e atualizamos o **README.md** com informações sobre o projeto e os integrantes do grupo. Logo após, iniciamos o desenvolvimento do **diário de bordo**, criando o arquivo `work-log.md` no **GitHub** para registrar semanalmente as atividades. 
+
+Já no dia **08/05**, mandamos perguntas a nossa entidade parceira, Bruna, para entender melhor o funcionamento do salão e sanar dúvidas de requisitos. Em seguida, em **09/05**, registramos as perguntas e respostas na página do **Notion**, criada na semana 2. Também criamos uma nova página no **Notion** para identificar e analisar todas as regras de negócio e requisitos (funcionais e não funcionais). 
+
+Por fim, iniciamos a modelagem do **MER** e subimos no **GitHub**.
+
+> **Resumo:** GitHub reestruturado; README.md atualizado; diário de bordo criado; conversa com entidade parceira; análise de requisitos; MER modelado
 
 ## Semana 9 – 12.05 a 18.05
 
