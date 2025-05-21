@@ -66,5 +66,12 @@ Por fim, iniciamos a modelagem do **MER** e subimos no **GitHub**.
 > **Resumo:** GitHub reestruturado; README.md atualizado; diário de bordo criado; conversa com entidade parceira; análise de requisitos; MER modelado
 
 ## Semana 9 – 12.05 a 18.05
+No início da semana, padronizamos a **nomenclatura** e definimos a **estrutura de arquivos** da documentação. Em seguida, com as informações da entidade parceira, organizamos melhor as **regras de negócio**, para extrair os requisitos funcionais e não funcionais, formalizando tudo no **Notion** com descrições, prioridades e status.
+
+Em **15/05**, mostramos o **MER** ao professor orientador e, em reunião no Discord posterior, discutimos ajustes pedidos por ele. 
+
+A partir de **17/05**, iniciamos os preparativos para a **Prova de Conceito (PoC)** prevista para a próxima aula, **20/05**. Para isso, definimos o escopo, criamos as instâncias e sub-redes via Docker, configuramos o DNS (DuckDNS), montamos a arquitetura na AWS e atribuímos responsabilidades na hora da apresentação. Por fim, aprimoramos o **diário de bordo** no `work-log.md`, incorporando registros das semanas iniciais.
+
+> **Resumo:** documentação padronizada; regras de negócio e requisitos formalizados; MER ajustado; PoC planejada; diário de bordo atualizado.
 
 ## Semana 10 – 19.05 a 25.05
