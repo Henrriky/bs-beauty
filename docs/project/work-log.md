@@ -75,3 +75,9 @@ A partir de **17/05**, iniciamos os preparativos para a **Prova de Conceito (PoC
 > **Resumo:** documentação padronizada; regras de negócio e requisitos formalizados; MER ajustado; PoC planejada; diário de bordo atualizado.
 
 ## Semana 10 – 19.05 a 25.05
+
+## Semana 11 - 26.05 a 01.06
+
+## Semana 12 - 02.06 a 08.06
+
+## Semana 13 - 09.06 a 15.06
