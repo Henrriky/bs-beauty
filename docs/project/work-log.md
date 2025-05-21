@@ -29,7 +29,7 @@ No dia 06/04, nos reunimos no **Discord** para distribuir entre os integrantes o
 ## Semana 4 – 07.04 a 13.04
 Nesta semana tivemos nossa primeira entrega: apresentação formal do projeto ao professor orientador e à turma, detalhando a entidade parceira, o tema e o fluxo do MVP, com a finalidade de receber feedbacks para alguns pequenos ajustes.  
 
-O orientador solicitou que, no início, separássemos o agendamento entre quem deseja um profissional específico e quem não se importa com a especificação do funcionário.  
+O orientador solicitou que, logo após o login, separássemos o agendamento entre quem deseja um profissional específico e quem não se importa com a especificação do funcionário.  
 
 Em seguida, atualizamos o cronograma no _ProjectLibre_, adicionando marcos-chave — início de sprints, atividades da equipe e entregas parciais — e alocando cada integrante como recurso humano.  
 
@@ -37,8 +37,11 @@ Por fim, em **13 de abril**, definimos adotar **Scrum** como metodologia de trab
 
 > **Resumo:** Apresentação formal do projeto; *ProjectLibre* com marcos e recursos; separação de agendamento por profissional específico ou genérico; Scrum definido.
 
-
 ## Semana 5 – 14.04 a 20.04
+Começamos a semana criando no GitHub a **branch `docs`** para concentrar arquivos de documentação e artefatos do projeto, como o *ProjectLibre*. No dia **15/04**, após orientações do professor sobre o desenho da arquitetura, elaboramos o **diagrama de componentes** com os elementos essenciais ao sistema e o subimos ao repositório. Ainda em **15/04**, definimos os responsáveis por cada tópico da documentação e, em seguida, adicionamos no *ProjectLibre* as respectivas tarefas, alocando os recursos humanos correspondentes.
+
+> **Resumo:** branch `docs` no GitHub criada; diagrama de componentes desenvolvido; responsáveis pela documentação definidos e refletidos no *ProjectLibre*.
+
 
 ## Semana 6 – 21.04 a 27.04
 
