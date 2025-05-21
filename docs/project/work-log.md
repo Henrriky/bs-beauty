@@ -42,8 +42,12 @@ Começamos a semana criando no GitHub a **branch `docs`** para concentrar arquiv
 
 > **Resumo:** branch `docs` no GitHub criada; diagrama de componentes desenvolvido; responsáveis pela documentação definidos e refletidos no *ProjectLibre*.
 
-
 ## Semana 6 – 21.04 a 27.04
+No início da semana, recebemos orientações do professor para considerar um dia de trabalho como apenas uma hora em vez das oito horas padrão no *ProjectLibre*, a fim de facilitar a análise de **viabilidade** **financeira**. No dia **22/04**, conforme solicitado em aula, estudamos o **diagrama de implantação**, identificamos os hardwares onde os componentes do sistema serão executados e o subimos ao GitHub. 
+
+Já em **26/04**, nos reunimos no Discord, aplicar o método **MoSCoW** para priorizar os requisitos levantados com a entidade parceira e registramos a análise em uma página no Notion.
+
+> **Resumo:** *ProjectLibre* reconfigurado; diagrama de implantação criado; análise MoSCoW.
 
 ## Semana 7 – 28.04 a 04.05
 
