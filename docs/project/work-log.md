@@ -17,17 +17,26 @@ Na segunda semana o foco foi dominar as ferramentas de gestão e consolidar as p
 > **Resumo:** Uso do *ProjectLibre* consolidado para gestão, informações do cliente recebidas e requisitos iniciais documentados.
 
 ## Semana 3 – 31.03 a 06.04
-No dia **01/04** definimos formalmente as funcionalidades do **MVP** e fizemos uma breve apresentação ao professor sobre nossa ideia de aplicativo para o salão de beleza coworking da **Bruna** (entidade parceira), validando a viabilidade do projeto. Logo após, o professor orientador pediu uma apresentação mais formal no dia **08/04** para explicar em detalhes o escopo, a arquitetura e o caminho até o MVP. Para sustentar a apresentação, preparamos um conjunto de slides que mostram o contexto da Bruna, o problema (falta de um sistema de agendamento e gestão) e a solução proposta (aplicação mobile com controle de acesso para diferentes funcionalidades), além do processo a ser desenvolvido para o MVP (**agendamento simplificado** de serviços no salão por clientes).
+No dia **01/04** definimos formalmente as funcionalidades do **MVP** e fizemos uma breve apresentação ao professor sobre nossa ideia de aplicativo para o salão de beleza coworking da **Bruna** (entidade parceira), validando a viabilidade do projeto. Logo após, o professor orientador pediu uma apresentação mais formal no dia **08/04** para explicar em detalhes o escopo, a arquitetura e o caminho até o MVP. Para sustentar a apresentação, preparamos um conjunto de slides que mostram o contexto da Bruna, o problema (falta de um sistema de agendamento e gestão) e a solução proposta (aplicação web com controle de acesso para diferentes funcionalidades), além do processo a ser desenvolvido para o MVP (**agendamento simplificado** de serviços no salão por clientes).
 
 Ainda neste dia, continuamos com o planejamento no **ProjectLibre**, adicionando mais detalhes: Cadastramos as tarefas iniciais, definimos prazos, atribuíram-se responsáveis e estabelecemos marcos-chave que guiarão cada fase do desenvolvimento até o MVP. 
 
 No dia 06/04, nos reunimos no **Discord** para distribuir entre os integrantes os tópicos que cada um apresentará para ter a ideia do projeto aprovada, de forma que todos participem da **apresentação**.
 
-
 > **Resumo**: conversa inicial de ideia e viabilidade; planejamento detalhado no ProjectLibre; preparação para a apresentação formal.  
 
 
 ## Semana 4 – 07.04 a 13.04
+Nesta semana tivemos nossa primeira entrega: apresentação formal do projeto ao professor orientador e à turma, detalhando a entidade parceira, o tema e o fluxo do MVP, com a finalidade de receber feedbacks para alguns pequenos ajustes.  
+
+O orientador solicitou que, no início, separássemos o agendamento entre quem deseja um profissional específico e quem não se importa com a especificação do funcionário.  
+
+Em seguida, atualizamos o cronograma no _ProjectLibre_, adicionando marcos-chave — início de sprints, atividades da equipe e entregas parciais — e alocando cada integrante como recurso humano.  
+
+Por fim, em **13 de abril**, definimos adotar **Scrum** como metodologia de trabalho, distribuindo os papéis de **Product Owner** para **Henrriky**, **Scrum Master** para **Alyson** e os demais integrantes como time de desenvolvimento.  
+
+> **Resumo:** Apresentação formal do projeto; *ProjectLibre* com marcos e recursos; separação de agendamento por profissional específico ou genérico; Scrum definido.
+
 
 ## Semana 5 – 14.04 a 20.04
 
