@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.4.29)  17 MAY 2025 21:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.4.29)  22 MAY 2025 16:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -879,8 +879,8 @@ LaTeX Info: Redefining \newblock on input line 591.
 LaTeX Info: Redefining \cite on input line 618.
 \ABCItoken=\toks32
 )
-Package color Info: Redefining color blue on input line 88.
-Package hyperref Info: Option `colorlinks' set `true' on input line 105.
+Package color Info: Redefining color blue on input line 86.
+Package hyperref Info: Option `colorlinks' set `true' on input line 103.
 \c@quadro=\count366
 \c@loqdepth=\count367
 \cftbeforequadroskip=\skip262
@@ -897,27 +897,27 @@ Package babel Info: 'brazil' activates 'portuges' shorthands.
 )
 \openout1 = `docPIE1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 156.
-LaTeX Font Info:    ... okay on input line 156.
-Package hyperref Info: Link coloring ON on input line 156.
-LaTeX Info: Redefining \degres on input line 156.
-LaTeX Info: Redefining \up on input line 156.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+Package hyperref Info: Link coloring ON on input line 154.
+LaTeX Info: Redefining \degres on input line 154.
+LaTeX Info: Redefining \up on input line 154.
 \myptabbox=\box60
 \myptabboxwidth=\skip265
 
@@ -946,20 +946,20 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 /00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Info: Redefining \microtypecontext on input line 156.
-Package microtype Info: Applying patch `item' on input line 156.
-Package microtype Info: Applying patch `toc' on input line 156.
-Package microtype Info: Applying patch `eqnum' on input line 156.
-Package microtype Info: Applying patch `footnote' on input line 156.
-Package microtype Info: Applying patch `verbatim' on input line 156.
-LaTeX Info: Redefining \microtypesetup on input line 156.
+LaTeX Info: Redefining \microtypecontext on input line 154.
+Package microtype Info: Applying patch `item' on input line 154.
+Package microtype Info: Applying patch `toc' on input line 154.
+Package microtype Info: Applying patch `eqnum' on input line 154.
+Package microtype Info: Applying patch `footnote' on input line 154.
+Package microtype Info: Applying patch `verbatim' on input line 154.
+LaTeX Info: Redefining \microtypesetup on input line 154.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 156.
+LaTeX Info: Redefining \showhyphens on input line 154.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -970,7 +970,7 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (RS)
 )
 LaTeX Font Info:    Trying to load font information for T1+lmss on input line 1
-73.
+71.
 
 (C:\Users\GCARVA24\OneDrive - azureford\Documents\estagio\PIE1\miktex\tex/latex
 /lm\t1lmss.fd
@@ -992,39 +992,39 @@ m-ec.enc}]
 
 ]
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-82.
+80.
 
 (C:\Users\GCARVA24\OneDrive - azureford\Documents\estagio\PIE1\miktex\tex/latex
 /lm\ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-82.
+80.
 
 (C:\Users\GCARVA24\OneDrive - azureford\Documents\estagio\PIE1\miktex\tex/latex
 /lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-182.
+180.
 
 (C:\Users\GCARVA24\OneDrive - azureford\Documents\estagio\PIE1\miktex\tex/latex
 /lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-182.
+180.
 
 (C:\Users\GCARVA24\OneDrive - azureford\Documents\estagio\PIE1\miktex\tex/latex
 /lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 182.
+(Font)              <12> on input line 180.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 182.
+(Font)              <8> on input line 180.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 182.
+(Font)              <6> on input line 180.
 
 
 
@@ -1032,31 +1032,31 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.182 	
+l.180 	
         [1
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 226--226
+Underfull \hbox (badness 10000) in paragraph at lines 224--224
 
  []
 
 
-Overfull \hbox (16.6597pt too wide) in paragraph at lines 226--226
+Overfull \hbox (16.6597pt too wide) in paragraph at lines 224--224
 []  [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 226--226
+Underfull \hbox (badness 10000) in paragraph at lines 224--224
 
  []
 
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 226.
+(Font)              <10> on input line 224.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 226.
+(Font)              <7> on input line 224.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 226.
+(Font)              <5> on input line 224.
 
 
 
@@ -1064,13 +1064,9 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.235 		E
-         lemento opcional da citeonline \citeonline[4.2.1.2]{NBR14724:2011}....
+l.233 		p
+         agina opcional para descrever algum correção que deve ser feita n...
 [2]
-
-LaTeX Warning: Citation `NBR14724:2011' on page 3 undefined on input line 235.
-
-
 
 [3
 
@@ -1107,10 +1103,6 @@ LaTeX Warning: Citation `NBR14724:2011' on page 3 undefined on input line 235.
 [12
 
 ]
-
-LaTeX Warning: Citation `NBR6028:2003' on page 13 undefined on input line 349.
-
-
 
 [13]
 
@@ -1175,113 +1167,132 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 
 [30
 
-]
+] (1.Introducao/1.Introducao.tex
+Underfull \hbox (badness 10000) in paragraph at lines 14--15
+
+ []
+
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
+7.
+
+(C:\Users\GCARVA24\OneDrive - azureford\Documents\estagio\PIE1\miktex\tex/latex
+/lm\ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
 
 [31
 
-]
+{C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/enc
+/dvips/lm/lm-ts1.enc}])
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 Package babel Info: 'brazil' activates 'portuges' shorthands.
-(babel)             Reported  on input line 479.
+(babel)             Reported  on input line 440.
 [32]
 
-[33
-
-]
+[33]
 
 [34
 
-]
+] (2.Revisao_literatura/2.Revisao_literatura.tex)
 
 [35]
 
 [36
 
 ]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 [37]
 
-[38]
+[38
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 [39]
 
-[40
+[40]
+
+[41]
+
+[42
 
 ]
-<images/salaoImagem.jpg, id=380, 281.05pt x 180.675pt>
+<images/salaoImagem.jpg, id=390, 281.05pt x 180.675pt>
 File: images/salaoImagem.jpg Graphic file (type jpg)
 <use images/salaoImagem.jpg>
-Package pdftex.def Info: images/salaoImagem.jpg  used on input line 561.
+Package pdftex.def Info: images/salaoImagem.jpg  used on input line 522.
 (pdftex.def)             Requested size: 364.00139pt x 234.01456pt.
  (tabela-custos.tex)
 
-LaTeX Warning: Citation `babel' on page 41 undefined on input line 576.
+LaTeX Warning: Citation `babel' on page 43 undefined on input line 537.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[41 <./images/salaoImagem.jpg>]
+[43 <./images/salaoImagem.jpg>]
 
-[42] (docPIE1.bbl (docPIE1.brf)
+[44] (docPIE1.bbl (docPIE1.brf)
 \tf@brf=\write5
 \openout5 = `docPIE1.brf'.
 
 
 
-[43
+[45
 
 ]
 
-[44
+[46
 
 ]
 bibitemlist
 )
 
-[45]
+[47]
 
-[46
+[48
 
 ]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\uppercase' on input line 613.
+(hyperref)                removing `\uppercase' on input line 574.
 
 
-
-[47
-
-]
-
-[48]
 
 [49
 
 ]
 
-[50
-
-]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\uppercase' on input line 630.
-
-
+[50]
 
 [51
 
 ]
 
-[52]
-No file docPIE1.ind.
+[52
+
+]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\uppercase' on input line 591.
+
 
 
 [53
+
+]
+
+[54]
+No file docPIE1.ind.
+
+
+[55
 
 ]
 \tf@lof=\write6
@@ -1306,16 +1317,16 @@ L3 programming layer <2020/03/25>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `docPIE1.brf' has not changed.
-(rerunfilecheck)             Checksum: E7B8E844EA9167AF3B82BAC5FB736595;244.
+(rerunfilecheck)             Checksum: 5A34EC3339BAFD26068F2A1CC83776AD;136.
  ) 
 Here is how much of TeX's memory you used:
- 19663 strings out of 469959
- 331783 string characters out of 5458247
- 871541 words of memory out of 5000000
- 45875 multiletter control sequences out of 15000+600000
- 710162 words of font info for 143 fonts, out of 8000000 for 9000
+ 19745 strings out of 469959
+ 333969 string characters out of 5458247
+ 871408 words of memory out of 5000000
+ 45898 multiletter control sequences out of 15000+600000
+ 712079 words of font info for 163 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,12n,107p,1006b,662s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,13n,107p,1006b,662s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/t
 ype1/public/lm/lmbx10.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/est
 agio/PIE1/miktex/fonts/type1/public/lm/lmbx12.pfb><C:/Users/GCARVA24/OneDrive -
@@ -1332,9 +1343,9 @@ eDrive - azureford/Documents/estagio/PIE1/miktex/fonts/type1/public/lm/lmss17.p
 fb><C:/Users/GCARVA24/OneDrive - azureford/Documents/estagio/PIE1/miktex/fonts/
 type1/public/lm/lmssbx10.pfb><C:/Users/GCARVA24/OneDrive - azureford/Documents/
 estagio/PIE1/miktex/fonts/type1/public/lm/lmsy10.pfb>
-Output written on docPIE1.pdf (55 pages, 398152 bytes).
+Output written on docPIE1.pdf (57 pages, 405753 bytes).
 PDF statistics:
- 806 PDF objects out of 1000 (max. 8388607)
- 168 named destinations out of 1000 (max. 500000)
- 49870 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 819 PDF objects out of 1000 (max. 8388607)
+ 170 named destinations out of 1000 (max. 500000)
+ 51918 words of extra memory for PDF output out of 61914 (max. 10000000)
 
