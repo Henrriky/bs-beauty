@@ -33,7 +33,7 @@ brazil				% o último idioma é o principal do documento
 % ---
 \usepackage{lipsum}				% para geração de dummy text
 % ---
-
+\usepackage{amssymb}   %para checkmark
 % ---
 % Pacotes de citações
 % ---
@@ -393,6 +393,17 @@ brazil				% o último idioma é o principal do documento
 	% ---
 	\begin{siglas}
 		\item [PIE1] Projeto Integrado de Extensão I
+		\item [B2C] Business to Consumer
+		\item [ECF] Emissor de Cupom Fiscal			\item [ERP] Enterprise Resource Planning (Sistema Integrado de Gestão Empresarial)
+		\item [iOS] iPhone Operating System
+		\item [MEI] Microempreendedor Individual
+		\item [NFC- e] Nota Fiscal de Consumidor Eletrônica
+		\item [PDV] Ponto de Venda
+		\item [Pix] Pagamento Instantâneo
+		\item [SAT] Sistema Autenticador e Transmissor de Cupons Fiscais
+		\item [SLA] Service Level Agreement (Acordo de Nível de Serviço)
+		\item [SMS] Short Message Service
+		\item [TEF] Transferência Eletrônica de Fundos
 	\end{siglas}
 	% ---
 	
@@ -400,31 +411,22 @@ brazil				% o último idioma é o principal do documento
 	% inserir lista de símbolos
 	% ---
 	\begin{simbolos}
-		\item[$ \Gamma $] Letra grega Gama
-		\item[$ \Lambda $] Lambda
-		\item[$ \zeta $] Letra grega minúscula zeta
-		\item[$ \in $] Pertence
+			\item [R\$] Real (moeda brasileira)
+			\item [\%]  Porcentagem
+		
 	\end{simbolos}
 	% ---
-	
-	% ---
+
 	% inserir o sumario
 	% ---
 	\pdfbookmark[0]{\contentsname}{toc}
 	\tableofcontents*
 	\cleardoublepage
-	% ---
-	
-	
-	
-	% ----------------------------------------------------------
-	% ELEMENTOS TEXTUAIS
+
 	% ----------------------------------------------------------
 	\textual
 	
-	% ----------------------------------------------------------
-	% Introdução (exemplo de capítulo sem numeração, mas presente no Sumário)
-	% ----------------------------------------------------------
+% ----------------------------------------------------------
 	\chapter{Introdução}
 	% ----------------------------------------------------------
 	
@@ -528,8 +530,6 @@ Reportagem online na Gazeta do Povo destaca que o ambiente coworking vem se cons
 	mesmo usando uma hospedagem gratis (AWS), precisamos pesquisar uma paga para colocar na tabela de custos
 	
 	\section{Custos}
-	
-	\input{tabela-custos}
 	
 	\section{Receitas}
 	\section{Cenário realista}
