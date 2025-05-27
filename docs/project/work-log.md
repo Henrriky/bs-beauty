@@ -76,6 +76,15 @@ A partir de **17/05**, iniciamos os preparativos para a **Prova de Conceito (PoC
 
 ## Semana 10 – 19.05 a 25.05
 
+No dia 20/05 reapresentamos os diagramas de componentes e implantação, dessa vez ajustados de acordo com as orientações recebidas na semana 7, para a turma e o professor orientador. Posteriormente, com base nos diagramas ajustados, realizamos a apresentação da Prova de Conceito a fim de comprovar que sabemos utilizar todas as tecnologias apresentadas nos diagrama: Inicialmente, mostramos – na instância da AWS – a tabela de clientes presente no banco de dados para exibir seu estado atual (comprovando que sabemos utilizar os serviços da AWS). Depois, no site do sistema do projeto, demonstramos o login utilizando a conta do Google (comprovando a utilização do Google OAuth API). Em seguida, foi apresentado um formulário (construído com React, outra ferramenta utilizada pela equipe) para completar o cadastro do usuário. Por fim, voltando para a instância da AWS, exibimos novamente a tabela de clientes, comprovando que o novo usuário foi devidamente cadastrado e os dados registrados no banco. Também apresentamos brevemente a utilização do Node.js por meio do log de erros do back-end.
+
+Ao longo da semana, seguimos trabalhando na documentação, criando de fato a padronização e estrutura definida na semana anterior (9) no repositório Git. Removemos alguns arquivos de documentação desnecessários presentes no repositório Git e criamos um arquivo “.gitignore” para evitar que os arquivos gerados automaticamente pelo LaTeX fossem rastreados pelo git a fim de deixar o repositório menos poluído com arquivos desnecessários.
+
+Até o momento, conseguimos atualizar completamente o Diário de Bordo no repositório, registrando todas as semanas anteriores até a atual. Além disso, desenvolvemos melhor o ProjectLibre, adicionando novas tarefas nas etapas definidas e ajustando a porcentagem de conclusão da maioria das tarefas já existentes. Por fim, alocamos os recursos humanos (integrantes da equipe) a cada tarefa para identificar os responsáveis por cada atividade.
+
+> **Resumo:** Diagramas ajustados reapresentados; Prova de Conceito demonstrada; Documentação padronizada e organizada no Git; Diário de Bordo atualizado; ProjectLibre detalhado com tarefas e responsáveis.
+
+
 ## Semana 11 - 26.05 a 01.06
 
 ## Semana 12 - 02.06 a 08.06
