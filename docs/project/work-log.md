@@ -11,10 +11,14 @@ Por fim, criamos um **workspace no Notion**, onde inserimos um checklist com tod
  
 > **Resumo:** Equipe definida, cliente alinhado e ferramentas de organização no ar.
 
+*Por Giovanna Carvalho*
+
 ## Semana 2 – 24.03 a 30.03
 Na segunda semana o foco foi dominar as ferramentas de gestão e consolidar as primeiras demandas do cliente. No dia **25/03**, após uma breve apresentação do professor, testamos o *ProjectLibre* e já montamos o cronograma-base com tarefas macro e durações. Já no dia **30/03** recebemos da Bruna as respostas ao questionário enviado, contendo dados sobre horários de pico, política de cancelamento, porcentagem de comissão e controle de produtos. Essas informações permitiram esboçar requisitos como bloqueio de cabines para manutenção e cálculo automático de repasses. Para registrar tudo, criamos no Notion a página **“Q&A Bruna”**, com perguntas e respostas, e outra chamada **“Requisitos Identificados”**, que lista cada requisito, seu status e o responsável.
 
 > **Resumo:** Uso do *ProjectLibre* consolidado para gestão, informações do cliente recebidas e requisitos iniciais documentados.
+
+*Por Giovanna Carvalho*
 
 ## Semana 3 – 31.03 a 06.04
 No dia **01/04** definimos formalmente as funcionalidades do **MVP** e fizemos uma breve apresentação ao professor sobre nossa ideia de aplicativo para o salão de beleza coworking da **Bruna** (entidade parceira), validando a viabilidade do projeto. Logo após, o professor orientador pediu uma apresentação mais formal no dia **08/04** para explicar em detalhes o escopo, a arquitetura e o caminho até o MVP. Para sustentar a apresentação, preparamos um conjunto de slides que mostram o contexto da Bruna, o problema (falta de um sistema de agendamento e gestão) e a solução proposta (aplicação web com controle de acesso para diferentes funcionalidades), além do processo a ser desenvolvido para o MVP (**agendamento simplificado** de serviços no salão por clientes).
@@ -25,6 +29,7 @@ No dia 06/04, nos reunimos no **Discord** para distribuir entre os integrantes o
 
 > **Resumo**: conversa inicial de ideia e viabilidade; planejamento detalhado no ProjectLibre; preparação para a apresentação formal.  
 
+*Por Giovanna Carvalho*
 
 ## Semana 4 – 07.04 a 13.04
 Nesta semana tivemos nossa primeira entrega: apresentação formal do projeto ao professor orientador e à turma, detalhando a entidade parceira, o tema e o fluxo do MVP, com a finalidade de receber feedbacks para alguns pequenos ajustes.  
@@ -37,10 +42,14 @@ Por fim, em **13 de abril**, definimos adotar **Scrum** como metodologia de trab
 
 > **Resumo:** Apresentação formal do projeto; *ProjectLibre* com marcos e recursos; separação de agendamento por profissional específico ou genérico; Scrum definido.
 
+*Por Giovanna Carvalho*
+
 ## Semana 5 – 14.04 a 20.04
 Começamos a semana criando no GitHub a **branch `docs`** para concentrar arquivos de documentação e artefatos do projeto, como o *ProjectLibre*. No dia **15/04**, após orientações do professor sobre o desenho da arquitetura, elaboramos o **diagrama de componentes** com os elementos essenciais ao sistema e o subimos ao repositório. Ainda em **15/04**, definimos os responsáveis por cada tópico da documentação e, em seguida, adicionamos no *ProjectLibre* as respectivas tarefas, alocando os recursos humanos correspondentes.
 
 > **Resumo:** branch `docs` no GitHub criada; diagrama de componentes desenvolvido; responsáveis pela documentação definidos e refletidos no *ProjectLibre*.
+
+*Por Giovanna Carvalho*
 
 ## Semana 6 – 21.04 a 27.04
 No início da semana, recebemos orientações do professor para considerar um dia de trabalho como apenas uma hora em vez das oito horas padrão no *ProjectLibre*, a fim de facilitar a análise de **viabilidade** **financeira**. 
@@ -51,10 +60,14 @@ Já em **26/04**, nos reunimos no Discord, aplicar o método **MoSCoW** para pri
 
 > **Resumo:** *ProjectLibre* reconfigurado; diagrama de implantação criado; análise MoSCoW.
 
+*Por Giovanna Carvalho*
+
 ## Semana 7 – 28.04 a 04.05
 No dia **29/04**, apresentamos ao professor orientador e à turma os **diagramas** de componentes e de implantação desenvolvidos nas semanas anteriores. Posteriormente, seguindo recomendações do orientador, realizamos ajustes para melhorar a diferenciação de componentes. Em seguida, iniciamos a **documentação** formal do projeto usando o modelo de trabalho acadêmico da ferramenta **abnTeX2**, no ambiente **TexStudio**, para escrever em **LaTeX**. Então, subimos os arquivos no **GitHub** para conseguirmos escrever colaborativamente.
 
 > **Resumo:** diagramas apresentados e ajustados; documentação formal iniciada com abnTeX2.
+
+*Por Giovanna Carvalho*
 
 ## Semana 8 – 05.04 a 11.05
 Começamos a semana ajustando a estrutura do repositório no **GitHub** para atender às orientações do professor orientador quanto à arquitetura de pastas do projeto e atualizamos o **README.md** com informações sobre o projeto e os integrantes do grupo. Logo após, iniciamos o desenvolvimento do **diário de bordo**, criando o arquivo `work-log.md` no **GitHub** para registrar semanalmente as atividades. 
@@ -74,15 +87,19 @@ A partir de **17/05**, iniciamos os preparativos para a **Prova de Conceito (PoC
 
 > **Resumo:** documentação padronizada; regras de negócio e requisitos formalizados; MER ajustado; PoC planejada; diário de bordo atualizado.
 
+*Por Giovanna Carvalho*
+
 ## Semana 10 – 19.05 a 25.05
 
-No dia 20/05 reapresentamos os diagramas de componentes e implantação, dessa vez ajustados de acordo com as orientações recebidas na semana 7, para a turma e o professor orientador. Posteriormente, com base nos diagramas ajustados, realizamos a apresentação da Prova de Conceito a fim de comprovar que sabemos utilizar todas as tecnologias apresentadas nos diagrama: Inicialmente, mostramos – na instância da AWS – a tabela de clientes presente no banco de dados para exibir seu estado atual (comprovando que sabemos utilizar os serviços da AWS). Depois, no site do sistema do projeto, demonstramos o login utilizando a conta do Google (comprovando a utilização do Google OAuth API). Em seguida, foi apresentado um formulário (construído com React, outra ferramenta utilizada pela equipe) para completar o cadastro do usuário. Por fim, voltando para a instância da AWS, exibimos novamente a tabela de clientes, comprovando que o novo usuário foi devidamente cadastrado e os dados registrados no banco. Também apresentamos brevemente a utilização do Node.js por meio do log de erros do back-end.
+No dia 20/05 reapresentamos os diagramas de componentes e implantação, dessa vez ajustados de acordo com as orientações recebidas na semana 7, para a turma e o professor orientador. Posteriormente, com base nos diagramas ajustados, realizamos a apresentação da **Prova de Conceito** a fim de comprovar que sabemos utilizar todas as tecnologias apresentadas nos diagrama: Inicialmente, mostramos – na instância da **AWS** – a tabela de clientes presente no banco de dados para exibir seu estado atual (comprovando que sabemos utilizar os serviços da AWS). Depois, no site do sistema do projeto, demonstramos o login utilizando a conta do Google (comprovando a utilização do **Google OAuth API**). Em seguida, foi apresentado um formulário (construído com **React**, outra ferramenta utilizada pela equipe) para completar o **cadastro do usuário**. Por fim, voltando para a instância da AWS, exibimos novamente a tabela de clientes, comprovando que o novo usuário foi devidamente cadastrado e os dados registrados no banco. Também apresentamos brevemente a utilização do **Node.js** por meio do log de erros do back-end.
 
-Ao longo da semana, seguimos trabalhando na documentação, criando de fato a padronização e estrutura definida na semana anterior (9) no repositório Git. Removemos alguns arquivos de documentação desnecessários presentes no repositório Git e criamos um arquivo “.gitignore” para evitar que os arquivos gerados automaticamente pelo LaTeX fossem rastreados pelo git a fim de deixar o repositório menos poluído com arquivos desnecessários.
+Ao longo da semana, seguimos trabalhando na **documentação**, criando de fato a padronização e estrutura definida na semana anterior (9) no repositório Git. Removemos alguns arquivos de documentação desnecessários presentes no repositório Git e criamos um arquivo `.gitignore` para evitar que os arquivos gerados automaticamente pelo LaTeX fossem rastreados pelo git a fim de deixar o repositório menos poluído com arquivos desnecessários.
 
-Até o momento, conseguimos atualizar completamente o Diário de Bordo no repositório, registrando todas as semanas anteriores até a atual. Além disso, desenvolvemos melhor o ProjectLibre, adicionando novas tarefas nas etapas definidas e ajustando a porcentagem de conclusão da maioria das tarefas já existentes. Por fim, alocamos os recursos humanos (integrantes da equipe) a cada tarefa para identificar os responsáveis por cada atividade.
+Até o momento, conseguimos atualizar completamente o **Diário de Bordo** no repositório, registrando todas as semanas anteriores até a atual. Além disso, desenvolvemos melhor o **ProjectLibre**, adicionando novas tarefas nas etapas definidas e ajustando a porcentagem de conclusão da maioria das tarefas já existentes. Por fim, alocamos os recursos humanos (integrantes da equipe) a cada tarefa para identificar os responsáveis por cada atividade.
 
 > **Resumo:** Diagramas ajustados reapresentados; Prova de Conceito demonstrada; Documentação padronizada e organizada no Git; Diário de Bordo atualizado; ProjectLibre detalhado com tarefas e responsáveis.
+
+*Por Giovanna Carvalho*
 
 
 ## Semana 11 - 26.05 a 01.06
