@@ -12,12 +12,14 @@ services:
       - --binlog-format=MIXE
     volumes: 
       - mysql-data:/var/lib/mysql
+    restart: always
   app:
     build: .
     ports: 
       - "3000:3000"
     depends_on: 
       - db
+    restart: always
 
 volumes:
   mysql-data:

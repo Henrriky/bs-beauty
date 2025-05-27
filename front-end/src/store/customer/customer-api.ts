@@ -16,13 +16,20 @@ export const customerAPI = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.customers.map(({ id }) => ({
-                type: 'Customers' as const,
-                id,
-              })),
-              { type: 'Customers', id: 'LIST' },
-            ]
+            ...result.customers.map(({ id }) => ({
+              type: 'Customers' as const,
+              id,
+            })),
+            { type: 'Customers', id: 'LIST' },
+          ]
           : [{ type: 'Customers', id: 'LIST' }],
+    }),
+    getCustomerById: builder.query<Customer, string>({
+      query: (customerId) => ({
+        url: API_VARIABLES.CUSTOMERS_ENDPOINTS.FIND_CUSTOMER_BY_ID(customerId),
+        method: 'GET',
+      }),
+      providesTags: (_result, _error, id) => [{ type: 'Customers', id }],
     }),
   }),
 })

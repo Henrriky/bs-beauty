@@ -12,6 +12,7 @@ import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod
 import { EmployeeCard } from './components/EmployeeCard'
 import { ErrorMessage } from '../../components/feedback/ErrorMessage'
 import BSBeautyLoading from '../../components/feedback/Loading'
+import Title from '../../components/texts/Title'
 
 type EmployeeFormData = z.infer<typeof EmployeeSchemas.createSchema>
 
@@ -40,10 +41,6 @@ function EmployeesManagement() {
   const [employeeToDelete, setEmployeeToDelete] = useState<Employee | null>(
     null
   )
-
-  useEffect(() => {
-    document.title = 'BS Beauty - Gerenciamento de Funcionários'
-  }, [])
 
   if (isError) {
     toast.error('Erro ao carregar a lista de clientes')
@@ -110,15 +107,15 @@ function EmployeesManagement() {
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-medium text-secondary-200 mb-4">
-        Gerenciamento de Funcionários
-      </h2>
-      <span className="text-sm text-[#D9D9D9]">
-        Olá, <span className="text-primary-200 font-bold">{username}</span>!
-        Nessa tela você pode gerenciar os colaboradores cadastrados na{' '}
-        <span className="text-secondary-200 font-bold">BS Beauty</span>.
-      </span>
+    <>
+      <Title align="left">Funcionários</Title>
+      <div className="mt-2">
+        <span className="text-sm text-[#D9D9D9]">
+          Olá, <span className="text-primary-200 font-bold">{username}</span>!
+          Nessa tela você pode gerenciar os colaboradores cadastrados na{' '}
+          <span className="text-secondary-200 font-bold">BS Beauty</span>.
+        </span>
+      </div>
 
       {isLoading ? (
         <div className="mt-5">
@@ -165,86 +162,82 @@ function EmployeesManagement() {
         </>
       )}
 
-      {
-        isDeleteModalOpen && (
-          <div
-            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
-            onClick={(e) => {
-              if (e.target === e.currentTarget) setIsDeleteModalOpen(false)
-            }}
-          >
-            <div className="bg-primary-900 p-6 rounded-lg shadow-lg w-96 ml-5 mr-5">
-              <h3 className="text-lg font-medium mb-4 text-[#D9D9D9]">
-                Confirmar Exclusão
-              </h3>
-              <p className="mb-4 text-white text-justify">
-                Tem certeza que deseja excluir o funcionário com e-mail{' '}
-                <strong>{employeeToDelete?.email}</strong>?
-              </p>
-              <p className="mb-4 text-white text-justify">
-                Essa alteração não poderá ser desfeita e o funcionário perderá
-                todos os dados cadastrados.{' '}
-              </p>
-              <div className="flex justify-end gap-2">
+      {isDeleteModalOpen && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsDeleteModalOpen(false)
+          }}
+        >
+          <div className="bg-primary-900 p-6 rounded-lg shadow-lg w-96 ml-5 mr-5">
+            <h3 className="text-lg font-medium mb-4 text-[#D9D9D9]">
+              Confirmar Exclusão
+            </h3>
+            <p className="mb-4 text-white text-justify">
+              Tem certeza que deseja excluir o funcionário com e-mail{' '}
+              <strong>{employeeToDelete?.email}</strong>?
+            </p>
+            <p className="mb-4 text-white text-justify">
+              Essa alteração não poderá ser desfeita e o funcionário perderá
+              todos os dados cadastrados.{' '}
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded-md"
+                onClick={() => setIsDeleteModalOpen(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                className="bg-primary-500 text-white px-4 py-2 rounded-md"
+                onClick={handleDelete}
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isInsertModalOpen && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsModalOpen(false)
+          }}
+        >
+          <div className="bg-primary-900 p-6 rounded-lg shadow-lg w-96 ml-5 mr-5">
+            <h3 className="text-lg font-medium mb-4 text-[#D9D9D9] ">
+              Adicionar Funcionário
+            </h3>
+            <form onSubmit={handleSubmit(handleAddEmployee)}>
+              <Input
+                registration={register('email')}
+                id="email"
+                type="email"
+                placeholder="Digite o e-mail do novo funcionário"
+                autoComplete="off"
+                error={errors.email?.message?.toString()}
+              />
+              <div className="flex justify-end gap-2 mt-5">
                 <button
                   className="bg-gray-500 text-white px-4 py-2 rounded-md"
-                  onClick={() => setIsDeleteModalOpen(false)}
+                  onClick={() => setIsModalOpen(false)}
+                  type="button"
                 >
                   Cancelar
                 </button>
-                <button
-                  className="bg-primary-500 text-white px-4 py-2 rounded-md"
-                  onClick={handleDelete}
-                >
-                  Excluir
-                </button>
-              </div>
-            </div>
-          </div>
-        )
-      }
-
-      {
-        isInsertModalOpen && (
-          <div
-            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
-            onClick={(e) => {
-              if (e.target === e.currentTarget) setIsModalOpen(false)
-            }}
-          >
-            <div className="bg-primary-900 p-6 rounded-lg shadow-lg w-96 ml-5 mr-5">
-              <h3 className="text-lg font-medium mb-4 text-[#D9D9D9] ">
-                Adicionar Funcionário
-              </h3>
-              <form onSubmit={handleSubmit(handleAddEmployee)}>
-                <Input
-                  registration={register('email')}
-                  id="email"
-                  type="email"
-                  placeholder="Digite o e-mail do novo funcionário"
-                  autoComplete="off"
-                  error={errors.email?.message?.toString()}
+                <Button
+                  type="submit"
+                  label="Adicionar"
+                  className="bg-primary-500 text-white px-4 py-2 rounded-md w-min text-base"
                 />
-                <div className="flex justify-end gap-2 mt-5">
-                  <button
-                    className="bg-gray-500 text-white px-4 py-2 rounded-md"
-                    onClick={() => setIsModalOpen(false)}
-                    type="button"
-                  >
-                    Cancelar
-                  </button>
-                  <Button
-                    type="submit"
-                    label="Adicionar"
-                    className="bg-primary-500 text-white px-4 py-2 rounded-md w-min text-base"
-                  />
-                </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
-        )
-      }
-    </div>
+        </div>
+      )}
+    </>
   )
 }
 

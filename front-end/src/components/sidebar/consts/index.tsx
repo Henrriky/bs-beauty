@@ -1,6 +1,5 @@
 import {
   ArrowLeftStartOnRectangleIcon,
-  BellIcon,
   BriefcaseIcon,
   CalendarDaysIcon,
   ClipboardDocumentCheckIcon,
@@ -40,13 +39,13 @@ const sideBarItems: SideBarOptions = {
       navigateTo: '/profile',
       order: 98,
     },
-  ],
-  [Role.CUSTOMER]: [
     {
       name: 'Agendamentos',
       icon: <CalendarDaysIcon className="size-6" />,
       navigateTo: '/appointments',
     },
+  ],
+  [Role.CUSTOMER]: [
     {
       name: 'Home',
       icon: <HomeIcon className="size-6" />,
@@ -64,11 +63,6 @@ const sideBarItems: SideBarOptions = {
       name: 'Funcionários',
       icon: <ClipboardDocumentCheckIcon className="size-6" />,
       navigateTo: '/employees-management',
-    },
-    {
-      name: 'Notificações',
-      icon: <BellIcon className="size-6" />,
-      navigateTo: '/notifications',
     },
     {
       name: 'Serviços',

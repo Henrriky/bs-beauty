@@ -32,6 +32,7 @@ describe('ShiftController', () => {
     useCaseMock = {
       executeFindAllByEmployeeId: vi.fn(),
       executeFindById: vi.fn(),
+      executeFindByEmployeeId: vi.fn(),
       executeCreate: vi.fn(),
       executeUpdate: vi.fn(),
       executeDelete: vi.fn(),
@@ -131,6 +132,54 @@ describe('ShiftController', () => {
       expect(next).toHaveBeenCalledWith(error);
     });
   })
+
+  describe('handleFindByEmployeeId', () => {
+    it('should send 200 and shift when use case succeeds', async () => {
+      // arrange
+      const employeeId = 'user-123';
+      req.params.id = employeeId;
+      useCaseMock.executeFindByEmployeeId.mockResolvedValueOnce({
+        shifts: [
+          {
+            id: 'shift-1',
+            weekDay: WeekDays.MONDAY,
+            shiftStart: new Date(),
+            employeeId: 'user-123',
+          }
+        ] as Shift[],
+      });
+
+      // act
+      await ShiftController.handleFindByEmployeeId(req, res, next);
+
+      // assert
+      expect(useCaseMock.executeFindByEmployeeId).toHaveBeenCalledWith(employeeId);
+      expect(next).not.toHaveBeenCalled();
+      expect(res.send).toHaveBeenCalledWith({
+        shifts: [
+          {
+            id: 'shift-1',
+            weekDay: WeekDays.MONDAY,
+            shiftStart: new Date(),
+            employeeId: 'user-123',
+          }
+        ],
+      });
+    });
+
+    it('should call next with an error if use case throws', async () => {
+      // arrange
+      const error = new Error('Use case failure');
+      useCaseMock.executeFindByEmployeeId.mockRejectedValueOnce(error);
+
+      // act
+      await ShiftController.handleFindByEmployeeId(req, res, next);
+
+      // assert
+      expect(res.send).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
 
   describe('handleCreate', () => {
     it('should send 201 and created shift when use case succeeds', async () => {

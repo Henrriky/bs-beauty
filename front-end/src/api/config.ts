@@ -1,5 +1,8 @@
+import ENV from '../config/config'
+
 export const API_VARIABLES = {
-  BASE_URL: 'http://localhost:3000/api',
+  BASE_URL:
+    ENV.ENVIRONMENT === 'dev' ? `http://localhost:${ENV.PORT}/api` : '/api',
   AUTH_ENDPOINTS: {
     COMPLETE_REGISTER: '/auth/register/complete',
     FETCH_GOOGLE_REDIRECT_URI: '/auth/google/redirect-uri',
@@ -13,6 +16,8 @@ export const API_VARIABLES = {
   },
   CUSTOMERS_ENDPOINTS: {
     FETCH_CUSTOMERS: '/customers',
+    FIND_CUSTOMER_BY_ID: (customerId: string) =>
+      `/customers/${customerId}`,
   },
   SERVICES_ENDPOINTS: {
     ENDPOINT: '/services',
@@ -44,6 +49,10 @@ export const API_VARIABLES = {
     FETCH_CUSTOMER_APPOINTMENTS: '/appointment-services/customer',
     FIND_BY_SERVICE_OFFERED: (serviceOfferedId: string) =>
       `/appointment-services/offer/${serviceOfferedId}`,
+    FIND_APPOINTMENT_SERVICE_BY_ID: (appointmentServiceId: string) =>
+      `/appointment-services/${appointmentServiceId}`,
+    UPDATE_APPOINTMENT_SERVICE: (appointmentServiceId: string) =>
+      `/appointment-services/${appointmentServiceId}`,
   },
   ANALYTICS_ENDPOINTS: {
     FETCH_ANALYTICS: '/analytics',

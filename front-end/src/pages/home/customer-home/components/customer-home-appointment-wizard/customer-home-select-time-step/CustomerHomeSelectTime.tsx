@@ -112,7 +112,7 @@ function CustomerHomeSelectTimeContainer() {
             navigationLabel={({ label, view }) => {
               if (view === 'month') {
                 const onlyMonthLabel = label.split(' ')[0]
-                const onlyYearLabel = label.split(' ')[2]
+                const onlyYearLabel = label.split(' ')[1]
                 return (
                   <label className="text-lg text-[#A5A5A5]">
                     {onlyMonthLabel.charAt(0).toUpperCase() +

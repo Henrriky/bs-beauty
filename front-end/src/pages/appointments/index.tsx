@@ -10,6 +10,7 @@ import { appointmentAPI } from '../../store/appointment/appointment-api'
 import { ListAppointmentsButtonStatus } from './types'
 import { useMemo, useState } from 'react'
 import { Status } from '../../store/appointment/types'
+import Title from '../../components/texts/Title'
 
 const roleToAppointmentComponents = {
   [Role.CUSTOMER]: CustomerAppointments,
@@ -19,11 +20,11 @@ const roleToAppointmentComponents = {
 
 function Appointments() {
   const [switchButtonStatus, setSwitchButtonStatus] =
-    useState<ListAppointmentsButtonStatus>('finished')
+    useState<ListAppointmentsButtonStatus>('schedulled')
   const user = useAppSelector((state) => state.auth.user!)
 
   const { data, isLoading, isError, error } =
-    appointmentAPI.useFindAppointmentsByCustomerIdQuery()
+    appointmentAPI.useFindAppointmentsByCustomerOrEmployeeIdQuery()
 
   if (isError) {
     toast.error('Erro ao carregar os agendamentos')
@@ -50,14 +51,15 @@ function Appointments() {
     return data.appointments.filter((appointment) =>
       switchButtonStatus === 'schedulled'
         ? schedulledStatuses.has(appointment.status.toString())
-        : finishedStatuses.has(appointment.status.toString()),
+        : finishedStatuses.has(appointment.status.toString())
     )
   }, [data, switchButtonStatus])
 
   return (
     <div className="h-full flex flex-col justify-between">
       <header>
-        <div className="flex flex-col mb-6 max-w-[50%]">
+        <Title align="left">Agendamentos</Title>
+        <div className="flex flex-col mt-3 mb-6 max-w-[50%]">
           <Subtitle align="left">
             Olá {user.name},{' '}
             <b className="text-[#A4978A]">
