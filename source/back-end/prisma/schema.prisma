@@ -14,49 +14,53 @@ datasource db {
 }
 
 model Customer {
-  id                String         @id @default(uuid())
-  name              String?        @default("Usuário")
-  registerCompleted Boolean        @default(false) @map("register_completed")
+  id                String    @id @default(uuid())
+  name              String?   @default("Usuário")
+  registerCompleted Boolean   @default(false) @map("register_completed")
   birthdate         DateTime?
-  email             String         @unique
-  googleId          String?        @unique @map("google_id")
-  phone             String?        @unique
+  email             String    @unique
+  googleId          String?   @unique @map("google_id")
+  phone             String?   @unique
   profilePhotoUrl   String?
-  notification      Notification[]
-  appointments      Appointment[]
-  role              Role           @default(CUSTOMER)
-  createdAt         DateTime       @default(now()) @map("created_at")
-  updatedAt         DateTime       @updatedAt @map("updated_at")
+  userType          UserType  @default(CUSTOMER) @map("user_type")
+  referrerId        String?   @map("referrer_id")
+  referralCount     Int       @default(0) @map("referral_count")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  appointments Appointment[]
+  referrer     Customer?     @relation("refers", fields: [referrerId], references: [id])
+  referrals    Customer[]    @relation("refers")
 
   @@map("customer")
 }
 
 model Appointment {
-  id                 String               @id @default(uuid())
-  observation        String?
-  status             Status               @default(PENDING)
-  createdAt          DateTime             @default(now()) @map("created_at")
-  updatedAt          DateTime             @updatedAt @map("updated_at")
-  customerId         String               @map("customer_id")
-  appointmentService AppointmentService[]
-
-  customer Customer @relation(fields: [customerId], references: [id])
-
-  @@map("appointment")
-}
-
-model AppointmentService {
   id               String   @id @default(uuid())
   observation      String?
   status           Status   @default(PENDING)
   appointmentDate  DateTime @map("appointment_date")
-  appointmentId    String   @map("appointment_id")
+  customerId       String   @map("customer_id")
   serviceOfferedId String   @map("service_id")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
-  appointment    Appointment @relation(fields: [appointmentId], references: [id])
-  serviceOffered Offer       @relation(fields: [serviceOfferedId], references: [id])
+  notifications Notification[]
+  rating        Rating?
+  customer      Customer       @relation(fields: [customerId], references: [id])
+  offer         Offer          @relation(fields: [serviceOfferedId], references: [id])
 
-  @@map("appointment_service")
+  @@map("appointment")
+}
+
+model Rating {
+  id            String   @id @default(uuid())
+  score         Int      @default(1)
+  comment       String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  appointmentId String   @map("appointment_id") @unique
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
 }
 
 model Service {
@@ -64,46 +68,47 @@ model Service {
   name        String
   description String?
   category    String
-  offers      Offer[]
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
+
+  offers Offer[]
 
   @@map("service")
 }
 
 model Offer {
-  id            String               @id @default(uuid())
-  estimatedTime Int                  @map("estimated_time")
-  price         Decimal              @db.Decimal(10, 2)
-  isOffering    Boolean              @default(false) @map("is_offering")
-  serviceId     String               @map("service_id")
-  employeeId    String               @map("employee_id")
-  createdAt     DateTime             @default(now()) @map("created_at")
-  updatedAt     DateTime             @updatedAt @map("updated_at")
-  appointments  AppointmentService[]
+  id            String   @id @default(uuid())
+  estimatedTime Int      @map("estimated_time")
+  price         Decimal  @db.Decimal(10, 2)
+  isOffering    Boolean  @default(false) @map("is_offering")
+  serviceId     String   @map("service_id")
+  employeeId    String   @map("employee_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
-  service  Service  @relation(fields: [serviceId], references: [id])
-  employee Employee @relation(fields: [employeeId], references: [id])
+  appointments Appointment[]
+  service      Service       @relation(fields: [serviceId], references: [id])
+  employee     Employee      @relation(fields: [employeeId], references: [id])
 
   @@map("offer")
 }
 
 model Employee {
-  id                String         @id @default(uuid())
-  name              String?        @default("Usuário")
-  email             String         @unique
-  googleId          String?        @unique @map("google_id")
-  registerCompleted Boolean        @default(false) @map("register_completed")
-  socialMedia       Json?          @map("social_media")
-  contact           String?        @unique
+  id                String   @id @default(uuid())
+  name              String?  @default("Usuário")
+  email             String   @unique
+  googleId          String?  @unique @map("google_id")
+  registerCompleted Boolean  @default(false) @map("register_completed")
+  socialMedia       Json?    @map("social_media")
+  contact           String?  @unique
   specialization    String?
-  profilePhotoUrl   String?
-  role              Role           @default(EMPLOYEE)
-  shifts            Shift[]
-  offers            Offer[]
-  notification      Notification[]
-  createdAt         DateTime       @default(now()) @map("created_at")
-  updatedAt         DateTime       @updatedAt @map("updated_at")
+  profilePhotoUrl   String?  @map("profile_photo_url")
+  role              UserType @default(EMPLOYEE)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  shifts Shift[]
+  offers Offer[]
 
   @@map("employee")
 }
@@ -122,16 +127,13 @@ model Shift {
 }
 
 model Notification {
-  id         String    @id @default(uuid())
-  title      String
-  content    String
-  employeeId String?   @map("employee_id")
-  customerId String?   @map("customer_id")
-  readAt     DateTime? @map("read_at")
-  createdAt  DateTime  @default(now()) @map("created_at")
+  id            String    @id @default(uuid())
+  message       String
+  createdAt     DateTime  @default(now()) @map("created_at")
+  readAt        DateTime? @map("read_at")
+  appointmentId String    @map("appointment_id")
 
-  employee Employee? @relation(fields: [employeeId], references: [id])
-  customer Customer? @relation(fields: [customerId], references: [id])
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
 
   @@map("notification")
 }
@@ -146,7 +148,7 @@ enum WeekDays {
   SATURDAY
 }
 
-enum Role {
+enum UserType {
   MANAGER
   CUSTOMER
   EMPLOYEE
