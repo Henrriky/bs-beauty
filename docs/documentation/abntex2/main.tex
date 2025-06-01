@@ -42,7 +42,8 @@ brazil				% o último idioma é o principal do documento
 % ---
 % Pacotes adicionados pelos autores
 % ---
-\usepackage{enumitem}		% para personalizar listas numeradas
+\usepackage{enumitem}							% para personalizar listas numeradas
+\usepackage{qrcode}								% para gerar QR code
 
 % --- 
 % CONFIGURAÇÕES DE PACOTES
@@ -438,35 +439,18 @@ brazil				% o último idioma é o principal do documento
 	
 % ----------------------------------------------------------
 	\chapter{Introdução}
-		
+	
+% o input do capitulo 1 já contem todas as seções dele	
 \input{cap01-Introducao/01-00-introducao}
-
-\section{Objetivos}
-\input{cap01-Introducao/01-01-objetivos}
-
-\section{Problema e Solução Proposta}
-\input{cap01-Introducao/01-02-problema_solucao}
-
-\section{Justificativa}
-\input{cap01-Introducao/01-03-justificativa}
-
-\section{Análise da Concorrência}
-\input{cap01-Introducao/01-04-concorrencia}
 	% --------------------------------------
 	
 	\chapter{Revisão da Literatura}
+	explicar os topicos principais do projeto
+	
+	%o input do capitulo 2 já contem todas as seções dele
+	
 	\input{cap02-Revisao_literatura/02-00-Revisao_literatura}	
-	
-	\section{Histórico do assunto}
-	\input{cap02-Revisao_literatura/02-01-historico}
-	
-	\section{Atualidade do assunto}
-	\input{cap02-Revisao_literatura/02-02-atualidade}	
-	%----------------------------------------------
-	\section{Outros contextos do assunto (opcional)}
-	\input{cap02-Revisao_literatura/02-03-outros_contextos}	
-
-	%  --------------------------------------------
+	%  ----------------------------------------------------------
 	
 	\include{cap03-gestao/03-00-gestao-projeto.tex}
 	
