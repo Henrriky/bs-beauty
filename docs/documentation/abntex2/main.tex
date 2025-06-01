@@ -2,7 +2,7 @@
 % -- opções da classe memoir --
 12pt,				% tamanho da fonte
 openany,			% capítulos iniciam na próxima pág disponível (sem inserir páginas em branco)
-twoside,			% para impressão em recto e verso. Oposto a oneside
+oneside,			% para impressão em recto e verso. Oposto a oneside
 a4paper,			% tamanho do papel. 
 % -- opções da classe abntex2 --
 %chapter=TITLE,		% títulos de capítulos convertidos em letras maiúsculas
@@ -39,6 +39,10 @@ brazil				% o último idioma é o principal do documento
 % ---
 \usepackage[brazilian,hyperpageref]{backref}	 % Paginas com as citações na bibl
 \usepackage[alf]{abntex2cite}	% Citações padrão ABNT
+% ---
+% Pacotes adicionados pelos autores
+% ---
+\usepackage{enumitem}		% para personalizar listas numeradas
 
 % --- 
 % CONFIGURAÇÕES DE PACOTES
@@ -58,6 +62,10 @@ brazil				% o último idioma é o principal do documento
 	\else
 	Citado #1 vezes nas páginas #2.%
 	\fi}%
+
+% Configuração do pacote enumitem
+% Aplicando o recuo em listas numeradas globalmente
+\setlist[enumerate]{leftmargin=2cm}
 % ---
 
 % ---
@@ -440,6 +448,7 @@ brazil				% o último idioma é o principal do documento
 	
 	\input{cap02-Revisao_literatura/2.Revisao_literatura}	
 	%  ----------------------------------------------------------
+	
 	\include{cap03-gestao/03-00-gestao-projeto.tex}
 	
 	%-------------------------------------------
