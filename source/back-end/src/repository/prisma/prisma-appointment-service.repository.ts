@@ -41,29 +41,29 @@ class PrismaAppointmentServiceRepository implements AppointmentServiceRepository
     return appointmentServices
   }
 
-  public async findByAppointmentDate (appointmentDate: Date) {
-    const appointmentServices = await prismaClient.appointmentService.findMany({
-      where: { appointmentDate }
-    })
+  // public async findByAppointmentDate (appointmentDate: Date) {
+  //   const appointmentServices = await prismaClient.appointmentService.findMany({
+  //     where: { appointmentDate }
+  //   })
 
-    return appointmentServices
-  }
+  //   return appointmentServices
+  // }
 
-  public async findByAppointmentId (appointmentId: string) {
-    const appointmentServices = await prismaClient.appointmentService.findMany({
-      where: { appointmentId }
-    })
+  // public async findByAppointmentId (appointmentId: string) {
+  //   const appointmentServices = await prismaClient.appointmentService.findMany({
+  //     where: { appointmentId }
+  //   })
 
-    return appointmentServices
-  }
+  //   return appointmentServices
+  // }
 
-  public async findByServiceOfferedId (serviceOfferedId: string) {
-    const appointmentServices = await prismaClient.appointmentService.findMany({
-      where: { serviceOfferedId }
-    })
+  // public async findByServiceOfferedId (serviceOfferedId: string) {
+  //   const appointmentServices = await prismaClient.appointmentService.findMany({
+  //     where: { serviceOfferedId }
+  //   })
 
-    return appointmentServices
-  }
+  //   return appointmentServices
+  // }
 
   public async create (appointmentServiceToCreate: Prisma.AppointmentServiceCreateInput) {
     const newAppointmentService = await prismaClient.appointmentService.create({

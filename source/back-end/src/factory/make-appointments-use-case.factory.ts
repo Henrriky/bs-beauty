@@ -1,9 +1,13 @@
 import { PrismaAppointmentRepository } from '../repository/prisma/prisma-appointment.repository'
+import { PrismaCustomerRepository } from '../repository/prisma/prisma-customer.repository'
+import { PrismaEmployeeRepository } from '../repository/prisma/prisma-employee.repository'
 import { AppointmentsUseCase } from '../services/appointments.use-case'
 
 function makeAppointmentsUseCaseFactory () {
-  const repository = new PrismaAppointmentRepository()
-  const useCase = new AppointmentsUseCase(repository)
+  const appointmentRepository = new PrismaAppointmentRepository()
+  const customerRepository = new PrismaCustomerRepository()
+  const employeeRepository = new PrismaEmployeeRepository()
+  const useCase = new AppointmentsUseCase(appointmentRepository, customerRepository, employeeRepository)
 
   return useCase
 }

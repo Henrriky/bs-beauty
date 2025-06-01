@@ -3,7 +3,7 @@ import { OffersController } from '../../controllers/offers.controller'
 import { validateCreateOffer } from '../../middlewares/data-validation/offer/create-offer.validation.middleware'
 import { validateUpdateOffer } from '../../middlewares/data-validation/offer/update-offer.validation.middleware'
 import { routeAuthMiddleware } from '../../middlewares/route-auth.middleware'
-import { Role } from '@prisma/client'
+import { UserType } from '@prisma/client'
 import { validateFetchAvailableSchedulling } from '../../middlewares/data-validation/offer/fetch-available-schedulling.validation.middleware'
 
 const offerRoutes = Router()
@@ -13,8 +13,8 @@ offerRoutes.get('/:id/schedulling', validateFetchAvailableSchedulling, OffersCon
 offerRoutes.get('/service/:id', OffersController.handleFindByServiceId)
 offerRoutes.get('/employee/:employeeId', OffersController.handleFindByEmployeeId)
 offerRoutes.get('/:id', OffersController.handleFindById)
-offerRoutes.post('/', routeAuthMiddleware([Role.EMPLOYEE, Role.MANAGER]), validateCreateOffer, OffersController.handleCreate)
-offerRoutes.put('/:id', routeAuthMiddleware([Role.EMPLOYEE, Role.MANAGER]), validateUpdateOffer, OffersController.handleUpdate)
-offerRoutes.delete('/:id', routeAuthMiddleware([Role.EMPLOYEE, Role.MANAGER]), OffersController.handleDelete)
+offerRoutes.post('/', routeAuthMiddleware([UserType.EMPLOYEE, UserType.MANAGER]), validateCreateOffer, OffersController.handleCreate)
+offerRoutes.put('/:id', routeAuthMiddleware([UserType.EMPLOYEE, UserType.MANAGER]), validateUpdateOffer, OffersController.handleUpdate)
+offerRoutes.delete('/:id', routeAuthMiddleware([UserType.EMPLOYEE, UserType.MANAGER]), OffersController.handleDelete)
 
 export { offerRoutes }

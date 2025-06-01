@@ -3,7 +3,7 @@ import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use
 import { type Prisma } from '@prisma/client'
 
 class AppointmentController {
-  public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindAll(req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeAppointmentsUseCaseFactory()
       const { appointments } = await useCase.executeFindAll()
@@ -14,7 +14,7 @@ class AppointmentController {
     }
   }
 
-  public static async handleFindById (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindById(req: Request, res: Response, next: NextFunction) {
     try {
       const appointmentId = req.params.id
       const useCase = makeAppointmentsUseCaseFactory()
@@ -26,19 +26,44 @@ class AppointmentController {
     }
   }
 
-  public static async handleFindByCustomerId (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByCustomerOrEmployeeId(req: Request, res: Response, next: NextFunction) {
     try {
-      const customerId = req.params.customerId
       const useCase = makeAppointmentsUseCaseFactory()
-      const appointments = await useCase.executeFindByCustomerId(customerId)
+      const customerId = req.user.id
 
-      res.send(appointments)
+      const { appointments } = await useCase.executeFindByCustomerOrEmployeeId(customerId)
+
+      res.send({ appointments }).status(200)
     } catch (error) {
       next(error)
     }
   }
 
-  public static async handleCreate (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByAppointmentDate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const appointmentDate = new Date(req.params.appointmentDate)
+      const useCase = makeAppointmentsUseCaseFactory()
+      const { appointments } = await useCase.executeFindByAppointmentDate(appointmentDate)
+
+      res.send({ appointments })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+    public static async handleFindByServiceOfferedId (req: Request, res: Response, next: NextFunction) {
+    try {
+      const serviceId = req.params.serviceOfferedId
+      const useCase = makeAppointmentsUseCaseFactory()
+      const { appointments } = await useCase.executeFindByServiceOfferedId(serviceId)
+
+      res.send({ appointments })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleCreate(req: Request, res: Response, next: NextFunction) {
     try {
       const appointmentToCreate: Prisma.AppointmentCreateInput = req.body
       const useCase = makeAppointmentsUseCaseFactory()
@@ -50,7 +75,7 @@ class AppointmentController {
     }
   }
 
-  public static async handleUpdate (req: Request, res: Response, next: NextFunction) {
+  public static async handleUpdate(req: Request, res: Response, next: NextFunction) {
     try {
       const appointmentToUpdate: Prisma.AppointmentUpdateInput = req.body
       const appointmentId = req.params.id
@@ -63,7 +88,7 @@ class AppointmentController {
     }
   }
 
-  public static async handleDelete (req: Request, res: Response, next: NextFunction) {
+  public static async handleDelete(req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeAppointmentsUseCaseFactory()
       const appointmentId = req.params.id

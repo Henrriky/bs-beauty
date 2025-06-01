@@ -7,13 +7,13 @@ import { formatValidationErrors } from '../../utils/formatting/zod-validation-er
 import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
 import { CustomerSchemas } from '../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
 import { makeCompleteUserRegisterUseCase } from '../../factory/auth/make-complete-user-register.use-case.factory'
-import { Role } from '@prisma/client'
+import { UserType } from '@prisma/client'
 import { InvalidRoleUseCaseError } from '../../services/use-cases/errors/invalid-role-use-case-error'
 
 const rolesToSchemas = {
-  [Role.CUSTOMER]: CustomerSchemas.customerCompleteRegisterBodySchema,
-  [Role.EMPLOYEE]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
-  [Role.MANAGER]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
+  [UserType.CUSTOMER]: CustomerSchemas.customerCompleteRegisterBodySchema,
+  [UserType.EMPLOYEE]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
+  [UserType.MANAGER]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
 }
 
 class CompleteUserRegisterController {
@@ -24,7 +24,7 @@ class CompleteUserRegisterController {
         return
       }
 
-      const schema = rolesToSchemas[req.user.role]
+      const schema = rolesToSchemas[req.user.userType]
 
       if (!schema) {
         throw new InvalidRoleUseCaseError(`Invalid role provided: ${req.user.role}`)

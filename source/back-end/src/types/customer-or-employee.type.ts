@@ -1,8 +1,8 @@
-import { type Role } from '@prisma/client'
+import { type UserType } from '@prisma/client'
 
 interface CustomerOrEmployee {
   id: string
-  role: Role
+  userType: UserType
   email: string
   name: string | null
   registerCompleted: boolean
