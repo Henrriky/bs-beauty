@@ -58,9 +58,21 @@ model Rating {
   score         Int      @default(1)
   comment       String?
   createdAt     DateTime @default(now()) @map("created_at")
-  appointmentId String   @map("appointment_id") @unique
+  appointmentId String   @unique @map("appointment_id")
 
   appointment Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model Notification {
+  id            String    @id @default(uuid())
+  message       String
+  createdAt     DateTime  @default(now()) @map("created_at")
+  readAt        DateTime? @map("read_at")
+  appointmentId String    @map("appointment_id")
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+
+  @@map("notification")
 }
 
 model Service {
@@ -103,12 +115,13 @@ model Employee {
   contact           String?  @unique
   specialization    String?
   profilePhotoUrl   String?  @map("profile_photo_url")
-  role              UserType @default(EMPLOYEE)
+  userType          UserType @default(EMPLOYEE) @map("user_type")
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
-  shifts Shift[]
-  offers Offer[]
+  shifts       Shift[]
+  offers       Offer[]
+  employeeRole EmployeeRole[]
 
   @@map("employee")
 }
@@ -126,16 +139,56 @@ model Shift {
   @@map("shift")
 }
 
-model Notification {
-  id            String    @id @default(uuid())
-  message       String
-  createdAt     DateTime  @default(now()) @map("created_at")
-  readAt        DateTime? @map("read_at")
-  appointmentId String    @map("appointment_id")
+model Role {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(false) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
-  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  employeeRole   EmployeeRole[]
+  rolePermission RolePermission[]
 
-  @@map("notification")
+  @@map("role")
+}
+
+model EmployeeRole {
+  id         String   @id @default(uuid())
+  employeeId String   @map("employee_id")
+  roleId     String   @map("role_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+  role     Role     @relation(fields: [roleId], references: [id])
+
+  @@map("employee_role")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  screen      String
+  action      Action
+  description String?
+  isActive    Boolean  @default(false) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  rolePermission RolePermission[]
+
+  @@map("permission")
+}
+
+model RolePermission {
+  id           String   @id @default(uuid())
+  roleId       String   @map("role_id")
+  permissionId String   @map("permission_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@map("role_permission")
 }
 
 enum WeekDays {
@@ -161,4 +214,11 @@ enum Status {
   RESCHEDULED
   FINISHED
   NO_SHOW
+}
+
+enum Action {
+  CREATE
+  READ
+  UPDATE
+  DELETE
 }
