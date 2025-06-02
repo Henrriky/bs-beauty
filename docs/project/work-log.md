@@ -103,6 +103,13 @@ Até o momento, conseguimos atualizar completamente o **Diário de Bordo** no re
 
 
 ## Semana 11 - 26.05 a 01.06
+Conforme solicitado pelo professor, começamos a nos preparar para apresentar o **modelo físico** do **banco de dados** do nosso sistema. Portanto, no início da semana definimos os responsáveis e identificamos os tópicos mais importantes para realizar a apresentação durante uma ligação no discord. Além disso, seguimos trabalhando na **documentação**, começando a desenvolver melhor as seções de desenvolvimento.
+
+Logo após, definimos as tarefas necessárias para a **melhoria** e consequente entrega do **MVP**, nos baseando na aplicação que desenvolvemos na disciplina de Engenharia de Software IV e já atribuindo os respectivos responsáveis por cada tarefa.
+
+> **Resumo:** Preparação Apresentação BD; Continuação documentação; Melhorias MVP planejadas.
+
+*Por Giovanna Carvalho*
 
 ## Semana 12 - 02.06 a 08.06
 
