@@ -9,16 +9,16 @@ import useAppDispatch from '../../hooks/use-app-dispatch'
 import useAppSelector from '../../hooks/use-app-selector'
 import { authAPI } from '../../store/auth/auth-api'
 import { setToken } from '../../store/auth/auth-slice'
-import { Role } from '../../store/auth/types'
+import { UserType } from '../../store/auth/types'
 import { decodeUserToken } from '../../utils/decode-token'
 import CustomerProfile from './components/CustomerProfile'
 import EmployeeProfile from './components/EmployeeProfile'
 import ProfilePicture from './components/ProfilePicture'
 
-const roleToProfileComponents = {
-  [Role.CUSTOMER]: CustomerProfile,
-  [Role.EMPLOYEE]: EmployeeProfile,
-  [Role.MANAGER]: EmployeeProfile,
+const userTypeToProfileComponents = {
+  [UserType.CUSTOMER]: CustomerProfile,
+  [UserType.EMPLOYEE]: EmployeeProfile,
+  [UserType.MANAGER]: EmployeeProfile,
 }
 
 function Profile() {
@@ -45,7 +45,7 @@ function Profile() {
         setToken({
           user: {
             id: decodedToken.id,
-            role: decodedToken.role,
+            userType: decodedToken.userType,
             email: decodedToken.email,
             name: decodedToken.name,
             registerCompleted: decodedToken.registerCompleted,
@@ -91,7 +91,7 @@ function Profile() {
     )
   }
 
-  const ProfileContainer = roleToProfileComponents[user.role]
+  const ProfileContainer = userTypeToProfileComponents[user.userType]
   const userInfo = data.user
 
   return (

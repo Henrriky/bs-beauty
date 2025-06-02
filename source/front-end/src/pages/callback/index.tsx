@@ -30,7 +30,7 @@ function Callback() {
         setToken({
           user: {
             id: decodedToken.id,
-            role: decodedToken.role,
+            userType: decodedToken.userType,
             email: decodedToken.email,
             name: decodedToken.name,
             registerCompleted: decodedToken.registerCompleted,

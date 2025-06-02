@@ -4,8 +4,7 @@ import { makeShiftUseCaseFactory } from '../factory/make-shift-use-case.factory'
 import { StatusCodes } from 'http-status-codes'
 
 class ShiftController {
-
-  public static async handleFindAllByEmployeeId(req: Request, res: Response, next: NextFunction) {
+  public static async handleFindAllByEmployeeId (req: Request, res: Response, next: NextFunction) {
     try {
       const { userId } = req.user
       const useCase = makeShiftUseCaseFactory()
@@ -28,7 +27,7 @@ class ShiftController {
     }
   }
 
-  public static async handleFindByEmployeeId(req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByEmployeeId (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeShiftUseCaseFactory()
       const employeeId = req.params.id
@@ -42,14 +41,13 @@ class ShiftController {
 
   public static async handleCreate (req: Request, res: Response, next: NextFunction) {
     try {
-
       const { userId } = req.user
 
       const useCase = makeShiftUseCaseFactory()
       const shiftToCreate: Prisma.ShiftCreateInput = {
         ...req.body,
         employeeId: userId
-      };      
+      }
       const newShift = await useCase.executeCreate(shiftToCreate)
 
       res.status(StatusCodes.CREATED).send(newShift)
@@ -58,7 +56,7 @@ class ShiftController {
     }
   }
 
-  public static async handleUpdateByIdAndEmployeeId(req: Request, res: Response, next: NextFunction) {
+  public static async handleUpdateByIdAndEmployeeId (req: Request, res: Response, next: NextFunction) {
     try {
       const { userId } = req.user
       const useCase = makeShiftUseCaseFactory()

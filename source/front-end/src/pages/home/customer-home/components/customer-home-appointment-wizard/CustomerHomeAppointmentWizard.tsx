@@ -3,7 +3,7 @@ import { useState } from 'react'
 import CustomerHomeSelectServiceContainer from './customer-home-select-service-step/CustomerHomeSelectService'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AppointmentServiceSchemas } from '../../../../../utils/validation/zod-schemas/appointment-service.zod-schemas.validation.util'
+import { AppointmentSchemas } from '../../../../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils'
 import { CreateAppointmentFormData } from './types'
 import { Button } from '../../../../../components/button/Button'
 import CustomerHomeSelectEmployeeContainer from './customer-home-select-employee-step/CustomerHomeSelectEmployee'
@@ -54,10 +54,10 @@ selectAppointmentTimeStep.previousStep = selectEmployeeStep
 function CustomerHomeAppointmentWizard() {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
   const [currentStep, setCurrentStep] = useState<Step>(selectServiceStep)
-  const userRole = useAppSelector((state) => state?.auth?.user?.role)
+  const userType = useAppSelector((state) => state?.auth?.user?.userType)
   const navigate = useNavigate()
   const createAppointmentForm = useForm<CreateAppointmentFormData>({
-    resolver: zodResolver(AppointmentServiceSchemas.createSchemaForm),
+    resolver: zodResolver(AppointmentSchemas.createSchemaForm),
   })
   const { handleSubmit } = createAppointmentForm
 
@@ -163,7 +163,7 @@ function CustomerHomeAppointmentWizard() {
         isOpen={modalIsOpen}
         onClose={() => {
           setModalIsOpen(false)
-          navigate(`/${userRole?.toString().toLowerCase()}/home`)
+          navigate(`/${userType?.toString().toLowerCase()}/home`)
           navigate(0)
         }}
       >
@@ -185,7 +185,7 @@ function CustomerHomeAppointmentWizard() {
             id={'submit-button'}
             onClick={() => {
               setModalIsOpen(false)
-              navigate(`/${userRole?.toString().toLowerCase()}/home`)
+              navigate(`/${userType?.toString().toLowerCase()}/home`)
               navigate(0)
             }}
           />

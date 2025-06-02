@@ -14,6 +14,23 @@ class AppointmentSchemas {
     })
     .strict()
 
+  public static createSchemaForm = z
+    .object({
+      observation: z
+        .string()
+        .max(255)
+        .refine((string) => RegexPatterns.content.test(string))
+        .optional(),
+      appointmentDate: z
+        .date()
+        .refine((date) => !isNaN(date.getTime()) && date > new Date()),
+      serviceOfferedId: z.string().uuid(),
+      serviceId: z.string().uuid(),
+      employeeId: z.string().optional(),
+      appointmentDayPicked: z.date().optional(),
+    })
+    .strict()
+
   public static customerUpdateSchema = z
     .object({
       observation: z
@@ -22,6 +39,7 @@ class AppointmentSchemas {
         .max(255)
         .refine((string) => RegexPatterns.content.test(string))
         .optional(),
+      status: z.nativeEnum(Status).optional(),
     })
     .strict()
 

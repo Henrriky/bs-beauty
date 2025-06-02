@@ -44,7 +44,7 @@ class EmployeeSchemas {
   public static createSchema = z
     .object({
       email: z.string({ required_error: 'O e-mail é obrigatório' }).email("Formato de e-mail inválido."),
-      role: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
+      userType: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
     })
     .strict()
 
@@ -57,7 +57,7 @@ class EmployeeSchemas {
         .string()
         .refine((value) => RegexPatterns.phone.test(value))
         .optional(),
-      role: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
+      userType: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
       specialization: SharedSchemas.specializationSchema,
     })
     .strict()

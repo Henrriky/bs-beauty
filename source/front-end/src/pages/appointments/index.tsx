@@ -3,7 +3,7 @@ import { Button } from '../../components/button/Button'
 import BSBeautyLoading from '../../components/feedback/Loading'
 import Subtitle from '../../components/texts/Subtitle'
 import useAppSelector from '../../hooks/use-app-selector'
-import { Role } from '../../store/auth/types'
+import { UserType } from '../../store/auth/types'
 import { CustomerAppointments } from './components/CustomerAppointments'
 import { ErrorMessage } from '../../components/feedback/ErrorMessage'
 import { appointmentAPI } from '../../store/appointment/appointment-api'
@@ -12,10 +12,10 @@ import { useMemo, useState } from 'react'
 import { Status } from '../../store/appointment/types'
 import Title from '../../components/texts/Title'
 
-const roleToAppointmentComponents = {
-  [Role.CUSTOMER]: CustomerAppointments,
-  [Role.EMPLOYEE]: CustomerAppointments,
-  [Role.MANAGER]: CustomerAppointments,
+const userTypeToAppointmentComponents = {
+  [UserType.CUSTOMER]: CustomerAppointments,
+  [UserType.EMPLOYEE]: CustomerAppointments,
+  [UserType.MANAGER]: CustomerAppointments,
 }
 
 function Appointments() {
@@ -31,7 +31,7 @@ function Appointments() {
     console.error(error)
   }
 
-  const AppointmentContainer = roleToAppointmentComponents[user.role]
+  const AppointmentContainer = userTypeToAppointmentComponents[user.userType]
 
   const filteredAppointments = useMemo(() => {
     if (!data) return []

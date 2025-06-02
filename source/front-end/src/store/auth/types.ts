@@ -1,6 +1,6 @@
 import { WeekDays } from "../../enums/enums"
 
-export enum Role {
+export enum UserType {
   MANAGER = "MANAGER",
   CUSTOMER = "CUSTOMER",
   EMPLOYEE = "EMPLOYEE"
@@ -8,48 +8,50 @@ export enum Role {
 
 export interface CustomerOrEmployee {
   id: string
-  role: Role
-  email: string
   name: string | null
   registerCompleted: boolean
+  email: string
+  userType: UserType
   profilePhotoUrl: string
 }
 
 export type Customer = {
-  name: string | null;
   id: string;
+  name: string | null;
   registerCompleted: boolean;
   birthdate: Date | null;
   email: string;
   googleId: string | null;
   phone: string | null;
   profilePhotoUrl: string | null;
-  role: Role;
+  userType: UserType;
+  referrerId: string;
+  referralCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export type Employee = {
-  name: string | null;
   id: string;
-  registerCompleted: boolean;
+  name: string | null;
   email: string;
   googleId: string | null;
-  role: Role;
-  createdAt: Date;
-  updatedAt: Date;
-  profilePhotoUrl: string;
+  registerCompleted: boolean;
   socialMedia: { name: string, url: string }[] | null;
   contact: string | null;
   specialization: string | null;
+  profilePhotoUrl: string;
+  userType: UserType;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type Shift = {
   id: string;
   weekDay: WeekDays;
+  isBusy: boolean;
   shiftStart: string;
   shiftEnd: string;
-  isBusy: boolean;
   employeeId: string;
   createdAt: Date;
   updatedAt: Date;

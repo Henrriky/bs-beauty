@@ -3,7 +3,6 @@ import { makeCustomersUseCaseFactory } from '../factory/make-customers-use-case.
 import { z } from 'zod'
 import { makeServiceUseCaseFactory } from '../factory/make-service-use-case.factory'
 import { makeEmployeesUseCaseFactory } from '../factory/make-employees-use-case.factory'
-import { makeAppointmentServicesUseCaseFactory } from '../factory/make-appointment-services-use-case.factory'
 import { makeOffersUseCaseFactory } from '../factory/make-offers-use-case.factory'
 import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use-case.factory'
 import { type Appointment } from '@prisma/client'

@@ -1,5 +1,5 @@
 import { type Appointment, type Prisma } from '@prisma/client'
-//import { FindAppointmentById, type FindAppointmentByCustomerId } from '../types/appointment-repository.types'
+// import { FindAppointmentById, type FindAppointmentByCustomerId } from '../types/appointment-repository.types'
 
 interface AppointmentRepository {
   findAll: () => Promise<Appointment[]>

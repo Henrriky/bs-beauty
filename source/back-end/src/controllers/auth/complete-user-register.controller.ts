@@ -13,7 +13,7 @@ import { InvalidRoleUseCaseError } from '../../services/use-cases/errors/invalid
 const rolesToSchemas = {
   [UserType.CUSTOMER]: CustomerSchemas.customerCompleteRegisterBodySchema,
   [UserType.EMPLOYEE]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
-  [UserType.MANAGER]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
+  [UserType.MANAGER]: EmployeeSchemas.employeeCompleteRegisterBodySchema
 }
 
 class CompleteUserRegisterController {
@@ -27,7 +27,7 @@ class CompleteUserRegisterController {
       const schema = rolesToSchemas[req.user.userType]
 
       if (!schema) {
-        throw new InvalidRoleUseCaseError(`Invalid role provided: ${req.user.role}`)
+        throw new InvalidRoleUseCaseError(`Invalid role provided: ${req.user.userType}`)
       }
 
       const customerOrEmployee = schema.parse(req.body)
@@ -42,7 +42,7 @@ class CompleteUserRegisterController {
       await usecase.execute({
         userData: customerOrEmployee,
         userId: req.user.sub,
-        userRole: req.user.role,
+        userType: req.user.userType,
         userEmail: req.user.email
       })
 

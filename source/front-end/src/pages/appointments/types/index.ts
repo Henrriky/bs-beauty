@@ -1,17 +1,17 @@
 import { z } from 'zod'
-import { AppointmentServiceSchemas } from '../../../utils/validation/zod-schemas/appointment-service.zod-schemas.validation.util'
-import { FindAppointmentServiceById } from '../../../store/appointment/types'
+import { AppointmentSchemas } from '../../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils'
+import { FindAppointmentById } from '../../../store/appointment/types'
 
 export type ListAppointmentsButtonStatus = 'finished' | 'schedulled'
 
 export type AppointmentDetailsAction = 'view' | 'edit'
 
 export type CustomerUpdateAppointmentFormData = z.infer<
-  typeof AppointmentServiceSchemas.customerUpdateSchema
+  typeof AppointmentSchemas.customerUpdateSchema
 >
 
 export type EmployeeUpdateAppointmentFormData = z.infer<
-  typeof AppointmentServiceSchemas.employeeUpdateSchema
+  typeof AppointmentSchemas.employeeUpdateSchema
 >
 
 export type OnSubmitAppointmentDetailsUpdateForm = (
@@ -20,7 +20,7 @@ export type OnSubmitAppointmentDetailsUpdateForm = (
 
 export interface AppointmentDetailsComponentProps {
   action: AppointmentDetailsAction
-  appointmentService: FindAppointmentServiceById
+  appointment: FindAppointmentById
   handleSubmitConcrete: OnSubmitAppointmentDetailsUpdateForm
   handleSubmitConcreteIsLoading: boolean
 }

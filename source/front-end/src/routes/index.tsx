@@ -13,7 +13,7 @@ import NotFound from '../pages/not-found'
 import PrivateRoute from '../pages/private-route'
 import Profile from '../pages/profile'
 import { ServiceDashboard } from '../pages/services'
-import { Role } from '../store/auth/types'
+import { UserType } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
@@ -29,7 +29,7 @@ function BSBeautyRouter() {
           <Route
             element={
               <PrivateRoute
-                allowedRoles={[Role.MANAGER, Role.EMPLOYEE, Role.CUSTOMER]}
+                allowedUserTypes={[UserType.MANAGER, UserType.EMPLOYEE, UserType.CUSTOMER]}
               />
             }
           >
@@ -42,17 +42,17 @@ function BSBeautyRouter() {
               />
 
               {/* CUSTOMER ROUTES */}
-              <Route element={<PrivateRoute allowedRoles={[Role.CUSTOMER]} />}>
+              <Route element={<PrivateRoute allowedUserTypes={[UserType.CUSTOMER]} />}>
                 <Route path="/customer/home" element={<CustomerHome />} />
               </Route>
 
               {/* EMPLOYEE ROUTES */}
-              <Route element={<PrivateRoute allowedRoles={[Role.EMPLOYEE]} />}>
+              <Route element={<PrivateRoute allowedUserTypes={[UserType.EMPLOYEE]} />}>
                 <Route path="/employee/home" element={<ManagerHome />} />
               </Route>
 
               {/* MANAGER ROUTES */}
-              <Route element={<PrivateRoute allowedRoles={[Role.MANAGER]} />}>
+              <Route element={<PrivateRoute allowedUserTypes={[UserType.MANAGER]} />}>
                 <Route path="/manager/home" element={<ManagerHome />} />
                 <Route path="/customers" element={<Customers />} />
                 <Route
@@ -64,7 +64,7 @@ function BSBeautyRouter() {
               {/* EMPLOYEE/MANAGER ROUTES */}
               <Route
                 element={
-                  <PrivateRoute allowedRoles={[Role.MANAGER, Role.EMPLOYEE]} />
+                  <PrivateRoute allowedUserTypes={[UserType.MANAGER, UserType.EMPLOYEE]} />
                 }
               >
                 <Route

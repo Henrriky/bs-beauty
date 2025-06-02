@@ -1,9 +1,9 @@
-import { FindAppointmentServiceByCustomerId } from '../../../store/appointment/types'
+import { FindAppointmentByCustomerId } from '../../../store/appointment/types'
 import { ListAppointmentsButtonStatus } from '../types'
 import { CustomerAppointmentCard } from './CustomerAppointmentCard'
 
 interface CustomerAppointmentsProps {
-  appointmentsService: FindAppointmentServiceByCustomerId[]
+  appointmentsService: FindAppointmentByCustomerId[]
   switchButtonStatus: ListAppointmentsButtonStatus
 }
 

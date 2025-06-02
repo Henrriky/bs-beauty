@@ -12,8 +12,8 @@ class FetchUserInfoController {
       const usecase = makeFetchUserInfoUseCase()
 
       const { user } = await usecase.execute({
-        email: req.user.email!,
-        role: req.user.role
+        email: req.user.email,
+        userType: req.user.userType
       })
 
       res.status(StatusCodes.OK).send({ user })

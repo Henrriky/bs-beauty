@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { FindAppointmentServiceByCustomerId } from '../../../store/appointment/types'
+import { FindAppointmentByCustomerId } from '../../../store/appointment/types'
 import ProfilePicture from '../../profile/components/ProfilePicture'
 import { firstLetterOfWordToUpperCase } from '../../../utils/formatter/first-letter-of-word-to-upper-case.util'
 import {
@@ -15,7 +15,7 @@ import { ListAppointmentsButtonStatus } from '../types'
 import { Link } from 'react-router-dom'
 
 interface CustomerAppointmentCardProps {
-  appointment: FindAppointmentServiceByCustomerId
+  appointment: FindAppointmentByCustomerId
   switchButtonStatus: ListAppointmentsButtonStatus
 }
 
@@ -54,7 +54,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
             <ProfilePicture
               size="md"
               profilePhotoUrl={
-                props.appointment.serviceOffered.employee.profilePhotoUrl ??
+                props.appointment.offer.employee.profilePhotoUrl ??
                 'https://cdn-site-assets.veed.io/cdn-cgi/image/width=256,quality=75,format=auto/Fish_6e8d209905/Fish_6e8d209905.webp'
               }
               filter={isSchedulled ? 'none' : 'black-white'}
@@ -63,12 +63,12 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
           <div className="flex flex-col">
             <h1 className="text-[#D9D9D9] text-base text-opacity-85">
               {firstLetterOfWordToUpperCase(
-                props.appointment.serviceOffered.service.name,
+                props.appointment.offer.service.name,
               )}
             </h1>
             <h3 className="text-[#D9D9D9] text-xs text-opacity-55">
               {firstLetterOfWordToUpperCase(
-                props.appointment.serviceOffered.employee.name || '',
+                props.appointment.offer.employee.name || '',
               )}
             </h3>
           </div>
@@ -89,7 +89,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
           <div className="flex items-center gap-2">
             <ClockIcon className="size-5 text-[#A4978A]" />
             <h3 className="text-[#A4978A] text-sm text-opacity-85 font-semibold">
-              Aprox {props.appointment.serviceOffered.estimatedTime} Min
+              Aprox {props.appointment.offer.estimatedTime} Min
             </h3>
           </div>
           <div className="flex items-center gap-2">

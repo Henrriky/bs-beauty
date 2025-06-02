@@ -3,13 +3,13 @@ import { prismaClient } from '../../lib/prisma'
 import { type AppointmentRepository } from '../protocols/appointment.repository'
 
 class PrismaAppointmentRepository implements AppointmentRepository {
-  public async findAll() {
+  public async findAll () {
     const appointments = await prismaClient.appointment.findMany()
 
     return appointments
   }
 
-  public async findById(id: string) {
+  public async findById (id: string) {
     const appointment = await prismaClient.appointment.findUnique({
       where: { id },
       select: {
@@ -17,41 +17,38 @@ class PrismaAppointmentRepository implements AppointmentRepository {
         observation: true,
         status: true,
         appointmentDate: true,
-        appointment: {
-          select: {
-            customerId: true
-          }
-        },
-        serviceOffered: {
+        customerId: true,
+        serviceOfferedId: true,
+        createdAt: true,
+        updatedAt: true,
+        offer: {
           select: {
             id: true,
             estimatedTime: true,
-            employee: true,
             price: true,
+            employeeId: true,
             service: {
               select: {
                 name: true
               }
             }
           }
-        },
+        }
       }
     })
 
     return appointment
   }
 
-  public async findByCustomerOrEmployeeId(customerOrEmployeeId: string) {
+  public async findByCustomerOrEmployeeId (customerOrEmployeeId: string) {
     const appointments = await prismaClient.appointment.findMany({
       where: {
         OR: [
           {
-            appointment: {
-              customerId: customerOrEmployeeId
-            }
+            customerId: customerOrEmployeeId
           },
           {
-            serviceOffered: {
+            offer: {
               employeeId: customerOrEmployeeId
             }
           }
@@ -59,33 +56,32 @@ class PrismaAppointmentRepository implements AppointmentRepository {
       },
       select: {
         id: true,
-        status: true,
         observation: true,
-        appointment: {
-          select: {
-            customerId: true
-          }
-        },
-        serviceOffered: {
+        status: true,
+        appointmentDate: true,
+        customerId: true,
+        serviceOfferedId: true,
+        createdAt: true,
+        updatedAt: true,
+        offer: {
           select: {
             id: true,
             estimatedTime: true,
-            employee: true,
+            employeeId: true,
             service: {
               select: {
                 name: true
               }
             }
           }
-        },
-        appointmentDate: true
+        }
       }
     })
 
-    return { appointments }
+    return appointments
   }
 
-  public async findByAppointmentDate(appointmentDate: Date) {
+  public async findByAppointmentDate (appointmentDate: Date) {
     const appointments = await prismaClient.appointment.findMany({
       where: { appointmentDate }
     })
@@ -93,7 +89,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async findByServiceOfferedId(serviceOfferedId: string) {
+  public async findByServiceOfferedId (serviceOfferedId: string) {
     const appointments = await prismaClient.appointment.findMany({
       where: { serviceOfferedId }
     })
@@ -101,7 +97,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async create(appointmentToCreate: Prisma.AppointmentCreateInput) {
+  public async create (appointmentToCreate: Prisma.AppointmentCreateInput) {
     const newAppointment = await prismaClient.appointment.create({
       data: { ...appointmentToCreate }
     })
@@ -109,7 +105,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return newAppointment
   }
 
-  public async update(id: string, appointmentToUpdate: Prisma.AppointmentUpdateInput) {
+  public async update (id: string, appointmentToUpdate: Prisma.AppointmentUpdateInput) {
     const updatedAppointment = await prismaClient.appointment.update({
       where: { id },
       data: { ...appointmentToUpdate }
@@ -118,7 +114,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return updatedAppointment
   }
 
-  public async delete(id: string) {
+  public async delete (id: string) {
     const deletedAppointment = await prismaClient.appointment.delete({
       where: { id }
     })

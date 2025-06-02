@@ -11,7 +11,7 @@ function ManagerHome() {
         <span className="text-primary-100">Bem-vindo(a) ao seu </span>
         <span className="text-secondary-200">perfil </span>
         <span className="text-primary-100">
-          como {user.role === 'MANAGER' ? 'gerente' : 'funcionário'}!
+          como {user.userType === 'MANAGER' ? 'gerente' : 'funcionário'}!
         </span>
       </h2>
       <div className="bg-[#595149] w-1/2 h-0.5 mt-2"></div>

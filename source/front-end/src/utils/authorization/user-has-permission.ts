@@ -1,5 +1,5 @@
-import { Role } from '../../store/auth/types'
+import { UserType } from '../../store/auth/types'
 
-export const userHasPermission = (allowedRoles: Role[], currentRole: Role) => {
-  return allowedRoles.includes(currentRole)
+export const userHasPermission = (allowedUserTypes: UserType[], currentUserType: UserType) => {
+  return allowedUserTypes.includes(currentUserType)
 }

@@ -22,27 +22,32 @@ export interface Appointment {
   id: string;
   observation: string | null;
   status: Status;
+  appointmentDate: string;
+  customerId: string;
+  serviceOfferedId: string;
   createdAt: Date;
   updatedAt: Date;
-  customerId: string;
 }
 
-export interface AppointmentService {
-  observation: string | null;
-  appointmentDate: string;
-  status: Status;
-  appointmentId: string;
-  serviceOfferedId: string;
+export interface FindAppointmentByCustomerId {
   id: string;
-}
-
-export interface FindAppointmentServiceByCustomerId {
-  id: string
-  observation: string | null
-  status: Status
-  appointmentDate: string
-  appointment: Appointment
-  serviceOffered: {
+  observation: string | null;
+  status: Status;
+  appointmentDate: string;
+  customerId: string;
+  serviceOfferedId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  // appointment: Appointment
+  // serviceOffered: {
+  //   id: string
+  //   estimatedTime: number
+  //   employee: Employee
+  //   service: {
+  //     name: string
+  //   }
+  // }
+  offer: {
     id: string
     estimatedTime: number
     employee: Employee
@@ -51,15 +56,14 @@ export interface FindAppointmentServiceByCustomerId {
     }
   }
 }
-export interface FindAppointmentServiceById {
+export interface FindAppointmentById {
   id: string
   observation: string | null
   status: Status
   appointmentDate: string
-  appointment: {
-    customerId: string
-  }
-  serviceOffered: {
+  customerId: string
+  serviceOfferedId: string
+  offer: {
     id: string
     estimatedTime: number
     price: string

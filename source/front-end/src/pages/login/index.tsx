@@ -14,15 +14,15 @@ function Login() {
   useEffect(() => {
     if (authInformations.token?.accessToken) {
       if (authInformations.user?.registerCompleted) {
-        navigate(`/${authInformations.user.role.toString().toLowerCase()}/home`)
+        navigate(`/${authInformations.user.userType.toString().toLowerCase()}/home`)
       } else {
-        navigate('/')
+        navigate('/a')
       }
     }
   }, [
     authInformations.token?.accessToken,
     authInformations.user?.registerCompleted,
-    authInformations.user?.role,
+    authInformations.user?.userType,
     navigate,
   ])
 

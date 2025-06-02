@@ -1,4 +1,4 @@
-import { Customer, Prisma, Role } from "@prisma/client";
+import { Customer, Prisma, UserType } from "@prisma/client";
 import { CustomersController } from "../../../src/controllers/customers.controller";
 import { makeCustomersUseCaseFactory } from "../../../src/factory/make-customers-use-case.factory";
 import { faker } from "@faker-js/faker";
@@ -152,7 +152,7 @@ describe('CustomerController', () => {
         email: 'newuser@example.com',
         registerCompleted: true,
         googleId: 'google-id-123',
-        role: Role.CUSTOMER,
+        userType: UserType.CUSTOMER,
         birthdate: faker.date.birthdate(),
       };
       req.body = newCustomer;

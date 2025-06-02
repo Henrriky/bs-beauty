@@ -9,7 +9,7 @@ import {
   UsersIcon,
 } from '@heroicons/react/24/outline'
 import React from 'react'
-import { Role } from '../../../store/auth/types'
+import { UserType } from '../../../store/auth/types'
 
 type SideBarItem = {
   name: string
@@ -20,9 +20,9 @@ type SideBarItem = {
 
 type SideBarOptions = {
   COMMON: SideBarItem[]
-  [Role.MANAGER]: SideBarItem[]
-  [Role.EMPLOYEE]: SideBarItem[]
-  [Role.CUSTOMER]: SideBarItem[]
+  [UserType.MANAGER]: SideBarItem[]
+  [UserType.EMPLOYEE]: SideBarItem[]
+  [UserType.CUSTOMER]: SideBarItem[]
 }
 
 const sideBarItems: SideBarOptions = {
@@ -45,7 +45,7 @@ const sideBarItems: SideBarOptions = {
       navigateTo: '/appointments',
     },
   ],
-  [Role.CUSTOMER]: [
+  [UserType.CUSTOMER]: [
     {
       name: 'Home',
       icon: <HomeIcon className="size-6" />,
@@ -53,7 +53,7 @@ const sideBarItems: SideBarOptions = {
       order: 1,
     },
   ],
-  [Role.MANAGER]: [
+  [UserType.MANAGER]: [
     {
       name: 'Clientes',
       icon: <UsersIcon className="size-6" />,
@@ -80,7 +80,7 @@ const sideBarItems: SideBarOptions = {
       navigateTo: '/manager/home',
     },
   ],
-  [Role.EMPLOYEE]: [
+  [UserType.EMPLOYEE]: [
     {
       name: 'Serviços',
       icon: <BriefcaseIcon className="size-6" />,
