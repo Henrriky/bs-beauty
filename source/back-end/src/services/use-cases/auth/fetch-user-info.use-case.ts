@@ -1,7 +1,7 @@
 import { UserType, type Employee, type Customer } from '@prisma/client'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
 import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
-import { InvalidRoleUseCaseError } from '../errors/invalid-role-use-case-error'
+import { InvalidUserTypeUseCaseError } from '../errors/invalid-user-type-use-case-error'
 import { NotFoundUseCaseError } from '../errors/not-found-error'
 
 interface FetchUserInfoUseCaseInput {
@@ -14,12 +14,12 @@ interface FetchUserInfoUseCaseOutput {
 }
 
 class FetchUserInfoUseCase {
-  constructor (
+  constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly employeeRepository: EmployeeRepository
-  ) {}
+  ) { }
 
-  async execute ({ userType, email }: FetchUserInfoUseCaseInput): Promise<FetchUserInfoUseCaseOutput> {
+  async execute({ userType, email }: FetchUserInfoUseCaseInput): Promise<FetchUserInfoUseCaseOutput> {
     if (userType === UserType.CUSTOMER) {
       const customer = await this.customerRepository.findByEmailOrPhone(email, '')
       if (customer == null) {
@@ -33,7 +33,7 @@ class FetchUserInfoUseCase {
       }
       return { user: employee }
     } else {
-      throw new InvalidRoleUseCaseError('Invalid user type provided ' + userType)
+      throw new InvalidUserTypeUseCaseError('Invalid user type provided ' + userType)
     }
   }
 }

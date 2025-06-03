@@ -14,6 +14,7 @@ function Login() {
   useEffect(() => {
     if (authInformations.token?.accessToken) {
       if (authInformations.user?.registerCompleted) {
+        console.log(authInformations)
         navigate(`/${authInformations.user.userType.toString().toLowerCase()}/home`)
       } else {
         navigate('/a')

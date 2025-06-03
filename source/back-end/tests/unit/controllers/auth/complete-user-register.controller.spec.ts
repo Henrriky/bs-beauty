@@ -44,7 +44,7 @@ describe('CompleteUserRegisterController', () => {
       // arrange
       req.user = {
         sub: undefined,
-        role: UserType.CUSTOMER,
+        userType: UserType.CUSTOMER,
         registerCompleted: false
       }
 
@@ -77,11 +77,11 @@ describe('CompleteUserRegisterController', () => {
       expect(res.send).toHaveBeenCalledWith({ message: 'User already complete register' })
     })
 
-    it('should return 400 for an invalid role', async () => {
+    it('should return 400 for an invalid userType', async () => {
       // arrange
       req.user = {
         sub: 'valid-user-id',
-        role: 'INVALID_ROLE',
+        userType: 'INVALID_USER_TYPE',
         registerCompleted: false
       }
 
@@ -91,7 +91,7 @@ describe('CompleteUserRegisterController', () => {
       // assert
       expect(res.status).toHaveBeenCalledWith(400)
       expect(res.send).toHaveBeenCalledWith({
-        message: 'Invalid role provided: INVALID_ROLE'
+        message: 'Invalid userType provided: INVALID_USER_TYPE'
       })
     })
 
@@ -99,7 +99,7 @@ describe('CompleteUserRegisterController', () => {
       // arrange
       req.user = {
         sub: 'valid-user-id',
-        role: UserType.CUSTOMER,
+        userType: UserType.CUSTOMER,
         registerCompleted: false
       }
 
@@ -125,7 +125,7 @@ describe('CompleteUserRegisterController', () => {
       // arrange
       req.user = {
         sub: 'valid-user-id',
-        role: UserType.CUSTOMER,
+        userType: UserType.CUSTOMER,
         registerCompleted: false
       }
 
@@ -147,7 +147,7 @@ describe('CompleteUserRegisterController', () => {
       // arrange
       req.user = {
         sub: 'valid-user-id',
-        role: UserType.CUSTOMER,
+        userType: UserType.CUSTOMER,
         registerCompleted: false
       }
 

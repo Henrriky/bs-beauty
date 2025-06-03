@@ -28,7 +28,7 @@ describe('EmployeesController', () => {
     app.use(appRoutes);
 
     validToken = jwt.sign(
-      { id: '12345', role: 'MANAGER' },
+      { id: '12345', userType: 'MANAGER' },
       process.env.JWT_SECRET || 'default_secret',
       { expiresIn: '1h' },
     );
@@ -73,7 +73,7 @@ describe('EmployeesController', () => {
       // arrange
       const newEmployee = {
         email: 'mark@example.com',
-        role: 'EMPLOYEE',
+        userType: 'EMPLOYEE',
       } as Prisma.EmployeeCreateInput;
 
       // act
@@ -86,7 +86,7 @@ describe('EmployeesController', () => {
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('name', 'Usuário');
       expect(response.body).toHaveProperty('email', 'mark@example.com');
-      expect(response.body).toHaveProperty('role', 'EMPLOYEE');
+      expect(response.body).toHaveProperty('userType', 'EMPLOYEE');
       expect(prismaClient.employee.count()).resolves.toBe(3);
     });
   });

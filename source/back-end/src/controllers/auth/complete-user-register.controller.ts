@@ -8,9 +8,9 @@ import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod
 import { CustomerSchemas } from '../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
 import { makeCompleteUserRegisterUseCase } from '../../factory/auth/make-complete-user-register.use-case.factory'
 import { UserType } from '@prisma/client'
-import { InvalidRoleUseCaseError } from '../../services/use-cases/errors/invalid-role-use-case-error'
+import { InvalidUserTypeUseCaseError } from '../../services/use-cases/errors/invalid-user-type-use-case-error'
 
-const rolesToSchemas = {
+const userTypesToSchemas = {
   [UserType.CUSTOMER]: CustomerSchemas.customerCompleteRegisterBodySchema,
   [UserType.EMPLOYEE]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
   [UserType.MANAGER]: EmployeeSchemas.employeeCompleteRegisterBodySchema
@@ -24,10 +24,10 @@ class CompleteUserRegisterController {
         return
       }
 
-      const schema = rolesToSchemas[req.user.userType]
+      const schema = userTypesToSchemas[req.user.userType]
 
       if (!schema) {
-        throw new InvalidRoleUseCaseError(`Invalid role provided: ${req.user.userType}`)
+        throw new InvalidUserTypeUseCaseError(`Invalid user type provided: ${req.user.userType}`)
       }
 
       const customerOrEmployee = schema.parse(req.body)
@@ -52,7 +52,7 @@ class CompleteUserRegisterController {
         formatValidationErrors(error, res)
         return
       }
-      if (error instanceof InvalidRoleUseCaseError) {
+      if (error instanceof InvalidUserTypeUseCaseError) {
         res.status(StatusCodes.BAD_REQUEST).send({ message: error.message })
         return
       }

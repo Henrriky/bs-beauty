@@ -2,12 +2,12 @@ import { type Request, type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { z } from 'zod'
 import { formatValidationErrors } from '../../utils/formatting/zod-validation-errors.formatting.util'
-import { InvalidRoleUseCaseError } from '../../services/use-cases/errors/invalid-role-use-case-error'
+import { InvalidUserTypeUseCaseError } from '../../services/use-cases/errors/invalid-user-type-use-case-error'
 import { makeFetchUserInfoUseCase } from '../../factory/auth/make-fetch-user-info.use-case.factory.ts'
 import { NotFoundUseCaseError } from '../../services/use-cases/errors/not-found-error'
 
 class FetchUserInfoController {
-  public static async handle (req: Request, res: Response) {
+  public static async handle(req: Request, res: Response) {
     try {
       const usecase = makeFetchUserInfoUseCase()
 
@@ -22,7 +22,7 @@ class FetchUserInfoController {
         formatValidationErrors(error, res)
         return
       }
-      if (error instanceof InvalidRoleUseCaseError) {
+      if (error instanceof InvalidUserTypeUseCaseError) {
         res.status(StatusCodes.BAD_REQUEST).send({ message: error.message })
         return
       } else if (error instanceof NotFoundUseCaseError) {
