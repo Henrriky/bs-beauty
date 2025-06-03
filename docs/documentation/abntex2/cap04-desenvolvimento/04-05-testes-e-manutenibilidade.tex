@@ -1,0 +1,99 @@
+\section{Testes e Manutenibilidade}
+Nessa seção do capítulo, apresenta-se os mecanismos e ferramentas adotados para garantir a qualidade de software do projeto ao longo do desenvolvimento.
+Será abordado o plano de testes, assim como cada teste que está incluso. Além disso, assuntos como infraestrutura de testes e convenções de código (coding convention)
+serão detalhados, evidenciando práticas que promovem a manutenibilidade, padronização e confiabilidade do sistema ao longo de sua evolução.
+
+\subsection{Plano de Testes}
+O plano de testes define a estratégia adotada para garantir a qualidade e confiabilidade da aplicação. 
+Ele inclui os tipos de testes aplicados, as ferramentas utilizadas, o escopo das validações, e os critérios de sucesso e falha.
+
+Tendo em vista que a arquitetura do back-end é constituída por \textit{controllers}, \textit{services} e \textit{repositories} usando o framework \textbf{Express}, 
+é necessário garantir um ótimo funcionamento da comunicação entre essas camadas. Portanto, conforme os recursos da RESTful API
+são desenvolvidos (agendamentos, serviços de beleza, clientes, funcionários, etc) com as respectivas camadas que foram comentadas,
+urge-se a demanda de serem testadas em paralelo, cobrindo os cenários possíveis cenários de sucesso/falha. 
+
+Pretende-se atingir, no mínimo, 80\% de cobertura nos testes unitários e integrados aplicados 
+sobre as camadas de \textit{controllers} e \textit{services} da API. 
+Essa métrica será obtida por meio de ferramentas integradas ao ambiente de testes, como o \textbf{Vitest} com suporte a geração de relatórios de cobertura. Embora a cobertura de testes não garanta por si só a ausência de falhas, ela serve como um forte indicador de que a maior parte da lógica de negócio está sendo exercitada e validada durante a execução dos testes. Essa prática contribui diretamente para a robustez do sistema 
+e facilita a detecção precoce de regressões ao longo do desenvolvimento.
+
+O mesmo propósito de cobertura de testes é válido para o front-end desenvolvido em \textbf{React}. Como essa tecnologia adota um princípio de componentização de elementos da interface,
+é interessante que as páginas com cenários lógicos mais críticos (como as telas de agendamento) sejam validadas de forma precisa.
+Garantindo que os elementos da interface estejam atendendo o comportamento esperado.
+
+Quanto à cobertura de testes do front-end, é tido como propósito, realizar uma cobertura de testes automatizados que envolva todos os processos que foram mapeados no escopo do projeto.
+
+Os arquivos contendo as classes/funções de testes devem estar localizados em diretórios específicos 
+de testes, adotando uma nomenclatura compreensível como 
+\texttt{analytics.\allowbreak controller.\allowbreak spec.\allowbreak unit.ts} (referenciando um teste unitário) e 
+\texttt{analytics.\allowbreak controller.\allowbreak spec.\allowbreak integration.ts} (referenciando um teste integrado).
+
+\subsection{Infraestrutura de Testes}
+
+A infraestrutura de testes do projeto está fortemente integrada ao processo de integração contínua (CI) e entrega contínua (CD),
+utilizando a ferramenta \textbf{GitHub Actions}. Essa integração visa garantir que o código entregue atenda a padrões mínimos de qualidade e estabilidade 
+em todas as etapas do desenvolvimento.  A cada push ou pull request, fluxos automatizados são executados para validar o código por meio de testes automatizados, 
+análise estática, e verificação de cobertura. Esse processo assegura que apenas alterações estáveis e em conformidade com os 
+padrões de qualidade sejam incorporadas à base de código principal, promovendo entregas seguras e contínuas ao longo do ciclo de desenvolvimento.
+
+\subsection{Análise Estáticas}
+A análise estática de código é realizada utilizando a ferramenta \textbf{SonarQube}, 
+que permite detectar problemas de qualidade, como vulnerabilidades, bugs e código duplicado, sem a necessidade de executar a aplicação. 
+Essa etapa ajuda a manter o código limpo, seguro e sustentável ao longo do tempo.
+
+\subsection{Testes Automatizados}
+A automação de testes tem como objetivo aumentar a confiabilidade do software e permitir validações rápidas e constantes. O projeto conta com:
+
+\begin{itemize}
+  \item \textbf{Testes unitários:} Validam o comportamento de funções e componentes isolados. \textbf{Vitest}.
+  \item \textbf{Testes integrados:} Verificam a interação entre módulos e componentes da aplicação, também utilizando o \textbf{Vitest}.
+%  \item \textbf{Testes de interface:} Serão aplicados, se necessário, nas páginas de maior relevância funcional da aplicação. Ferramentas como \textbf{Cypress} poderão ser utilizadas.
+\end{itemize}
+
+\subsection{Logs}
+\subsection{Code Convention}
+Para garantir a legibilidade e padronização do código, são adotadas convenções definidas com base em boas práticas da comunidade JavaScript/TypeScript.
+Essas diretrizes ajudam a manter o código uniforme entre os diferentes desenvolvedores do time, reduzindo ambiguidades e facilitando o entendimento do sistema como um todo.
+
+
+As principais práticas adotadas incluem:
+
+\begin{itemize}
+  \item \textbf{Ferramentas de Linting e Formatação:}
+  \begin{itemize}
+    \item Utilização do \textbf{ESLint} para garantir padrões de estilo e detectar possíveis erros ou práticas inadequadas de codificação.
+    \item Uso do \textbf{Prettier} para formatação automática do código, assegurando que todos os arquivos mantenham a mesma estrutura visual (espaçamento, quebras de linha, indentação, etc).
+  \end{itemize}
+
+  \item \textbf{Padrões de Nomenclatura:}
+  \begin{itemize}
+    \item Uso de \texttt{camelCase} para variáveis e funções.
+    \item Uso de \texttt{PascalCase} para componentes e classes.
+    \item Uso de \texttt{UPPER\_SNAKE\_CASE} para constantes globais.
+  \end{itemize}
+
+  \item \textbf{Organização do Código:}
+  \begin{itemize}
+    \item Estrutura modular com separação clara entre camadas (controllers, services, repositories).
+    \item Agrupamento de arquivos por domínio funcional.
+  \end{itemize}
+
+  \item \textbf{Boas Práticas:}
+  \begin{itemize}
+    \item Escrita de código limpo e legível, evitando duplicações.
+    \item Utilização de comentários apenas quando necessário, priorizando nomes autoexplicativos.
+    \item Aplicação do princípio DRY (Don't Repeat Yourself).
+  \end{itemize}
+
+  \item \textbf{Revisões e Padronização em Equipe:}
+  \begin{itemize}
+    \item Adoção de pull requests com as devidas descrições das funcionalidades desenvolvidas.
+    \item Documentação e comunicação clara de decisões técnicas relevantes.
+  \end{itemize}
+\end{itemize}
+% \subsection{Testes de Performance}
+% \subsection{Testes de Componente}
+% \subsection{Testes Funcionais}
+% \subsection{Testes não Funcionais}
+% \subsection{Testes de Carga}
+% \subsection{Testes de Configuração}
