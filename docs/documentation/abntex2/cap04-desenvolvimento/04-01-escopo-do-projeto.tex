@@ -8,5 +8,74 @@ Com base nessas interações, foram estabelecidas as regras de negócio que orie
 A definição clara desses elementos é essencial para garantir a coerência do sistema com as necessidades dos usuários e para orientar a equipe de desenvolvimento ao longo das etapas do projeto.
 
 \subsection{Regras de Negócio}
+
+As regras de negócio definem os comportamentos, restrições e condições que regem o funcionamento do sistema, conforme as particularidades da BS Beauty Academy, e representam diretrizes que devem ser respeitadas tanto no uso da aplicação quanto no desenvolvimento das funcionalidades.
+
+A seguir, são listadas as principais regras de negócio identificadas:
+
+\begin{longtable}{|p{1.2cm}|p{10cm}|p{4cm}|}
+	\hline
+	\textbf{ID} & \textbf{Descrição da Regra de Negócio} & \textbf{Área Impactada} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{ID} & \textbf{Descrição da Regra de Negócio} & \textbf{Área Impactada} \\
+	\hline
+	\endhead
+	
+	RN01 & Não há políticas ou penalidades referentes a cancelamentos ou atrasos. & Agenda \\
+	\hline
+	RN02 & Clientes podem agendar múltiplos serviços em um mesmo agendamento. & Agenda, Clientes \\
+	\hline
+	RN03 & Pagamentos são realizados só presencialmente. & Atendimento, Financeiro, Marketing e Vendas \\
+	\hline
+	RN04 & Clientes devem avaliar os serviços concluídos. & Atendimento, Clientes \\
+	\hline
+	RN05 & Não deve haver sobreposição de horários em agendamentos. & Agenda, Atendimento \\
+	\hline
+	RN06 & Agendamentos devem ser feitos com, no mínimo, 3 horas de antecedência. & Agenda \\
+	\hline
+	RN07 & O cadastro e edição de funcionárias é feito exclusivamente pela gerente. & RH/Profissionais \\
+	\hline
+	RN08 & Profissionais podem definir seus próprios horários de trabalho. & Agenda, RH/Profissionais \\
+	\hline
+	RN09 & Profissionais podem bloquear horários específicos na agenda. & Agenda, RH/Profissionais \\
+	\hline
+	RN10 & Preços e duração de serviços podem ser definidos pela profissional (autônoma) ou pela gerente (modelo comissionado). & Financeiro, Marketing e Vendas, RH/Profissionais \\
+	\hline
+	RN11 & O salão possui horário fixo de funcionamento (definido pela gerente). & Atendimento, RH/Profissionais \\
+	\hline
+	RN12 & Clientes devem informar como conheceram o salão. & Atendimento, Clientes \\
+	\hline
+	RN13 & Programa de indicação para indicar 3 pessoas e ganhar um procedimento grátis. & Clientes, Financeiro, Marketing e Vendas \\
+	\hline
+	RN14 & Clientes aniversariantes devem receber mensagens de aniversário e descontos. & Clientes, Marketing e Vendas \\
+	\hline
+	RN15 & Clientes, profissionais e a gerente devem receber notificações referentes a agendamentos. & Agenda, Atendimento, Clientes, RH/Profissionais \\
+	\hline
+	RN16 & E-mails e telefones cadastrados por clientes e profissionais devem ser únicos. & Clientes, RH/Profissionais \\
+	\hline
+	RN17 & Cada serviço possui um tempo de duração definido ao cadastrá-lo. & Agenda, Atendimento \\
+	\hline
+	RN18 & Não é possível agendar serviços para datas passadas. & Agenda, Atendimento \\
+	\hline
+	RN19 & Serviços devem estar vinculados a uma ou mais profissionais especializadas. & Atendimento, RH/Profissionais \\
+	\hline
+	RN20 & Gerente e profissionais devem receber relatórios diversos. & RH/Profissionais \\
+	\hline
+	RN21 & O histórico de avaliações e agendamentos deve ser mantido. & Atendimento \\
+	\hline
+	RN22 & Clientes devem agendar com base no serviço ou profissional. & Agenda, Clientes \\
+	\hline
+	RN23 & A quantidade de clientes atendidos por uma profissional depende do tempo de cada procedimento. & Agenda, Atendimento, RH/Profissionais \\
+	\hline
+	RN24 & Atualmente, o salão oferece serviços de depilação, unhas, estética corporal e facial, sobrancelhas, remoção e cílios. & Agenda, Atendimento \\
+	\hline
+	RN25 & Profissionais podem criar seus próprios serviços (com limitações de acesso). & Agenda, RH/Profissionais \\
+	\hline
+	
+\end{longtable}
+
 \subsection{Requisitos Funcionais}
 \subsection{Requisitos Não Funcionais}
