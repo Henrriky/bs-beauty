@@ -78,4 +78,247 @@ A seguir, são listadas as principais regras de negócio identificadas:
 \end{longtable}
 
 \subsection{Requisitos Funcionais}
+
+Os requisitos funcionais representam as funcionalidades que o sistema deve implementar a fim de garantir o cumprimento das regras de negócio definidas durante as reuniões entre a equipe de desenvolvimento e a gestora do estabelecimento. Esses requisitos foram organizados de forma a manter uma correspondência clara com as regras de negócio, permitindo maior rastreabilidade e coerência entre as decisões do domínio e a implementação técnica do sistema.
+
+\begin{longtable}{|p{0.1\textwidth}|p{0.85\textwidth}|}
+	\hline
+	\textbf{Código} & \textbf{Descrição do Requisito Funcional} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Código} & \textbf{Descrição do Requisito Funcional} \\
+	\hline
+	\endhead
+	
+		% RN01
+	\multicolumn{2}{|l|}{\textbf{RN01}} \\ \hline
+	RF01-01 & O sistema não deve bloquear clientes que se atrasaram em agendamentos anteriores. \\ \hline
+	RF01-02 & O sistema deve permitir cancelamentos de agendamentos sem aplicação de multas ou penalidades. \\ \hline
+	
+	% RN02
+	\multicolumn{2}{|l|}{\textbf{RN02}} \\ \hline
+	RF02-01 & O sistema deve permitir a seleção de múltiplos serviços em uma única operação de agendamento. \\ \hline
+	RF02-02 & O sistema deve calcular o tempo total necessário para todos os serviços selecionados. \\ \hline
+	RF02-03 & O sistema deve calcular o valor total de todos os serviços agendados. \\ \hline
+	RF02-04 & O sistema deve permitir a visualização do resumo dos múltiplos serviços agendados. \\ \hline
+	RF02-05 & O sistema deve verificar a disponibilidade de profissionais para realizar os serviços selecionados no período necessário. \\ \hline
+	
+	% RN03
+	\multicolumn{2}{|l|}{\textbf{RN03}} \\ \hline
+	RF03-01 & O sistema não deve solicitar informações de pagamento durante o agendamento online. \\ \hline
+	RF03-02 & O sistema deve gerar um registro de pagamento pendente para cada agendamento. \\ \hline
+	RF03-03 & O sistema deve disponibilizar interface para registro de pagamentos apenas em terminais do salão. \\ \hline
+	RF03-04 & O sistema deve emitir comprovantes de pagamento quando a transação for registrada presencialmente. \\ \hline
+	RF03-05 & O sistema deve permitir o registro de diferentes formas de pagamento presencial. \\ \hline
+	
+	% RN04
+	\multicolumn{2}{|l|}{\textbf{RN04}} \\ \hline
+	RF04-01 & O sistema deve solicitar avaliação após cada serviço concluído. \\ \hline
+	RF04-02 & O sistema deve enviar notificação de avaliação pendente após o atendimento. \\ \hline
+	RF04-03 & O sistema deve permitir avaliação por critérios específicos (atendimento, resultado, ambiente). \\ \hline
+	RF04-04 & O sistema deve permitir a inclusão de comentários textuais nas avaliações. \\ \hline
+	RF04-05 & O sistema deve compilar e exibir estatísticas de avaliações para gerentes e profissionais. \\ \hline
+	
+	% RN05
+	\multicolumn{2}{|l|}{\textbf{RN05}} \\ \hline
+	RF05-01 & O sistema deve verificar a disponibilidade do profissional antes de confirmar um agendamento. \\ \hline
+	RF05-02 & O sistema deve impedir o agendamento quando houver conflito de horários para o mesmo profissional. \\ \hline
+	RF05-03 & O sistema deve exibir alertas visuais quando tentativas de sobreposição forem detectadas. \\ \hline
+	RF05-04 & O sistema deve sugerir horários alternativos disponíveis em caso de sobreposição. \\ \hline
+	RF05-05 & O sistema deve considerar o tempo de duração de cada serviço para evitar sobreposições parciais. \\ \hline
+	
+	% RN06
+	\multicolumn{2}{|l|}{\textbf{RN06}} \\ \hline
+	RF06-01 & O sistema deve permitir à gerente definir o tempo mínimo de antecedência. \\ \hline
+	RF06-02 & O sistema deve validar a antecedência mínima para todos os agendamentos. \\ \hline
+	RF06-03 & O sistema deve bloquear tentativas de agendamento inferiores ao tempo de antecedência definido. \\ \hline
+	RF06-04 & O sistema deve exibir mensagem informativa sobre a política de antecedência mínima. \\ \hline
+	RF06-05 & O sistema deve permitir que a gerência faça agendamentos emergenciais fora da antecedência mínima. \\ \hline
+	RF06-06 & O sistema deve calcular automaticamente os horários disponíveis considerando a antecedência mínima. \\ \hline
+	
+	% RN07
+	\multicolumn{2}{|l|}{\textbf{RN07}} \\ \hline
+	RF07-01 & O sistema deve restringir as operações de cadastro de funcionárias ao perfil de gerente. \\ \hline
+	RF07-02 & O sistema deve restringir as operações de edição de dados de funcionárias ao perfil de gerente. \\ \hline
+	RF07-03 & O sistema deve disponibilizar interface de gerenciamento de funcionárias apenas para usuários com perfil de gerente. \\ \hline
+	RF07-04 & O sistema deve registrar log de todas as operações de cadastro e edição de funcionárias. \\ \hline
+	RF07-05 & O sistema deve notificar funcionárias quando seus dados forem alterados pela gerente. \\ \hline
+	
+	% RN08
+	\multicolumn{2}{|l|}{\textbf{RN08}} \\ \hline
+	RF08-01 & O sistema deve disponibilizar interface para profissionais definirem seus horários de trabalho. \\ \hline
+	RF08-02 & O sistema deve permitir a configuração de horários diferentes para cada dia da semana. \\ \hline
+	RF08-03 & O sistema deve validar os horários definidos conforme o horário de funcionamento do salão. \\ \hline
+	RF08-04 & O sistema deve atualizar automaticamente a agenda de disponibilidade. \\ \hline
+	
+	% RN09
+	\multicolumn{2}{|l|}{\textbf{RN09}} \\ \hline
+	RF09-01 & O sistema deve permitir que profissionais bloqueiem intervalos específicos em sua agenda. \\ \hline
+	RF09-02 & O sistema deve possibilitar a definição de motivo para o bloqueio (opcional). \\ \hline
+	RF09-03 & O sistema deve impedir novos agendamentos nos horários bloqueados. \\ \hline
+	RF09-04 & O sistema deve permitir o desbloqueio de horários previamente bloqueados. \\ \hline
+	RF09-05 & O sistema deve exibir visualmente os horários bloqueados na interface de agendamento. \\ \hline
+	
+	% RN10
+	\multicolumn{2}{|l|}{\textbf{RN10}} \\ \hline
+	RF10-01 & O sistema deve permitir configuração de preços e duração de serviços conforme o modelo de trabalho da profissional. \\ \hline
+	RF10-02 & O sistema deve restringir edição de preços e duração às profissionais autônomas ou à gerente, conforme o caso. \\ \hline
+	RF10-03 & O sistema deve exibir diferenciação visual entre serviços autônomos e comissionados. \\ \hline
+	RF10-04 & O sistema deve calcular automaticamente comissões para profissionais do modelo comissionado. \\ \hline
+	RF10-05 & O sistema deve guardar histórico de alterações de preços e duração de serviços. \\ \hline
+	
+	% RN11
+	\multicolumn{2}{|l|}{\textbf{RN11}} \\ \hline
+	RF11-01 & O sistema deve permitir à gerente configurar os horários de funcionamento do salão para cada dia da semana. \\ \hline
+	RF11-02 & O sistema deve impedir agendamentos fora do horário de funcionamento. \\ \hline
+	RF11-03 & O sistema deve exibir os horários de funcionamento para clientes durante o processo de agendamento. \\ \hline
+	RF11-04 & O sistema deve permitir configuração de horários especiais para datas comemorativas ou feriados. \\ \hline
+	RF11-05 & O sistema deve adaptar a visualização da agenda conforme os horários de funcionamento. \\ \hline
+	
+	% RN12
+	\multicolumn{2}{|l|}{\textbf{RN12}} \\ \hline
+	RF12-01 & O sistema deve solicitar informação sobre como o cliente conheceu o salão durante o cadastro inicial. \\ \hline
+	RF12-02 & O sistema deve oferecer opções predefinidas (redes sociais, indicação, busca online, etc.). \\ \hline
+	RF12-03 & O sistema deve permitir especificar o nome do indicador quando a opção for "indicação”. \\ \hline
+	RF12-04 & O sistema deve gerar relatórios estatísticos sobre as fontes de captação de clientes. \\ \hline
+	RF12-05 & O sistema deve permitir atualização dessa informação em caso de erro ou mudança. \\ \hline
+	
+	% RN13
+	\multicolumn{2}{|l|}{\textbf{RN13}} \\ \hline
+	RF13-01 & O sistema deve registrar e contabilizar indicações feitas por cada cliente. \\ \hline
+	RF13-02 & O sistema deve confirmar que novos clientes indicados realizaram ao menos um serviço pago. \\ \hline
+	RF13-03 & O sistema deve notificar automaticamente quando um cliente atingir 3 indicações confirmadas. \\ \hline
+	RF13-04 & O sistema deve gerar um voucher/crédito para procedimento gratuito. \\ \hline
+	RF13-05 & O sistema deve permitir a seleção e aplicação do procedimento gratuito durante o agendamento. \\ \hline
+	RF13-06 & O sistema deve reiniciar a contagem de indicações após o uso do benefício. \\ \hline
+		
+	% RN14
+	\multicolumn{2}{|l|}{\textbf{RN14}} \\ \hline
+	RF14-01 & O sistema deve identificar automaticamente clientes aniversariantes do dia/semana/mês. \\ \hline
+	RF14-02 & O sistema deve enviar automaticamente mensagem de aniversário na data correspondente. \\ \hline
+	RF14-03 & O sistema deve gerar cupom de desconto para uso durante o mês de aniversário. \\ \hline
+	RF14-04 & O sistema deve permitir a aplicação do desconto de aniversário durante o agendamento no mês correspondente. \\ \hline
+	RF14-05 & O sistema deve registrar o uso do benefício para evitar duplicidades. \\ \hline
+	
+	% RN15
+	\multicolumn{2}{|l|}{\textbf{RN15}} \\ \hline
+	RF15-01 & O sistema deve enviar confirmação de agendamento para o cliente e profissional envolvidos. \\ \hline
+	RF15-02 & O sistema deve enviar lembretes 24h antes do horário agendado. \\ \hline
+	RF15-03 & O sistema deve notificar sobre cancelamentos ou alterações nos agendamentos. \\ \hline
+	RF15-04 & O sistema deve permitir configuração dos tipos de notificação desejados (email, SMS, push). \\ \hline
+	RF15-05 & O sistema deve notificar a gerência sobre agendamentos de novos clientes ou serviços de alto valor. \\ \hline
+	
+	% RN16
+	\multicolumn{2}{|l|}{\textbf{RN16}} \\ \hline
+	RF16-01 & O sistema deve validar a unicidade de e-mails durante o cadastro de usuários. \\ \hline
+	RF16-02 & O sistema deve validar a unicidade de telefones durante o cadastro de usuários. \\ \hline
+	RF16-03 & O sistema deve exibir alerta quando houver tentativa de cadastro com email/telefone já existente. \\ \hline
+	RF16-04 & O sistema deve permitir a atualização de e-mail/telefone com validação de unicidade. \\ \hline
+	
+	% RN17
+	\multicolumn{2}{|l|}{\textbf{RN17}} \\ \hline
+	RF17-01 & O sistema deve solicitar o tempo de duração durante o cadastro de cada serviço. \\ \hline
+	RF17-02 & O sistema deve utilizar a duração para cálculo de disponibilidade na agenda. \\ \hline
+	RF17-03 & O sistema deve permitir duração personalizada por profissional para o mesmo tipo de serviço. \\ \hline
+	RF17-04 & O sistema deve considerar a duração para evitar sobreposições de agendamentos. \\ \hline
+	RF17-05 & O sistema deve exibir o tempo de duração estimado durante o processo de agendamento. \\ \hline
+	
+	% RN18
+	\multicolumn{2}{|l|}{\textbf{RN18}} \\ \hline
+	RF18-01 & O sistema deve validar se a data e hora de agendamento são futuras em relação ao momento da operação. \\ \hline
+	RF18-02 & O sistema deve bloquear e exibir mensagem de erro para tentativas de agendamento em datas/horários passados. \\ \hline
+	RF18-03 & O sistema deve atualizar automaticamente os horários disponíveis conforme o avanço do tempo. \\ \hline
+	RF18-04 & O sistema deve considerar o fuso horário do salão para validação das datas e horários. \\ \hline
+	RF18-05 & O sistema deve desabilitar visualmente na interface os dias e horários que já passaram. \\ \hline
+	
+	% RN19
+	\multicolumn{2}{|l|}{\textbf{RN19}} \\ \hline
+	RF19-01 & O sistema deve permitir a vinculação de serviços a profissionais específicas durante o cadastro do serviço. \\ \hline
+	RF19-02 & O sistema deve exibir apenas profissionais habilitadas para cada serviço durante o agendamento. \\ \hline
+	RF19-03 & O sistema deve permitir que uma profissional seja vinculada a múltiplos serviços. \\ \hline
+	RF19-04 & O sistema deve permitir à gerente atualizar as vinculações entre serviços e profissionais. \\ \hline
+	RF19-05 & O sistema deve notificar profissionais quando forem vinculadas a novos serviços. \\ \hline
+	
+	% RN20
+	\multicolumn{2}{|l|}{\textbf{RN20}} \\ \hline
+	RF20-01 & O sistema deve gerar relatórios de produtividade por profissional (serviços realizados, valores, avaliações). \\ \hline
+	RF20-02 & O sistema deve gerar relatórios financeiros (receita diária, semanal, mensal) para a gerência. \\ \hline
+	RF20-03 & O sistema deve gerar relatórios de ocupação (horários mais procurados, serviços mais solicitados). \\ \hline
+	RF20-04 & O sistema deve permitir a exportação dos relatórios em formatos diversos (PDF, Excel, CSV). \\ \hline
+	RF20-05 & O sistema deve possibilitar a configuração de relatórios automáticos enviados periodicamente. \\ \hline
+	RF20-06 & O sistema deve gerar dashboard com indicadores-chave de desempenho para gerência e profissionais. \\ \hline
+	
+	% RN21
+	\multicolumn{2}{|l|}{\textbf{RN21}} \\ \hline
+	RF21-01 & O sistema deve armazenar permanentemente todos os agendamentos realizados e suas informações. \\ \hline
+	RF21-02 & O sistema deve manter registro completo de todas as avaliações de serviços feitas pelos clientes. \\ \hline
+	RF21-03 & O sistema deve permitir consulta ao histórico de serviços e avaliações por cliente. \\ \hline
+	RF21-04 & O sistema deve possibilitar consulta ao histórico de serviços realizados por profissional. \\ \hline
+	RF21-05 & O sistema deve implementar política de retenção de dados conforme legislação vigente (LGPD). \\ \hline
+	
+	% RN22
+	\multicolumn{2}{|l|}{\textbf{RN22}} \\ \hline
+	RF22-01 & O sistema deve oferecer duas vias principais de agendamento: por serviço ou por profissional. \\ \hline
+	RF22-02 & O sistema deve exibir lista de profissionais disponíveis após a seleção do serviço. \\ \hline
+	RF22-03 & O sistema deve exibir lista de serviços disponíveis após a seleção da profissional. \\ \hline
+	RF22-04 & O sistema deve permitir filtragem por data/horário em ambos os fluxos de agendamento. \\ \hline
+	RF22-05 & O sistema deve exibir informações sobre a profissional (experiência, avaliações) durante o agendamento por serviço. \\ \hline
+	RF22-06 & O sistema deve exibir informações sobre o serviço (duração, preço, descrição) durante o agendamento por profissional. \\ \hline
+	
+	% RN23
+	\multicolumn{2}{|l|}{\textbf{RN23}} \\ \hline
+	RF23-01 & O sistema deve calcular automaticamente a disponibilidade da profissional com base na duração dos serviços agendados. \\ \hline
+	RF23-02 & O sistema deve bloquear horários subsequentes conforme a duração do serviço agendado. \\ \hline
+	RF23-03 & O sistema deve considerar intervalos entre atendimentos quando configurados. \\ \hline
+	RF23-04 & O sistema deve atualizar a agenda em tempo real conforme novos agendamentos são realizados. \\ \hline
+	RF23-05 & O sistema deve alertar a profissional sobre tempo disponível entre agendamentos. \\ \hline
+	RF23-06 & O sistema deve permitir visualização da taxa de ocupação diária da profissional. \\ \hline
+	
+	% RN24
+	\multicolumn{2}{|l|}{\textbf{RN24}} \\ \hline
+	RF24-01 & O sistema deve permitir cadastro e categorização dos serviços por tipo (depilação, unhas, estética corporal, etc.). \\ \hline
+	RF24-02 & O sistema deve possibilitar a organização hierárquica dos serviços (categorias e subcategorias). \\ \hline
+	RF24-03 & O sistema deve exibir serviços agrupados por categoria na interface de agendamento. \\ \hline
+	RF24-04 & O sistema deve permitir busca de serviços por nome ou categoria. \\ \hline
+	RF24-05 & O sistema deve exibir informações detalhadas sobre cada serviço (descrição, duração, valor). \\ \hline
+	RF24-06 & O sistema deve permitir adição de imagens ilustrativas para cada categoria de serviço. \\ \hline
+	
+	% RN25
+	\multicolumn{2}{|l|}{\textbf{RN25}} \\ \hline
+	RF25-01 & O sistema deve disponibilizar interface para profissionais cadastrarem novos serviços. \\ \hline
+	RF25-02 & O sistema deve implementar fluxo de aprovação pela gerência para novos serviços criados. \\ \hline
+	RF25-03 & O sistema deve permitir definição de parâmetros específicos para serviços personalizados (preço, duração, descrição). \\ \hline
+	RF25-04 & O sistema deve restringir a visualização e agendamento dos serviços personalizados conforme configuração da profissional. \\ \hline
+	RF25-05 & O sistema deve notificar clientes elegíveis sobre novos serviços personalizados quando configurado. \\ \hline
+	
+
+\end{longtable}
+
+
+
 \subsection{Requisitos Não Funcionais}
+
+% Introdução para requisitos não funcionais
+A seguir, são apresentados os requisitos não funcionais, relativos a qualidade e a experiência do sistema, garantindo aspectos essenciais como usabilidade, segurança e design.
+
+\begin{longtable}{|p{0.1\textwidth}|p{0.85\textwidth}|}
+	\hline
+	\textbf{Código} & \textbf{Descrição do Requisito Não Funcional} \\
+	\hline
+	\endfirsthead
+	
+	\hline
+	\textbf{Código} & \textbf{Descrição do Requisito Não Funcional} \\
+	\hline
+	\endhead
+	
+	RNF01 & O sistema deve ser intuitivo e fácil de usar. \\ \hline
+	RNF02 & O sistema deve estar constantemente disponível. \\ \hline
+	RNF03 & O sistema deve proporcionar segurança aos usuários. \\ \hline
+	RNF04 & O sistema deve ser responsivo, adaptando-se a diferentes dispositivos. \\ \hline
+	RNF05 & O sistema deve ter um design simples, minimalista e chique. \\ \hline
+	RNF06 & O sistema deve ter processo de cadastro simplificado. \\ \hline
+\end{longtable}
+
