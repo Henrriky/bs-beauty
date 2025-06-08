@@ -240,27 +240,6 @@ brazil				% o último idioma é o principal do documento
 	% ---
 	
 	% ---
-	% Inserir errata
-	% ---
-	\begin{errata}
-		pagina opcional para descrever algum correção que deve ser feita no documento.
-		
-		\begin{table}[htb]
-			\center
-			\footnotesize
-			\begin{tabular}{|p{1.4cm}|p{1cm}|p{3cm}|p{3cm}|}
-				\hline
-				\textbf{Folha} & \textbf{Linha}  & \textbf{Onde se lê}  & \textbf{Leia-se}  \\
-				\hline
-				1 & 10 & auto-conclavo & autoconclavo\\
-				\hline
-			\end{tabular}
-		\end{table}
-		
-	\end{errata}
-	% ---
-	
-	% ---
 	% Inserir folha de aprovação
 	% ---
 	
@@ -291,7 +270,8 @@ brazil				% o último idioma é o principal do documento
 			\vspace*{\fill}
 		\end{center}
 		
-		Trabalho aprovado. \imprimirlocal, xx de xxx de 2025:
+Trabalho aprovado. \imprimirlocal, 
+\makebox[2cm]{\hrulefill}~de~\makebox[3cm]{\hrulefill}~de~2025:
 		
 		\assinatura{\textbf{\imprimirorientador} \\ Orientador} 
 		\assinatura{\textbf{Professor} \\ Convidado 1}
@@ -311,71 +291,15 @@ brazil				% o último idioma é o principal do documento
 	% ---
 	
 	% ---
-	% Dedicatória
-	% ---
-	\begin{dedicatoria}
-		\vspace*{\fill}
-		\centering
-		\noindent
-		\textit{ Este trabalho é dedicado às crianças adultas que,\\
-			quando pequenas, sonharam em se tornar cientistas.} \vspace*{\fill}
-	\end{dedicatoria}
-	% ---
-	
-	% ---
-	% Agradecimentos
-	% ---
-	\begin{agradecimentos}
-	escrever agradecimentos (um paragrafo para cada?)
-		
-	\end{agradecimentos}
-	% ---
-	
-	% ---
-	% Epígrafe
-	% ---
-	\begin{epigrafe}
-		\vspace*{\fill}
-		\begin{flushright}
-			\textit{``Não vos amoldeis às estruturas deste mundo, \\
-				mas transformai-vos pela renovação da mente, \\
-				a fim de distinguir qual é a vontade de Deus: \\
-				o que é bom, o que Lhe é agradável, o que é perfeito.\\
-				(Bíblia Sagrada, Romanos 12, 2)}
-		\end{flushright}
-	\end{epigrafe}
-	% ---
-	
-	% ---
 	% RESUMOS
 	% ---
 	
 	% resumo em português
 	\setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
-	\begin{resumo}
-		o resumo deve ressaltar o
-		objetivo, o método, os resultados e as conclusões do documento. A ordem e a extensão
-		destes itens dependem do tipo de resumo (informativo ou indicativo) e do
-		tratamento que cada item recebe no documento original. O resumo deve ser
-		precedido da referência do documento, com exceção do resumo inserido no
-		próprio documento. As palavras-chave devem figurar logo abaixo do
-		resumo, antecedidas da expressão Palavras-chave:, separadas entre si por
-		ponto e finalizadas também por ponto.
-		
-		\textbf{Palavras-chave}: latex. abntex. editoração de texto.
-	\end{resumo}
+\input{Resumo/resumo.tex}
 	
 	% resumo em inglês
-	\begin{resumo}[abstract]
-		\begin{otherlanguage*}{english}
-			This is the english abstract.
-			
-			\vspace{\onelineskip}
-			
-			\noindent 
-			\textbf{Keywords}: latex. abntex. text editoration.
-		\end{otherlanguage*}
-	\end{resumo}
+\input{Resumo/abstract.tex}
 	
 	% ---
 	% inserir lista de ilustrações
