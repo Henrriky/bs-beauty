@@ -62,7 +62,7 @@ Nele foram definidas as seguintes entidades e relacionamentos:
 	\label{fig:mer}
 \end{figure}
 \subsection{Diagrama Entidade Relacionamento - DER}
-tabelas
+Após a elaboração do MER conforme o entendimento dos requisitos e necessidades da entidade parceira, foi produzido um Diagrama Entidade Relacionamento (DER), a partir do MER, que contém a listagem de todos os atributos das entidades modeladas, apresentando seus nomes, o tipo de dado e sua possível categorização como chave primária (identificadora) ou estrangeira.
 \begin{figure}[h!tbp]
 	\centering
 	\caption{DER}
@@ -71,3 +71,28 @@ tabelas
 	\label{fig:der}
 \end{figure}
 \subsection{Dicionário de Dados}
+Pensando no modelo físico de banco de dados, também foi elaborado um dicionário de dados referente ao sistema que se enquadra como uma poderosa ferramenta de documentação. Com esse instrumento, qualquer pessoa pode entender como foi pensado os atributos do sistema, como são armazenados e qual seria a finalidade de cada um.
+O dicionário descreve:
+\begin{itemize}
+	\item \textbf{PK/FK:} Se um atributo é chave primária ou estrangeira.
+	\item \textbf{Nome do Campo:} Qual o nome do atributo.
+	\item \textbf{Tipo:} Qual o tipo de dado do atributo, como \textit{INT} para valores numéricos inteiros.
+	\item \textbf{Descrição:} A descrição do atributo, explicando o que representa na prática.
+	\item \textbf{\textit{Null:}} Se o campo pode ser nulo, ou seja, não ter valor atribuído.
+	\item \textbf{Tamanho:} O tamanho do atributo, como quantidade de caracteres (\textit{bytes}).
+	\item \textbf{Valores permitidos:} Quais os valores permitidos para atributos que definição. Alguns campos utilizam enumerações, por exemplo, que possuem valores definidos previamente.
+	\item \textbf{Observações:} Algumas especificidades, como valores padrão, ou de onde uma \textit{FK} foi tomada.
+\end{itemize}
+Abaixo se encontra um \textit{QR Code} que leva a uma planilha onde foi elaborado o dicionário de dados desta aplicação.
+\begin{figure}[h]
+	\centering
+	\caption{QR Code do Dicionário de Dados}
+	\label{fig:qrcode-dicionario-de-dados}
+	\scalebox{1.5}{\qrcode{https://docs.google.com/spreadsheets/d/17kJ2aQqjXM-HIXZLWUs257oe_hur0jlTakR0s9KdBrE}}
+	\fonte{Produzido pelos autores}
+\end{figure}
+
+
+
+
+
