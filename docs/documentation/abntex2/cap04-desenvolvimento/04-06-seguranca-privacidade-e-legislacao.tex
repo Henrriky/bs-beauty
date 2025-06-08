@@ -1,6 +1,6 @@
 \section{Segurança, Privacidade e Legislação}
 Atualmente, há uma crescente no número de usuários utilizando dispositivos conectados a \textit{Internet}, o que, por um lado mostra que essa tecnologia tão importante está sendo difundida a todas as camadas sociais, mas por outro, gera preocupação quanto as implicações do uso inadvertido das redes.
-Nesse contexto, tornou-se comum pessoas mal intencionadas que usam da ignorância de alguns para cometer ataques digitais, prejudicando ou tomando vantagem de pessoas, grupos ou organizações. A afirmativa anterior é confirmada por um gráfico (Figura \ref{fig:cibercrimes}) elaborado pela Surfshark \cite{Surfshark}, empresa provedora de serviços de VPN, que analisa o crescimento anual de custos em cibersegurança. 
+Nesse contexto, tornou-se comum pessoas mal intencionadas que usam da ignorância de alguns para cometer ataques digitais, prejudicando ou tomando vantagem de pessoas, grupos ou organizações. A afirmativa anterior é confirmada por um gráfico (Figura \ref{fig:cibercrimes}) elaborado pela \emph{Surfshark} \cite{Surfshark}, empresa provedora de serviços de VPN, que analisa o crescimento anual de custos em cibersegurança. 
 \begin{figure}[h]
 	\centering
 	\caption{Crescimento anual de custos com cibercrime}
@@ -15,9 +15,9 @@ Isto posto, serão abordadas as técnicas e metodologias adotadas a fim de garan
 \subsection{Critérios de Segurança e Privacidade}
 Na aplicação desenvolvida, foram definidas formas de manter a segurança de todas as partes envolvidas. Foi implementado um método de cadastro e \textit{login} facilitado com geração de \textit{tokens} e também uma infraestrutura de rede que protege o dispositivo que armazena o banco de dados da aplicação.
 
-\subsubsection{Cadastro e Login com Conta Google}
-Um dos requisitos da entidade parceira, era o desenvolvimento de um sistema de cadastro e login facilitados, haja vista que muitos dos clientes tinham dificuldade em acessar a aplicação anterior por constantemente esquecerem sua credenciais (e-mail e senha).
-Considerando essa dificuldade, foi implementado um sistema de registro e login utilizando a API de autenticação OAuth da Google, pelo fato da maioria dos dispositivos no Brasil apresentarem sistema operacional Android, conforme destaca uma pesquisa \cite{app-my-site}, que geralmente requerem uma conta Google para seu funcionamento. E mesmo indivíduos com aparelhos de outro sistema operacional, comumente possuem contas Google para usufruir de seus serviços.
+\subsubsection{Cadastro e \emph{Login} com Conta Google}
+Um dos requisitos da entidade parceira, era o desenvolvimento de um sistema de cadastro e \emph{login} facilitados, haja vista que muitos dos clientes tinham dificuldade em acessar a aplicação anterior por constantemente esquecerem sua credenciais (\emph{e-mail} e senha).
+Considerando essa dificuldade, foi implementado um sistema de registro e \emph{login} utilizando a API de autenticação \emph{OAuth} da Google, pelo fato da maioria dos dispositivos no Brasil apresentarem sistema operacional Android, conforme destaca uma pesquisa \cite{app-my-site}, que geralmente requerem uma conta Google para seu funcionamento. E mesmo indivíduos com aparelhos de outro sistema operacional, comumente possuem contas Google para usufruir de seus serviços.
 Assim sendo, a responsabilidade de identificar os usuários da aplicação foi terceirizada para a Google, e quando estes se cadastram, devem aceitar sua políticas e termos de usuário que definem extensamente como os dados são processados, tratados e protegidos.
 
 \subsubsection{Infraestrutura de Rede}

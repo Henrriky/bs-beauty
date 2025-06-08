@@ -9,7 +9,7 @@ A definição clara desses elementos é essencial para garantir a coerência do 
 
 \subsection{Regras de Negócio}
 
-As regras de negócio definem os comportamentos, restrições e condições que regem o funcionamento do sistema, conforme as particularidades da BS Beauty Academy, e representam diretrizes que devem ser respeitadas tanto no uso da aplicação quanto no desenvolvimento das funcionalidades.
+As regras de negócio definem os comportamentos, restrições e condições que regem o funcionamento do sistema, conforme as particularidades da \emph{BS Beauty Academy}, e representam diretrizes que devem ser respeitadas tanto no uso da aplicação quanto no desenvolvimento das funcionalidades.
 
 A seguir, são listadas as principais regras de negócio identificadas:
 
@@ -28,7 +28,7 @@ A seguir, são listadas as principais regras de negócio identificadas:
 	\hline
 	RN02 & Clientes podem agendar múltiplos serviços em um mesmo agendamento. & Agenda, Clientes \\
 	\hline
-	RN03 & Pagamentos são realizados só presencialmente. & Atendimento, Financeiro, Marketing e Vendas \\
+	RN03 & Pagamentos são realizados só presencialmente. & Atendimento, Financeiro, \emph{Marketing} e Vendas \\
 	\hline
 	RN04 & Clientes devem avaliar os serviços concluídos. & Atendimento, Clientes \\
 	\hline
@@ -42,19 +42,19 @@ A seguir, são listadas as principais regras de negócio identificadas:
 	\hline
 	RN09 & Profissionais podem bloquear horários específicos na agenda. & Agenda, RH/Profissionais \\
 	\hline
-	RN10 & Preços e duração de serviços podem ser definidos pela profissional (autônoma) ou pela gerente (modelo comissionado). & Financeiro, Marketing e Vendas, RH/Profissionais \\
+	RN10 & Preços e duração de serviços podem ser definidos pela profissional (autônoma) ou pela gerente (modelo comissionado). & Financeiro, \emph{Marketing} e Vendas, RH/Profissionais \\
 	\hline
 	RN11 & O salão possui horário fixo de funcionamento (definido pela gerente). & Atendimento, RH/Profissionais \\
 	\hline
 	RN12 & Clientes devem informar como conheceram o salão. & Atendimento, Clientes \\
 	\hline
-	RN13 & Programa de indicação para indicar 3 pessoas e ganhar um procedimento grátis. & Clientes, Financeiro, Marketing e Vendas \\
+	RN13 & Programa de indicação para indicar 3 pessoas e ganhar um procedimento grátis. & Clientes, Financeiro, \emph{Marketing} e Vendas \\
 	\hline
-	RN14 & Clientes aniversariantes devem receber mensagens de aniversário e descontos. & Clientes, Marketing e Vendas \\
+	RN14 & Clientes aniversariantes devem receber mensagens de aniversário e descontos. & Clientes, \emph{Marketing} e Vendas \\
 	\hline
 	RN15 & Clientes, profissionais e a gerente devem receber notificações referentes a agendamentos. & Agenda, Atendimento, Clientes, RH/Profissionais \\
 	\hline
-	RN16 & E-mails e telefones cadastrados por clientes e profissionais devem ser únicos. & Clientes, RH/Profissionais \\
+	RN16 & \emph{E-mails} e telefones cadastrados por clientes e profissionais devem ser únicos. & Clientes, RH/Profissionais \\
 	\hline
 	RN17 & Cada serviço possui um tempo de duração definido ao cadastrá-lo. & Agenda, Atendimento \\
 	\hline
@@ -109,7 +109,7 @@ Os requisitos funcionais representam as funcionalidades que o sistema deve imple
 	
 	% RN03
 	\multicolumn{2}{|l|}{\textbf{RN03}} \\ \hline
-	RF03-01 & O sistema não deve solicitar informações de pagamento durante o agendamento online. \\ \hline
+	RF03-01 & O sistema não deve solicitar informações de pagamento durante o agendamento \emph{on-line}. \\ \hline
 	RF03-02 & O sistema deve gerar um registro de pagamento pendente para cada agendamento. \\ \hline
 	RF03-03 & O sistema deve disponibilizar interface para registro de pagamentos apenas em terminais do salão. \\ \hline
 	RF03-04 & O sistema deve permitir o registro de diferentes formas de pagamento presencial. \\ \hline
@@ -141,7 +141,7 @@ Os requisitos funcionais representam as funcionalidades que o sistema deve imple
 	RF07-01 & O sistema deve restringir as operações de cadastro de funcionárias ao perfil de gerente. \\ \hline
 	RF07-02 & O sistema deve restringir as operações de edição de dados de funcionárias ao perfil de gerente. \\ \hline
 	RF07-03 & O sistema deve disponibilizar interface de gerenciamento de funcionárias apenas para usuários com perfil de gerente. \\ \hline
-	RF07-04 & O sistema deve registrar log de todas as operações de cadastro e edição de funcionárias. \\ \hline
+	RF07-04 & O sistema deve registrar \emph{log} de todas as operações de cadastro e edição de funcionárias. \\ \hline
 	RF07-05 & O sistema deve notificar funcionárias quando seus dados forem alterados pela gerente. \\ \hline
 	
 	% RN08
@@ -177,7 +177,7 @@ Os requisitos funcionais representam as funcionalidades que o sistema deve imple
 	% RN12
 	\multicolumn{2}{|l|}{\textbf{RN12}} \\ \hline
 	RF12-01 & O sistema deve solicitar informação sobre como o cliente conheceu o salão durante o cadastro inicial. \\ \hline
-	RF12-02 & O sistema deve oferecer opções predefinidas (redes sociais, indicação, busca online, etc.). \\ \hline
+	RF12-02 & O sistema deve oferecer opções predefinidas (redes sociais, indicação, busca \emph{on-line}, etc.). \\ \hline
 	RF12-03 & O sistema deve permitir especificar o nome do indicador quando a opção for "indicação”. \\ \hline
 	RF12-04 & O sistema deve gerar relatórios estatísticos sobre as fontes de captação de clientes. \\ \hline
 	RF12-05 & O sistema deve permitir atualização dessa informação em caso de erro ou mudança. \\ \hline
@@ -204,14 +204,14 @@ Os requisitos funcionais representam as funcionalidades que o sistema deve imple
 	RF15-01 & O sistema deve enviar confirmação de agendamento para o cliente e profissional envolvidos. \\ \hline
 	RF15-02 & O sistema deve enviar lembretes 24h antes do horário agendado. \\ \hline
 	RF15-03 & O sistema deve notificar sobre cancelamentos ou alterações nos agendamentos. \\ \hline
-	RF15-04 & O sistema deve permitir configuração dos tipos de notificação desejados (email, SMS, push). \\ \hline
+	RF15-04 & O sistema deve permitir configuração dos tipos de notificação desejados (\emph{e-mail}, SMS, push). \\ \hline
 	
 	% RN16
 	\multicolumn{2}{|l|}{\textbf{RN16}} \\ \hline
-	RF16-01 & O sistema deve validar a unicidade de e-mails durante o cadastro de usuários. \\ \hline
+	RF16-01 & O sistema deve validar a unicidade de \emph{e-mails} durante o cadastro de usuários. \\ \hline
 	RF16-02 & O sistema deve validar a unicidade de telefones durante o cadastro de usuários. \\ \hline
-	RF16-03 & O sistema deve exibir alerta quando houver tentativa de cadastro com email/telefone já existente. \\ \hline
-	RF16-04 & O sistema deve permitir a atualização de e-mail/telefone com validação de unicidade. \\ \hline
+	RF16-03 & O sistema deve exibir alerta quando houver tentativa de cadastro com \emph{e-mail}/telefone já existente. \\ \hline
+	RF16-04 & O sistema deve permitir a atualização de \emph{e-mail}/telefone com validação de unicidade. \\ \hline
 	
 	% RN17
 	\multicolumn{2}{|l|}{\textbf{RN17}} \\ \hline
@@ -243,7 +243,7 @@ Os requisitos funcionais representam as funcionalidades que o sistema deve imple
 	RF20-02 & O sistema deve gerar relatórios financeiros (receita diária, semanal, mensal) para a gerência. \\ \hline
 	RF20-03 & O sistema deve gerar relatórios de ocupação (horários mais procurados, serviços mais solicitados). \\ \hline
 	RF20-04 & O sistema deve permitir a exportação dos relatórios em formatos diversos (PDF, Excel, CSV). \\ \hline
-	RF20-05 & O sistema deve gerar dashboard com indicadores-chave de desempenho para gerência e profissionais. \\ \hline
+	RF20-05 & O sistema deve gerar \emph{dashboard} com indicadores-chave de desempenho para gerência e profissionais. \\ \hline
 	
 	% RN21
 	\multicolumn{2}{|l|}{\textbf{RN21}} \\ \hline
@@ -311,7 +311,7 @@ Os requisitos funcionais representam as funcionalidades que o sistema deve imple
 
 \subsection{Requisitos Não Funcionais}
 
-A seguir, são apresentados os requisitos não funcionais, relativos a qualidade e a experiência do sistema, garantindo aspectos essenciais como usabilidade, segurança e design.
+A seguir, são apresentados os requisitos não funcionais, relativos à qualidade e à experiência do sistema, garantindo aspectos essenciais como usabilidade, segurança e design.
 
 \begin{longtable}{|p{0.1\textwidth}|p{0.85\textwidth}|}
 	\caption{Requisitos Não Funcionais} \label{tab:requisitos-nao-funcionais}\\

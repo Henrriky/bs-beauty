@@ -1,5 +1,5 @@
 \section{Testes e Manutenibilidade}
-Nessa seção do capítulo, apresenta-se os mecanismos e ferramentas adotados para garantir a qualidade de software do projeto ao longo do desenvolvimento.
+Nesta seção, apresenta-se os mecanismos e ferramentas adotados para garantir a qualidade de software do projeto ao longo do desenvolvimento.
 Será abordado o plano de testes, assim como cada teste que está incluso. Além disso, assuntos como infraestrutura de testes e convenções de código (\textit{coding convention})
 serão detalhados, evidenciando práticas que promovem a manutenibilidade, padronização e confiabilidade do sistema ao longo de sua evolução.
 
@@ -7,15 +7,15 @@ serão detalhados, evidenciando práticas que promovem a manutenibilidade, padro
 O plano de testes define a estratégia adotada para garantir a qualidade e confiabilidade da aplicação. 
 Ele inclui os tipos de testes aplicados, as ferramentas utilizadas, o escopo das validações, e os critérios de sucesso e falha.
 
-Tendo em vista que a arquitetura do \textit{back-end} é constituída por \textit{controllers}, \textit{services} e \textit{repositories} usando o framework \textit{Express}, 
+Tendo em vista que a arquitetura do \textit{back-end} é constituída por \textit{controllers}, \textit{services} e \textit{repositories} usando o \emph{framework} \textit{Express}, 
 é necessário garantir um ótimo funcionamento da comunicação entre essas camadas. Portanto, conforme os recursos da \textit{RESTful API} são desenvolvidos (agendamentos, serviços de beleza, clientes, funcionários, etc) com as respectivas camadas que foram comentadas, urge-se a demanda de serem testadas em paralelo, cobrindo os cenários possíveis de sucesso/falha. 
 
 Pretende-se atingir, no mínimo, 80\% de cobertura nos testes unitários e integrados aplicados sobre as camadas de \textit{controllers} e \textit{services} da \textit{API}. Essa métrica será obtida por meio de ferramentas integradas ao ambiente de testes, como o \textit{framework} \textbf{\textit{Vitest}}~\cite{vitest-2025} com suporte a geração de relatórios. Embora a cobertura de testes não garanta por si só a ausência de falhas, ela serve como um forte indicador de que a maior parte da lógica de negócio está sendo exercitada e validada durante a execução dos testes. Essa prática contribui diretamente para a robustez do sistema e facilita a detecção precoce de regressões ao longo do desenvolvimento.
 
 O mesmo propósito de cobertura de testes é válido para o \textit{front-end} desenvolvido em \textit{React}. Como essa tecnologia adota um princípio de componentização de elementos da interface,
-é interessante que as páginas com cenários lógicos mais críticos (como as telas de agendamento) sejam validadas de forma precisa. Garantindo que os elementos da interface estejam atendendo o comportamento esperado.
+é interessante que as páginas com cenários lógicos mais críticos (como as telas de agendamento) sejam validadas de forma precisa. Assim, garantindo que os elementos da interface estejam atendendo o comportamento esperado.
 
-Quanto à cobertura de testes do \textit{front-end}, é tido como propósito, realizar uma cobertura de testes que envolva todos os processos que foram mapeados no escopo do projeto.
+Quanto à cobertura de testes do \textit{front-end}, é tido como propósito, realizar um plano que envolva todos os processos que foram mapeados no escopo do projeto.
 
 Ademais, os testes desenvolvidos nas duas divisões do sistema terão foco, inicialmente, nas funcionalidades essenciais para o funcionamento do sistema, tais como autenticação, criação e gerenciamento de agendamentos, relatórios, serviços e ofertas. Essa abordagem inicial permite validar as principais regras de negócio desde as primeiras entregas, contribuindo para uma base de código mais robusta e confiável à medida que novas funcionalidades forem sendo integradas.
 

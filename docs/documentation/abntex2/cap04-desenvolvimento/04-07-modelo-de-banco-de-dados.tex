@@ -4,55 +4,55 @@ Para o desenvolvimento da aplicação foram elaborados previamente modelos de re
 O Modelo Entidade Relacionamento explica muito sobre a aplicação e já aponta algumas regras de negócio.
 Nele foram definidas as seguintes entidades e relacionamentos:
 \begin{itemize}
-	\item CUSTOMER: Entidade que representa um cliente.
+	\item \emph{CUSTOMER}: Entidade que representa um cliente.
 	\begin{itemize}
-		\item \textbf{\textit{refers:}} um cliente (CUSTOMER) pode ou não indicar (\textit{refers}) outros cliente e um cliente é indicado por nenhum ou um único cliente.
-		\item \textbf{\textit{makes:}} um cliente faz ou não agendamentos (APPOINTMENT).
+		\item \textbf{\textit{refers:}} um cliente (\emph{CUSTOMER}) pode ou não indicar (\textit{refers}) outros cliente e um cliente é indicado por nenhum ou um único cliente.
+		\item \textbf{\textit{makes:}} um cliente faz ou não agendamentos (\emph{APPOINTMENT}).
 	\end{itemize}
-	\item APPOINTMENT: Entidade que representa um agendamento.
+	\item \emph{APPOINTMENT}: Entidade que representa um agendamento.
 	\begin{itemize}
-		\item \textbf{\textit{makes}}: um agendamento (APPOINTMENT) é feito (\textit{makes}) por um cliente. 
-		\item \textbf{\textit{has}}: um agendamento (APPOINTMENT) tem (\textit{has}) ou não uma avaliação (RATING).
-		\item \textbf{\textit{sends}}: um agendamento (APPOINTMENT) envia (\textit{sends}) ao menos uma notificação (NOTIFICATION).
-		\item \textbf{\textit{includes}}: um agendamento (APPOINTMENT) inclui (\textit{includes}) uma oferta (OFFER).
+		\item \textbf{\textit{makes}}: um agendamento (\emph{APPOINTMENT}) é feito (\textit{makes}) por um cliente. 
+		\item \textbf{\textit{has}}: um agendamento (\emph{APPOINTMENT}) tem (\textit{has}) ou não uma avaliação (\emph{RATING}).
+		\item \textbf{\textit{sends}}: um agendamento (\emph{APPOINTMENT}) envia (\textit{sends}) ao menos uma notificação (\emph{NOTIFICATION}).
+		\item \textbf{\textit{includes}}: um agendamento (\emph{APPOINTMENT}) inclui (\textit{includes}) uma oferta (\emph{OFFER}).
 	\end{itemize}
-	\item RATING: Entidade que representa a avaliação de um agendamento.
+	\item \emph{RATING}: Entidade que representa a avaliação de um agendamento.
 	\begin{itemize}
-		\item \textbf{\textit{has:}} uma avaliação (RATING) é tida (\textit{has}) por um agendamento (APPOINTMENT).
+		\item \textbf{\textit{has:}} uma avaliação (\emph{RATING}) é tida (\textit{has}) por um agendamento (\emph{APPOINTMENT}).
 	\end{itemize}
-	\item NOTIFICATION: Entidade que representa uma notificação.
+	\item \emph{NOTIFICATION}: Entidade que representa uma notificação.
 	\begin{itemize}
-		\item \textbf{\textit{sends:}} uma notificação (NOTIFICATION) é enviada por (\textit{sends}) um agendamento (APPOINTMENT).
+		\item \textbf{\textit{sends:}} uma notificação (\emph{NOTIFICATION}) é enviada por (\textit{sends}) um agendamento (\emph{APPOINTMENT}).
 	\end{itemize}
-	\item OFFER: Entidade associativa que representa a oferta (\textit{offers}) de um serviço (SERVICE) por um funcionário (EMPLOYEE).
+	\item \emph{OFFER}: Entidade associativa que representa a oferta (\textit{offers}) de um serviço (\emph{SERVICE}) por um funcionário (\emph{EMPLOYEE}).
 	\begin{itemize}
-		\item \textbf{\textit{includes}}: uma oferta (OFFER) pode ou não ser incluida (\textit{includes}) em muitos agendamentos (APPOINTMENT). 
+		\item \textbf{\textit{includes}}: uma oferta (\emph{OFFER}) pode ou não ser incluida (\textit{includes}) em muitos agendamentos (\emph{APPOINTMENT}). 
 	\end{itemize}
-	\item EMPLOYEE: Entidade que representa um funcionário.
+	\item \emph{EMPLOYEE}: Entidade que representa um funcionário.
 	\begin{itemize}
-		\item \textbf{\textit{offers}}: um funcionário (EMPLOYEE) oferece (\textit{offers}) ou não muitos serviços (SERVICE).
-		\item \textbf{\textit{has}}: um funcionário (EMPLOYEE) tem (\textit{has}) ou não muitos turnos (SHIFT).
-		\item \textbf{\textit{has}}: um funcionário (EMPLOYEE) tem (\textit{has}) ao menos um papel (ROLE).
+		\item \textbf{\textit{offers}}: um funcionário (\emph{EMPLOYEE}) oferece (\textit{offers}) ou não muitos serviços (\emph{SERVICE}).
+		\item \textbf{\textit{has}}: um funcionário (\emph{EMPLOYEE}) tem (\textit{has}) ou não muitos turnos (\emph{SHIFT}).
+		\item \textbf{\textit{has}}: um funcionário (\emph{EMPLOYEE}) tem (\textit{has}) ao menos um papel (\emph{ROLE}).
 	\end{itemize}
-	\item SERVICE: Entidade que representa um serviço no salão de beleza.
+	\item \emph{SERVICE}: Entidade que representa um serviço no salão de beleza.
 	\begin{itemize}
-		\item \textbf{\textit{offers}}: um serviço (SERVICE) é oferecido (\textit{offers}) ou não por muitos funcionários (EMPLOYEE).
+		\item \textbf{\textit{offers}}: um serviço (\emph{SERVICE}) é oferecido (\textit{offers}) ou não por muitos funcionários (\emph{EMPLOYEE}).
 	\end{itemize}
-	\item SHIFT: Entidade que representa os turnos de trabalho de um funcionário.
+	\item \emph{SHIFT}: Entidade que representa os turnos de trabalho de um funcionário.
 	\begin{itemize}
-		\item \textbf{\textit{has}}: um turno (SHIFT) é tido (\textit{has}) por um funcionário (EMPLOYEE).
+		\item \textbf{\textit{has}}: um turno (\emph{SHIFT}) é tido (\textit{has}) por um funcionário (\emph{EMPLOYEE}).
 	\end{itemize}
-	\item ROLE: Entidade que representa os papéis que um funcionário possui na plataforma.
+	\item \emph{ROLE}: Entidade que representa os papéis que um funcionário possui na plataforma.
 	\begin{itemize}
-		\item \textbf{\textit{has}}: um papel (ROLE) é tido ou não (\textit{has}) por muitos funcionários (EMPLOYEE).
-		\item \textbf{\textit{has}}: um papel (ROLE) tem (\textit{has}) ao menos uma permissão (PERMISSIONS).
+		\item \textbf{\textit{has}}: um papel (\emph{ROLE}) é tido ou não (\textit{has}) por muitos funcionários (\emph{EMPLOYEE}).
+		\item \textbf{\textit{has}}: um papel (\emph{ROLE}) tem (\textit{has}) ao menos uma permissão (\emph{PERMISSIONS}).
 	\end{itemize}
-	\item EMPLOYE\_ROLE: Entidade associativa auxiliar para EMPLOYEE e ROLE.
-	\item PERMISSIONS: Entidade que representa as permissões que cada papel provê.
+	\item \emph{EMPLOYE\_ROLE}: Entidade associativa auxiliar para \emph{EMPLOYEE} e \emph{ROLE}.
+	\item \emph{PERMISSIONS}: Entidade que representa as permissões que cada papel provê.
 	\begin{itemize}
-		\item \textbf{\textit{has}}: uma permissão (PERMISSIONS) é tida (\textit{has}) ou não por muitos papeis (ROLE).
+		\item \textbf{\textit{has}}: uma permissão (\emph{PERMISSIONS}) é tida (\textit{has}) ou não por muitos papeis (\emph{ROLE}).
 \end{itemize}
-	\item ROLE\_PERMISSION: Entidade associativa auxiliar para ROLE e PERMISSIONS.
+	\item \emph{ROLE\_PERMISSION}: Entidade associativa auxiliar para \emph{ROLE} e \emph{PERMISSIONS}.
 \end{itemize}
 \begin{figure}[h!tbp]
 	\centering
