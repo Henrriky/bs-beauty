@@ -23,3 +23,11 @@ export type EmployeesOfferingService = {
   id: string
   offers: Array<EmployeesOfferingServiceOffer>
 }
+
+export interface PaginatedServicesResponse {
+  data: Service[]
+  total: number
+  page: number
+  totalPages: number
+  limit: number
+}
