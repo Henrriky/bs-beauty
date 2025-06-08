@@ -1,0 +1,73 @@
+\section{Modelo de Banco de Dados}
+Para o desenvolvimento da aplicação foram elaborados previamente modelos de representação do banco de dados. Tais modelos auxiliam a ter uma visão da aplicação antes que seja de fato desenvolvida.
+\subsection{Modelo Entidade Relacionamento - MER}
+O Modelo Entidade Relacionamento explica muito sobre a aplicação e já aponta algumas regras de negócio.
+Nele foram definidas as seguintes entidades e relacionamentos:
+\begin{itemize}
+	\item CUSTOMER: Entidade que representa um cliente.
+	\begin{itemize}
+		\item \textbf{\textit{refers:}} um cliente (CUSTOMER) pode ou não indicar (\textit{refers}) outros cliente e um cliente é indicado por nenhum ou um único cliente.
+		\item \textbf{\textit{makes:}} um cliente faz ou não agendamentos (APPOINTMENT).
+	\end{itemize}
+	\item APPOINTMENT: Entidade que representa um agendamento.
+	\begin{itemize}
+		\item \textbf{\textit{makes}}: um agendamento (APPOINTMENT) é feito (\textit{makes}) por um cliente. 
+		\item \textbf{\textit{has}}: um agendamento (APPOINTMENT) tem (\textit{has}) ou não uma avaliação (RATING).
+		\item \textbf{\textit{sends}}: um agendamento (APPOINTMENT) envia (\textit{sends}) ao menos uma notificação (NOTIFICATION).
+		\item \textbf{\textit{includes}}: um agendamento (APPOINTMENT) inclui (\textit{includes}) uma oferta (OFFER).
+	\end{itemize}
+	\item RATING: Entidade que representa a avaliação de um agendamento.
+	\begin{itemize}
+		\item \textbf{\textit{has:}} uma avaliação (RATING) é tida (\textit{has}) por um agendamento (APPOINTMENT).
+	\end{itemize}
+	\item NOTIFICATION: Entidade que representa uma notificação.
+	\begin{itemize}
+		\item \textbf{\textit{sends:}} uma notificação (NOTIFICATION) é enviada por (\textit{sends}) um agendamento (APPOINTMENT).
+	\end{itemize}
+	\item OFFER: Entidade associativa que representa a oferta (\textit{offers}) de um serviço (SERVICE) por um funcionário (EMPLOYEE).
+	\begin{itemize}
+		\item \textbf{\textit{includes}}: uma oferta (OFFER) pode ou não ser incluida (\textit{includes}) em muitos agendamentos (APPOINTMENT). 
+	\end{itemize}
+	\item EMPLOYEE: Entidade que representa um funcionário.
+	\begin{itemize}
+		\item \textbf{\textit{offers}}: um funcionário (EMPLOYEE) oferece (\textit{offers}) ou não muitos serviços (SERVICE).
+		\item \textbf{\textit{has}}: um funcionário (EMPLOYEE) tem (\textit{has}) ou não muitos turnos (SHIFT).
+		\item \textbf{\textit{has}}: um funcionário (EMPLOYEE) tem (\textit{has}) ao menos um papel (ROLE).
+	\end{itemize}
+	\item SERVICE: Entidade que representa um serviço no salão de beleza.
+	\begin{itemize}
+		\item \textbf{\textit{offers}}: um serviço (SERVICE) é oferecido (\textit{offers}) ou não por muitos funcionários (EMPLOYEE).
+	\end{itemize}
+	\item SHIFT: Entidade que representa os turnos de trabalho de um funcionário.
+	\begin{itemize}
+		\item \textbf{\textit{has}}: um turno (SHIFT) é tido (\textit{has}) por um funcionário (EMPLOYEE).
+	\end{itemize}
+	\item ROLE: Entidade que representa os papéis que um funcionário possui na plataforma.
+	\begin{itemize}
+		\item \textbf{\textit{has}}: um papel (ROLE) é tido ou não (\textit{has}) por muitos funcionários (EMPLOYEE).
+		\item \textbf{\textit{has}}: um papel (ROLE) tem (\textit{has}) ao menos uma permissão (PERMISSIONS).
+	\end{itemize}
+	\item EMPLOYE\_ROLE: Entidade associativa auxiliar para EMPLOYEE e ROLE.
+	\item PERMISSIONS: Entidade que representa as permissões que cada papel provê.
+	\begin{itemize}
+		\item \textbf{\textit{has}}: uma permissão (PERMISSIONS) é tida (\textit{has}) ou não por muitos papeis (ROLE).
+\end{itemize}
+	\item ROLE\_PERMISSION: Entidade associativa auxiliar para ROLE e PERMISSIONS.
+\end{itemize}
+\begin{figure}[h!tbp]
+	\centering
+	\caption{MER}
+	\includegraphics[width=1\textwidth]{cap04-desenvolvimento/images/4-7-1-modelo-entidade-relacionamento.png}
+	\fonte{Produzido pelos autores}
+	\label{fig:mer}
+\end{figure}
+\subsection{Diagrama Entidade Relacionamento - DER}
+tabelas
+\begin{figure}[h!tbp]
+	\centering
+	\caption{DER}
+	\includegraphics[width=1\textwidth]{cap04-desenvolvimento/images/4-7-2-diagrama-entidade-relacionamento.png}
+	\fonte{Produzido pelos autores}
+	\label{fig:der}
+\end{figure}
+\subsection{Dicionário de Dados}
