@@ -1,6 +1,8 @@
 import { type Employee, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type EmployeeRepository } from '../protocols/employee.repository'
+import { PaginatedRequest, PaginatedResult } from '../../types/pagination'
+import { EmployeeFilters } from '../../types/employees/employee-filters'
 
 class PrismaEmployeeRepository implements EmployeeRepository {
   public async findAll () {
@@ -78,6 +80,37 @@ class PrismaEmployeeRepository implements EmployeeRepository {
 
     return employeeDeleted
   }
+
+  public async findAllPaginated(
+    params: PaginatedRequest<EmployeeFilters>
+  ) {
+    const { page, limit, filters } = params
+    const skip = (page - 1) * limit
+
+    const where = {
+      name: filters.name ? { contains: filters.name } : undefined,
+      email: filters.email ? { contains: filters.email, } : undefined,
+    }
+
+    const [data, total] = await Promise.all([
+      prismaClient.employee.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'asc' }
+      }),
+      prismaClient.employee.count({ where })
+    ])
+
+    return {
+      data,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      limit
+    }
+  }
+
 }
 
 export { PrismaEmployeeRepository }
