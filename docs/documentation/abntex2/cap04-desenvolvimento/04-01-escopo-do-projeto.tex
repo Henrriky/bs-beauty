@@ -74,6 +74,8 @@ A seguir, são listadas as principais regras de negócio identificadas:
 	\hline
 	RN25 & Profissionais podem criar seus próprios serviços (com limitações de acesso). & Agenda, RH/Profissionais \\
 	\hline
+	RN26 & A gerente deve aprovar os novos serviços que forem criados. & Agenda, RH/Profissionais. \\
+	\hline
 	
 \end{longtable}
 
@@ -284,6 +286,23 @@ Os requisitos funcionais representam as funcionalidades que o sistema deve imple
 	RF25-03 & O sistema deve permitir definição de parâmetros específicos para serviços personalizados (preço, duração, descrição). \\ \hline
 	RF25-04 & O sistema deve restringir a visualização e agendamento dos serviços personalizados conforme configuração da profissional. \\ \hline
 	RF25-05 & O sistema deve notificar clientes elegíveis sobre novos serviços personalizados quando configurado. \\ \hline
+	RF25-06 & O sistema deve fazer com que novos serviços sejam criados com o status de "Pendente de Aprovação”. \\ \hline
+	RF25-07 & O sistema deve impedir que serviços com status "Pendente" sejam disponibilizados para agendamento. \\ \hline
+	RF25-08 & O sistema deve gerar automaticamente uma solicitação de aprovação quando um novo serviço for criado. \\ \hline
+	
+	% RN26
+	\multicolumn{2}{|l|}{\textbf{RN26}} \\ \hline
+	RF26-01 & O sistema deve notificar a gerente imediatamente quando um novo serviço for submetido para aprovação. \\ \hline
+	RF26-02 & O sistema deve notificar a profissional sobre o status da avaliação (aprovado, rejeitado, ou solicitação de alterações). \\ \hline
+	RF26-03 & O sistema deve permitir que a gerente inclua comentários justificando aprovação ou rejeição. \\ \hline
+	RF26-04 & O sistema deve disponibilizar uma área exclusiva para a gerente visualizar todos os serviços pendentes de aprovação. \\ \hline
+	RF26-05 & O sistema deve exibir todas as informações do serviço proposto de forma clara e organizada. \\ \hline
+	RF26-06 & O sistema deve permitir que a gerente aprove, rejeite ou solicite modificações nos serviços. \\ \hline
+	RF26-07 & O sistema deve exibir informações sobre a profissional que criou o serviço. \\ \hline
+	RF26-08 & O sistema deve impedir que profissionais modifiquem serviços que estão em processo de aprovação. \\ \hline
+	RF26-09 & O sistema deve manter os seguintes status para serviços: "Rascunho", "Pendente de Aprovação", "Aprovado", "Rejeitado", "Requer Modificações”. \\ \hline
+	RF26-10 & O sistema deve permitir que serviços rejeitados sejam editados e ressubmetidos para nova avaliação. \\ \hline
+	RF26-11 & O sistema deve automaticamente disponibilizar serviços aprovados na lista de agendamento. \\ \hline
 	
 
 \end{longtable}
