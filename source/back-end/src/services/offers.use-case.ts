@@ -4,6 +4,8 @@ import { RecordExistence } from '../utils/validation/record-existence.validation
 import { CustomError } from '../utils/errors/custom.error.util'
 import { type ShiftRepository } from '../repository/protocols/shift.repository'
 import { DateFormatter } from '../utils/formatting/date.formatting.util'
+import { PaginatedRequest, PaginatedResult } from '../types/pagination'
+import { OffersFilters } from '../types/offers/offers-filters'
 
 interface OfferOutput {
   offers: Offer[]
@@ -142,6 +144,15 @@ class OffersUseCase {
     }
 
     return { availableSchedulling }
+  }
+
+  public async executeFindByEmployeeIdPaginated(
+    employeeId: string,
+    params: PaginatedRequest<OffersFilters>
+  ): Promise<PaginatedResult<Offer>> {
+    const result = await this.offerRepository.findByEmployeeIdPaginated(employeeId, params)
+
+    return result
   }
 }
 
