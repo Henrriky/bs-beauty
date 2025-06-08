@@ -12,10 +12,10 @@ Nesse contexto, tornou-se comum pessoas mal intencionadas que usam da ignorânci
 Por isso surgiram leis e normas que regularizam como os dados devem ser tratados e também tecnologias que auxiliam a proteger os dois lados da comunicação: os clientes, que desejam ter seus dados protegidos, e das organizações, que precisam se certificar da identidade do usuário.
 Isto posto, serão abordadas as técnicas e metodologias adotadas a fim de garantir que o software desenvolvido atenda as demandas da legislação e promova segurança e privacidade a seus utilizadores.
 
-\subsection{Critérios de segurança e privacidade}
+\subsection{Critérios de Segurança e Privacidade}
 Na aplicação desenvolvida, foram definidas formas de manter a segurança de todas as partes envolvidas. Foi implementado um método de cadastro e \textit{login} facilitado com geração de \textit{tokens} e também uma infraestrutura de rede que protege o dispositivo que armazena o banco de dados da aplicação.
 
-\subsubsection{Cadastro e login com conta Google}
+\subsubsection{Cadastro e Login com Conta Google}
 Um dos requisitos da entidade parceira, era o desenvolvimento de um sistema de cadastro e login facilitados, haja vista que muitos dos clientes tinham dificuldade em acessar a aplicação anterior por constantemente esquecerem sua credenciais (e-mail e senha).
 Considerando essa dificuldade, foi implementado um sistema de registro e login utilizando a API de autenticação OAuth da Google, pelo fato da maioria dos dispositivos no Brasil apresentarem sistema operacional Android, conforme destaca uma pesquisa \cite{app-my-site}, que geralmente requerem uma conta Google para seu funcionamento. E mesmo indivíduos com aparelhos de outro sistema operacional, comumente possuem contas Google para usufruir de seus serviços.
 Assim sendo, a responsabilidade de identificar os usuários da aplicação foi terceirizada para a Google, e quando estes se cadastram, devem aceitar sua políticas e termos de usuário que definem extensamente como os dados são processados, tratados e protegidos.
@@ -24,4 +24,16 @@ Assim sendo, a responsabilidade de identificar os usuários da aplicação foi t
 Os dispositivos (máquinas virtuais) que sustentam a aplicação estão hospedados na AWS, logo sendo de sua inteira responsabilidade protegê-los fisicamente, como diz seu Modelo de Responsabilidade Compartilhada \cite{aws-shared-responsibilities}, porém no que tange a software e redes, cabe ao time de desenvolvimento proteger.
 Para evitar acessos indevidos aos sistema interno, criaram-se duas instâncias EC2, uma delas sendo pública e outra privada. Como já explicado, a instância privada não possui IP público, portanto só é possível acessá-la pela rede interna dentro da infraestrutura de rede criada, delimitando uma camada a mais de segurança.
 O acesso a essa instância é feito pela instância pública por meio do protocolo SSH, que possui seus próprios métodos de segurança com esquema de chaves de acesso.
+
+\subsubsection{Controle de Acesso Baseado em Papéis}
+Outra medida de segurança, dessa vez mais relacionada a estrutura do software em si, é o controle de acesso baseado em \textit{roles}, traduzido geralmente como papéis.
+Na aplicação desenvolvida existem diversas páginas disponíveis, sendo cada uma delas destinada a um tipo de usuário (papel), como gerente, funcionários ou clientes. Assim, faz-se necessário uma maneira de bloquear e liberar o acesso a esses recursos conforme o papel do usuário atual, evitando que clientes do salão tenham acesso a páginas de relatório por exemplo.
+O controle de acesso foi implementado por meio de um mapeamentos dos papéis e permissões dentro da aplicação. Consequentemente, toda vez que uma página é requisitada, é feita uma verificação do papel do usuário atual, que recebe ou não permissão para acessar a página.
+Dessa forma os recursos são disponibilizados de forma consoante ao uso do usuário. Resolvendo o problema de acessos indevidos a partes do sistema e também tornando a experiência do usuário coerente.
+
 \subsection{Observância à Legislação}
+No Brasil a legislação que define como os dados devem ser manipulados digitalmente é a Lei Geral de Proteção de Dados, conhecida pelo seu acrônimo LGPD \cite{lgpd}. De acordo com a LGPD, os dados que coletamos não se enquadram como dados sensíveis, mas apenas como dados pessoais, portanto a aplicação se isenta de muitas restrições legislativas.
+
+Para utilização dos dados pessoais coletados, foi elaborada uma política de usuário que deve ser aceita antes que se conclua o cadastro na plataforma, provendo informações sobre quais dados estão sendo coletados, para qual finalidade e como são tratados.  Esses dados não são utilizados de forma a prejudicar o usuário, excluindo ou tratando-o de maneira diferente por motivos pessoais, políticos ou étnicos. 
+
+Ademais, o usuário pode visualizar e alterar esses dados a qualquer momento dentro da aplicação sem quaisquer tipo de restrição e como já discutido, diversos mecanismos de segurança foram implementados e empresas consolidadas no ramo de tecnologia são responsáveis pelas questões de infraestrutura física e autenticação, garantindo a integridade, confidencialidade e disponibilidade dos recursos.
