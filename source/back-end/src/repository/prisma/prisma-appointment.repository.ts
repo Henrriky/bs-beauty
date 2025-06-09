@@ -31,7 +31,8 @@ class PrismaAppointmentRepository implements AppointmentRepository {
               select: {
                 name: true
               }
-            }
+            },
+            employee: true
           }
         }
       }
@@ -72,7 +73,8 @@ class PrismaAppointmentRepository implements AppointmentRepository {
               select: {
                 name: true
               }
-            }
+            },
+            employee: true
           }
         }
       }
