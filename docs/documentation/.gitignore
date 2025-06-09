@@ -16,6 +16,13 @@
 *.nav
 *.snm
 *.vrb
+*.acn
+*.acr
+*.ist
+*.glo
+*.gls
+*.glg
+*.alg
 
 # Arquivos temporários
 *.bak
