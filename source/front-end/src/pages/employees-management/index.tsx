@@ -2,24 +2,29 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { z } from 'zod'
-import { Button } from '../../components/button/Button'
-import { Input } from '../../components/inputs/Input'
-import useAppSelector from '../../hooks/use-app-selector'
-import { Employee } from '../../store/auth/types'
-import { employeeAPI } from '../../store/employee/employee-api'
-import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
-import { EmployeeCard } from './components/EmployeeCard'
-import { ErrorMessage } from '../../components/feedback/ErrorMessage'
-import BSBeautyLoading from '../../components/feedback/Loading'
-import Title from '../../components/texts/Title'
+import { z } from 'zod';
+import { Button } from '../../components/button/Button';
+import { ErrorMessage } from '../../components/feedback/ErrorMessage';
+import BSBeautyLoading from '../../components/feedback/Loading';
+import { Input } from '../../components/inputs/Input';
+import Title from '../../components/texts/Title';
+import useAppSelector from '../../hooks/use-app-selector';
+import { Employee } from '../../store/auth/types';
+import { employeeAPI } from '../../store/employee/employee-api';
+import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils';
+import { EmployeeCard } from './components/EmployeeCard';
 
 type EmployeeFormData = z.infer<typeof EmployeeSchemas.createSchema>
 
 function EmployeesManagement() {
+  const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState(search)
+  const [page, setPage] = useState(1)
+
   const { data, isLoading, isError, error, refetch } =
-    employeeAPI.useFetchEmployeesQuery()
-  const employees = data?.employees || []
+    employeeAPI.useFetchEmployeesQuery({ page, limit: 2, email: debouncedSearch })
+
+  const [allEmployees, setAllEmployees] = useState<Employee[]>([])
 
   const {
     register,
@@ -32,9 +37,6 @@ function EmployeesManagement() {
   })
 
   const username = useAppSelector((state) => state.auth.user?.name!)
-
-  const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([])
-  const [search, setSearch] = useState('')
 
   const [isInsertModalOpen, setIsModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -50,14 +52,6 @@ function EmployeesManagement() {
       <ErrorMessage message="Erro ao carregar informações. Tente novamente mais tarde." />
     )
   }
-
-  useEffect(() => {
-    setFilteredEmployees(
-      employees.filter((employee) =>
-        employee.email.toLowerCase().includes(search.toLowerCase())
-      )
-    )
-  }, [search, employees])
 
   const [deleteEmployee] = employeeAPI.useDeleteEmployeeMutation()
 
@@ -106,6 +100,33 @@ function EmployeesManagement() {
     }
   }
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search)
+    }, 500)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [search])
+
+  useEffect(() => {
+    setPage(1);
+    setAllEmployees([]);
+  }, [debouncedSearch]);
+
+
+  useEffect(() => {
+    if (data?.data) {
+      setAllEmployees((prev) => {
+        const newUsers = data.data.filter(
+          (emp) => !prev.some((e) => e.id === emp.id)
+        );
+        return [...prev, ...newUsers];
+      });
+    }
+  }, [data]);
+
   return (
     <>
       <Title align="left">Funcionários</Title>
@@ -134,31 +155,43 @@ function EmployeesManagement() {
             />
           </div>
 
-          <button
-            className="bg-primary-500 text-white px-5 py-3 rounded-full text-xl shadow-lg hover:bg-primary-600 transition-transform transform hover:scale-105 absolute bottom-16 right-11 z-10"
-            onClick={() => setIsModalOpen(true)}
-          >
-            +
-          </button>
-
           <div className="mt-6 max-h-[70vh] overflow-y-auto scroll relative">
-            {filteredEmployees.length > 0 ? (
-              filteredEmployees.map((employee) => (
-                <EmployeeCard
-                  key={employee.id}
-                  employee={employee}
-                  onDelete={(employee) => {
-                    setEmployeeToDelete(employee)
-                    setIsDeleteModalOpen(true)
-                  }}
-                />
-              ))
-            ) : (
-              <p className="text-center text-gray-400">
-                Nenhum colaborador encontrado.
-              </p>
+              {allEmployees.length > 0 ? (
+                <>
+                  {allEmployees.map((employee) => (
+                    <EmployeeCard
+                      key={employee.id}
+                      employee={employee}
+                      onDelete={(employee) => {
+                        setEmployeeToDelete(employee)
+                        setIsDeleteModalOpen(true)
+                      }}
+                    />
+                  ))}
+                </>
+              ) : (
+                <p className="text-center text-gray-400">
+                  Nenhum colaborador encontrado.
+                </p>
+              )}
+              <div
+                onClick={() => setIsModalOpen(true)}
+                className="p-4 mb-4 bg-[#222222] text-primary-0 rounded-lg shadow-md cursor-pointer hover:bg-[#2e2e2e] transition-all flex items-center justify-center"
+              >
+                <span className="text-3xl text-primary-0 font-bold">+</span>
+              </div>
+              {data && data.page < data.totalPages && (
+                <div className="flex justify-center mt-4">
+                  <button
+                    className="bg-secondary-500 text-white px-4 py-2 mb-3 rounded-md hover:bg-secondary-600 transition"
+                    onClick={() => setPage((prev) => prev + 1)}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Carregando...' : 'Carregar mais'}
+                  </button>
+                </div>
             )}
-          </div>
+            </div>
         </>
       )}
 

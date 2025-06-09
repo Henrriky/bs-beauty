@@ -1,6 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express'
 import { makeOffersUseCaseFactory } from '../factory/make-offers-use-case.factory'
 import { type Prisma } from '@prisma/client'
+import { offerQuerySchema } from '../utils/validation/zod-schemas/pagination/offers/offers-query.schema'
 
 class OffersController {
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
@@ -99,6 +100,27 @@ class OffersController {
       )
 
       res.send({ availableSchedulling })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleFindByEmployeeIdPaginated(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeOffersUseCaseFactory()
+      const parsed = offerQuerySchema.parse(req.query)
+      const { page, limit, ...filters } = parsed
+      const employeeId = req.params.employeeId
+      const result = await useCase.executeFindByEmployeeIdPaginated(
+        employeeId,
+        {
+          page,
+          limit,
+          filters
+        }
+      )
+
+      res.send(result)
     } catch (error) {
       next(error)
     }

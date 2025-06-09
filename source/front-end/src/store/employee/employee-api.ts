@@ -2,21 +2,30 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { API_VARIABLES } from '../../api/config';
 import { Employee } from '../auth/types';
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base';
+import { PaginatedEmployeesResponse } from './types';
 
 export const employeeAPI = createApi({
   reducerPath: 'employee-api',
   baseQuery: baseQueryWithAuth,
   tagTypes: ['Employees'],
   endpoints: (builder) => ({
-    fetchEmployees: builder.query<{ employees: Employee[] }, void>({
-      query: () => ({
+    fetchEmployees: builder.query<
+      PaginatedEmployeesResponse,
+      {
+        page?: number;
+        limit?: number;
+        name?: string;
+        email?: string;
+      }>({
+        query: (params) => ({
         url: API_VARIABLES.EMPLOYEES_ENDPOINTS.FETCH_EMPLOYEES,
         method: 'GET',
+          params
       }),
       providesTags: (result) =>
         result
           ? [
-            ...result.employees.map(({ id }) => ({
+            ...result.data.map(({ id }) => ({
               type: 'Employees' as const,
               id,
             })),

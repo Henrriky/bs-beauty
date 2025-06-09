@@ -1,22 +1,31 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
+import { API_VARIABLES } from '../../api/config'
 import {
   CreateOfferFormData,
   UpdateOfferFormData,
-  // UpdateOfferFormData,
 } from '../../pages/services/components/types'
-import { API_VARIABLES } from '../../api/config'
-import { AvailableSchedulling, Offer } from './types'
+import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
+import { AvailableSchedulling, PaginatedOffersResponse } from './types'
 
 export const offerAPI = createApi({
   reducerPath: 'offers',
   baseQuery: baseQueryWithAuth,
   tagTypes: ['Offers'],
   endpoints: (builder) => ({
-    getOffers: builder.query<{ offers: Offer[] }, string>({
-      query: (employeeId) => ({
+    getOffers: builder.query<
+      PaginatedOffersResponse, {
+        employeeId: string
+        page?: number;
+        limit?: number;
+      }
+    >({
+      query: ({ employeeId, page, limit }) => ({
         url: `${API_VARIABLES.OFFERS_ENDPOINTS.ENDPOINT}/employee/${employeeId}`,
         method: 'GET',
+        params: {
+          page,
+          limit
+        }
       }),
       providesTags: ['Offers'],
     }),

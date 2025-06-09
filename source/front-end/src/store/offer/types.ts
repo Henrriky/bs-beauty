@@ -14,3 +14,11 @@ export interface AvailableSchedulling {
   endTimestamp: number
   isBusy: boolean
 }
+
+export interface PaginatedOffersResponse {
+  data: Offer[]
+  total: number
+  page: number
+  totalPages: number
+  limit: number
+}

@@ -27,7 +27,7 @@ export function EmployeeCard({ employee, onDelete }: EmployeeCardProps) {
           className="absolute top-2 right-2"
           onClick={() => onDelete(employee)}
         >
-          <TrashIcon className="size-5 transition-all" onClick={() => onDelete(employee)} />
+          <TrashIcon className="size-5 transition-all" onClick={() => onDelete(employee)} title="Excluir" />
         </button>
 
       )}

@@ -1,8 +1,11 @@
-import { type Prisma } from '@prisma/client'
+import { Service, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type ServiceRepository } from '../protocols/service.repository'
+import { PaginatedRequest, PaginatedResult } from '../../types/pagination'
+import { ServiceFilters } from '../../types/services/service-filters'
 
 class PrismaServiceRepository implements ServiceRepository {
+
   public async findAll () {
     const services = await prismaClient.service.findMany()
     return services
@@ -73,6 +76,35 @@ class PrismaServiceRepository implements ServiceRepository {
       }
     })
     return service
+  }
+
+  public async findAllPaginated(
+    params: PaginatedRequest<ServiceFilters>
+  ) {
+    const { page, limit, filters } = params
+    const skip = (page - 1) * limit
+
+    const where = {
+      name: filters.name ? { contains: filters.name } : undefined,
+    }
+
+    const [data, total] = await Promise.all([
+      prismaClient.service.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'asc' }
+      }),
+      prismaClient.service.count({ where })
+    ])
+
+    return {
+      data,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      limit
+    }
   }
 }
 
