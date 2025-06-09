@@ -161,6 +161,56 @@ brazil				% o último idioma é o principal do documento
 \makeindex
 % ---
 
+% — antes de tudo, passe a opção para hyperref evitar destinos duplicados:
+\PassOptionsToPackage{hypertexnames=false}{hyperref}
+\usepackage[acronym,nomain]{glossaries}
+ 
+% Definição dos acrônimos em ordem alfabética
+% -----------------------------------
+\newacronym{api}   {API}     {\emph{Application Programming Interface} – Interface de Programação de Aplicações}
+\newacronym{b2c}   {B2C}     {\emph{Business to Consumer} – Negócio para Consumidor}
+\newacronym{covid} {COVID-19}{\emph{Coronavirus Disease 2019} – Doença por Coronavírus 2019}
+\newacronym{der}   {DER}     {Diagrama Entidade-Relacionamento}
+\newacronym{dns}   {DNS}     {\emph{Domain Name System} – Sistema de Nomes de Domínio}
+\newacronym{ec2}   {EC2}     {\emph{Elastic Compute Cloud} – Nuvem de Computação Elástica}
+\newacronym{ecf}   {ECF}     {Emissor de Cupom Fiscal}
+\newacronym{erp}   {ERP}     {\emph{Enterprise Resource Planning} – Sistema Integrado de Gestão Empresarial}
+\newacronym{fk}    {FK}      {\emph{Foreign Key} – Chave Estrangeira}
+\newacronym{http}  {HTTP}    {\emph{HyperText Transfer Protocol} – Protocolo de Transferência de Hipertexto}
+\newacronym{https} {HTTPS}   {\emph{HyperText Transfer Protocol Secure} – Protocolo de Transferência de Hipertexto Seguro}
+\newacronym{ifsp}  {IFSP-SPO}{Instituto Federal de Educação, Ciência e Tecnologia de São Paulo – Campus São Paulo}
+\newacronym{ip}    {IP}      {\emph{Internet Protocol} – Protocolo de Internet}
+\newacronym{ios}   {iOS}     {\emph{iPhone Operating System} – Sistema Operacional do iPhone}
+\newacronym{lgpd}  {LGPD}    {Lei Geral de Proteção de Dados – Lei nº 13.709/2018}
+\newacronym{mei}   {MEI}     {Microempreendedor Individual}
+\newacronym{mer}   {MER}     {Modelo Entidade-Relacionamento}
+\newacronym{mvc}   {MVC}     {\emph{Model-View-Controller} – Modelo-Visão-Controlador}
+\newacronym{nat}   {NAT}     {\emph{Network Address Translation} – Tradução de Endereços de Rede}
+\newacronym{nfe}   {NF-e}    {Nota Fiscal Eletrônica}
+\newacronym{nfce}  {NFC-e}   {Nota Fiscal de Consumidor Eletrônica}
+\newacronym{oauth} {OAuth}   {\emph{Open Authorization} – Autorização Aberta}
+\newacronym{pdv}   {PDV}     {Ponto de Venda}
+\newacronym{pix}   {Pix}     {Pagamento Instantâneo}
+\newacronym{pk}    {PK}      {\emph{Primary Key} – Chave Primária}
+\newacronym{po}    {PO}      {Product Owner}
+\newacronym{rest}  {REST}    {\emph{Representational State Transfer} – Transferência de Estado Representacional}
+\newacronym{rf}    {RF}      {Requisito Funcional}
+\newacronym{rn}    {RN}      {Regra de Negócio}
+\newacronym{rnf}   {RNF}     {Requisito Não Funcional}
+\newacronym{saas}  {SaaS}    {\emph{Software as a Service} – Software como Serviço}
+\newacronym{sat}   {SAT}     {Sistema Autenticador e Transmissor de Cupons Fiscais}
+\newacronym{sebrae}{SEBRAE}  {Serviço Brasileiro de Apoio às Micro e Pequenas Empresas}
+\newacronym{sgbd}  {SGBD}    {Sistema Gerenciador de Banco de Dados}
+\newacronym{sla}   {SLA}     {\emph{Service Level Agreement} – Acordo de Nível de Serviço}
+\newacronym{sms}   {SMS}     {\emph{Short Message Service} – Serviço de Mensagens Curtas}
+\newacronym{spopie}{SPOPIE1} {Projeto Integrado de Extensão I}
+\newacronym{sso}   {SSO}     {\emph{Single Sign-On} – Autenticação Única}
+\newacronym{tads}  {TADS}    {Tecnologia em Análise e Desenvolvimento de Sistemas}
+\newacronym{tef}   {TEF}     {Transferência Eletrônica de Fundos}
+\newacronym{tls}   {TLS}     {\emph{Transport Layer Security} – Segurança da Camada de Transporte}
+\newacronym{vpc}   {VPC}     {\emph{Virtual Private Cloud} – Nuvem Privada Virtual}
+
+\makeglossaries
 % ----
 % Início do documento
 % ----
@@ -300,7 +350,8 @@ Trabalho aprovado. \imprimirlocal,
 	
 	% resumo em inglês
 \input{Resumo/abstract.tex}
-	
+
+\pretextual	
 	% ---
 	% inserir lista de ilustrações
 	% ---
@@ -327,24 +378,17 @@ Trabalho aprovado. \imprimirlocal,
 	
 	% ---
 	% inserir lista de abreviaturas e siglas
-	% ---
-	\begin{siglas}
-		\item [B2C] Business to Consumer
-		\item [ECF] Emissor de Cupom Fiscal			\item [ERP] Enterprise Resource Planning (Sistema Integrado de Gestão Empresarial)
-		\item [iOS] iPhone Operating System
-		\item [MEI] Microempreendedor Individual
-		\item [NFC- e] Nota Fiscal de Consumidor Eletrônica
-		\item [PDV] Ponto de Venda
-		\item [Pix] Pagamento Instantâneo
-		\item [SAT] Sistema Autenticador e Transmissor de Cupons Fiscais
-		\item [SLA] Service Level Agreement (Acordo de Nível de Serviço)
-		\item [SMS] Short Message Service
-		\item [TEF] Transferência Eletrônica de Fundos
-		\item [TADS] Tecnologia em Análise e Desenvolvimento de Sistemas
-		\item [LGPD] Lei Geral de Proteção de Dados (Lei nº 13.709/2018)
-		\item [MER] Modelo Entidade Relacionamento
-		\item [DER] Diagrama Entidade Relacionamento
-	\end{siglas}
+	
+	% Cria os arquivos auxiliares de glossários
+\cleardoublepage
+\printglossary[
+type=\acronymtype,
+title={Lista de Siglas}
+]
+\cleardoublepage
+
+
+	
 	% ---
 	
 	% ---
