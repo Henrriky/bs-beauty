@@ -8,9 +8,9 @@ O plano de testes define a estratégia adotada para garantir a qualidade e confi
 Ele inclui os tipos de testes aplicados, as ferramentas utilizadas, o escopo das validações, e os critérios de sucesso e falha.
 
 Tendo em vista que a arquitetura do \textit{back-end} é constituída por \textit{controllers}, \textit{services} e \textit{repositories} usando o \emph{framework} \textit{Express}, 
-é necessário garantir um ótimo funcionamento da comunicação entre essas camadas. Portanto, conforme os recursos da \textit{RESTful API} são desenvolvidos (agendamentos, serviços de beleza, clientes, funcionários, etc) com as respectivas camadas que foram comentadas, urge-se a demanda de serem testadas em paralelo, cobrindo os cenários possíveis de sucesso/falha. 
+é necessário garantir um ótimo funcionamento da comunicação entre essas camadas. Portanto, conforme os recursos da \textit{RESTful \gls{api}} são desenvolvidos (agendamentos, serviços de beleza, clientes, funcionários, etc) com as respectivas camadas que foram comentadas, urge-se a demanda de serem testadas em paralelo, cobrindo os cenários possíveis de sucesso/falha. 
 
-Pretende-se atingir, no mínimo, 80\% de cobertura nos testes unitários e integrados aplicados sobre as camadas de \textit{controllers} e \textit{services} da \textit{API}. Essa métrica será obtida por meio de ferramentas integradas ao ambiente de testes, como o \textit{framework} \textbf{\textit{Vitest}}~\cite{vitest-2025} com suporte a geração de relatórios. Embora a cobertura de testes não garanta por si só a ausência de falhas, ela serve como um forte indicador de que a maior parte da lógica de negócio está sendo exercitada e validada durante a execução dos testes. Essa prática contribui diretamente para a robustez do sistema e facilita a detecção precoce de regressões ao longo do desenvolvimento.
+Pretende-se atingir, no mínimo, 80\% de cobertura nos testes unitários e integrados aplicados sobre as camadas de \textit{controllers} e \textit{services} da \gls{api}. Essa métrica será obtida por meio de ferramentas integradas ao ambiente de testes, como o \textit{framework} \textbf{\textit{Vitest}}~\cite{vitest-2025} com suporte a geração de relatórios. Embora a cobertura de testes não garanta por si só a ausência de falhas, ela serve como um forte indicador de que a maior parte da lógica de negócio está sendo exercitada e validada durante a execução dos testes. Essa prática contribui diretamente para a robustez do sistema e facilita a detecção precoce de regressões ao longo do desenvolvimento.
 
 O mesmo propósito de cobertura de testes é válido para o \textit{front-end} desenvolvido em \textit{React}. Como essa tecnologia adota um princípio de componentização de elementos da interface,
 é interessante que as páginas com cenários lógicos mais críticos (como as telas de agendamento) sejam validadas de forma precisa. Assim, garantindo que os elementos da interface estejam atendendo o comportamento esperado.
@@ -48,7 +48,7 @@ Assim como os testes unitários, os testes integrados seguem uma convenção de 
 
 
 \subsubsection{Testes \textit{end-to-end}}
-Os testes \textit{end-to-end} representam provações feitas através de cenários que validam o sistema completamente desde a interface gráfica até a lógica interna da API.
+Os testes \textit{end-to-end} representam provações feitas através de cenários que validam o sistema completamente desde a interface gráfica até a lógica interna da \gls{api}.
 
 No atual momento do desenvolvimento, esse tipo de teste será usado para validar, especialmente, os processos levantados nas premissas do projeto, devido à alta complexidade de configuração e lentidão de execução que possui.
 
