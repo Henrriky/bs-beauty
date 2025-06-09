@@ -87,11 +87,11 @@ export const appointmentAPI = createApi({
           const offersResponse = await fetchWithBQ({
             url: `/offers/employee/${userId}`,
           })
+
           const serviceOfferedIds =
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
-            offersResponse.data?.offers.map((offer) => offer.id) || []
-
+            offersResponse.data?.data?.map((offer) => offer.id) || []
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           const appointmentPromises = serviceOfferedIds.map((id) =>
