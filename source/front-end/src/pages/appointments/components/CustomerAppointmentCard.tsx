@@ -54,7 +54,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
             <ProfilePicture
               size="md"
               profilePhotoUrl={
-                props.appointment.offer.employee.profilePhotoUrl ??
+                props.appointment.offer?.employee?.profilePhotoUrl ??
                 'https://cdn-site-assets.veed.io/cdn-cgi/image/width=256,quality=75,format=auto/Fish_6e8d209905/Fish_6e8d209905.webp'
               }
               filter={isSchedulled ? 'none' : 'black-white'}
@@ -68,7 +68,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
             </h1>
             <h3 className="text-[#D9D9D9] text-xs text-opacity-55">
               {firstLetterOfWordToUpperCase(
-                props.appointment.offer.employee.name || '',
+                props.appointment.offer?.employee?.name || 'Funcionário não definido'
               )}
             </h3>
           </div>

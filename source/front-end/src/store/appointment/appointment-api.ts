@@ -2,19 +2,18 @@
 // TODO: Solve errors
 
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import { API_VARIABLES } from '../../api/config'
-import {
-  Appointment,
-  AssociateAppointmentAPIData,
-  CreateAppointmentAPIData,
-  FindAppointmentByCustomerId,
-  FindAppointmentById,
-} from './types'
 import {
   CustomerUpdateAppointmentFormData,
   EmployeeUpdateAppointmentFormData,
 } from '../../pages/appointments/types'
+import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
+import {
+  Appointment,
+  CreateAppointmentAPIData,
+  FindAppointmentByCustomerId,
+  FindAppointmentById
+} from './types'
 
 export const appointmentAPI = createApi({
   reducerPath: 'appointments',
@@ -44,17 +43,6 @@ export const appointmentAPI = createApi({
           ...data,
           id: undefined,
         },
-      }),
-    }),
-    associateOfferWithAppointment: builder.mutation<
-      { appointmentServices: Appointment[] },
-      AssociateAppointmentAPIData
-    >({
-      query: (data) => ({
-        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS
-          .ASSOCIATE_APPOINTMENT_WITH_OFFER,
-        method: 'POST',
-        body: data,
       }),
     }),
     findAppointmentsByCustomerOrEmployeeId: builder.query<
@@ -118,19 +106,14 @@ export const appointmentAPI = createApi({
 
           const allAppointments = appointmentResponses
             .filter(
-              (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                response,
-              ) => response.data,
+              (response: { data?: { appointments?: Appointment[] } }) =>
+                Array.isArray(response.data?.appointments),
             )
             .flatMap(
-              (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                response,
-              ) => response.data.appointmentServices,
+              (response: { data?: { appointments?: Appointment[] } }) =>
+                response.data?.appointments ?? [],
             )
+
 
           return { data: { appointments: allAppointments } }
         } catch (error) {

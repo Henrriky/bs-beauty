@@ -14,10 +14,11 @@ const WeekAppointments = () => {
   const { data: userData } = authAPI.useFetchUserInfoQuery()
   const id = userData?.user.id
 
-  const { data, error, isLoading } =
-    appointmentAPI.useFetchEmployeeAppointmentsByAllOffersQuery(
-      id as unknown as string,
-    )
+  const {
+    data,
+    error,
+    isLoading,
+  } = appointmentAPI.useFetchEmployeeAppointmentsByAllOffersQuery(id!)
 
   if (isLoading) {
     return <div>Loading...</div>
