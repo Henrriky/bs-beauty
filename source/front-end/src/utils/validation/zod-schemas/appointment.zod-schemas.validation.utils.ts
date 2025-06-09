@@ -22,12 +22,18 @@ class AppointmentSchemas {
         .refine((string) => RegexPatterns.content.test(string))
         .optional(),
       appointmentDate: z
-        .date()
-        .refine((date) => !isNaN(date.getTime()) && date > new Date()),
+        .string()
+        .refine((value) => {
+          const parsed = Date.parse(value)
+          return !isNaN(parsed) && parsed > Date.now()
+        }, {
+          message: 'appointmentDate must be a future ISO date string',
+        }),
       serviceOfferedId: z.string().uuid(),
-      serviceId: z.string().uuid(),
+      customerId: z.string().uuid(),
+      appointmentDayPicked: z.string().optional(),
+      serviceId: z.string().optional(),
       employeeId: z.string().optional(),
-      appointmentDayPicked: z.date().optional(),
     })
     .strict()
 

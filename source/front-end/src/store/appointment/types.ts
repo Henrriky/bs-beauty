@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { AppointmentSchemas } from "../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils"
-import { AppointmentServiceSchemas } from "../../utils/validation/zod-schemas/appointment-service.zod-schemas.validation.util"
+// import { AppointmentServiceSchemas } from "../../utils/validation/zod-schemas/appointment-service.zod-schemas.validation.util"
 import { Employee } from "../auth/types"
 
 export enum Status {
@@ -74,5 +74,4 @@ export interface FindAppointmentById {
   }
 }
 
-export type CreateAppointmentAPIData = z.infer<typeof AppointmentSchemas.createSchema>
-export type AssociateAppointmentAPIData = z.infer<typeof AppointmentServiceSchemas.createSchema>
+export type CreateAppointmentAPIData = z.infer<typeof AppointmentSchemas.createSchemaForm>

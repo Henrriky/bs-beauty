@@ -29,7 +29,8 @@ function CustomerHomeSelectTimeContainer() {
   const serviceOfferedId = watch('serviceOfferedId')
   const employeeId = watch('employeeId')
   const appointmentDayPicked = watch('appointmentDayPicked')
-  const appointmentDate: Date | null = watch('appointmentDate')
+  const appointmentDateStr = watch('appointmentDate')
+  const appointmentDate = appointmentDateStr ? new Date(appointmentDateStr) : null
 
   const {
     data: schedullingData,
@@ -38,7 +39,9 @@ function CustomerHomeSelectTimeContainer() {
   } = offerAPI.useFetchForAvailableSchedulesFromEmployeeOfferQuery(
     {
       serviceOfferedId,
-      dayToFetchAvailableSchedulling: appointmentDayPicked?.toISOString() ?? '',
+      dayToFetchAvailableSchedulling: appointmentDayPicked
+        ? new Date(appointmentDayPicked).toISOString()
+        : ''
     },
     {
       skip: !appointmentDayPicked,
@@ -139,21 +142,21 @@ function CustomerHomeSelectTimeContainer() {
               return false
             }}
             tileClassName={(params) => {
-              if (params.view === 'month') {
+              if (params.view === 'month' && appointmentDayPicked) {
+                const pickedDate = new Date(appointmentDayPicked)
+
                 const isDaySelected =
-                  appointmentDayPicked &&
-                  params.date.getFullYear() ===
-                    appointmentDayPicked.getFullYear() &&
-                  params.date.getMonth() === appointmentDayPicked.getMonth() &&
-                  params.date.getDate() === appointmentDayPicked.getDate()
-                if (isDaySelected) {
-                  return 'abbr-selected'
-                }
+                  params.date.getFullYear() === pickedDate.getFullYear() &&
+                  params.date.getMonth() === pickedDate.getMonth() &&
+                  params.date.getDate() === pickedDate.getDate()
+
+                if (isDaySelected) return 'abbr-selected'
               }
+
               return ''
             }}
             onClickDay={(value) => {
-              setValue('appointmentDayPicked', value)
+              setValue('appointmentDayPicked', value.toISOString())
             }}
           />
         </div>
@@ -202,12 +205,7 @@ function CustomerHomeSelectTimeContainer() {
                               schedullingDate.startTimestamp < Date.now()
                             }
                             onClick={() => {
-                              setValue(
-                                'appointmentDate',
-                                new Date(
-                                  Number(schedullingDate.startTimestamp),
-                                ),
-                              )
+                              setValue('appointmentDate', new Date(Number(schedullingDate.startTimestamp)).toISOString()) // <-- Aqui
                             }}
                           />
                         </div>

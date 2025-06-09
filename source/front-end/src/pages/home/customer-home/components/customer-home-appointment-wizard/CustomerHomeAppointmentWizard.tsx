@@ -1,21 +1,21 @@
 /* eslint-disable react/jsx-key */
-import { useState } from 'react'
-import CustomerHomeSelectServiceContainer from './customer-home-select-service-step/CustomerHomeSelectService'
-import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AppointmentSchemas } from '../../../../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils'
-import { CreateAppointmentFormData } from './types'
-import { Button } from '../../../../../components/button/Button'
-import CustomerHomeSelectEmployeeContainer from './customer-home-select-employee-step/CustomerHomeSelectEmployee'
-import CustomerHomeSelectTimeContainer from './customer-home-select-time-step/CustomerHomeSelectTime'
-import { appointmentAPI } from '../../../../../store/appointment/appointment-api'
-import useAppSelector from '../../../../../hooks/use-app-selector'
-import { toast } from 'react-toastify'
-import Modal from '../../../../services/components/Modal'
+import { useEffect, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
+import { Button } from '../../../../../components/button/Button'
 import Subtitle from '../../../../../components/texts/Subtitle'
+import useAppSelector from '../../../../../hooks/use-app-selector'
+import { appointmentAPI } from '../../../../../store/appointment/appointment-api'
+import { AppointmentSchemas } from '../../../../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils'
+import Modal from '../../../../services/components/Modal'
+import CustomerHomeSelectEmployeeContainer from './customer-home-select-employee-step/CustomerHomeSelectEmployee'
+import CustomerHomeSelectServiceContainer from './customer-home-select-service-step/CustomerHomeSelectService'
+import CustomerHomeSelectTimeContainer from './customer-home-select-time-step/CustomerHomeSelectTime'
+import { CreateAppointmentFormData } from './types'
 
 import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-appointment-success.svg'
+import { toast } from 'react-toastify'
 
 
 type Step = {
@@ -52,6 +52,7 @@ selectEmployeeStep.nextStep = selectAppointmentTimeStep
 selectAppointmentTimeStep.previousStep = selectEmployeeStep
 
 function CustomerHomeAppointmentWizard() {
+  const customerId = useAppSelector((state) => state?.auth?.user?.id)
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
   const [currentStep, setCurrentStep] = useState<Step>(selectServiceStep)
   const userType = useAppSelector((state) => state?.auth?.user?.userType)
@@ -59,51 +60,42 @@ function CustomerHomeAppointmentWizard() {
   const createAppointmentForm = useForm<CreateAppointmentFormData>({
     resolver: zodResolver(AppointmentSchemas.createSchemaForm),
   })
-  const { handleSubmit } = createAppointmentForm
+  const {
+    handleSubmit,
+  } = createAppointmentForm
 
   const [makeAppointment, { isLoading: isLoadingMakeAppointment }] =
     appointmentAPI.useMakeAppointmentMutation()
-  const [associateOfferWithAppointment] =
-    appointmentAPI.useAssociateOfferWithAppointmentMutation()
 
   const handleSubmitConcrete = async (data: CreateAppointmentFormData) => {
-    await makeAppointment({
-      observation: undefined,
-    })
-      .unwrap()
-      .then((response) => {
-        associateOfferWithAppointment({
-          appointmentDate: data.appointmentDate,
-          serviceOfferedId: data.serviceOfferedId,
-          appointmentId: response.id,
-        })
-          .then(() => {
-            setModalIsOpen(true)
-          })
-          .catch((error: unknown) => {
-            console.error(
-              'Error trying to associate offer with appointment',
-              error,
-            )
-            toast.error(
-              'Ocorreu um erro ao associar o serviço com o agendamento.',
-            )
-          })
-      })
-      .catch((error: unknown) => {
-        console.error('Error trying to create appointment', error)
-        toast.error('Ocorreu um erro ao criar o agendamento.')
-      })
+    const payload = {
+      observation: data.observation,
+      appointmentDate: data.appointmentDate,
+      serviceOfferedId: data.serviceOfferedId,
+      customerId: customerId!,
+    }
+    try {
+      await makeAppointment(payload).unwrap()
+
+      setModalIsOpen(true)
+
+    } catch (error) {
+      console.error("❌ Erro ao criar o agendamento:", error)
+      toast.error('Erro ao criar o agendamento. Tente novamente.')
+    }     
   }
 
   const AppointmentCurrentStepForm = currentStep.currentStepAppointmentForm
 
+  useEffect(() => {
+    if (customerId) {
+      createAppointmentForm.setValue('customerId', customerId)
+    }
+  }, [customerId])
+
   return (
     <FormProvider {...createAppointmentForm}>
-      <form
-        // className="flex flex-col gap-10 w-full"
-        onSubmit={handleSubmit(handleSubmitConcrete)}
-      >
+      <form onSubmit={handleSubmit(handleSubmitConcrete)}>
         <div className="">
           <AppointmentCurrentStepForm />
         </div>
