@@ -1,17 +1,17 @@
 \section{Modelo de Banco de Dados}
 Para o desenvolvimento da aplicação foram elaborados previamente modelos de representação do banco de dados. Tais modelos auxiliam a ter uma visão da aplicação antes que seja de fato desenvolvida.
 \subsection{Modelo Entidade Relacionamento - MER}
-O Modelo Entidade Relacionamento explica muito sobre a aplicação e já aponta algumas regras de negócio.
+O \gls{mer} explica muito sobre a aplicação e já aponta algumas regras de negócio.
 Nele foram definidas as seguintes entidades e relacionamentos:
 \begin{itemize}
 	\item \emph{CUSTOMER}: Entidade que representa um cliente.
 	\begin{itemize}
-		\item \textbf{\textit{refers:}} um cliente (\emph{CUSTOMER}) pode ou não indicar (\textit{refers}) outros cliente e um cliente é indicado por nenhum ou um único cliente.
-		\item \textbf{\textit{makes:}} um cliente faz ou não agendamentos (\emph{APPOINTMENT}).
+		\item \textbf{\textit{refers:}} um cliente (\emph{CUSTOMER}) pode ou não indicar (\textit{refers}) outros clientes e um cliente é indicado por nenhum ou um único cliente.
+		\item \textbf{\textit{makes:}} um cliente faz (\emph{makes}) ou não agendamentos (\emph{APPOINTMENT}).
 	\end{itemize}
 	\item \emph{APPOINTMENT}: Entidade que representa um agendamento.
 	\begin{itemize}
-		\item \textbf{\textit{makes}}: um agendamento (\emph{APPOINTMENT}) é feito (\textit{makes}) por um cliente. 
+		\item \textbf{\textit{makes}}: um agendamento (\emph{APPOINTMENT}) é feito (\textit{makes}) por um cliente (\emph{CUSTOMER}). 
 		\item \textbf{\textit{has}}: um agendamento (\emph{APPOINTMENT}) tem (\textit{has}) ou não uma avaliação (\emph{RATING}).
 		\item \textbf{\textit{sends}}: um agendamento (\emph{APPOINTMENT}) envia (\textit{sends}) ao menos uma notificação (\emph{NOTIFICATION}).
 		\item \textbf{\textit{includes}}: um agendamento (\emph{APPOINTMENT}) inclui (\textit{includes}) uma oferta (\emph{OFFER}).
@@ -62,7 +62,7 @@ Nele foram definidas as seguintes entidades e relacionamentos:
 	\label{fig:mer}
 \end{figure}
 \subsection{Diagrama Entidade Relacionamento - DER}
-Após a elaboração do MER conforme o entendimento dos requisitos e necessidades da entidade parceira, foi produzido um Diagrama Entidade Relacionamento (DER), a partir do MER, que contém a listagem de todos os atributos das entidades modeladas, apresentando seus nomes, o tipo de dado e sua possível categorização como chave primária (identificadora) ou estrangeira.
+Após a elaboração do \gls{mer} conforme o entendimento dos requisitos e necessidades da entidade parceira, foi produzido um \gls{der}, a partir do \gls{mer}, que contém a listagem de todos os atributos das entidades modeladas, apresentando seus nomes, o tipo de dado e sua possível categorização como chave primária (identificadora) ou estrangeira.
 \begin{figure}[h!tbp]
 	\centering
 	\caption{DER}
@@ -80,10 +80,10 @@ O dicionário descreve:
 	\item \textbf{Descrição:} A descrição do atributo, explicando o que representa na prática.
 	\item \textbf{\textit{Null:}} Se o campo pode ser nulo, ou seja, não ter valor atribuído.
 	\item \textbf{Tamanho:} O tamanho do atributo, como quantidade de caracteres (\textit{bytes}).
-	\item \textbf{Valores permitidos:} Quais os valores permitidos para atributos que definição. Alguns campos utilizam enumerações, por exemplo, que possuem valores definidos previamente.
+	\item \textbf{Valores permitidos:} Quais os valores permitidos para atributos. Alguns campos utilizam enumerações, por exemplo, que possuem valores definidos previamente.
 	\item \textbf{Observações:} Algumas especificidades, como valores padrão, ou de onde uma \textit{FK} foi tomada.
 \end{itemize}
-Abaixo se encontra um \textit{QR Code} que leva a uma planilha onde foi elaborado o dicionário de dados desta aplicação.
+Abaixo se encontra um \textit{QR Code} que leva à planilha onde foi elaborado o dicionário de dados desta aplicação.
 \begin{figure}[h]
 	\centering
 	\caption{\emph{QR Code} do Dicionário de Dados}
