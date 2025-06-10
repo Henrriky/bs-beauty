@@ -48,10 +48,17 @@ brazil				% o último idioma é o principal do documento
 \usepackage{qrcode}								% para gerar QR code
 \usepackage{longtable}         					%para tabelas longas
 \usepackage[section]{placeins} % para barreiras
+\usepackage{array}
+\usepackage{xcolor,colortbl}
+\usepackage{tabularx}
+\usepackage{multirow}
 
 % --- 
 % CONFIGURAÇÕES DE PACOTES
 % ---
+
+\definecolor{cinza-escuro}{RGB}{110, 110, 110}
+\newcommand{\bloco}{\cellcolor{cinza-escuro}\rule{0pt}{2.5ex}}
 
 % Configurações do pacote backref
 % Usado sem a opção hyperpageref de backref
@@ -201,6 +208,7 @@ brazil				% o último idioma é o principal do documento
 \newacronym{mei}   {MEI}     {Microempreendedor Individual}
 \newacronym{mer}   {MER}     {Modelo Entidade-Relacionamento}
 \newacronym{mvc}   {MVC}     {\emph{Model-View-Controller} – Modelo-Visão-Controlador}
+\newacronym{mvp}   {MVP}	 {\emph{Minimum Viable Product} –  Produto Mínimo Viável}
 
 \newacronym{nat}   {NAT}     {\emph{Network Address Translation} – Tradução de Endereços de Rede}
 \newacronym{nfe}   {NF-e}    {Nota Fiscal Eletrônica}
