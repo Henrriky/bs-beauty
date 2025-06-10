@@ -1,3 +1,79 @@
 \section{Custos}
 
-Texto
+\label{sec:custos}
+
+A Tabela \ref{tab:custo-mensal-projeto} apresenta os custos com mão de obra, infraestrutura e ferramentas aplicadas no desenvolvimento do projeto.
+
+\begin{table}[htbp]
+	\centering
+	\caption{Custos mensais estimados do projeto}
+	\label{tab:custo-mensal-projeto}
+	\begin{tabular}{lrr}
+		\toprule
+		\textbf{Item de Custo} & \textbf{Valor Unitário (R\$)} & \textbf{Valor Total (R\$)} \\
+		\midrule
+		\multicolumn{3}{l}{\textbf{Mão de Obra}} \\
+		\quad Gestor & 1.250,00 & 1.250,00 \\
+		\quad Tech Lead & 2.000,00 & 2.000,00 \\
+		\quad Desenvolvedor Fullstack (3x) & 750,00 & 2.250,00 \\
+		\quad Auditora Técnica & 500,00 & 500,00 \\
+		\cmidrule{3-3}
+		\multicolumn{2}{l}{\textbf{Subtotal Mão de Obra}} & \textbf{6.000,00} \\
+		\midrule
+		\multicolumn{3}{l}{\textbf{Infraestrutura e Ferramentas}} \\
+		\quad AWS EC2 (múltiplas instâncias) & --- & 250,00 \\
+		\quad Internet (banda larga) & --- & 120,00 \\
+		\quad Consumo elétrico (6 computadores) & --- & 40,00 \\
+		\quad SonarQube (licença comercial) & --- & 350,00 \\
+		\quad Notion Plus (equipe) & --- & 400,00 \\
+		\quad Figma Professional (acesso full + dev) & --- & 160,00 \\
+		\cmidrule{3-3}
+		\multicolumn{2}{l}{\textbf{Subtotal Infraestrutura}} & \textbf{1.320,00} \\
+		\midrule
+		\multicolumn{2}{l}{\textbf{TOTAL MENSAL}} & \textbf{7.320,00} \\
+		\bottomrule
+	\end{tabular}
+	\fonte{Produzido pelos autores}
+\end{table}
+
+Para determinar os custos da mão de obra, utilizou-se a plataforma \emph{Glassdoor} \cite{glassdoor-2025}. Nela, pesquisou-se o salário médio de cada um dos cargos definidos na subseção \ref{subsec:papeis-equipe} considerando a cidade de São Paulo.
+
+Conforme aconselhado pelo orientador do projeto, considerou-se um dia de trabalho inteiro equivalente a apenas uma hora para se aproximar da disponibilidade real que os membros da equipe podiam dedicar ao desenvolvimento do projeto. Assim, o custo mensal de cada cargo foi obtido considerando o valor da hora trabalhada.
+
+O preço da infraestrutura das instâncias \gls{ec2}, operando 24 horas por dia, foi calculado utilizando a própria calculadora de preços da \gls{aws} \cite{aws-calculadora-2025}. Já o custo de internet foi baseado numa média de preços online \cite{internet-precos-2025}, enquanto o de consumo elétrico considerou a tarifa residencial da cidade de São Paulo no ano de 2024 \cite{enel-tarifa-2024} para 6 computadores com um consumo médio de 300 W por hora.
+
+Quanto às ferramentas utilizadas no projeto, levou-se em conta os preços do \emph{SonarQube} \cite{sonarqube-preco-2025}, as mensalidades do \emph{Notion} \cite{notion-preco-2025} e os planos do \emph{Figma} \cite{figma-preco-2025}. Os valores em dólar foram convertidos considerando uma cotação média de R\$ 5,50 em junho de 2025.
+
+A Tabela \ref{tab:custo-total-projeto} apresenta o custo total do projeto considerando os 9 meses de desenvolvimento previstos na Seção \ref{sec:duracao}.
+
+\begin{table}[htbp]
+	\centering
+	\caption{Custos totais do projeto}
+	\label{tab:custo-total-projeto}
+	\begin{tabular}{lrr}
+		\toprule
+		\textbf{Item de Custo} & \textbf{Valor Mensal (R\$)} & \textbf{Valor Total (R\$)} \\
+		\midrule
+		\multicolumn{3}{l}{\textbf{Mão de Obra}} \\
+		\quad Gestor & 1.250,00 & 11.250,00 \\
+		\quad Tech Lead & 2.000,00 & 18.000,00 \\
+		\quad Desenvolvedor Fullstack (3x) & 2.250,00 & 20.250,00 \\
+		\quad Auditora Técnica & 500,00 & 4.500,00 \\
+		\cmidrule{3-3}
+		\multicolumn{2}{l}{\textbf{Subtotal Mão de Obra}} & \textbf{54.000,00} \\
+		\midrule
+		\multicolumn{3}{l}{\textbf{Infraestrutura e Ferramentas}} \\
+		\quad AWS EC2 (múltiplas instâncias) & --- & 2.250,00 \\
+		\quad Internet (banda larga) & --- & 1.080,00 \\
+		\quad Consumo elétrico (6 computadores) & --- & 360,00 \\
+		\quad SonarQube (licença comercial) & --- & 3.150,00 \\
+		\quad Notion Plus (equipe) & --- & 3.600,00 \\
+		\quad Figma Professional (acesso full + dev) & --- & 1.440,00 \\
+		\cmidrule{3-3}
+		\multicolumn{2}{l}{\textbf{Subtotal Infraestrutura}} & \textbf{11.880,00} \\
+		\midrule
+		\multicolumn{2}{l}{\textbf{TOTAL}} & \textbf{65.880,00} \\
+		\bottomrule
+	\end{tabular}
+	\fonte{Produzido pelos autores}
+\end{table}

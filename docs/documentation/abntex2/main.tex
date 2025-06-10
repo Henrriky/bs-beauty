@@ -47,11 +47,15 @@ brazil				% o último idioma é o principal do documento
 \usepackage{enumitem}							% para personalizar listas numeradas
 \usepackage{qrcode}								% para gerar QR code
 \usepackage{longtable}         					%para tabelas longas
-\usepackage[section]{placeins} % para barreiras
-\usepackage{array}
-\usepackage{xcolor,colortbl}
+\usepackage[section]{placeins}					% para barreiras
+
+% Pacotes para tabelas
+\usepackage{array}								% para formatação de tabelas
+\usepackage{xcolor,colortbl}	
 \usepackage{tabularx}
-\usepackage{multirow}
+\usepackage{multirow}							% para mesclar células
+\usepackage{siunitx}							% para alinhamento de números
+\usepackage{booktabs} 							% para linhas profissionais em tabelas
 
 % --- 
 % CONFIGURAÇÕES DE PACOTES
@@ -208,7 +212,7 @@ brazil				% o último idioma é o principal do documento
 \newacronym{mei}   {MEI}     {Microempreendedor Individual}
 \newacronym{mer}   {MER}     {Modelo Entidade-Relacionamento}
 \newacronym{mvc}   {MVC}     {\emph{Model-View-Controller} – Modelo-Visão-Controlador}
-\newacronym{mvp}   {MVP}	 {\emph{Minimum Viable Product} –  Produto Mínimo Viável}
+\newacronym{mvp}   {MVP}	 {\emph{Minimum Viable Product}}
 
 \newacronym{nat}   {NAT}     {\emph{Network Address Translation} – Tradução de Endereços de Rede}
 \newacronym{nfe}   {NF-e}    {Nota Fiscal Eletrônica}
@@ -434,6 +438,7 @@ title={Lista de Siglas}
 	\begin{simbolos}
 			\item [R\$] Real (moeda brasileira)
 			\item [\%]  Porcentagem
+			\item [W]	Watts
 		
 	\end{simbolos}
 	% ---
