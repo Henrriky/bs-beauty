@@ -10,19 +10,53 @@ Ele inclui os tipos de testes aplicados, as ferramentas utilizadas, o escopo das
 Tendo em vista que a arquitetura do \textit{back-end} é constituída por \textit{controllers}, \textit{services} e \textit{repositories} usando o \emph{framework} \textit{Express}, 
 é necessário garantir um ótimo funcionamento da comunicação entre essas camadas. Portanto, conforme os recursos da \textit{RESTful \gls{api}} são desenvolvidos (agendamentos, serviços de beleza, clientes, funcionários, etc) com as respectivas camadas que foram comentadas, urge-se a demanda de serem testadas em paralelo, cobrindo os cenários possíveis de sucesso/falha. 
 
-Pretende-se atingir, no mínimo, 80\% de cobertura nos testes unitários e integrados aplicados sobre as camadas de \textit{controllers} e \textit{services} da \gls{api}. Essa métrica será obtida por meio de ferramentas integradas ao ambiente de testes, como o \textit{framework} \textbf{\textit{Vitest}}~\cite{vitest-2025} com suporte a geração de relatórios. Embora a cobertura de testes não garanta por si só a ausência de falhas, ela serve como um forte indicador de que a maior parte da lógica de negócio está sendo exercitada e validada durante a execução dos testes. Essa prática contribui diretamente para a robustez do sistema e facilita a detecção precoce de regressões ao longo do desenvolvimento.
+Pretende-se atingir, no mínimo, 70\% de cobertura nos testes unitários, integrados e de componentes aplicados sobre as camadas de \textit{controllers} e \textit{services} da \gls{api}. Essa métrica será obtida por meio de ferramentas integradas ao ambiente de testes, como o \textit{framework} \textbf{\textit{Vitest}}~\cite{vitest-2025} com suporte a geração de relatórios. Embora a cobertura de testes não garanta por si só a ausência de falhas, ela serve como um forte indicador de que a maior parte da lógica de negócio está sendo exercitada e validada durante a execução dos testes. Essa prática contribui diretamente para a robustez do sistema e facilita a detecção precoce de regressões ao longo do desenvolvimento.
 
-O mesmo propósito de cobertura de testes é válido para o \textit{front-end} desenvolvido em \textit{React}. Como essa tecnologia adota um princípio de componentização de elementos da interface,
-é interessante que as páginas com cenários lógicos mais críticos (como as telas de agendamento) sejam validadas de forma precisa. Assim, garantindo que os elementos da interface estejam atendendo o comportamento esperado.
+O mesmo propósito de cobertura de testes é válido para o \textit{front-end} desenvolvido em \textit{React}. Como essa tecnologia adota um princípio de componentização de elementos da interface, é interessante que as páginas com cenários lógicos mais críticos (como as telas de agendamento) sejam validadas de forma precisa. Assim, garantindo que os elementos da interface estejam atendendo o comportamento esperado.
 
-Quanto à cobertura de testes do \textit{front-end}, é tido como propósito, realizar um plano que envolva todos os processos que foram mapeados no escopo do projeto.
+Quanto à cobertura de testes do \textit{front-end}, é tido como propósito, cobrir cenários que envolvam todos os processos que foram mapeados no escopo do projeto.
 
 Ademais, os testes desenvolvidos nas duas divisões do sistema terão foco, inicialmente, nas funcionalidades essenciais para o funcionamento do sistema, tais como autenticação, criação e gerenciamento de agendamentos, relatórios, serviços e ofertas. Essa abordagem inicial permite validar as principais regras de negócio desde as primeiras entregas, contribuindo para uma base de código mais robusta e confiável à medida que novas funcionalidades forem sendo integradas.
 
-Os arquivos contendo as classes/funções de testes devem estar localizados em diretórios específicos, adotando uma nomenclatura compreensível como 
-\texttt{analytics.\allowbreak controller.\allowbreak spec.\allowbreak unit.ts} (referenciando um teste unitário) e \texttt{analytics.controller.spec.}%
-\linebreak%
-{\ttfamily integration.ts} referenciando um teste integrado).
+\begin{quadro}[htbp]
+	\centering
+	\caption{Planejamento de Testes por Fase Funcional}
+	\label{quad:planejamento-testes}
+	\begin{tabularx}{\textwidth}{|p{5cm}|X|X|}
+		\hline
+		\textbf{Fase} & 
+		\textbf{Funcionalidades Prioritárias} & 
+		\textbf{Tipos de Testes Aplicados} \\
+		\hline
+		Fase 1 – Preparação da Esteira CI/CD e Ambiente de Testes & 
+		Configuração iniciais para a varredura de todos os tipos de testes que serão realizados &
+		Todos os testes automatizados (unitários, integrados, componentes)
+		\\
+		\hline
+		Fase 2 – Funcionalidades Essenciais & 
+		Autenticação e Agendamentos & 
+		Testes Unitários, de Integração e de Componentes (back-end e front-end) \\
+		\hline
+		Fase 3 – Monitoramento de qualidade e Medidas de comunicação & 
+		Relatórios, Avaliações e Notificações & 
+		Testes Unitários, de Integração e de Componentes (back-end e front-end) \\
+		\hline
+		Fase 4 – Dados Operacionais & 
+		Gerenciamento de Funcionários, Serviços e Ofertas & 
+		Testes Unitários, de Integração e de Componentes (back-end e front-end) \\
+		\hline
+		Fase 5 – Validação Completa do Sistema & 
+		Fluxos completos: login, agendar serviço, avaliar atendimento, visualizar relatórios & 
+		Testes End-to-End (E2E) \\
+		\hline
+		Fase 6 – Estabilização e Qualidade Final & 
+		Reexecução dos testes automatizados, análise de cobertura, correções finais & 
+		Todos os tipos de teste relacionados ao projeto \\
+		\hline
+	\end{tabularx}
+	\fonte{Produzido pelos autores}
+\end{quadro}
+
 
 \subsection{Análise Estáticas}
 A análise estática de código é realizada utilizando as ferramentas \textbf{\textit{SonarQube}}~\cite{sonarqube-2025} e \textbf{\textit{ESLint}}~\cite{eslint-2025}, 
@@ -65,9 +99,22 @@ Testes de configuração estão fora do escopo do projeto no atual desenvolvimen
 \subsection{Testes automatizados}
 Os testes automatizados desempenham um papel fundamental na garantia da qualidade do sistema ao longo de seu ciclo de vida. Eles são responsáveis por verificar continuamente o correto funcionamento das funcionalidades implementadas, promovendo confiança no código e permitindo a identificação precoce de regressões.
 
+Os testes automatizados englobam diferentes tipos de testes descritos anteriormente, como os testes unitários, de integração, de componentes e end-to-end, que são executados de forma automática por ferramentas de validação contínua.
+
 A execução dos testes automatizados está ligada ao fluxo de integração contínua por meio da ferramenta \textbf{\textit{GitHub Actions}}~\cite{githubactions-2025}. Essa integração visa garantir que o código entregue atenda a padrões mínimos de qualidade e estabilidade em todas as etapas do desenvolvimento.  A cada \textit{push} ou \textit{pull request}, fluxos automatizados são executados para validar o código por meio de testes automatizados, análise estática, e verificação de cobertura. Esse processo assegura que apenas alterações estáveis e em conformidade com os padrões de qualidade sejam incorporadas à base de código principal, promovendo entregas seguras e contínuas ao longo do ciclo de desenvolvimento.
 
 \subsection{\textit{Logs}}
+O sistema adota uma estratégia de registro de eventos por meio de mecanismos de \textit{logging} que visam fornecer visibilidade sobre o comportamento da aplicação durante sua execução. Esses registros são essenciais para atividades de depuração, monitoramento e manutenção.
+
+No \textit{back-end} e \textit{front-end}, os logs são implementados utilizando funcionalidades nativas do Node.js, como o uso de \texttt{console.log}, \texttt{console.error}, \texttt{console.warn} e \texttt{console.info}.
+
+Os principais pontos de geração de logs incluem:
+\begin{itemize}
+	\item A entrada e saída de requisições HTTP (rotas, métodos, status).
+	\item Erros em operações internas, como falhas de banco de dados ou validações.
+\end{itemize}
+
+Além disso, é tido um cuidado com as informações exibidas nos \textit{logs}. Em suma, é priorizado que as mensagens exibidas sejam curtas e objetivas com a cautela de não fornecer dados sensíveis.
 
 \subsection{\textit{Code Convention}}
 Para garantir a legibilidade e padronização do código, são adotadas convenções definidas com base em boas práticas da comunidade \textit{JavaScript}/\textit{TypeScript}.
