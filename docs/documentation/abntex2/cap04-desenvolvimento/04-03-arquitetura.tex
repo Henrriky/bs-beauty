@@ -1,14 +1,14 @@
 \section{Arquitetura}
 
-Nessa seção do capítulo, apresenta-se a arquitetura da aplicação, que define como os componentes do sistema interagem entre si e com o usuário.
+Nessa seção, apresenta-se a arquitetura da aplicação, que define como os componentes do sistema interagem entre si e com o usuário.
 
 \subsection{Definições da arquitetura}
 
-O sistema foi estruturado com base no modelo cliente-servidor, no qual o \emph{front-end} e o \emph{back-end} operam como aplicações independentes que se comunicam por meio de requisições \gls{http}, seguindo a arquitetura RESTful.
+O sistema foi estruturado com base no modelo cliente-servidor, no qual o \emph{front-end} e o \emph{back-end} operam como aplicações independentes que se comunicam por meio de requisições \gls{http}, seguindo a arquitetura RESTful~\cite{RESTArch}.
 
 O \emph{back-end} é responsável pelo processamento da lógica de negócios e pela persistência dos dados, enquanto o \emph{front-end} realiza a apresentação e interação com o usuário. Essa separação garante maior modularidade e facilita a manutenção da aplicação, cujo domínio é um ambiente de \textit{coworking} para salões de beleza.
 
-A arquitetura do sistema adota um padrão baseado no \gls{mvc} de forma adaptada, aproximando-se de uma arquitetura em camadas. Cada camada possui uma responsabilidade bem definida, conforme descrito a seguir:
+A arquitetura do sistema adota um padrão baseado no \gls{mvc}~\cite{MDNMVC} de forma adaptada, aproximando-se de uma arquitetura em camadas. Cada camada possui uma responsabilidade bem definida, conforme descrito a seguir:
 
 \begin{itemize}
   \item \textbf{\emph{Controller:}} Responsável por receber e tratar as requisições provenientes do cliente (\emph{front-end}), encaminhando-as para a camada de serviço correspondente. Esta camada lida diretamente com aspectos de infraestrutura externa,  como servidores de borda ou \emph{gateways} de entrada da aplicação, servindo como ponto inicial de processamento das solicitações.
@@ -22,7 +22,7 @@ Esta subseção apresenta dois diagramas que representam a arquitetura do sistem
 
 \subsubsection{Diagrama de componentes}
 
-O diagrama de componentes representa a organização lógica dos principais módulos da aplicação, evidenciando as dependências e as formas de comunicação entre eles. Ele demonstra como os componentes interagem por meio de interfaces — que definem contratos de uso — e implementações — que oferecem as funcionalidades esperadas.
+O diagrama de componentes representa a estrutura modular principais módulos do sistema, evidenciando as dependências e as formas de comunicação entre eles, como comentado em ~\cite{Booch2005}. Ele demonstra como os componentes interagem por meio de interfaces — que definem contratos de uso — e implementações — que oferecem as funcionalidades esperadas.
 
 Esse tipo de diagrama é útil para visualizar a estrutura modular da aplicação, facilitando o entendimento da separação de responsabilidades e da reutilização de código, além de apoiar decisões relacionadas à manutenção e evolução do sistema.
 
@@ -33,12 +33,13 @@ Esse tipo de diagrama é útil para visualizar a estrutura modular da aplicaçã
   \label{fig:diagrama-componente}
   \fonte{Produzido pelos autores}
 \end{figure}
+\FloatBarrier
 
 
 No diagrama de componentes proposto, a aplicação é composta por diversos módulos que representam funcionalidades distintas e organizadas de forma modular. Esses componentes são responsáveis por encapsular regras de negócio e oferecer interfaces bem definidas para comunicação entre si. A seguir, são descritos os principais módulos do sistema:
 
 \begin{itemize}
-  \item \textbf{\emph{Auth}}: Componente responsável pela autenticação de usuários e integração com serviços externos, como o \emph{Google OAuth}. Garante um processo facilitado de login para os usuários e autenticação no acesso das funcionalidades protegidas da aplicação.
+  \item \textbf{\emph{Auth}}: Componente responsável pela autenticação de usuários e integração com serviços externos, como o \emph{Google OAuth} \cite{GoogleOAuth}. Garante um processo facilitado de login para os usuários e autenticação no acesso das funcionalidades protegidas da aplicação.
 
   \item \textbf{\emph{Analytics}}: Responsável por gerar relatórios e fornecer estatísticas baseadas nas informações do sistema. Auxilia principalmente no acompanhamento de desempenho da plataforma por parte dos gerentes do salão.
 
@@ -58,14 +59,12 @@ No diagrama de componentes proposto, a aplicação é composta por diversos mód
 
   \item \textbf{\emph{Rating}}: Permite que os clientes avaliem os serviços e os profissionais após os atendimentos, promovendo um sistema de \emph{feedback} contínuo.
   
-  \item \textbf{\emph{Role} e \emph{Permissions}}: Implementa o controle de acesso baseado em papéis, estabelecendo diferentes níveis de permissão conforme o tipo de usuário (cliente, funcionário, administrador, etc.).
-
   \item \textbf{\emph{Static Files (Front-end)}}: Componente responsável por servir os arquivos estáticos da interface do usuário, gerados após o processo de \textit{build} do projeto \emph{front-end} (em \emph{React}). Inclui arquivos \gls{html}, \gls{css} e \emph{JavaScript} que são entregues ao navegador do usuário final via servidor \emph{NGINX}.
 \end{itemize}
 
 \subsubsection{Diagrama de Implantação}
 
-O diagrama de implantação mostra como os componentes do sistema estão distribuídos em termos de infraestrutura, seja em servidores físicos ou ambientes virtuais. Ele ajuda a entender onde cada parte da aplicação está rodando, como os serviços se conectam entre si e quais recursos são necessários para que tudo funcione bem em produção.
+O diagrama de implantação mostra como os componentes do sistema estão distribuídos em termos de infraestrutura~\cite{Booch2005}, seja em servidores físicos ou ambientes virtuais. Ele ajuda a entender onde cada parte da aplicação está rodando, como os serviços se conectam entre si e quais recursos são necessários para que tudo funcione da forma adequada no ambiente de produção.
 
 Esse tipo de representação é especialmente útil para quem for implantar ou manter o sistema, pois facilita a visualização de elementos como servidores, banco de dados, \emph{gateways} de rede, e outras dependências da aplicação. Além disso, o diagrama contribui para o planejamento de permissões, acessos e políticas de segurança que precisam ser configuradas na infraestrutura.
 
@@ -76,26 +75,27 @@ Esse tipo de representação é especialmente útil para quem for implantar ou m
   \label{fig:diagrama-implantacao}
    \fonte{Produzido pelos autores}
 \end{figure}
+\FloatBarrier
 
 O diagrama acima é composto pelos seguintes componentes:
 \begin{itemize}
-  \item \textbf{\textit{User Device:}} No diagrama proposto, por se tratar de uma aplicação \emph{web}, o dispositivo do usuário será responsável por executar a aplicação \textit{client-side}, que interpreta através do navegador os arquivos \gls{css}, \emph{JavaScript} e \gls{html} gerados no empacotamento ou \textit{build} do projeto feito com a biblioteca \emph{React}. Ademais, esse \textit{device} é composto por alguns artefatos importantes que são obtidos pelo navegador por meio de uma requisição ao \textit{Proxy Reverso}: \gls{css} (\emph{style)}, \emph{JavaScript} (\emph{script)} e \gls{html}.
+  \item \textbf{\textit{User Device:}} No diagrama proposto, por se tratar de uma aplicação \emph{web}, o dispositivo do usuário será responsável por executar a aplicação \textit{client-side}, que interpreta através do navegador os arquivos \gls{css}, \emph{JavaScript} e \gls{html} gerados no empacotamento ou \textit{build} do projeto feito com a biblioteca \emph{React}. Ademais, esse dispositivo é composto por alguns artefatos importantes que são obtidos pelo navegador por meio de uma requisição ao \textit{Proxy Reverso}: \gls{css} (\emph{style)}, \emph{JavaScript} (\emph{script)} e \gls{html}.
 
   \item \textbf{\textit{Amazon Public Instance (Device):}} A \textit{Amazon Public Instance} é uma instância \gls{ec2} que possui um \gls{ip} público, o que permite que ela seja acessada diretamente pelo usuário ou resolvida por \gls{dns}. Por esse motivo, nela são executados apenas os componentes que devem estar disponíveis publicamente ao cliente final:
     \begin{itemize}
-      \item \textit{Componente NGINX}: Serviço que atua como \textit{Proxy Reverso} para a aplicação que está sendo executada em uma instância privada na arquitetura proposta. Para viabilizar conexões \gls{https}, o \emph{NGINX} utiliza certificados digitais emitidos gratuitamente pelo serviço \emph{Let's Encrypt}, por meio da ferramenta \emph{Certbot}, que automatiza todo o processo de emissão e renovação dos certificados~\cite{LetsEncryptWithCertbot}. Este serviço é instalado como um \textbf{artefato} adicional no ambiente da instância pública, sendo integrado ao próprio ciclo de configuração e inicialização do \emph{NGINX}.
+      \item \textit{Componente NGINX}: Serviço que atua como \textit{Proxy Reverso}~\cite{NGINXDocs} para a aplicação que está sendo executada em uma instância privada na arquitetura proposta. Para viabilizar conexões \gls{https}, o \emph{NGINX} utiliza certificados digitais emitidos gratuitamente pelo serviço \emph{Let's Encrypt}, utilizando a ferramenta \emph{Certbot}~\cite{LetsEncryptWithCertbot}, que automatiza todo o processo de emissão e renovação dos certificados. Este serviço é instalado como um \textbf{artefato} adicional no ambiente da instância pública, sendo integrado ao próprio ciclo de configuração e inicialização do \emph{NGINX}.
     \end{itemize}
 
   \item \textbf{\textit{Amazon Private Instance (Device):}} Por outro lado, a \textit{Amazon Private Instance} é composta por uma instância \gls{ec2} com restrições de rede, o que significa que seu acesso é limitado à rede interna e não possui \gls{ip} público. Nessa instância, componentes da arquitetura que não precisam estar disponíveis de forma pública são o caso de uso perfeito, uma vez que garante maior segurança e isolamento dos aspectos internos da aplicação. Em seu interior, ela é composta pelos seguintes componentes:
     \begin{itemize}
-      \item \textit{\gls{api} (Back-end em NodeJS)}: Principal serviço da aplicação, sendo o responsável por se prover os \emph{"endpoints"} que fornecem os dados e arquivos estáticos para o \textit{front-end} através de uma \textit{\gls{api} RestFull}, se comunicando com o banco de dados, um componente que é executado no mesmo device.
+      \item A \textit{\gls{api} (Back-end em NodeJS)}: Principal serviço da aplicação, sendo o responsável por prover os \emph{"endpoints"} que fornecem os dados e arquivos estáticos para o \textit{front-end} através de uma \textit{\gls{api} RestFull}, se comunicando com o banco de dados, um componente que é executado no mesmo dispositivo.
       \item \textit{Banco de Dados (\gls{sgbd} MariaDB)}: Serviço de \gls{sgbd} que provê os dados para o \textit{back-end} da aplicação, o que possibilita a persistência e consulta de forma eficiente. Para garantir a persistência dos dados gerenciados pelo MariaDB, o contêiner utiliza volumes \emph{Docker} montados na instância \gls{ec2} privada. Isso assegura que os dados não sejam perdidos em reinicializações do contêiner.
     \end{itemize}
-  Além dos serviços em execução, a instância privada também contém os seguintes artefatos essenciais para o empacotamento e execução dos serviços via contêineres \emph{Docker}:
+  Além dos serviços em execução, a instância privada também contém os seguintes artefatos essenciais para o empacotamento e execução dos serviços via contêineres \emph{Docker}~\cite{DockerDocs}:
     \begin{itemize}
       \item \textit{Dockerfile}: Esse artefato descreve as instruções necessárias para criar a imagem \emph{Docker} da aplicação \textit{back-end}, especificando o ambiente base (como a imagem do Node.js), os arquivos a serem copiados, dependências a serem instaladas e os comandos de inicialização da aplicação.
 
-      \item \textit{docker-compose.yaml}: Esse arquivo é utilizado como ferramenta de orquestração para os serviços \emph{Docker} da aplicação. Ele define a configuração dos contêineres da aplicação, como o contêiner da \gls{api} e o do banco de dados, bem como as variáveis de ambiente, volumes, redes e dependências entre os serviços. É a partir deste artefato que os contêineres são gerados e executados de forma integrada.
+      \item \textit{docker-compose.yaml}: Esse arquivo é utilizado como ferramenta de orquestração para os serviços \emph{Docker}~\cite{DockerComposeDocs} da aplicação. Ele define a configuração dos contêineres da aplicação, como o contêiner da \gls{api} e o do banco de dados, bem como as variáveis de ambiente, volumes, redes e dependências entre os serviços. É a partir deste artefato que os contêineres são gerados e executados de forma integrada.
     \end{itemize}
 
   \item \textbf{\textit{Google Cloud (Device):}} Localizada na nuvem pública da Google (\textit{Google Cloud}), essa \gls{api} é utilizada pelo \emph{back-end} da aplicação para realizar a autenticação de usuários através do protocolo \emph{OAuth} 2.0 \cite{GoogleOAuth}. Esse processo ocorre quando o usuário opta por fazer \emph{login} com sua conta Google. Nesse cenário, a aplicação redireciona o usuário para a tela de autenticação da Google, e após a confirmação, a \gls{api} recebe um \textit{token} de acesso que é utilizado para obter as informações do usuário autenticado. Esse fluxo garante uma autenticação segura, delegando a responsabilidade da validação de identidade à Google.
@@ -106,13 +106,13 @@ O fluxo de execução típico da aplicação baseado no diagrama de implantaçã
   \item O usuário acessa a aplicação pelo navegador, requisitando os arquivos \gls{html}/\gls{css}/\gls{js} ao servidor \emph{NGINX}.
   \item O \emph{NGINX}, atuando como proxy reverso, redireciona essas requisições para o serviço de \emph{back-end} na instância privada.
   \item A \gls{api} processa a requisição, acessa o banco de dados quando necessário e retorna os dados.
-  \item Em caso de autenticação via Google, a \gls{api} redireciona o usuário para o serviço \emph{Google OAuth}, que retorna um \emph{token} de acesso após o \emph{login}.
+  \item Em caso de autenticação via Google, a \gls{api} redireciona o usuário para o serviço \emph{Google OAuth} \cite{GoogleOAuth}, que retorna um \emph{token} de acesso após o \emph{login}.
   \item Esse \emph{token} é utilizado pela \gls{api} para obter os dados do usuário autenticado e estabelecer uma sessão.
 \end{enumerate}
 
 Além da organização dos componentes do diagrama, a arquitetura também prioriza a segurança da comunicação e do acesso. O tráfego entre o navegador do usuário e a instância pública é realizado por meio do protocolo \gls{https}, o que garante a confidencialidade e a integridade dos dados transmitidos. Para isso, foi utilizado o serviço gratuito de certificação digital \emph{Let's Encrypt} em conjunto com a ferramenta \emph{Certbot}, que automatiza a emissão, renovação e instalação dos certificados \gls{tls} no servidor \emph{NGINX}.
 
-Internamente, a comunicação entre o \emph{NGINX} e os serviços da instância privada ocorre por meio de regras específicas de segurança definidas na \gls{vpc}, utilizando mecanismos como \textit{Security Groups} e \textit{Route Tables}. Isso reduz significativamente a superfície de ataque da aplicação e assegura uma camada adicional de proteção para os aspectos internos.
+Internamente, a comunicação entre o \emph{NGINX} e os serviços da instância privada ocorre seguindo regras específicas de segurança definidas na \gls{vpc}, utilizando mecanismos como \textit{Security Groups} e \textit{Route Tables}. Isso reduz significativamente a superfície de ataque da aplicação e assegura uma camada adicional de proteção para os aspectos internos.
 
 \subsubsection{Diagrama de Referência na \gls{aws}}
 
@@ -127,6 +127,7 @@ Este diagrama ilustra elementos de infraestrutura fundamentais como sub-redes p�
   \label{fig:diagrama-geral}
   \fonte{Produzido pelos autores}
 \end{figure}
+\FloatBarrier
 
 \begin{itemize}
   \item \textbf{\gls{vpc} (Virtual Private Cloud):} A aplicação opera dentro de uma \gls{vpc} personalizada com o bloco \gls{cidr} \texttt{10.0.0.0/16}, que abriga duas sub-redes: uma pública e outra privada, seguindo o princípio de segmentação de rede recomendado pela própria \gls{aws}~\cite{AWSBestPractices}.
@@ -139,11 +140,11 @@ Este diagrama ilustra elementos de infraestrutura fundamentais como sub-redes p�
 
   \item \textbf{Internet \emph{Gateway:}} Responsável por permitir o tráfego de entrada e saída entre a \gls{vpc} e a internet pública. Está associado à sub-rede pública e \gls{nat} \emph{Gateway}, permitindo que o \emph{NGINX} receba requisições externas e o \gls{nat} receba um \gls{ip}.
 
-  \item \textbf{\emph{DuckDNS:}} Utilizado como serviço de \gls{dns} dinâmico gratuito, permitindo que a aplicação seja acessada por um domínio estável (\texttt{bsbeauty.duckdns.org}), mesmo que o endereço \gls{ip} público da instância \gls{ec2} varie. A resolução de nome é feita de forma transparente para o usuário final, facilitando o acesso à aplicação.
+  \item \textbf{\emph{DuckDNS:}} Utilizado como serviço de \gls{dns} dinâmico gratuito~\cite{DuckDNSDocs}, permitindo que a aplicação seja acessada por um domínio estável (\texttt{bsbeauty.duckdns.org}), mesmo que o endereço \gls{ip} público da instância \gls{ec2} varie. A resolução de nome é feita de forma transparente para o usuário final, facilitando o acesso à aplicação.
 
   \item \textbf{Usuários externos (\emph{\gls{aws} General Users):}} Representam os clientes que acessam a aplicação via navegador. O tráfego \gls{http}/\gls{https} chega inicialmente ao serviço \emph{NGINX} na sub-rede pública, que encaminha as requisições para a instância privada onde os serviços da aplicação estão efetivamente em execução.
 \end{itemize}
 
-Essa separação entre sub-rede pública e privada visa seguir boas práticas de segurança e isolamento de ambiente, recomendadas tanto pela documentação oficial da \gls{aws} quanto por autores renomados da área de arquitetura de software em nuvem, como em \cite{AWSBestPractices}. Ao manter os serviços internos em uma sub-rede privada, reduz-se a superfície de ataque da aplicação e melhora a resistência contra acessos não autorizados.
+A separação entre sub-rede pública e privada segue boas práticas de segurança e isolamento de ambiente, recomendadas tanto pela documentação oficial da \gls{aws} quanto por autores renomados da área de arquitetura de software em nuvem, como em \cite{AWSBestPractices}. Ao manter os serviços internos em uma sub-rede privada, reduz-se a superfície de ataque da aplicação e melhora a resistência contra acessos não autorizados.
 
 Além disso, a utilização do \emph{DuckDNS} simplifica a exposição da aplicação para o ambiente externo sem a necessidade de configurar manualmente um serviço de \gls{dns} ou pagar por domínios personalizados, o que se alinha aos objetivos de custo deste projeto.
