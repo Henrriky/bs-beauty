@@ -1,6 +1,6 @@
 import { type Employee, type Prisma } from '@prisma/client'
 import { PaginatedRequest, PaginatedResult } from '../../types/pagination'
-import { EmployeeFilters } from '../../types/employees/employee-filters'
+import { EmployeesFilters } from '../../types/employees/employees-filters'
 
 interface EmployeeRepository {
   findAll: () => Promise<Employee[]>
@@ -11,7 +11,7 @@ interface EmployeeRepository {
   updateByEmailAndGoogleId: (googleId: string, email: string, customerUpdated: Prisma.EmployeeUpdateInput) => Promise<Employee>
   updateEmployeeByEmail: (email: string, customerUpdated: Prisma.EmployeeUpdateInput) => Promise<Employee>
   delete: (id: string) => Promise<Employee>
-  findAllPaginated: (params: PaginatedRequest<EmployeeFilters>) => Promise<PaginatedResult<Employee>>
+  findAllPaginated: (params: PaginatedRequest<EmployeesFilters>) => Promise<PaginatedResult<Employee>>
 }
 
 export type { EmployeeRepository }

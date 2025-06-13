@@ -1,6 +1,7 @@
+import { type Prisma } from '@prisma/client'
 import { type NextFunction, type Request, type Response } from 'express'
 import { makeCustomersUseCaseFactory } from '../factory/make-customers-use-case.factory'
-import { type Prisma } from '@prisma/client'
+import { customerQuerySchema } from '../utils/validation/zod-schemas/pagination/customers/customers-query.schema'
 
 class CustomersController {
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
@@ -58,6 +59,23 @@ class CustomersController {
       const customerDeleted = await useCase.executeDelete(customerId)
 
       res.send(customerDeleted)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleFindAllPaginated(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeCustomersUseCaseFactory()
+      const parsed = customerQuerySchema.parse(req.query)
+      const { page, limit, ...filters } = parsed
+
+      const result = await useCase.executeFindAllPaginated({
+        page,
+        limit,
+        filters
+      })
+      res.send(result)
     } catch (error) {
       next(error)
     }

@@ -1,6 +1,8 @@
 import { type Customer, type Prisma } from '@prisma/client'
 import { type CustomerRepository } from '../repository/protocols/customer.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { PaginatedRequest, PaginatedResult } from '../types/pagination'
+import { CustomersFilters } from '../types/customers/customers-filters'
 
 interface CustomersOutput {
   customers: Customer[]
@@ -45,6 +47,14 @@ class CustomersUseCase {
     const deletedCustomer = await this.customerRepository.delete(customerId)
 
     return deletedCustomer
+  }
+
+  public async executeFindAllPaginated(
+    params: PaginatedRequest<CustomersFilters>
+  ): Promise<PaginatedResult<Customer>> {
+    const result = await this.customerRepository.findAllPaginated(params)
+
+    return result
   }
 }
 
