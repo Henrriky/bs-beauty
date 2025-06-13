@@ -8,10 +8,13 @@ import Title from '../../components/texts/Title'
 import { customerAPI } from '../../store/customer/customer-api'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
 import UserCard from './components/UserCard'
+import { useEffect } from 'react'
 
 function Customers() {
   const { data, isLoading, isError, error } =
     customerAPI.useFetchCustomersQuery()
+
+  const customers = data?.data || []
 
   if (isLoading) {
     return <BSBeautyLoading title="Carregando as informações..." />
@@ -39,8 +42,8 @@ function Customers() {
     <div className="h-full flex flex-col justify-between">
       <Title align="left">Listagem de clientes</Title>
       <div className="flex flex-col max-h-[80vh] overflow-y-scroll px-4">
-        {data.customers &&
-          data.customers.map((customer) => {
+        {customers &&
+          customers.map((customer) => {
             return (
               <>
                 <UserCard

@@ -25,6 +25,7 @@ function ProfilePicture({
         src={profilePhotoUrl}
         alt="Profile"
         className={`absolute w-full object-cover ${variation === 'rounded' ? 'rounded-full' : 'rounded-md'} ${filter === 'black-white' ? 'grayscale' : ''}`}
+        loading="lazy"
       />
     </div>
   )
