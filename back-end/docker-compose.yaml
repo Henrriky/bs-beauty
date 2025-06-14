@@ -10,3 +10,14 @@ services:
     command:
       - --log-bin
       - --binlog-format=MIXE
+    volumes: 
+      - mysql-data:/var/lib/mysql
+  app:
+    build: .
+    ports: 
+      - "3000:3000"
+    depends_on: 
+      - db
+
+volumes:
+  mysql-data:
