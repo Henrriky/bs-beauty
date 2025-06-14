@@ -10,7 +10,12 @@ import {
   AssociateAppointmentAPIData,
   CreateAppointmentAPIData,
   FindAppointmentServiceByCustomerId,
+  FindAppointmentServiceById,
 } from './types'
+import {
+  CustomerUpdateAppointmentFormData,
+  EmployeeUpdateAppointmentFormData,
+} from '../../pages/appointments/types'
 
 export const appointmentAPI = createApi({
   reducerPath: 'appointments',
@@ -24,6 +29,24 @@ export const appointmentAPI = createApi({
         body: data,
       }),
     }),
+    updateAppointmentService: builder.mutation<
+      void,
+      (
+        | CustomerUpdateAppointmentFormData
+        | EmployeeUpdateAppointmentFormData
+      ) & { id: string }
+    >({
+      query: (data) => ({
+        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.UPDATE_APPOINTMENT_SERVICE(
+          data.id,
+        ),
+        method: 'PUT',
+        body: {
+          ...data,
+          id: undefined,
+        },
+      }),
+    }),
     associateOfferWithAppointment: builder.mutation<
       { appointmentServices: AppointmentService[] },
       AssociateAppointmentAPIData
@@ -35,7 +58,7 @@ export const appointmentAPI = createApi({
         body: data,
       }),
     }),
-    findAppointmentsByCustomerId: builder.query<
+    findAppointmentsByCustomerOrEmployeeId: builder.query<
       {
         appointments: FindAppointmentServiceByCustomerId[]
       },
@@ -115,6 +138,17 @@ export const appointmentAPI = createApi({
           return { error }
         }
       },
+    }),
+    findAppointmentServiceById: builder.query<
+      FindAppointmentServiceById,
+      { appointmentServiceId: string }
+    >({
+      query: ({ appointmentServiceId }) => ({
+        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.FIND_APPOINTMENT_SERVICE_BY_ID(
+          appointmentServiceId,
+        ),
+        method: 'GET',
+      }),
     }),
   }),
 })

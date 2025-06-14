@@ -10,6 +10,7 @@ import {
 import { analyticsAPI } from '../../../store/analytics/analytics-api'
 import Card from './Card'
 import { authAPI } from '../../../store/auth/auth-api'
+import { toast } from 'react-toastify'
 
 const AnalyticsCards = () => {
   const { data: userData } = authAPI.useFetchUserInfoQuery()
@@ -41,13 +42,12 @@ const AnalyticsCards = () => {
   }
 
   if (error) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    if (error.data.statusCode === 404) return <p>Error while fetching data.</p>
+    toast.warning("Error while fetching data.")
   }
 
   if (!analytics) {
-    return <p>No analytics data available.</p>
+    toast.warn("No analytics data available.")
+    return <h1 className='mt-10 text-primary-200 text-xl'>No analytics data available.</h1>
   }
 
   return (
@@ -55,39 +55,39 @@ const AnalyticsCards = () => {
       <Card
         icon={<CalendarDateRangeIcon />}
         text="Total de agendamentos"
-        count={Number(analytics?.totalAppointments)}
+        count={analytics?.totalAppointments}
       />
       <Card
         icon={<UserPlusIcon />}
         text="Novos agendamentos"
-        count={Number(analytics?.newAppointments)}
+        count={analytics?.newAppointments}
       />
       <Card
         icon={<CheckBadgeIcon />}
         text="Agendamentos finalizados"
-        count={Number(analytics?.finishedAppointments)}
+        count={analytics?.finishedAppointments}
       />
       <Card
         icon={<UserGroupIcon />}
         text="Total de clientes"
-        count={Number(analytics?.totalCustomers)}
+        count={analytics?.totalCustomers}
       />
       <Card
         icon={<ScissorsIcon />}
         text="Total de serviços"
-        count={Number(analytics?.numberOfServices)}
+        count={analytics?.numberOfServices}
       />
       {role === 'MANAGER' && (
         <Card
           icon={<BriefcaseIcon />}
           text="Funcionários"
-          count={Number(analytics?.numberOfEmployees)}
+          count={(analytics?.numberOfEmployees ?? 0)}
         />
       )}
       <Card
         icon={<CurrencyDollarIcon />}
         text="Faturamento total"
-        count={Number(Number(analytics?.totalRevenue).toFixed(2))}
+        count={analytics?.totalRevenue.toFixed(2)}
       />
     </div>
   )
