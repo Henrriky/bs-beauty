@@ -27,6 +27,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+input[type="time"]::-webkit-calendar-picker-indicator {
+
+  display: none;
+
+  -webkit-appearance: none;
+
+}
 .react-calendar__navigation {
   display: flex;
 }

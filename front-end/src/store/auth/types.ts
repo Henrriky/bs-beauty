@@ -1,3 +1,5 @@
+import { WeekDays } from "../../enums/enums"
+
 export enum Role {
   MANAGER = "MANAGER",
   CUSTOMER = "CUSTOMER",
@@ -42,3 +44,13 @@ export type Employee = {
   specialization: string | null;
 }
 
+export type Shift = {
+  id: string;
+  weekDay: WeekDays;
+  shiftStart: string;
+  shiftEnd: string;
+  isBusy: boolean;
+  employeeId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
