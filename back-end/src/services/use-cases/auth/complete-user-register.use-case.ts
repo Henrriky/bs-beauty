@@ -16,12 +16,12 @@ interface CompleteUserRegisterUseCaseInput {
 }
 
 class CompleteUserRegisterUseCase {
-  constructor (
+  constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly employeeRepository: EmployeeRepository
-  ) {}
+  ) { }
 
-  async execute ({ userData, userId, userEmail, userRole }: CompleteUserRegisterUseCaseInput): Promise<void> {
+  async execute({ userData, userId, userEmail, userRole }: CompleteUserRegisterUseCaseInput): Promise<void> {
     const data = {
       ...userData,
       registerCompleted: true
@@ -33,7 +33,7 @@ class CompleteUserRegisterUseCase {
         userEmail,
         data
       )
-    } else if (userRole === Role.EMPLOYEE) {
+    } else if (userRole === Role.EMPLOYEE || userRole === Role.MANAGER) {
       await this.employeeRepository.updateByEmailAndGoogleId(
         userId,
         userEmail,

@@ -13,11 +13,11 @@ import { InvalidRoleUseCaseError } from '../../services/use-cases/errors/invalid
 const rolesToSchemas = {
   [Role.CUSTOMER]: CustomerSchemas.customerCompleteRegisterBodySchema,
   [Role.EMPLOYEE]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
-  [Role.MANAGER]: null
+  [Role.MANAGER]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
 }
 
 class CompleteUserRegisterController {
-  public static async handle (req: Request, res: Response) {
+  public static async handle(req: Request, res: Response) {
     try {
       if (req.user.registerCompleted) {
         res.status(StatusCodes.BAD_REQUEST).send({ message: 'User already complete register' })
