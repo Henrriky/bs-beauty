@@ -10,8 +10,8 @@ class AppointmentSchemas {
     appointmentDate: z
       .string()
       .refine((value) => !isNaN(Date.parse(value)), {
-        message: 'appointmentDate must be a valid ISO date string',
-      }),
+        message: 'appointmentDate must be a valid ISO date string'
+      })
   }).strict()
 
   public static customerUpdateSchema = z.object({

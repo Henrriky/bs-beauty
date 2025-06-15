@@ -1,7 +1,7 @@
 import { type Service, type Prisma } from '@prisma/client'
 import { type EmployeesOfferingService } from '../types/service-repository.types'
-import { PaginatedRequest, PaginatedResult } from '../../types/pagination'
-import { ServiceFilters } from '../../types/services/service-filters'
+import { type PaginatedRequest, type PaginatedResult } from '../../types/pagination'
+import { type ServiceFilters } from '../../types/services/service-filters'
 
 interface ServiceRepository {
   findAll: () => Promise<Service[]>

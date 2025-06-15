@@ -7,7 +7,7 @@ class ShiftSchemas {
     weekDay: z.nativeEnum(WeekDays),
     isBusy: z.boolean().optional(),
     shiftStart: z.string().refine((string) => RegexPatterns.time.test(string)),
-    shiftEnd: z.string().refine((string) => RegexPatterns.time.test(string)),
+    shiftEnd: z.string().refine((string) => RegexPatterns.time.test(string))
   }).strict()
 
   public static updateSchema = z.object({

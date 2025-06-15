@@ -1,6 +1,6 @@
 import { type Employee, type Prisma } from '@prisma/client'
-import { PaginatedRequest, PaginatedResult } from '../../types/pagination'
-import { EmployeeFilters } from '../../types/employees/employee-filters'
+import { type PaginatedRequest, type PaginatedResult } from '../../types/pagination'
+import { type EmployeeFilters } from '../../types/employees/employee-filters'
 
 interface EmployeeRepository {
   findAll: () => Promise<Employee[]>

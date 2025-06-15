@@ -105,7 +105,7 @@ class OffersController {
     }
   }
 
-  public static async handleFindByEmployeeIdPaginated(req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByEmployeeIdPaginated (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeOffersUseCaseFactory()
       const parsed = offerQuerySchema.parse(req.query)

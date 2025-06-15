@@ -29,7 +29,11 @@ function BSBeautyRouter() {
           <Route
             element={
               <PrivateRoute
-                allowedUserTypes={[UserType.MANAGER, UserType.EMPLOYEE, UserType.CUSTOMER]}
+                allowedUserTypes={[
+                  UserType.MANAGER,
+                  UserType.EMPLOYEE,
+                  UserType.CUSTOMER,
+                ]}
               />
             }
           >
@@ -42,17 +46,27 @@ function BSBeautyRouter() {
               />
 
               {/* CUSTOMER ROUTES */}
-              <Route element={<PrivateRoute allowedUserTypes={[UserType.CUSTOMER]} />}>
+              <Route
+                element={
+                  <PrivateRoute allowedUserTypes={[UserType.CUSTOMER]} />
+                }
+              >
                 <Route path="/customer/home" element={<CustomerHome />} />
               </Route>
 
               {/* EMPLOYEE ROUTES */}
-              <Route element={<PrivateRoute allowedUserTypes={[UserType.EMPLOYEE]} />}>
+              <Route
+                element={
+                  <PrivateRoute allowedUserTypes={[UserType.EMPLOYEE]} />
+                }
+              >
                 <Route path="/employee/home" element={<ManagerHome />} />
               </Route>
 
               {/* MANAGER ROUTES */}
-              <Route element={<PrivateRoute allowedUserTypes={[UserType.MANAGER]} />}>
+              <Route
+                element={<PrivateRoute allowedUserTypes={[UserType.MANAGER]} />}
+              >
                 <Route path="/manager/home" element={<ManagerHome />} />
                 <Route path="/customers" element={<Customers />} />
                 <Route
@@ -64,7 +78,9 @@ function BSBeautyRouter() {
               {/* EMPLOYEE/MANAGER ROUTES */}
               <Route
                 element={
-                  <PrivateRoute allowedUserTypes={[UserType.MANAGER, UserType.EMPLOYEE]} />
+                  <PrivateRoute
+                    allowedUserTypes={[UserType.MANAGER, UserType.EMPLOYEE]}
+                  />
                 }
               >
                 <Route

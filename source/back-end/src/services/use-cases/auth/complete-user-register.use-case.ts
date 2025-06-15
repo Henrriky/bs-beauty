@@ -17,19 +17,19 @@ interface CompleteUserRegisterUseCaseInput {
 }
 
 class CompleteUserRegisterUseCase {
-  constructor(
+  constructor (
     private readonly customerRepository: CustomerRepository,
     private readonly employeeRepository: EmployeeRepository
   ) { }
 
-  async execute({ userData, userId, userEmail, userType }: CompleteUserRegisterUseCaseInput): Promise<void> {
+  async execute ({ userData, userId, userEmail, userType }: CompleteUserRegisterUseCaseInput): Promise<void> {
     const data = {
       ...userData,
       registerCompleted: true
     }
 
     if (userType === UserType.CUSTOMER) {
-      const userByPhone = await this.customerRepository.findByEmailOrPhone("", (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone)
+      const userByPhone = await this.customerRepository.findByEmailOrPhone('', (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone)
       if (userByPhone) {
         throw new ResourceWithAttributAlreadyExists(
           'user',
@@ -37,7 +37,7 @@ class CompleteUserRegisterUseCase {
           (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone
         )
       }
-      
+
       await this.customerRepository.updateByEmailAndGoogleId(
         userId,
         userEmail,
