@@ -5,6 +5,7 @@ import { UserType } from '@prisma/client'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
 import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
 import { InvalidUserTypeUseCaseError } from '../errors/invalid-user-type-use-case-error'
+import { ResourceWithAttributAlreadyExists } from '../errors/resource-with-attribute-alreay-exists'
 
 type CompleteCustomerOrEmployeeRegister = z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema> | z.infer<typeof EmployeeSchemas.employeeCompleteRegisterBodySchema>
 
@@ -28,6 +29,15 @@ class CompleteUserRegisterUseCase {
     }
 
     if (userType === UserType.CUSTOMER) {
+      const userByPhone = await this.customerRepository.findByEmailOrPhone("", (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone)
+      if (userByPhone) {
+        throw new ResourceWithAttributAlreadyExists(
+          'user',
+          'phone',
+          (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone
+        )
+      }
+      
       await this.customerRepository.updateByEmailAndGoogleId(
         userId,
         userEmail,

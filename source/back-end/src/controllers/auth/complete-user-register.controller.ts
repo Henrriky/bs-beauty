@@ -9,6 +9,7 @@ import { CustomerSchemas } from '../../utils/validation/zod-schemas/customer.zod
 import { makeCompleteUserRegisterUseCase } from '../../factory/auth/make-complete-user-register.use-case.factory'
 import { UserType } from '@prisma/client'
 import { InvalidUserTypeUseCaseError } from '../../services/use-cases/errors/invalid-user-type-use-case-error'
+import { ResourceWithAttributAlreadyExists } from '../../services/use-cases/errors/resource-with-attribute-alreay-exists'
 
 const userTypesToSchemas = {
   [UserType.CUSTOMER]: CustomerSchemas.customerCompleteRegisterBodySchema,
@@ -56,6 +57,11 @@ class CompleteUserRegisterController {
         res.status(StatusCodes.BAD_REQUEST).send({ message: error.message })
         return
       }
+      if (error instanceof ResourceWithAttributAlreadyExists) {
+        res.status(StatusCodes.CONFLICT).send({ message: error.message })
+        return
+      }
+
       console.error(`Error trying to complete user register.\nReason: ${error?.message}`)
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Error trying to complete user register, please check back-end logs...' })
     }
