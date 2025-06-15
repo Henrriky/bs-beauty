@@ -7,7 +7,7 @@ import { makeFetchUserInfoUseCase } from '../../factory/auth/make-fetch-user-inf
 import { NotFoundUseCaseError } from '../../services/use-cases/errors/not-found-error'
 
 class FetchUserInfoController {
-  public static async handle(req: Request, res: Response) {
+  public static async handle (req: Request, res: Response) {
     try {
       const usecase = makeFetchUserInfoUseCase()
 

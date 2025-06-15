@@ -1,7 +1,7 @@
 import { type Prisma, type Offer } from '@prisma/client'
 import { type FetchAvailableSchedulingToOfferByDay } from '../types/offer-repository.types'
-import { PaginatedRequest, PaginatedResult } from '../../types/pagination'
-import { OffersFilters } from '../../types/offers/offers-filters'
+import { type PaginatedRequest, type PaginatedResult } from '../../types/pagination'
+import { type OffersFilters } from '../../types/offers/offers-filters'
 
 interface OfferRepository {
   findAll: () => Promise<Offer[]>

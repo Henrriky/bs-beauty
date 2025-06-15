@@ -14,12 +14,12 @@ interface FetchUserInfoUseCaseOutput {
 }
 
 class FetchUserInfoUseCase {
-  constructor(
+  constructor (
     private readonly customerRepository: CustomerRepository,
     private readonly employeeRepository: EmployeeRepository
   ) { }
 
-  async execute({ userType, email }: FetchUserInfoUseCaseInput): Promise<FetchUserInfoUseCaseOutput> {
+  async execute ({ userType, email }: FetchUserInfoUseCaseInput): Promise<FetchUserInfoUseCaseOutput> {
     if (userType === UserType.CUSTOMER) {
       const customer = await this.customerRepository.findByEmailOrPhone(email, '')
       if (customer == null) {

@@ -9,7 +9,7 @@ interface ShiftOutput {
 class ShiftUseCase {
   constructor (private readonly shiftRepository: ShiftRepository) {}
 
-  public async executeFindAllByEmployeeId(employeeId: string | undefined): Promise<ShiftOutput> {
+  public async executeFindAllByEmployeeId (employeeId: string | undefined): Promise<ShiftOutput> {
     const shifts = await this.shiftRepository.findAllByEmployeeId(employeeId)
     RecordExistence.validateManyRecordsExistence(shifts, 'shifts')
 
@@ -23,7 +23,7 @@ class ShiftUseCase {
     return shift
   }
 
-  public async executeFindByEmployeeId(employeeId: string | undefined): Promise<ShiftOutput> {
+  public async executeFindByEmployeeId (employeeId: string | undefined): Promise<ShiftOutput> {
     const shifts = await this.shiftRepository.findByEmployeeId(employeeId)
     RecordExistence.validateManyRecordsExistence(shifts, 'shifts')
 
@@ -63,13 +63,12 @@ class ShiftUseCase {
     return deletedShift
   }
 
-  public async executeFindByIdAndEmployeeId(shiftId: string, employeeId: string) {
+  public async executeFindByIdAndEmployeeId (shiftId: string, employeeId: string) {
     const shift = await this.shiftRepository.findByIdAndEmployeeId(shiftId, employeeId)
-    RecordExistence.validateRecordExistence(shift, 'Shift');
+    RecordExistence.validateRecordExistence(shift, 'Shift')
 
     return shift
   }
-
 }
 
 export { ShiftUseCase }

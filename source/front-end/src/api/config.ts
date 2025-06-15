@@ -16,8 +16,7 @@ export const API_VARIABLES = {
   },
   CUSTOMERS_ENDPOINTS: {
     FETCH_CUSTOMERS: '/customers',
-    FIND_CUSTOMER_BY_ID: (customerId: string) =>
-      `/customers/${customerId}`,
+    FIND_CUSTOMER_BY_ID: (customerId: string) => `/customers/${customerId}`,
   },
   SERVICES_ENDPOINTS: {
     ENDPOINT: '/services',
