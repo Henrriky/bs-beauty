@@ -7,7 +7,7 @@ import Modal from './components/Modal'
 import { Service } from '../../store/service/types'
 import CreateOfferForm from './components/CreateOfferForm'
 import { authAPI } from '../../store/auth/auth-api'
-import { Role } from '../../store/auth/types'
+import { UserType } from '../../store/auth/types'
 import useAppSelector from '../../hooks/use-app-selector'
 import ListOffers from './components/ListOffers'
 import UpdateOfferForm from './components/UpdateOfferForm'
@@ -28,7 +28,7 @@ function ServiceDashboard() {
   const [offer, setOffer] = useState<Offer>()
   const { data } = authAPI.useFetchUserInfoQuery()
   const user = useAppSelector((state) => state.auth.user!)
-  const isManager = user.role === Role.MANAGER
+  const isManager = user.userType === UserType.MANAGER
   const employeeId = data?.user.id
 
   const toggleDiv = (div: string | SetStateAction<null>) => {

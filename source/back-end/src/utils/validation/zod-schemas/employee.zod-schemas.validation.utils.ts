@@ -17,7 +17,7 @@ class EmployeeSchemas {
     email: z.string().email(),
     socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
     contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
-    role: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
+    userType: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
     specialization: z.string().min(3).max(3).optional()
   }).strict()
 
@@ -26,7 +26,7 @@ class EmployeeSchemas {
     email: z.string().email().optional(),
     socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
     contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
-    role: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
+    userType: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
     specialization: z.string().min(3).max(3).optional()
   }).strict()
 

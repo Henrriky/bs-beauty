@@ -1,145 +1,145 @@
-import { type Prisma } from '@prisma/client'
-import { prismaClient } from '../../lib/prisma'
-import { type AppointmentServiceRepository } from '../protocols/appointment-service.repository'
+// import { type Prisma } from '@prisma/client'
+// import { prismaClient } from '../../lib/prisma'
+// import { type AppointmentServiceRepository } from '../protocols/appointment-service.repository'
 
-class PrismaAppointmentServiceRepository implements AppointmentServiceRepository {
-  public async findAll () {
-    const appointmentServices = await prismaClient.appointmentService.findMany()
+// class PrismaAppointmentServiceRepository implements AppointmentServiceRepository {
+//   public async findAll () {
+//     const appointmentServices = await prismaClient.appointmentService.findMany()
 
-    return appointmentServices
-  }
+//     return appointmentServices
+//   }
 
-  public async findById (id: string) {
-    const appointmentServices = await prismaClient.appointmentService.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        status: true,
-        observation: true,
-        appointment: {
-          select: {
-            customerId: true
-          }
-        },
-        appointmentDate: true,
-        serviceOffered: {
-          select: {
-            id: true,
-            estimatedTime: true,
-            employee: true,
-            price: true,
-            service: {
-              select: {
-                name: true
-              }
-            }
-          }
-        },
-      }
-    })
+//   public async findById (id: string) {
+//     const appointmentServices = await prismaClient.appointmentService.findUnique({
+//       where: { id },
+//       select: {
+//         id: true,
+//         status: true,
+//         observation: true,
+//         appointment: {
+//           select: {
+//             customerId: true
+//           }
+//         },
+//         appointmentDate: true,
+//         serviceOffered: {
+//           select: {
+//             id: true,
+//             estimatedTime: true,
+//             employee: true,
+//             price: true,
+//             service: {
+//               select: {
+//                 name: true
+//               }
+//             }
+//           }
+//         },
+//       }
+//     })
 
-    return appointmentServices
-  }
+//     return appointmentServices
+//   }
 
-  public async findByAppointmentDate (appointmentDate: Date) {
-    const appointmentServices = await prismaClient.appointmentService.findMany({
-      where: { appointmentDate }
-    })
+//   // public async findByAppointmentDate (appointmentDate: Date) {
+//   //   const appointmentServices = await prismaClient.appointmentService.findMany({
+//   //     where: { appointmentDate }
+//   //   })
 
-    return appointmentServices
-  }
+//   //   return appointmentServices
+//   // }
 
-  public async findByAppointmentId (appointmentId: string) {
-    const appointmentServices = await prismaClient.appointmentService.findMany({
-      where: { appointmentId }
-    })
+//   // public async findByAppointmentId (appointmentId: string) {
+//   //   const appointmentServices = await prismaClient.appointmentService.findMany({
+//   //     where: { appointmentId }
+//   //   })
 
-    return appointmentServices
-  }
+//   //   return appointmentServices
+//   // }
 
-  public async findByServiceOfferedId (serviceOfferedId: string) {
-    const appointmentServices = await prismaClient.appointmentService.findMany({
-      where: { serviceOfferedId }
-    })
+//   // public async findByServiceOfferedId (serviceOfferedId: string) {
+//   //   const appointmentServices = await prismaClient.appointmentService.findMany({
+//   //     where: { serviceOfferedId }
+//   //   })
 
-    return appointmentServices
-  }
+//   //   return appointmentServices
+//   // }
 
-  public async create (appointmentServiceToCreate: Prisma.AppointmentServiceCreateInput) {
-    const newAppointmentService = await prismaClient.appointmentService.create({
-      data: { ...appointmentServiceToCreate }
-    })
+//   public async create (appointmentServiceToCreate: Prisma.AppointmentServiceCreateInput) {
+//     const newAppointmentService = await prismaClient.appointmentService.create({
+//       data: { ...appointmentServiceToCreate }
+//     })
 
-    return newAppointmentService
-  }
+//     return newAppointmentService
+//   }
 
-  public async update (id: string, appointmentServiceToUpdate: Prisma.AppointmentServiceUpdateInput) {
-    const { appointmentDate, ...otherFields } = appointmentServiceToUpdate
-    const updatedAppointmentService = await prismaClient.appointmentService.update({
-      where: { id },
-      data: { ...otherFields, ...(appointmentDate instanceof Date && !isNaN(appointmentDate.getTime()) ? { appointmentDate } : {}),
-      appointment: {
-        update: {
-          status: otherFields.status
-        }
-      }
-    }
-    })
+//   public async update (id: string, appointmentServiceToUpdate: Prisma.AppointmentServiceUpdateInput) {
+//     const { appointmentDate, ...otherFields } = appointmentServiceToUpdate
+//     const updatedAppointmentService = await prismaClient.appointmentService.update({
+//       where: { id },
+//       data: { ...otherFields, ...(appointmentDate instanceof Date && !isNaN(appointmentDate.getTime()) ? { appointmentDate } : {}),
+//       appointment: {
+//         update: {
+//           status: otherFields.status
+//         }
+//       }
+//     }
+//     })
 
-    return updatedAppointmentService
-  }
+//     return updatedAppointmentService
+//   }
 
-  public async delete (id: string) {
-    const deletedAppointmentService = await prismaClient.appointmentService.delete({
-      where: { id }
-    })
+//   public async delete (id: string) {
+//     const deletedAppointmentService = await prismaClient.appointmentService.delete({
+//       where: { id }
+//     })
 
-    return deletedAppointmentService
-  }
+//     return deletedAppointmentService
+//   }
 
-  public async findByCustomerOrEmployeeId (customerOrEmployeeId: string) {
-    const appointments = await prismaClient.appointmentService.findMany({
-      where: {
-        OR: [
-          {
-            appointment: {
-              customerId: customerOrEmployeeId
-            }
-          },
-          {
-            serviceOffered: {
-              employeeId: customerOrEmployeeId
-            }
-          }
-        ]
-      },
-      select: {
-        id: true,
-        status: true,
-        observation: true,
-        appointment: {
-          select: {
-            customerId: true
-          }
-        },
-        serviceOffered: {
-          select: {
-            id: true,
-            estimatedTime: true,
-            employee: true,
-            service: {
-              select: {
-                name: true
-              }
-            }
-          }
-        },
-        appointmentDate: true
-      }
-    })
+//   public async findByCustomerOrEmployeeId (customerOrEmployeeId: string) {
+//     const appointments = await prismaClient.appointmentService.findMany({
+//       where: {
+//         OR: [
+//           {
+//             appointment: {
+//               customerId: customerOrEmployeeId
+//             }
+//           },
+//           {
+//             serviceOffered: {
+//               employeeId: customerOrEmployeeId
+//             }
+//           }
+//         ]
+//       },
+//       select: {
+//         id: true,
+//         status: true,
+//         observation: true,
+//         appointment: {
+//           select: {
+//             customerId: true
+//           }
+//         },
+//         serviceOffered: {
+//           select: {
+//             id: true,
+//             estimatedTime: true,
+//             employee: true,
+//             service: {
+//               select: {
+//                 name: true
+//               }
+//             }
+//           }
+//         },
+//         appointmentDate: true
+//       }
+//     })
 
-    return { appointments }
-  }
-}
+//     return { appointments }
+//   }
+// }
 
-export { PrismaAppointmentServiceRepository }
+// export { PrismaAppointmentServiceRepository }

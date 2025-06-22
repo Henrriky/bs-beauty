@@ -2,19 +2,19 @@ import { type NextFunction, type Request, type Response } from 'express'
 import { z } from 'zod'
 import { formatValidationErrors } from '../../../utils/formatting/zod-validation-errors.formatting.util'
 import { AppointmentSchemas } from '../../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils'
-import { Role } from '@prisma/client'
+import { UserType } from '@prisma/client'
 
 const validateUpdateAppointment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const roles: Role[] = [Role.MANAGER, Role.EMPLOYEE]
-    const role = req.headers.role as Role
+    const userTypes: UserType[] = [UserType.MANAGER, UserType.EMPLOYEE]
+    const userType = req.headers.userType as UserType
     const requestBody = req.body
 
-    if (role === Role.CUSTOMER) {
+    if (userType === UserType.CUSTOMER) {
       AppointmentSchemas.customerUpdateSchema.parse(requestBody)
     }
 
-    if (roles.includes(role)) {
+    if (userTypes.includes(userType)) {
       AppointmentSchemas.employeeUpdateSchema.parse(requestBody)
     }
 

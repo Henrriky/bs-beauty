@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
 import { FetchUserInfoController } from '../../../../src/controllers/auth/fetch-user-info.controller'
 import { makeFetchUserInfoUseCase } from '../../../../src/factory/auth/make-fetch-user-info.use-case.factory.ts'
-import { InvalidRoleUseCaseError } from '../../../../src/services/use-cases/errors/invalid-role-use-case-error'
+import { InvalidUserTypeUseCaseError } from '../../../../src/services/use-cases/errors/invalid-user-type-use-case-error'
 import { NotFoundUseCaseError } from '../../../../src/services/use-cases/errors/not-found-error'
 import { z } from 'zod'
 
@@ -18,7 +18,7 @@ describe('FetchUserInfoController', () => {
     req = {
       user: {
         email: 'user@example.com',
-        role: 'user'
+        userType: 'user'
       }
     }
 
@@ -53,14 +53,14 @@ describe('FetchUserInfoController', () => {
       expect(res.send).toHaveBeenCalledWith({ user: mockUser })
       expect(useCaseMock.execute).toHaveBeenCalledWith({
         email: 'user@example.com',
-        role: 'user'
+        userType: 'user'
       })
     })
 
-    it('should return 400 if the role is invalid', async () => {
+    it('should return 400 if the userType is invalid', async () => {
       // arrange
-      const errorMessage = 'Invalid role'
-      useCaseMock.execute.mockRejectedValueOnce(new InvalidRoleUseCaseError(errorMessage))
+      const errorMessage = 'Invalid userType'
+      useCaseMock.execute.mockRejectedValueOnce(new InvalidUserTypeUseCaseError(errorMessage))
 
       // act
       await FetchUserInfoController.handle(req, res)

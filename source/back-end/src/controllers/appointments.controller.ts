@@ -26,13 +26,38 @@ class AppointmentController {
     }
   }
 
-  public static async handleFindByCustomerId (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByCustomerOrEmployeeId (req: Request, res: Response, next: NextFunction) {
     try {
-      const customerId = req.params.customerId
       const useCase = makeAppointmentsUseCaseFactory()
-      const appointments = await useCase.executeFindByCustomerId(customerId)
+      const customerId = req.user.id
 
-      res.send(appointments)
+      const { appointments } = await useCase.executeFindByCustomerOrEmployeeId(customerId)
+
+      res.send({ appointments }).status(200)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleFindByAppointmentDate (req: Request, res: Response, next: NextFunction) {
+    try {
+      const appointmentDate = new Date(req.params.appointmentDate)
+      const useCase = makeAppointmentsUseCaseFactory()
+      const { appointments } = await useCase.executeFindByAppointmentDate(appointmentDate)
+
+      res.send({ appointments })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleFindByServiceOfferedId (req: Request, res: Response, next: NextFunction) {
+    try {
+      const serviceId = req.params.serviceOfferedId
+      const useCase = makeAppointmentsUseCaseFactory()
+      const { appointments } = await useCase.executeFindByServiceOfferedId(serviceId)
+
+      res.send({ appointments })
     } catch (error) {
       next(error)
     }

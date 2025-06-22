@@ -1,4 +1,4 @@
-import { Employee, Role } from "../../../store/auth/types";
+import { Employee, UserType } from "../../../store/auth/types";
 import { TrashIcon } from '@heroicons/react/24/outline'
 
 interface EmployeeCardProps {
@@ -19,15 +19,15 @@ export function EmployeeCard({ employee, onDelete }: EmployeeCardProps) {
       <p className="text-xs">{employee.email}</p>
       <p className="text-sm font-bold mt-2">Cargo:</p>
       <p className="text-xs">
-        {employee.role === Role.MANAGER ? "Gerente" : "Funcionário"}
+        {employee.userType === UserType.MANAGER ? "Gerente" : "Funcionário"}
       </p>
 
-      {employee.role !== Role.MANAGER && (
+      {employee.userType !== UserType.MANAGER && (
         <button
           className="absolute top-2 right-2"
           onClick={() => onDelete(employee)}
         >
-          <TrashIcon className="size-5 transition-all" onClick={() => onDelete(employee)} />
+          <TrashIcon className="size-5 transition-all" onClick={() => onDelete(employee)} title="Excluir" />
         </button>
 
       )}

@@ -4,7 +4,6 @@ import { ExchangeCodeByTokenUseCase } from '../../services/use-cases/auth/exchan
 import { z } from 'zod'
 import { formatValidationErrors } from '../../utils/formatting/zod-validation-errors.formatting.util'
 
-
 const exchangeCodeByTokenBodySchema = z.object({
   code: z.string()
 })

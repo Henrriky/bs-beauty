@@ -4,7 +4,7 @@ import { ErrorMessage } from '../../../components/feedback/ErrorMessage'
 import BSBeautyLoading from '../../../components/feedback/Loading'
 import { toast } from 'react-toastify'
 import useAppSelector from '../../../hooks/use-app-selector'
-import { Role } from '../../../store/auth/types'
+import { UserType } from '../../../store/auth/types'
 import CustomerAppointmentDetails from './CustomerAppointmentsDetails'
 import {
   AppointmentDetailsAction,
@@ -13,10 +13,10 @@ import {
 import useAppDispatch from '../../../hooks/use-app-dispatch'
 import EmployeeAppointmentDetails from './EmployeeAppointmentDetails'
 
-const roleToAppointmentDetailsComponents = {
-  [Role.CUSTOMER]: CustomerAppointmentDetails,
-  [Role.EMPLOYEE]: EmployeeAppointmentDetails,
-  [Role.MANAGER]: EmployeeAppointmentDetails,
+const userTypeToAppointmentDetailsComponents = {
+  [UserType.CUSTOMER]: CustomerAppointmentDetails,
+  [UserType.EMPLOYEE]: EmployeeAppointmentDetails,
+  [UserType.MANAGER]: EmployeeAppointmentDetails,
 }
 
 function AppointmentDetails() {
@@ -25,7 +25,7 @@ function AppointmentDetails() {
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const action = queryParams.get('action') as AppointmentDetailsAction | null
-  const userRole = useAppSelector((state) => state.auth.user?.role)!
+  const userUserType = useAppSelector((state) => state.auth.user?.userType)!
 
   if (!appointmentId) {
     return (
@@ -40,19 +40,19 @@ function AppointmentDetails() {
   }
 
   const AppointmentDetailsContainer =
-    roleToAppointmentDetailsComponents[userRole]
+    userTypeToAppointmentDetailsComponents[userUserType]
 
   if (!AppointmentDetailsContainer) {
-    return <ErrorMessage message="Ação ou role fornecida inválida" />
+    return <ErrorMessage message="Ação ou userType fornecida inválida" />
   }
 
   const { data, isLoading, isError, error } =
     appointmentAPI.useFindAppointmentServiceByIdQuery({
-      appointmentServiceId: appointmentId!,
+      appointmentId: appointmentId!,
     })
 
   const [
-    updateAppointmentService,
+    updateAppointment,
     { isLoading: isLoadingUpdateAppontmentService },
   ] = appointmentAPI.useUpdateAppointmentServiceMutation()
 
@@ -81,7 +81,7 @@ function AppointmentDetails() {
   const handleSubmitConcrete: OnSubmitAppointmentDetailsUpdateForm = async (
     data,
   ) => {
-    await updateAppointmentService({
+    await updateAppointment({
       id: appointmentId,
       status: data.status,
       ...('observation' in data ? { observation: data.observation } : {}),
@@ -91,7 +91,7 @@ function AppointmentDetails() {
         dispatchRedux(
           appointmentAPI.util.updateQueryData(
             'findAppointmentServiceById',
-            { appointmentServiceId: appointmentId },
+            { appointmentId: appointmentId },
             (draft) => {
               draft.observation = (
                 'observation' in data ? data.observation : null
@@ -130,7 +130,7 @@ function AppointmentDetails() {
   return (
     <AppointmentDetailsContainer
       action={action}
-      appointmentService={data}
+      appointment={data}
       handleSubmitConcrete={handleSubmitConcrete}
       handleSubmitConcreteIsLoading={isLoadingUpdateAppontmentService}
     />

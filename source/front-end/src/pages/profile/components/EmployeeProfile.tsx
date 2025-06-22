@@ -104,9 +104,9 @@ function EmployeeProfile({ userInfo, onProfileUpdate }: EmployeeProfileProps) {
       />
       <Input
         label="Função"
-        id="role"
-        type="role"
-        value={userInfo.role === 'MANAGER' ? 'Gerente' : 'Funcionario'}
+        id="userType"
+        type="userType"
+        value={userInfo.userType === 'MANAGER' ? 'Gerente' : 'Funcionario'}
         disabled
       />
       <SocialMediaContainerInput

@@ -2,14 +2,22 @@ import type { NextFunction, Request, Response } from 'express'
 import { makeEmployeesUseCaseFactory } from '../factory/make-employees-use-case.factory'
 import type { Prisma } from '@prisma/client'
 import { StatusCodes } from 'http-status-codes'
+import { employeeQuerySchema } from '../utils/validation/zod-schemas/pagination/employees/employees-query.schema'
 
 class EmployeesController {
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeEmployeesUseCaseFactory()
-      const { employees } = await useCase.executeFindAll()
+      const parsed = employeeQuerySchema.parse(req.query)
+      const { page, limit, ...filters } = parsed
 
-      res.status(StatusCodes.OK).send({ employees })
+      const result = await useCase.executeFindAllPaginated({
+        page,
+        limit,
+        filters
+      })
+
+      res.status(StatusCodes.OK).send(result)
     } catch (error) {
       next(error)
     }

@@ -20,9 +20,11 @@ function ListOffers({
   openDeleteModal,
   selectOffer,
 }: ListOffersProps) {
-  const { data, isLoading, isError } = offerAPI.useGetOffersQuery(employeeId)
+  // TODO: CARREGAR MAIS OFERTAS QUANDO CHEGA NO LIMITE PADRÃO (10)
+  const { data, isLoading, isError } = offerAPI.useGetOffersQuery({ employeeId })
 
-  const offers = data?.offers
+  const offers = data?.data
+
   const [selected, setSelected] = useState(null)
   const [servicesData, setServicesData] = useState<
     { service: Service | null; serviceLoading: boolean }[]
@@ -82,52 +84,68 @@ function ListOffers({
     >
       <div className="max-h-[161px] scroll overflow-y-auto w-full">
         <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
-          {offers?.map((offer, index) => {
-            const service = servicesData.filter(
-              (serviceData) => serviceData.service?.id === offer.serviceId,
-            )
+          {
+            offers!.length > 0 ? (
+              <>
+                {offers?.map((offer, index) => {
+                  const service = servicesData.filter(
+                    (serviceData) => serviceData.service?.id === offer.serviceId,
+                  )
 
-            return (
-              <Button
-                label={
-                  <div className="flex flex-row items-center">
-                    {service.at(0)?.service?.name}
-                    <div className="ml-auto flex gap-3 justify-center items-center">
-                      <TrashIcon
-                        className="size-4 hover:text-primary-0 hover:size-5 transition-all stroke-[#D9D9D9]"
-                        onClick={() => openDeleteModal()}
-                      />
-                    </div>
-                  </div>
+                  return (
+                    <Button
+                      label={
+                        <div className="flex flex-row items-center">
+                          {service.at(0)?.service?.name}
+                          <div className="ml-auto flex gap-3 justify-center items-center">
+                            <TrashIcon
+                              className="size-4 hover:text-primary-0 hover:size-5 transition-all stroke-[#D9D9D9]"
+                              onClick={() => openDeleteModal()}
+                            />
+                          </div>
+                        </div>
+                      }
+                      key={index}
+                      variant="outline"
+                      outlineVariantBorderStyle="dashed"
+                      onClick={(e) => {
+                        setSelected(index as unknown as SetStateAction<null>)
+                        selectOffer(offer as unknown as Offer)
+                        e.stopPropagation()
+                      }}
+                      className={`bg-[#222222] w-full text-left px-4 py-[6px] ${selected !== index ? 'border-none' : ''}`}
+                    />
+                  )
+                })
                 }
-                key={index}
-                variant="outline"
-                outlineVariantBorderStyle="dashed"
-                onClick={(e) => {
-                  setSelected(index as unknown as SetStateAction<null>)
-                  selectOffer(offer as unknown as Offer)
-                  e.stopPropagation()
-                }}
-                className={`bg-[#222222] w-full text-left px-4 py-[6px] ${selected !== index ? 'border-none' : ''}`}
-              />
+
+                <div className="mt-3 w-full flex flex-col justify-center items-center">
+                  <Button
+                    label="Editar oferta"
+                    className="w-full max-h-[32px] py-[6px]"
+                    onClick={
+                      selected !== null
+                        ? () => {
+                          openUpdateModal()
+                          setSelected(null)
+                        }
+                        : () => toast.info('Selecione uma oferta.')
+                    }
+                  />
+                </div>
+
+              </>
             )
-          })}
+              :
+              (
+                <p className="text-[#CC3636] animate-fadeIn w-full mt-2 text-sm">
+                  Não há ofertas disponíveis.
+                </p>
+              )
+          }
         </div>
       </div>
-      <div className="mt-3 w-full flex flex-col justify-center items-center">
-        <Button
-          label="Editar oferta"
-          className="w-full max-h-[32px] py-[6px]"
-          onClick={
-            selected !== null
-              ? () => {
-                  openUpdateModal()
-                  setSelected(null)
-                }
-              : () => toast.info('Selecione uma oferta.')
-          }
-        />
-      </div>
+
     </div>
   )
 }

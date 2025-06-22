@@ -1,6 +1,8 @@
-import { Status, type Prisma } from '@prisma/client'
+import { Offer, Status, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type OfferRepository } from '../protocols/offer.repository'
+import { type PaginatedRequest, PaginatedResult } from '../../types/pagination'
+import { type OffersFilters } from '../../types/offers/offers-filters'
 
 class PrismaOfferRepository implements OfferRepository {
   public async findAll () {
@@ -105,6 +107,34 @@ class PrismaOfferRepository implements OfferRepository {
 
     return {
       validAppointmentsToOfferOnDay
+    }
+  }
+
+  public async findByEmployeeIdPaginated (
+    employeeId: string,
+    params: PaginatedRequest<OffersFilters>
+  ) {
+    const { page, limit } = params
+    const skip = (page - 1) * limit
+
+    const [data, total] = await Promise.all([
+      prismaClient.offer.findMany({
+        where: { employeeId },
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'asc' }
+      }),
+      prismaClient.offer.count({
+        where: { employeeId }
+      })
+    ])
+
+    return {
+      data,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      limit
     }
   }
 }

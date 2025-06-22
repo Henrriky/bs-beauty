@@ -14,27 +14,27 @@ import { toast } from 'react-toastify'
 
 const AnalyticsCards = () => {
   const { data: userData } = authAPI.useFetchUserInfoQuery()
-  const role = userData?.user?.role
+  const userType = userData?.user?.userType
   const id = userData?.user?.id
 
   const managerQuery = analyticsAPI.useFetchAnalyticsQuery(undefined, {
-    skip: role !== 'MANAGER',
+    skip: userType !== 'MANAGER',
   })
 
   const employeeQuery = analyticsAPI.useFetchAnalyticsByEmployeeIdQuery(
     { employeeId: id! },
     {
-      skip: role !== 'EMPLOYEE' || !id,
+      skip: userType !== 'EMPLOYEE' || !id,
     },
   )
 
   if (!userData) return <p>Loading user...</p>
 
-  if (role !== 'MANAGER' && role !== 'EMPLOYEE') {
+  if (userType !== 'MANAGER' && userType !== 'EMPLOYEE') {
     return <p>No permissions</p>
   }
 
-  const activeQuery = role === 'MANAGER' ? managerQuery : employeeQuery
+  const activeQuery = userType === 'MANAGER' ? managerQuery : employeeQuery
   const { data: analytics, isLoading, error } = activeQuery
 
   if (isLoading) {
@@ -77,7 +77,7 @@ const AnalyticsCards = () => {
         text="Total de serviços"
         count={analytics?.numberOfServices}
       />
-      {role === 'MANAGER' && (
+      {userType === 'MANAGER' && (
         <Card
           icon={<BriefcaseIcon />}
           text="Funcionários"

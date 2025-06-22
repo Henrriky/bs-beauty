@@ -1,6 +1,8 @@
 import { type Employee, type Prisma } from '@prisma/client'
 import { type EmployeeRepository } from '../repository/protocols/employee.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { type EmployeeFilters } from '../types/employees/employee-filters'
+import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
 
 interface EmployeesOutput {
   employees: Employee[]
@@ -45,6 +47,14 @@ class EmployeesUseCase {
     const deletedEmployee = await this.employeeRepository.delete(employeeId)
 
     return deletedEmployee
+  }
+
+  public async executeFindAllPaginated (
+    params: PaginatedRequest<EmployeeFilters>
+  ): Promise<PaginatedResult<Employee>> {
+    const result = await this.employeeRepository.findAllPaginated(params)
+
+    return result
   }
 }
 

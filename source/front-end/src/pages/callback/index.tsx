@@ -15,10 +15,11 @@ function Callback() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const extractAuthorizationCodeFromSearch = () => {
+    const extractAuthorizationCodeAndErrorFromSearch = () => {
       const urlParams = new URLSearchParams(window.location.search)
       const code = urlParams.get('code')
-      return code
+      const error = urlParams.get('error')
+      return { code, error }
     }
 
     const storeDecodedTokenOnAuthState = (
@@ -30,7 +31,7 @@ function Callback() {
         setToken({
           user: {
             id: decodedToken.id,
-            role: decodedToken.role,
+            userType: decodedToken.userType,
             email: decodedToken.email,
             name: decodedToken.name,
             registerCompleted: decodedToken.registerCompleted,
@@ -45,9 +46,18 @@ function Callback() {
       )
     }
 
-    const code = extractAuthorizationCodeFromSearch()
+    const { code, error } = extractAuthorizationCodeAndErrorFromSearch()
     if (!code) {
-      throw new Error('Código de autorização não encontrado')
+      console.error('Código de autorização não encontrado')
+      if (error && error === 'access_denied') {
+        toast.error('Acesso negado, tente novamente')
+        setTimeout(() => navigate('/'), 500)
+        return
+      }
+      console.error('Fluxo de autorização inválido, tente novamente')
+      toast.error('Fluxo de autorização inválido, tente novamente')
+      setTimeout(() => navigate('/'), 500)
+      return
     }
 
     AuthAPI.exchangeCodeForToken(code)

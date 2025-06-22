@@ -1,10 +1,11 @@
 import { type z } from 'zod'
 import { type CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
 import { type EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
-import { Role } from '@prisma/client'
+import { UserType } from '@prisma/client'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
 import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
-import { InvalidRoleUseCaseError } from '../errors/invalid-role-use-case-error'
+import { InvalidUserTypeUseCaseError } from '../errors/invalid-user-type-use-case-error'
+import { ResourceWithAttributAlreadyExists } from '../errors/resource-with-attribute-alreay-exists'
 
 type CompleteCustomerOrEmployeeRegister = z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema> | z.infer<typeof EmployeeSchemas.employeeCompleteRegisterBodySchema>
 
@@ -12,35 +13,44 @@ interface CompleteUserRegisterUseCaseInput {
   userData: CompleteCustomerOrEmployeeRegister
   userId: string
   userEmail: string
-  userRole: Role
+  userType: UserType
 }
 
 class CompleteUserRegisterUseCase {
   constructor (
     private readonly customerRepository: CustomerRepository,
     private readonly employeeRepository: EmployeeRepository
-  ) {}
+  ) { }
 
-  async execute ({ userData, userId, userEmail, userRole }: CompleteUserRegisterUseCaseInput): Promise<void> {
+  async execute ({ userData, userId, userEmail, userType }: CompleteUserRegisterUseCaseInput): Promise<void> {
     const data = {
       ...userData,
       registerCompleted: true
     }
 
-    if (userRole === Role.CUSTOMER) {
+    if (userType === UserType.CUSTOMER) {
+      const userByPhone = await this.customerRepository.findByEmailOrPhone('', (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone)
+      if (userByPhone) {
+        throw new ResourceWithAttributAlreadyExists(
+          'user',
+          'phone',
+          (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone
+        )
+      }
+
       await this.customerRepository.updateByEmailAndGoogleId(
         userId,
         userEmail,
         data
       )
-    } else if (userRole === Role.EMPLOYEE || userRole === Role.MANAGER) {
+    } else if (userType === UserType.EMPLOYEE || userType === UserType.MANAGER) {
       await this.employeeRepository.updateByEmailAndGoogleId(
         userId,
         userEmail,
         data
       )
     } else {
-      throw new InvalidRoleUseCaseError(`Invalid role provided ${userRole}`)
+      throw new InvalidUserTypeUseCaseError(`Invalid user type provided ${userType}`)
     }
   }
 }

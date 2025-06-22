@@ -66,7 +66,7 @@ function SideBar() {
             <div className="">
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
               <ul className="text-primary-200 mt-8 text-[12px]">
-                {sideBarItems.COMMON.concat(sideBarItems[user.role!])
+                {sideBarItems.COMMON.concat(sideBarItems[user.userType!])
                   .map((sideBarItem) => {
                     return (
                       <SideBarItem

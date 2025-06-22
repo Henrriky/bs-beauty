@@ -3,10 +3,9 @@ import { makeCustomersUseCaseFactory } from '../factory/make-customers-use-case.
 import { z } from 'zod'
 import { makeServiceUseCaseFactory } from '../factory/make-service-use-case.factory'
 import { makeEmployeesUseCaseFactory } from '../factory/make-employees-use-case.factory'
-import { makeAppointmentServicesUseCaseFactory } from '../factory/make-appointment-services-use-case.factory'
 import { makeOffersUseCaseFactory } from '../factory/make-offers-use-case.factory'
 import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use-case.factory'
-import { type AppointmentService } from '@prisma/client'
+import { type Appointment } from '@prisma/client'
 
 const schema = z.object({
   totalAppointments: z.number(),
@@ -25,33 +24,33 @@ class AnalyticsController {
     try {
       const analytics: Partial<Analytics> = {}
 
-      const appointmentServicesUseCase = makeAppointmentServicesUseCaseFactory()
-      let appointmentServiceList
+      const appointmentUseCase = makeAppointmentsUseCaseFactory()
+      let appointmentsList: Appointment[] | undefined
       try {
-        const { appointmentServices } = await appointmentServicesUseCase.executeFindAll()
-        appointmentServiceList = appointmentServices
+        const { appointments } = await appointmentUseCase.executeFindAll()
+        appointmentsList = appointments
       } catch (error: any) {
         if (error.statusCode === 404) {
-          console.warn('No appointment services found (404). Continuing...')
+          console.warn('No appointments found (404). Continuing...')
         } else {
           throw error
         }
       }
 
-      if (appointmentServiceList !== undefined) {
-        analytics.totalAppointments = appointmentServiceList.length
+      if (appointmentsList !== undefined) {
+        analytics.totalAppointments = appointmentsList.length
 
         let newAppointmentsCount = 0
-        appointmentServiceList.forEach(appointmentService => {
-          if (appointmentService.status === 'PENDING') {
+        appointmentsList.forEach(appointment => {
+          if (appointment.status === 'PENDING') {
             newAppointmentsCount++
           }
         })
         analytics.newAppointments = newAppointmentsCount
 
         let finishedAppointmentsCount = 0
-        appointmentServiceList.forEach(appointmentService => {
-          if (appointmentService.status === 'FINISHED') {
+        appointmentsList.forEach(appointment => {
+          if (appointment.status === 'FINISHED') {
             finishedAppointmentsCount++
           }
         })
@@ -59,9 +58,9 @@ class AnalyticsController {
 
         let revenueCount = Number(0)
         const offerUseCase = makeOffersUseCaseFactory()
-        for (const appointmentService of appointmentServiceList) {
-          if (appointmentService.status === 'FINISHED') {
-            const offers = await offerUseCase.executeFindById(appointmentService.serviceOfferedId)
+        for (const appointment of appointmentsList) {
+          if (appointment.status === 'FINISHED') {
+            const offers = await offerUseCase.executeFindById(appointment.serviceOfferedId)
             if (offers?.price !== undefined && offers?.price !== null) {
               revenueCount += Number(offers.price)
             }
@@ -142,12 +141,12 @@ class AnalyticsController {
       }
 
       if (offerList !== undefined) {
-        const appointmentServicesUseCase = makeAppointmentServicesUseCaseFactory()
-        const employeeAppointments: AppointmentService[] = []
+        const appointmentsUseCase = makeAppointmentsUseCaseFactory()
+        const employeeAppointments: Appointment[] = []
         for (const offer of offerList) {
           try {
-            const { appointmentServices } = await appointmentServicesUseCase.executeFindByServiceOfferedId(offer.id)
-            appointmentServices.forEach((item) => {
+            const { appointments } = await appointmentsUseCase.executeFindByServiceOfferedId(offer.id)
+            appointments.forEach((item) => {
               employeeAppointments.push(item)
             })
           } catch (error: any) {
@@ -183,11 +182,8 @@ class AnalyticsController {
 
         const currentEmployeeCustomersIds = new Set<string>()
         const appointmentUseCase = makeAppointmentsUseCaseFactory()
-        for (const appointmentService of employeeAppointments) {
-          const appointment = await appointmentUseCase.executeFindById(appointmentService.appointmentId)
-          if (appointment !== null) {
-            currentEmployeeCustomersIds.add(appointment.customerId)
-          }
+        for (const appointment of employeeAppointments) {
+          currentEmployeeCustomersIds.add(appointment.customerId)
         }
         analytics.totalCustomers = currentEmployeeCustomersIds.size
 
@@ -196,9 +192,9 @@ class AnalyticsController {
         let revenueCount = Number(0)
         for (const offer of offerList) {
           try {
-            const { appointmentServices } = await appointmentServicesUseCase.executeFindByServiceOfferedId(offer.id)
-            for (const appointmentService of appointmentServices) {
-              if (appointmentService.status === 'FINISHED') {
+            const { appointments } = await appointmentUseCase.executeFindByServiceOfferedId(offer.id)
+            for (const appointment of appointments) {
+              if (appointment.status === 'FINISHED') {
                 revenueCount += Number(offer.price)
               }
             }

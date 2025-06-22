@@ -4,7 +4,6 @@ import { customerRoutes } from './routes/customers.routes'
 import { employeeRoutes } from './routes/employees.routes'
 import { notificationRoutes } from './routes/notifications.routes'
 import { appointmentRoutes } from './routes/appointments.routes'
-import { appointmentServiceRoutes } from './routes/appointment-services.routes'
 import { shiftRoutes } from './routes/shift.routes'
 import { offerRoutes } from './routes/offers.routes'
 import { errorHandlerMiddleware } from '../middlewares/error-handler.middleware'
@@ -20,7 +19,6 @@ appRoutes.use('/services', verifyJwtTokenMiddleware, serviceRoutes)
 appRoutes.use('/customers', verifyJwtTokenMiddleware, customerRoutes)
 appRoutes.use('/notifications', verifyJwtTokenMiddleware, notificationRoutes)
 appRoutes.use('/appointments', verifyJwtTokenMiddleware, appointmentRoutes)
-appRoutes.use('/appointment-services', verifyJwtTokenMiddleware, appointmentServiceRoutes)
 appRoutes.use('/shifts', verifyJwtTokenMiddleware, shiftRoutes)
 appRoutes.use('/offers', verifyJwtTokenMiddleware, offerRoutes)
 appRoutes.use('/analytics', verifyJwtTokenMiddleware, analyticsServiceRoutes)

@@ -1,15 +1,20 @@
+import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import BSBeautyLoading from '../../../../../../components/feedback/Loading'
 import Subtitle from '../../../../../../components/texts/Subtitle'
 import { serviceAPI } from '../../../../../../store/service/service-api'
-import CustomerHomeServiceCard from './CustomerHomeServiceCard'
-import { useFormContext } from 'react-hook-form'
 import { CreateAppointmentFormData } from '../types'
+import CustomerHomeServiceCard from './CustomerHomeServiceCard'
 
 function CustomerHomeSelectServiceContainer() {
   const { register, watch } = useFormContext<CreateAppointmentFormData>()
   const serviceSelectedId = watch('serviceId')
-  const { data, isLoading, isError, error } = serviceAPI.useGetServicesQuery()
+
+  const { data, isLoading, isError, error } = serviceAPI.useGetServicesQuery({})
+  // TODO: CARREGAR MAIS SERVIÇOS QUANDO CHEGA NO LIMITE PADRÃO (10)
+  // TODO: POSSÍVEL CRIAÇÃO DE INPUT DE BUSCA PARA BUSCAR PELO NOME (O PARÂMETRO JÁ ESTÁ FEITO NA API)
+
+  const services = data?.data || []
 
   if (isLoading) return <BSBeautyLoading title="Carregando os serviços..." />
 
@@ -30,8 +35,8 @@ function CustomerHomeSelectServiceContainer() {
         Selecione o serviço que você deseja agendar:
       </Subtitle>
 
-      {data?.services &&
-        data.services.map((service) => {
+      {services &&
+        services.map((service) => {
           return (
             <div key={`service-label-${service.id}`}>
               <input

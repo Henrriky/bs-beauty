@@ -1,4 +1,4 @@
-import { AppointmentServiceSchemas } from '../../../utils/validation/zod-schemas/appointment-service.zod-schemas.validation.util'
+import { AppointmentSchemas } from '../../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils'
 import { Status } from '../../../store/appointment/types'
 import { Input } from '../../../components/inputs/Input'
 import { Formatter } from '../../../utils/formatter/formatter.util'
@@ -46,14 +46,14 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
     formState: { errors },
     setValue,
   } = useForm<CustomerUpdateAppointmentFormData>({
-    resolver: zodResolver(AppointmentServiceSchemas.customerUpdateSchema),
+    resolver: zodResolver(AppointmentSchemas.customerUpdateSchema),
     defaultValues: {
-      observation: props.appointmentService?.observation ?? '',
+      observation: props.appointment?.observation ?? '',
     },
   })
 
   const appointmentDateOnLocalZone = DateTime.fromISO(
-    props.appointmentService.appointmentDate,
+    props.appointment.appointmentDate,
   ).setZone('local')
 
   return (
@@ -73,7 +73,7 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
           id="professional"
           type="text"
           variant="solid"
-          value={props.appointmentService.serviceOffered.employee.name ?? ''}
+          value={props.appointment.offer?.employee?.name ?? 'Funcionário não definido'}
           disabled
         />
 
@@ -87,7 +87,7 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
           id="service"
           type="text"
           variant="solid"
-          value={props.appointmentService.serviceOffered.service.name}
+          value={props.appointment.offer.service.name}
           disabled
         />
         <Input
@@ -103,7 +103,7 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
           value={new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL',
-          }).format(Number(props.appointmentService.serviceOffered.price))}
+          }).format(Number(props.appointment.offer.price))}
           disabled
         />
         <Input
@@ -132,7 +132,7 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
           type="text"
           variant="solid"
           value={Formatter.formatApplicationStatusToPrettyRepresentation(
-            props.appointmentService.status,
+            props.appointment.status,
           )}
           disabled
         />

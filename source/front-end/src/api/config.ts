@@ -16,8 +16,7 @@ export const API_VARIABLES = {
   },
   CUSTOMERS_ENDPOINTS: {
     FETCH_CUSTOMERS: '/customers',
-    FIND_CUSTOMER_BY_ID: (customerId: string) =>
-      `/customers/${customerId}`,
+    FIND_CUSTOMER_BY_ID: (customerId: string) => `/customers/${customerId}`,
   },
   SERVICES_ENDPOINTS: {
     ENDPOINT: '/services',
@@ -45,14 +44,14 @@ export const API_VARIABLES = {
   },
   APPOINTMENTS_ENDPOINTS: {
     CREATE_APPOINTMENT: '/appointments',
-    ASSOCIATE_APPOINTMENT_WITH_OFFER: '/appointment-services',
-    FETCH_CUSTOMER_APPOINTMENTS: '/appointment-services/customer',
+    ASSOCIATE_APPOINTMENT_WITH_OFFER: '/appointments',
+    FETCH_CUSTOMER_APPOINTMENTS: '/appointments/customer',
     FIND_BY_SERVICE_OFFERED: (serviceOfferedId: string) =>
-      `/appointment-services/offer/${serviceOfferedId}`,
-    FIND_APPOINTMENT_SERVICE_BY_ID: (appointmentServiceId: string) =>
-      `/appointment-services/${appointmentServiceId}`,
-    UPDATE_APPOINTMENT_SERVICE: (appointmentServiceId: string) =>
-      `/appointment-services/${appointmentServiceId}`,
+      `/appointments/offer/${serviceOfferedId}`,
+    FIND_APPOINTMENT_BY_ID: (appointmentId: string) =>
+      `/appointments/${appointmentId}`,
+    UPDATE_APPOINTMENT: (appointmentId: string) =>
+      `/appointments/${appointmentId}`,
   },
   ANALYTICS_ENDPOINTS: {
     FETCH_ANALYTICS: '/analytics',

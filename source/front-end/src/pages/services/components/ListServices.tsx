@@ -22,7 +22,11 @@ function ListServices({
 }: ListServicesProps) {
   const [selected, setSelected] = useState(null)
 
-  const { data, isLoading, isError } = serviceAPI.useGetServicesQuery()
+  // TODO: CARREGAR MAIS SERVIÇOS QUANDO CHEGA NO LIMITE PADRÃO (10)
+  // TODO: POSSÍVEL CRIAÇÃO DE INPUT DE BUSCA PARA BUSCAR PELO NOME (O PARÂMETRO JÁ ESTÁ FEITO NA API)
+  const { data, isLoading, isError } = serviceAPI.useGetServicesQuery({})
+
+  const services = data?.data || []
 
   if (isLoading) {
     return (
@@ -56,7 +60,7 @@ function ListServices({
     >
       <div className="max-h-[161px] scroll overflow-y-auto w-full">
         <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
-          {data?.services.map((service, index) => (
+          {services.map((service, index) => (
             <Button
               label={
                 <div className="flex flex-row items-center">

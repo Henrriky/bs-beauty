@@ -12,14 +12,14 @@ import { setRegisterCompleted, setToken } from '../../store/auth/auth-slice'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import * as AuthAPI from '../../api/auth-api'
-import { Role } from '../../store/auth/types'
+import { UserType } from '../../store/auth/types'
 import { decodeUserToken } from '../../utils/decode-token'
 import { OnSubmitEmployeeOrCustomerForm } from './types'
 
-const rolesToInputContainers = {
-  [Role.CUSTOMER]: CustomerInputContainer,
-  [Role.EMPLOYEE]: EmployeeInputContainer,
-  [Role.MANAGER]: EmployeeInputContainer,
+const userTypesToInputContainers = {
+  [UserType.CUSTOMER]: CustomerInputContainer,
+  [UserType.EMPLOYEE]: EmployeeInputContainer,
+  [UserType.MANAGER]: EmployeeInputContainer,
 }
 
 function CompleteRegister() {
@@ -31,7 +31,7 @@ function CompleteRegister() {
   const [completeRegister, { isLoading }] =
     authAPI.useCompleteRegisterMutation()
 
-  const InputContainer = rolesToInputContainers[user.role]
+  const InputContainer = userTypesToInputContainers[user.userType]
 
   async function handleUpdateProfileToken() {
     if (!tokens?.googleAccessToken) {
@@ -50,7 +50,7 @@ function CompleteRegister() {
         setToken({
           user: {
             id: decodedToken.id,
-            role: decodedToken.role,
+            userType: decodedToken.userType,
             email: decodedToken.email,
             name: decodedToken.name,
             registerCompleted: decodedToken.registerCompleted,

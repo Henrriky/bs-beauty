@@ -4,6 +4,8 @@ import { type OAuthIdentityProvider } from '../protocols/oauth-identity-provider
 
 class GoogleAuthIdentityProvider implements OAuthIdentityProvider {
   async fetchUserInformationsFromToken (token: string): Promise<{ userId: string, email: string, profilePhotoUrl: string }> {
+    this.updateCredentials(token)
+
     const tokenInfo = await oauth2Client.getTokenInfo(token)
     const { email, sub: userId } = tokenInfo
 
@@ -24,6 +26,7 @@ class GoogleAuthIdentityProvider implements OAuthIdentityProvider {
       throw new Error('Profile photo url not exists on google user info')
     }
 
+
     return { userId, email, profilePhotoUrl }
   }
 
@@ -36,6 +39,12 @@ class GoogleAuthIdentityProvider implements OAuthIdentityProvider {
     }
 
     return { accessToken: tokens.access_token }
+  }
+
+  private updateCredentials (accessToken: string): void {
+    oauth2Client.setCredentials({
+      access_token: accessToken,
+    })
   }
 
   generateRedirectUri () {

@@ -7,13 +7,14 @@ import { formatValidationErrors } from '../../utils/formatting/zod-validation-er
 import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
 import { CustomerSchemas } from '../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
 import { makeCompleteUserRegisterUseCase } from '../../factory/auth/make-complete-user-register.use-case.factory'
-import { Role } from '@prisma/client'
-import { InvalidRoleUseCaseError } from '../../services/use-cases/errors/invalid-role-use-case-error'
+import { UserType } from '@prisma/client'
+import { InvalidUserTypeUseCaseError } from '../../services/use-cases/errors/invalid-user-type-use-case-error'
+import { ResourceWithAttributAlreadyExists } from '../../services/use-cases/errors/resource-with-attribute-alreay-exists'
 
-const rolesToSchemas = {
-  [Role.CUSTOMER]: CustomerSchemas.customerCompleteRegisterBodySchema,
-  [Role.EMPLOYEE]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
-  [Role.MANAGER]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
+const userTypesToSchemas = {
+  [UserType.CUSTOMER]: CustomerSchemas.customerCompleteRegisterBodySchema,
+  [UserType.EMPLOYEE]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
+  [UserType.MANAGER]: EmployeeSchemas.employeeCompleteRegisterBodySchema
 }
 
 class CompleteUserRegisterController {
@@ -24,10 +25,10 @@ class CompleteUserRegisterController {
         return
       }
 
-      const schema = rolesToSchemas[req.user.role]
+      const schema = userTypesToSchemas[req.user.userType]
 
       if (!schema) {
-        throw new InvalidRoleUseCaseError(`Invalid role provided: ${req.user.role}`)
+        throw new InvalidUserTypeUseCaseError(`Invalid user type provided: ${req.user.userType}`)
       }
 
       const customerOrEmployee = schema.parse(req.body)
@@ -42,7 +43,7 @@ class CompleteUserRegisterController {
       await usecase.execute({
         userData: customerOrEmployee,
         userId: req.user.sub,
-        userRole: req.user.role,
+        userType: req.user.userType,
         userEmail: req.user.email
       })
 
@@ -52,10 +53,15 @@ class CompleteUserRegisterController {
         formatValidationErrors(error, res)
         return
       }
-      if (error instanceof InvalidRoleUseCaseError) {
+      if (error instanceof InvalidUserTypeUseCaseError) {
         res.status(StatusCodes.BAD_REQUEST).send({ message: error.message })
         return
       }
+      if (error instanceof ResourceWithAttributAlreadyExists) {
+        res.status(StatusCodes.CONFLICT).send({ message: error.message })
+        return
+      }
+
       console.error(`Error trying to complete user register.\nReason: ${error?.message}`)
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Error trying to complete user register, please check back-end logs...' })
     }

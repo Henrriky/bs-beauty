@@ -2,20 +2,18 @@
 // TODO: Solve errors
 
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import { API_VARIABLES } from '../../api/config'
-import {
-  Appointment,
-  AppointmentService,
-  AssociateAppointmentAPIData,
-  CreateAppointmentAPIData,
-  FindAppointmentServiceByCustomerId,
-  FindAppointmentServiceById,
-} from './types'
 import {
   CustomerUpdateAppointmentFormData,
   EmployeeUpdateAppointmentFormData,
 } from '../../pages/appointments/types'
+import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
+import {
+  Appointment,
+  CreateAppointmentAPIData,
+  FindAppointmentByCustomerId,
+  FindAppointmentById
+} from './types'
 
 export const appointmentAPI = createApi({
   reducerPath: 'appointments',
@@ -37,7 +35,7 @@ export const appointmentAPI = createApi({
       ) & { id: string }
     >({
       query: (data) => ({
-        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.UPDATE_APPOINTMENT_SERVICE(
+        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.UPDATE_APPOINTMENT(
           data.id,
         ),
         method: 'PUT',
@@ -47,20 +45,9 @@ export const appointmentAPI = createApi({
         },
       }),
     }),
-    associateOfferWithAppointment: builder.mutation<
-      { appointmentServices: AppointmentService[] },
-      AssociateAppointmentAPIData
-    >({
-      query: (data) => ({
-        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS
-          .ASSOCIATE_APPOINTMENT_WITH_OFFER,
-        method: 'POST',
-        body: data,
-      }),
-    }),
     findAppointmentsByCustomerOrEmployeeId: builder.query<
       {
-        appointments: FindAppointmentServiceByCustomerId[]
+        appointments: FindAppointmentByCustomerId[]
       },
       void
     >({
@@ -79,7 +66,7 @@ export const appointmentAPI = createApi({
           : [{ type: 'Appointments', id: 'LIST' }],
     }),
     findAppointmentsByServiceOfferedId: builder.query<
-      AppointmentService[],
+      Appointment[],
       { serviceOfferedId: string }
     >({
       query: ({ serviceOfferedId }) => ({
@@ -90,7 +77,7 @@ export const appointmentAPI = createApi({
       }),
     }),
     fetchEmployeeAppointmentsByAllOffers: builder.query<
-      { appointments: AppointmentService[] },
+      { appointments: Appointment[] },
       string
     >({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -100,11 +87,11 @@ export const appointmentAPI = createApi({
           const offersResponse = await fetchWithBQ({
             url: `/offers/employee/${userId}`,
           })
+
           const serviceOfferedIds =
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
-            offersResponse.data?.offers.map((offer) => offer.id) || []
-
+            offersResponse.data?.data?.map((offer) => offer.id) || []
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           const appointmentPromises = serviceOfferedIds.map((id) =>
@@ -119,19 +106,14 @@ export const appointmentAPI = createApi({
 
           const allAppointments = appointmentResponses
             .filter(
-              (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                response,
-              ) => response.data,
+              (response: { data?: { appointments?: Appointment[] } }) =>
+                Array.isArray(response.data?.appointments),
             )
             .flatMap(
-              (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                response,
-              ) => response.data.appointmentServices,
+              (response: { data?: { appointments?: Appointment[] } }) =>
+                response.data?.appointments ?? [],
             )
+
 
           return { data: { appointments: allAppointments } }
         } catch (error) {
@@ -140,12 +122,12 @@ export const appointmentAPI = createApi({
       },
     }),
     findAppointmentServiceById: builder.query<
-      FindAppointmentServiceById,
-      { appointmentServiceId: string }
+      FindAppointmentById,
+      { appointmentId: string }
     >({
-      query: ({ appointmentServiceId }) => ({
-        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.FIND_APPOINTMENT_SERVICE_BY_ID(
-          appointmentServiceId,
+      query: ({ appointmentId }) => ({
+        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.FIND_APPOINTMENT_BY_ID(
+          appointmentId,
         ),
         method: 'GET',
       }),
