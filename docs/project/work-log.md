@@ -103,7 +103,40 @@ Até o momento, conseguimos atualizar completamente o **Diário de Bordo** no re
 
 
 ## Semana 11 - 26.05 a 01.06
+Conforme solicitado pelo professor, começamos a nos preparar para apresentar o **modelo físico** do **banco de dados** do nosso sistema. Portanto, no início da semana definimos os responsáveis e identificamos os tópicos mais importantes para realizar a apresentação durante uma ligação no discord. Além disso, seguimos trabalhando na **documentação**, começando a desenvolver melhor as seções de desenvolvimento.
+
+Logo após, definimos as tarefas necessárias para a **melhoria** e consequente entrega do **MVP**, nos baseando na aplicação que desenvolvemos na disciplina de Engenharia de Software IV e já atribuindo os respectivos responsáveis por cada tarefa.
+
+> **Resumo:** Preparação Apresentação BD; Continuação documentação; Melhorias MVP planejadas.
+
+*Por Giovanna Carvalho*
 
 ## Semana 12 - 02.06 a 08.06
 
+Durante esta semana, utilizamos o **ProjectLibre** para estruturar todas as atividades do segundo semestre, já que na disciplina SPOPIE2 vamos desenvolver as demais funcionalidades do sistema que não foram contempladas no MVP. No cronograma, identificamos e registramos os responsáveis atribuídos a cada tarefa e atualizamos a porcentagem de conclusão de algumas delas, garantindo uma visão clara do **andamento do projeto**.
+
+Em 03/06, realizamos uma reunião com o professor orientador para apresentar o banco de dados. Explicamos o **MER** e o **DER** da aplicação, além de apontar quais entidades fariam parte do **MVP** e quais seriam desenvolvidas apenas na disciplina SPOPIE2. Esse alinhamento foi fundamental para assegurar a coerência da apresentação final.
+
+Sobre a **documentação**, desenvolvemos com clareza todos os tópicos necessários, adicionando os respectivos textos, figuras, quadros e tabelas. Como resultado, alcançamos uma documentação quase completa, cobrindo o **escopo principal** da aplicação.
+
+Paralelamente, demos início à elaboração do **plano de testes**, definindo quais testes seriam pertinentes para o projeto e considerando a adoção de testes automatizados. Esse planejamento garantirá a qualidade do desenvolvimento no próximo semestre.
+
+Por fim, começamos a implementar melhorias no **MVP**. O primeiro passo foi a reestruturação do **banco de dados** para adequá-lo ao novo MER, o que exigiu a correção de alguns **bugs** decorrentes dessa mudança. Além disso, padronizamos as respostas da **API** para que os dados fossem retornados de forma mais eficiente e coerente com a aplicação.
+
+> Resumo: cronograma completo no ProjectLibre, MER e DER validados, documentação avançada; plano de testes definido, banco de dados refatorado e APIs padronizadas.
+
+*Por Giovanna Carvalho*
+
 ## Semana 13 - 09.06 a 15.06
+
+Durante esta semana foram feitos alguns **ajustes finais** de referências e gramática na **documentação** antes de discuti-la com o professor orientador. Após a reunião, realizaram-se outras mudanças para padronizar diferentes aspectos do material.
+
+No **GitHub**, realizou-se o **merge** das diversas **branches** do repositório em uma branch chamada **gource**, a fim de recuperar **commits “perdidos”** devido ao uso do comando git squash nos momentos iniciais do projeto.
+
+No **ProjectLibre**, efetuaram-se **melhorias** para evitar a sobrecarga de recursos humanos e atualizou-se a porcentagem de conclusão de determinadas tarefas.
+
+Por fim, no **MVP**, conseguiu-se corrigir um **bug** que atribuía a mesma **imagem de perfil** a usuários que se cadastram simultaneamente no sistema.
+
+> Resumo: documentação padronizada, branches mescladas no GitHub (gource), cronograma otimizado no ProjectLibre; bug de imagem corrigido no MVP.
+
+*Por Giovanna Carvalho*
