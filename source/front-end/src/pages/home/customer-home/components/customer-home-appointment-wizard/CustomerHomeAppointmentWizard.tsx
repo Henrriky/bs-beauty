@@ -16,7 +16,7 @@ import { CreateAppointmentFormData } from './types'
 
 import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-appointment-success.svg'
 import { toast } from 'react-toastify'
-
+import CustomerHomeSelectAppointmentFlow from './CustomerHomeSelectAppointmentFlow'
 
 type Step = {
   currentStepName: string
@@ -60,9 +60,7 @@ function CustomerHomeAppointmentWizard() {
   const createAppointmentForm = useForm<CreateAppointmentFormData>({
     resolver: zodResolver(AppointmentSchemas.createSchemaForm),
   })
-  const {
-    handleSubmit,
-  } = createAppointmentForm
+  const { handleSubmit } = createAppointmentForm
 
   const [makeAppointment, { isLoading: isLoadingMakeAppointment }] =
     appointmentAPI.useMakeAppointmentMutation()
@@ -78,11 +76,10 @@ function CustomerHomeAppointmentWizard() {
       await makeAppointment(payload).unwrap()
 
       setModalIsOpen(true)
-
     } catch (error) {
-      console.error("❌ Erro ao criar o agendamento:", error)
+      console.error('❌ Erro ao criar o agendamento:', error)
       toast.error('Erro ao criar o agendamento. Tente novamente.')
-    }     
+    }
   }
 
   const AppointmentCurrentStepForm = currentStep.currentStepAppointmentForm
@@ -95,6 +92,7 @@ function CustomerHomeAppointmentWizard() {
 
   return (
     <FormProvider {...createAppointmentForm}>
+      <CustomerHomeSelectAppointmentFlow />
       <form onSubmit={handleSubmit(handleSubmitConcrete)}>
         <div className="">
           <AppointmentCurrentStepForm />
