@@ -89,7 +89,7 @@ class PrismaEmployeeRepository implements EmployeeRepository {
 
     const where = {
       name: filters.name ? { contains: filters.name } : undefined,
-      email: filters.email ? { contains: filters.email, } : undefined,
+      email: filters.email ? { contains: filters.email } : undefined
     }
 
     const [data, total] = await Promise.all([
@@ -110,7 +110,6 @@ class PrismaEmployeeRepository implements EmployeeRepository {
       limit
     }
   }
-
 }
 
 export { PrismaEmployeeRepository }

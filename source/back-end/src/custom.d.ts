@@ -1,4 +1,4 @@
-import { TokenPayload } from "./middlewares/auth/verify-jwt-token.middleware";
+import { type TokenPayload } from './middlewares/auth/verify-jwt-token.middleware'
 
 declare global {
   namespace Express {

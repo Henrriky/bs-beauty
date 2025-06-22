@@ -2,8 +2,8 @@ import { type Service, type Prisma } from '@prisma/client'
 import { type ServiceRepository } from '../repository/protocols/service.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { type EmployeesOfferingService } from '../repository/types/service-repository.types'
-import { PaginatedRequest, PaginatedResult } from '../types/pagination'
-import { ServiceFilters } from '../types/services/service-filters'
+import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
+import { type ServiceFilters } from '../types/services/service-filters'
 
 interface ServicesOutput {
   services: Service[]
@@ -53,7 +53,7 @@ class ServicesUseCase {
     return service
   }
 
-  public async executeFindAllPaginated(
+  public async executeFindAllPaginated (
     params: PaginatedRequest<ServiceFilters>
   ): Promise<PaginatedResult<Service>> {
     const result = await this.serviceRepository.findAllPaginated(params)

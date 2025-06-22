@@ -13,7 +13,7 @@ class EmployeesUseCase {
 
   constructor (private readonly employeeRepository: EmployeeRepository) { }
 
-  public async executeFindAll(): Promise<EmployeesOutput> {
+  public async executeFindAll (): Promise<EmployeesOutput> {
     const employees = await this.employeeRepository.findAll()
     RecordExistence.validateManyRecordsExistence(employees, 'employees')
 

@@ -20,7 +20,6 @@ function PrivateRoute({ allowedUserTypes }: PrivateRouteProps) {
 
   if (!currentUserHasPermission) {
     toast.warn('Você não tem permissão para acessar esta página.')
-    console.log("hi")
     return <Navigate to={'/home'} replace />
   }
 

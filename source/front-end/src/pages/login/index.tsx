@@ -15,12 +15,15 @@ function Login() {
     if (authInformations.token?.accessToken) {
       if (authInformations.user?.registerCompleted) {
         console.log(authInformations)
-        navigate(`/${authInformations.user.userType.toString().toLowerCase()}/home`)
+        navigate(
+          `/${authInformations.user.userType.toString().toLowerCase()}/home`,
+        )
       } else {
         navigate('/a')
       }
     }
   }, [
+    authInformations,
     authInformations.token?.accessToken,
     authInformations.user?.registerCompleted,
     authInformations.user?.userType,
