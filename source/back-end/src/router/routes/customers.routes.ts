@@ -6,7 +6,7 @@ import { routeAuthMiddleware } from '../../middlewares/route-auth.middleware'
 
 const customerRoutes = Router()
 
-customerRoutes.get('/', CustomersController.handleFindAll)
+customerRoutes.get('/', CustomersController.handleFindAllPaginated)
 customerRoutes.get('/:id', CustomersController.handleFindById)
 customerRoutes.post('/', routeAuthMiddleware(['CUSTOMER']), validateCreateCustomer, CustomersController.handleCreate)
 customerRoutes.put('/:id', routeAuthMiddleware(['CUSTOMER']), validateUpdateCustomer, CustomersController.handleUpdate)
