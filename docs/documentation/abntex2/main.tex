@@ -16,6 +16,7 @@ english,			% idioma adicional para hifenização
 french,				% idioma adicional para hifenização
 spanish,			% idioma adicional para hifenização
 brazil				% o último idioma é o principal do documento
+chapter=TITLE % deixa capitulos em maiusculo
 ]{abntex2}
 
 % ---
@@ -87,18 +88,26 @@ brazil				% o último idioma é o principal do documento
 % ---
 % Informações de dados para CAPA e FOLHA DE ROSTO
 % ---
-\titulo{Projeto Integrado de Extensão I}
-\autor{BS Beauty Academy}
-\local{São Paulo, SP - Brasil}
+\instituicao{IFSP – Instituto Federal de Educação,\\
+	Ciência e Tecnologia Câmpus São Paulo}
+
+\titulo{\emph{BS Beauty Academy}}
+\local{São Paulo – SP – Brasil}
 \data{2025}
-\orientador{Marcelo Tavares}
-\instituicao{%
-	Instituto Federal de Educação, Ciência e\\ Tecnologia de São Paulo -- IFSP
-	\par
-	Tecnologia em Análise e Desenvolvimento de Sistemas
-	\par
-	Programa de graduação}
+\orientador{Marcelo Tavares de Santana}
 \tipotrabalho{Projeto Integrado de Extensão}
+
+% ------------ AUTORES (só aparecem na capa) ---
+\newcommand{\autorescapa}{%
+	\begin{tabular}[t]{@{}l@{\hspace{3em}}r@{}}
+		ALYSON CÉSAR FUMAGALLI & SP3082156\\
+		BRUNO DE ALMEIDA FISCHER & SP309300X\\
+		ELIEL DA SILVA & SP3096165\\
+		GIOVANNA CAMILLE SILVA CARVALHO & SP176232X\\
+		HENRIQUE SANTIAGO PIRES & SP3094839\\
+		HENRRIKY JHONNY DE OLIVEIRA BASTOS & SP3093905\\
+\end{tabular}}
+
 % O preambulo deve conter o tipo do trabalho, o objetivo, 
 % o nome da instituição e a área de concentração 
 \preambulo{Este projeto integrado de extensão, desenvolvido como parte do curso de Tecnologia em Análise e Desenvolvimento de Sistemas do Instituto Federal de Educação, Ciência e Tecnologia de São Paulo, tem como objetivo desenvolver uma aplicação web para otimizar a gestão e o agendamento de serviços de estética em um ambiente coworking. A área de concentração do projeto é a inovação tecnológica aplicada ao setor de serviços de beleza.}
@@ -141,7 +150,7 @@ brazil				% o último idioma é o principal do documento
 % Ver https://github.com/abntex/abntex2/issues/176
 %
 \newcommand{\quadroname}{Quadro}
-\newcommand{\listofquadrosname}{Lista de quadros}
+\newcommand{\listofquadrosname}{LISTA DE QUADROS}
 
 \newfloat[chapter]{quadro}{loq}{\quadroname}
 \newlistof{listofquadros}{loq}{\listofquadrosname}
@@ -253,6 +262,30 @@ brazil				% o último idioma é o principal do documento
 
 \makeglossaries
 % ----
+%  REDEFINIÇÃO DA CAPA (instituição + local/ano centralizados)
+% =================================================================
+\makeatletter
+\renewcommand{\imprimircapa}{%
+	\begin{capa}
+		\begin{center}
+			% --------- Instituição -------------
+			{\ABNTEXchapterfont\large\imprimirinstituicao\par}
+			\vspace*{2cm}
+			% --------- Autores -----------------
+			\imprimirautor
+			\vfill
+			% --------- Título ------------------
+			{\ABNTEXchapterfont\bfseries\Large\imprimirtitulo\par}
+			\vfill
+			% --------- Local e ano -------------
+			{\large\imprimirlocal\par}
+			{\large\imprimirdata}
+		\end{center}
+\end{capa}}
+\makeatother
+
+
+
 % Início do documento
 % ----
 \begin{document}
@@ -272,13 +305,16 @@ brazil				% o último idioma é o principal do documento
 	% ---
 	% Capa
 	% ---
+	\autor{\autorescapa}
 	\imprimircapa
+	\autor{} 
 	% ---
 	
 	% ---
 	% Folha de rosto
 	% (o * indica que haverá a ficha bibliográfica)
 	% ---
+	
 	\imprimirfolhaderosto*
 	% ---
 	
@@ -298,6 +334,9 @@ brazil				% o último idioma é o principal do documento
 		% \end{fichacatalografica}
 	
 	\begin{fichacatalografica}
+			\begin{center}
+			\imprimirinstituicao
+		\end{center}
 		\sffamily
 		\vspace*{\fill}					% Posição vertical
 		\begin{center}					% Minipage Centralizado
@@ -321,7 +360,7 @@ brazil				% o último idioma é o principal do documento
 					1. Graduação
 					2. Extensão
 					3. Integrado \\
-					I. Marcelo Tavares.
+					I. Marcelo Tavares de Santana.
 					II. IFSP.
 					III. Análise e Desenvolvimento de Sistemas. 
 					IV. SPOPIE1 			
@@ -344,6 +383,9 @@ brazil				% o último idioma é o principal do documento
 		% \end{folhadeaprovacao}
 	%
 	\begin{folhadeaprovacao}
+			\begin{center}
+			\imprimirinstituicao
+		\end{center}
 		
 		\begin{center}
 			{\ABNTEXchapterfont\large\imprimirautor}
@@ -387,8 +429,11 @@ Trabalho aprovado. \imprimirlocal,
 	
 	% resumo em português
 	\setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
-\input{Resumo/resumo.tex}
+	\renewcommand{\resumoname}{RESUMO}
 	
+\input{Resumo/resumo.tex}
+
+\renewcommand{\abstractname}{\MakeUppercase{ABSTRACT}}	
 	% resumo em inglês
 \input{Resumo/abstract.tex}
 
@@ -397,6 +442,7 @@ Trabalho aprovado. \imprimirlocal,
 	% inserir lista de ilustrações
 	% ---
 	\pdfbookmark[0]{\listfigurename}{lof}
+	\renewcommand{\listfigurename}{\MakeUppercase{LISTA DE ILUSTRAÇÕES}}
 	\listoffigures*
 	\cleardoublepage
 	% ---
@@ -413,6 +459,7 @@ Trabalho aprovado. \imprimirlocal,
 	% inserir lista de tabelas
 	% ---
 	\pdfbookmark[0]{\listtablename}{lot}
+\renewcommand{\listtablename}{\MakeUppercase{LISTA DE TABELAS}}
 	\listoftables*
 	\cleardoublepage
 	% ---
@@ -424,7 +471,7 @@ Trabalho aprovado. \imprimirlocal,
 \cleardoublepage
 \printglossary[
 type=\acronymtype,
-title={Lista de Siglas}
+title={LISTA DE SIGLAS }
 ]
 \cleardoublepage
 
@@ -435,17 +482,15 @@ title={Lista de Siglas}
 	% ---
 	% inserir lista de símbolos
 	% ---
-	\begin{simbolos}
-			\item [R\$] Real (moeda brasileira)
-			\item [\%]  Porcentagem
-			\item [W]	Watts
-		
-	\end{simbolos}
+%	\providecommand{\listsimbolosname}{}
+%	\renewcommand{\listsimbolosname}{\MakeUppercase{LISTA DE SÍMBOLOS}}
+\input{Resumo/simbolos.tex}
 	% ---
 
 	% inserir o sumario
 	% ---
 	\pdfbookmark[0]{\contentsname}{toc}
+	\renewcommand{\contentsname}{\MakeUppercase{SUMÁRIO}}
 	\tableofcontents*
 	\cleardoublepage
 
@@ -453,14 +498,14 @@ title={Lista de Siglas}
 	\textual
 	
 % ----------------------------------------------------------
-	\chapter{Introdução}
+	\chapter{INTRODUÇÃO}
 		
 %o input do capitulo 1 já contem todas as seções dele		
 \input{cap01-introducao/01-00-introducao}
 
 	% --------------------------------------
 	
-	\chapter{Revisão da Literatura}
+	\chapter{REVISÃO DA LITERATURA}
 	
 	%o input do capitulo 2 já contem todas as seções dele
 	
@@ -479,7 +524,7 @@ title={Lista de Siglas}
 	
 	% ---------------------------------------------------------------
 	
-	\chapter{Considerações Finais}
+	\chapter{CONSIDERAÇÕES FINAIS}
 
 \input{cap06-Consideracoes/06-00-consideracoes_finais}
 	% ----------------------------------------------------------
@@ -487,7 +532,7 @@ title={Lista de Siglas}
 	% ---
 	
 	%Página de referencias
-	\renewcommand{\bibname}{Referências Bibliográficas} %renomeia o título da página de referencias
+	\renewcommand{\bibname}{REFERÊNCIAS} %renomeia o título da página de referencias
 	\bibliography{referencias-bibliograficas}
 	\bibliographystyle{abntex2-alf}
 	\bibliographystyle{abntex2-num}
@@ -508,33 +553,33 @@ title={Lista de Siglas}
 	% ---
 	% Inicia os apêndices
 	% ---
-	\begin{apendicesenv}
+%	\begin{apendicesenv}
 		
 		% Imprime uma página indicando o início dos apêndices
-		\partapendices
+%		\partapendices
 		
 		% ----------------------------------------------------------
-		\chapter{exemplo 1}
+%		\chapter{exemplo 1}
 		% ----------------------------------------------------------
 		
-		materiais desenvolvidos pelo próprio autor do trabalho
+%		materiais desenvolvidos pelo próprio autor do trabalho
 		
-	\end{apendicesenv}
+%	\end{apendicesenv}
 	
 	% ----------------------------------------------------------
 	% Anexos
 	% Inicia os anexos
 	
-	\begin{anexosenv}
+%	\begin{anexosenv}
 		
 		% Imprime uma página indicando o início dos anexos
-		\partanexos
+	%	\partanexos
 		
 		% ---
-		\chapter{exemplo 1}
-		matérias de outras fontes que não o próprio autor do trabalho
+%		\chapter{exemplo 1}
+	%	matérias de outras fontes que não o próprio autor do trabalho
 		
-	\end{anexosenv}
+%	\end{anexosenv}
 	
 	%---------------------------------------------------------------------
 	% INDICE REMISSIVO

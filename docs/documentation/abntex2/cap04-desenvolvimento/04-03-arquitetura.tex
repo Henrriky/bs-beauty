@@ -28,8 +28,8 @@ Esse tipo de diagrama é útil para visualizar a estrutura modular da aplicaçã
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=\textwidth]{cap04-desenvolvimento/images/4-3-2-1-diagrama-componentes}
   \caption{Diagrama de componentes da aplicação}
+  \includegraphics[width=\textwidth]{cap04-desenvolvimento/images/4-3-2-1-diagrama-componentes}
   \label{fig:diagrama-componente}
   \fonte{Produzido pelos autores}
 \end{figure}
@@ -62,7 +62,7 @@ No diagrama de componentes proposto, a aplicação é composta por diversos mód
   \item \textbf{\emph{Static Files (Front-end)}}: Componente responsável por servir os arquivos estáticos da interface do usuário, gerados após o processo de \textit{build} do projeto \emph{front-end} (em \emph{React}). Inclui arquivos \gls{html}, \gls{css} e \emph{JavaScript} que são entregues ao navegador do usuário final via servidor \emph{NGINX}.
 \end{itemize}
 
-\subsubsection{Diagrama de Implantação}
+\subsubsection{Diagrama de implantação}
 
 O diagrama de implantação mostra como os componentes do sistema estão distribuídos em termos de infraestrutura~\cite{Booch2005}, seja em servidores físicos ou ambientes virtuais. Ele ajuda a entender onde cada parte da aplicação está rodando, como os serviços se conectam entre si e quais recursos são necessários para que tudo funcione da forma adequada no ambiente de produção.
 
@@ -70,8 +70,8 @@ Esse tipo de representação é especialmente útil para quem for implantar ou m
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=\textwidth]{cap04-desenvolvimento/images/4-3-2-2-diagrama-implantacao}
   \caption{Diagrama de implantação da aplicação}
+  \includegraphics[width=\textwidth]{cap04-desenvolvimento/images/4-3-2-2-diagrama-implantacao}
   \label{fig:diagrama-implantacao}
    \fonte{Produzido pelos autores}
 \end{figure}
@@ -114,7 +114,7 @@ Além da organização dos componentes do diagrama, a arquitetura também priori
 
 Internamente, a comunicação entre o \emph{NGINX} e os serviços da instância privada ocorre seguindo regras específicas de segurança definidas na \gls{vpc}, utilizando mecanismos como \textit{Security Groups} e \textit{Route Tables}. Isso reduz significativamente a superfície de ataque da aplicação e assegura uma camada adicional de proteção para os aspectos internos.
 
-\subsubsection{Diagrama de Referência na \gls{aws}}
+\subsubsection{Diagrama de referência na \gls{aws}}
 
 Com o objetivo de fornecer uma visão mais aprofundada da infraestrutura da aplicação na nuvem, o diagrama apresenta a disposição dos principais componentes implantados na arquitetura da \gls{aws}.
 
@@ -122,8 +122,8 @@ Este diagrama ilustra elementos de infraestrutura fundamentais como sub-redes p�
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=\textwidth]{cap04-desenvolvimento/images/4-3-2-3-diagrama-geral}
   \caption{Diagrama Geral da Arquitetura}
+  \includegraphics[width=\textwidth]{cap04-desenvolvimento/images/4-3-2-3-diagrama-geral}
   \label{fig:diagrama-geral}
   \fonte{Produzido pelos autores}
 \end{figure}
