@@ -9,8 +9,8 @@ export type Service = {
 
 export type EmployeesOfferingServiceOffer = {
   id: string
-  estimatedTime: number
-  price: string
+  estimatedTime?: number
+  price?: string
   employee: {
     id: string
     name: string | null

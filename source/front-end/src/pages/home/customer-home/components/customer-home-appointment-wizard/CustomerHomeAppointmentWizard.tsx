@@ -35,7 +35,7 @@ function createSteps(currentFlow: 'service' | 'professional'): Step {
         : 'Selecionar profissional',
     currentStepAppointmentForm:
       currentFlow === 'service'
-        ? () => <CustomerHomeSelectServiceContainer />
+        ? () => <CustomerHomeSelectServiceContainer currentFlow={currentFlow} />
         : () => (
             <CustomerHomeSelectEmployeeContainer currentFlow={currentFlow} />
           ),
@@ -53,7 +53,9 @@ function createSteps(currentFlow: 'service' | 'professional'): Step {
         ? () => (
             <CustomerHomeSelectEmployeeContainer currentFlow={currentFlow} />
           )
-        : () => <CustomerHomeSelectServiceContainer />,
+        : () => (
+            <CustomerHomeSelectServiceContainer currentFlow={currentFlow} />
+          ),
     nextStep: null,
     previousStep: firstSelectStep,
   }
@@ -98,11 +100,8 @@ function CustomerHomeAppointmentWizard() {
       customerId: customerId!,
     }
 
-    console.log(payload)
     try {
-      console.log('PALMEIRAS')
       await makeAppointment(payload).unwrap()
-      console.log('VASCO')
 
       setModalIsOpen(true)
     } catch (error) {

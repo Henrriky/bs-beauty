@@ -5,22 +5,66 @@ import Subtitle from '../../../../../../components/texts/Subtitle'
 import { serviceAPI } from '../../../../../../store/service/service-api'
 import { CreateAppointmentFormData } from '../types'
 import CustomerHomeServiceCard from './CustomerHomeServiceCard'
+import { ErrorMessage } from '../../../../../../components/feedback/ErrorMessage'
+import { employeeAPI } from '../../../../../../store/employee/employee-api'
+import { FaceFrownIcon } from '@heroicons/react/24/outline'
 
-function CustomerHomeSelectServiceContainer() {
+interface Props {
+  currentFlow: 'service' | 'professional'
+}
+
+function CustomerHomeSelectServiceContainer(props: Props) {
   const { register, watch } = useFormContext<CreateAppointmentFormData>()
   const serviceSelectedId = watch('serviceId')
+  const serviceOfferedId = watch('serviceOfferedId')
+  const employeeId = watch('employeeId')
 
-  const { data, isLoading, isError, error } = serviceAPI.useGetServicesQuery({})
+  if (!employeeId && props.currentFlow === 'professional') {
+    toast.error(
+      'Por favor, selecione um funcionário para acessar a etapa de selecionar os serviços',
+    )
+
+    return (
+      <ErrorMessage
+        message={
+          'Por favor, selecione um funcionário para acessar a etapa de selecionar os serviços'
+        }
+      />
+    )
+  }
+
+  const { data, isLoading, isError, error } = serviceAPI.useGetServicesQuery(
+    {},
+    { skip: props.currentFlow !== 'service' },
+  )
+
+  const {
+    data: offersData,
+    isLoading: isLoadingOffers,
+    isError: isErrorOffers,
+    error: offersError,
+  } = employeeAPI.useFetchServicesOfferedByEmployeeQuery(
+    { employeeId },
+    { skip: props.currentFlow !== 'professional' },
+  )
+
   // TODO: CARREGAR MAIS SERVIÇOS QUANDO CHEGA NO LIMITE PADRÃO (10)
   // TODO: POSSÍVEL CRIAÇÃO DE INPUT DE BUSCA PARA BUSCAR PELO NOME (O PARÂMETRO JÁ ESTÁ FEITO NA API)
 
-  const services = data?.data || []
+  const services =
+    props.currentFlow === 'service'
+      ? (data?.data ?? [])
+      : (offersData?.offers?.map((offer) => ({
+          id: `${offer.id}`,
+          service: offer.service,
+        })) ?? [])
 
-  if (isLoading) return <BSBeautyLoading title="Carregando os serviços..." />
+  if (isLoading || isLoadingOffers)
+    return <BSBeautyLoading title="Carregando os serviços..." />
 
-  if (isError) {
+  if (isError || isErrorOffers) {
     toast.error('Erro ao carregar os serviços')
-    console.error(`Error trying to fetch services`, error)
+    console.error(`Error trying to fetch services`, error || offersError)
 
     return (
       <div className="flex justify-center items-center h-full text-red-500">
@@ -28,6 +72,12 @@ function CustomerHomeSelectServiceContainer() {
       </div>
     )
   }
+
+  const fieldToRegister =
+    props.currentFlow === 'service' ? 'serviceId' : 'serviceOfferedId'
+
+  const fieldToCompare =
+    props.currentFlow === 'service' ? serviceSelectedId : serviceOfferedId
 
   return (
     <>
