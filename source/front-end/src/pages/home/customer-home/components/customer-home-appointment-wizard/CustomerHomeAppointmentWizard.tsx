@@ -54,6 +54,9 @@ selectAppointmentTimeStep.previousStep = selectEmployeeStep
 function CustomerHomeAppointmentWizard() {
   const customerId = useAppSelector((state) => state?.auth?.user?.id)
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
+  const [currentFlow, setCurrentFlow] = useState<'service' | 'professional'>(
+    'service',
+  )
   const [currentStep, setCurrentStep] = useState<Step>(selectServiceStep)
   const userType = useAppSelector((state) => state?.auth?.user?.userType)
   const navigate = useNavigate()
@@ -92,7 +95,7 @@ function CustomerHomeAppointmentWizard() {
 
   return (
     <FormProvider {...createAppointmentForm}>
-      <CustomerHomeSelectAppointmentFlow />
+      <CustomerHomeSelectAppointmentFlow setCurrenFlow={setCurrentFlow} />
       <form onSubmit={handleSubmit(handleSubmitConcrete)}>
         <div className="">
           <AppointmentCurrentStepForm />
