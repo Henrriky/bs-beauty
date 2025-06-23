@@ -13,4 +13,6 @@ employeeRoutes.get('/:id', routeAuthMiddleware(['MANAGER']), EmployeesController
 employeeRoutes.post('/', routeAuthMiddleware(['MANAGER']), validateCreateEmployee, EmployeesController.handleCreate)
 employeeRoutes.put('/:id', routeAuthMiddleware(['MANAGER', 'EMPLOYEE']), validateUpdateEmployee, EmployeesController.handleUpdate)
 employeeRoutes.delete('/:id', routeAuthMiddleware(['MANAGER']), EmployeesController.handleDelete)
+employeeRoutes.get('/:id/offers/service', EmployeesController.handleFetchServicesOfferedByEmployee)
+
 export { employeeRoutes }

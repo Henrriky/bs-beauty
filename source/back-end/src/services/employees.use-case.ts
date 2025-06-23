@@ -3,6 +3,7 @@ import { type EmployeeRepository } from '../repository/protocols/employee.reposi
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { type EmployeeFilters } from '../types/employees/employee-filters'
 import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
+import { type ServicesOfferedByEmployee } from '../repository/types/employee-repository.types'
 
 interface EmployeesOutput {
   employees: Employee[]
@@ -47,6 +48,13 @@ class EmployeesUseCase {
     const deletedEmployee = await this.employeeRepository.delete(employeeId)
 
     return deletedEmployee
+  }
+
+  public async fetchServicesOfferedByEmployee (employeeId: string): Promise<{ offers: ServicesOfferedByEmployee }> {
+    const { offers } = await this.employeeRepository.fetchServicesOfferedByEmployee(employeeId)
+    RecordExistence.validateRecordExistence(offers, 'Employee')
+
+    return { offers: offers! }
   }
 
   public async executeFindAllPaginated (
