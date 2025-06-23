@@ -2,6 +2,7 @@ import { BriefcaseIcon } from '@heroicons/react/24/outline'
 import CustomerHomeServiceCardTitle from './CustomerHomeServiceCardTitle'
 import CustomerHomeServiceCardDescription from './CustomerHomeServiceCardDescription'
 import { ServicesOfferedByEmployeeOffer } from '../../../../../../store/employee/types'
+import CustomerHomeOfferInfo from '../CustomerHomeOfferInfo'
 
 interface CustomerHomeServiceCardProps extends ServicesOfferedByEmployeeOffer {
   key: string
@@ -18,6 +19,7 @@ function CustomerHomeServiceCard(props: CustomerHomeServiceCardProps) {
                   transition-all duration-300 ease-in-out
                   ${props.isSelected ? 'border-[1px] border-[#A4978A]' : 'border-[0px] border-transparent'}`}
       htmlFor={props.for}
+      onClick={props.onClick}
     >
       <div className="">
         <BriefcaseIcon color={'#434544'} className="size-8" />
@@ -31,6 +33,12 @@ function CustomerHomeServiceCard(props: CustomerHomeServiceCardProps) {
           {props.service.description}
         </CustomerHomeServiceCardDescription>
       </div>
+      {props.currentFlow === 'professional' && (
+        <CustomerHomeOfferInfo
+          offerEstimatedTime={props.estimatedTime || 'Não definido'}
+          offerPrice={props.price}
+        />
+      )}
     </label>
   )
 }

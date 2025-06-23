@@ -28,10 +28,9 @@ function CustomerHomeSelectTimeContainer() {
   const { watch, setValue } = useFormContext<CreateAppointmentFormData>()
   const serviceOfferedId = watch('serviceOfferedId')
   const employeeId = watch('employeeId')
-  console.log('EmployeeID: ', employeeId)
-  console.log('ServiceOfferedId: ', serviceOfferedId)
   const appointmentDayPicked = watch('appointmentDayPicked')
   const appointmentDateStr = watch('appointmentDate')
+
   const appointmentDate = appointmentDateStr
     ? new Date(appointmentDateStr)
     : null

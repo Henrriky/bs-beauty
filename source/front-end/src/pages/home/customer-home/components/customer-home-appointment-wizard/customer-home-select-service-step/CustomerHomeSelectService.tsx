@@ -108,6 +108,7 @@ function CustomerHomeSelectServiceContainer(props: Props) {
       {services &&
         services.map((service) => {
           const serviceOffered = service.service
+
           return (
             <div key={`service-label-${service.id}`}>
               <input
@@ -123,7 +124,7 @@ function CustomerHomeSelectServiceContainer(props: Props) {
                 key={service.id}
                 for={service.id}
                 {...service}
-                onClick={() => setValue('serviceId', service.id)}
+                onClick={() => setValue('serviceId', serviceOffered.id)}
               />
             </div>
           )

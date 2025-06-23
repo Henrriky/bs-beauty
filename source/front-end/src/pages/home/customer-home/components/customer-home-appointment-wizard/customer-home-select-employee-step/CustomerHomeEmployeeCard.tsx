@@ -1,6 +1,6 @@
 import { EmployeesOfferingServiceOffer } from '../../../../../../store/service/types'
 import CustomerHomeEmployeeCardPersonalInfo from './CustomerHomeEmployeeCardPersonalInfo'
-import CustomerHomeEmployeeCardOfferInfo from './CustomerHomeEmployeeCardOfferInfo'
+import CustomerHomeOfferInfo from '../CustomerHomeOfferInfo'
 
 interface CustomerHomeEmployeeCardProps extends EmployeesOfferingServiceOffer {
   key: string
@@ -28,7 +28,7 @@ function CustomerHomeEmployeeCard(props: CustomerHomeEmployeeCardProps) {
         }
       />
       {props.currentFlow === 'service' && (
-        <CustomerHomeEmployeeCardOfferInfo
+        <CustomerHomeOfferInfo
           offerEstimatedTime={props.estimatedTime || 'Não definido'}
           offerPrice={props.price}
         />
