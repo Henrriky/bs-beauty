@@ -25,31 +25,33 @@ type Step = {
   nextStep: Step | null
 }
 
-const selectServiceStep: Step = {
-  currentStepName: 'Selecionar serviço',
-  currentStepAppointmentForm: CustomerHomeSelectServiceContainer,
-  nextStep: null,
-  previousStep: null,
-}
+function createStep(): Step {
+  const firstSelectStep: Step = {
+    currentStepName: 'Selecionar serviço',
+    currentStepAppointmentForm: CustomerHomeSelectServiceContainer,
+    nextStep: null,
+    previousStep: null,
+  }
 
-const selectEmployeeStep: Step = {
-  currentStepName: 'Selecionar profissional',
-  currentStepAppointmentForm: CustomerHomeSelectEmployeeContainer,
-  nextStep: null,
-  previousStep: null,
-}
+  const secondSelectStep: Step = {
+    currentStepName: 'Selecionar profissional',
+    currentStepAppointmentForm: CustomerHomeSelectEmployeeContainer,
+    nextStep: null,
+    previousStep: firstSelectStep,
+  }
 
-const selectAppointmentTimeStep: Step = {
-  currentStepName: 'Selecionar horário',
-  currentStepAppointmentForm: CustomerHomeSelectTimeContainer,
-  nextStep: null,
-  previousStep: null,
-}
+  const selectAppointmentTimeStep: Step = {
+    currentStepName: 'Selecionar horário',
+    currentStepAppointmentForm: CustomerHomeSelectTimeContainer,
+    nextStep: null,
+    previousStep: secondSelectStep,
+  }
 
-selectServiceStep.nextStep = selectEmployeeStep
-selectEmployeeStep.previousStep = selectServiceStep
-selectEmployeeStep.nextStep = selectAppointmentTimeStep
-selectAppointmentTimeStep.previousStep = selectEmployeeStep
+  firstSelectStep.nextStep = secondSelectStep
+  secondSelectStep.nextStep = selectAppointmentTimeStep
+
+  return firstSelectStep
+}
 
 function CustomerHomeAppointmentWizard() {
   const customerId = useAppSelector((state) => state?.auth?.user?.id)
@@ -57,7 +59,7 @@ function CustomerHomeAppointmentWizard() {
   const [currentFlow, setCurrentFlow] = useState<'service' | 'professional'>(
     'service',
   )
-  const [currentStep, setCurrentStep] = useState<Step>(selectServiceStep)
+  const [currentStep, setCurrentStep] = useState<Step>(() => createStep())
   const userType = useAppSelector((state) => state?.auth?.user?.userType)
   const navigate = useNavigate()
   const createAppointmentForm = useForm<CreateAppointmentFormData>({
