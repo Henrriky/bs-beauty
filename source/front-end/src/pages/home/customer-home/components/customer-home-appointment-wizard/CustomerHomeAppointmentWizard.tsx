@@ -20,22 +20,40 @@ import CustomerHomeSelectAppointmentFlow from './CustomerHomeSelectAppointmentFl
 
 type Step = {
   currentStepName: string
-  currentStepAppointmentForm: () => JSX.Element
+  currentStepAppointmentForm: (props: {
+    currentFlow: 'service' | 'professional'
+  }) => JSX.Element
   previousStep: Step | null
   nextStep: Step | null
 }
 
-function createStep(): Step {
+function createSteps(currentFlow: 'service' | 'professional'): Step {
   const firstSelectStep: Step = {
-    currentStepName: 'Selecionar serviço',
-    currentStepAppointmentForm: CustomerHomeSelectServiceContainer,
+    currentStepName:
+      currentFlow === 'service'
+        ? 'Selecionar serviço'
+        : 'Selecionar profissional',
+    currentStepAppointmentForm:
+      currentFlow === 'service'
+        ? () => <CustomerHomeSelectServiceContainer />
+        : () => (
+            <CustomerHomeSelectEmployeeContainer currentFlow={currentFlow} />
+          ),
     nextStep: null,
     previousStep: null,
   }
 
   const secondSelectStep: Step = {
-    currentStepName: 'Selecionar profissional',
-    currentStepAppointmentForm: CustomerHomeSelectEmployeeContainer,
+    currentStepName:
+      currentFlow === 'service'
+        ? 'Selecionar profissional'
+        : 'Selecionar serviço',
+    currentStepAppointmentForm:
+      currentFlow === 'service'
+        ? () => (
+            <CustomerHomeSelectEmployeeContainer currentFlow={currentFlow} />
+          )
+        : () => <CustomerHomeSelectServiceContainer />,
     nextStep: null,
     previousStep: firstSelectStep,
   }
@@ -59,7 +77,9 @@ function CustomerHomeAppointmentWizard() {
   const [currentFlow, setCurrentFlow] = useState<'service' | 'professional'>(
     'service',
   )
-  const [currentStep, setCurrentStep] = useState<Step>(() => createStep())
+  const [currentStep, setCurrentStep] = useState<Step>(() =>
+    createSteps(currentFlow),
+  )
   const userType = useAppSelector((state) => state?.auth?.user?.userType)
   const navigate = useNavigate()
   const createAppointmentForm = useForm<CreateAppointmentFormData>({
@@ -77,8 +97,12 @@ function CustomerHomeAppointmentWizard() {
       serviceOfferedId: data.serviceOfferedId,
       customerId: customerId!,
     }
+
+    console.log(payload)
     try {
+      console.log('PALMEIRAS')
       await makeAppointment(payload).unwrap()
+      console.log('VASCO')
 
       setModalIsOpen(true)
     } catch (error) {
@@ -95,12 +119,17 @@ function CustomerHomeAppointmentWizard() {
     }
   }, [customerId])
 
+  useEffect(() => {
+    const firstStep = createSteps(currentFlow)
+    setCurrentStep(firstStep)
+  }, [currentFlow])
+
   return (
     <FormProvider {...createAppointmentForm}>
       <CustomerHomeSelectAppointmentFlow setCurrenFlow={setCurrentFlow} />
       <form onSubmit={handleSubmit(handleSubmitConcrete)}>
         <div className="">
-          <AppointmentCurrentStepForm />
+          <AppointmentCurrentStepForm currentFlow={currentFlow} />
         </div>
         <div
           className={`flex mt-6 ${!currentStep.previousStep ? 'justify-end' : 'justify-between'}`}

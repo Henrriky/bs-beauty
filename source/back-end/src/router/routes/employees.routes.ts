@@ -8,7 +8,7 @@ import { employeeQuerySchema } from '../../utils/validation/zod-schemas/paginati
 
 const employeeRoutes = Router()
 
-employeeRoutes.get('/', routeAuthMiddleware(['MANAGER']), validateQuery(employeeQuerySchema), EmployeesController.handleFindAll)
+employeeRoutes.get('/', routeAuthMiddleware(['MANAGER', 'CUSTOMER']), validateQuery(employeeQuerySchema), EmployeesController.handleFindAll)
 employeeRoutes.get('/:id', routeAuthMiddleware(['MANAGER']), EmployeesController.handleFindById)
 employeeRoutes.post('/', routeAuthMiddleware(['MANAGER']), validateCreateEmployee, EmployeesController.handleCreate)
 employeeRoutes.put('/:id', routeAuthMiddleware(['MANAGER', 'EMPLOYEE']), validateUpdateEmployee, EmployeesController.handleUpdate)
