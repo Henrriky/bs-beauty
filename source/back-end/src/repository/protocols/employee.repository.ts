@@ -13,7 +13,7 @@ interface EmployeeRepository {
   updateEmployeeByEmail: (email: string, customerUpdated: Prisma.EmployeeUpdateInput) => Promise<Employee>
   delete: (id: string) => Promise<Employee>
   fetchServicesOfferedByEmployee: (employeeId: string) => Promise<{
-    offers: ServicesOfferedByEmployee
+    employee: ServicesOfferedByEmployee
   }>
   findAllPaginated: (params: PaginatedRequest<EmployeeFilters>) => Promise<PaginatedResult<Employee>>
 }

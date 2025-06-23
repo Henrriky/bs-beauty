@@ -75,9 +75,9 @@ class EmployeesController {
   public static async handleFetchServicesOfferedByEmployee (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeEmployeesUseCaseFactory()
-      const { offers } = await useCase.fetchServicesOfferedByEmployee(req.params.id)
+      const { employee } = await useCase.fetchServicesOfferedByEmployee(req.params.id)
 
-      res.send({ offers })
+      res.send({ employee })
     } catch (error) {
       next(error)
     }

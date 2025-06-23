@@ -50,7 +50,7 @@ export const employeeAPI = createApi({
       invalidatesTags: ['Employees'],
     }),
     fetchServicesOfferedByEmployee: builder.query<
-      ServicesOfferedByEmployee,
+      { employee: ServicesOfferedByEmployee },
       { employeeId: string }
     >({
       query: ({ employeeId }) => ({

@@ -14,7 +14,8 @@ interface Props {
 }
 
 function CustomerHomeSelectServiceContainer(props: Props) {
-  const { register, watch } = useFormContext<CreateAppointmentFormData>()
+  const { register, watch, setValue } =
+    useFormContext<CreateAppointmentFormData>()
   const serviceSelectedId = watch('serviceId')
   const serviceOfferedId = watch('serviceOfferedId')
   const employeeId = watch('employeeId')
@@ -51,13 +52,18 @@ function CustomerHomeSelectServiceContainer(props: Props) {
   // TODO: CARREGAR MAIS SERVIÇOS QUANDO CHEGA NO LIMITE PADRÃO (10)
   // TODO: POSSÍVEL CRIAÇÃO DE INPUT DE BUSCA PARA BUSCAR PELO NOME (O PARÂMETRO JÁ ESTÁ FEITO NA API)
 
+  const servicesData = Array.isArray(data?.data) ? data.data : []
+  const offersDataArray = Array.isArray(offersData?.employee.offers)
+    ? offersData?.employee.offers
+    : []
+
   const services =
     props.currentFlow === 'service'
-      ? (data?.data ?? [])
-      : (offersData?.offers?.map((offer) => ({
-          id: `${offer.id}`,
-          service: offer.service,
-        })) ?? [])
+      ? servicesData.map((service) => ({
+          id: `${service.id}`,
+          service,
+        }))
+      : offersDataArray
 
   if (isLoading || isLoadingOffers)
     return <BSBeautyLoading title="Carregando os serviços..." />
@@ -79,6 +85,20 @@ function CustomerHomeSelectServiceContainer(props: Props) {
   const fieldToCompare =
     props.currentFlow === 'service' ? serviceSelectedId : serviceOfferedId
 
+  if (!Array.isArray(services) || services.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-48 text-gray-500">
+        <FaceFrownIcon className="h-12 w-12 mb-2" />
+        <p>Nenhum serviço disponível</p>
+        {props.currentFlow === 'professional' && (
+          <p className="text-sm">
+            Este funcionário não possui serviços cadastrados
+          </p>
+        )}
+      </div>
+    )
+  }
+
   return (
     <>
       <Subtitle align="left" className="text-[#A4978A] font-medium">
@@ -87,6 +107,7 @@ function CustomerHomeSelectServiceContainer(props: Props) {
 
       {services &&
         services.map((service) => {
+          const serviceOffered = service.service
           return (
             <div key={`service-label-${service.id}`}>
               <input
@@ -94,14 +115,15 @@ function CustomerHomeSelectServiceContainer(props: Props) {
                 type="radio"
                 id={service.id}
                 value={service.id}
-                {...register('serviceId')}
+                {...register(fieldToRegister)}
               />
               <CustomerHomeServiceCard
-                isSelected={serviceSelectedId === service.id}
-                name={service.name}
-                description={service.description}
-                id={service.id}
+                isSelected={fieldToCompare === service.id}
+                currentFlow={props.currentFlow}
+                key={service.id}
                 for={service.id}
+                {...service}
+                onClick={() => setValue('serviceId', service.id)}
               />
             </div>
           )

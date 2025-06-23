@@ -50,11 +50,11 @@ class EmployeesUseCase {
     return deletedEmployee
   }
 
-  public async fetchServicesOfferedByEmployee (employeeId: string): Promise<{ offers: ServicesOfferedByEmployee }> {
-    const { offers } = await this.employeeRepository.fetchServicesOfferedByEmployee(employeeId)
-    RecordExistence.validateRecordExistence(offers, 'Employee')
+  public async fetchServicesOfferedByEmployee (employeeId: string): Promise<{ employee: ServicesOfferedByEmployee }> {
+    const { employee } = await this.employeeRepository.fetchServicesOfferedByEmployee(employeeId)
+    RecordExistence.validateRecordExistence(employee, 'Employee')
 
-    return { offers: offers! }
+    return { employee: employee! }
   }
 
   public async executeFindAllPaginated (

@@ -82,7 +82,7 @@ class PrismaEmployeeRepository implements EmployeeRepository {
   }
 
   public async fetchServicesOfferedByEmployee (employeeId: string) {
-    const offers = await prismaClient.employee.findUnique({
+    const employee = await prismaClient.employee.findUnique({
       where: {
         id: employeeId
       },
@@ -109,7 +109,7 @@ class PrismaEmployeeRepository implements EmployeeRepository {
       }
     })
 
-    return { offers }
+    return { employee }
   }
 
   public async findAllPaginated (

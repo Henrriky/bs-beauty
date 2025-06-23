@@ -74,15 +74,15 @@ function CustomerHomeSelectEmployeeContainer(props: Props) {
 
   if (employeesToShow.length === 0) {
     return (
-      <ErrorMessage
-        message={
-          <>
-            <FaceFrownIcon />
-            Infelizmente, no momento não temos funcionários oferecendo esse
-            serviço
-          </>
-        }
-      />
+      <div className="flex flex-col items-center justify-center h-48 text-gray-500">
+        <FaceFrownIcon className="h-12 w-12 mb-2" />
+        <p>Nenhum funcionário disponível</p>
+        {props.currentFlow === 'service' && (
+          <p className="text-sm">
+            Este serviço não está sendo feito por nenhum funcionário no momento
+          </p>
+        )}
+      </div>
     )
   }
 

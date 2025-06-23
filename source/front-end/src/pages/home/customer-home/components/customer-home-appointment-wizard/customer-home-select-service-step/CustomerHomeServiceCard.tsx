@@ -1,12 +1,14 @@
 import { BriefcaseIcon } from '@heroicons/react/24/outline'
-import { Service } from '../../../../../../store/service/types'
 import CustomerHomeServiceCardTitle from './CustomerHomeServiceCardTitle'
 import CustomerHomeServiceCardDescription from './CustomerHomeServiceCardDescription'
+import { ServicesOfferedByEmployeeOffer } from '../../../../../../store/employee/types'
 
-interface CustomerHomeServiceCardProps
-  extends Pick<Service, 'name' | 'id' | 'description'> {
+interface CustomerHomeServiceCardProps extends ServicesOfferedByEmployeeOffer {
+  key: string
   for: string
   isSelected: boolean
+  onClick?: React.MouseEventHandler<HTMLLabelElement> | undefined
+  currentFlow: 'service' | 'professional'
 }
 
 function CustomerHomeServiceCard(props: CustomerHomeServiceCardProps) {
@@ -23,10 +25,10 @@ function CustomerHomeServiceCard(props: CustomerHomeServiceCardProps) {
       <div className="w-[1.5px] h-full bg-[#595149] rounded-sm"></div>
       <div className="flex flex-col">
         <CustomerHomeServiceCardTitle>
-          {props.name}
+          {props.service.name}
         </CustomerHomeServiceCardTitle>
         <CustomerHomeServiceCardDescription>
-          {props.description}
+          {props.service.description}
         </CustomerHomeServiceCardDescription>
       </div>
     </label>
