@@ -1,0 +1,69 @@
+\section{Histórias de Usuário}
+
+Esta seção apresenta as histórias de usuário elaboradas com o objetivo de descrever os requisitos funcionais do sistema sob a perspectiva dos usuários finais. As histórias foram definidas com base nas necessidades identificadas, e visam representar, de forma simples e objetiva, as funcionalidades esperadas por cada tipo de usuário do sistema: \textit{customer} (cliente), \textit{employee} (funcionário) e \textit{manager} (gerente). 
+
+Na tabela a seguir, cada história é redigida utilizando a estrutura “Como [tipo de usuário], eu quero [ação] para [objetivo]”, permitindo evidenciar o papel do usuário, a funcionalidade desejada e o benefício esperado.
+
+
+\begin{longtable}{|p{2cm}|p{4cm}|p{9cm}|}
+	\caption{Histórias de usuário} \label{tab:historias_de_usuario}\\
+	\hline
+	\textbf{ID} & \textbf{Título} & \textbf{Descrição} \\ \hline
+	\endfirsthead
+	
+	\hline
+	\textbf{ID} & \textbf{Título} & \textbf{Descrição} \\ \hline
+	\endhead
+	HIST-1 & Cancelamento de agendamento & Como CLIENTE, quero cancelar agendamentos quando não puder comparecer. \\ \hline
+	HIST-2 & Não aplicação de penalidades & Como CLIENTE, não quero receber penalidades por atrasos ou cancelamentos para evitar cobranças ou conflitos. \\ \hline
+	HIST-3 & Agendamento de múltiplos serviços & Como CLIENTE, quero poder agendar múltiplos serviços para realizar vários procedimentos em um mesmo dia. \\ \hline
+	HIST-4 & Resumo do agendamento & Como CLIENTE, quero visualizar um resumo do agendamento (incluindo serviços, preço total e tempo total) para confirmar se está tudo correto antes de finalizar o agendamento. \\ \hline
+	HIST-5 & Visualização de horários disponíveis & Como CLIENTE, quero visualizar os dias e horários disponíveis no agendamento para escolher a melhor data que atenda a minha disponibilidade. \\ \hline
+	HIST-6 & Pagamento presencial & Como GERENTE, quero que os pagamentos sejam realizados presencialmente para garantir maior controle financeiro e conferência imediata dos valores. \\ \hline
+	HIST-7 & Registro de pagamento & Como PROFISSIONAL, quero registrar os pagamentos para manter o controle financeiro dos serviços prestados. \\ \hline
+	HIST-8 & Visualização das formas de pagamento & Como CLIENTE, quero visualizar as formas de pagamento antecipadamente para escolher a opção mais conveniente antes de comparecer ao salão. \\ \hline
+	HIST-9 & Avaliação de serviços & Como GERENTE, quero que os clientes avaliem os serviços agendados para monitorar a qualidade do atendimento prestado. \\ \hline
+	HIST-10 & Geração de estatísticas com base nas avaliações & Como GERENTE, quero que o sistema compile e exiba estatísticas de avaliações para monitorar o desempenho dos profissionais e serviços oferecidos. \\ \hline
+	HIST-11 & Não sobreposição de agendamentos & Como PROFISSIONAL, não quero que haja sobreposição de agendamentos para garantir que cada atendimento tenha tempo suficiente para ser realizado com qualidade. \\ \hline
+	HIST-12 & Antecedência no agendamento & Como PROFISSIONAL, quero que os agendamentos sejam feitos com, no mínimo, 3 horas de antecedência para ter tempo suficiente para me preparar e organizar a agenda. \\ \hline
+	HIST-13 & Cadastro e edição de funcionárias & Como GERENTE, quero cadastrar e editar funcionárias do salão no sistema para controlar o acesso e permissões de cada profissional, além de monitorar o desempenho e os serviços realizados por elas. \\ \hline
+	HIST-14 & Personalização de perfil & Como CLIENTE, quero personalizar meu perfil para ter uma experiência mais adequada as minhas preferências e necessidades. \\ \hline
+	HIST-15 & Definição de turnos & Como PROFISSIONAL, quero definir meus próprios horários de trabalho para ter autonomia sobre minha agenda e rotina. \\ \hline
+	HIST-16 & Bloqueio de horários & Como PROFISSIONAL, quero bloquear horários específicos na agenda para reservar tempo para pausas, compromissos pessoais ou imprevistos. \\ \hline
+	HIST-17 & Precificação de serviços & Como PROFISSIONAL, quero definir os preços dos serviços prestados por mim para garantir que o valor cobrado reflita a qualidade e o tempo do meu serviço. \\ \hline
+	HIST-18 & Duração de serviços & Como PROFISSIONAL, quero definir a duração dos serviços prestados por mim para oferecer uma estimativa clara de tempo para o cliente no momento do agendamento. \\ \hline
+	HIST-19 & Comissão de serviços & Como GERENTE, quero definir a comissão sobre um atendimento para controlar os repasses aos profissionais de forma justa e automatizada. \\ \hline
+	HIST-20 & Horário de funcionamento do salão & Como GERENTE, quero definir o horário fixo de funcionamento do salão para organizar os agendamentos de acordo com a disponibilidade real do estabelecimento. \\ \hline
+	HIST-21 & Aquisição de novos clientes & Como GERENTE, quero que os clientes informem como conheceram o salão para identificar os meios que mais atraem novos clientes. \\ \hline
+	HIST-22 & Relatórios das fontes de captação de clientes & Como GERENTE, quero visualizar relatórios sobre as fontes de captação de clientes para otimizar as estratégias de divulgação com base em dados reais. \\ \hline
+	HIST-23 & Programa de indicação & Como GERENTE, quero implementar um programa de indicação para incentivar clientes satisfeitos a recomendarem o salão. \\ \hline
+	HIST-24 & Mensagem de aniversário & Como GERENTE, quero que os clientes aniversariantes recebem uma mensagem de parabéns para demonstrar cuidado e atenção com o cliente. \\ \hline
+	HIST-25 & Desconto aniversário & Como CLIENTE, quero receber descontos no meu aniversário para ter um incentivo para agendar um serviço nessa data especial. \\ \hline
+	HIST-26 & Notificação de novo atendimento & Como PROFISSIONAL, quero receber notificações sobre atendimentos para me manter informada em tempo real sobre a minha agenda. \\ \hline
+	HIST-27 & Notificação de atendimento cancelado & Como PROFISSIONAL, quero receber notificações sobre cancelamentos para me reorganizar e aproveitar melhor os horários vagos. \\ \hline
+	HIST-28 & Notificação de atendimento próximo & Como PROFISSIONAL, quero receber alertas horas antes de um atendimento para me preparar adequadamente para cada serviço. \\ \hline
+	HIST-29 & Notificações sobre agendamentos & Como CLIENTE, quero receber notificações sobre meus agendamentos para ser informado rapidamente sobre confirmações, alterações ou cancelamentos. \\ \hline
+	HIST-30 & Prevenção de agendamentos no passado & Como GERENTE, não quero que seja possível agendar serviços para data passadas para garantir que todos os agendamentos reflitam compromissos futuros reais. \\ \hline
+	HIST-31 & Relatórios de produtividade & Como PROFISSIONAL, quero visualizar relatórios de produtividade pessoal para avaliar meu desempenho ao longo do tempo. \\ \hline
+	HIST-32 & Relatórios financeiros & Como GERENTE, quero visualizar relatórios financeiros  para acompanhar o desempenho econômico do salão. \\ \hline
+	HIST-33 & Relatórios de ocupação & Como GERENTE, quero visualizar relatórios de ocupação para identificar os horários e serviços mais procurados. \\ \hline
+	HIST-34 & Histórico de atendimentos & Como PROFISSIONAL, quero visualizar atendimentos antigos para consultar o histórico dos serviços prestados a cada cliente. \\ \hline
+	HIST-35 & Histórico de agendamentos & Como CLIENTE, quero visualizar agendamentos antigos para consultar os serviços que já utilizei no salão. \\ \hline
+	HIST-36 & Agendamento por profissional & Como CLIENTE, quero agendar com base na profissional por confiar na especialidade e estilo de trabalho do profissional. \\ \hline
+	HIST-37 & Agendamento por serviço & Como CLIENTE, quero agendar exclusivamente com base no serviço por não conhecer o trabalho da profissionais. \\ \hline
+	HIST-38 & Lista de profissionais & Como CLIENTE, quero visualizar uma lista de profissionais disponíveis para escolher aquele que melhor atende às minhas preferências. \\ \hline
+	HIST-39 & Lista de serviços & Como CLIENTE, quero visualizar uma lista de serviços disponíveis para escolher o serviço que melhor atende às minhas necessidades. \\ \hline
+	HIST-40 & Agrupamento de serviços & Como CLIENTE, quero visualizar os serviços agrupados por categoria para encontrar mais facilmente o tipo de serviço que desejo. \\ \hline
+	HIST-41 & Filtro de busca de serviços & Como CLIENTE, quero poder buscar serviços por nome ou categoria para facilitar a navegação pelo catálogo, economizando tempo. \\ \hline
+	HIST-42 & Informações sobre serviços & Como CLIENTE, quero visualizar informações detalhadas sobre os serviços para saber o preço, duração e materiais utilizados. \\ \hline
+	HIST-43 & Cadastro de categorias de serviços & Como GERENTE, quero cadastrar as categorias de serviço para organizar o catálogo de serviços de forma clara e estruturada. \\ \hline
+	HIST-44 & Criação de serviços & Como PROFISSIONAL, quero criar meus próprios serviços para ter controle sobre o portfólio de serviços que presto. \\ \hline
+	HIST-45 & Aprovação de novo serviço & Como GERENTE, quero analisar os serviços criados pelas profissionais para garantir a qualidade e padronização dos serviços oferecidos. \\ \hline
+	HIST-46 & Monitoramento de funcionárias & Como GERENTE, quero visualizar todas as funcionárias do salão para monitorar a equipe e organizar a gestão de pessoal. \\ \hline
+	HIST-47 & Visualização da agenda & Como PROFISSIONAL, quero visualizar minha agenda para ter uma visão clara dos próximos agendamentos para me preparar melhor. \\ \hline
+	HIST-48 & Cancelamento de atendimento & Como PROFISSIONAL, quero cancelar atendimentos para gerenciar imprevistos pessoais ou profissionais. \\ \hline
+	HIST-49 & Login simplificado & Como CLIENTE, quero um processo de login simplificado para acessar o sistema rapidamente e sem complicações. \\ \hline
+	HIST-50 & Conclusão de atendimento & Como PROFISSIONAL, quero marcar um atendimento como concluído para identificar que o serviço foi prestado com sucesso. \\ \hline
+	HIST-51 & Aceitação de atendimento & Como PROFISSIONAL, quero poder aceitar ou recusar atendimentos para garantir que só assumirei atendimentos que posso realmente realizar. \\ \hline
+	HIST-52 & Oferecimento de serviços & Como PROFISSIONAL, quero oferecer diversos serviços de acordo com minha especialidade para atender melhor às necessidades dos clientes dentro da minha área de atuação. \\ \hline
+\end{longtable}
