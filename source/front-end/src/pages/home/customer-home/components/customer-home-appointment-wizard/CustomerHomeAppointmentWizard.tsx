@@ -125,7 +125,10 @@ function CustomerHomeAppointmentWizard() {
 
   return (
     <FormProvider {...createAppointmentForm}>
-      <CustomerHomeSelectAppointmentFlow setCurrenFlow={setCurrentFlow} />
+      <CustomerHomeSelectAppointmentFlow
+        currentFlow={currentFlow}
+        setCurrenFlow={setCurrentFlow}
+      />
       <form onSubmit={handleSubmit(handleSubmitConcrete)}>
         <div className="">
           <AppointmentCurrentStepForm currentFlow={currentFlow} />
