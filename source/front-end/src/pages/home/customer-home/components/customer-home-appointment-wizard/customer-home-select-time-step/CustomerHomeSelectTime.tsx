@@ -30,7 +30,10 @@ function CustomerHomeSelectTimeContainer() {
   const employeeId = watch('employeeId')
   const appointmentDayPicked = watch('appointmentDayPicked')
   const appointmentDateStr = watch('appointmentDate')
-  const appointmentDate = appointmentDateStr ? new Date(appointmentDateStr) : null
+
+  const appointmentDate = appointmentDateStr
+    ? new Date(appointmentDateStr)
+    : null
 
   const {
     data: schedullingData,
@@ -41,7 +44,7 @@ function CustomerHomeSelectTimeContainer() {
       serviceOfferedId,
       dayToFetchAvailableSchedulling: appointmentDayPicked
         ? new Date(appointmentDayPicked).toISOString()
-        : ''
+        : '',
     },
     {
       skip: !appointmentDayPicked,
@@ -205,7 +208,12 @@ function CustomerHomeSelectTimeContainer() {
                               schedullingDate.startTimestamp < Date.now()
                             }
                             onClick={() => {
-                              setValue('appointmentDate', new Date(Number(schedullingDate.startTimestamp)).toISOString()) // <-- Aqui
+                              setValue(
+                                'appointmentDate',
+                                new Date(
+                                  Number(schedullingDate.startTimestamp),
+                                ).toISOString(),
+                              ) // <-- Aqui
                             }}
                           />
                         </div>

@@ -16,53 +16,78 @@ import { CreateAppointmentFormData } from './types'
 
 import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-appointment-success.svg'
 import { toast } from 'react-toastify'
-
+import CustomerHomeSelectAppointmentFlow from './CustomerHomeSelectAppointmentFlow'
 
 type Step = {
   currentStepName: string
-  currentStepAppointmentForm: () => JSX.Element
+  currentStepAppointmentForm: (props: {
+    currentFlow: 'service' | 'professional'
+  }) => JSX.Element
   previousStep: Step | null
   nextStep: Step | null
 }
 
-const selectServiceStep: Step = {
-  currentStepName: 'Selecionar serviço',
-  currentStepAppointmentForm: CustomerHomeSelectServiceContainer,
-  nextStep: null,
-  previousStep: null,
-}
+function createSteps(currentFlow: 'service' | 'professional'): Step {
+  const firstSelectStep: Step = {
+    currentStepName:
+      currentFlow === 'service'
+        ? 'Selecionar serviço'
+        : 'Selecionar profissional',
+    currentStepAppointmentForm:
+      currentFlow === 'service'
+        ? () => <CustomerHomeSelectServiceContainer currentFlow={currentFlow} />
+        : () => (
+            <CustomerHomeSelectEmployeeContainer currentFlow={currentFlow} />
+          ),
+    nextStep: null,
+    previousStep: null,
+  }
 
-const selectEmployeeStep: Step = {
-  currentStepName: 'Selecionar profissional',
-  currentStepAppointmentForm: CustomerHomeSelectEmployeeContainer,
-  nextStep: null,
-  previousStep: null,
-}
+  const secondSelectStep: Step = {
+    currentStepName:
+      currentFlow === 'service'
+        ? 'Selecionar profissional'
+        : 'Selecionar serviço',
+    currentStepAppointmentForm:
+      currentFlow === 'service'
+        ? () => (
+            <CustomerHomeSelectEmployeeContainer currentFlow={currentFlow} />
+          )
+        : () => (
+            <CustomerHomeSelectServiceContainer currentFlow={currentFlow} />
+          ),
+    nextStep: null,
+    previousStep: firstSelectStep,
+  }
 
-const selectAppointmentTimeStep: Step = {
-  currentStepName: 'Selecionar horário',
-  currentStepAppointmentForm: CustomerHomeSelectTimeContainer,
-  nextStep: null,
-  previousStep: null,
-}
+  const selectAppointmentTimeStep: Step = {
+    currentStepName: 'Selecionar horário',
+    currentStepAppointmentForm: CustomerHomeSelectTimeContainer,
+    nextStep: null,
+    previousStep: secondSelectStep,
+  }
 
-selectServiceStep.nextStep = selectEmployeeStep
-selectEmployeeStep.previousStep = selectServiceStep
-selectEmployeeStep.nextStep = selectAppointmentTimeStep
-selectAppointmentTimeStep.previousStep = selectEmployeeStep
+  firstSelectStep.nextStep = secondSelectStep
+  secondSelectStep.nextStep = selectAppointmentTimeStep
+
+  return firstSelectStep
+}
 
 function CustomerHomeAppointmentWizard() {
   const customerId = useAppSelector((state) => state?.auth?.user?.id)
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
-  const [currentStep, setCurrentStep] = useState<Step>(selectServiceStep)
+  const [currentFlow, setCurrentFlow] = useState<'service' | 'professional'>(
+    'service',
+  )
+  const [currentStep, setCurrentStep] = useState<Step>(() =>
+    createSteps(currentFlow),
+  )
   const userType = useAppSelector((state) => state?.auth?.user?.userType)
   const navigate = useNavigate()
   const createAppointmentForm = useForm<CreateAppointmentFormData>({
     resolver: zodResolver(AppointmentSchemas.createSchemaForm),
   })
-  const {
-    handleSubmit,
-  } = createAppointmentForm
+  const { handleSubmit } = createAppointmentForm
 
   const [makeAppointment, { isLoading: isLoadingMakeAppointment }] =
     appointmentAPI.useMakeAppointmentMutation()
@@ -74,15 +99,15 @@ function CustomerHomeAppointmentWizard() {
       serviceOfferedId: data.serviceOfferedId,
       customerId: customerId!,
     }
+
     try {
       await makeAppointment(payload).unwrap()
 
       setModalIsOpen(true)
-
     } catch (error) {
-      console.error("❌ Erro ao criar o agendamento:", error)
+      console.error('❌ Erro ao criar o agendamento:', error)
       toast.error('Erro ao criar o agendamento. Tente novamente.')
-    }     
+    }
   }
 
   const AppointmentCurrentStepForm = currentStep.currentStepAppointmentForm
@@ -93,11 +118,20 @@ function CustomerHomeAppointmentWizard() {
     }
   }, [customerId])
 
+  useEffect(() => {
+    const firstStep = createSteps(currentFlow)
+    setCurrentStep(firstStep)
+  }, [currentFlow])
+
   return (
     <FormProvider {...createAppointmentForm}>
+      <CustomerHomeSelectAppointmentFlow
+        currentFlow={currentFlow}
+        setCurrenFlow={setCurrentFlow}
+      />
       <form onSubmit={handleSubmit(handleSubmitConcrete)}>
         <div className="">
-          <AppointmentCurrentStepForm />
+          <AppointmentCurrentStepForm currentFlow={currentFlow} />
         </div>
         <div
           className={`flex mt-6 ${!currentStep.previousStep ? 'justify-end' : 'justify-between'}`}

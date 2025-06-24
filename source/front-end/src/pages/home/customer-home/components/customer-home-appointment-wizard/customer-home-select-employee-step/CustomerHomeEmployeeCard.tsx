@@ -1,12 +1,13 @@
 import { EmployeesOfferingServiceOffer } from '../../../../../../store/service/types'
 import CustomerHomeEmployeeCardPersonalInfo from './CustomerHomeEmployeeCardPersonalInfo'
-import CustomerHomeEmployeeCardOfferInfo from './CustomerHomeEmployeeCardOfferInfo'
+import CustomerHomeOfferInfo from '../CustomerHomeOfferInfo'
 
 interface CustomerHomeEmployeeCardProps extends EmployeesOfferingServiceOffer {
   key: string
   for: string
   isSelected: boolean
   onClick?: React.MouseEventHandler<HTMLLabelElement> | undefined
+  currentFlow: 'service' | 'professional'
 }
 
 function CustomerHomeEmployeeCard(props: CustomerHomeEmployeeCardProps) {
@@ -26,10 +27,12 @@ function CustomerHomeEmployeeCard(props: CustomerHomeEmployeeCardProps) {
           'https://cdn-site-assets.veed.io/cdn-cgi/image/width=256,quality=75,format=auto/Fish_6e8d209905/Fish_6e8d209905.webp'
         }
       />
-      <CustomerHomeEmployeeCardOfferInfo
-        offerEstimatedTime={props.estimatedTime || 'Não definido'}
-        offerPrice={props.price}
-      />
+      {props.currentFlow === 'service' && (
+        <CustomerHomeOfferInfo
+          offerEstimatedTime={props.estimatedTime || 'Não definido'}
+          offerPrice={props.price}
+        />
+      )}
     </label>
   )
 }

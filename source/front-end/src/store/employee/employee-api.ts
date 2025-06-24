@@ -1,8 +1,8 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import { API_VARIABLES } from '../../api/config';
-import { Employee } from '../auth/types';
-import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base';
-import { PaginatedEmployeesResponse } from './types';
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { API_VARIABLES } from '../../api/config'
+import { Employee } from '../auth/types'
+import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
+import { PaginatedEmployeesResponse, ServicesOfferedByEmployee } from './types'
 
 export const employeeAPI = createApi({
   reducerPath: 'employee-api',
@@ -12,25 +12,26 @@ export const employeeAPI = createApi({
     fetchEmployees: builder.query<
       PaginatedEmployeesResponse,
       {
-        page?: number;
-        limit?: number;
-        name?: string;
-        email?: string;
-      }>({
-        query: (params) => ({
+        page?: number
+        limit?: number
+        name?: string
+        email?: string
+      }
+    >({
+      query: (params) => ({
         url: API_VARIABLES.EMPLOYEES_ENDPOINTS.FETCH_EMPLOYEES,
         method: 'GET',
-          params
+        params,
       }),
       providesTags: (result) =>
         result
           ? [
-            ...result.data.map(({ id }) => ({
-              type: 'Employees' as const,
-              id,
-            })),
-            { type: 'Employees', id: 'LIST' },
-          ]
+              ...result.data.map(({ id }) => ({
+                type: 'Employees' as const,
+                id,
+              })),
+              { type: 'Employees', id: 'LIST' },
+            ]
           : [{ type: 'Employees', id: 'LIST' }],
     }),
     insertEmployee: builder.mutation<Employee, { email: string }>({
@@ -48,5 +49,16 @@ export const employeeAPI = createApi({
       }),
       invalidatesTags: ['Employees'],
     }),
+    fetchServicesOfferedByEmployee: builder.query<
+      { employee: ServicesOfferedByEmployee },
+      { employeeId: string }
+    >({
+      query: ({ employeeId }) => ({
+        url: API_VARIABLES.EMPLOYEES_ENDPOINTS.FETCH_SERVICES_OFFERED_BY_EMPLOYEE(
+          employeeId,
+        ),
+        method: 'GET',
+      }),
+    }),
   }),
-});
+})

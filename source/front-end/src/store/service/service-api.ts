@@ -6,7 +6,11 @@ import {
   // UpdateServiceFormData,
 } from '../../pages/services/components/types'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
-import { EmployeesOfferingService, PaginatedServicesResponse, Service } from './types'
+import {
+  EmployeesOfferingService,
+  PaginatedServicesResponse,
+  Service,
+} from './types'
 
 export const serviceAPI = createApi({
   reducerPath: 'services',
@@ -16,24 +20,25 @@ export const serviceAPI = createApi({
     getServices: builder.query<
       PaginatedServicesResponse,
       {
-        page?: number;
-        limit?: number;
-        name?: string;
-      }>({
-        query: (params) => ({
+        page?: number
+        limit?: number
+        name?: string
+      }
+    >({
+      query: (params) => ({
         url: API_VARIABLES.SERVICES_ENDPOINTS.ENDPOINT,
         method: 'GET',
-          params
+        params,
       }),
       providesTags: (result) =>
         result
           ? [
-            ...result.data.map(({ id }) => ({
-              type: 'Services' as const,
-              id,
-            })),
-            { type: 'Services', id: 'LIST' },
-          ]
+              ...result.data.map(({ id }) => ({
+                type: 'Services' as const,
+                id,
+              })),
+              { type: 'Services', id: 'LIST' },
+            ]
           : [{ type: 'Services', id: 'LIST' }],
     }),
     fetchEmployeesOfferingService: builder.query<

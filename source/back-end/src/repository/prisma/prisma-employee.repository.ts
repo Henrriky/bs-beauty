@@ -81,8 +81,39 @@ class PrismaEmployeeRepository implements EmployeeRepository {
     return employeeDeleted
   }
 
-  public async findAllPaginated(
-    params: PaginatedRequest<EmployeesFilters>
+  public async fetchServicesOfferedByEmployee (employeeId: string) {
+    const employee = await prismaClient.employee.findUnique({
+      where: {
+        id: employeeId
+      },
+      select: {
+        id: true,
+        offers: {
+          where: {
+            isOffering: true
+          },
+          select: {
+            id: true,
+            estimatedTime: true,
+            price: true,
+            service: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                category: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    return { employee }
+  }
+
+  public async findAllPaginated (
+    params: PaginatedRequest<EmployeeFilters>
   ) {
     const { page, limit, filters } = params
     const skip = (page - 1) * limit

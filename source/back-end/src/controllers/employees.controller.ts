@@ -71,6 +71,17 @@ class EmployeesController {
       next(error)
     }
   }
+
+  public static async handleFetchServicesOfferedByEmployee (req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeEmployeesUseCaseFactory()
+      const { employee } = await useCase.fetchServicesOfferedByEmployee(req.params.id)
+
+      res.send({ employee })
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { EmployeesController }

@@ -1,12 +1,15 @@
 import { BriefcaseIcon } from '@heroicons/react/24/outline'
-import { Service } from '../../../../../../store/service/types'
 import CustomerHomeServiceCardTitle from './CustomerHomeServiceCardTitle'
 import CustomerHomeServiceCardDescription from './CustomerHomeServiceCardDescription'
+import { ServicesOfferedByEmployeeOffer } from '../../../../../../store/employee/types'
+import CustomerHomeOfferInfo from '../CustomerHomeOfferInfo'
 
-interface CustomerHomeServiceCardProps
-  extends Pick<Service, 'name' | 'id' | 'description'> {
+interface CustomerHomeServiceCardProps extends ServicesOfferedByEmployeeOffer {
+  key: string
   for: string
   isSelected: boolean
+  onClick?: React.MouseEventHandler<HTMLLabelElement> | undefined
+  currentFlow: 'service' | 'professional'
 }
 
 function CustomerHomeServiceCard(props: CustomerHomeServiceCardProps) {
@@ -16,6 +19,7 @@ function CustomerHomeServiceCard(props: CustomerHomeServiceCardProps) {
                   transition-all duration-300 ease-in-out
                   ${props.isSelected ? 'border-[1px] border-[#A4978A]' : 'border-[0px] border-transparent'}`}
       htmlFor={props.for}
+      onClick={props.onClick}
     >
       <div className="">
         <BriefcaseIcon color={'#434544'} className="size-8" />
@@ -23,12 +27,18 @@ function CustomerHomeServiceCard(props: CustomerHomeServiceCardProps) {
       <div className="w-[1.5px] h-full bg-[#595149] rounded-sm"></div>
       <div className="flex flex-col">
         <CustomerHomeServiceCardTitle>
-          {props.name}
+          {props.service.name}
         </CustomerHomeServiceCardTitle>
         <CustomerHomeServiceCardDescription>
-          {props.description}
+          {props.service.description}
         </CustomerHomeServiceCardDescription>
       </div>
+      {props.currentFlow === 'professional' && (
+        <CustomerHomeOfferInfo
+          offerEstimatedTime={props.estimatedTime || 'Não definido'}
+          offerPrice={props.price}
+        />
+      )}
     </label>
   )
 }

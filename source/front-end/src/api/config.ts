@@ -41,6 +41,8 @@ export const API_VARIABLES = {
     FETCH_EMPLOYEES: '/employees',
     CREATE_EMPLOYEE: '/employees',
     DELETE_EMPLOYEE: (employeeId: string) => `/employees/${employeeId}`,
+    FETCH_SERVICES_OFFERED_BY_EMPLOYEE: (employeeId: string) =>
+      `/employees/${employeeId}/offers/service`,
   },
   APPOINTMENTS_ENDPOINTS: {
     CREATE_APPOINTMENT: '/appointments',
