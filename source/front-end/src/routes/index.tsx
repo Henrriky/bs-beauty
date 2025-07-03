@@ -7,7 +7,7 @@ import RegistrationCompleted from '../pages/complete-register/components/Registr
 import Customers from '../pages/customers'
 import EmployeeShifts from '../pages/employee-shifts'
 import EmployeesManagement from '../pages/employees-management'
-import Login from '../pages/login'
+import LandingPage from '../pages/landing-page'
 import ManagerHome from '../pages/manager-home'
 import NotFound from '../pages/not-found'
 import PrivateRoute from '../pages/private-route'
@@ -23,8 +23,8 @@ function BSBeautyRouter() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Login />} />
-          <Route path="/login" element={<Login />} />
+          <Route index element={<LandingPage />} />
+          <Route path="/login" element={<LandingPage />} />
           <Route path="/auth/google/callback" element={<Callback />} />
           <Route
             element={
