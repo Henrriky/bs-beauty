@@ -153,3 +153,16 @@ Por fim, exploramos a ferramenta **GitStat** indicada pelo professor para gerar 
 
 *Por Giovanna Carvalho*
 
+# Semana 15 - 23.06 a 29.06 
+
+Na aula de 24/06 apresentamos o estado atual do **MVP** ao professor orientador e à turma, momento em que também coletamos **feedbacks** valiosos a fim de aprimorar nossa apresentação final. A partir desse retorno, identificamos os ajustes finais necessários no sistema para corrigir determinados bugs que ainda persistiam.
+
+Para a **apresentação final**, definimos claramente as **responsabilidades** de cada membro da equipe e nos dedicamos ao aprimoramento dos **slides**, garantindo uma divisão equilibrada de tarefas e uma comunicação visual mais eficaz.
+
+> Resumo: feedback MVP; desenvolvimento apresentação final.
+
+*Por Giovanna Carvalho*
+
+# Semana 16 - 30/06 a 06.07
+
+*Por Giovanna Carvalho*
