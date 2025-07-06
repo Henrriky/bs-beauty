@@ -1,6 +1,6 @@
 import { type Customer, type Prisma } from '@prisma/client'
-import { PaginatedRequest, PaginatedResult } from '../../types/pagination'
-import { CustomersFilters } from '../../types/customers/customers-filters'
+import { type PaginatedRequest, type PaginatedResult } from '../../types/pagination'
+import { type CustomersFilters } from '../../types/customers/customers-filters'
 
 interface UpdateOrCreateParams {
   email?: string | undefined

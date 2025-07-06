@@ -64,7 +64,7 @@ class CustomersController {
     }
   }
 
-  public static async handleFindAllPaginated(req: Request, res: Response, next: NextFunction) {
+  public static async handleFindAllPaginated (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeCustomersUseCaseFactory()
       const parsed = customerQuerySchema.parse(req.query)

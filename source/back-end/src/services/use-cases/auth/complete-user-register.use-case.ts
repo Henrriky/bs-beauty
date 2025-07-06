@@ -30,7 +30,7 @@ class CompleteUserRegisterUseCase {
 
     if (userType === UserType.CUSTOMER) {
       const userByPhone = await this.customerRepository.findByEmailOrPhone('', (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone)
-      if (userByPhone) {
+      if (userByPhone != null) {
         throw new ResourceWithAttributAlreadyExists(
           'user',
           'phone',

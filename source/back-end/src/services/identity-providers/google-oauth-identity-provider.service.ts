@@ -26,7 +26,6 @@ class GoogleAuthIdentityProvider implements OAuthIdentityProvider {
       throw new Error('Profile photo url not exists on google user info')
     }
 
-
     return { userId, email, profilePhotoUrl }
   }
 
@@ -43,7 +42,7 @@ class GoogleAuthIdentityProvider implements OAuthIdentityProvider {
 
   private updateCredentials (accessToken: string): void {
     oauth2Client.setCredentials({
-      access_token: accessToken,
+      access_token: accessToken
     })
   }
 

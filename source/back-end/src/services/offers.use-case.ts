@@ -11,47 +11,47 @@ interface OfferOutput {
   offers: Offer[]
 }
 
-type AvailablesSchedulling = {
+interface AvailablesSchedulling {
   startTimestamp: number
   endTimestamp: number
   isBusy: boolean
 }
 
 class OffersUseCase {
-  constructor(
+  constructor (
     private readonly offerRepository: OfferRepository,
     private readonly shiftRepository: ShiftRepository
   ) { }
 
-  public async executeFindAll(): Promise<OfferOutput> {
+  public async executeFindAll (): Promise<OfferOutput> {
     const offers = await this.offerRepository.findAll()
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
   }
 
-  public async executeFindById(offerId: string) {
+  public async executeFindById (offerId: string) {
     const offer = await this.offerRepository.findById(offerId)
     RecordExistence.validateRecordExistence(offer, 'Offer')
 
     return offer
   }
 
-  public async executeFindByServiceId(serviceId: string) {
+  public async executeFindByServiceId (serviceId: string) {
     const offer = await this.offerRepository.findByServiceId(serviceId)
     RecordExistence.validateRecordExistence(offer, 'Offer')
 
     return offer
   }
 
-  public async executeFindByEmployeeId(employeeId: string): Promise<OfferOutput> {
+  public async executeFindByEmployeeId (employeeId: string): Promise<OfferOutput> {
     const offers = await this.offerRepository.findByEmployeeId(employeeId)
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
   }
 
-  public async executeCreate(offerToCreate: Prisma.OfferCreateInput) {
+  public async executeCreate (offerToCreate: Prisma.OfferCreateInput) {
     const offer = offerToCreate as unknown as Offer
     const serviceId = offer.serviceId
     const employeeId = offer.employeeId
@@ -62,23 +62,22 @@ class OffersUseCase {
     return newOffer
   }
 
-  public async executeUpdate(offerId: string, offerToUpdate: Prisma.OfferUpdateInput) {
+  public async executeUpdate (offerId: string, offerToUpdate: Prisma.OfferUpdateInput) {
     await this.executeFindById(offerId)
     const updatedOffer = await this.offerRepository.update(offerId, offerToUpdate)
 
     return updatedOffer
   }
 
-  public async executeDelete(offerId: string) {
+  public async executeDelete (offerId: string) {
     await this.executeFindById(offerId)
     const deletedOffer = await this.offerRepository.delete(offerId)
 
     return deletedOffer
   }
 
-  public async executeFetchAvailableSchedulingToOfferByDay(serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) {
-
-    // Validate 
+  public async executeFetchAvailableSchedulingToOfferByDay (serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) {
+    // Validate
     const serviceOffering = await this.offerRepository.findById(serviceOfferingId)
     const isValidServiceOffering = serviceOffering != null && serviceOffering?.isOffering
 
@@ -92,7 +91,6 @@ class OffersUseCase {
     if (!isValidEmployeeShiftByDay) {
       throw new CustomError('Unable to fetch available scheduling because employee does not work on this day or not exists', 400, '')
     }
-
 
     const { shiftEnd, shiftStart } = employeeShiftByDay
 
@@ -132,7 +130,6 @@ class OffersUseCase {
           return overlaps
         })
 
-
         if (overlappingAppointment) {
           isBusy = true
           skipAheadTime = overlappingAppointment.estimatedTime * 60_000
@@ -151,7 +148,7 @@ class OffersUseCase {
     return { availableSchedulling }
   }
 
-  public async executeFindByEmployeeIdPaginated(
+  public async executeFindByEmployeeIdPaginated (
     employeeId: string,
     params: PaginatedRequest<OffersFilters>
   ): Promise<PaginatedResult<Offer>> {

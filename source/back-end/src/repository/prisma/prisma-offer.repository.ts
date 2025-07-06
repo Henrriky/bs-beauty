@@ -3,7 +3,7 @@ import { prismaClient } from '../../lib/prisma'
 import { type OfferRepository } from '../protocols/offer.repository'
 import { type PaginatedRequest } from '../../types/pagination'
 import { type OffersFilters } from '../../types/offers/offers-filters'
-import { FetchValidAppointmentsByProfessionalOnDay } from '../types/offer-repository.types'
+import { type FetchValidAppointmentsByProfessionalOnDay } from '../types/offer-repository.types'
 
 class PrismaOfferRepository implements OfferRepository {
   public async findAll () {
@@ -79,7 +79,7 @@ class PrismaOfferRepository implements OfferRepository {
     const validAppointmentsByProfessionalOnDay = await prismaClient.offer.findMany({
       where: {
         isOffering: true,
-        employeeId,
+        employeeId
       },
       select: {
         employeeId: true,
@@ -106,28 +106,26 @@ class PrismaOfferRepository implements OfferRepository {
 
     const validAppointmentsOnDay = validAppointmentsByProfessionalOnDay.reduce(
       (acc: Array<FetchValidAppointmentsByProfessionalOnDay[0]>, offer) => {
+        if (offer.appointments.length > 0) {
+          acc.push(...offer.appointments.map(appointment => {
+            return {
+              id: appointment.id,
+              observation: appointment.observation,
+              status: appointment.status,
+              appointmentDate: appointment.appointmentDate,
+              appointmentId: appointment.id,
+              estimatedTime: offer.estimatedTime
+            }
+          }))
+        }
 
-      if (offer.appointments.length > 0) {
-        acc.push(...offer.appointments.map(appointment => {
-          return {
-            id: appointment.id,
-            observation: appointment.observation,
-            status: appointment.status,
-            appointmentDate: appointment.appointmentDate,
-            appointmentId: appointment.id,
-            estimatedTime: offer.estimatedTime
-          }
-        }))
-      }
-
-      return acc
-    }, [])
+        return acc
+      }, [])
 
     return {
       validAppointmentsOnDay
     }
   }
-
 
   public async findByEmployeeIdPaginated (
     employeeId: string,

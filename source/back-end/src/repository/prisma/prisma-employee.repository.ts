@@ -1,8 +1,8 @@
 import { type Employee, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
-import { EmployeesFilters } from '../../types/employees/employees-filters'
-import { PaginatedRequest } from '../../types/pagination'
+import { type PaginatedRequest } from '../../types/pagination'
 import { type EmployeeRepository } from '../protocols/employee.repository'
+import { type EmployeesFilters } from '../../types/employees/employees-filters'
 
 class PrismaEmployeeRepository implements EmployeeRepository {
   public async findAll () {
@@ -109,18 +109,32 @@ class PrismaEmployeeRepository implements EmployeeRepository {
       }
     })
 
-    return { employee }
+    if (employee == null) {
+      throw new Error('Employee not found')
+    }
+
+    const mappedEmployee = {
+      id: employee.id,
+      offers: employee.offers.map(offer => ({
+        id: offer.id,
+        estimatedPrice: offer.estimatedTime,
+        price: offer.price,
+        service: offer.service
+      }))
+    }
+
+    return { employee: mappedEmployee }
   }
 
   public async findAllPaginated (
-    params: PaginatedRequest<EmployeeFilters>
+    params: PaginatedRequest<EmployeesFilters>
   ) {
     const { page, limit, filters } = params
     const skip = (page - 1) * limit
 
     const where = {
-      name: filters.name ? { contains: filters.name } : undefined,
-      email: filters.email ? { contains: filters.email } : undefined
+      name: ((filters?.name) != null) ? { contains: filters.name } : undefined,
+      email: ((filters?.email) != null) ? { contains: filters.email } : undefined
     }
 
     const [data, total] = await Promise.all([
@@ -144,4 +158,3 @@ class PrismaEmployeeRepository implements EmployeeRepository {
 }
 
 export { PrismaEmployeeRepository }
-

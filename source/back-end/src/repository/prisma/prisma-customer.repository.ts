@@ -1,11 +1,10 @@
 import { type Customer, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type UpdateOrCreateParams, type CustomerRepository } from '../protocols/customer.repository'
-import { CustomersFilters } from '../../types/customers/customers-filters'
-import { PaginatedRequest, PaginatedResult } from '../../types/pagination'
+import { type CustomersFilters } from '../../types/customers/customers-filters'
+import { type PaginatedRequest } from '../../types/pagination'
 
 class PrismaCustomerRepository implements CustomerRepository {
-
   public async findAll () {
     const customers = await prismaClient.customer.findMany()
 
@@ -90,13 +89,13 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customerDeleted
   }
 
-  public async findAllPaginated(params: PaginatedRequest<CustomersFilters>) {
+  public async findAllPaginated (params: PaginatedRequest<CustomersFilters>) {
     const { page, limit, filters } = params
     const skip = (page - 1) * limit
 
     const where = {
       name: filters.name ? { contains: filters.name } : undefined,
-      email: filters.email ? { contains: filters.email } : undefined,
+      email: filters.email ? { contains: filters.email } : undefined
     }
 
     const [data, total] = await Promise.all([
@@ -117,7 +116,6 @@ class PrismaCustomerRepository implements CustomerRepository {
       limit
     }
   }
-
 }
 
 export { PrismaCustomerRepository }

@@ -29,7 +29,7 @@ class LoginUseCase {
     const employeeAlreadyExists = await this.employeeRepository.findByEmail(email)
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!employeeAlreadyExists) {
-      customerOrEmployee = await this.customerRepository.updateOrCreate({
+      const customer = await this.customerRepository.updateOrCreate({
         googleId: userId,
         email
       }, {
@@ -37,11 +37,19 @@ class LoginUseCase {
         googleId: userId,
         profilePhotoUrl
       })
+      customerOrEmployee = {
+        ...customer,
+        userId
+      }
     } else {
-      customerOrEmployee = await this.employeeRepository.updateEmployeeByEmail(email, {
+      const employee = await this.employeeRepository.updateEmployeeByEmail(email, {
         googleId: userId,
         profilePhotoUrl
       })
+      customerOrEmployee = {
+        ...employee,
+        userId
+      }
     }
 
     const { accessToken } = await this.encrypter.encrypt({

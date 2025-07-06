@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
 const parsePageOrLimit = (val: unknown, defaultValue: number) => {
-  const parsed = parseInt((val ?? '').toString(), 10)
+  const str = (val === undefined || val === null) ? '' : String(val)
+  const parsed = parseInt(str, 10)
   return isNaN(parsed) || parsed <= 0 ? defaultValue : parsed
 }
 
