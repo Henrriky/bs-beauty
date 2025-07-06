@@ -1,17 +1,12 @@
 import { type $Enums, type Prisma } from '@prisma/client'
 
-interface FetchAvailableSchedulingToOfferByDay {
+interface FetchValidAppointmentsByProfessionalOnDay extends Array<{
   id: string
+  observation: string | null
+  status: $Enums.Status
+  appointmentDate: Date
+  appointmentId: string
   estimatedTime: number
-  price: Prisma.Decimal
-  isOffering: boolean
-  appointments: Array<{
-    id: string
-    observation: string | null
-    status: $Enums.Status
-    appointmentDate: Date
-    appointmentId: string
-    serviceOfferedId: string
-  }>
-}
-export type { FetchAvailableSchedulingToOfferByDay }
+}> {}
+
+export type { FetchValidAppointmentsByProfessionalOnDay }

@@ -1,8 +1,9 @@
-import { Offer, Status, type Prisma } from '@prisma/client'
+import { Status, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type OfferRepository } from '../protocols/offer.repository'
-import { type PaginatedRequest, PaginatedResult } from '../../types/pagination'
+import { type PaginatedRequest } from '../../types/pagination'
 import { type OffersFilters } from '../../types/offers/offers-filters'
+import { FetchValidAppointmentsByProfessionalOnDay } from '../types/offer-repository.types'
 
 class PrismaOfferRepository implements OfferRepository {
   public async findAll () {
@@ -68,22 +69,20 @@ class PrismaOfferRepository implements OfferRepository {
     return deletedOffer
   }
 
-  public async fetchValidAppointmentsByOfferAndDay (serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) {
+  public async fetchValidAppointmentsByProfessionalOnDay (employeeId: string, dayToFetchAvailableSchedulling: Date) {
     const startOfDay = new Date(dayToFetchAvailableSchedulling)
     startOfDay.setHours(0, 0, 0, 0)
 
     const endOfDay = new Date(dayToFetchAvailableSchedulling)
     endOfDay.setHours(23, 59, 59, 999)
 
-    const validAppointmentsToOfferOnDay = await prismaClient.offer.findUnique({
+    const validAppointmentsByProfessionalOnDay = await prismaClient.offer.findMany({
       where: {
-        id: serviceOfferingId,
-        isOffering: true
+        isOffering: true,
+        employeeId,
       },
       select: {
-        id: true,
-        price: true,
-        isOffering: true,
+        employeeId: true,
         estimatedTime: true,
         appointments: {
           where: {
@@ -99,16 +98,36 @@ class PrismaOfferRepository implements OfferRepository {
       }
     })
 
-    if (validAppointmentsToOfferOnDay == null) {
+    if (validAppointmentsByProfessionalOnDay == null) {
       return {
-        validAppointmentsToOfferOnDay: null
+        validAppointmentsOnDay: null
       }
     }
 
+    const validAppointmentsOnDay = validAppointmentsByProfessionalOnDay.reduce(
+      (acc: Array<FetchValidAppointmentsByProfessionalOnDay[0]>, offer) => {
+
+      if (offer.appointments.length > 0) {
+        acc.push(...offer.appointments.map(appointment => {
+          return {
+            id: appointment.id,
+            observation: appointment.observation,
+            status: appointment.status,
+            appointmentDate: appointment.appointmentDate,
+            appointmentId: appointment.id,
+            estimatedTime: offer.estimatedTime
+          }
+        }))
+      }
+
+      return acc
+    }, [])
+
     return {
-      validAppointmentsToOfferOnDay
+      validAppointmentsOnDay
     }
   }
+
 
   public async findByEmployeeIdPaginated (
     employeeId: string,
