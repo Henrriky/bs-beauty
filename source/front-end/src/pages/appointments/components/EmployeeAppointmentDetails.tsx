@@ -22,9 +22,7 @@ import {
   UserIcon,
   XCircleIcon,
 } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router'
 import { customerAPI } from '../../../store/customer/customer-api'
-
 
 const actionToOperations = {
   edit: {
@@ -32,28 +30,32 @@ const actionToOperations = {
       {
         name: 'Cancelar agendamento',
         value: Status.CANCELLED,
-        style: 'border-secondary-200 hover:border-red-700 hover:text-red-700 hover:font-semibold',
+        style:
+          'border-secondary-200 hover:border-red-700 hover:text-red-700 hover:font-semibold',
         Icon: XCircleIcon,
         status: Status.CANCELLED,
       },
       {
         name: 'Confirmar agendamento',
         value: Status.CONFIRMED,
-        style: 'border-secondary-200 hover:border-blue-500 hover:text-blue-500 hover:font-semibold',
+        style:
+          'border-secondary-200 hover:border-blue-500 hover:text-blue-500 hover:font-semibold',
         Icon: CalendarDaysIcon,
         status: Status.CONFIRMED,
       },
       {
         name: 'Agendamento Concluído',
         value: Status.FINISHED,
-        style: 'border-secondary-200 hover:border-green-500 hover:text-green-500 hover:font-semibold',
+        style:
+          'border-secondary-200 hover:border-green-500 hover:text-green-500 hover:font-semibold',
         Icon: CheckIcon,
         status: Status.FINISHED,
       },
       {
         name: 'Agendamento Pendente',
         value: Status.PENDING,
-        style: 'border-secondary-200 hover:border-yellow-500 hover:text-yellow-500 hover:font-semibold',
+        style:
+          'border-secondary-200 hover:border-yellow-500 hover:text-yellow-500 hover:font-semibold',
         Icon: EllipsisHorizontalIcon,
         status: Status.PENDING,
       },
@@ -64,23 +66,19 @@ const actionToOperations = {
   },
 }
 
-
 function EmployeeAppointmentDetails(props: AppointmentDetailsComponentProps) {
-  const navigate = useNavigate()
-
-  const { data: customerData } = customerAPI.useGetCustomerByIdQuery(props.appointment.customerId)
+  const { data: customerData } = customerAPI.useGetCustomerByIdQuery(
+    props.appointment.customerId,
+  )
 
   const operationInformations = actionToOperations[props.action]
-  const {
-    register,
-    handleSubmit,
-    setValue,
-  } = useForm<CustomerUpdateAppointmentFormData>({
-    resolver: zodResolver(AppointmentSchemas.customerUpdateSchema),
-    defaultValues: {
-      observation: props.appointment?.observation ?? '',
-    },
-  })
+  const { register, handleSubmit, setValue } =
+    useForm<CustomerUpdateAppointmentFormData>({
+      resolver: zodResolver(AppointmentSchemas.employeeUpdateSchema),
+      defaultValues: {
+        observation: props.appointment?.observation ?? '',
+      },
+    })
 
   const appointmentDateOnLocalZone = DateTime.fromISO(
     props.appointment.appointmentDate,
@@ -211,7 +209,6 @@ function EmployeeAppointmentDetails(props: AppointmentDetailsComponentProps) {
                   e.preventDefault()
                   setValue('status', operation.value)
                   handleSubmit(props.handleSubmitConcrete)()
-                  navigate('/appointments')
                 }}
                 disabled={props.handleSubmitConcreteIsLoading}
               />

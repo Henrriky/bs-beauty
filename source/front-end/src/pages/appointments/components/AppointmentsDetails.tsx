@@ -1,4 +1,4 @@
-import { useLocation, useParams } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { appointmentAPI } from '../../../store/appointment/appointment-api'
 import { ErrorMessage } from '../../../components/feedback/ErrorMessage'
 import BSBeautyLoading from '../../../components/feedback/Loading'
@@ -22,6 +22,7 @@ const userTypeToAppointmentDetailsComponents = {
 function AppointmentDetails() {
   const dispatchRedux = useAppDispatch()
   const { appointmentId } = useParams()
+  const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const action = queryParams.get('action') as AppointmentDetailsAction | null
@@ -51,10 +52,8 @@ function AppointmentDetails() {
       appointmentId: appointmentId!,
     })
 
-  const [
-    updateAppointment,
-    { isLoading: isLoadingUpdateAppontmentService },
-  ] = appointmentAPI.useUpdateAppointmentServiceMutation()
+  const [updateAppointment, { isLoading: isLoadingUpdateAppontmentService }] =
+    appointmentAPI.useUpdateAppointmentServiceMutation()
 
   if (isLoading) {
     return <BSBeautyLoading title="Carregando as informações..." />
@@ -91,7 +90,7 @@ function AppointmentDetails() {
         dispatchRedux(
           appointmentAPI.util.updateQueryData(
             'findAppointmentServiceById',
-            { appointmentId: appointmentId },
+            { appointmentId },
             (draft) => {
               draft.observation = (
                 'observation' in data ? data.observation : null
@@ -120,6 +119,7 @@ function AppointmentDetails() {
           ),
         )
         toast.success('Agendamento atualizado com sucesso!')
+        navigate('/appointments')
       })
       .catch((error: unknown) => {
         console.error('Error trying to complete register', error)

@@ -21,14 +21,15 @@ class AppointmentSchemas {
         .max(255)
         .refine((string) => RegexPatterns.content.test(string))
         .optional(),
-      appointmentDate: z
-        .string()
-        .refine((value) => {
+      appointmentDate: z.string().refine(
+        (value) => {
           const parsed = Date.parse(value)
           return !isNaN(parsed) && parsed > Date.now()
-        }, {
+        },
+        {
           message: 'appointmentDate must be a future ISO date string',
-        }),
+        },
+      ),
       serviceOfferedId: z.string().uuid(),
       customerId: z.string().uuid(),
       appointmentDayPicked: z.string().optional(),
@@ -49,11 +50,9 @@ class AppointmentSchemas {
     })
     .strict()
 
-  public static employeeUpdateSchema = z
-    .object({
-      status: z.nativeEnum(Status).optional(),
-    })
-    .strict()
+  public static employeeUpdateSchema = z.object({
+    status: z.nativeEnum(Status).optional(),
+  })
 }
 
 export { AppointmentSchemas }
