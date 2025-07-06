@@ -1,5 +1,5 @@
 import { type Prisma, type Offer } from '@prisma/client'
-import { type FetchAvailableSchedulingToOfferByDay } from '../types/offer-repository.types'
+import { type FetchValidAppointmentsByProfessionalOnDay } from '../types/offer-repository.types'
 import { type PaginatedRequest, type PaginatedResult } from '../../types/pagination'
 import { type OffersFilters } from '../../types/offers/offers-filters'
 
@@ -12,7 +12,7 @@ interface OfferRepository {
   create: (offerToCreate: Prisma.OfferCreateInput) => Promise<Offer>
   update: (id: string, offerToUpdate: Prisma.OfferUpdateInput) => Promise<Offer>
   delete: (id: string) => Promise<Offer>
-  fetchValidAppointmentsByOfferAndDay: (serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) => Promise<{ validAppointmentsToOfferOnDay: FetchAvailableSchedulingToOfferByDay | null } >
+  fetchValidAppointmentsByProfessionalOnDay: (employeeId: string, dayToFetchAvailableSchedulling: Date) => Promise<{ validAppointmentsOnDay: FetchValidAppointmentsByProfessionalOnDay | null } >
   findByEmployeeIdPaginated: (employeeId: string, params: PaginatedRequest<OffersFilters>) => Promise<PaginatedResult<Offer>>
   // fetchValidWorkingDaysByOfferAndMonth: (serviceOfferingId: string, monthToVerify: number) => Promise<>
 }
