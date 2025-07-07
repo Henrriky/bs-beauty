@@ -123,7 +123,7 @@ Paralelamente, demos início à elaboração do **plano de testes**, definindo q
 
 Por fim, começamos a implementar melhorias no **MVP**. O primeiro passo foi a reestruturação do **banco de dados** para adequá-lo ao novo MER, o que exigiu a correção de alguns **bugs** decorrentes dessa mudança. Além disso, padronizamos as respostas da **API** para que os dados fossem retornados de forma mais eficiente e coerente com a aplicação.
 
-> Resumo: cronograma completo no ProjectLibre, MER e DER validados, documentação avançada; plano de testes definido, banco de dados refatorado e APIs padronizadas.
+> **Resumo**: cronograma completo no ProjectLibre, MER e DER validados, documentação avançada; plano de testes definido, banco de dados refatorado e APIs padronizadas.
 
 *Por Giovanna Carvalho*
 
@@ -137,6 +137,32 @@ No **ProjectLibre**, efetuaram-se **melhorias** para evitar a sobrecarga de recu
 
 Por fim, no **MVP**, conseguiu-se corrigir um **bug** que atribuía a mesma **imagem de perfil** a usuários que se cadastram simultaneamente no sistema.
 
-> Resumo: documentação padronizada, branches mescladas no GitHub (gource), cronograma otimizado no ProjectLibre; bug de imagem corrigido no MVP.
+> **Resumo**: documentação padronizada, branches mescladas no GitHub (gource), cronograma otimizado no ProjectLibre; bug de imagem corrigido no MVP.
+
+*Por Giovanna Carvalho*
+
+## Semana 14 - 16.06 a 22.06
+
+Ao longo desta semana, concentramos nossos esforços em aprimorar o **MVP**: finalizamos o design da página inicial, mantendo a identidade visual do sistema, e iniciamos a implementação do segundo fluxo de **agendamento**, agora permitindo que o usuário escolha diretamente uma profissional específica. Paralelamente, preparamos uma demonstração informal do estado atual da aplicação para o professor orientador e a turma, a fim de obter **feedback antecipado** que nos ajude a refinar detalhes antes da entrega final.
+
+Também avançamos na preparação da apresentação final da disciplina. Após o sorteio de datas, fomos designados para **apresentar** em **08/07**; por isso, começamos a criar os primeiros slides e estruturar a divisão da apresentação pelos integrantes. 
+
+Por fim, exploramos a ferramenta **GitStat** indicada pelo professor para gerar **métricas** do repositório **GitHub**. As **estatísticas** produzidas (número de commits, linhas de código e frequência de merges) foram analisadas e exportadas em gráficos com o objetivo de serem incorporadas ao material da apresentação final, evidenciando a **participação** de cada membro e oferecendo insights para otimizar nosso fluxo de trabalho.
+
+> **Resumo**: homepage finalizada, fluxo de agendamento alterado, apresentação final agendada, estatísticas geradas.
+
+*Por Giovanna Carvalho*
+
+# Semana 15 - 23.06 a 29.06 
+
+Na aula de 24/06 apresentamos o estado atual do **MVP** ao professor orientador e à turma, momento em que também coletamos **feedbacks** valiosos a fim de aprimorar nossa apresentação final. A partir desse retorno, identificamos os ajustes finais necessários no sistema para corrigir determinados bugs que ainda persistiam.
+
+Para a **apresentação final**, definimos claramente as **responsabilidades** de cada membro da equipe e nos dedicamos ao aprimoramento dos **slides**, garantindo uma divisão equilibrada de tarefas e uma comunicação visual mais eficaz.
+
+> Resumo: feedback MVP; desenvolvimento apresentação final.
+
+*Por Giovanna Carvalho*
+
+# Semana 16 - 30/06 a 06.07
 
 *Por Giovanna Carvalho*
