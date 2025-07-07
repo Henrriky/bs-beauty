@@ -1,0 +1,78 @@
+\section{Duração / Cronograma}
+
+\label{sec:duracao}
+
+Esta seção tem como propósito descrever a estimativa de tempo necessária para a conclusão do desenvolvimento do projeto. A definição da duração fundamenta-se no uso do \textit{framework} Scrum \cite{scrum-2024} e da ferramenta \emph{ProjectLibre} \cite{projectlibre-2025}.
+
+\subsection{Análise da duração do projeto}
+
+Conforme o Quadro \ref{frame:cronograma}, o projeto --- iniciado em março de 2025 --- possui uma duração estimada de 9 meses com seu fim estabelecido em novembro considerando todas as etapas de planejamento, análise, desenvolvimentos, testes e \textit{deploy}.
+
+Desses 9 meses, os quatro primeiros foram dedicados ao planejamento, análise e documentação do projeto, bem com o desenvolvimento do \gls{mvp}. Posteriormente a um mês de recesso, os quatro meses restantes foram voltados ao desenvolvimento de funcionalidades avançadas, testagem e \textit{deploy} da aplicação.
+
+\begin{quadro}[htbp]
+	\begin{center}
+		\renewcommand{\arraystretch}{1.5} 	% espaçamento entre linhas
+		\setlength{\tabcolsep}{2.5pt}      	% espaçamento horizontal
+		\caption{\label{frame:cronograma}Cronograma de atividades do projeto}
+		\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}m{4.2cm} | *{12}{>{\centering\arraybackslash}c|}}
+			\hline
+			\centering\multirow{2}{*}{\textbf{ETAPAS}} & \multicolumn{12}{c|}{\textbf{MESES}} \\
+			\cline{2-13}
+			& \textbf{Jan} & \textbf{Fev} & \textbf{Mar} & \textbf{Abr} & \textbf{Mai} & \textbf{Jun} & \textbf{Jul} & \textbf{Ago} & \textbf{Set} & \textbf{Out} & \textbf{Nov} & \textbf{Dez} \\
+			\hline
+			PLANEJAMENTO  &  &  & \bloco & \bloco & \bloco & \bloco &  &  &  &  &  &  \\
+			\hline
+			\gls{mvp}  &  &  &  & \bloco & \bloco\rule{0pt}{2.5ex} & \bloco &  &  &  &  &  &  \\
+			\hline
+			RECESSO  &  &  &  &  &  &  & \bloco &  &  &  &  &  \\
+			\hline
+			DESENVOLVIMENTO  &  &  &  &  &  &  &  & \bloco & \bloco & \bloco & \bloco &  \\
+			\hline
+			TESTES  &  &  &  &  &  &  &  & \bloco & \bloco & \bloco & \bloco &  \\
+			\hline
+			ENTREGA FINAL &  &  &  &  &  &  &  &  &  &  & \bloco &  \\
+			\hline
+			DOCUMENTAÇÃO  &  &  & \bloco & \bloco & \bloco & \bloco & \bloco & \bloco & \bloco & \bloco & \bloco &  \\
+			\hline
+		\end{tabularx}
+		\fonte{Produzido pelos autores}
+	\end{center}
+\end{quadro}
+
+Devido à flexibilidade da metodologia ágil Scrum adotada, o cronograma do projeto não apresenta um comportamento sequencial. Isso é evidenciado por meio do paralelismo existente entre diferentes etapas trabalhadas ao longo do andamento do projeto.
+
+O Quadro \ref{frame:etapas-estimativa} apresenta uma duração mais detalhada para cada etapa do projeto junto com as principais atividades desenvolvidas em cada fase. 
+
+\begin{quadro}[ht]
+	\setlength{\tabcolsep}{5pt}
+	\begin{center}
+		\renewcommand{\arraystretch}{1.12} 	% espaçamento entre linhas
+		\setlength{\tabcolsep}{4pt}      	% espaçamento horizontal
+		\caption{\label{frame:etapas-estimativa}Estimativa de duração das etapas do projeto}
+		\begin{tabular}{|m{4cm}|m{7cm}|c|}
+			\hline
+			\centering\textbf{Etapa} & \centering\textbf{Atividades Principais} & \textbf{Duração Estimada} \\
+			\hline
+			1 - Planejamento & Entendimento das necessidades do cliente, levantamento de requisitos, definição da arquitetura e tecnologias  & 9 semanas \\
+			\hline
+			2 - \gls{mvp} & Implementação do cadastro de clientes, agenda, serviços, autenticação de usuários & 11 semanas \\
+			\hline
+			3 - Desenvolvimento & Melhorias no \gls{mvp}, implementação de notificações, relatórios, avaliação, programa de indicação  & 16 semanas \\
+			\hline
+			4 - Testes & Testes unitários, de componentes, de integração  & 16 semanas \\
+			\hline
+			5 - Documentação & Produção e revisão da documentação do projeto & 38 semanas \\
+			\hline
+			6 - Entrega Final & Apresentação do projeto e do sistema &  4 semanas \\
+			\hline
+		\end{tabular}
+		\fonte{Produzido pelos autores}
+	\end{center}
+\end{quadro}
+
+Segundo definido na Seção \ref{section:metolodogia-gestao}, foram estabelecidos \textit{sprints} quinzenais na etapa de desenvolvimento; portanto, a fase conta com 8 \textit{sprints} contemplando a implementação de novas funcionalidades e a validação direta com a entidade parceira.
+
+Com o uso do \textit{framework} Scrum, os \textit{sprints} --- e, portanto, o cronograma do projeto como um todo --- estiveram constantemente sujeitos a mudanças conforme a complexidade das demandas e o retorno dos \textit{stakeholders} ao longo do projeto.
+
+Em uma outra análise, com as tarefas definidas no \emph{ProjectLibre}, estima-se uma duração total de 188 dias para o desenvolvimento completo do projeto considerando os dias úteis em que a equipe dedicou tempo para a realização das atividades do projeto. Para mais detalhes do cronograma estabelecido no \emph{ProjectLibre}, o arquivo \texttt{.pod} da ferramenta pode ser acessado no repositório remoto do projeto  apresentado na Seção \ref{section:repositorio-aplicacao}.

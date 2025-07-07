@@ -1,0 +1,224 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id                String    @id @default(uuid())
+  name              String?   @default("Usuário")
+  registerCompleted Boolean   @default(false) @map("register_completed")
+  birthdate         DateTime?
+  email             String    @unique
+  googleId          String?   @unique @map("google_id")
+  phone             String?   @unique
+  profilePhotoUrl   String?
+  userType          UserType  @default(CUSTOMER) @map("user_type")
+  referrerId        String?   @map("referrer_id")
+  referralCount     Int       @default(0) @map("referral_count")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  appointments Appointment[]
+  referrer     Customer?     @relation("refers", fields: [referrerId], references: [id])
+  referrals    Customer[]    @relation("refers")
+
+  @@map("customer")
+}
+
+model Appointment {
+  id               String   @id @default(uuid())
+  observation      String?
+  status           Status   @default(PENDING)
+  appointmentDate  DateTime @map("appointment_date")
+  customerId       String   @map("customer_id")
+  serviceOfferedId String   @map("service_id")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  notifications Notification[]
+  rating        Rating?
+  customer      Customer       @relation(fields: [customerId], references: [id])
+  offer         Offer          @relation(fields: [serviceOfferedId], references: [id])
+
+  @@map("appointment")
+}
+
+model Rating {
+  id            String   @id @default(uuid())
+  score         Int      @default(1)
+  comment       String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  appointmentId String   @unique @map("appointment_id")
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model Notification {
+  id            String    @id @default(uuid())
+  message       String
+  createdAt     DateTime  @default(now()) @map("created_at")
+  readAt        DateTime? @map("read_at")
+  appointmentId String    @map("appointment_id")
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+
+  @@map("notification")
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  category    String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  offers Offer[]
+
+  @@map("service")
+}
+
+model Offer {
+  id            String   @id @default(uuid())
+  estimatedTime Int      @map("estimated_time")
+  price         Decimal  @db.Decimal(10, 2)
+  isOffering    Boolean  @default(false) @map("is_offering")
+  serviceId     String   @map("service_id")
+  employeeId    String   @map("employee_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  appointments Appointment[]
+  service      Service       @relation(fields: [serviceId], references: [id])
+  employee     Employee      @relation(fields: [employeeId], references: [id])
+
+  @@map("offer")
+}
+
+model Employee {
+  id                String   @id @default(uuid())
+  name              String?  @default("Usuário")
+  email             String   @unique
+  googleId          String?  @unique @map("google_id")
+  registerCompleted Boolean  @default(false) @map("register_completed")
+  socialMedia       Json?    @map("social_media")
+  contact           String?  @unique
+  specialization    String?
+  profilePhotoUrl   String?  @map("profile_photo_url")
+  userType          UserType @default(EMPLOYEE) @map("user_type")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  shifts       Shift[]
+  offers       Offer[]
+  employeeRole EmployeeRole[]
+
+  @@map("employee")
+}
+
+model Shift {
+  id         String   @id @default(uuid())
+  weekDay    WeekDays @map("week_day")
+  isBusy     Boolean  @default(false) @map("is_busy")
+  shiftStart DateTime @map("shift_start")
+  shiftEnd   DateTime @map("shift_end")
+  employeeId String   @map("employee_id")
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("shift")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(false) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  employeeRole   EmployeeRole[]
+  rolePermission RolePermission[]
+
+  @@map("role")
+}
+
+model EmployeeRole {
+  id         String   @id @default(uuid())
+  employeeId String   @map("employee_id")
+  roleId     String   @map("role_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+  role     Role     @relation(fields: [roleId], references: [id])
+
+  @@map("employee_role")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  screen      String
+  action      Action
+  description String?
+  isActive    Boolean  @default(false) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  rolePermission RolePermission[]
+
+  @@map("permission")
+}
+
+model RolePermission {
+  id           String   @id @default(uuid())
+  roleId       String   @map("role_id")
+  permissionId String   @map("permission_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@map("role_permission")
+}
+
+enum WeekDays {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+enum UserType {
+  MANAGER
+  CUSTOMER
+  EMPLOYEE
+}
+
+enum Status {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  RESCHEDULED
+  FINISHED
+  NO_SHOW
+}
+
+enum Action {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+}

@@ -1,0 +1,593 @@
+% !TeX root = main.tex
+
+\documentclass[
+% -- opções da classe memoir --
+12pt,				% tamanho da fonte
+openany,			% capítulos iniciam na próxima pág disponível (sem inserir páginas em branco)
+oneside,			% para impressão em recto e verso. Oposto a oneside
+a4paper,			% tamanho do papel. 
+% -- opções da classe abntex2 --
+%chapter=TITLE,		% títulos de capítulos convertidos em letras maiúsculas
+%section=TITLE,		% títulos de seções convertidos em letras maiúsculas
+%subsection=TITLE,	% títulos de subseções convertidos em letras maiúsculas
+%subsubsection=TITLE,% títulos de subsubseções convertidos em letras maiúsculas
+% -- opções do pacote babel --
+english,			% idioma adicional para hifenização
+french,				% idioma adicional para hifenização
+spanish,			% idioma adicional para hifenização
+brazil				% o último idioma é o principal do documento
+chapter=TITLE % deixa capitulos em maiusculo
+]{abntex2}
+
+% ---
+% Pacotes básicos 
+% ---
+\usepackage{lmodern}			% Usa a fonte Latin Modern			
+\usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
+\usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
+\usepackage{color}				% Controle das cores
+\usepackage{graphicx}			% Inclusão de gráficos
+\usepackage{microtype} 			% para melhorias de justificação
+% ---
+
+% ---
+% Pacotes adicionais, usados apenas no âmbito do Modelo Canônico do abnteX2
+% ---
+\usepackage{lipsum}				% para geração de dummy text
+% ---
+\usepackage{amssymb}   %para checkmark
+% ---
+% Pacotes de citações
+% ---
+\usepackage[brazilian,hyperpageref]{backref}	 % Paginas com as citações na bibl
+\usepackage[alf]{abntex2cite}	% Citações padrão ABNT
+% ---
+% Pacotes adicionados pelos autores
+% ---
+\usepackage{enumitem}							% para personalizar listas numeradas
+\usepackage{qrcode}								% para gerar QR code
+\usepackage{longtable}         					%para tabelas longas
+\usepackage[section]{placeins}					% para barreiras
+
+% Pacotes para tabelas
+\usepackage{array}								% para formatação de tabelas
+\usepackage{xcolor,colortbl}	
+\usepackage{tabularx}
+\usepackage{multirow}							% para mesclar células
+\usepackage{siunitx}							% para alinhamento de números
+\usepackage{booktabs} 							% para linhas profissionais em tabelas
+
+% --- 
+% CONFIGURAÇÕES DE PACOTES
+% ---
+
+\definecolor{cinza-escuro}{RGB}{110, 110, 110}
+\newcommand{\bloco}{\cellcolor{cinza-escuro}\rule{0pt}{2.5ex}}
+
+% Configurações do pacote backref
+% Usado sem a opção hyperpageref de backref
+\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+% Texto padrão antes do número das páginas
+\renewcommand{\backref}{}
+% Define os textos da citação
+\renewcommand*{\backrefalt}[4]{
+	\ifcase #1 %
+	Nenhuma citação no texto.%
+	\or
+	Citado na página #2.%
+	\else
+	Citado #1 vezes nas páginas #2.%
+	\fi}%
+
+% Configuração do pacote enumitem
+% Aplicando o recuo em listas numeradas globalmente
+\setlist[enumerate]{leftmargin=2cm}
+% ---
+
+% ---
+% Informações de dados para CAPA e FOLHA DE ROSTO
+% ---
+\instituicao{IFSP – Instituto Federal de Educação,\\
+	Ciência e Tecnologia Câmpus São Paulo}
+
+\titulo{\emph{BS Beauty Academy}}
+\local{São Paulo – SP – Brasil}
+\data{2025}
+\orientador{Marcelo Tavares de Santana}
+\tipotrabalho{Projeto Integrado de Extensão}
+
+% ------------ AUTORES (só aparecem na capa) ---
+\newcommand{\autorescapa}{%
+	\begin{tabular}[t]{@{}l@{\hspace{3em}}l@{}}
+		ALYSON CÉSAR FUMAGALLI & SP3121071\\
+		BRUNO DE ALMEIDA FISCHER & 
+		SP3120139\\
+		ELIEL DA SILVA & 
+		SP3121054\\
+		GIOVANNA CAMILLE SILVA CARVALHO & SP3123162\\
+		HENRIQUE SANTIAGO PIRES & SP312262X\\
+		HENRRIKY JHONNY DE OLIVEIRA BASTOS & SP3123103\\
+\end{tabular}}
+
+% O preambulo deve conter o tipo do trabalho, o objetivo, 
+% o nome da instituição e a área de concentração 
+\preambulo{Este projeto integrado de extensão, desenvolvido como parte do curso de Tecnologia em Análise e Desenvolvimento de Sistemas do Instituto Federal de Educação, Ciência e Tecnologia de São Paulo, tem como objetivo desenvolver uma aplicação web para otimizar a gestão e o agendamento de serviços de estética em um ambiente coworking. A área de concentração do projeto é a inovação tecnológica aplicada ao setor de serviços de beleza.}
+% ---
+
+% Configurações de aparência do PDF final
+
+% alterando o aspecto da cor azul
+\definecolor{blue}{RGB}{41,5,195}
+
+% informações do PDF
+\makeatletter
+\hypersetup{
+	%pagebackref=true,
+	pdftitle={\@title}, 
+	pdfauthor={\@author},
+	pdfsubject={\imprimirpreambulo},
+	pdfcreator={LaTeX with abnTeX2},
+	pdfkeywords={abnt}{latex}{abntex}{abntex2}{trabalho acadêmico}, 
+	colorlinks=true,       		% false: boxed links; true: colored links
+	linkcolor=blue,          	% color of internal links
+	citecolor=blue,        		% color of links to bibliography
+	filecolor=magenta,      		% color of file links
+	urlcolor=blue,
+	bookmarksdepth=4
+}
+\makeatother
+% --- 
+
+% ---
+% Posiciona figuras e tabelas no topo da página quando adicionadas sozinhas
+% em um página em branco. Ver https://github.com/abntex/abntex2/issues/170
+\makeatletter
+\setlength{\@fptop}{5pt} % Set distance from top of page to first float
+\makeatother
+% ---
+
+% ---
+% Possibilita criação de Quadros e Lista de quadros.
+% Ver https://github.com/abntex/abntex2/issues/176
+%
+\newcommand{\quadroname}{Quadro}
+\newcommand{\listofquadrosname}{LISTA DE QUADROS}
+
+\newfloat[chapter]{quadro}{loq}{\quadroname}
+\newlistof{listofquadros}{loq}{\listofquadrosname}
+\newlistentry{quadro}{loq}{0}
+
+% configurações para atender às regras da ABNT
+\setfloatadjustment{quadro}{\centering}
+\counterwithout{quadro}{chapter}
+\renewcommand{\cftquadroname}{\quadroname\space} 
+\renewcommand*{\cftquadroaftersnum}{\hfill--\hfill}
+
+\setfloatlocations{quadro}{hbtp} % Ver https://github.com/abntex/abntex2/issues/176
+% ---
+
+% --- 
+% Espaçamentos entre linhas e parágrafos 
+% --- 
+
+% O tamanho do parágrafo é dado por:
+\setlength{\parindent}{1.3cm}
+
+% Controle do espaçamento entre um parágrafo e outro:
+\setlength{\parskip}{0.2cm}  % tente também \onelineskip
+
+% ---
+% compila o indice
+% ---
+\makeindex
+% ---
+
+% — antes de tudo, passe a opção para hyperref evitar destinos duplicados:
+\PassOptionsToPackage{hypertexnames=false}{hyperref}
+\usepackage[acronym,nomain]{glossaries}
+ 
+% Definição dos acrônimos em ordem alfabética
+% -----------------------------------
+\newacronym{api}   {API}     {\emph{Application Programming Interface} – Interface de Programação de Aplicações}
+\newacronym{aws}   {AWS}     {\emph{Amazon Web Services}}
+\newacronym{b2c}   {B2C}     {\emph{Business to Consumer} – Negócio para Consumidor}
+
+\newacronym{cidr}  {CIDR}    {\emph{Classless Inter-Domain Routing} – Roteamento Interdomínio sem Classes}
+\newacronym{cli}   {CLI}     {\emph{Command Line Interface} – Interface de Linha de Comando}
+\newacronym{covid} {COVID-19}{\emph{Coronavirus Disease 2019} – Doença por Coronavírus 2019}
+\newacronym{css}   {CSS}     {\emph{Cascading Style Sheets} }
+\newacronym{csv}   {CSV}     {\emph{Comma-Separated Values} – Valores Separados por Vírgula}
+
+\newacronym{der}   {DER}     {Diagrama Entidade-Relacionamento}
+\newacronym{dns}   {DNS}     {\emph{Domain Name System} – Sistema de Nomes de Domínio}
+\newacronym{dvd}   {DVD}     {\emph{Digital Versatile Disc} – Disco Digital Versátil}
+
+\newacronym{ec2}   {EC2}     {\emph{Elastic Compute Cloud} – Nuvem de Computação Elástica}
+\newacronym{ecf}   {ECF}     {Emissor de Cupom Fiscal}
+\newacronym{erp}   {ERP}     {\emph{Enterprise Resource Planning} – Sistema Integrado de Gestão Empresarial}
+
+\newacronym{fk}    {FK}      {\emph{Foreign Key}}
+
+\newacronym{html}  {HTML}    {\emph{HyperText Markup Language} - Linguagem de Marcação de Hipertexto}
+\newacronym{http}  {HTTP}    {\emph{HyperText Transfer Protocol} – Protocolo de Transferência de Hipertexto}
+\newacronym{https} {HTTPS}   {\emph{HyperText Transfer Protocol Secure} – Protocolo de Transferência de Hipertexto Seguro}
+
+\newacronym{ifsp}  {IFSP-SPO}{Instituto Federal de Educação, Ciência e Tecnologia de São Paulo – Campus São Paulo}
+\newacronym{ip}    {IP}      {\emph{Internet Protocol} – Protocolo de Internet}
+\newacronym{ios}   {iOS}     {\emph{iPhone Operating System} – Sistema Operacional do iPhone}
+\newacronym{js}    {JS}      {\emph{JavaScript}}
+
+\newacronym{lgpd}  {LGPD}    {Lei Geral de Proteção de Dados – Lei nº 13.709/2018}
+
+\newacronym{mei}   {MEI}     {Microempreendedor Individual}
+\newacronym{mer}   {MER}     {Modelo Entidade-Relacionamento}
+\newacronym{mvc}   {MVC}     {\emph{Model-View-Controller} – Modelo-Visão-Controlador}
+\newacronym{mvp}   {MVP}	 {\emph{Minimum Viable Product}}
+
+\newacronym{nat}   {NAT}     {\emph{Network Address Translation} – Tradução de Endereços de Rede}
+\newacronym{nfe}   {NF-e}    {Nota Fiscal Eletrônica}
+\newacronym{nfce}  {NFC-e}   {Nota Fiscal de Consumidor Eletrônica}
+
+\newacronym{oauth} {OAuth}   {\emph{Open Authorization} – Autorização Aberta}
+
+\newacronym{pdf}   {PDF}     {\emph{Portable Document Format} – Formato de Documento Portátil}
+\newacronym{pdv}   {PDV}     {Ponto de Venda}
+\newacronym{pie}   {PIE}     {Projeto Integrado de Extensão}
+\newacronym{pix}   {Pix}     {Pagamento Instantâneo}
+\newacronym{pk}    {PK}      {\emph{Primary Key}}
+\newacronym{po}    {PO}      {Product Owner}
+
+\newacronym{rest}  {REST}    {\emph{Representational State Transfer} – Transferência de Estado Representacional}
+\newacronym{rf}    {RF}      {Requisito Funcional}
+\newacronym{rh}    {RH}      {Recursos Humanos}
+\newacronym{rn}    {RN}      {Regra de Negócio}
+\newacronym{rnf}   {RNF}     {Requisito Não Funcional}
+
+\newacronym{saas}  {SaaS}    {\emph{Software as a Service} – Software como Serviço}
+\newacronym{sat}   {SAT}     {Sistema Autenticador e Transmissor de Cupons Fiscais}
+\newacronym{sebrae}{SEBRAE}  {Serviço Brasileiro de Apoio às Micro e Pequenas Empresas}
+\newacronym{sgbd}  {SGBD}    {Sistema Gerenciador de Banco de Dados}
+\newacronym{sla}   {SLA}     {\emph{Service Level Agreement} – Acordo de Nível de Serviço}
+\newacronym{sms}   {SMS}     {\emph{Short Message Service} – Serviço de Mensagens Curtas}
+\newacronym{spopie}{SPOPIE1} {Projeto Integrado de Extensão I}
+\newacronym{ssh}   {SSH}     {\emph{Secure Shell}}
+\newacronym{sso}   {SSO}     {\emph{Single Sign-On} – Autenticação Única}
+
+\newacronym{tef}   {TEF}     {Transferência Eletrônica de Fundos}
+\newacronym{tls}   {TLS}     {\emph{Transport Layer Security} – Segurança da Camada de Transporte}
+
+\newacronym{vpc}   {VPC}     {\emph{Virtual Private Cloud} – Nuvem Privada Virtual}
+\newacronym{vpn}   {VPN}     {\emph{Virtual Private Network} – Rede Privada Virtual}
+
+
+
+\makeglossaries
+% ----
+%  REDEFINIÇÃO DA CAPA (instituição + local/ano centralizados)
+% =================================================================
+\makeatletter
+\renewcommand{\imprimircapa}{%
+	\begin{capa}
+		\begin{center}
+			% --------- Instituição -------------
+			{\ABNTEXchapterfont\large\imprimirinstituicao\par}
+			\vspace*{2cm}
+			% --------- Autores -----------------
+			\imprimirautor
+			\vfill
+			% --------- Título ------------------
+			{\ABNTEXchapterfont\bfseries\Large\imprimirtitulo\par}
+			\vfill
+			% --------- Local e ano -------------
+			{\large\imprimirlocal\par}
+			{\large\imprimirdata}
+		\end{center}
+\end{capa}}
+\makeatother
+
+
+
+% Início do documento
+% ----
+\begin{document}
+	
+	% Seleciona o idioma do documento (conforme pacotes do babel)
+	%\selectlanguage{english}
+	\selectlanguage{brazil}
+	
+	% Retira espaço extra obsoleto entre as frases.
+	\frenchspacing 
+	
+	% ----------------------------------------------------------
+	% ELEMENTOS PRÉ-TEXTUAIS
+	% ----------------------------------------------------------
+	% \pretextual
+	
+	% ---
+	% Capa
+	% ---
+	\autor{\autorescapa}
+	\imprimircapa
+	\autor{} 
+	% ---
+	
+	% ---
+	% Folha de rosto
+	% (o * indica que haverá a ficha bibliográfica)
+	% ---
+	
+	\imprimirfolhaderosto*
+	% ---
+	
+	% ---
+	% Inserir a ficha bibliografica
+	% ---
+	
+	% Isto é um exemplo de Ficha Catalográfica, ou ``Dados internacionais de
+	% catalogação-na-publicação''. Você pode utilizar este modelo como referência. 
+	% Porém, provavelmente a biblioteca da sua universidade lhe fornecerá um PDF
+	% com a ficha catalográfica definitiva após a defesa do trabalho. Quando estiver
+	% com o documento, salve-o como PDF no diretório do seu projeto e substitua todo
+	% o conteúdo de implementação deste arquivo pelo comando abaixo:
+	%
+	% \begin{fichacatalografica}
+		%     \includepdf{fig_ficha_catalografica.pdf}
+		% \end{fichacatalografica}
+	
+%	\begin{fichacatalografica}
+%			\begin{center}
+%			\imprimirinstituicao
+%		\end{center}
+%		\sffamily
+%		\vspace*{\fill}					% Posição vertical
+%		\begin{center}					% Minipage Centralizado
+%			\fbox{\begin{minipage}[c][8cm]{13.5cm}		% Largura
+%					\small
+%					\imprimirautor
+%					%Sobrenome, Nome do autor
+%					
+%					\hspace{0.5cm} \imprimirtitulo  / \imprimirautor. --
+%					\imprimirlocal, \imprimirdata
+%					
+%					\hspace{0.5cm} \thelastpage p. : il. color; 30cm 
+%					
+%					\hspace{0.5cm} \imprimirorientadorRotulo~\imprimirorientador\\
+%					
+%					\hspace{0.5cm}
+%					\parbox[t]{\textwidth}{\imprimirtipotrabalho~--~\imprimirinstituicao,
+%						\imprimirdata.}\\
+%					
+%					\hspace{0.5cm}
+%					1. Graduação
+%					2. Extensão
+%					3. Integrado \\
+%					I. Marcelo Tavares de Santana.
+%					II. IFSP.
+%					III. Análise e Desenvolvimento de Sistemas. 
+%					IV. SPOPIE1 			
+%			\end{minipage}}
+%		\end{center}
+%	\end{fichacatalografica}
+	% ---
+	
+	% ---
+	% Inserir folha de aprovação
+	% ---
+	
+	% Isto é um exemplo de Folha de aprovação, elemento obrigatório da NBR
+	% 14724/2011 (seção 4.2.1.3). Você pode utilizar este modelo até a aprovação
+	% do trabalho. Após isso, substitua todo o conteúdo deste arquivo por uma
+	% imagem da página assinada pela banca com o comando abaixo:
+	%
+	% \begin{folhadeaprovacao}
+		% \includepdf{folhadeaprovacao_final.pdf}
+		% \end{folhadeaprovacao}
+	%
+	\begin{folhadeaprovacao}
+			\begin{center}
+			\imprimirinstituicao
+		\end{center}
+		
+		\begin{center}
+			{\ABNTEXchapterfont\large\imprimirautor}
+			
+			\vspace*{\fill}\vspace*{\fill}
+			\begin{center}
+				\ABNTEXchapterfont\bfseries\Large\imprimirtitulo
+			\end{center}
+			\vspace*{\fill}
+			
+			\hspace{.45\textwidth}
+			\begin{minipage}{.5\textwidth}
+				\imprimirpreambulo
+			\end{minipage}%
+			\vspace*{\fill}
+		\end{center}
+		
+Trabalho aprovado. \imprimirlocal, 
+\makebox[2cm]{\hrulefill}~de~\makebox[3cm]{\hrulefill}~de~2025:
+		
+		\assinatura{\textbf{\imprimirorientador} \\ Orientador} 
+		\assinatura{\textbf{Daniela dos Santos Santana} \\ Convidado 1}
+		\assinatura{\textbf{Johnata Souza Santicioli} \\ Convidado 2}
+		\assinatura{\textbf{Leonardo Andrade Motta de Lima} \\ Convidado 3}
+		%\assinatura{\textbf{Professor} \\ Convidado 4}
+		
+		\begin{center}
+			\vspace*{0.5cm}
+			{\large\imprimirlocal}
+			\par
+			{\large\imprimirdata}
+			\vspace*{1cm}
+		\end{center}
+		
+	\end{folhadeaprovacao}
+	% ---
+	
+	% ---
+	% RESUMOS
+	% ---
+	
+	% resumo em português
+	\setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
+	\renewcommand{\resumoname}{RESUMO}
+	
+\input{Resumo/resumo.tex}
+
+\renewcommand{\abstractname}{\MakeUppercase{ABSTRACT}}	
+	% resumo em inglês
+\input{Resumo/abstract.tex}
+
+\pretextual	
+	% ---
+	% inserir lista de ilustrações
+	% ---
+	\pdfbookmark[0]{\listfigurename}{lof}
+	\renewcommand{\listfigurename}{\MakeUppercase{LISTA DE ILUSTRAÇÕES}}
+	\listoffigures*
+	\cleardoublepage
+	% ---
+	
+	% ---
+	% inserir lista de quadros
+	% ---
+	\pdfbookmark[0]{\listofquadrosname}{loq}
+	\listofquadros*
+	\cleardoublepage
+	% ---
+	
+	% ---
+	% inserir lista de tabelas
+	% ---
+	\pdfbookmark[0]{\listtablename}{lot}
+\renewcommand{\listtablename}{\MakeUppercase{LISTA DE TABELAS}}
+	\listoftables*
+	\cleardoublepage
+	% ---
+	
+	% ---
+	% inserir lista de abreviaturas e siglas
+	
+	% Cria os arquivos auxiliares de glossários
+\cleardoublepage
+\printglossary[
+type=\acronymtype,
+title={LISTA DE SIGLAS }
+]
+\cleardoublepage
+
+
+	
+	% ---
+	
+	% ---
+	% inserir lista de símbolos
+	% ---
+%	\providecommand{\listsimbolosname}{}
+%	\renewcommand{\listsimbolosname}{\MakeUppercase{LISTA DE SÍMBOLOS}}
+\input{Resumo/simbolos.tex}
+	% ---
+
+	% inserir o sumario
+	% ---
+	\pdfbookmark[0]{\contentsname}{toc}
+	\renewcommand{\contentsname}{\MakeUppercase{SUMÁRIO}}
+	\tableofcontents*
+	\cleardoublepage
+
+	% ----------------------------------------------------------
+	\textual
+	
+% ----------------------------------------------------------
+	\chapter{INTRODUÇÃO}
+		
+%o input do capitulo 1 já contem todas as seções dele		
+\input{cap01-introducao/01-00-introducao}
+
+	% --------------------------------------
+	
+	\chapter{REVISÃO DA LITERATURA}
+	
+	%o input do capitulo 2 já contem todas as seções dele
+	
+	\input{cap02-revisao/02-00-revisao-literatura}	
+	%  ------------------------------------------
+	
+	\include{cap03-gestao/03-00-gestao-projeto.tex}
+	
+	%-------------------------------------------
+	
+	\include{cap04-desenvolvimento/04-00-desenvolvimento}
+	
+	% ----------------------------------------------------------
+	
+	\include{cap05-viabilidade/05-00-viabilidade-financeira.tex}
+	
+	% ---------------------------------------------------------------
+	
+	\chapter{CONSIDERAÇÕES FINAIS}
+
+\input{cap06-Consideracoes/06-00-consideracoes_finais}
+	% ----------------------------------------------------------
+
+	% ---
+	
+	%Página de referencias
+	\renewcommand{\bibname}{REFERÊNCIAS} %renomeia o título da página de referencias
+	\bibliography{referencias-bibliograficas}
+	\bibliographystyle{abntex2-alf}
+	\bibliographystyle{abntex2-num}
+	
+	
+	% ----------------------------------------------------------
+	% Glossário
+	% ----------------------------------------------------------
+	%
+	% Consulte o manual da classe abntex2 para orientações sobre o glossário.
+	%
+	%\glossary
+	
+	% ----------------------------------------------------------
+	% Apêndices
+	% ----------------------------------------------------------
+	
+	% ---
+	% Inicia os apêndices
+	% ---
+%	\begin{apendicesenv}
+		
+		% Imprime uma página indicando o início dos apêndices
+%		\partapendices
+		
+		% ----------------------------------------------------------
+%		\chapter{exemplo 1}
+		% ----------------------------------------------------------
+		
+%		materiais desenvolvidos pelo próprio autor do trabalho
+		
+%	\end{apendicesenv}
+	
+	% ----------------------------------------------------------
+	% Anexos
+	% Inicia os anexos
+	
+%	\begin{anexosenv}
+		
+		% Imprime uma página indicando o início dos anexos
+	%	\partanexos
+		
+		% ---
+%		\chapter{exemplo 1}
+	%	matérias de outras fontes que não o próprio autor do trabalho
+		
+%	\end{anexosenv}
+	
+	%---------------------------------------------------------------------
+	% INDICE REMISSIVO
+	%---------------------------------------------------------------------
+	\phantompart
+	\printindex
+	%---------------------------------------------------------------------
+	
+\end{document}
