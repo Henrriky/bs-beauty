@@ -15,7 +15,7 @@ class AppointmentSchemas {
   }).strict()
 
   public static customerUpdateSchema = z.object({
-    observation: z.string().min(3).max(255).refine((string) => RegexPatterns.content.test(string)).optional()
+    observation: z.string().max(255).transform((val) => (val === undefined || val.trim() === '' ? '' : val.trim())).refine((string) => RegexPatterns.content.test(string)).optional()
   }).strict()
 
   public static employeeUpdateSchema = z.object({

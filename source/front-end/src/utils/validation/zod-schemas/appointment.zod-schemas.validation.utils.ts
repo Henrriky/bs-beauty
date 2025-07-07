@@ -42,9 +42,8 @@ class AppointmentSchemas {
     .object({
       observation: z
         .string()
-        .min(3)
         .max(255)
-        .refine((string) => RegexPatterns.content.test(string))
+        .refine((string) => RegexPatterns.observation.test(string))
         .optional(),
       status: z.nativeEnum(Status).optional(),
     })
