@@ -17,7 +17,7 @@ interface CompleteUserRegisterUseCaseInput {
 }
 
 class CompleteUserRegisterUseCase {
-  constructor (
+  constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly employeeRepository: EmployeeRepository
   ) { }

@@ -18,7 +18,7 @@ const userTypesToSchemas = {
 }
 
 class CompleteUserRegisterController {
-  public static async handle (req: Request, res: Response) {
+  public static async handle(req: Request, res: Response) {
     try {
       if (req.user.registerCompleted) {
         res.status(StatusCodes.BAD_REQUEST).send({ message: 'User already complete register' })
