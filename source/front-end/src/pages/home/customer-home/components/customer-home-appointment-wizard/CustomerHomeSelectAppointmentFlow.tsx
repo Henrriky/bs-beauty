@@ -15,14 +15,14 @@ function CustomerHomeSelectAppointmentFlow({
       <Button
         label="Por Serviço"
         variant="text-only"
-        className={`text-[20px] ${currentFlow === 'service' ? '' : 'text-[#4e483f]'}`}
         onClick={() => setCurrenFlow('service')}
+        className={`text-[21px] ${currentFlow === 'service' ? '' : 'text-[#4E483F]'}`}
       />
       <Button
         label="Por Profissional"
         variant="text-only"
-        className={`text-[20px] ${currentFlow === 'professional' ? '' : 'text-[#4e483f]'}`}
         onClick={() => setCurrenFlow('professional')}
+        className={`text-[21px] ${currentFlow === 'professional' ? '' : 'text-[#4E483F]'}`}
       />
     </div>
   )

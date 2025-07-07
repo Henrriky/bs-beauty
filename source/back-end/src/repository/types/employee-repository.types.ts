@@ -4,7 +4,7 @@ interface ServicesOfferedByEmployee {
   id: string
   offers: Array<{
     id: string
-    estimatedPrice: number
+    estimatedTime: number
     price: Prisma.Decimal
     service: {
       id: string

@@ -117,7 +117,7 @@ class PrismaEmployeeRepository implements EmployeeRepository {
       id: employee.id,
       offers: employee.offers.map(offer => ({
         id: offer.id,
-        estimatedPrice: offer.estimatedTime,
+        estimatedTime: offer.estimatedTime,
         price: offer.price,
         service: offer.service
       }))
