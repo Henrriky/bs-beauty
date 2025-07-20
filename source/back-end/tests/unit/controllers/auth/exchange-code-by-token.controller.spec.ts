@@ -1,34 +1,32 @@
 import { StatusCodes } from "http-status-codes";
 import { ExchangeCodeByTokenUseCase } from "../../../../src/services/use-cases/auth/exchange-code-by-token.use-case";
 import { ExchangeCodeByTokenController } from "../../../../src/controllers/auth/exchange-code-by-token.controller";
+import { Response } from "express";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { mockRequest, MockRequest, mockResponse } from "../../../unit/utils/test-utilts";
+import { createMock } from "../../../unit/utils/mocks";
 
 vi.mock('../../../../src/services/use-cases/auth/exchange-code-by-token.use-case');
 vi.mock('../../../services/identity-providers/google-oauth-identity-provider.service');
 
 describe('ExchangeCodeByTokenController', () => {
 
-    let req: any;
-    let res: any;
-    let serviceMock: any;
+    let req: MockRequest;
+    let res: Response;
+    let executeMock: ReturnType<typeof vi.fn>;
 
     beforeEach(() => {
         vi.clearAllMocks();
 
-        req = {
-            body: {},
-        };
+        req = mockRequest();
 
-        res = {
-            status: vi.fn().mockReturnThis(),
-            send: vi.fn(),
-            json: vi.fn(),
-        };
+        res = mockResponse();
 
-        serviceMock = {
-            execute: vi.fn(),
-        };
+        const result = createMock<ExchangeCodeByTokenUseCase>();
+        executeMock = result.executeMock;
 
-        vi.mocked(ExchangeCodeByTokenUseCase).mockImplementation(() => serviceMock);
+        vi.spyOn(ExchangeCodeByTokenUseCase.prototype, 'execute')
+            .mockImplementation(executeMock);
     })
 
     it('should be defined', () => {
@@ -40,7 +38,7 @@ describe('ExchangeCodeByTokenController', () => {
         it('should return 200 and the access token if the use case succeeds', async () => {
             // arrange
             req.body = { code: 'valid_code' };
-            serviceMock.execute.mockResolvedValueOnce({ accessToken: 'fake_access_token' });
+            executeMock.mockResolvedValueOnce({ accessToken: 'fake_access_token' });
 
             // act
             await ExchangeCodeByTokenController.handle(req, res);
@@ -48,7 +46,7 @@ describe('ExchangeCodeByTokenController', () => {
             // assert
             expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
             expect(res.send).toHaveBeenCalledWith({ accessToken: 'fake_access_token' });
-            expect(serviceMock.execute).toHaveBeenCalledWith({ code: 'valid_code' });
+            expect(executeMock).toHaveBeenCalledWith({ code: 'valid_code' });
         });
 
         it('should return 400 if the body validation fails', async () => {
@@ -65,13 +63,13 @@ describe('ExchangeCodeByTokenController', () => {
                 message: 'Validation Error',
                 errors: expect.any(Array),
             }));
-            expect(serviceMock.execute).not.toHaveBeenCalled();
+            expect(executeMock).not.toHaveBeenCalled();
         });
 
         it('should return 500 if the use case throws an error', async () => {
             // arrange
             req.body = { code: 'valid_code' };
-            serviceMock.execute.mockRejectedValueOnce(new Error('Use case failure'));
+            executeMock.mockRejectedValueOnce(new Error('Use case failure'));
 
             // act
             await ExchangeCodeByTokenController.handle(req, res);
