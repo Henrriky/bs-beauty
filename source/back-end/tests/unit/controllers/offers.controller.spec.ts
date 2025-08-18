@@ -2,12 +2,14 @@ import { Offer } from "@prisma/client";
 import { OffersController } from "../../../src/controllers/offers.controller";
 import { makeOffersUseCaseFactory } from "../../../src/factory/make-offers-use-case.factory";
 import { Decimal } from "@prisma/client/runtime/library";
+import { mockRequest, MockRequest, mockResponse } from "../utils/test-utilts";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock('../../../src/factory/make-offers-use-case.factory.ts');
 
 describe('OffersController', () => {
 
-  let req: any;
+  let req: MockRequest;
   let res: any;
   let next: any;
   let useCaseMock: any;
@@ -16,19 +18,9 @@ describe('OffersController', () => {
 
     vi.clearAllMocks();
 
-    req = {
-      user: { userId: 'user-123' },
-      body: {},
-      params: {},
-      query: {},
-    };
+    req = mockRequest();
 
-
-
-    res = {
-      status: vi.fn().mockReturnThis(),
-      send: vi.fn(),
-    };
+    res = mockResponse();
 
     next = vi.fn();
 

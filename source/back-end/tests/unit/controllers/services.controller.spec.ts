@@ -1,13 +1,16 @@
 import { Prisma, Service } from "@prisma/client";
+import { Response } from "express";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ServicesController } from "../../../src/controllers/services.controller";
 import { makeServiceUseCaseFactory } from "../../../src/factory/make-service-use-case.factory";
+import { mockRequest, MockRequest, mockResponse } from "../utils/test-utilts";
 
 vi.mock('../../../src/factory/make-service-use-case.factory.ts');
 
 describe('ServicesController', () => {
 
-  let req: any;
-  let res: any;
+  let req: MockRequest;
+  let res: Response;
   let next: any;
   let useCaseMock: any;
 
@@ -15,16 +18,9 @@ describe('ServicesController', () => {
 
     vi.clearAllMocks();
 
-    req = {
-      user: { userId: 'user-123' },
-      body: {},
-      params: {},
-    };
+    req = mockRequest();
 
-    res = {
-      status: vi.fn().mockReturnThis(),
-      send: vi.fn(),
-    };
+    res = mockResponse();
 
     next = vi.fn();
 

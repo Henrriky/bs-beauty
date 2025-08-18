@@ -1,13 +1,15 @@
-import { Shift, WeekDays } from "@prisma/client";
+import { Shift, UserType, WeekDays } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
-import { makeShiftUseCaseFactory } from "../../../src/factory/make-shift-use-case.factory";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ShiftController } from "../../../src/controllers/shift.controller";
+import { makeShiftUseCaseFactory } from "../../../src/factory/make-shift-use-case.factory";
+import { mockRequest, MockRequest, mockResponse } from "../utils/test-utilts";
 
 vi.mock('../../../src/factory/make-shift-use-case.factory');
 
 describe('ShiftController', () => {
 
-  let req: any;
+  let req: MockRequest;
   let res: any;
   let next: any;
   let useCaseMock: any;
@@ -16,16 +18,20 @@ describe('ShiftController', () => {
 
     vi.clearAllMocks();
 
-    req = {
-      user: { userId: 'user-123' },
-      body: {},
-      params: {},
-    };
+    req = mockRequest({
+      user: {
+        id: 'user-123',
+        userType: UserType.EMPLOYEE,
+        email: '',
+        name: '',
+        registerCompleted: true,
+        googleId: '',
+        profilePhotoUrl: '',
+        userId: 'user-123',
+      }
+    });
 
-    res = {
-      status: vi.fn().mockReturnThis(),
-      send: vi.fn(),
-    };
+    res = mockResponse();
 
     next = vi.fn();
 
