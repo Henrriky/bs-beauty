@@ -9,7 +9,7 @@ export default defineConfig({
     coverage: {
       reporter: ['text', 'html'],
     },
+    setupFiles: ['./tests/unit/setup-integration-unit.ts'],
   },
-  setupFiles: ['./tests/unit/setup-integration-unit.ts'],
-  plugins: [tsConfigPaths()], 
+  plugins: [tsConfigPaths()],
 })
