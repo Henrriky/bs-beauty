@@ -9,7 +9,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./source/back-end
+        working-directory: source/back-end
 
     steps:
       - name: Debug repo layout (show where files are)
