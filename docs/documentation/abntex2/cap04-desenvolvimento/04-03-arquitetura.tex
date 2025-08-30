@@ -47,15 +47,15 @@ No diagrama de componentes proposto, a aplicação é composta por diversos mód
 
   \item \textbf{\emph{Customers}}: Controla os dados relacionados aos clientes da plataforma. Permite o cadastro, consulta e edição de informações do perfil dos usuários.
 
-  \item \textbf{\emph{Employees}}: Administra os dados dos profissionais que prestam serviços na aplicação, incluindo informações cadastrais, disponibilidade e associação a serviços específicos.
+  \item \textbf{\emph{Professionals}}: Administra os dados dos profissionais que prestam serviços na aplicação, incluindo informações cadastrais, disponibilidade e associação a serviços específicos.
 
   \item \textbf{\emph{Notifications}}: Responsável por enviar notificações aos usuários, como lembretes, confirmações de agendamento e atualizações importantes. Pode incluir o envio por \emph{e-mail} ou outros canais.
 
-  \item \textbf{\emph{Offers}}: Define a relação entre profissionais e os serviços que eles oferecem. Cada oferta especifica o tempo estimado e o valor cobrado por um funcionário para realizar determinado serviço. Esse componente é fundamental para a composição de um agendamento, pois determina quais combinações de profissional e serviço estão disponíveis.
+  \item \textbf{\emph{Offers}}: Define a relação entre profissionais e os serviços que eles oferecem. Cada oferta especifica o tempo estimado e o valor cobrado por um profissional para realizar determinado serviço. Esse componente é fundamental para a composição de um agendamento, pois determina quais combinações de profissional e serviço estão disponíveis.
 
   \item \textbf{\emph{Services}}: Representa os serviços oferecidos pela empresa, armazenando informações descritivas como nome e descrição. Este módulo não define valores ou tempos de execução, pois esses dados são especificados nas ofertas individuais de cada profissional (por meio do módulo \textit{Offers}).
 
-  \item \textbf{\emph{Shift}}: Trata do controle de turnos de trabalho dos funcionários, possibilitando a definição de horários disponíveis para realização dos agendamentos.
+  \item \textbf{\emph{Shift}}: Trata do controle de turnos de trabalho dos profissionais, possibilitando a definição de horários disponíveis para realização dos agendamentos.
 
   \item \textbf{\emph{Rating}}: Permite que os clientes avaliem os serviços e os profissionais após os atendimentos, promovendo um sistema de \emph{feedback} contínuo.
   

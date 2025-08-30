@@ -24,30 +24,30 @@ Nele foram definidas as seguintes entidades e relacionamentos:
 	\begin{itemize}
 		\item \textbf{\textit{sends:}} uma notificação (\emph{NOTIFICATION}) é enviada por (\textit{sends}) um agendamento (\emph{APPOINTMENT}).
 	\end{itemize}
-	\item \emph{OFFER}: Entidade associativa que representa a oferta (\textit{offers}) de um serviço (\emph{SERVICE}) por um funcionário (\emph{EMPLOYEE}).
+	\item \emph{OFFER}: Entidade associativa que representa a oferta (\textit{offers}) de um serviço (\emph{SERVICE}) por um profissional (\emph{PROFESSIONAL}).
 	\begin{itemize}
 		\item \textbf{\textit{includes}}: uma oferta (\emph{OFFER}) pode ou não ser incluida (\textit{includes}) em muitos agendamentos (\emph{APPOINTMENT}). 
 	\end{itemize}
-	\item \emph{EMPLOYEE}: Entidade que representa um funcionário.
+	\item \emph{PROFESSIONAL}: Entidade que representa um profissional.
 	\begin{itemize}
-		\item \textbf{\textit{offers}}: um funcionário (\emph{EMPLOYEE}) oferece (\textit{offers}) ou não muitos serviços (\emph{SERVICE}).
-		\item \textbf{\textit{has}}: um funcionário (\emph{EMPLOYEE}) tem (\textit{has}) ou não muitos turnos (\emph{SHIFT}).
-		\item \textbf{\textit{has}}: um funcionário (\emph{EMPLOYEE}) tem (\textit{has}) ao menos um papel (\emph{ROLE}).
+		\item \textbf{\textit{offers}}: um profissional (\emph{PROFESSIONAL}) oferece (\textit{offers}) ou não muitos serviços (\emph{SERVICE}).
+		\item \textbf{\textit{has}}: um profissional (\emph{PROFESSIONAL}) tem (\textit{has}) ou não muitos turnos (\emph{SHIFT}).
+		\item \textbf{\textit{has}}: um profissional (\emph{PROFESSIONAL}) tem (\textit{has}) ao menos um papel (\emph{ROLE}).
 	\end{itemize}
 	\item \emph{SERVICE}: Entidade que representa um serviço no salão de beleza.
 	\begin{itemize}
-		\item \textbf{\textit{offers}}: um serviço (\emph{SERVICE}) é oferecido (\textit{offers}) ou não por muitos funcionários (\emph{EMPLOYEE}).
+		\item \textbf{\textit{offers}}: um serviço (\emph{SERVICE}) é oferecido (\textit{offers}) ou não por muitos funcionários (\emph{PROFESSIONAL}).
 	\end{itemize}
-	\item \emph{SHIFT}: Entidade que representa os turnos de trabalho de um funcionário.
+	\item \emph{SHIFT}: Entidade que representa os turnos de trabalho de um profissional.
 	\begin{itemize}
-		\item \textbf{\textit{has}}: um turno (\emph{SHIFT}) é tido (\textit{has}) por um funcionário (\emph{EMPLOYEE}).
+		\item \textbf{\textit{has}}: um turno (\emph{SHIFT}) é tido (\textit{has}) por um profissional (\emph{PROFESSIONAL}).
 	\end{itemize}
-	\item \emph{ROLE}: Entidade que representa os papéis que um funcionário possui na plataforma.
+	\item \emph{ROLE}: Entidade que representa os papéis que um profissional possui na plataforma.
 	\begin{itemize}
-		\item \textbf{\textit{has}}: um papel (\emph{ROLE}) é tido ou não (\textit{has}) por muitos funcionários (\emph{EMPLOYEE}).
+		\item \textbf{\textit{has}}: um papel (\emph{ROLE}) é tido ou não (\textit{has}) por muitos profissionais (\emph{EMPLOYEE}).
 		\item \textbf{\textit{has}}: um papel (\emph{ROLE}) tem (\textit{has}) ao menos uma permissão (\emph{PERMISSIONS}).
 	\end{itemize}
-	\item \emph{EMPLOYE\_ROLE}: Entidade associativa auxiliar para \emph{EMPLOYEE} e \emph{ROLE}.
+	\item \emph{PROFESSIONAL\_ROLE}: Entidade associativa auxiliar para \emph{PROFESSIONAL} e \emph{ROLE}.
 	\item \emph{PERMISSIONS}: Entidade que representa as permissões que cada papel provê.
 	\begin{itemize}
 		\item \textbf{\textit{has}}: uma permissão (\emph{PERMISSIONS}) é tida (\textit{has}) ou não por muitos papeis (\emph{ROLE}).
