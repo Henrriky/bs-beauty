@@ -12,6 +12,16 @@ jobs:
         working-directory: ./source/back-end
 
     steps:
+      - name: Debug repo layout (show where files are)
+        run: |
+          echo "pwd: $(pwd)"
+          echo "root listing:"
+          ls -la
+          echo "source listing:"
+          ls -la source || true
+          echo "source/back-end listing:"
+          ls -la source/back-end || true
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
