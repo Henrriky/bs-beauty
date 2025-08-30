@@ -3,36 +3,42 @@ import { FetchUserInfoController } from '../../../../src/controllers/auth/fetch-
 import { makeFetchUserInfoUseCase } from '../../../../src/factory/auth/make-fetch-user-info.use-case.factory.ts'
 import { InvalidUserTypeUseCaseError } from '../../../../src/services/use-cases/errors/invalid-user-type-use-case-error'
 import { NotFoundUseCaseError } from '../../../../src/services/use-cases/errors/not-found-error'
-import { z } from 'zod'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { Request, Response } from 'express'
+import { MockRequest, mockRequest, mockResponse } from '../../utils/test-utilts.ts'
+import { FetchUserInfoUseCase } from '../../../../src/services/use-cases/auth/fetch-user-info.use-case.ts'
+import { createMock } from '../../utils/mocks.ts'
 
 vi.mock('../../../../src/factory/auth/make-fetch-user-info.use-case.factory.ts')
 
 describe('FetchUserInfoController', () => {
-  let req: any
-  let res: any
-  let useCaseMock: any
+  let req: MockRequest
+  let res: Response
+  let executeMock: ReturnType<typeof vi.fn>;
+  let usecaseMock: FetchUserInfoUseCase;;
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    req = {
+    req = mockRequest({
       user: {
+        id: '12345',
+        name: 'John Doe',
         email: 'user@example.com',
-        userType: 'user'
+        userType: 'EMPLOYEE',
+        profilePhotoUrl: 'http://example.com/photo.jpg',
+        registerCompleted: false,
+        userId: '12345',
       }
-    }
+    });
 
-    res = {
-      status: vi.fn().mockReturnThis(),
-      send: vi.fn(),
-      json: vi.fn()
-    }
+    res = mockResponse();
 
-    useCaseMock = {
-      execute: vi.fn()
-    }
+    const result = createMock<FetchUserInfoUseCase>();
+    usecaseMock = result.usecase;
+    executeMock = result.executeMock;
 
-    vi.mocked(makeFetchUserInfoUseCase).mockImplementation(() => useCaseMock)
+    vi.mocked(makeFetchUserInfoUseCase).mockImplementation(() => usecaseMock)
   })
 
   it('should be defined', () => {
@@ -43,7 +49,7 @@ describe('FetchUserInfoController', () => {
     it('should return 200 and the user info if the use case succeeds', async () => {
       // arrange
       const mockUser = { name: 'John Doe', email: 'user@example.com' }
-      useCaseMock.execute.mockResolvedValueOnce({ user: mockUser })
+      executeMock.mockResolvedValueOnce({ user: mockUser })
 
       // act
       await FetchUserInfoController.handle(req, res)
@@ -51,16 +57,16 @@ describe('FetchUserInfoController', () => {
       // assert
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK)
       expect(res.send).toHaveBeenCalledWith({ user: mockUser })
-      expect(useCaseMock.execute).toHaveBeenCalledWith({
+      expect(usecaseMock.execute).toHaveBeenCalledWith({
         email: 'user@example.com',
-        userType: 'user'
+        userType: "EMPLOYEE",
       })
     })
 
     it('should return 400 if the userType is invalid', async () => {
       // arrange
       const errorMessage = 'Invalid userType'
-      useCaseMock.execute.mockRejectedValueOnce(new InvalidUserTypeUseCaseError(errorMessage))
+      executeMock.mockRejectedValueOnce(new InvalidUserTypeUseCaseError(errorMessage))
 
       // act
       await FetchUserInfoController.handle(req, res)
@@ -73,7 +79,7 @@ describe('FetchUserInfoController', () => {
     it('should return 404 if the user is not found', async () => {
       // arrange
       const errorMessage = 'User not found'
-      useCaseMock.execute.mockRejectedValueOnce(new NotFoundUseCaseError(errorMessage))
+      executeMock.mockRejectedValueOnce(new NotFoundUseCaseError(errorMessage))
 
       // act
       await FetchUserInfoController.handle(req, res)
@@ -85,7 +91,7 @@ describe('FetchUserInfoController', () => {
 
     it('should return 500 if the use case throws an unexpected error', async () => {
       // arrange
-      useCaseMock.execute.mockRejectedValueOnce(new Error('Unexpected error'))
+      executeMock.mockRejectedValueOnce(new Error('Unexpected error'))
 
       // act
       await FetchUserInfoController.handle(req, res)

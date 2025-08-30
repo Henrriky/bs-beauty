@@ -2,6 +2,8 @@ import { Employee, Prisma } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import { makeEmployeesUseCaseFactory } from "../../../src/factory/make-employees-use-case.factory";
 import { EmployeesController } from "../../../src/controllers/employees.controller";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { mockRequest, mockResponse } from "../utils/test-utilts";
 
 vi.mock('../../../src/factory/make-employees-use-case.factory');
 
@@ -16,21 +18,12 @@ describe('EmployeesController', () => {
 
     vi.clearAllMocks();
 
-    req = {
-      user: { userId: 'user-123' },
-      body: {},
-      params: {},
-    };
-
-    res = {
-      status: vi.fn().mockReturnThis(),
-      send: vi.fn(),
-    };
-
+    req = mockRequest();
+    res = mockResponse();
     next = vi.fn();
 
     useCaseMock = {
-      executeFindAll: vi.fn(),
+      executeFindAllPaginated: vi.fn(),
       executeFindById: vi.fn(),
       executeCreate: vi.fn(),
       executeUpdate: vi.fn(),
@@ -58,26 +51,26 @@ describe('EmployeesController', () => {
           {
             id: 'user-123',
             name: 'John Doe',
-            email: 'rikolas@example.com',
+            email: 'johndoe@example.com',
             registerCompleted: true,
             googleId: 'google-id-123',
           },
           {
             id: 'user-1',
             name: 'Jane Doe',
-            email: 'ricks@example.com',
+            email: 'janedoe@example.com',
             registerCompleted: false,
           },
         ] as Employee[],
       };
 
-      useCaseMock.executeFindAll.mockResolvedValueOnce(employeesListFromUseCase);
+      useCaseMock.executeFindAllPaginated.mockResolvedValueOnce(employeesListFromUseCase);
 
       // act
       await EmployeesController.handleFindAll(req, res, next);
 
       // assert
-      expect(useCaseMock.executeFindAll).toHaveBeenCalled();
+      expect(useCaseMock.executeFindAllPaginated).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.send).toHaveBeenCalledWith(employeesListFromUseCase);
       expect(next).not.toHaveBeenCalled();
@@ -87,13 +80,13 @@ describe('EmployeesController', () => {
     it('should call next with an error if executeFindAll fails', async () => {
       // arrange
       const error = new Error('Database connection failed');
-      useCaseMock.executeFindAll.mockRejectedValueOnce(error);
+      useCaseMock.executeFindAllPaginated.mockRejectedValueOnce(error);
 
       // act
       await EmployeesController.handleFindAll(req, res, next);
 
       // assert
-      expect(useCaseMock.executeFindAll).toHaveBeenCalledTimes(1);
+      expect(useCaseMock.executeFindAllPaginated).toHaveBeenCalledTimes(1);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.send).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);

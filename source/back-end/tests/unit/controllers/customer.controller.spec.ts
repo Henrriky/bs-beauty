@@ -1,43 +1,49 @@
+import { faker } from "@faker-js/faker";
 import { Customer, Prisma, UserType } from "@prisma/client";
+import { Response } from "express";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CustomersController } from "../../../src/controllers/customers.controller";
 import { makeCustomersUseCaseFactory } from "../../../src/factory/make-customers-use-case.factory";
-import { faker } from "@faker-js/faker";
+import { mockRequest, MockRequest, mockResponse } from "../utils/test-utilts";
+import * as CustomersQuerySchemaMod from '../../../src/utils/validation/zod-schemas/pagination/customers/customers-query.schema';
+import { z } from "zod";
 
-vi.mock('../../../src/factory/make-customers-use-case.factory.ts');
+vi.mock('../../../src/factory/make-customers-use-case.factory');
+
+type usecaseType = {
+  executeFindAll: ReturnType<typeof vi.fn>;
+  executeFindById: ReturnType<typeof vi.fn>;
+  executeCreate: ReturnType<typeof vi.fn>;
+  executeUpdate: ReturnType<typeof vi.fn>;
+  executeDelete: ReturnType<typeof vi.fn>;
+  executeFindAllPaginated: ReturnType<typeof vi.fn>;
+};
 
 describe('CustomerController', () => {
 
-  let req: any;
-  let res: any;
+  let req: MockRequest;
+  let res: Response;
   let next: any;
-  let useCaseMock: any;
+  let usecaseMock: usecaseType;
 
   beforeEach(() => {
 
     vi.clearAllMocks();
-
-    req = {
-      user: { userId: 'user-123' },
-      body: {},
-      params: {},
-    };
-
-    res = {
-      status: vi.fn().mockReturnThis(),
-      send: vi.fn(),
-    };
-
+    req = mockRequest();
+    res = mockResponse();
     next = vi.fn();
 
-    useCaseMock = {
+    usecaseMock = {
       executeFindAll: vi.fn(),
       executeFindById: vi.fn(),
       executeCreate: vi.fn(),
       executeUpdate: vi.fn(),
       executeDelete: vi.fn(),
+      executeFindAllPaginated: vi.fn(),
     };
 
-    vi.mocked(makeCustomersUseCaseFactory).mockReturnValue(useCaseMock);
+    vi.mocked(makeCustomersUseCaseFactory)
+      .mockReturnValue(usecaseMock as unknown as ReturnType<typeof makeCustomersUseCaseFactory>);
 
   });
 
@@ -69,14 +75,14 @@ describe('CustomerController', () => {
           googleId: 'google-id-2',
         }
       ] as Customer[];
-      useCaseMock.executeFindAll.mockResolvedValue({ customers });
+      usecaseMock.executeFindAll.mockResolvedValue({ customers });
 
       // act
       await CustomersController.handleFindAll(req, res, next);
 
       // assert
       expect(res.send).toHaveBeenCalledWith({ customers });
-      expect(useCaseMock.executeFindAll).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeFindAll).toHaveBeenCalledTimes(1);
       expect(next).not.toHaveBeenCalled();
 
     });
@@ -84,13 +90,13 @@ describe('CustomerController', () => {
     it('should call next with an error if executeFindAll fails', async () => {
       // arrange
       const error = new Error('Database connection failed');
-      useCaseMock.executeFindAll.mockRejectedValueOnce(error);
+      usecaseMock.executeFindAll.mockRejectedValueOnce(error);
 
       // act
       await CustomersController.handleFindAll(req, res, next);
 
       // assert
-      expect(useCaseMock.executeFindAll).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeFindAll).toHaveBeenCalledTimes(1);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.send).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
@@ -113,7 +119,7 @@ describe('CustomerController', () => {
         registerCompleted: true,
         googleId: 'google-id-1',
       } as Customer;
-      useCaseMock.executeFindById.mockResolvedValueOnce(customer);
+      usecaseMock.executeFindById.mockResolvedValueOnce(customer);
 
       // act
       await CustomersController.handleFindById(req, res, next);
@@ -121,7 +127,7 @@ describe('CustomerController', () => {
       // assert
       expect(req.params.id).toBe(customerId);
       expect(res.send).toHaveBeenCalledWith(customer);
-      expect(useCaseMock.executeFindById).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeFindById).toHaveBeenCalledTimes(1);
       expect(next).not.toHaveBeenCalled();
 
     });
@@ -129,13 +135,13 @@ describe('CustomerController', () => {
     it('should call next with an error if executeFindById fails', async () => {
       // arrange
       const error = new Error('Database connection failed');
-      useCaseMock.executeFindById.mockRejectedValueOnce(error);
+      usecaseMock.executeFindById.mockRejectedValueOnce(error);
 
       // act
       await CustomersController.handleFindById(req, res, next);
 
       // assert
-      expect(useCaseMock.executeFindById).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeFindById).toHaveBeenCalledTimes(1);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.send).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
@@ -156,7 +162,7 @@ describe('CustomerController', () => {
         birthdate: faker.date.birthdate(),
       };
       req.body = newCustomer;
-      useCaseMock.executeCreate.mockResolvedValueOnce(newCustomer);
+      usecaseMock.executeCreate.mockResolvedValueOnce(newCustomer);
 
       // act
       await CustomersController.handleCreate(req, res, next);
@@ -164,7 +170,7 @@ describe('CustomerController', () => {
       // assert
       expect(req.body).toEqual(newCustomer);
       expect(res.send).toHaveBeenCalledWith(newCustomer);
-      expect(useCaseMock.executeCreate).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeCreate).toHaveBeenCalledTimes(1);
       expect(next).not.toHaveBeenCalled();
 
     });
@@ -172,13 +178,13 @@ describe('CustomerController', () => {
     it('should call next with an error if executeCreate fails', async () => {
       // arrange
       const error = new Error('Database connection failed');
-      useCaseMock.executeCreate.mockRejectedValueOnce(error);
+      usecaseMock.executeCreate.mockRejectedValueOnce(error);
 
       // act
       await CustomersController.handleCreate(req, res, next);
 
       // assert
-      expect(useCaseMock.executeCreate).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeCreate).toHaveBeenCalledTimes(1);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.send).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
@@ -199,7 +205,7 @@ describe('CustomerController', () => {
       const customerId = 'random-uuid';
       req.body = customerToUpdate;
       req.params.id = customerId;
-      useCaseMock.executeUpdate.mockResolvedValueOnce(customerToUpdate);
+      usecaseMock.executeUpdate.mockResolvedValueOnce(customerToUpdate);
 
       // act
       await CustomersController.handleUpdate(req, res, next);
@@ -208,7 +214,7 @@ describe('CustomerController', () => {
       expect(req.body).toEqual(customerToUpdate);
       expect(req.params.id).toBe(customerId);
       expect(res.send).toHaveBeenCalledWith(customerToUpdate);
-      expect(useCaseMock.executeUpdate).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeUpdate).toHaveBeenCalledTimes(1);
       expect(next).not.toHaveBeenCalled();
 
     });
@@ -216,13 +222,13 @@ describe('CustomerController', () => {
     it('should call next with an error if executeUpdate fails', async () => {
       // arrange
       const error = new Error('Database connection failed');
-      useCaseMock.executeUpdate.mockRejectedValueOnce(error);
+      usecaseMock.executeUpdate.mockRejectedValueOnce(error);
 
       // act
       await CustomersController.handleUpdate(req, res, next);
 
       // assert
-      expect(useCaseMock.executeUpdate).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeUpdate).toHaveBeenCalledTimes(1);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.send).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
@@ -236,14 +242,14 @@ describe('CustomerController', () => {
       // arrange
       const customerId = 'random-uuid';
       req.params.id = customerId;
-      useCaseMock.executeDelete.mockResolvedValueOnce(undefined);
+      usecaseMock.executeDelete.mockResolvedValueOnce(undefined);
 
       // act
       await CustomersController.handleDelete(req, res, next);
 
       // assert
       expect(req.params.id).toBe(customerId);
-      expect(useCaseMock.executeDelete).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeDelete).toHaveBeenCalledTimes(1);
       expect(res.send).toHaveBeenCalled();
       expect(next).not.toHaveBeenCalled();
     });
@@ -253,18 +259,138 @@ describe('CustomerController', () => {
       const error = new Error('Database connection failed');
       const serviceId = 'random-uuid';
       req.params.id = serviceId;
-      useCaseMock.executeDelete.mockRejectedValueOnce(error);
+      usecaseMock.executeDelete.mockRejectedValueOnce(error);
 
       // act
       await CustomersController.handleDelete(req, res, next);
 
       // assert
-      expect(useCaseMock.executeDelete).toHaveBeenCalledTimes(1);
-      expect(useCaseMock.executeDelete).toHaveBeenCalledWith(serviceId);
+      expect(usecaseMock.executeDelete).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeDelete).toHaveBeenCalledWith(serviceId);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.send).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
       expect(next).toHaveBeenCalledWith(error);
+    });
+
+
+
+  });
+
+  describe('handleFindAllPaginated', () => {
+    it('should parse query with Zod and call usecase with page, limit and filters', async () => {
+      const parseSpy = vi.spyOn(CustomersQuerySchemaMod.customerQuerySchema, 'parse');
+
+      parseSpy.mockReturnValueOnce({ page: 2, limit: 10, name: 'john' });
+
+      const pagedResult = {
+        data: [{ id: '1', name: 'John' }],
+        page: 2,
+        limit: 10,
+        total: 11,
+        totalPages: 2,
+      };
+      usecaseMock.executeFindAllPaginated.mockResolvedValueOnce(pagedResult);
+
+      await CustomersController.handleFindAllPaginated(req, res, next);
+
+      expect(makeCustomersUseCaseFactory).toHaveBeenCalledTimes(1);
+      expect(parseSpy).toHaveBeenCalledWith(req.query);
+      expect(usecaseMock.executeFindAllPaginated).toHaveBeenCalledWith({
+        page: 2,
+        limit: 10,
+        filters: { name: 'john' },
+      });
+      expect(res.send).toHaveBeenCalledWith(pagedResult);
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it('should call next when Zod parse throws (invalid query)', async () => {
+      const parseSpy = vi.spyOn(CustomersQuerySchemaMod.customerQuerySchema, 'parse');
+      const zodErr = new z.ZodError([]);
+
+      parseSpy.mockImplementationOnce(() => { throw zodErr; });
+
+      await CustomersController.handleFindAllPaginated(req, res, next);
+
+      expect(makeCustomersUseCaseFactory).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeFindAllPaginated).not.toHaveBeenCalled();
+      expect(res.send).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(zodErr);
+    });
+
+    it('should call next when usecase throws', async () => {
+      const parseSpy = vi.spyOn(CustomersQuerySchemaMod.customerQuerySchema, 'parse');
+      parseSpy.mockReturnValueOnce({ page: 1, limit: 20 });
+
+      const err = new Error('DB down');
+      usecaseMock.executeFindAllPaginated.mockRejectedValueOnce(err);
+
+      await CustomersController.handleFindAllPaginated(req, res, next);
+
+      expect(usecaseMock.executeFindAllPaginated).toHaveBeenCalledWith({
+        page: 1, limit: 20, filters: {}
+      });
+      expect(res.send).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(err);
+    });
+
+    it('should pass empty filters when schema returns only page/limit', async () => {
+      const parseSpy = vi.spyOn(CustomersQuerySchemaMod.customerQuerySchema, 'parse');
+      parseSpy.mockReturnValueOnce({ page: 1, limit: 50 });
+
+      const result = { data: [], page: 1, limit: 50, total: 0, totalPages: 0 };
+      usecaseMock.executeFindAllPaginated.mockResolvedValueOnce(result);
+
+      await CustomersController.handleFindAllPaginated(req, res, next);
+
+      expect(usecaseMock.executeFindAllPaginated).toHaveBeenCalledWith({
+        page: 1, limit: 50, filters: {}
+      });
+      expect(res.send).toHaveBeenCalledWith(result);
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it('should forward multiple filters returned by schema', async () => {
+      const parseSpy = vi.spyOn(CustomersQuerySchemaMod.customerQuerySchema, 'parse');
+      parseSpy.mockReturnValueOnce({
+        page: 3,
+        limit: 5,
+        name: 'john',
+        email: 'john@ex.com',
+      });
+
+      const result = { data: [{ id: '1', name: 'John' }], page: 3, limit: 5, total: 1, totalPages: 1 };
+      usecaseMock.executeFindAllPaginated.mockResolvedValueOnce(result);
+
+      await CustomersController.handleFindAllPaginated(req, res, next);
+
+      expect(usecaseMock.executeFindAllPaginated).toHaveBeenCalledWith({
+        page: 3,
+        limit: 5,
+        filters: { name: 'john', email: 'john@ex.com' },
+      });
+      expect(res.send).toHaveBeenCalledWith(result);
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it('should return empty page results correctly', async () => {
+      const parseSpy = vi.spyOn(CustomersQuerySchemaMod.customerQuerySchema, 'parse');
+      parseSpy.mockReturnValueOnce({ page: 2, limit: 10 });
+
+      const emptyResult = { data: [], page: 2, limit: 10, total: 0, totalPages: 0 };
+      usecaseMock.executeFindAllPaginated.mockResolvedValueOnce(emptyResult);
+
+      await CustomersController.handleFindAllPaginated(req, res, next);
+
+      expect(makeCustomersUseCaseFactory).toHaveBeenCalledTimes(1);
+      expect(usecaseMock.executeFindAllPaginated).toHaveBeenCalledWith({
+        page: 2,
+        limit: 10,
+        filters: {},
+      });
+      expect(res.send).toHaveBeenCalledWith(emptyResult);
+      expect(next).not.toHaveBeenCalled();
     });
 
   });
