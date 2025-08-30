@@ -7,8 +7,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await prismaClient.$disconnect();
   await truncateAll();
+  await prismaClient.$disconnect();
 });
 
 beforeEach(async () => {
