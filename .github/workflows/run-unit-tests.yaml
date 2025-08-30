@@ -12,6 +12,9 @@ jobs:
         working-directory: source/back-end
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Debug repo layout (show where files are)
         run: |
           echo "pwd: $(pwd)"
@@ -21,10 +24,7 @@ jobs:
           ls -la source || true
           echo "source/back-end listing:"
           ls -la source/back-end || true
-
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
+          
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
