@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { decodeUserToken } from '../../utils/decode-token'
-import { CustomerOrEmployee } from './types'
+import { CustomerOrProfessional } from './types'
 
 type TokenParams = {
   accessToken: string
@@ -10,7 +10,7 @@ type TokenParams = {
 
 type AuthState = {
   token: TokenParams | null
-  user: CustomerOrEmployee | null
+  user: CustomerOrProfessional | null
 }
 
 const initialState = (): AuthState => {
@@ -60,7 +60,7 @@ const authSlice = createSlice({
   reducers: {
     setToken: (
       state,
-      action: PayloadAction<{ token: TokenParams; user: CustomerOrEmployee }>,
+      action: PayloadAction<{ token: TokenParams; user: CustomerOrProfessional }>,
     ) => {
       return {
         ...state,
@@ -80,7 +80,7 @@ const authSlice = createSlice({
     },
     updateUserInformations: (
       state,
-      action: PayloadAction<{ user: Partial<CustomerOrEmployee> }>,
+      action: PayloadAction<{ user: Partial<CustomerOrProfessional> }>,
     ) => {
       return {
         ...state,

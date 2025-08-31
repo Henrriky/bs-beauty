@@ -25,7 +25,7 @@ interface EditableShift {
   isBusy: boolean
 }
 
-const EmployeeShifts = () => {
+const ProfessionalShifts = () => {
   const { data, refetch } = shiftAPI.useFindShiftsByAuthenticatedUserQuery()
   const [createShift] = shiftAPI.useCreateShiftMutation()
   const [updateShift] = shiftAPI.useUpdateShiftMutation()
@@ -190,4 +190,4 @@ const EmployeeShifts = () => {
   )
 }
 
-export default EmployeeShifts
+export default ProfessionalShifts

@@ -12,13 +12,13 @@ import { setToken } from '../../store/auth/auth-slice'
 import { UserType } from '../../store/auth/types'
 import { decodeUserToken } from '../../utils/decode-token'
 import CustomerProfile from './components/CustomerProfile'
-import EmployeeProfile from './components/EmployeeProfile'
+import ProfessionalProfile from './components/ProfessionalProfile'
 import ProfilePicture from './components/ProfilePicture'
 
 const userTypeToProfileComponents = {
   [UserType.CUSTOMER]: CustomerProfile,
-  [UserType.EMPLOYEE]: EmployeeProfile,
-  [UserType.MANAGER]: EmployeeProfile,
+  [UserType.PROFESSIONAL]: ProfessionalProfile,
+  [UserType.MANAGER]: ProfessionalProfile,
 }
 
 function Profile() {
@@ -36,7 +36,7 @@ function Profile() {
 
     try {
       const { accessToken } = await AuthAPI.loginWithGoogleAccessToken(
-        tokens.googleAccessToken
+        tokens.googleAccessToken,
       )
 
       const decodedToken = decodeUserToken(accessToken)
@@ -56,7 +56,7 @@ function Profile() {
             accessToken,
             expiresAt: decodedToken.exp!,
           },
-        })
+        }),
       )
 
       localStorage.setItem('token', accessToken)

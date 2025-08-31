@@ -6,19 +6,19 @@ import { useFormContext } from 'react-hook-form'
 import { CreateAppointmentFormData } from '../types'
 import { ErrorMessage } from '../../../../../../components/feedback/ErrorMessage'
 import { FaceFrownIcon } from '@heroicons/react/24/outline'
-import CustomerHomeEmployeeCard from './CustomerHomeEmployeeCard'
-import { employeeAPI } from '../../../../../../store/employee/employee-api'
+import CustomerHomeProfessionalCard from './CustomerHomeProfessionalCard'
+import { professionalAPI } from '../../../../../../store/professional/professional-api'
 
 interface Props {
   currentFlow: 'service' | 'professional'
 }
 
-function CustomerHomeSelectEmployeeContainer(props: Props) {
+function CustomerHomeSelectProfessionalContainer(props: Props) {
   const { register, watch, setValue } =
     useFormContext<CreateAppointmentFormData>()
   const serviceId = watch('serviceId')
   const serviceOfferedId = watch('serviceOfferedId')
-  const employeeId = watch('employeeId')
+  const professionalId = watch('professionalId')
 
   if (!serviceId && props.currentFlow === 'service') {
     toast.error(
@@ -35,27 +35,27 @@ function CustomerHomeSelectEmployeeContainer(props: Props) {
   }
 
   const { data, isLoading, isError, error } =
-    serviceAPI.useFetchEmployeesOfferingServiceQuery(
+    serviceAPI.useFetchProfessionalsOfferingServiceQuery(
       { serviceId },
       { skip: props.currentFlow !== 'service' },
     )
 
   const {
-    data: employeesData,
-    isLoading: isLoadingEmployees,
-    isError: isErrorEmployees,
-    error: employeesError,
-  } = employeeAPI.useFetchEmployeesQuery(
+    data: professionalsData,
+    isLoading: isLoadingProfessionals,
+    isError: isErrorProfessionals,
+    error: professionalsError,
+  } = professionalAPI.useFetchProfessionalsQuery(
     {},
     { skip: props.currentFlow !== 'professional' },
   )
 
-  if (isLoading || isLoadingEmployees)
+  if (isLoading || isLoadingProfessionals)
     return <BSBeautyLoading title="Carregando os funcionários..." />
 
-  if (isError || isErrorEmployees) {
+  if (isError || isErrorProfessionals) {
     toast.error('Erro ao carregar dados')
-    console.error(`Error trying to fetch services`, error || employeesError)
+    console.error(`Error trying to fetch services`, error || professionalsError)
 
     return (
       <ErrorMessage
@@ -64,15 +64,15 @@ function CustomerHomeSelectEmployeeContainer(props: Props) {
     )
   }
 
-  const employeesToShow =
+  const professionalsToShow =
     props.currentFlow === 'service'
-      ? (data?.employeesOfferingService.offers ?? [])
-      : (employeesData?.data.map((employee) => ({
-          id: `${employee.id}`,
-          employee,
+      ? (data?.professionalsOfferingService.offers ?? [])
+      : (professionalsData?.data.map((professional) => ({
+          id: `${professional.id}`,
+          professional,
         })) ?? [])
 
-  if (employeesToShow.length === 0) {
+  if (professionalsToShow.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-48 text-gray-500">
         <FaceFrownIcon className="h-12 w-12 mb-2" />
@@ -87,10 +87,10 @@ function CustomerHomeSelectEmployeeContainer(props: Props) {
   }
 
   const fieldToRegister =
-    props.currentFlow === 'service' ? 'serviceOfferedId' : 'employeeId'
+    props.currentFlow === 'service' ? 'serviceOfferedId' : 'professionalId'
 
   const fieldToCompare =
-    props.currentFlow === 'service' ? serviceOfferedId : employeeId
+    props.currentFlow === 'service' ? serviceOfferedId : professionalId
 
   return (
     <>
@@ -98,26 +98,26 @@ function CustomerHomeSelectEmployeeContainer(props: Props) {
         Escolha o profissional do seu agendamento:
       </Subtitle>
 
-      {employeesToShow &&
-        employeesToShow.map((offerOrEmployee) => {
-          const employee = offerOrEmployee.employee
+      {professionalsToShow &&
+        professionalsToShow.map((offerOrProfessional) => {
+          const professional = offerOrProfessional.professional
 
           return (
-            <div key={`employee-${employee.id}`}>
+            <div key={`professional-${professional.id}`}>
               <input
                 className="invisible"
                 type="radio"
-                id={offerOrEmployee.id}
-                value={offerOrEmployee.id}
+                id={offerOrProfessional.id}
+                value={offerOrProfessional.id}
                 {...register(fieldToRegister)}
               />
-              <CustomerHomeEmployeeCard
-                isSelected={fieldToCompare === offerOrEmployee.id}
+              <CustomerHomeProfessionalCard
+                isSelected={fieldToCompare === offerOrProfessional.id}
                 currentFlow={props.currentFlow}
-                key={offerOrEmployee.id}
-                for={offerOrEmployee.id}
-                {...offerOrEmployee}
-                onClick={() => setValue('employeeId', employee.id)}
+                key={offerOrProfessional.id}
+                for={offerOrProfessional.id}
+                {...offerOrProfessional}
+                onClick={() => setValue('professionalId', professional.id)}
               />
             </div>
           )
@@ -126,4 +126,4 @@ function CustomerHomeSelectEmployeeContainer(props: Props) {
   )
 }
 
-export default CustomerHomeSelectEmployeeContainer
+export default CustomerHomeSelectProfessionalContainer

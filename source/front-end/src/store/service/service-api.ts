@@ -7,7 +7,7 @@ import {
 } from '../../pages/services/components/types'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import {
-  EmployeesOfferingService,
+  ProfessionalsOfferingService,
   PaginatedServicesResponse,
   Service,
 } from './types'
@@ -41,12 +41,12 @@ export const serviceAPI = createApi({
             ]
           : [{ type: 'Services', id: 'LIST' }],
     }),
-    fetchEmployeesOfferingService: builder.query<
-      { employeesOfferingService: EmployeesOfferingService },
+    fetchProfessionalsOfferingService: builder.query<
+      { professionalsOfferingService: ProfessionalsOfferingService },
       { serviceId: string }
     >({
       query: ({ serviceId }) => ({
-        url: API_VARIABLES.SERVICES_ENDPOINTS.FETCH_EMPLOYEES_OFFERING_SERVICE(
+        url: API_VARIABLES.SERVICES_ENDPOINTS.FETCH_PROFESSIONALS_OFFERING_SERVICE(
           serviceId,
         ),
         method: 'GET',

@@ -21,20 +21,20 @@ const AnalyticsCards = () => {
     skip: userType !== 'MANAGER',
   })
 
-  const employeeQuery = analyticsAPI.useFetchAnalyticsByEmployeeIdQuery(
-    { employeeId: id! },
+  const professionalQuery = analyticsAPI.useFetchAnalyticsByProfessionalIdQuery(
+    { professionalId: id! },
     {
-      skip: userType !== 'EMPLOYEE' || !id,
+      skip: userType !== 'PROFESSIONAL' || !id,
     },
   )
 
   if (!userData) return <p>Loading user...</p>
 
-  if (userType !== 'MANAGER' && userType !== 'EMPLOYEE') {
+  if (userType !== 'MANAGER' && userType !== 'PROFESSIONAL') {
     return <p>No permissions</p>
   }
 
-  const activeQuery = userType === 'MANAGER' ? managerQuery : employeeQuery
+  const activeQuery = userType === 'MANAGER' ? managerQuery : professionalQuery
   const { data: analytics, isLoading, error } = activeQuery
 
   if (isLoading) {
@@ -42,12 +42,16 @@ const AnalyticsCards = () => {
   }
 
   if (error) {
-    toast.warning("Error while fetching data.")
+    toast.warning('Error while fetching data.')
   }
 
   if (!analytics) {
-    toast.warn("No analytics data available.")
-    return <h1 className='mt-10 text-primary-200 text-xl'>No analytics data available.</h1>
+    toast.warn('No analytics data available.')
+    return (
+      <h1 className="mt-10 text-primary-200 text-xl">
+        No analytics data available.
+      </h1>
+    )
   }
 
   return (
@@ -80,8 +84,8 @@ const AnalyticsCards = () => {
       {userType === 'MANAGER' && (
         <Card
           icon={<BriefcaseIcon />}
-          text="Funcionários"
-          count={(analytics?.numberOfEmployees ?? 0)}
+          text="Profissionais"
+          count={analytics?.numberOfProfessionals ?? 0}
         />
       )}
       <Card

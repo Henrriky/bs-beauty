@@ -1,38 +1,42 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { z } from 'zod';
-import { Button } from '../../components/button/Button';
-import { ErrorMessage } from '../../components/feedback/ErrorMessage';
-import BSBeautyLoading from '../../components/feedback/Loading';
-import { Input } from '../../components/inputs/Input';
-import Title from '../../components/texts/Title';
-import useAppSelector from '../../hooks/use-app-selector';
-import { Employee } from '../../store/auth/types';
-import { employeeAPI } from '../../store/employee/employee-api';
-import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils';
-import { EmployeeCard } from './components/EmployeeCard';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import { z } from 'zod'
+import { Button } from '../../components/button/Button'
+import { ErrorMessage } from '../../components/feedback/ErrorMessage'
+import BSBeautyLoading from '../../components/feedback/Loading'
+import { Input } from '../../components/inputs/Input'
+import Title from '../../components/texts/Title'
+import useAppSelector from '../../hooks/use-app-selector'
+import { Professional } from '../../store/auth/types'
+import { professionalAPI } from '../../store/professional/professional-api'
+import { ProfessionalSchemas } from '../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
+import { ProfessionalCard } from './components/ProfessionalCard'
 
-type EmployeeFormData = z.infer<typeof EmployeeSchemas.createSchema>
+type ProfessionalFormData = z.infer<typeof ProfessionalSchemas.createSchema>
 
-function EmployeesManagement() {
+function ProfessionalsManagement() {
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState(search)
   const [page, setPage] = useState(1)
 
   const { data, isLoading, isError, error, refetch } =
-    employeeAPI.useFetchEmployeesQuery({ page, limit: 2, email: debouncedSearch })
+    professionalAPI.useFetchProfessionalsQuery({
+      page,
+      limit: 2,
+      email: debouncedSearch,
+    })
 
-  const [allEmployees, setAllEmployees] = useState<Employee[]>([])
+  const [allProfessionals, setAllProfessionals] = useState<Professional[]>([])
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<EmployeeFormData>({
-    resolver: zodResolver(EmployeeSchemas.createSchema),
+  } = useForm<ProfessionalFormData>({
+    resolver: zodResolver(ProfessionalSchemas.createSchema),
     mode: 'onSubmit',
   })
 
@@ -40,9 +44,8 @@ function EmployeesManagement() {
 
   const [isInsertModalOpen, setIsModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [employeeToDelete, setEmployeeToDelete] = useState<Employee | null>(
-    null
-  )
+  const [professionalToDelete, setProfessionalToDelete] =
+    useState<Professional | null>(null)
 
   if (isError) {
     toast.error('Erro ao carregar a lista de clientes')
@@ -53,12 +56,12 @@ function EmployeesManagement() {
     )
   }
 
-  const [deleteEmployee] = employeeAPI.useDeleteEmployeeMutation()
+  const [deleteProfessional] = professionalAPI.useDeleteProfessionalMutation()
 
   const handleDelete = async () => {
-    if (employeeToDelete) {
+    if (professionalToDelete) {
       try {
-        await deleteEmployee(employeeToDelete.id).unwrap()
+        await deleteProfessional(professionalToDelete.id).unwrap()
         toast.success('Funcionário excluído com sucesso!')
         refetch()
       } catch (error) {
@@ -66,14 +69,14 @@ function EmployeesManagement() {
         toast.error('Erro ao tentar excluir o funcionário. Tente novamente.')
       } finally {
         setIsDeleteModalOpen(false)
-        setEmployeeToDelete(null)
+        setProfessionalToDelete(null)
       }
     }
   }
 
   const translateError = (details: string): string => {
     switch (details) {
-      case 'Employee already exists.':
+      case 'Professional already exists.':
         return 'Funcionário já existe.'
       case 'Invalid email format.':
         return 'Formato de e-mail inválido.'
@@ -82,11 +85,11 @@ function EmployeesManagement() {
     }
   }
 
-  const [insertEmployee] = employeeAPI.useInsertEmployeeMutation()
+  const [insertProfessional] = professionalAPI.useInsertProfessionalMutation()
 
-  const handleAddEmployee = async (data: EmployeeFormData) => {
+  const handleAddProfessional = async (data: ProfessionalFormData) => {
     try {
-      await insertEmployee({ email: data.email }).unwrap()
+      await insertProfessional({ email: data.email }).unwrap()
       toast.success('Funcionário adicionado com sucesso!')
       setIsModalOpen(false)
       reset()
@@ -111,21 +114,20 @@ function EmployeesManagement() {
   }, [search])
 
   useEffect(() => {
-    setPage(1);
-    setAllEmployees([]);
-  }, [debouncedSearch]);
-
+    setPage(1)
+    setAllProfessionals([])
+  }, [debouncedSearch])
 
   useEffect(() => {
     if (data?.data) {
-      setAllEmployees((prev) => {
+      setAllProfessionals((prev) => {
         const newUsers = data.data.filter(
-          (emp) => !prev.some((e) => e.id === emp.id)
-        );
-        return [...prev, ...newUsers];
-      });
+          (emp) => !prev.some((e) => e.id === emp.id),
+        )
+        return [...prev, ...newUsers]
+      })
     }
-  }, [data]);
+  }, [data])
 
   return (
     <>
@@ -156,42 +158,42 @@ function EmployeesManagement() {
           </div>
 
           <div className="mt-6 max-h-[70vh] overflow-y-auto scroll relative">
-              {allEmployees.length > 0 ? (
-                <>
-                  {allEmployees.map((employee) => (
-                    <EmployeeCard
-                      key={employee.id}
-                      employee={employee}
-                      onDelete={(employee) => {
-                        setEmployeeToDelete(employee)
-                        setIsDeleteModalOpen(true)
-                      }}
-                    />
-                  ))}
-                </>
-              ) : (
-                <p className="text-center text-gray-400">
-                  Nenhum colaborador encontrado.
-                </p>
-              )}
-              <div
-                onClick={() => setIsModalOpen(true)}
-                className="p-4 mb-4 bg-[#222222] text-primary-0 rounded-lg shadow-md cursor-pointer hover:bg-[#2e2e2e] transition-all flex items-center justify-center"
-              >
-                <span className="text-3xl text-primary-0 font-bold">+</span>
-              </div>
-              {data && data.page < data.totalPages && (
-                <div className="flex justify-center mt-4">
-                  <button
-                    className="bg-secondary-500 text-white px-4 py-2 mb-3 rounded-md hover:bg-secondary-600 transition"
-                    onClick={() => setPage((prev) => prev + 1)}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Carregando...' : 'Carregar mais'}
-                  </button>
-                </div>
+            {allProfessionals.length > 0 ? (
+              <>
+                {allProfessionals.map((professional) => (
+                  <ProfessionalCard
+                    key={professional.id}
+                    professional={professional}
+                    onDelete={(professional) => {
+                      setProfessionalToDelete(professional)
+                      setIsDeleteModalOpen(true)
+                    }}
+                  />
+                ))}
+              </>
+            ) : (
+              <p className="text-center text-gray-400">
+                Nenhum colaborador encontrado.
+              </p>
             )}
+            <div
+              onClick={() => setIsModalOpen(true)}
+              className="p-4 mb-4 bg-[#222222] text-primary-0 rounded-lg shadow-md cursor-pointer hover:bg-[#2e2e2e] transition-all flex items-center justify-center"
+            >
+              <span className="text-3xl text-primary-0 font-bold">+</span>
             </div>
+            {data && data.page < data.totalPages && (
+              <div className="flex justify-center mt-4">
+                <button
+                  className="bg-secondary-500 text-white px-4 py-2 mb-3 rounded-md hover:bg-secondary-600 transition"
+                  onClick={() => setPage((prev) => prev + 1)}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Carregando...' : 'Carregar mais'}
+                </button>
+              </div>
+            )}
+          </div>
         </>
       )}
 
@@ -208,7 +210,7 @@ function EmployeesManagement() {
             </h3>
             <p className="mb-4 text-white text-justify">
               Tem certeza que deseja excluir o funcionário com e-mail{' '}
-              <strong>{employeeToDelete?.email}</strong>?
+              <strong>{professionalToDelete?.email}</strong>?
             </p>
             <p className="mb-4 text-white text-justify">
               Essa alteração não poderá ser desfeita e o funcionário perderá
@@ -243,7 +245,7 @@ function EmployeesManagement() {
             <h3 className="text-lg font-medium mb-4 text-[#D9D9D9] ">
               Adicionar Funcionário
             </h3>
-            <form onSubmit={handleSubmit(handleAddEmployee)}>
+            <form onSubmit={handleSubmit(handleAddProfessional)}>
               <Input
                 registration={register('email')}
                 id="email"
@@ -274,4 +276,4 @@ function EmployeesManagement() {
   )
 }
 
-export default EmployeesManagement;
+export default ProfessionalsManagement

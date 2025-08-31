@@ -7,11 +7,11 @@ export type Service = {
   updatedAt: Date
 }
 
-export type EmployeesOfferingServiceOffer = {
+export type ProfessionalsOfferingServiceOffer = {
   id: string
   estimatedTime?: number
   price?: string
-  employee: {
+  professional: {
     id: string
     name: string | null
     specialization: string | null
@@ -19,9 +19,9 @@ export type EmployeesOfferingServiceOffer = {
   }
 }
 
-export type EmployeesOfferingService = {
+export type ProfessionalsOfferingService = {
   id: string
-  offers: Array<EmployeesOfferingServiceOffer>
+  offers: Array<ProfessionalsOfferingServiceOffer>
 }
 
 export interface PaginatedServicesResponse {

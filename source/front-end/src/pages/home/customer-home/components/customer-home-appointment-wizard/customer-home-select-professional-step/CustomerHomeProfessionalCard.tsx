@@ -1,8 +1,9 @@
-import { EmployeesOfferingServiceOffer } from '../../../../../../store/service/types'
-import CustomerHomeEmployeeCardPersonalInfo from './CustomerHomeEmployeeCardPersonalInfo'
+import { ProfessionalsOfferingServiceOffer } from '../../../../../../store/service/types'
+import CustomerHomeProfessionalCardPersonalInfo from './CustomerHomeProfessionalCardPersonalInfo'
 import CustomerHomeOfferInfo from '../CustomerHomeOfferInfo'
 
-interface CustomerHomeEmployeeCardProps extends EmployeesOfferingServiceOffer {
+interface CustomerHomeProfessionalCardProps
+  extends ProfessionalsOfferingServiceOffer {
   key: string
   for: string
   isSelected: boolean
@@ -10,7 +11,9 @@ interface CustomerHomeEmployeeCardProps extends EmployeesOfferingServiceOffer {
   currentFlow: 'service' | 'professional'
 }
 
-function CustomerHomeEmployeeCard(props: CustomerHomeEmployeeCardProps) {
+function CustomerHomeProfessionalCard(
+  props: CustomerHomeProfessionalCardProps,
+) {
   return (
     <label
       className={`flex items-center justify-between h-20 py-2 px-6 rounded-2xl mt-5 bg-[#262626] hover:cursor-pointer 
@@ -19,11 +22,13 @@ function CustomerHomeEmployeeCard(props: CustomerHomeEmployeeCardProps) {
       htmlFor={props.for}
       onClick={props.onClick}
     >
-      <CustomerHomeEmployeeCardPersonalInfo
-        employeeName={props.employee.name || 'Não definido'}
-        employeeSpecialization={props.employee.specialization || 'Nenhuma'}
-        employeePhotoUrl={
-          props.employee.profilePhotoUrl ||
+      <CustomerHomeProfessionalCardPersonalInfo
+        professionalName={props.professional.name || 'Não definido'}
+        professionalSpecialization={
+          props.professional.specialization || 'Nenhuma'
+        }
+        professionalPhotoUrl={
+          props.professional.profilePhotoUrl ||
           'https://cdn-site-assets.veed.io/cdn-cgi/image/width=256,quality=75,format=auto/Fish_6e8d209905/Fish_6e8d209905.webp'
         }
       />
@@ -37,4 +42,4 @@ function CustomerHomeEmployeeCard(props: CustomerHomeEmployeeCardProps) {
   )
 }
 
-export default CustomerHomeEmployeeCard
+export default CustomerHomeProfessionalCard

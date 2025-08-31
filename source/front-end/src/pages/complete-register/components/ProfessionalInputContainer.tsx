@@ -7,26 +7,28 @@ import { Input } from '../../../components/inputs/Input'
 import { Button } from '../../../components/button/Button'
 
 import {
-  EmployeeCompleteRegisterFormData,
-  OnSubmitEmployeeOrCustomerForm,
+  ProfessionalCompleteRegisterFormData,
+  OnSubmitProfessionalOrCustomerForm,
 } from '../types'
-import { EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
+import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import SocialMediaContainerInput from '../../../components/inputs/social-media-input/SocialMediaContainerInput'
 
-interface EmployeeInputContainerProps {
+interface ProfessionalInputContainerProps {
   isLoading: boolean
-  handleSubmit: OnSubmitEmployeeOrCustomerForm
+  handleSubmit: OnSubmitProfessionalOrCustomerForm
 }
 
-function EmployeeInputContainer(props: EmployeeInputContainerProps) {
+function ProfessionalInputContainer(props: ProfessionalInputContainerProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<EmployeeCompleteRegisterFormData>({
-    resolver: zodResolver(EmployeeSchemas.employeeCompleteRegisterBodySchema),
+  } = useForm<ProfessionalCompleteRegisterFormData>({
+    resolver: zodResolver(
+      ProfessionalSchemas.professionalCompleteRegisterBodySchema,
+    ),
   })
 
   const user = useAppSelector((state) => state.auth.user!)
@@ -99,4 +101,4 @@ function EmployeeInputContainer(props: EmployeeInputContainerProps) {
   )
 }
 
-export default EmployeeInputContainer
+export default ProfessionalInputContainer

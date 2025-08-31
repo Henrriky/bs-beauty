@@ -5,8 +5,8 @@ import Callback from '../pages/callback'
 import CompleteRegister from '../pages/complete-register'
 import RegistrationCompleted from '../pages/complete-register/components/RegistrationCompleted'
 import Customers from '../pages/customers'
-import EmployeeShifts from '../pages/employee-shifts'
-import EmployeesManagement from '../pages/employees-management'
+import ProfessionalShifts from '../pages/professional-shifts'
+import ProfessionalsManagement from '../pages/professionals-management'
 import Login from '../pages/login'
 import ManagerHome from '../pages/manager-home'
 import NotFound from '../pages/not-found'
@@ -31,7 +31,7 @@ function BSBeautyRouter() {
               <PrivateRoute
                 allowedUserTypes={[
                   UserType.MANAGER,
-                  UserType.EMPLOYEE,
+                  UserType.PROFESSIONAL,
                   UserType.CUSTOMER,
                 ]}
               />
@@ -54,13 +54,13 @@ function BSBeautyRouter() {
                 <Route path="/customer/home" element={<CustomerHome />} />
               </Route>
 
-              {/* EMPLOYEE ROUTES */}
+              {/* PROFESSIONAL ROUTES */}
               <Route
                 element={
-                  <PrivateRoute allowedUserTypes={[UserType.EMPLOYEE]} />
+                  <PrivateRoute allowedUserTypes={[UserType.PROFESSIONAL]} />
                 }
               >
-                <Route path="/employee/home" element={<ManagerHome />} />
+                <Route path="/professional/home" element={<ManagerHome />} />
               </Route>
 
               {/* MANAGER ROUTES */}
@@ -70,16 +70,16 @@ function BSBeautyRouter() {
                 <Route path="/manager/home" element={<ManagerHome />} />
                 <Route path="/customers" element={<Customers />} />
                 <Route
-                  path="/employees-management"
-                  element={<EmployeesManagement />}
+                  path="/professionals-management"
+                  element={<ProfessionalsManagement />}
                 />
               </Route>
 
-              {/* EMPLOYEE/MANAGER ROUTES */}
+              {/* PROFESSIONAL/MANAGER ROUTES */}
               <Route
                 element={
                   <PrivateRoute
-                    allowedUserTypes={[UserType.MANAGER, UserType.EMPLOYEE]}
+                    allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
                   />
                 }
               >
@@ -87,7 +87,7 @@ function BSBeautyRouter() {
                   path="/management/services"
                   element={<ServiceDashboard />}
                 />
-                <Route path="/employee-shifts" element={<EmployeeShifts />} />
+                <Route path="/professional-shifts" element={<ProfessionalShifts />} />
               </Route>
 
               <Route path="/profile" element={<Profile />} />

@@ -4,20 +4,23 @@ import { toast } from 'react-toastify'
 import { Button } from '../../../components/button/Button'
 import { Input } from '../../../components/inputs/Input'
 import SocialMediaContainerInput from '../../../components/inputs/social-media-input/SocialMediaContainerInput'
-import { Employee } from '../../../store/auth/types'
+import { Professional } from '../../../store/auth/types'
 import { userAPI } from '../../../store/user/user-api'
 import { Formatter } from '../../../utils/formatter/formatter.util'
-import { EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
-import { EmployeeUpdateProfileFormData } from '../types'
+import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
+import { ProfessionalUpdateProfileFormData } from '../types'
 
-interface EmployeeProfileProps {
-  userInfo: Employee
+interface ProfessionalProfileProps {
+  userInfo: Professional
   onProfileUpdate: () => void
 }
 
 // TODO: Separate Social Media to a Component
 
-function EmployeeProfile({ userInfo, onProfileUpdate }: EmployeeProfileProps) {
+function ProfessionalProfile({
+  userInfo,
+  onProfileUpdate,
+}: ProfessionalProfileProps) {
   const [updateProfile, { isLoading }] = userAPI.useUpdateProfileMutation()
 
   const {
@@ -25,8 +28,8 @@ function EmployeeProfile({ userInfo, onProfileUpdate }: EmployeeProfileProps) {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<EmployeeUpdateProfileFormData>({
-    resolver: zodResolver(EmployeeSchemas.employeeUpdateSchema),
+  } = useForm<ProfessionalUpdateProfileFormData>({
+    resolver: zodResolver(ProfessionalSchemas.professionalUpdateSchema),
     defaultValues: {
       name: userInfo.name || undefined,
       contact: userInfo.contact || undefined,
@@ -44,7 +47,9 @@ function EmployeeProfile({ userInfo, onProfileUpdate }: EmployeeProfileProps) {
     name: 'socialMedia',
   })
 
-  const handleSubmitConcrete = async (data: EmployeeUpdateProfileFormData) => {
+  const handleSubmitConcrete = async (
+    data: ProfessionalUpdateProfileFormData,
+  ) => {
     await updateProfile({
       userId: userInfo.id,
       profileData: data,
@@ -135,4 +140,4 @@ function EmployeeProfile({ userInfo, onProfileUpdate }: EmployeeProfileProps) {
   )
 }
 
-export default EmployeeProfile
+export default ProfessionalProfile

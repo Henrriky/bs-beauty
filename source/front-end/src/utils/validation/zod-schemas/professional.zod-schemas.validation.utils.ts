@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
 import { SharedSchemas } from './shared-zod-schemas.validation.utils'
 
-class EmployeeSchemas {
+class ProfessionalSchemas {
   public static readonly socialMediaSchema = z
     .array(
       z
@@ -19,7 +19,7 @@ class EmployeeSchemas {
     )
     .max(5)
 
-  public static readonly employeeCompleteRegisterBodySchema = z
+  public static readonly professionalCompleteRegisterBodySchema = z
     .object({
       name: z
         .string({
@@ -31,7 +31,7 @@ class EmployeeSchemas {
           (string) => RegexPatterns.names.test(string),
           'Por favor, forneça um nome válido.',
         ),
-      socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
+      socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
       contact: z
         .string({ message: 'O telefone de contato é obrigatório' })
         .refine(
@@ -43,8 +43,10 @@ class EmployeeSchemas {
 
   public static createSchema = z
     .object({
-      email: z.string({ required_error: 'O e-mail é obrigatório' }).email("Formato de e-mail inválido."),
-      userType: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
+      email: z
+        .string({ required_error: 'O e-mail é obrigatório' })
+        .email('Formato de e-mail inválido.'),
+      userType: z.enum(['MANAGER', 'PROFESSIONAL']).optional(),
     })
     .strict()
 
@@ -52,21 +54,21 @@ class EmployeeSchemas {
     .object({
       name: SharedSchemas.nameSchema,
       email: z.string().email().optional(),
-      socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
+      socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
       contact: z
         .string()
         .refine((value) => RegexPatterns.phone.test(value))
         .optional(),
-      userType: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
+      userType: z.enum(['MANAGER', 'PROFESSIONAL']).optional(),
       specialization: SharedSchemas.specializationSchema,
     })
     .strict()
 
-  public static employeeUpdateSchema = z
+  public static professionalUpdateSchema = z
     .object({
       name: SharedSchemas.nameSchema,
       email: z.string().email().optional(),
-      socialMedia: EmployeeSchemas.socialMediaSchema.optional(),
+      socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
       contact: z
         .string()
         .refine((value) => RegexPatterns.phone.test(value))
@@ -76,4 +78,4 @@ class EmployeeSchemas {
     .strict()
 }
 
-export { EmployeeSchemas }
+export { ProfessionalSchemas }

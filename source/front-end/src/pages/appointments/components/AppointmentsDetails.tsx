@@ -11,12 +11,12 @@ import {
   OnSubmitAppointmentDetailsUpdateForm,
 } from '../types'
 import useAppDispatch from '../../../hooks/use-app-dispatch'
-import EmployeeAppointmentDetails from './EmployeeAppointmentDetails'
+import ProfessionalAppointmentDetails from './ProfessionalAppointmentDetails'
 
 const userTypeToAppointmentDetailsComponents = {
   [UserType.CUSTOMER]: CustomerAppointmentDetails,
-  [UserType.EMPLOYEE]: EmployeeAppointmentDetails,
-  [UserType.MANAGER]: EmployeeAppointmentDetails,
+  [UserType.PROFESSIONAL]: ProfessionalAppointmentDetails,
+  [UserType.MANAGER]: ProfessionalAppointmentDetails,
 }
 
 function AppointmentDetails() {
@@ -103,7 +103,7 @@ function AppointmentDetails() {
         )
         dispatchRedux(
           appointmentAPI.util.updateQueryData(
-            'findAppointmentsByCustomerOrEmployeeId',
+            'findAppointmentsByCustomerOrProfessionalId',
             undefined,
             (draft) => {
               if (!data.status) return

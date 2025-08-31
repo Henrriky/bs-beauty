@@ -28,16 +28,26 @@ function SideBar() {
   return (
     <>
       <div>
-        <nav className={`transition-opacity ease-in-out bg-primary-900 mb-5 w-full z-0 left-0 top-[0px]`}>
-          <div className={`text-[12px] transition-all flex flex-row gap-2 justify-center pt-5`}>
+        <nav
+          className={`transition-opacity ease-in-out bg-primary-900 mb-5 w-full z-0 left-0 top-[0px]`}
+        >
+          <div
+            className={`text-[12px] transition-all flex flex-row gap-2 justify-center pt-5`}
+          >
             <button
               className={`transition-all w-[25px] text-primary-400 hover:w-[30px] hover:text-primary-200 mr-auto`}
               onClick={toggleSideBar}
             >
               <Bars3Icon className="size-7" />
             </button>
-            <div className={'hover:cursor-pointer'} onClick={() => navigate('/profile')}>
-              <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} size="sm" />
+            <div
+              className={'hover:cursor-pointer'}
+              onClick={() => navigate('/profile')}
+            >
+              <ProfilePicture
+                profilePhotoUrl={user.profilePhotoUrl}
+                size="sm"
+              />
             </div>
           </div>
         </nav>
@@ -46,18 +56,30 @@ function SideBar() {
         <Outlet />
       </section>
 
-      {isSideBarOpen &&
-        <div className={'transition-all flex flex-row w-full h-full absolute left-0 top-[0px]'}>
+      {isSideBarOpen && (
+        <div
+          className={
+            'transition-all flex flex-row w-full h-full absolute left-0 top-[0px]'
+          }
+        >
           <nav className={'bg-primary-900 mb-5 h-full w-9/12 z-20'}>
-            <div className={`text-[12px] transition-all pl-4 mt-11 flex flex-col gap-5`}>
+            <div
+              className={`text-[12px] transition-all pl-4 mt-11 flex flex-col gap-5`}
+            >
               <button
                 className={`transition-all w-[25px] text-primary-400 hover:w-[30px] hover:text-primary-200 place-self-end mr-5 absolute `}
                 onClick={toggleSideBar}
               >
                 <XMarkIcon />
               </button>
-              <div className={'hover:cursor-pointer w-9'} onClick={() => navigate('/profile')}>
-                <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} size="sm" />
+              <div
+                className={'hover:cursor-pointer w-9'}
+                onClick={() => navigate('/profile')}
+              >
+                <ProfilePicture
+                  profilePhotoUrl={user.profilePhotoUrl}
+                  size="sm"
+                />
               </div>
               <h2 className="text-primary-0 mb-9 text-sm capitalize">
                 {user.name ? firstLetterOfWordToUpperCase(user.name) : ''}
@@ -88,7 +110,7 @@ function SideBar() {
             className={`${isSideBarOpen ? 'w-full h-full backdrop-blur-sm z-10' : 'hidden'}`}
           ></div>
         </div>
-      }
+      )}
     </>
   )
 }

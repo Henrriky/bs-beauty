@@ -18,7 +18,7 @@ const WeekAppointments = () => {
     data,
     error,
     isLoading,
-  } = appointmentAPI.useFetchEmployeeAppointmentsByAllOffersQuery(id!)
+  } = appointmentAPI.useFetchProfessionalAppointmentsByAllOffersQuery(id!)
 
   if (isLoading) {
     return <div>Loading...</div>

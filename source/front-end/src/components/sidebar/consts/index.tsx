@@ -21,7 +21,7 @@ type SideBarItem = {
 type SideBarOptions = {
   COMMON: SideBarItem[]
   [UserType.MANAGER]: SideBarItem[]
-  [UserType.EMPLOYEE]: SideBarItem[]
+  [UserType.PROFESSIONAL]: SideBarItem[]
   [UserType.CUSTOMER]: SideBarItem[]
 }
 
@@ -62,7 +62,7 @@ const sideBarItems: SideBarOptions = {
     {
       name: 'Funcionários',
       icon: <ClipboardDocumentCheckIcon className="size-6" />,
-      navigateTo: '/employees-management',
+      navigateTo: '/professionals-management',
     },
     {
       name: 'Serviços',
@@ -72,7 +72,7 @@ const sideBarItems: SideBarOptions = {
     {
       name: 'Turnos',
       icon: <ClockIcon className="size-6" />,
-      navigateTo: '/employee-shifts',
+      navigateTo: '/professional-shifts',
     },
     {
       name: 'Home',
@@ -80,7 +80,7 @@ const sideBarItems: SideBarOptions = {
       navigateTo: '/manager/home',
     },
   ],
-  [UserType.EMPLOYEE]: [
+  [UserType.PROFESSIONAL]: [
     {
       name: 'Serviços',
       icon: <BriefcaseIcon className="size-6" />,
@@ -89,12 +89,12 @@ const sideBarItems: SideBarOptions = {
     {
       name: 'Turnos',
       icon: <ClockIcon className="size-6" />,
-      navigateTo: '/employee-shifts',
+      navigateTo: '/professional-shifts',
     },
     {
       name: 'Home',
       icon: <HomeIcon className="size-6" />,
-      navigateTo: '/employee/home',
+      navigateTo: '/professional/home',
     },
   ],
 }

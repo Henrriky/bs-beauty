@@ -3,10 +3,10 @@ import { WeekDays } from "../../enums/enums"
 export enum UserType {
   MANAGER = "MANAGER",
   CUSTOMER = "CUSTOMER",
-  EMPLOYEE = "EMPLOYEE"
+  PROFESSIONAL = "PROFESSIONAL"
 }
 
-export interface CustomerOrEmployee {
+export interface CustomerOrProfessional {
   id: string
   name: string | null
   registerCompleted: boolean
@@ -31,7 +31,7 @@ export type Customer = {
   updatedAt: Date;
 }
 
-export type Employee = {
+export type Professional = {
   id: string;
   name: string | null;
   email: string;
@@ -52,7 +52,7 @@ export type Shift = {
   isBusy: boolean;
   shiftStart: string;
   shiftEnd: string;
-  employeeId: string;
+  professionalId: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -66,7 +66,9 @@ const actionToOperations = {
   },
 }
 
-function EmployeeAppointmentDetails(props: AppointmentDetailsComponentProps) {
+function ProfessionalAppointmentDetails(
+  props: AppointmentDetailsComponentProps,
+) {
   const { data: customerData } = customerAPI.useGetCustomerByIdQuery(
     props.appointment.customerId,
   )
@@ -74,7 +76,7 @@ function EmployeeAppointmentDetails(props: AppointmentDetailsComponentProps) {
   const operationInformations = actionToOperations[props.action]
   const { register, handleSubmit, setValue } =
     useForm<CustomerUpdateAppointmentFormData>({
-      resolver: zodResolver(AppointmentSchemas.employeeUpdateSchema),
+      resolver: zodResolver(AppointmentSchemas.professionalUpdateSchema),
       defaultValues: {
         observation: props.appointment?.observation ?? '',
       },
@@ -220,4 +222,4 @@ function EmployeeAppointmentDetails(props: AppointmentDetailsComponentProps) {
   )
 }
 
-export default EmployeeAppointmentDetails
+export default ProfessionalAppointmentDetails

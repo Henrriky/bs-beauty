@@ -9,7 +9,7 @@ import useAppSelector from '../../../../../hooks/use-app-selector'
 import { appointmentAPI } from '../../../../../store/appointment/appointment-api'
 import { AppointmentSchemas } from '../../../../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils'
 import Modal from '../../../../services/components/Modal'
-import CustomerHomeSelectEmployeeContainer from './customer-home-select-employee-step/CustomerHomeSelectEmployee'
+import CustomerHomeSelectProfessionalContainer from './customer-home-select-professional-step/CustomerHomeSelectProfessional'
 import CustomerHomeSelectServiceContainer from './customer-home-select-service-step/CustomerHomeSelectService'
 import CustomerHomeSelectTimeContainer from './customer-home-select-time-step/CustomerHomeSelectTime'
 import { CreateAppointmentFormData } from './types'
@@ -37,7 +37,9 @@ function createSteps(currentFlow: 'service' | 'professional'): Step {
       currentFlow === 'service'
         ? () => <CustomerHomeSelectServiceContainer currentFlow={currentFlow} />
         : () => (
-            <CustomerHomeSelectEmployeeContainer currentFlow={currentFlow} />
+            <CustomerHomeSelectProfessionalContainer
+              currentFlow={currentFlow}
+            />
           ),
     nextStep: null,
     previousStep: null,
@@ -51,7 +53,9 @@ function createSteps(currentFlow: 'service' | 'professional'): Step {
     currentStepAppointmentForm:
       currentFlow === 'service'
         ? () => (
-            <CustomerHomeSelectEmployeeContainer currentFlow={currentFlow} />
+            <CustomerHomeSelectProfessionalContainer
+              currentFlow={currentFlow}
+            />
           )
         : () => (
             <CustomerHomeSelectServiceContainer currentFlow={currentFlow} />

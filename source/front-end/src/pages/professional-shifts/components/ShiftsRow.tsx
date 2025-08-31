@@ -1,17 +1,17 @@
-import { CheckIcon } from "@heroicons/react/16/solid";
+import { CheckIcon } from '@heroicons/react/16/solid'
 
 interface EditableShift {
-  shiftStart: string;
-  shiftEnd: string;
-  isBusy: boolean;
+  shiftStart: string
+  shiftEnd: string
+  isBusy: boolean
 }
 
 interface ShiftsRowProps {
-  weekDays: string[];
-  editableShifts: Record<string, EditableShift>;
+  weekDays: string[]
+  editableShifts: Record<string, EditableShift>
   setEditableShifts: React.Dispatch<
     React.SetStateAction<Record<string, EditableShift>>
-  >;
+  >
 }
 
 const ShiftsRow = ({
@@ -26,8 +26,8 @@ const ShiftsRow = ({
         ...prev[day],
         isBusy: !prev[day].isBusy,
       },
-    }));
-  };
+    }))
+  }
 
   return (
     <>
@@ -37,11 +37,11 @@ const ShiftsRow = ({
         <div className="w-1/2 text-center">Fim</div>
       </div>
       {weekDays.map((day, index) => {
-        const shift = editableShifts[day];
+        const shift = editableShifts[day]
 
         const handleChange = (
-          field: "shiftStart" | "shiftEnd",
-          value: string
+          field: 'shiftStart' | 'shiftEnd',
+          value: string,
         ) => {
           setEditableShifts((prev) => ({
             ...prev,
@@ -49,8 +49,8 @@ const ShiftsRow = ({
               ...prev[day],
               [field]: value,
             },
-          }));
-        };
+          }))
+        }
 
         return (
           <div key={index} className="flex items-center py-3">
@@ -66,7 +66,7 @@ const ShiftsRow = ({
                 <label
                   htmlFor={`checkbox-${day}`}
                   className={`flex items-center justify-center w-5 h-5 border-2 rounded-xl transition-all duration-200 cursor-pointer 
-                            ${shift?.isBusy ? "border-secondary-200" : "border-[#A4978A]"}`}
+                            ${shift?.isBusy ? 'border-secondary-200' : 'border-[#A4978A]'}`}
                 >
                   {!shift?.isBusy && <CheckIcon />}
                 </label>
@@ -76,25 +76,25 @@ const ShiftsRow = ({
               <input
                 type="time"
                 className="bg-transparent w-full text-[#D9D9D9] focus:outline-none"
-                value={shift?.shiftStart || "00:00"}
-                onChange={(e) => handleChange("shiftStart", e.target.value)}
-                style={{ borderBottom: "1px solid #A4978A" }}
+                value={shift?.shiftStart || '00:00'}
+                onChange={(e) => handleChange('shiftStart', e.target.value)}
+                style={{ borderBottom: '1px solid #A4978A' }}
               />
             </div>
             <div className="w-1/2 pl-2">
               <input
                 type="time"
                 className="bg-transparent w-full text-[#D9D9D9] focus:outline-none"
-                value={shift?.shiftEnd || "00:00"}
-                onChange={(e) => handleChange("shiftEnd", e.target.value)}
-                style={{ borderBottom: "1px solid #A4978A" }}
+                value={shift?.shiftEnd || '00:00'}
+                onChange={(e) => handleChange('shiftEnd', e.target.value)}
+                style={{ borderBottom: '1px solid #A4978A' }}
               />
             </div>
           </div>
-        );
+        )
       })}
     </>
-  );
-};
+  )
+}
 
-export default ShiftsRow;
+export default ShiftsRow
