@@ -1,6 +1,6 @@
 import { type Prisma } from '@prisma/client'
 
-interface ServicesOfferedByEmployee {
+interface ServicesOfferedByProfessional {
   id: string
   offers: Array<{
     id: string
@@ -15,4 +15,4 @@ interface ServicesOfferedByEmployee {
   }>
 }
 
-export type { ServicesOfferedByEmployee }
+export type { ServicesOfferedByProfessional }

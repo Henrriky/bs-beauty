@@ -1,7 +1,7 @@
 import { type Encrypter } from '../../protocols/encrypter.protocol'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
-import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
-import { type CustomerOrEmployee } from '../../../types/customer-or-employee.type'
+import { type ProfessionalRepository } from '../../../repository/protocols/professional.repository'
+import { type CustomerOrProfessional } from '../../../types/customer-or-professional.type'
 import { type OAuthIdentityProvider } from '../../protocols/oauth-identity-provider.protocol'
 
 interface LoginUseCaseInput {
@@ -13,22 +13,22 @@ interface LoginUseCaseOutput {
 }
 
 class LoginUseCase {
-  constructor (
+  constructor(
     private readonly customerRepository: CustomerRepository,
-    private readonly employeeRepository: EmployeeRepository,
+    private readonly professionalRepository: ProfessionalRepository,
     private readonly encrypter: Encrypter,
     private readonly identityProvider: OAuthIdentityProvider
   ) {
 
   }
 
-  async execute ({ token }: LoginUseCaseInput): Promise<LoginUseCaseOutput> {
+  async execute({ token }: LoginUseCaseInput): Promise<LoginUseCaseOutput> {
     const { userId, email, profilePhotoUrl } = await this.identityProvider.fetchUserInformationsFromToken(token)
 
-    let customerOrEmployee: CustomerOrEmployee
-    const employeeAlreadyExists = await this.employeeRepository.findByEmail(email)
+    let customerOrProfessional: CustomerOrProfessional
+    const professionalAlreadyExists = await this.professionalRepository.findByEmail(email)
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (!employeeAlreadyExists) {
+    if (!professionalAlreadyExists) {
       const customer = await this.customerRepository.updateOrCreate({
         googleId: userId,
         email
@@ -37,28 +37,28 @@ class LoginUseCase {
         googleId: userId,
         profilePhotoUrl
       })
-      customerOrEmployee = {
+      customerOrProfessional = {
         ...customer,
         userId
       }
     } else {
-      const employee = await this.employeeRepository.updateEmployeeByEmail(email, {
+      const professional = await this.professionalRepository.updateProfessionalByEmail(email, {
         googleId: userId,
         profilePhotoUrl
       })
-      customerOrEmployee = {
-        ...employee,
+      customerOrProfessional = {
+        ...professional,
         userId
       }
     }
 
     const { accessToken } = await this.encrypter.encrypt({
       userId,
-      id: customerOrEmployee.id,
-      userType: customerOrEmployee.userType,
-      email: customerOrEmployee.email,
-      name: customerOrEmployee.name,
-      registerCompleted: customerOrEmployee.registerCompleted,
+      id: customerOrProfessional.id,
+      userType: customerOrProfessional.userType,
+      email: customerOrProfessional.email,
+      name: customerOrProfessional.name,
+      registerCompleted: customerOrProfessional.registerCompleted,
       profilePhotoUrl
     })
 

@@ -18,65 +18,65 @@ interface AvailablesSchedulling {
 }
 
 class OffersUseCase {
-  constructor (
+  constructor(
     private readonly offerRepository: OfferRepository,
     private readonly shiftRepository: ShiftRepository
   ) { }
 
-  public async executeFindAll (): Promise<OfferOutput> {
+  public async executeFindAll(): Promise<OfferOutput> {
     const offers = await this.offerRepository.findAll()
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
   }
 
-  public async executeFindById (offerId: string) {
+  public async executeFindById(offerId: string) {
     const offer = await this.offerRepository.findById(offerId)
     RecordExistence.validateRecordExistence(offer, 'Offer')
 
     return offer
   }
 
-  public async executeFindByServiceId (serviceId: string) {
+  public async executeFindByServiceId(serviceId: string) {
     const offer = await this.offerRepository.findByServiceId(serviceId)
     RecordExistence.validateRecordExistence(offer, 'Offer')
 
     return offer
   }
 
-  public async executeFindByEmployeeId (employeeId: string): Promise<OfferOutput> {
-    const offers = await this.offerRepository.findByEmployeeId(employeeId)
+  public async executeFindByProfessionalId(professionalId: string): Promise<OfferOutput> {
+    const offers = await this.offerRepository.findByProfessionalId(professionalId)
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
   }
 
-  public async executeCreate (offerToCreate: Prisma.OfferCreateInput) {
+  public async executeCreate(offerToCreate: Prisma.OfferCreateInput) {
     const offer = offerToCreate as unknown as Offer
     const serviceId = offer.serviceId
-    const employeeId = offer.employeeId
-    const offerFound = await this.offerRepository.findByEmployeeAndServiceId(serviceId, employeeId)
+    const professionalId = offer.professionalId
+    const offerFound = await this.offerRepository.findByProfessionalAndServiceId(serviceId, professionalId)
     RecordExistence.validateRecordNonExistence(offerFound, 'Offer')
     const newOffer = await this.offerRepository.create(offerToCreate)
 
     return newOffer
   }
 
-  public async executeUpdate (offerId: string, offerToUpdate: Prisma.OfferUpdateInput) {
+  public async executeUpdate(offerId: string, offerToUpdate: Prisma.OfferUpdateInput) {
     await this.executeFindById(offerId)
     const updatedOffer = await this.offerRepository.update(offerId, offerToUpdate)
 
     return updatedOffer
   }
 
-  public async executeDelete (offerId: string) {
+  public async executeDelete(offerId: string) {
     await this.executeFindById(offerId)
     const deletedOffer = await this.offerRepository.delete(offerId)
 
     return deletedOffer
   }
 
-  public async executeFetchAvailableSchedulingToOfferByDay (serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) {
+  public async executeFetchAvailableSchedulingToOfferByDay(serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) {
     // Validate
     const serviceOffering = await this.offerRepository.findById(serviceOfferingId)
     const isValidServiceOffering = serviceOffering != null && serviceOffering?.isOffering
@@ -85,17 +85,17 @@ class OffersUseCase {
       throw new CustomError('Unable to fetch available scheduling because offer not exists or is not being offering', 400)
     }
 
-    const employeeShiftByDay = await this.shiftRepository.findByEmployeeAndWeekDay(serviceOffering.employeeId, DateFormatter.formatDayOfDateToWeekDay(dayToFetchAvailableSchedulling))
-    const isValidEmployeeShiftByDay = (employeeShiftByDay !== null) && !employeeShiftByDay.isBusy
+    const professionalShiftByDay = await this.shiftRepository.findByProfessionalAndWeekDay(serviceOffering.professionalId, DateFormatter.formatDayOfDateToWeekDay(dayToFetchAvailableSchedulling))
+    const isValidProfessionalShiftByDay = (professionalShiftByDay !== null) && !professionalShiftByDay.isBusy
 
-    if (!isValidEmployeeShiftByDay) {
-      throw new CustomError('Unable to fetch available scheduling because employee does not work on this day or not exists', 400, '')
+    if (!isValidProfessionalShiftByDay) {
+      throw new CustomError('Unable to fetch available scheduling because professional does not work on this day or not exists', 400, '')
     }
 
-    const { shiftEnd, shiftStart } = employeeShiftByDay
+    const { shiftEnd, shiftStart } = professionalShiftByDay
 
     const currentDayShiftEndTimeAsDate = new Date(dayToFetchAvailableSchedulling)
-    currentDayShiftEndTimeAsDate.setHours(employeeShiftByDay.shiftEnd.getHours(), shiftEnd.getMinutes(), shiftEnd.getSeconds(), shiftEnd.getMilliseconds())
+    currentDayShiftEndTimeAsDate.setHours(professionalShiftByDay.shiftEnd.getHours(), shiftEnd.getMinutes(), shiftEnd.getSeconds(), shiftEnd.getMilliseconds())
     const currentDayShiftEndTime = currentDayShiftEndTimeAsDate.getTime()
 
     const currentStartTimeAsDate = new Date(dayToFetchAvailableSchedulling)
@@ -105,7 +105,7 @@ class OffersUseCase {
     const estimatedTimeMs = serviceOffering.estimatedTime * 60_000
 
     const { validAppointmentsOnDay } = await this.offerRepository.fetchValidAppointmentsByProfessionalOnDay(
-      serviceOffering.employeeId,
+      serviceOffering.professionalId,
       dayToFetchAvailableSchedulling
     )
 
@@ -148,11 +148,11 @@ class OffersUseCase {
     return { availableSchedulling }
   }
 
-  public async executeFindByEmployeeIdPaginated (
-    employeeId: string,
+  public async executeFindByProfessionalIdPaginated(
+    professionalId: string,
     params: PaginatedRequest<OffersFilters>
   ): Promise<PaginatedResult<Offer>> {
-    const result = await this.offerRepository.findByEmployeeIdPaginated(employeeId, params)
+    const result = await this.offerRepository.findByProfessionalIdPaginated(professionalId, params)
 
     return result
   }

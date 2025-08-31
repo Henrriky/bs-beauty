@@ -2,7 +2,7 @@ import { AnalyticsController } from '../../../src/controllers/analytics.controll
 import { makeAppointmentServicesUseCaseFactory } from '../../../src/factory/make-appointment-services-use-case.factory'
 import { makeCustomersUseCaseFactory } from '../../../src/factory/make-customers-use-case.factory'
 import { makeServiceUseCaseFactory } from '../../../src/factory/make-service-use-case.factory'
-import { makeEmployeesUseCaseFactory } from '../../../src/factory/make-employees-use-case.factory'
+import { makeProfessionalsUseCaseFactory } from '../../../src/factory/make-professionals-use-case.factory'
 import { makeOffersUseCaseFactory } from '../../../src/factory/make-offers-use-case.factory'
 import { makeAppointmentsUseCaseFactory } from '../../../src/factory/make-appointments-use-case.factory'
 import { type AppointmentService } from '@prisma/client'
@@ -11,7 +11,7 @@ import { vi } from 'vitest'
 vi.mock('../../../src/factory/make-appointment-services-use-case.factory.ts')
 vi.mock('../../../src/factory/make-customers-use-case.factory.ts')
 vi.mock('../../../src/factory/make-service-use-case.factory.ts')
-vi.mock('../../../src/factory/make-employees-use-case.factory.ts')
+vi.mock('../../../src/factory/make-professionals-use-case.factory.ts')
 vi.mock('../../../src/factory/make-offers-use-case.factory.ts')
 vi.mock('../../../src/factory/make-appointments-use-case.factory.ts')
 
@@ -22,7 +22,7 @@ describe('AnalyticsController', () => {
   let appointmentServicesUseCaseMock: any
   let customerUseCaseMock: any
   let serviceUseCaseMock: any
-  let employeeUseCaseMock: any
+  let professionalUseCaseMock: any
   let offerUseCaseMock: any
   let appointmentUseCaseMock: any
 
@@ -52,13 +52,13 @@ describe('AnalyticsController', () => {
       executeFindAll: vi.fn()
     }
 
-    employeeUseCaseMock = {
+    professionalUseCaseMock = {
       executeFindAll: vi.fn()
     }
 
     offerUseCaseMock = {
       executeFindById: vi.fn(),
-      executeFindByEmployeeId: vi.fn()
+      executeFindByProfessionalId: vi.fn()
     }
 
     appointmentUseCaseMock = {
@@ -68,7 +68,7 @@ describe('AnalyticsController', () => {
     vi.mocked(makeAppointmentServicesUseCaseFactory).mockReturnValue(appointmentServicesUseCaseMock)
     vi.mocked(makeCustomersUseCaseFactory).mockReturnValue(customerUseCaseMock)
     vi.mocked(makeServiceUseCaseFactory).mockReturnValue(serviceUseCaseMock)
-    vi.mocked(makeEmployeesUseCaseFactory).mockReturnValue(employeeUseCaseMock)
+    vi.mocked(makeProfessionalsUseCaseFactory).mockReturnValue(professionalUseCaseMock)
     vi.mocked(makeOffersUseCaseFactory).mockReturnValue(offerUseCaseMock)
     vi.mocked(makeAppointmentsUseCaseFactory).mockReturnValue(appointmentUseCaseMock)
   })
@@ -96,8 +96,8 @@ describe('AnalyticsController', () => {
       const services = [{ id: '1' }, { id: '2' }]
       serviceUseCaseMock.executeFindAll.mockResolvedValue({ services })
 
-      const employees = [{ id: '1' }, { id: '2' }]
-      employeeUseCaseMock.executeFindAll.mockResolvedValue({ employees })
+      const professionals = [{ id: '1' }, { id: '2' }]
+      professionalUseCaseMock.executeFindAll.mockResolvedValue({ professionals })
 
       const offer = { id: '1', price: 100 }
       offerUseCaseMock.executeFindById.mockResolvedValue(offer)
@@ -112,7 +112,7 @@ describe('AnalyticsController', () => {
         finishedAppointments: 1,
         totalCustomers: 2,
         numberOfServices: 2,
-        numberOfEmployees: 2,
+        numberOfProfessionals: 2,
         totalRevenue: 100
       })
       expect(next).not.toHaveBeenCalled()
@@ -132,14 +132,14 @@ describe('AnalyticsController', () => {
     })
   })
 
-  describe('handleFindByEmployeeId', () => {
-    it('should return analytics data for a specific employee', async () => {
+  describe('handleFindByProfessionalId', () => {
+    it('should return analytics data for a specific professional', async () => {
       // arrange
-      const employeeId = '1'
-      req.params.id = employeeId
+      const professionalId = '1'
+      req.params.id = professionalId
 
       const offers = [{ id: '1', price: 100 }]
-      offerUseCaseMock.executeFindByEmployeeId.mockResolvedValue({ offers })
+      offerUseCaseMock.executeFindByProfessionalId.mockResolvedValue({ offers })
 
       const appointmentServices = [
         { id: '1', status: 'PENDING', serviceOfferedId: '1', appointmentId: '1' },
@@ -151,7 +151,7 @@ describe('AnalyticsController', () => {
       appointmentUseCaseMock.executeFindById.mockResolvedValue(appointment)
 
       // act
-      await AnalyticsController.handleFindByEmployeeId(req, res, next)
+      await AnalyticsController.handleFindByProfessionalId(req, res, next)
 
       // assert
       expect(res.send).toHaveBeenCalledWith({
@@ -167,14 +167,14 @@ describe('AnalyticsController', () => {
 
     it('should handle errors and call next', async () => {
       // arrange
-      const employeeId = '1'
-      req.params.id = employeeId
+      const professionalId = '1'
+      req.params.id = professionalId
 
       const error = new Error('Database connection failed')
-      offerUseCaseMock.executeFindByEmployeeId.mockRejectedValue(error)
+      offerUseCaseMock.executeFindByProfessionalId.mockRejectedValue(error)
 
       // act
-      await AnalyticsController.handleFindByEmployeeId(req, res, next)
+      await AnalyticsController.handleFindByProfessionalId(req, res, next)
 
       // assert
       expect(next).toHaveBeenCalledWith(error)

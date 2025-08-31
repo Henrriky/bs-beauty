@@ -4,7 +4,7 @@ import { type Appointment, type Prisma } from '@prisma/client'
 interface AppointmentRepository {
   findAll: () => Promise<Appointment[]>
   findById: (id: string) => Promise<Appointment | null>
-  findByCustomerOrEmployeeId: (customerOrEmployeeId: string) => Promise<Appointment[] >
+  findByCustomerOrProfessionalId: (customerOrProfessionalId: string) => Promise<Appointment[]>
   findByAppointmentDate: (date: Date) => Promise<Appointment[]>
   findByServiceOfferedId: (id: string) => Promise<Appointment[]>
   create: (newAppointment: Prisma.AppointmentCreateInput) => Promise<Appointment>

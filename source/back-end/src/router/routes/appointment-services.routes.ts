@@ -11,11 +11,11 @@
 // appointmentServiceRoutes.get('/date/:appointmentDate', AppointmentServiceController.handleFindByAppointmentDate)
 // appointmentServiceRoutes.get('/appointment/:appointmentId', AppointmentServiceController.handleFindByAppointmentId)
 // appointmentServiceRoutes.get('/offer/:serviceOfferedId', AppointmentServiceController.handleFindByServiceOfferedId)
-// appointmentServiceRoutes.get('/customer', routeAuthMiddleware([Role.CUSTOMER, Role.EMPLOYEE, Role.MANAGER]), AppointmentServiceController.handleFindByCustomerOrEmployeeId)
+// appointmentServiceRoutes.get('/customer', routeAuthMiddleware([Role.CUSTOMER, Role.PROFESSIONAL, Role.MANAGER]), AppointmentServiceController.handleFindByCustomerOrProfessionalId)
 // appointmentServiceRoutes.get('/:id', AppointmentServiceController.handleFindById)
 
 // appointmentServiceRoutes.post('/', routeAuthMiddleware([Role.CUSTOMER]), validateCreateAppointmentService, AppointmentServiceController.handleCreate)
-// appointmentServiceRoutes.put('/:id', routeAuthMiddleware([Role.CUSTOMER, Role.EMPLOYEE, Role.MANAGER]), validateUpdateAppointmentService, AppointmentServiceController.handleUpdate)
+// appointmentServiceRoutes.put('/:id', routeAuthMiddleware([Role.CUSTOMER, Role.PROFESSIONAL, Role.MANAGER]), validateUpdateAppointmentService, AppointmentServiceController.handleUpdate)
 // appointmentServiceRoutes.delete('/:id', AppointmentServiceController.handleDelete)
 
 // export { appointmentServiceRoutes }

@@ -1,6 +1,6 @@
 import { type UserType } from '@prisma/client'
 
-interface CustomerOrEmployee {
+interface CustomerOrProfessional {
   id: string
   userType: UserType
   email: string
@@ -10,4 +10,4 @@ interface CustomerOrEmployee {
   profilePhotoUrl: string | null
 }
 
-export type { CustomerOrEmployee }
+export type { CustomerOrProfessional }

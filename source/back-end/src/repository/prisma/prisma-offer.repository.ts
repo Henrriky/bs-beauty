@@ -6,13 +6,13 @@ import { type OffersFilters } from '../../types/offers/offers-filters'
 import { type FetchValidAppointmentsByProfessionalOnDay } from '../types/offer-repository.types'
 
 class PrismaOfferRepository implements OfferRepository {
-  public async findAll () {
+  public async findAll() {
     const offers = await prismaClient.offer.findMany()
 
     return offers
   }
 
-  public async findById (id: string) {
+  public async findById(id: string) {
     const offer = await prismaClient.offer.findUnique({
       where: { id }
     })
@@ -20,7 +20,7 @@ class PrismaOfferRepository implements OfferRepository {
     return offer
   }
 
-  public async findByServiceId (serviceId: string) {
+  public async findByServiceId(serviceId: string) {
     const offer = await prismaClient.offer.findFirst({
       where: { serviceId }
     })
@@ -28,23 +28,23 @@ class PrismaOfferRepository implements OfferRepository {
     return offer
   }
 
-  public async findByEmployeeId (employeeId: string) {
+  public async findByProfessionalId(professionalId: string) {
     const offers = await prismaClient.offer.findMany({
-      where: { employeeId }
+      where: { professionalId }
     })
 
     return offers
   }
 
-  public async findByEmployeeAndServiceId (serviceId: string, employeeId: string) {
+  public async findByProfessionalAndServiceId(serviceId: string, professionalId: string) {
     const offer = await prismaClient.offer.findFirst({
-      where: { serviceId, employeeId }
+      where: { serviceId, professionalId }
     })
 
     return offer
   }
 
-  public async create (offerToCreate: Prisma.OfferCreateInput) {
+  public async create(offerToCreate: Prisma.OfferCreateInput) {
     const newOffer = await prismaClient.offer.create({
       data: { ...offerToCreate }
     })
@@ -52,7 +52,7 @@ class PrismaOfferRepository implements OfferRepository {
     return newOffer
   }
 
-  public async update (id: string, offerToUpdate: Prisma.OfferUpdateInput) {
+  public async update(id: string, offerToUpdate: Prisma.OfferUpdateInput) {
     const updatedOffer = await prismaClient.offer.update({
       where: { id },
       data: { ...offerToUpdate }
@@ -61,7 +61,7 @@ class PrismaOfferRepository implements OfferRepository {
     return updatedOffer
   }
 
-  public async delete (id: string) {
+  public async delete(id: string) {
     const deletedOffer = await prismaClient.offer.delete({
       where: { id }
     })
@@ -69,7 +69,7 @@ class PrismaOfferRepository implements OfferRepository {
     return deletedOffer
   }
 
-  public async fetchValidAppointmentsByProfessionalOnDay (employeeId: string, dayToFetchAvailableSchedulling: Date) {
+  public async fetchValidAppointmentsByProfessionalOnDay(professionalId: string, dayToFetchAvailableSchedulling: Date) {
     const startOfDay = new Date(dayToFetchAvailableSchedulling)
     startOfDay.setHours(0, 0, 0, 0)
 
@@ -79,10 +79,10 @@ class PrismaOfferRepository implements OfferRepository {
     const validAppointmentsByProfessionalOnDay = await prismaClient.offer.findMany({
       where: {
         isOffering: true,
-        employeeId
+        professionalId
       },
       select: {
-        employeeId: true,
+        professionalId: true,
         estimatedTime: true,
         appointments: {
           where: {
@@ -127,8 +127,8 @@ class PrismaOfferRepository implements OfferRepository {
     }
   }
 
-  public async findByEmployeeIdPaginated (
-    employeeId: string,
+  public async findByProfessionalIdPaginated(
+    professionalId: string,
     params: PaginatedRequest<OffersFilters>
   ) {
     const { page, limit } = params
@@ -136,13 +136,13 @@ class PrismaOfferRepository implements OfferRepository {
 
     const [data, total] = await Promise.all([
       prismaClient.offer.findMany({
-        where: { employeeId },
+        where: { professionalId },
         skip,
         take: limit,
         orderBy: { createdAt: 'asc' }
       }),
       prismaClient.offer.count({
-        where: { employeeId }
+        where: { professionalId }
       })
     ])
 

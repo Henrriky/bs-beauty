@@ -24,12 +24,12 @@ class ServicesController {
     }
   }
 
-  public static async handleFetchEmployeesOfferingService (req: Request, res: Response, next: NextFunction) {
+  public static async handleFetchProfessionalsOfferingService (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeServiceUseCaseFactory()
-      const { employeesOfferingService } = await useCase.fetchEmployeesOfferingService(req.params.id)
+      const { professionalsOfferingService } = await useCase.fetchProfessionalsOfferingService(req.params.id)
 
-      res.send({ employeesOfferingService })
+      res.send({ professionalsOfferingService })
     } catch (error) {
       next(error)
     }

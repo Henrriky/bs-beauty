@@ -1,11 +1,11 @@
-import { Employee, Prisma } from "@prisma/client";
+import { Professional, Prisma } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
-import { makeEmployeesUseCaseFactory } from "../../../src/factory/make-employees-use-case.factory";
-import { EmployeesController } from "../../../src/controllers/employees.controller";
+import { makeProfessionalsUseCaseFactory } from "../../../src/factory/make-professionals-use-case.factory";
+import { ProfessionalsController } from "../../../src/controllers/professionals.controller";
 
-vi.mock('../../../src/factory/make-employees-use-case.factory');
+vi.mock('../../../src/factory/make-professionals-use-case.factory');
 
-describe('EmployeesController', () => {
+describe('ProfessionalsController', () => {
 
   let req: any;
   let res: any;
@@ -37,7 +37,7 @@ describe('EmployeesController', () => {
       executeDelete: vi.fn(),
     };
 
-    vi.mocked(makeEmployeesUseCaseFactory).mockReturnValue(useCaseMock);
+    vi.mocked(makeProfessionalsUseCaseFactory).mockReturnValue(useCaseMock);
 
   });
 
@@ -46,15 +46,15 @@ describe('EmployeesController', () => {
   });
 
   it('should be defined', () => {
-    expect(EmployeesController).toBeDefined();
+    expect(ProfessionalsController).toBeDefined();
   });
 
   describe('handleFindAll', () => {
 
-    it('should return a list of employees', async () => {
+    it('should return a list of professionals', async () => {
       // arrange
-      const employeesListFromUseCase = {
-        employees: [
+      const professionalsListFromUseCase = {
+        professionals: [
           {
             id: 'user-123',
             name: 'John Doe',
@@ -68,18 +68,18 @@ describe('EmployeesController', () => {
             email: 'ricks@example.com',
             registerCompleted: false,
           },
-        ] as Employee[],
+        ] as Professional[],
       };
 
-      useCaseMock.executeFindAll.mockResolvedValueOnce(employeesListFromUseCase);
+      useCaseMock.executeFindAll.mockResolvedValueOnce(professionalsListFromUseCase);
 
       // act
-      await EmployeesController.handleFindAll(req, res, next);
+      await ProfessionalsController.handleFindAll(req, res, next);
 
       // assert
       expect(useCaseMock.executeFindAll).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      expect(res.send).toHaveBeenCalledWith(employeesListFromUseCase);
+      expect(res.send).toHaveBeenCalledWith(professionalsListFromUseCase);
       expect(next).not.toHaveBeenCalled();
 
     });
@@ -90,7 +90,7 @@ describe('EmployeesController', () => {
       useCaseMock.executeFindAll.mockRejectedValueOnce(error);
 
       // act
-      await EmployeesController.handleFindAll(req, res, next);
+      await ProfessionalsController.handleFindAll(req, res, next);
 
       // assert
       expect(useCaseMock.executeFindAll).toHaveBeenCalledTimes(1);
@@ -104,25 +104,25 @@ describe('EmployeesController', () => {
 
   describe('handleFindById', () => {
 
-    it('should return an employee', async () => {
+    it('should return an professional', async () => {
       // arrange
-      const employee = {
+      const professional = {
         id: 'user-123',
         name: 'John Doe',
         email: 'rikolas@example.com',
         registerCompleted: true,
         googleId: 'google-id-123',
-      } as Employee;
+      } as Professional;
 
-      useCaseMock.executeFindById.mockResolvedValueOnce(employee);
+      useCaseMock.executeFindById.mockResolvedValueOnce(professional);
 
       // act
-      await EmployeesController.handleFindById(req, res, next);
+      await ProfessionalsController.handleFindById(req, res, next);
 
       // assert
       expect(useCaseMock.executeFindById).toHaveBeenCalledTimes(1);
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      expect(res.send).toHaveBeenCalledWith(employee);
+      expect(res.send).toHaveBeenCalledWith(professional);
       expect(next).not.toHaveBeenCalled();
 
     });
@@ -133,7 +133,7 @@ describe('EmployeesController', () => {
       useCaseMock.executeFindById.mockRejectedValueOnce(error);
 
       // act
-      await EmployeesController.handleFindById(req, res, next);
+      await ProfessionalsController.handleFindById(req, res, next);
 
       // assert
       expect(useCaseMock.executeFindById).toHaveBeenCalledTimes(1);
@@ -147,25 +147,25 @@ describe('EmployeesController', () => {
 
   describe('handleCreate', () => {
 
-    it('should create an employee', async () => {
+    it('should create an professional', async () => {
       // arrange
-      const newEmployee: Prisma.EmployeeCreateInput = {
+      const newProfessional: Prisma.ProfessionalCreateInput = {
         name: 'Usuário',
         email: 'newuser@example.com',
         registerCompleted: true,
         googleId: 'google-id-123',
       };
-      req.body = newEmployee;
-      useCaseMock.executeCreate.mockResolvedValueOnce(newEmployee);
+      req.body = newProfessional;
+      useCaseMock.executeCreate.mockResolvedValueOnce(newProfessional);
 
       // act
-      await EmployeesController.handleCreate(req, res, next);
+      await ProfessionalsController.handleCreate(req, res, next);
 
       // assert
       expect(useCaseMock.executeCreate).toHaveBeenCalledTimes(1);
-      expect(useCaseMock.executeCreate).toHaveBeenCalledWith(newEmployee);
+      expect(useCaseMock.executeCreate).toHaveBeenCalledWith(newProfessional);
       expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
-      expect(res.send).toHaveBeenCalledWith(newEmployee);
+      expect(res.send).toHaveBeenCalledWith(newProfessional);
       expect(next).not.toHaveBeenCalled();
 
     });
@@ -176,7 +176,7 @@ describe('EmployeesController', () => {
       useCaseMock.executeCreate.mockRejectedValueOnce(error);
 
       // act
-      await EmployeesController.handleCreate(req, res, next);
+      await ProfessionalsController.handleCreate(req, res, next);
 
       // assert
       expect(useCaseMock.executeCreate).toHaveBeenCalledTimes(1);
@@ -190,28 +190,28 @@ describe('EmployeesController', () => {
 
   describe('handleUpdate', () => {
 
-    it('should update an employee', async () => {
+    it('should update an professional', async () => {
       // arrange
-      const employeeToUpdate: Prisma.EmployeeUpdateInput = {
+      const professionalToUpdate: Prisma.ProfessionalUpdateInput = {
         name: 'Usuário',
         email: 'newuser@example.com',
         registerCompleted: true,
         googleId: 'google-id-123',
       };
-      const employeeId = 'user-123';
+      const professionalId = 'user-123';
 
-      req.body = employeeToUpdate;
-      req.params.id = employeeId;
-      useCaseMock.executeUpdate.mockResolvedValueOnce(employeeToUpdate);
+      req.body = professionalToUpdate;
+      req.params.id = professionalId;
+      useCaseMock.executeUpdate.mockResolvedValueOnce(professionalToUpdate);
 
       // act
-      await EmployeesController.handleUpdate(req, res, next);
+      await ProfessionalsController.handleUpdate(req, res, next);
 
       // assert
       expect(useCaseMock.executeUpdate).toHaveBeenCalledTimes(1);
-      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(employeeId, employeeToUpdate);
+      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(professionalId, professionalToUpdate);
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      expect(res.send).toHaveBeenCalledWith(employeeToUpdate);
+      expect(res.send).toHaveBeenCalledWith(professionalToUpdate);
       expect(next).not.toHaveBeenCalled();
 
     });
@@ -219,24 +219,24 @@ describe('EmployeesController', () => {
     it('should call next with an error if executeUpdate fails', async () => {
       // arrange
       const error = new Error('Database connection failed');
-      const employeeToUpdate: Prisma.EmployeeUpdateInput = {
+      const professionalToUpdate: Prisma.ProfessionalUpdateInput = {
         name: 'Usuário',
         email: 'newuser@example.com',
         registerCompleted: true,
         googleId: 'google-id-123',
       };
-      const employeeId = 'user-123';
+      const professionalId = 'user-123';
 
-      req.body = employeeToUpdate;
-      req.params.id = employeeId;
+      req.body = professionalToUpdate;
+      req.params.id = professionalId;
       useCaseMock.executeUpdate.mockRejectedValueOnce(error);
 
       // act
-      await EmployeesController.handleUpdate(req, res, next);
+      await ProfessionalsController.handleUpdate(req, res, next);
 
       // assert
       expect(useCaseMock.executeUpdate).toHaveBeenCalledTimes(1);
-      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(employeeId, employeeToUpdate);
+      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(professionalId, professionalToUpdate);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.send).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
@@ -247,18 +247,18 @@ describe('EmployeesController', () => {
 
   describe('handleDelete', () => {
 
-    it('should delete an employee', async () => {
+    it('should delete an professional', async () => {
       // arrange
-      const employeeId = 'user-123';
-      req.params.id = employeeId;
+      const professionalId = 'user-123';
+      req.params.id = professionalId;
       useCaseMock.executeDelete.mockResolvedValueOnce(undefined);
 
       // act
-      await EmployeesController.handleDelete(req, res, next);
+      await ProfessionalsController.handleDelete(req, res, next);
 
       // assert
       expect(useCaseMock.executeDelete).toHaveBeenCalledTimes(1);
-      expect(useCaseMock.executeDelete).toHaveBeenCalledWith(employeeId);
+      expect(useCaseMock.executeDelete).toHaveBeenCalledWith(professionalId);
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
       expect(res.send).toHaveBeenCalled();
       expect(next).not.toHaveBeenCalled();
@@ -267,16 +267,16 @@ describe('EmployeesController', () => {
     it('should call next with an error if executeDelete fails', async () => {
       // arrange
       const error = new Error('Database connection failed');
-      const employeeId = 'user-123';
-      req.params.id = employeeId;
+      const professionalId = 'user-123';
+      req.params.id = professionalId;
       useCaseMock.executeDelete.mockRejectedValueOnce(error);
 
       // act
-      await EmployeesController.handleDelete(req, res, next);
+      await ProfessionalsController.handleDelete(req, res, next);
 
       // assert
       expect(useCaseMock.executeDelete).toHaveBeenCalledTimes(1);
-      expect(useCaseMock.executeDelete).toHaveBeenCalledWith(employeeId);
+      expect(useCaseMock.executeDelete).toHaveBeenCalledWith(professionalId);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.send).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);

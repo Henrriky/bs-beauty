@@ -1,6 +1,6 @@
-import { UserType, type Employee, type Customer } from '@prisma/client'
+import { UserType, type Professional, type Customer } from '@prisma/client'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
-import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
+import { type ProfessionalRepository } from '../../../repository/protocols/professional.repository'
 import { InvalidUserTypeUseCaseError } from '../errors/invalid-user-type-use-case-error'
 import { NotFoundUseCaseError } from '../errors/not-found-error'
 
@@ -10,28 +10,28 @@ interface FetchUserInfoUseCaseInput {
 }
 
 interface FetchUserInfoUseCaseOutput {
-  user: Customer | Employee
+  user: Customer | Professional
 }
 
 class FetchUserInfoUseCase {
-  constructor (
+  constructor(
     private readonly customerRepository: CustomerRepository,
-    private readonly employeeRepository: EmployeeRepository
+    private readonly professionalRepository: ProfessionalRepository
   ) { }
 
-  async execute ({ userType, email }: FetchUserInfoUseCaseInput): Promise<FetchUserInfoUseCaseOutput> {
+  async execute({ userType, email }: FetchUserInfoUseCaseInput): Promise<FetchUserInfoUseCaseOutput> {
     if (userType === UserType.CUSTOMER) {
       const customer = await this.customerRepository.findByEmailOrPhone(email, '')
       if (customer == null) {
         throw new NotFoundUseCaseError('Customer not found')
       }
       return { user: customer }
-    } else if (userType === UserType.EMPLOYEE || userType === UserType.MANAGER) {
-      const employee = await this.employeeRepository.findByEmail(email)
-      if (employee == null) {
-        throw new NotFoundUseCaseError('Employee not found')
+    } else if (userType === UserType.PROFESSIONAL || userType === UserType.MANAGER) {
+      const professional = await this.professionalRepository.findByEmail(email)
+      if (professional == null) {
+        throw new NotFoundUseCaseError('Professional not found')
       }
-      return { user: employee }
+      return { user: professional }
     } else {
       throw new InvalidUserTypeUseCaseError('Invalid user type provided ' + userType)
     }

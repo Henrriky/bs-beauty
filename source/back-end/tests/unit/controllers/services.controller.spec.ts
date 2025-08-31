@@ -31,7 +31,7 @@ describe('ServicesController', () => {
     useCaseMock = {
       executeFindAll: vi.fn(),
       executeFindById: vi.fn(),
-      fetchEmployeesOfferingService: vi.fn(),
+      fetchProfessionalsOfferingService: vi.fn(),
       executeCreate: vi.fn(),
       executeUpdate: vi.fn(),
       executeDelete: vi.fn(),
@@ -145,18 +145,18 @@ describe('ServicesController', () => {
     });
   })
 
-  describe('handleFetchEmployeesOfferingService', () => {
-    it('should return employees offering a service', async () => {
+  describe('handleFetchProfessionalsOfferingService', () => {
+    it('should return professionals offering a service', async () => {
       // arrange
-      const employeesOfferingService = {
+      const professionalsOfferingService = {
         id: 'service-123',
         offers: [
           {
             id: 'offer-1',
             estimatedTime: 60,
             price: 100.0,
-            employee: {
-              id: 'employee-1',
+            professional: {
+              id: 'professional-1',
               name: 'John Doe',
               specialization: 'Hair Stylist',
               profilePhotoUrl: 'https://example.com/john-doe.jpg',
@@ -166,8 +166,8 @@ describe('ServicesController', () => {
             id: 'offer-2',
             estimatedTime: 45,
             price: 75.0,
-            employee: {
-              id: 'employee-2',
+            professional: {
+              id: 'professional-2',
               name: 'Jane Smith',
               specialization: 'Makeup Artist',
               profilePhotoUrl: 'https://example.com/jane-smith.jpg',
@@ -175,24 +175,24 @@ describe('ServicesController', () => {
           },
         ],
       };
-      useCaseMock.fetchEmployeesOfferingService.mockResolvedValue({ employeesOfferingService })
+      useCaseMock.fetchProfessionalsOfferingService.mockResolvedValue({ professionalsOfferingService })
       req.params.id = 'random-uuid-service-1'
 
       // act
-      await ServicesController.handleFetchEmployeesOfferingService(req, res, next)
+      await ServicesController.handleFetchProfessionalsOfferingService(req, res, next)
 
       // assert
-      expect(useCaseMock.fetchEmployeesOfferingService).toHaveBeenCalledWith('random-uuid-service-1')
-      expect(res.send).toHaveBeenCalledWith({ employeesOfferingService })
+      expect(useCaseMock.fetchProfessionalsOfferingService).toHaveBeenCalledWith('random-uuid-service-1')
+      expect(res.send).toHaveBeenCalledWith({ professionalsOfferingService })
       expect(next).not.toHaveBeenCalled()
     })
 
     it('should call next with error if something goes wrong', async () => {
       const mockError = new Error('Something went wrong')
-      useCaseMock.fetchEmployeesOfferingService.mockRejectedValue(mockError)
+      useCaseMock.fetchProfessionalsOfferingService.mockRejectedValue(mockError)
       req.params = { id: '1' }
 
-      await ServicesController.handleFetchEmployeesOfferingService(req, res, next)
+      await ServicesController.handleFetchProfessionalsOfferingService(req, res, next)
 
       expect(res.send).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalledTimes(1);

@@ -30,9 +30,9 @@ describe('ShiftController', () => {
     next = vi.fn();
 
     useCaseMock = {
-      executeFindAllByEmployeeId: vi.fn(),
+      executeFindAllByProfessionalId: vi.fn(),
       executeFindById: vi.fn(),
-      executeFindByEmployeeId: vi.fn(),
+      executeFindByProfessionalId: vi.fn(),
       executeCreate: vi.fn(),
       executeUpdate: vi.fn(),
       executeDelete: vi.fn(),
@@ -51,32 +51,32 @@ describe('ShiftController', () => {
     expect(ShiftController).toBeDefined();
   });
 
-  describe('handleFindAllByEmployeeId', () => {
+  describe('handleFindAllByProfessionalId', () => {
     it('should return 200 and shifts when use case succeeds', async () => {
       // arrange
-      useCaseMock.executeFindAllByEmployeeId.mockResolvedValueOnce({
+      useCaseMock.executeFindAllByProfessionalId.mockResolvedValueOnce({
         shifts: [
           {
             id: 'shift-1',
             weekDay: WeekDays.MONDAY,
             shiftStart: new Date(),
-            employeeId: 'user-123',
+            professionalId: 'user-123',
           }
         ] as Shift[],
       });
 
       // act
-      await ShiftController.handleFindAllByEmployeeId(req, res, next);
+      await ShiftController.handleFindAllByProfessionalId(req, res, next);
 
       // assert
-      expect(useCaseMock.executeFindAllByEmployeeId).toHaveBeenCalledWith('user-123');
+      expect(useCaseMock.executeFindAllByProfessionalId).toHaveBeenCalledWith('user-123');
       expect(res.send).toHaveBeenCalledWith({
         shifts: [
           {
             id: 'shift-1',
             weekDay: WeekDays.MONDAY,
             shiftStart: new Date(),
-            employeeId: 'user-123',
+            professionalId: 'user-123',
           }
         ],
       });
@@ -85,10 +85,10 @@ describe('ShiftController', () => {
     it('should call next with an error if use case throws', async () => {
       // arrange
       const error = new Error('Use case failure');
-      useCaseMock.executeFindAllByEmployeeId.mockRejectedValueOnce(error);
+      useCaseMock.executeFindAllByProfessionalId.mockRejectedValueOnce(error);
 
       // act
-      await ShiftController.handleFindAllByEmployeeId(req, res, next);
+      await ShiftController.handleFindAllByProfessionalId(req, res, next);
 
       // assert
       expect(next).toHaveBeenCalledWith(error);
@@ -104,7 +104,7 @@ describe('ShiftController', () => {
         id: shiftId,
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       } as Shift);
 
       // act
@@ -116,7 +116,7 @@ describe('ShiftController', () => {
         id: shiftId,
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       });
     });
 
@@ -133,27 +133,27 @@ describe('ShiftController', () => {
     });
   })
 
-  describe('handleFindByEmployeeId', () => {
+  describe('handleFindByProfessionalId', () => {
     it('should send 200 and shift when use case succeeds', async () => {
       // arrange
-      const employeeId = 'user-123';
-      req.params.id = employeeId;
-      useCaseMock.executeFindByEmployeeId.mockResolvedValueOnce({
+      const professionalId = 'user-123';
+      req.params.id = professionalId;
+      useCaseMock.executeFindByProfessionalId.mockResolvedValueOnce({
         shifts: [
           {
             id: 'shift-1',
             weekDay: WeekDays.MONDAY,
             shiftStart: new Date(),
-            employeeId: 'user-123',
+            professionalId: 'user-123',
           }
         ] as Shift[],
       });
 
       // act
-      await ShiftController.handleFindByEmployeeId(req, res, next);
+      await ShiftController.handleFindByProfessionalId(req, res, next);
 
       // assert
-      expect(useCaseMock.executeFindByEmployeeId).toHaveBeenCalledWith(employeeId);
+      expect(useCaseMock.executeFindByProfessionalId).toHaveBeenCalledWith(professionalId);
       expect(next).not.toHaveBeenCalled();
       expect(res.send).toHaveBeenCalledWith({
         shifts: [
@@ -161,7 +161,7 @@ describe('ShiftController', () => {
             id: 'shift-1',
             weekDay: WeekDays.MONDAY,
             shiftStart: new Date(),
-            employeeId: 'user-123',
+            professionalId: 'user-123',
           }
         ],
       });
@@ -170,10 +170,10 @@ describe('ShiftController', () => {
     it('should call next with an error if use case throws', async () => {
       // arrange
       const error = new Error('Use case failure');
-      useCaseMock.executeFindByEmployeeId.mockRejectedValueOnce(error);
+      useCaseMock.executeFindByProfessionalId.mockRejectedValueOnce(error);
 
       // act
-      await ShiftController.handleFindByEmployeeId(req, res, next);
+      await ShiftController.handleFindByProfessionalId(req, res, next);
 
       // assert
       expect(res.send).not.toHaveBeenCalled();
@@ -187,13 +187,13 @@ describe('ShiftController', () => {
       req.body = {
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       }
       useCaseMock.executeCreate.mockResolvedValueOnce({
         id: 'shift-1',
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       } as Shift);
 
       // act
@@ -204,13 +204,13 @@ describe('ShiftController', () => {
       expect(useCaseMock.executeCreate).toHaveBeenCalledWith({
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       });
       expect(res.send).toHaveBeenCalledWith({
         id: 'shift-1',
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       });
     });
 
@@ -220,7 +220,7 @@ describe('ShiftController', () => {
       req.body = {
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       }
       useCaseMock.executeCreate.mockRejectedValueOnce(error);
 
@@ -240,29 +240,29 @@ describe('ShiftController', () => {
       req.body = {
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       }
       useCaseMock.executeUpdate.mockResolvedValueOnce({
         id: shiftId,
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date('2025-01-02T07:00:00.000Z'),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       } as Shift);
 
       // act
-      await ShiftController.handleUpdateByIdAndEmployeeId(req, res, next);
+      await ShiftController.handleUpdateByIdAndProfessionalId(req, res, next);
 
       // assert
       expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(shiftId, {
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       });
       expect(res.send).toHaveBeenCalledWith({
         id: shiftId,
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date('2025-01-02T07:00:00.000Z'),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       });
     });
 
@@ -274,12 +274,12 @@ describe('ShiftController', () => {
       req.body = {
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       }
       useCaseMock.executeUpdate.mockRejectedValueOnce(error);
 
       // act
-      await ShiftController.handleUpdateByIdAndEmployeeId(req, res, next);
+      await ShiftController.handleUpdateByIdAndProfessionalId(req, res, next);
 
       // assert
       expect(next).toHaveBeenCalledWith(error);
@@ -296,7 +296,7 @@ describe('ShiftController', () => {
         id: shiftId,
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       } as Shift);
 
       // act
@@ -308,7 +308,7 @@ describe('ShiftController', () => {
         id: 'shift-1',
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123',
+        professionalId: 'user-123',
       });
     });
 

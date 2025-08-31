@@ -5,13 +5,13 @@ import { prismaClient } from '../../../src/lib/prisma'
 import { appRoutes } from '../../../src/router'
 import { type Prisma } from '@prisma/client'
 
-describe('EmployeesController', () => {
+describe('ProfessionalsController', () => {
   let app: express.Express
   let validToken: string
 
   beforeEach(async () => {
-    await prismaClient.employee.deleteMany()
-    await prismaClient.employee.createMany({
+    await prismaClient.professional.deleteMany()
+    await prismaClient.professional.createMany({
       data: [
         { id: 'random-uuid', name: 'John Doe', email: 'john@example.com' },
         { id: 'random-uuid2', name: 'Jane Doe', email: 'jane@example.com' }
@@ -42,24 +42,24 @@ describe('EmployeesController', () => {
   })
 
   describe('handleFindAll', () => {
-    it('should return a list of employees', async () => {
+    it('should return a list of professionals', async () => {
       // act
       const response = await request(app)
-        .get('/employees')
+        .get('/professionals')
         .set('Authorization', `Bearer ${validToken}`)
 
       // assert
       expect(response.status).toBe(200)
-      expect(response.body.employees).toHaveLength(2)
-      expect(response.body.employees[0]).toHaveProperty('name', 'John Doe')
+      expect(response.body.professionals).toHaveLength(2)
+      expect(response.body.professionals[0]).toHaveProperty('name', 'John Doe')
     })
   })
 
   describe('handleFindById', () => {
-    it('should return an employee by id', async () => {
+    it('should return an professional by id', async () => {
       // act
       const response = await request(app)
-        .get('/employees/random-uuid')
+        .get('/professionals/random-uuid')
         .set('Authorization', `Bearer ${validToken}`)
 
       // assert
@@ -69,33 +69,33 @@ describe('EmployeesController', () => {
   })
 
   describe('handleCreate', () => {
-    it('should create a new employee and store in the database', async () => {
-      const newEmployee: Prisma.EmployeeCreateInput = {
+    it('should create a new professional and store in the database', async () => {
+      const newProfessional: Prisma.ProfessionalCreateInput = {
         email: 'mark@example.com',
-        userType: 'EMPLOYEE'
+        userType: 'PROFESSIONAL'
       }
 
       const response = await request(app)
-        .post('/employees')
+        .post('/professionals')
         .set('Authorization', `Bearer ${validToken}`)
-        .send(newEmployee)
+        .send(newProfessional)
 
-      const employeeQuantity = await prismaClient.employee.count()
+      const professionalQuantity = await prismaClient.professional.count()
 
       // assert
       expect(response.status).toBe(201)
       expect(response.body).toHaveProperty('name', 'Usuário')
       expect(response.body).toHaveProperty('email', 'mark@example.com')
-      expect(response.body).toHaveProperty('userType', 'EMPLOYEE')
-      expect(employeeQuantity).toBe(3)
+      expect(response.body).toHaveProperty('userType', 'PROFESSIONAL')
+      expect(professionalQuantity).toBe(3)
     })
   })
 
   describe('handleUpdate', () => {
-    it('should update an employee and save changes in the database', async () => {
+    it('should update an professional and save changes in the database', async () => {
       // act
       const response = await request(app)
-        .put('/employees/random-uuid')
+        .put('/professionals/random-uuid')
         .set('Authorization', `Bearer ${validToken}`)
         .send({ name: 'John Updated' })
 
@@ -106,16 +106,16 @@ describe('EmployeesController', () => {
   })
 
   describe('handleDelete', () => {
-    it('should delete an employee from the database', async () => {
+    it('should delete an professional from the database', async () => {
       // act
       const response = await request(app)
-        .delete('/employees/random-uuid')
+        .delete('/professionals/random-uuid')
         .set('Authorization', `Bearer ${validToken}`)
 
-      const employeeQuantity = await prismaClient.employee.count()
+      const professionalQuantity = await prismaClient.professional.count()
       // assert
       expect(response.status).toBe(200)
-      expect(employeeQuantity).toBe(1)
+      expect(professionalQuantity).toBe(1)
     })
   })
 })

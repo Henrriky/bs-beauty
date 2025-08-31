@@ -3,13 +3,13 @@ import { prismaClient } from '../../lib/prisma'
 import { type NotificationRepository } from '../protocols/notification.repository'
 
 class PrismaNotificationRepository implements NotificationRepository {
-  public async findAll () {
+  public async findAll() {
     const notifications = await prismaClient.notification.findMany()
 
     return notifications
   }
 
-  public async findById (id: string) {
+  public async findById(id: string) {
     const notification = await prismaClient.notification.findUnique({
       where: { id }
     })
@@ -17,15 +17,15 @@ class PrismaNotificationRepository implements NotificationRepository {
     return notification
   }
 
-  public async findByUserId (userId: string) {
+  public async findByUserId(userId: string) {
     const notifications = await prismaClient.notification.findMany({
-      where: { OR: [{ appointment: { customerId: userId } }, { appointment: { offer: { employeeId: userId } } }] }
+      where: { OR: [{ appointment: { customerId: userId } }, { appointment: { offer: { professionalId: userId } } }] }
     })
 
     return notifications
   }
 
-  public async create (notificationToCreate: Prisma.NotificationCreateInput) {
+  public async create(notificationToCreate: Prisma.NotificationCreateInput) {
     const newNotification = await prismaClient.notification.create({
       data: { ...notificationToCreate }
     })
@@ -33,7 +33,7 @@ class PrismaNotificationRepository implements NotificationRepository {
     return newNotification
   }
 
-  public async delete (id: string) {
+  public async delete(id: string) {
     const deletedNotification = await prismaClient.notification.delete({
       where: { id }
     })
@@ -41,7 +41,7 @@ class PrismaNotificationRepository implements NotificationRepository {
     return deletedNotification
   }
 
-  public async markAsRead (id: string) {
+  public async markAsRead(id: string) {
     const readNotification = await prismaClient.notification.update({
       where: { id },
       data: { readAt: new Date() }

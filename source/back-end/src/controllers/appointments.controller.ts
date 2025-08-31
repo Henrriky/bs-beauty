@@ -26,12 +26,12 @@ class AppointmentController {
     }
   }
 
-  public static async handleFindByCustomerOrEmployeeId (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByCustomerOrProfessionalId (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeAppointmentsUseCaseFactory()
       const customerId = req.user.id
 
-      const { appointments } = await useCase.executeFindByCustomerOrEmployeeId(customerId)
+      const { appointments } = await useCase.executeFindByCustomerOrProfessionalId(customerId)
 
       res.send({ appointments }).status(200)
     } catch (error) {

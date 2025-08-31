@@ -1,11 +1,11 @@
 import type { NextFunction, Request, Response } from 'express'
 import { z } from 'zod'
 import { formatValidationErrors } from '../../../utils/formatting/zod-validation-errors.formatting.util'
-import { EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
+import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 
-const validateCreateEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const validateCreateProfessional = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    EmployeeSchemas.createSchema.parse(req.body)
+    ProfessionalSchemas.createSchema.parse(req.body)
     next()
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -16,4 +16,4 @@ const validateCreateEmployee = async (req: Request, res: Response, next: NextFun
   }
 }
 
-export { validateCreateEmployee }
+export { validateCreateProfessional }

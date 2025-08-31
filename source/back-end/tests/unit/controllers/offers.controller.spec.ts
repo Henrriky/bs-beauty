@@ -36,7 +36,7 @@ describe('OffersController', () => {
       executeFindAll: vi.fn(),
       executeFindById: vi.fn(),
       executeFindByServiceId: vi.fn(),
-      executeFindByEmployeeId: vi.fn(),
+      executeFindByProfessionalId: vi.fn(),
       executeCreate: vi.fn(),
       executeUpdate: vi.fn(),
       executeDelete: vi.fn(),
@@ -63,7 +63,7 @@ describe('OffersController', () => {
         {
           id: 'random-uuid',
           serviceId: 'random-uuid-service',
-          employeeId: 'random-uuid-employee',
+          professionalId: 'random-uuid-professional',
           estimatedTime: 60,
           price: new Decimal(100.0),
           isOffering: true,
@@ -108,7 +108,7 @@ describe('OffersController', () => {
       const mockOffer = {
         id: 'random-uuid',
         serviceId: 'random-uuid-service',
-        employeeId: 'random-uuid-employee',
+        professionalId: 'random-uuid-professional',
         estimatedTime: 60,
         price: new Decimal(100.0),
         isOffering: true,
@@ -153,7 +153,7 @@ describe('OffersController', () => {
       const mockOffer = {
         id: 'random-uuid',
         serviceId: 'random-uuid-service',
-        employeeId: 'random-uuid-employee',
+        professionalId: 'random-uuid-professional',
         estimatedTime: 60,
         price: new Decimal(100.0),
         isOffering: true,
@@ -193,15 +193,15 @@ describe('OffersController', () => {
 
   });
 
-  describe('handleFindByEmployeeId', () => {
-    it('should find offers by employee id', async () => {
+  describe('handleFindByProfessionalId', () => {
+    it('should find offers by professional id', async () => {
 
       // arrange
       const mockOffers = [
         {
           id: 'random-uuid',
           serviceId: 'random-uuid-service',
-          employeeId: 'random-uuid-employee',
+          professionalId: 'random-uuid-professional',
           estimatedTime: 60,
           price: new Decimal(100.0),
           isOffering: true,
@@ -210,29 +210,29 @@ describe('OffersController', () => {
         }
       ] as Offer[];
 
-      req.params.employeeId = mockOffers[0].employeeId;
-      useCaseMock.executeFindByEmployeeId.mockResolvedValueOnce({ offers: mockOffers });
+      req.params.professionalId = mockOffers[0].professionalId;
+      useCaseMock.executeFindByProfessionalId.mockResolvedValueOnce({ offers: mockOffers });
 
       // act
-      await OffersController.handleFindByEmployeeId(req, res, next);
+      await OffersController.handleFindByProfessionalId(req, res, next);
 
       // assert
-      expect(req.params.employeeId).toBe(mockOffers[0].employeeId);
+      expect(req.params.professionalId).toBe(mockOffers[0].professionalId);
       expect(res.send).toHaveBeenCalledWith({ offers: mockOffers });
-      expect(useCaseMock.executeFindByEmployeeId).toHaveBeenCalledTimes(1);
+      expect(useCaseMock.executeFindByProfessionalId).toHaveBeenCalledTimes(1);
       expect(next).not.toHaveBeenCalled();
     });
 
-    it('should call next with an error if executeFindByEmployeeId fails', async () => {
+    it('should call next with an error if executeFindByProfessionalId fails', async () => {
       // arrange
       const error = new Error('Database connection failed');
-      useCaseMock.executeFindByEmployeeId.mockRejectedValueOnce(error);
+      useCaseMock.executeFindByProfessionalId.mockRejectedValueOnce(error);
 
       // act
-      await OffersController.handleFindByEmployeeId(req, res, next);
+      await OffersController.handleFindByProfessionalId(req, res, next);
 
       // assert
-      expect(useCaseMock.executeFindByEmployeeId).toHaveBeenCalledTimes(1);
+      expect(useCaseMock.executeFindByProfessionalId).toHaveBeenCalledTimes(1);
       expect(res.status).not.toHaveBeenCalled();
       expect(res.send).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
@@ -247,7 +247,7 @@ describe('OffersController', () => {
       // arrange
       const mockOffer = {
         serviceId: 'random-uuid-service',
-        employeeId: 'random-uuid-employee',
+        professionalId: 'random-uuid-professional',
         estimatedTime: 60,
         price: new Decimal(100.0),
         isOffering: true,
@@ -292,7 +292,7 @@ describe('OffersController', () => {
       const mockOffer = {
         id: 'random-uuid',
         serviceId: 'random-uuid-service',
-        employeeId: 'random-uuid-employee',
+        professionalId: 'random-uuid-professional',
         estimatedTime: 60,
         price: new Decimal(100.0),
         isOffering: true,
@@ -339,7 +339,7 @@ describe('OffersController', () => {
       const mockOffer = {
         id: 'random-uuid',
         serviceId: 'random-uuid-service',
-        employeeId: 'random-uuid-employee',
+        professionalId: 'random-uuid-professional',
         estimatedTime: 60,
         price: new Decimal(100.0),
         isOffering: true,

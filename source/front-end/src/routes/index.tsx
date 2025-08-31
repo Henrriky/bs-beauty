@@ -87,7 +87,10 @@ function BSBeautyRouter() {
                   path="/management/services"
                   element={<ServiceDashboard />}
                 />
-                <Route path="/professional-shifts" element={<ProfessionalShifts />} />
+                <Route
+                  path="/professional-shifts"
+                  element={<ProfessionalShifts />}
+                />
               </Route>
 
               <Route path="/profile" element={<Profile />} />
