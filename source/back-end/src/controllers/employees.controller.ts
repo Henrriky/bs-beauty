@@ -3,6 +3,7 @@ import { makeEmployeesUseCaseFactory } from '../factory/make-employees-use-case.
 import type { Prisma } from '@prisma/client'
 import { StatusCodes } from 'http-status-codes'
 import { employeeQuerySchema } from '../utils/validation/zod-schemas/pagination/employees/employees-query.schema'
+import bcrypt from 'bcrypt'
 
 class EmployeesController {
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
@@ -37,9 +38,15 @@ class EmployeesController {
 
   public static async handleCreate (req: Request, res: Response, next: NextFunction) {
     try {
-      const newEmployee: Prisma.EmployeeCreateInput = req.body
+      const { password, confirmPassword, ...employeeData } = req.body
+
+      if (password) {
+        const passwordHash = await bcrypt.hash(password, 10)
+        employeeData.passwordHash = passwordHash
+      }
+
       const useCase = makeEmployeesUseCaseFactory()
-      const employee = await useCase.executeCreate(newEmployee)
+      const employee = await useCase.executeCreate(employeeData)
 
       res.status(StatusCodes.CREATED).send(employee)
     } catch (error) {
