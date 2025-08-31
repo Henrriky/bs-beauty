@@ -29,26 +29,43 @@ class CompleteUserRegisterUseCase {
     }
 
     if (userType === UserType.CUSTOMER) {
-      const userByPhone = await this.customerRepository.findByEmailOrPhone('', (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone)
-      if (userByPhone != null) {
-        throw new ResourceWithAttributAlreadyExists(
-          'user',
-          'phone',
-          (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone
-        )
+      const existingCustomer = await this.customerRepository.findByEmail(userEmail)
+
+      if (existingCustomer) {
+        const userByPhone = await this.customerRepository.findByEmailOrPhone('', (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone)
+
+        if (userByPhone != null) {
+          throw new ResourceWithAttributAlreadyExists(
+            'user',
+            'phone',
+            (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone
+          )
+        }
+
+        if (existingCustomer.googleId && !existingCustomer.passwordHash) {
+          await this.customerRepository.updateByEmailAndGoogleId(
+            userId,
+            userEmail,
+            data
+          )
+        } else {
+          await this.customerRepository.updateByEmail(userEmail, data)
+        }
+      }
+    } else if (userType === UserType.EMPLOYEE || userType === UserType.MANAGER) {
+      const existingEmployee = await this.employeeRepository.findByEmail(userEmail)
+      if (existingEmployee) {
+        if (existingEmployee.googleId && !existingEmployee.passwordHash) {
+          await this.employeeRepository.updateByEmailAndGoogleId(
+            userId,
+            userEmail,
+            data
+          )
+        } else {
+          await this.employeeRepository.updateEmployeeByEmail(userEmail, data)
+        }
       }
 
-      await this.customerRepository.updateByEmailAndGoogleId(
-        userId,
-        userEmail,
-        data
-      )
-    } else if (userType === UserType.EMPLOYEE || userType === UserType.MANAGER) {
-      await this.employeeRepository.updateByEmailAndGoogleId(
-        userId,
-        userEmail,
-        data
-      )
     } else {
       throw new InvalidUserTypeUseCaseError(`Invalid user type provided ${userType}`)
     }
