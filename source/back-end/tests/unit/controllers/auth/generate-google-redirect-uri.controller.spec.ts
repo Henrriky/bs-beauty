@@ -1,32 +1,32 @@
 import { StatusCodes } from "http-status-codes";
 import { GenerateOAuthRedirectUriUseCase } from "../../../../src/services/use-cases/auth/generate-oauth-redirect-uri.use-case";
 import { GenerateGoogleRedirectUriController } from "../../../../src/controllers/auth/generate-google-redirect-uri.controller";
-
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { MockRequest, mockRequest, mockResponse } from "../../utils/test-utilts";
+import { Request, Response } from "express";
+import { createMock } from "../../utils/mocks";
 
 vi.mock('../../../../src/services/use-cases/auth/generate-oauth-redirect-uri.use-case');
 
 describe('GenerateGoogleRedirectUriController', () => {
 
-    let req: any
-    let res: any;
-    let serviceMock: any;
+    let req: MockRequest;
+    let res: Response;
+    let executeMock: ReturnType<typeof vi.fn>;
+    let usecaseMock: GenerateOAuthRedirectUriUseCase;
 
     beforeEach(() => {
 
         vi.clearAllMocks();
 
-        req = {}
+        req = mockRequest();
+        res = mockResponse();
 
-        res = {
-            status: vi.fn().mockReturnThis(),
-            send: vi.fn(),
-        };
+        const result = createMock<GenerateOAuthRedirectUriUseCase>();
+        usecaseMock = result.usecase;
+        executeMock = result.executeMock;
 
-        serviceMock = {
-            execute: vi.fn(),
-        };
-        vi.mocked(GenerateOAuthRedirectUriUseCase).mockImplementation(() => serviceMock);
-
+        vi.mocked(GenerateOAuthRedirectUriUseCase).mockImplementation(() => usecaseMock);
     })
 
     it('should be defined', () => {
@@ -36,7 +36,7 @@ describe('GenerateGoogleRedirectUriController', () => {
     describe('handle', () => {
         it('should return 200 and the authorization URL if the use case succeeds', async () => {
             // arrange
-            serviceMock.execute.mockReturnValueOnce({ authorizationUrl: 'http://example.com/auth' });
+            executeMock.mockReturnValueOnce({ authorizationUrl: 'http://example.com/auth' });
 
             // act
             await GenerateGoogleRedirectUriController.handle(req, res);
@@ -44,12 +44,12 @@ describe('GenerateGoogleRedirectUriController', () => {
             // assert
             expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
             expect(res.send).toHaveBeenCalledWith({ authorizationUrl: 'http://example.com/auth' });
-            expect(serviceMock.execute).toHaveBeenCalledTimes(1);
+            expect(usecaseMock.execute).toHaveBeenCalledTimes(1);
         })
 
         it('should return 500 if the use case throws an error', async () => {
             // arrange
-            serviceMock.execute.mockImplementationOnce(() => {
+            executeMock.mockImplementationOnce(() => {
                 throw new Error('Use case failure');
             });
 
@@ -65,3 +65,4 @@ describe('GenerateGoogleRedirectUriController', () => {
     });
 
 })
+

@@ -1,8 +1,8 @@
 {
   "exclude": [
-    "**/*.spec.ts",
     "node_modules"
   ],
+  "include": ["src", "tests", "src/@types"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
@@ -10,7 +10,8 @@
     "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
     "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
     "target": "ES2020",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "module": "commonjs",                                /* Specify what module code is generated. */
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
     "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */

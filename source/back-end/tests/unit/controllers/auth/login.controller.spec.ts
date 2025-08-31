@@ -1,33 +1,34 @@
+import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { makeLoginUseCase } from '../../../../src/factory/make-login-use-case.factory';
 import { LoginController } from '../../../../src/controllers/auth/login.controller';
+import { makeLoginUseCase } from '../../../../src/factory/make-login-use-case.factory';
+import { LoginUseCase } from '../../../../src/services/use-cases/auth/login.use-case';
+import { MockRequest, mockRequest, mockResponse } from '../../../unit/utils/test-utilts';
+import { createMock } from '../../utils/mocks';
 
 vi.mock('../../../../src/factory/make-login-use-case.factory', () => ({
     makeLoginUseCase: vi.fn(),
 }));
 
 describe('LoginController', () => {
-    let req: any
-    let res: any
-    let usecaseMock: any
+    let req: MockRequest;
+    let res: Response;
+    let executeMock: ReturnType<typeof vi.fn>;
+    let usecaseMock: LoginUseCase;
 
     beforeEach(() => {
 
         vi.clearAllMocks();
-        req = {
-            headers: {},
-        }
+        req = mockRequest();
+        res = mockResponse();
 
-        res = {
-            status: vi.fn().mockReturnThis(),
-            send: vi.fn(),
-        };
+        const result = createMock<LoginUseCase>();
+        usecaseMock = result.usecase;
+        executeMock = result.executeMock;
 
-        usecaseMock = {
-            execute: vi.fn(),
-        };
         vi.mocked(makeLoginUseCase).mockReturnValue(usecaseMock);
+
     });
 
     it('should be defined', () => {
@@ -38,7 +39,7 @@ describe('LoginController', () => {
 
         it('should return 401 if no authorization header is provided', async () => {
             // act
-            await LoginController.handle(req as any, res);
+            await LoginController.handle(req, res);
 
             // assert
             expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED);
@@ -49,8 +50,8 @@ describe('LoginController', () => {
         it('should return 200 and an access token if the login use case succeeds', async () => {
 
             // arrange
-            req.headers.authorization = 'Bearer valid_token'
-            usecaseMock.execute.mockResolvedValueOnce({ accessToken: 'fake_access_token' })
+            req = mockRequest({ headers: { authorization: 'Bearer valid_token' } });
+            executeMock.mockResolvedValueOnce({ accessToken: 'fake_access_token' });
 
             // act
             await LoginController.handle(req, res);
@@ -63,8 +64,8 @@ describe('LoginController', () => {
 
         it('should return 500 if the login use case throws an error', async () => {
             // arrange
-            req.headers.authorization = 'Bearer valid_token'
-            usecaseMock.execute.mockRejectedValueOnce(new Error('Use case failure'))
+            req = mockRequest({ headers: { authorization: 'Bearer valid_token' } });
+            executeMock.mockRejectedValueOnce(new Error('Use case failure'));
 
             // act
             await LoginController.handle(req, res);

@@ -1,23 +1,7 @@
-import path from 'path'
-import express from 'express'
-import cors from 'cors'
-import { appRoutes } from './router'
+import { app } from './app';
 
-const app = express()
+const port = Number(process.env.PORT) || 3000;
 
-/* =========BACK-END-END====== */
-app.use(cors({
-  origin: '*'
-}))
-app.use(express.json())
-app.use('/api', appRoutes)
-
-/* =========FRONT-END====== */
-app.use(express.static(path.join(__dirname, '..', '..', 'front-end', 'build')))
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', '..', 'front-end', 'build', 'index.html'))
-})
-
-app.listen(3000, () => {
-  console.log(`HTTP Server listening on port ${3000}`)
-})
+app.listen(port, () => {
+  console.log(`HTTP Server listening on port ${port}`);
+});
