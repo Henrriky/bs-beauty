@@ -60,7 +60,7 @@ const sideBarItems: SideBarOptions = {
       navigateTo: '/customers',
     },
     {
-      name: 'Funcionários',
+      name: 'Profissionais',
       icon: <ClipboardDocumentCheckIcon className="size-6" />,
       navigateTo: '/professionals-management',
     },

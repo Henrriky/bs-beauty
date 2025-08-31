@@ -72,7 +72,7 @@ function CustomerHomeSelectTimeContainer() {
 
   if (isLoading)
     return (
-      <BSBeautyLoading title="Carregando os horários do funcionários escolhido..." />
+      <BSBeautyLoading title="Carregando os horários do profissionais escolhido..." />
     )
 
   if (isError) {
@@ -166,7 +166,7 @@ function CustomerHomeSelectTimeContainer() {
         <div className="bg-[#595149] w-full h-0.5 mb-4"></div>
         <div>
           {schedullingIsLoading ? (
-            <BSBeautyLoading title="Carregando os horários do funcionários escolhido..." />
+            <BSBeautyLoading title="Carregando os horários do profissionais escolhido..." />
           ) : schedullingIsError ? (
             <ErrorMessage
               message={

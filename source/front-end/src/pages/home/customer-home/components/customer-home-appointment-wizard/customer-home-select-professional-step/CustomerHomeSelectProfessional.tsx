@@ -22,13 +22,13 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
 
   if (!serviceId && props.currentFlow === 'service') {
     toast.error(
-      'Por favor, selecione um serviço para acessar a etapa de selecionar os funcionários',
+      'Por favor, selecione um serviço para acessar a etapa de selecionar os profissionais',
     )
 
     return (
       <ErrorMessage
         message={
-          'Por favor, selecione um serviço para acessar a etapa de selecionar os funcionários'
+          'Por favor, selecione um serviço para acessar a etapa de selecionar os profissionais'
         }
       />
     )
@@ -51,7 +51,7 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
   )
 
   if (isLoading || isLoadingProfessionals)
-    return <BSBeautyLoading title="Carregando os funcionários..." />
+    return <BSBeautyLoading title="Carregando os profissionais..." />
 
   if (isError || isErrorProfessionals) {
     toast.error('Erro ao carregar dados')
@@ -68,9 +68,9 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
     props.currentFlow === 'service'
       ? (data?.professionalsOfferingService.offers ?? [])
       : (professionalsData?.data.map((professional) => ({
-          id: `${professional.id}`,
-          professional,
-        })) ?? [])
+        id: `${professional.id}`,
+        professional,
+      })) ?? [])
 
   if (professionalsToShow.length === 0) {
     return (

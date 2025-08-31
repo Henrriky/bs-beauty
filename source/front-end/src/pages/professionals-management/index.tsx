@@ -131,7 +131,7 @@ function ProfessionalsManagement() {
 
   return (
     <>
-      <Title align="left">Funcionários</Title>
+      <Title align="left">Profissionais</Title>
       <div className="mt-2">
         <span className="text-sm text-[#D9D9D9]">
           Olá, <span className="text-primary-200 font-bold">{username}</span>!
