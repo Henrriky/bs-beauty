@@ -14,6 +14,7 @@ vi.mock('../../../../src/factory/make-login-use-case.factory', () => ({
 describe('LoginController', () => {
     let req: MockRequest;
     let res: Response;
+    let next: any;
     let executeMock: ReturnType<typeof vi.fn>;
     let usecaseMock: LoginUseCase;
 
@@ -22,6 +23,7 @@ describe('LoginController', () => {
         vi.clearAllMocks();
         req = mockRequest();
         res = mockResponse();
+        next = vi.fn();
 
         const result = createMock<LoginUseCase>();
         usecaseMock = result.usecase;
@@ -37,13 +39,13 @@ describe('LoginController', () => {
 
     describe('handle', () => {
 
-        it('should return 401 if no authorization header is provided', async () => {
+        it('should return 400 if no authorization header and missing email/password', async () => {
             // act
-            await LoginController.handle(req, res);
+            await LoginController.handle(req, res, next);
 
             // assert
-            expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED);
-            expect(res.send).toHaveBeenCalledWith({ message: 'Please, send google access token to login' });
+            expect(res.status).toHaveBeenCalledWith(StatusCodes.BAD_REQUEST);
+            expect(res.send).toHaveBeenCalledWith({ message: 'Email and password are required for login' });
             expect(usecaseMock.execute).not.toHaveBeenCalled()
         });
 
@@ -54,7 +56,7 @@ describe('LoginController', () => {
             executeMock.mockResolvedValueOnce({ accessToken: 'fake_access_token' });
 
             // act
-            await LoginController.handle(req, res);
+            await LoginController.handle(req, res, next);
 
             // assert
             expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
@@ -68,11 +70,14 @@ describe('LoginController', () => {
             executeMock.mockRejectedValueOnce(new Error('Use case failure'));
 
             // act
-            await LoginController.handle(req, res);
+            await LoginController.handle(req, res, next);
 
             // assert
-            expect(res.status).toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR);
-            expect(res.send).toHaveBeenCalledWith({ message: 'Error trying to login, please check back-end logs...' });
+            expect(next).toHaveBeenCalledTimes(1);
+            expect(next.mock.calls[0][0]).toBeInstanceOf(Error);
+            expect((next.mock.calls[0][0] as Error).message).toBe('Use case failure');
+            expect(res.status).not.toHaveBeenCalled();
+            expect(res.send).not.toHaveBeenCalled();
         });
     });
 
