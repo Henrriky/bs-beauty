@@ -5,10 +5,10 @@ import Callback from '../pages/callback'
 import CompleteRegister from '../pages/complete-register'
 import RegistrationCompleted from '../pages/complete-register/components/RegistrationCompleted'
 import Customers from '../pages/customers'
-import ProfessionalShifts from '../pages/professional-shifts'
-import ProfessionalsManagement from '../pages/professionals-management'
+import Shifts from '../pages/shifts'
+import Professionals from '../pages/professionals'
 import Login from '../pages/login'
-import ManagerHome from '../pages/manager-home'
+import ManagerHome from '../pages/home/manager-employee-home'
 import NotFound from '../pages/not-found'
 import PrivateRoute from '../pages/private-route'
 import Profile from '../pages/profile'
@@ -68,10 +68,10 @@ function BSBeautyRouter() {
                 element={<PrivateRoute allowedUserTypes={[UserType.MANAGER]} />}
               >
                 <Route path="/manager/home" element={<ManagerHome />} />
-                <Route path="/customers" element={<Customers />} />
+                <Route path="/manager/customers" element={<Customers />} />
                 <Route
-                  path="/professionals-management"
-                  element={<ProfessionalsManagement />}
+                  path="/manager/professionals"
+                  element={<Professionals />}
                 />
               </Route>
 
@@ -83,14 +83,8 @@ function BSBeautyRouter() {
                   />
                 }
               >
-                <Route
-                  path="/management/services"
-                  element={<ServiceDashboard />}
-                />
-                <Route
-                  path="/professional-shifts"
-                  element={<ProfessionalShifts />}
-                />
+                <Route path="/services" element={<ServiceDashboard />} />
+                <Route path="/shifts" element={<Shifts />} />
               </Route>
 
               <Route path="/profile" element={<Profile />} />

@@ -57,22 +57,22 @@ const sideBarItems: SideBarOptions = {
     {
       name: 'Clientes',
       icon: <UsersIcon className="size-6" />,
-      navigateTo: '/customers',
+      navigateTo: '/manager/customers',
     },
     {
       name: 'Profissionais',
       icon: <ClipboardDocumentCheckIcon className="size-6" />,
-      navigateTo: '/professionals-management',
+      navigateTo: '/manager/professionals',
     },
     {
       name: 'Serviços',
       icon: <BriefcaseIcon className="size-6" />,
-      navigateTo: '/management/services',
+      navigateTo: '/services',
     },
     {
       name: 'Turnos',
       icon: <ClockIcon className="size-6" />,
-      navigateTo: '/professional-shifts',
+      navigateTo: '/shifts',
     },
     {
       name: 'Home',
@@ -84,12 +84,12 @@ const sideBarItems: SideBarOptions = {
     {
       name: 'Serviços',
       icon: <BriefcaseIcon className="size-6" />,
-      navigateTo: '/management/services',
+      navigateTo: 'services',
     },
     {
       name: 'Turnos',
       icon: <ClockIcon className="size-6" />,
-      navigateTo: '/professional-shifts',
+      navigateTo: '/shifts',
     },
     {
       name: 'Home',

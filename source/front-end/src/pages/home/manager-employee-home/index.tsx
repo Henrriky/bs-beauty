@@ -1,7 +1,7 @@
 import { ClockIcon } from '@heroicons/react/24/outline'
 import WeekAppointments from './components/WeekAppointments'
 import AnalyticsCards from './components/AnalyticsCards'
-import useAppSelector from '../../hooks/use-app-selector'
+import useAppSelector from '../../../hooks/use-app-selector'
 
 function ManagerHome() {
   const user = useAppSelector((state) => state.auth.user!)

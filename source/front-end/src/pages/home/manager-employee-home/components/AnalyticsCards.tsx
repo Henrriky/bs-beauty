@@ -7,9 +7,9 @@ import {
   UserGroupIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/outline'
-import { analyticsAPI } from '../../../store/analytics/analytics-api'
+import { analyticsAPI } from '../../../../store/analytics/analytics-api'
 import Card from './Card'
-import { authAPI } from '../../../store/auth/auth-api'
+import { authAPI } from '../../../../store/auth/auth-api'
 import { toast } from 'react-toastify'
 
 const AnalyticsCards = () => {

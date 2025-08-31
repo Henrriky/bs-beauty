@@ -1,7 +1,7 @@
 import { addDays } from 'date-fns'
 import { CalendarIcon } from '@heroicons/react/24/outline'
-import { appointmentAPI } from '../../../store/appointment/appointment-api'
-import { authAPI } from '../../../store/auth/auth-api'
+import { appointmentAPI } from '../../../../store/appointment/appointment-api'
+import { authAPI } from '../../../../store/auth/auth-api'
 
 function getDifferenceInDays(date1: Date, date2: Date) {
   const diffInMilliseconds = Math.abs(
@@ -14,11 +14,8 @@ const WeekAppointments = () => {
   const { data: userData } = authAPI.useFetchUserInfoQuery()
   const id = userData?.user.id
 
-  const {
-    data,
-    error,
-    isLoading,
-  } = appointmentAPI.useFetchProfessionalAppointmentsByAllOffersQuery(id!)
+  const { data, error, isLoading } =
+    appointmentAPI.useFetchProfessionalAppointmentsByAllOffersQuery(id!)
 
   if (isLoading) {
     return <div>Loading...</div>

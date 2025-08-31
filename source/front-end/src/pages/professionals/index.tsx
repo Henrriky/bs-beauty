@@ -16,7 +16,7 @@ import { ProfessionalCard } from './components/ProfessionalCard'
 
 type ProfessionalFormData = z.infer<typeof ProfessionalSchemas.createSchema>
 
-function ProfessionalsManagement() {
+function Professionals() {
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState(search)
   const [page, setPage] = useState(1)
@@ -276,4 +276,4 @@ function ProfessionalsManagement() {
   )
 }
 
-export default ProfessionalsManagement
+export default Professionals
