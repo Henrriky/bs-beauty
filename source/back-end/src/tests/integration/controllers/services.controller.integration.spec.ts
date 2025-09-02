@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { app } from '../../../src/app'
+import { app } from '../../../app'
 import { getManagerToken } from '../utils/auth'
 import { type Service } from '@prisma/client'
 import { spyServicesWiring } from '../utils/services-spies'

@@ -94,8 +94,8 @@ class PrismaCustomerRepository implements CustomerRepository {
     const skip = (page - 1) * limit
 
     const where = {
-      name: filters.name ? { contains: filters.name } : undefined,
-      email: filters.email ? { contains: filters.email } : undefined
+      name: (filters.name != null) ? { contains: filters.name } : undefined,
+      email: (filters.email != null) ? { contains: filters.email } : undefined
     }
 
     const [data, total] = await Promise.all([

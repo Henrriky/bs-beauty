@@ -4,12 +4,12 @@ import tsConfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
   test: {
     globals: true,
-    include: ['tests/unit/**/*.spec.ts'],
+    include: ['src/tests/unit/**/*.spec.ts'],
     root: './',
     coverage: {
       reporter: ['text', 'html'],
     },
-    setupFiles: ['./tests/unit/setup-integration-unit.ts'],
+    setupFiles: ['./src/tests/unit/setup-integration-unit.ts'],
   },
   plugins: [tsConfigPaths()],
 })

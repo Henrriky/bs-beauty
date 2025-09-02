@@ -2,7 +2,7 @@
   "exclude": [
     "node_modules"
   ],
-  "include": ["src", "tests", "src/@types"],
+  "include": ["src", "src/tests", "src/@types"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 

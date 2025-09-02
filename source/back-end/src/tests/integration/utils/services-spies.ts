@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
-import { ServicesUseCase } from '../../../src/services/services.use-case';
-import * as factoryModule from '../../../src/factory/make-service-use-case.factory';
-import { PrismaServiceRepository } from '../../../src/repository/prisma/prisma-service.repository';
+import { ServicesUseCase } from '../../../services/services.use-case';
+import * as factoryModule from '../../../factory/make-service-use-case.factory';
+import { PrismaServiceRepository } from '../../../repository/prisma/prisma-service.repository';
 
 export function spyServicesWiring() {
   const factory = vi.spyOn(factoryModule, 'makeServiceUseCaseFactory');

@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
-import { EmployeesUseCase } from '../../../src/services/employees.use-case';
-import * as factoryModule from '../../../src/factory/make-employees-use-case.factory';
-import { PrismaEmployeeRepository } from '../../../src/repository/prisma/prisma-employee.repository';
+import { EmployeesUseCase } from '../../../services/employees.use-case';
+import * as factoryModule from '../../../factory/make-employees-use-case.factory';
+import { PrismaEmployeeRepository } from '../../../repository/prisma/prisma-employee.repository';
 
 export function spyEmployeesWiring() {
   const factory = vi.spyOn(factoryModule, 'makeEmployeesUseCaseFactory');

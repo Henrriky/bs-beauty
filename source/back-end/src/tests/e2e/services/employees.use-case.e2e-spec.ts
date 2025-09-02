@@ -1,6 +1,6 @@
-import { prismaClient } from "../../../src/lib/prisma";
-import { PrismaEmployeeRepository } from "../../../src/repository/prisma/prisma-employee.repository";
-import { EmployeesUseCase } from "../../../src/services/employees.use-case";
+import { prismaClient } from "../../../lib/prisma";
+import { PrismaEmployeeRepository } from "../../../repository/prisma/prisma-employee.repository";
+import { EmployeesUseCase } from "../../../services/employees.use-case";
 
 describe('EmployeesUseCase', () => {
   let employeesUseCase: EmployeesUseCase;
