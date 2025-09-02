@@ -1,7 +1,7 @@
 import { type Employee } from '@prisma/client'
 import request from 'supertest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { app } from '../../../src/app'
+import { app } from '../../../app'
 import { getManagerToken } from '../utils/auth'
 import { spyEmployeesWiring } from '../utils/employees-spies'
 import { faker } from '@faker-js/faker'

@@ -42,12 +42,16 @@ const AnalyticsCards = () => {
   }
 
   if (error) {
-    toast.warning("Error while fetching data.")
+    toast.warning('Error while fetching data.')
   }
 
   if (!analytics) {
-    toast.warn("No analytics data available.")
-    return <h1 className='mt-10 text-primary-200 text-xl'>No analytics data available.</h1>
+    toast.warn('No analytics data available.')
+    return (
+      <h1 className="mt-10 text-primary-200 text-xl">
+        No analytics data available.
+      </h1>
+    )
   }
 
   return (
@@ -81,7 +85,7 @@ const AnalyticsCards = () => {
         <Card
           icon={<BriefcaseIcon />}
           text="Funcionários"
-          count={(analytics?.numberOfEmployees ?? 0)}
+          count={analytics?.numberOfEmployees ?? 0}
         />
       )}
       <Card

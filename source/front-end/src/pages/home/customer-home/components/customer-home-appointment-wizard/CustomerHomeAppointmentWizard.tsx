@@ -116,7 +116,7 @@ function CustomerHomeAppointmentWizard() {
     if (customerId) {
       createAppointmentForm.setValue('customerId', customerId)
     }
-  }, [customerId])
+  }, [createAppointmentForm, customerId])
 
   useEffect(() => {
     const firstStep = createSteps(currentFlow)

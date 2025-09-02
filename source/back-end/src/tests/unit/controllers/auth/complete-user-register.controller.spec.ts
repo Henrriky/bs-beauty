@@ -1,24 +1,24 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { faker } from '@faker-js/faker'
 import { UserType } from '@prisma/client'
-import { Response } from 'express'
+import { type Response } from 'express'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { z } from 'zod'
-import { CompleteUserRegisterController } from '../../../../src/controllers/auth/complete-user-register.controller'
-import { makeCompleteUserRegisterUseCase } from '../../../../src/factory/auth/make-complete-user-register.use-case.factory'
-import { CustomerSchemas } from '../../../../src/utils/validation/zod-schemas/customer.zod-schemas.validation.util'
-import { MockRequest, mockRequest, mockResponse } from '../../utils/test-utilts'
-import { CompleteUserRegisterUseCase } from '../../../../src/services/use-cases/auth/complete-user-register.use-case'
+import { CompleteUserRegisterController } from '../../../../controllers/auth/complete-user-register.controller'
+import { makeCompleteUserRegisterUseCase } from '../../../../factory/auth/make-complete-user-register.use-case.factory'
+import { CustomerSchemas } from '../../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
+import { type MockRequest, mockRequest, mockResponse } from '../../utils/test-utilts'
+import { type CompleteUserRegisterUseCase } from '../../../../services/use-cases/auth/complete-user-register.use-case'
 import { createMock } from '../../utils/mocks'
 
-vi.mock('../../../../src/factory/auth/make-complete-user-register.use-case.factory', () => ({
+vi.mock('@/factory/auth/make-complete-user-register.use-case.factory', () => ({
   makeCompleteUserRegisterUseCase: vi.fn()
 }))
 
 describe('CompleteUserRegisterController', () => {
   let req: MockRequest
   let res: Response
-  let executeMock: ReturnType<typeof vi.fn>;
-  let usecaseMock: CompleteUserRegisterUseCase;
+  let usecaseMock: CompleteUserRegisterUseCase
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -26,13 +26,12 @@ describe('CompleteUserRegisterController', () => {
     req = mockRequest({
       headers: {},
       body: {}
-    });
+    })
 
-    res = mockResponse();
+    res = mockResponse()
 
-    const result = createMock<CompleteUserRegisterUseCase>();
-    usecaseMock = result.usecase;
-    executeMock = result.executeMock;
+    const result = createMock<CompleteUserRegisterUseCase>()
+    usecaseMock = result.usecase
 
     vi.mocked(makeCompleteUserRegisterUseCase).mockReturnValue(usecaseMock)
   })
@@ -47,7 +46,7 @@ describe('CompleteUserRegisterController', () => {
       req.user = {
         sub: undefined,
         userType: UserType.CUSTOMER,
-        registerCompleted: false,
+        registerCompleted: false
       } as any
 
       vi.spyOn(CustomerSchemas.customerCompleteRegisterBodySchema, 'parse').mockReturnValue({
@@ -69,7 +68,7 @@ describe('CompleteUserRegisterController', () => {
       req.user = {
         sub: 'valid-user-id',
         registerCompleted: true,
-        userType: UserType.CUSTOMER,
+        userType: UserType.CUSTOMER
       } as any
 
       // act

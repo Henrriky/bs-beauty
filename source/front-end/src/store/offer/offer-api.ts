@@ -13,10 +13,11 @@ export const offerAPI = createApi({
   tagTypes: ['Offers'],
   endpoints: (builder) => ({
     getOffers: builder.query<
-      PaginatedOffersResponse, {
+      PaginatedOffersResponse,
+      {
         employeeId: string
-        page?: number;
-        limit?: number;
+        page?: number
+        limit?: number
       }
     >({
       query: ({ employeeId, page, limit }) => ({
@@ -24,8 +25,8 @@ export const offerAPI = createApi({
         method: 'GET',
         params: {
           page,
-          limit
-        }
+          limit,
+        },
       }),
       providesTags: ['Offers'],
     }),
