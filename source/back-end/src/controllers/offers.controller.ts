@@ -90,13 +90,16 @@ class OffersController {
 
   public static async handleFetchAvailableSchedulingToOfferByDay (req: Request, res: Response, next: NextFunction) {
     try {
+      const { userId } = req.user
       const useCase = makeOffersUseCaseFactory()
       const serviceOfferingId = req.params.id
       const dayToFetchAvailableSchedulling: Date = new Date((req.query.dayToFetchAvailableSchedulling as string))
 
-      const { availableSchedulling } = await useCase.executeFetchAvailableSchedulingToOfferByDay(
+      const { availableSchedulling } = await useCase.executeFetchAvailableSchedulingToOfferByDay({
+        customerId: userId,
         serviceOfferingId,
         dayToFetchAvailableSchedulling
+      }
       )
 
       res.send({ availableSchedulling })

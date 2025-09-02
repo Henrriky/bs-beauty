@@ -6,6 +6,7 @@ import { type ShiftRepository } from '../repository/protocols/shift.repository'
 import { DateFormatter } from '../utils/formatting/date.formatting.util'
 import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
 import { type OffersFilters } from '../types/offers/offers-filters'
+import { type AppointmentRepository } from '../repository/protocols/appointment.repository'
 
 interface OfferOutput {
   offers: Offer[]
@@ -20,7 +21,8 @@ interface AvailablesSchedulling {
 class OffersUseCase {
   constructor (
     private readonly offerRepository: OfferRepository,
-    private readonly shiftRepository: ShiftRepository
+    private readonly shiftRepository: ShiftRepository,
+    private readonly appointmentRepository: AppointmentRepository
   ) { }
 
   public async executeFindAll (): Promise<OfferOutput> {
@@ -76,7 +78,16 @@ class OffersUseCase {
     return deletedOffer
   }
 
-  public async executeFetchAvailableSchedulingToOfferByDay (serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) {
+  public async executeFetchAvailableSchedulingToOfferByDay (
+    {
+      customerId,
+      serviceOfferingId,
+      dayToFetchAvailableSchedulling
+    }: {
+      customerId: string
+      serviceOfferingId: string
+      dayToFetchAvailableSchedulling: Date
+    }) {
     // Validate
     const serviceOffering = await this.offerRepository.findById(serviceOfferingId)
     const isValidServiceOffering = serviceOffering != null && serviceOffering?.isOffering
@@ -104,14 +115,29 @@ class OffersUseCase {
 
     const estimatedTimeMs = serviceOffering.estimatedTime * 60_000
 
-    const { validAppointmentsOnDay } = await this.offerRepository.fetchValidAppointmentsByProfessionalOnDay(
-      serviceOffering.employeeId,
-      dayToFetchAvailableSchedulling
-    )
+    const [
+      { validAppointmentsOnDay: nonFinishedAppointmentsByEmployeeOnDay },
+      { validAppointmentsOnDay: nonFinishedAppointmentsByCustomerOnDay }
+    ] =
+      await Promise.all([
+        this.appointmentRepository.findNonFinishedByUserAndDay(
+          serviceOffering.employeeId,
+          dayToFetchAvailableSchedulling
+        ),
+        this.appointmentRepository.findNonFinishedByUserAndDay(
+          customerId,
+          dayToFetchAvailableSchedulling
+        )
+      ])
+
+    const nonFinishedAppointmentsByCustomerAndEmployeeOnDay = [
+      ...nonFinishedAppointmentsByCustomerOnDay,
+      ...nonFinishedAppointmentsByEmployeeOnDay
+    ]
 
     const availableSchedulling: AvailablesSchedulling[] = []
 
-    const hasAppointments = Array.isArray(validAppointmentsOnDay) && validAppointmentsOnDay.length > 0
+    const hasAppointments = Array.isArray(nonFinishedAppointmentsByCustomerAndEmployeeOnDay) && nonFinishedAppointmentsByCustomerAndEmployeeOnDay.length > 0
     while ((currentStartTime + estimatedTimeMs) <= currentDayShiftEndTime) {
       const startTimestamp = currentStartTime
       const endTimestamp = startTimestamp + estimatedTimeMs
@@ -120,7 +146,7 @@ class OffersUseCase {
       let skipAheadTime = estimatedTimeMs
 
       if (hasAppointments) {
-        const overlappingAppointment = validAppointmentsOnDay.find(appointment => {
+        const overlappingAppointment = nonFinishedAppointmentsByCustomerAndEmployeeOnDay.find(appointment => {
           const appointmentStart = appointment.appointmentDate.getTime()
           const appointmentDuration = appointment.estimatedTime * 60_000
           const appointmentEnd = appointmentStart + appointmentDuration
@@ -130,7 +156,7 @@ class OffersUseCase {
           return overlaps
         })
 
-        if (overlappingAppointment) {
+        if (overlappingAppointment != null) {
           isBusy = true
           skipAheadTime = overlappingAppointment.estimatedTime * 60_000
         }
