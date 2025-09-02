@@ -63,5 +63,10 @@
     "typescript": "^5.6.3",
     "vitest": "^3.2.4",
     "esbuild": "0.23.1"
-  }
+  },
+  "engines": {
+    "node": "20.10.x",
+    "npm": "10.x"
+  },
+  "engineStrict": true
 }
