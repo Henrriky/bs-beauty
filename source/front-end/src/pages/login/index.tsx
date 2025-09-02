@@ -6,9 +6,8 @@ import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import useAppSelector from '../../hooks/use-app-selector'
-import { Input } from '../../components/inputs/Input'
 import Title from '../../components/texts/Title'
-import { Button } from '../../components/button/Button'
+import LoginWithEmailAndPasswordForm from './components/LoginWithEmailAndPasswordForm'
 
 function Login() {
   const navigate = useNavigate()
@@ -17,12 +16,11 @@ function Login() {
   useEffect(() => {
     if (authInformations.token?.accessToken) {
       if (authInformations.user?.registerCompleted) {
-        console.log(authInformations)
         navigate(
           `/${authInformations.user.userType.toString().toLowerCase()}/home`,
         )
       } else {
-        navigate('/a')
+        navigate('/complete-register')
       }
     }
   }, [
@@ -33,7 +31,7 @@ function Login() {
     navigate,
   ])
 
-  async function handleButtonClick() {
+  async function handleGoogleLoginButtonClick() {
     try {
       const { authorizationUrl } = await AuthAPI.fetchGoogleRedirectUri()
       window.location.href = authorizationUrl
@@ -53,36 +51,13 @@ function Login() {
           // className={`absolute right-[-${(LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING * 4).toString()}px] top-0`}
         />
         <Title align={'center'}>Bem-vindo(a) ao BS Beauty Academy!</Title>
-        <div className="flex justify-center items-center flex-col gap-3">
-          <p className="text-[#DBDBDB] text-xs">
-            Não possui conta? {''}
-            <Button
-              variant="text-only"
-              label="Crie uma agora!"
-              className="text-xs"
-              onClick={() => navigate('/complete-register')}
-            />
-          </p>
-          <Input
-            id="email"
-            type="email"
-            variant="solid"
-            placeholder="E-mail"
-            inputClassName="w-[330px]"
-          ></Input>
-          <Input
-            id="password"
-            type="password"
-            variant="solid"
-            placeholder="Senha"
-            inputClassName="w-[330px]"
-          ></Input>
-          <Button label="Entrar" variant="outline"></Button>
-        </div>
+
+        <LoginWithEmailAndPasswordForm />
+
         <div className="flex justify-center items-center flex-col gap-5">
           <p className="text-[#DBDBDB]">Outras formas de login:</p>
           <button
-            onClick={handleButtonClick}
+            onClick={handleGoogleLoginButtonClick}
             className="flex justify-center items-center gap-2.5 bg-[#DBDBDB] p-2 rounded w-[320px] text-[#1E1E1E] text-sm font-medium rounded-tl-3xl rounded-tr-sm rounded-br-3xl rounded-bl-sm z-10 relative"
           >
             <img src={googleIcon} alt="Ícone do Google" />
