@@ -4,7 +4,7 @@ import { CustomerOrEmployee } from './types'
 
 type TokenParams = {
   accessToken: string
-  googleAccessToken: string
+  googleAccessToken?: string
   expiresAt: number
 }
 
