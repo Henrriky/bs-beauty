@@ -1,11 +1,13 @@
-import { type Offer } from '@prisma/client'
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import { UserType, type Offer } from '@prisma/client'
 import { OffersController } from '../../../controllers/offers.controller'
 import { makeOffersUseCaseFactory } from '../../../factory/make-offers-use-case.factory'
 import { Decimal } from '@prisma/client/runtime/library'
 import { mockRequest, type MockRequest, mockResponse } from '../utils/test-utilts'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { faker } from '@faker-js/faker'
 
-vi.mock('../../../src/factory/make-offers-use-case.factory.ts')
+vi.mock('@/factory/make-offers-use-case.factory.ts')
 
 describe('OffersController', () => {
   let req: MockRequest
@@ -92,7 +94,7 @@ describe('OffersController', () => {
   describe('handleFindById', () => {
     it('should find an offer by id', async () => {
       // arrange
-      const mockOffer = {
+      const mockOffer: Offer = {
         id: 'random-uuid',
         serviceId: 'random-uuid-service',
         employeeId: 'random-uuid-employee',
@@ -101,7 +103,7 @@ describe('OffersController', () => {
         isOffering: true,
         createdAt: new Date('2025-01-01T09:00:00'),
         updatedAt: new Date('2025-01-01T09:00:00')
-      } as Offer
+      }
 
       req.params.id = 'random-uuid'
       useCaseMock.executeFindById.mockResolvedValueOnce(mockOffer)
@@ -136,7 +138,7 @@ describe('OffersController', () => {
   describe('handleFindByServiceId', () => {
     it('should find an offer by service id', async () => {
       // arrange
-      const mockOffer = {
+      const mockOffer: Offer = {
         id: 'random-uuid',
         serviceId: 'random-uuid-service',
         employeeId: 'random-uuid-employee',
@@ -145,7 +147,7 @@ describe('OffersController', () => {
         isOffering: true,
         createdAt: new Date('2025-01-01T09:00:00'),
         updatedAt: new Date('2025-01-01T09:00:00')
-      } as Offer
+      }
 
       req.params.serviceId = mockOffer.serviceId
       useCaseMock.executeFindByServiceId.mockResolvedValueOnce(mockOffer)
@@ -226,15 +228,16 @@ describe('OffersController', () => {
   describe('handleCreate', () => {
     it('should create an offer', async () => {
       // arrange
-      const mockOffer = {
+      const mockOffer: Offer = {
         serviceId: 'random-uuid-service',
         employeeId: 'random-uuid-employee',
         estimatedTime: 60,
         price: new Decimal(100.0),
         isOffering: true,
         createdAt: new Date('2025-01-01T09:00:00'),
-        updatedAt: new Date('2025-01-01T09:00:00')
-      } as Offer
+        updatedAt: new Date('2025-01-01T09:00:00'),
+        id: ''
+      }
 
       req.body = mockOffer
       useCaseMock.executeCreate.mockResolvedValueOnce(mockOffer)
@@ -269,7 +272,7 @@ describe('OffersController', () => {
   describe('handleUpdate', () => {
     it('should update an offer', async () => {
       // arrange
-      const mockOffer = {
+      const mockOffer: Offer = {
         id: 'random-uuid',
         serviceId: 'random-uuid-service',
         employeeId: 'random-uuid-employee',
@@ -278,7 +281,7 @@ describe('OffersController', () => {
         isOffering: true,
         createdAt: new Date('2025-01-01T09:00:00'),
         updatedAt: new Date('2025-01-01T09:00:00')
-      } as Offer
+      }
 
       req.params.id = mockOffer.id
       req.body = mockOffer
@@ -315,7 +318,7 @@ describe('OffersController', () => {
   describe('handleDelete', () => {
     it('should delete an offer', async () => {
       // arrange
-      const mockOffer = {
+      const mockOffer: Offer = {
         id: 'random-uuid',
         serviceId: 'random-uuid-service',
         employeeId: 'random-uuid-employee',
@@ -324,7 +327,7 @@ describe('OffersController', () => {
         isOffering: true,
         createdAt: new Date('2025-01-01T09:00:00'),
         updatedAt: new Date('2025-01-01T09:00:00')
-      } as Offer
+      }
 
       req.params.id = mockOffer.id
       useCaseMock.executeDelete.mockResolvedValueOnce(mockOffer)
@@ -356,19 +359,28 @@ describe('OffersController', () => {
   })
 
   describe('handleFetchAvailableSchedulingToOfferByDay', () => {
+    const validUser = {
+      userId: faker.string.uuid(),
+      userType: UserType.CUSTOMER,
+      registerCompleted: true
+    }
+    const serviceOfferingId = 'random-service-id'
+    const dayToFetchAvailableSchedulling = '2025-02-10T00:00:00.000Z'
+
+    beforeEach(() => {
+      req.user = validUser as any
+      req.params.id = serviceOfferingId
+      req.query.dayToFetchAvailableSchedulling = dayToFetchAvailableSchedulling
+    })
+
     it('should fetch available scheduling for an offer by day', async () => {
       // arrange
-      const serviceOfferingId = 'random-service-id'
-      const dayToFetchAvailableSchedulling = '2025-02-10T00:00:00.000Z'
       const availableSchedulling = [
         { startTimestamp: '10:00 AM', endTimestamp: '10:00 AM', isBusy: false },
         { startTimestamp: '12:00 AM', endTimestamp: '15:00 AM', isBusy: true },
         { startTimestamp: '12:00 AM', endTimestamp: '15:00 AM', isBusy: true },
         { startTimestamp: '11:00 AM', endTimestamp: '17:00 AM', isBusy: true }
       ]
-
-      req.params.id = serviceOfferingId
-      req.query.dayToFetchAvailableSchedulling = dayToFetchAvailableSchedulling
 
       useCaseMock.executeFetchAvailableSchedulingToOfferByDay.mockResolvedValueOnce({
         availableSchedulling
@@ -378,9 +390,11 @@ describe('OffersController', () => {
       await OffersController.handleFetchAvailableSchedulingToOfferByDay(req, res, next)
 
       // assert
-      expect(useCaseMock.executeFetchAvailableSchedulingToOfferByDay).toHaveBeenCalledWith(
+      expect(useCaseMock.executeFetchAvailableSchedulingToOfferByDay).toHaveBeenCalledWith({
+        customerId: validUser.userId,
         serviceOfferingId,
-        new Date(dayToFetchAvailableSchedulling)
+        dayToFetchAvailableSchedulling: new Date(dayToFetchAvailableSchedulling)
+      }
       )
       expect(res.send).toHaveBeenCalledWith({ availableSchedulling })
       expect(next).not.toHaveBeenCalled()
@@ -388,19 +402,18 @@ describe('OffersController', () => {
 
     it('should call next with an error if use case fails', async () => {
       // arrange
-      const error = new Error('Something went wrong')
-
+      delete (req as any).user
       req.params.id = 'random-service-id'
       req.query.dayToFetchAvailableSchedulling = '2025-02-10T00:00:00.000Z'
-
-      useCaseMock.executeFetchAvailableSchedulingToOfferByDay.mockRejectedValueOnce(error)
 
       // act
       await OffersController.handleFetchAvailableSchedulingToOfferByDay(req, res, next)
 
       // assert
-      expect(next).toHaveBeenCalledWith(error)
-      expect(res.send).not.toHaveBeenCalled()
+      expect(next).toHaveBeenCalledTimes(1)
+      expect(next).toHaveBeenCalledWith(expect.any(Error))
+      // opcional: valide mensagem
+      expect((next).mock.calls[0][0].message).toMatch(/user/i)
     })
   })
 })

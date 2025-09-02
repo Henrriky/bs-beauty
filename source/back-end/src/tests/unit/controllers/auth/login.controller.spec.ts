@@ -7,7 +7,7 @@ import { type LoginUseCase } from '../../../../services/use-cases/auth/login.use
 import { type MockRequest, mockRequest, mockResponse } from '../../utils/test-utilts'
 import { createMock } from '../../utils/mocks'
 
-vi.mock('../../../../src/factory/make-login-use-case.factory', () => ({
+vi.mock('@/factory/make-login-use-case.factory', () => ({
   makeLoginUseCase: vi.fn()
 }))
 

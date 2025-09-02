@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { type Shift, UserType, WeekDays } from '@prisma/client'
 import { StatusCodes } from 'http-status-codes'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -5,7 +6,7 @@ import { ShiftController } from '../../../controllers/shift.controller'
 import { makeShiftUseCaseFactory } from '../../../factory/make-shift-use-case.factory'
 import { mockRequest, type MockRequest, mockResponse } from '../utils/test-utilts'
 
-vi.mock('../../../src/factory/make-shift-use-case.factory')
+vi.mock('@/factory/make-shift-use-case.factory')
 
 describe('ShiftController', () => {
   let req: MockRequest
@@ -101,26 +102,24 @@ describe('ShiftController', () => {
   describe('handleFindById', () => {
     it('should send 200 and shift when use case succeeds', async () => {
       // arrange
-      const shiftId = 'shift-1'
-      req.params.id = shiftId
-      useCaseMock.executeFindById.mockResolvedValueOnce({
-        id: shiftId,
+      const expectedShiftId = 'shift-1'
+      const expectedShift: Shift = {
+        id: expectedShiftId,
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123'
-      } as Shift)
+        employeeId: 'user-123',
+        isBusy: false,
+        shiftEnd: new Date()
+      }
+      req.params.id = expectedShiftId
+      useCaseMock.executeFindById.mockResolvedValueOnce(expectedShift)
 
       // act
       await ShiftController.handleFindById(req, res, next)
 
       // assert
-      expect(useCaseMock.executeFindById).toHaveBeenCalledWith(shiftId)
-      expect(res.send).toHaveBeenCalledWith({
-        id: shiftId,
-        weekDay: WeekDays.MONDAY,
-        shiftStart: new Date(),
-        employeeId: 'user-123'
-      })
+      expect(useCaseMock.executeFindById).toHaveBeenCalledWith(expectedShiftId)
+      expect(res.send).toHaveBeenCalledWith(expectedShift)
     })
 
     it('should call next with an error if use case throws', async () => {
@@ -187,34 +186,29 @@ describe('ShiftController', () => {
   describe('handleCreate', () => {
     it('should send 201 and created shift when use case succeeds', async () => {
       // arrange
-      req.body = {
-        weekDay: WeekDays.MONDAY,
-        shiftStart: new Date(),
-        employeeId: 'user-123'
-      }
-      useCaseMock.executeCreate.mockResolvedValueOnce({
+      const expectedCreatedShift: Shift = {
         id: 'shift-1',
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123'
-      } as Shift)
+        employeeId: 'user-123',
+        isBusy: false,
+        shiftEnd: new Date()
+      }
+      const shiftToCreate = {
+        weekDay: expectedCreatedShift.weekDay,
+        shiftStart: expectedCreatedShift.shiftStart,
+        employeeId: expectedCreatedShift.employeeId
+      }
+      req.body = shiftToCreate
+      useCaseMock.executeCreate.mockResolvedValueOnce(expectedCreatedShift)
 
       // act
       await ShiftController.handleCreate(req, res, next)
 
       // assert
       expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED)
-      expect(useCaseMock.executeCreate).toHaveBeenCalledWith({
-        weekDay: WeekDays.MONDAY,
-        shiftStart: new Date(),
-        employeeId: 'user-123'
-      })
-      expect(res.send).toHaveBeenCalledWith({
-        id: 'shift-1',
-        weekDay: WeekDays.MONDAY,
-        shiftStart: new Date(),
-        employeeId: 'user-123'
-      })
+      expect(useCaseMock.executeCreate).toHaveBeenCalledWith(shiftToCreate)
+      expect(res.send).toHaveBeenCalledWith(expectedCreatedShift)
     })
 
     it('should call next with an error if use case throws', async () => {
@@ -238,35 +232,33 @@ describe('ShiftController', () => {
   describe('handleUpdate', () => {
     it('should send 200 and updated shift when use case succeeds', async () => {
       // arrange
-      const shiftId = 'shift-1'
-      req.params.id = shiftId
-      req.body = {
+      const shiftId = 'sla-teste'
+      const start = new Date('2025-01-02T07:00:00.000Z')
+      const end = new Date('2025-01-01T12:00:00.000Z')
+
+      const shiftToUpdate = {
         weekDay: WeekDays.MONDAY,
-        shiftStart: new Date(),
+        shiftStart: start,
         employeeId: 'user-123'
       }
-      useCaseMock.executeUpdate.mockResolvedValueOnce({
+      const expectedShiftUpdated: Shift = {
         id: shiftId,
-        weekDay: WeekDays.MONDAY,
-        shiftStart: new Date('2025-01-02T07:00:00.000Z'),
-        employeeId: 'user-123'
-      } as Shift)
+        weekDay: shiftToUpdate.weekDay,
+        employeeId: shiftToUpdate.employeeId,
+        isBusy: false,
+        shiftStart: start,
+        shiftEnd: end
+      }
+      req.body = shiftToUpdate
+      req.params.id = shiftId
+      useCaseMock.executeUpdate.mockResolvedValueOnce(expectedShiftUpdated)
 
       // act
       await ShiftController.handleUpdateByIdAndEmployeeId(req, res, next)
 
       // assert
-      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(shiftId, {
-        weekDay: WeekDays.MONDAY,
-        shiftStart: new Date(),
-        employeeId: 'user-123'
-      })
-      expect(res.send).toHaveBeenCalledWith({
-        id: shiftId,
-        weekDay: WeekDays.MONDAY,
-        shiftStart: new Date('2025-01-02T07:00:00.000Z'),
-        employeeId: 'user-123'
-      })
+      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(shiftId, shiftToUpdate)
+      expect(res.send).toHaveBeenCalledWith(expectedShiftUpdated)
     })
 
     it('should call next with an error if use case throws', async () => {
@@ -292,27 +284,24 @@ describe('ShiftController', () => {
   describe('handleDelete', () => {
     it('should send 200 and deleted shift when use case succeeds', async () => {
       // arrange
-      const shiftId = 'shift-1'
-      req.params.id = shiftId
-
-      useCaseMock.executeDelete.mockResolvedValueOnce({
-        id: shiftId,
+      const shiftIdToDelete = 'shift-1'
+      const deletedShift: Shift = {
+        id: shiftIdToDelete,
         weekDay: WeekDays.MONDAY,
         shiftStart: new Date(),
-        employeeId: 'user-123'
-      } as Shift)
+        employeeId: 'user-123',
+        isBusy: false,
+        shiftEnd: new Date()
+      }
+      req.params.id = shiftIdToDelete
+      useCaseMock.executeDelete.mockResolvedValueOnce(deletedShift)
 
       // act
       await ShiftController.handleDelete(req, res, next)
 
       // assert
       expect(useCaseMock.executeDelete).toHaveBeenCalledWith('shift-1')
-      expect(res.send).toHaveBeenCalledWith({
-        id: 'shift-1',
-        weekDay: WeekDays.MONDAY,
-        shiftStart: new Date(),
-        employeeId: 'user-123'
-      })
+      expect(res.send).toHaveBeenCalledWith(deletedShift)
     })
 
     it('should call next with an error if use case throws', async () => {

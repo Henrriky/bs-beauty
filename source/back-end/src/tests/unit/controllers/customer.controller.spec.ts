@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { faker } from '@faker-js/faker'
 import { type Customer, type Prisma, UserType } from '@prisma/client'
 import { type Response } from 'express'
@@ -8,7 +9,7 @@ import { mockRequest, type MockRequest, mockResponse } from '../utils/test-utilt
 import * as CustomersQuerySchemaMod from '../../../utils/validation/zod-schemas/pagination/customers/customers-query.schema'
 import { z } from 'zod'
 
-vi.mock('../../../src/factory/make-customers-use-case.factory')
+vi.mock('@/factory/make-customers-use-case.factory')
 
 interface usecaseType {
   executeFindAll: ReturnType<typeof vi.fn>
@@ -104,13 +105,21 @@ describe('CustomerController', () => {
       // arrange
       const customerId = 'random-uuid'
       req.params.id = customerId
-      const customer = {
+      const customer: Customer = {
         id: 'random-uuid',
         name: 'John Doe',
         email: 'johndoe@example.com',
         registerCompleted: true,
-        googleId: 'google-id-1'
-      } as Customer
+        googleId: 'google-id-1',
+        birthdate: null,
+        phone: null,
+        profilePhotoUrl: null,
+        userType: 'MANAGER',
+        referrerId: null,
+        referralCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
       usecaseMock.executeFindById.mockResolvedValueOnce(customer)
 
       // act

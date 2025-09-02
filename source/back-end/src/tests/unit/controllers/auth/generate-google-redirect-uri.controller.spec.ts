@@ -3,10 +3,10 @@ import { GenerateOAuthRedirectUriUseCase } from '../../../../services/use-cases/
 import { GenerateGoogleRedirectUriController } from '../../../../controllers/auth/generate-google-redirect-uri.controller'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { type MockRequest, mockRequest, mockResponse } from '../../utils/test-utilts'
-import { Request, type Response } from 'express'
+import { type Response } from 'express'
 import { createMock } from '../../utils/mocks'
 
-vi.mock('../../../../src/services/use-cases/auth/generate-oauth-redirect-uri.use-case')
+vi.mock('@/services/use-cases/auth/generate-oauth-redirect-uri.use-case')
 
 describe('GenerateGoogleRedirectUriController', () => {
   let req: MockRequest

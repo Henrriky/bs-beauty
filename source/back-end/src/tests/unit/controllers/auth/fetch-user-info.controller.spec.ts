@@ -9,7 +9,7 @@ import { type MockRequest, mockRequest, mockResponse } from '../../utils/test-ut
 import { type FetchUserInfoUseCase } from '../../../../services/use-cases/auth/fetch-user-info.use-case'
 import { createMock } from '../../utils/mocks'
 
-vi.mock('../../../../src/factory/auth/make-fetch-user-info.use-case.factory.ts')
+vi.mock('@/factory/auth/make-fetch-user-info.use-case.factory.ts')
 
 describe('FetchUserInfoController', () => {
   let req: MockRequest

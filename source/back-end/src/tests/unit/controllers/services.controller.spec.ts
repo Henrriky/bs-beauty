@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { type Prisma, type Service } from '@prisma/client'
 import { type Response } from 'express'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -5,7 +6,7 @@ import { ServicesController } from '../../../controllers/services.controller'
 import { makeServiceUseCaseFactory } from '../../../factory/make-service-use-case.factory'
 import { mockRequest, type MockRequest, mockResponse } from '../utils/test-utilts'
 
-vi.mock('../../../src/factory/make-service-use-case.factory.ts')
+vi.mock('@/factory/make-service-use-case.factory.ts')
 
 describe('ServicesController', () => {
   let req: MockRequest
@@ -96,14 +97,14 @@ describe('ServicesController', () => {
   describe('handleFindById', () => {
     it('should return a service', async () => {
       // arrange
-      const service = {
+      const service: Service = {
         id: 'random-uuid',
         name: 'Service 1',
         description: 'Description 1',
         category: 'Category 1',
         createdAt: new Date('2025-01-01T09:00:00'),
         updatedAt: new Date('2025-01-01T09:00:00')
-      } as Service
+      }
       req.params.id = 'random-uuid'
       useCaseMock.executeFindById.mockResolvedValueOnce(service)
 

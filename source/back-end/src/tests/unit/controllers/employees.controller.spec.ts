@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { type Employee, type Prisma } from '@prisma/client'
 import { StatusCodes } from 'http-status-codes'
 import { makeEmployeesUseCaseFactory } from '../../../factory/make-employees-use-case.factory'
@@ -5,7 +6,7 @@ import { EmployeesController } from '../../../controllers/employees.controller'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockRequest, mockResponse } from '../utils/test-utilts'
 
-vi.mock('../../../src/factory/make-employees-use-case.factory')
+vi.mock('@/factory/make-employees-use-case.factory')
 
 describe('EmployeesController', () => {
   let req: any
@@ -92,13 +93,20 @@ describe('EmployeesController', () => {
   describe('handleFindById', () => {
     it('should return an employee', async () => {
       // arrange
-      const employee = {
+      const employee: Employee = {
         id: 'user-123',
         name: 'John Doe',
         email: 'rikolas@example.com',
         registerCompleted: true,
-        googleId: 'google-id-123'
-      } as Employee
+        googleId: 'google-id-123',
+        socialMedia: null,
+        contact: null,
+        specialization: null,
+        profilePhotoUrl: null,
+        userType: 'MANAGER',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
 
       useCaseMock.executeFindById.mockResolvedValueOnce(employee)
 

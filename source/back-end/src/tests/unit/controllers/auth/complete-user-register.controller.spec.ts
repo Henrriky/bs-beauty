@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { faker } from '@faker-js/faker'
 import { UserType } from '@prisma/client'
 import { type Response } from 'express'
@@ -10,7 +11,7 @@ import { type MockRequest, mockRequest, mockResponse } from '../../utils/test-ut
 import { type CompleteUserRegisterUseCase } from '../../../../services/use-cases/auth/complete-user-register.use-case'
 import { createMock } from '../../utils/mocks'
 
-vi.mock('../../../../src/factory/auth/make-complete-user-register.use-case.factory', () => ({
+vi.mock('@/factory/auth/make-complete-user-register.use-case.factory', () => ({
   makeCompleteUserRegisterUseCase: vi.fn()
 }))
 

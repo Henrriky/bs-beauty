@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockRequest, type MockRequest, mockResponse } from '../../utils/test-utilts'
 import { createMock } from '../../utils/mocks'
 
-vi.mock('../../../../src/services/use-cases/auth/exchange-code-by-token.use-case')
+vi.mock('../@/services/use-cases/auth/exchange-code-by-token.use-case')
 vi.mock('../../../services/identity-providers/google-oauth-identity-provider.service')
 
 describe('ExchangeCodeByTokenController', () => {
