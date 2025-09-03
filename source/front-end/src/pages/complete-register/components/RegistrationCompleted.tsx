@@ -22,7 +22,9 @@ function RegistrationCompleted() {
       <Button
         variant="solid"
         label="Ir para o Painel Inicial"
-        onClick={() => navigate(`/${user.userType.toString().toLowerCase()}/home`)}
+        onClick={() =>
+          navigate(`/${user.userType.toString().toLowerCase()}/home`)
+        }
         className="animate-moveUp"
       />
     </div>
