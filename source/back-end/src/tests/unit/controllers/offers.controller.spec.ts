@@ -373,13 +373,12 @@ describe('OffersController', () => {
       req.query.dayToFetchAvailableSchedulling = dayToFetchAvailableSchedulling
     })
 
-    it('should fetch available scheduling for an offer by day', async () => {
+    it('[Basic Scheduling] should return sequential available time slots (10:00, 11:00, 12:00) with no overlaps', async () => {
       // arrange
       const availableSchedulling = [
-        { startTimestamp: '10:00 AM', endTimestamp: '10:00 AM', isBusy: false },
-        { startTimestamp: '12:00 AM', endTimestamp: '15:00 AM', isBusy: true },
-        { startTimestamp: '12:00 AM', endTimestamp: '15:00 AM', isBusy: true },
-        { startTimestamp: '11:00 AM', endTimestamp: '17:00 AM', isBusy: true }
+        { startTimestamp: new Date('2025-02-10T10:00:00').getTime(), endTimestamp: new Date('2025-02-10T11:00:00').getTime(), isBusy: false },
+        { startTimestamp: new Date('2025-02-10T11:00:00').getTime(), endTimestamp: new Date('2025-02-10T12:00:00').getTime(), isBusy: false },
+        { startTimestamp: new Date('2025-02-10T12:00:00').getTime(), endTimestamp: new Date('2025-02-10T13:00:00').getTime(), isBusy: false }
       ]
 
       useCaseMock.executeFetchAvailableSchedulingToOfferByDay.mockResolvedValueOnce({
@@ -394,13 +393,67 @@ describe('OffersController', () => {
         customerId: validUser.userId,
         serviceOfferingId,
         dayToFetchAvailableSchedulling: new Date(dayToFetchAvailableSchedulling)
-      }
-      )
+      })
       expect(res.send).toHaveBeenCalledWith({ availableSchedulling })
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should call next with an error if use case fails', async () => {
+    it('[Overlap Detection] should mark as busy the 10:30 slot that overlaps with existing 10:00-11:00 appointment', async () => {
+      // arrange
+      const availableSchedulling = [
+        { startTimestamp: new Date('2025-02-10T10:00:00').getTime(), endTimestamp: new Date('2025-02-10T11:00:00').getTime(), isBusy: false },
+        { startTimestamp: new Date('2025-02-10T10:30:00').getTime(), endTimestamp: new Date('2025-02-10T11:30:00').getTime(), isBusy: true },
+        { startTimestamp: new Date('2025-02-10T11:30:00').getTime(), endTimestamp: new Date('2025-02-10T12:30:00').getTime(), isBusy: false }
+      ]
+
+      useCaseMock.executeFetchAvailableSchedulingToOfferByDay.mockResolvedValueOnce({
+        availableSchedulling
+      })
+
+      // act
+      await OffersController.handleFetchAvailableSchedulingToOfferByDay(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeFetchAvailableSchedulingToOfferByDay).toHaveBeenCalledWith({
+        customerId: validUser.userId,
+        serviceOfferingId,
+        dayToFetchAvailableSchedulling: new Date(dayToFetchAvailableSchedulling)
+      })
+      expect(res.send).toHaveBeenCalledWith({ availableSchedulling })
+      // Verify the middle slot is marked as busy due to overlap
+      expect(availableSchedulling[1].isBusy).toBe(true)
+    })
+
+    it('[Different Durations] should handle 90-minute appointment (10:30-12:00) and keep adjacent slots available', async () => {
+      // arrange
+      const availableSchedulling = [
+        { startTimestamp: new Date('2025-02-10T10:00:00').getTime(), endTimestamp: new Date('2025-02-10T10:30:00').getTime(), isBusy: false },
+        { startTimestamp: new Date('2025-02-10T10:30:00').getTime(), endTimestamp: new Date('2025-02-10T12:00:00').getTime(), isBusy: true }, // 90 min appointment
+        { startTimestamp: new Date('2025-02-10T12:00:00').getTime(), endTimestamp: new Date('2025-02-10T12:30:00').getTime(), isBusy: false }
+      ]
+
+      useCaseMock.executeFetchAvailableSchedulingToOfferByDay.mockResolvedValueOnce({
+        availableSchedulling
+      })
+
+      // act
+      await OffersController.handleFetchAvailableSchedulingToOfferByDay(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeFetchAvailableSchedulingToOfferByDay).toHaveBeenCalledWith({
+        customerId: validUser.userId,
+        serviceOfferingId,
+        dayToFetchAvailableSchedulling: new Date(dayToFetchAvailableSchedulling)
+      })
+      expect(res.send).toHaveBeenCalledWith({ availableSchedulling })
+      // Verify the longer appointment slot is marked as busy
+      expect(availableSchedulling[1].isBusy).toBe(true)
+      // Verify adjacent slots are not affected
+      expect(availableSchedulling[0].isBusy).toBe(false)
+      expect(availableSchedulling[2].isBusy).toBe(false)
+    })
+
+    it('[Error Handling] should call next with error when user is not authenticated', async () => {
       // arrange
       delete (req as any).user
       req.params.id = 'random-service-id'
@@ -412,7 +465,6 @@ describe('OffersController', () => {
       // assert
       expect(next).toHaveBeenCalledTimes(1)
       expect(next).toHaveBeenCalledWith(expect.any(Error))
-      // opcional: valide mensagem
       expect((next).mock.calls[0][0].message).toMatch(/user/i)
     })
   })
