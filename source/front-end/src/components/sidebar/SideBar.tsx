@@ -37,7 +37,7 @@ function SideBar() {
               <Bars3Icon className="size-7" />
             </button>
             <div className={'hover:cursor-pointer'} onClick={() => navigate('/profile')}>
-              <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} size="sm" />
+              <ProfilePicture profilePhotoUrl={user.profilePhotoUrl!} size="sm" />
             </div>
           </div>
         </nav>
@@ -57,7 +57,7 @@ function SideBar() {
                 <XMarkIcon />
               </button>
               <div className={'hover:cursor-pointer w-9'} onClick={() => navigate('/profile')}>
-                <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} size="sm" />
+                <ProfilePicture profilePhotoUrl={user.profilePhotoUrl!} size="sm" />
               </div>
               <h2 className="text-primary-0 mb-9 text-sm capitalize">
                 {user.name ? firstLetterOfWordToUpperCase(user.name) : ''}

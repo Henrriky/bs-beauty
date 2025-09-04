@@ -36,7 +36,7 @@ function CustomerHomeSelectEmployeeContainer(props: Props) {
 
   const { data, isLoading, isError, error } =
     serviceAPI.useFetchEmployeesOfferingServiceQuery(
-      { serviceId },
+      { serviceId: serviceId! },
       { skip: props.currentFlow !== 'service' },
     )
 
