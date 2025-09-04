@@ -7,10 +7,12 @@ import * as AuthAPI from '../../../api/auth-api'
 import { toast } from 'react-toastify'
 import { Input } from '../../../components/inputs/Input'
 import { Button } from '../../../components/button/Button'
+import PasswordEyeIcon from '../../../components/password/PasswordEyeIcon'
 
 function LoginWithEmailAndPasswordForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const dispatchRedux = useAppDispatch()
   const navigate = useNavigate()
 
@@ -68,18 +70,24 @@ function LoginWithEmailAndPasswordForm() {
             variant="solid"
             value={email}
             placeholder="E-mail"
-            inputClassName="w-[330px]"
+            inputClassName="w-[340px]"
             onChange={(e) => setEmail(e.target.value)}
           ></Input>
-          <Input
-            id="password"
-            type="password"
-            variant="solid"
-            value={password}
-            placeholder="Senha"
-            inputClassName="w-[330px]"
-            onChange={(e) => setPassword(e.target.value)}
-          ></Input>
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              variant="solid"
+              value={password}
+              placeholder="Senha"
+              inputClassName="w-[340px]"
+              onChange={(e) => setPassword(e.target.value)}
+            ></Input>
+            <PasswordEyeIcon
+              showPassword={showPassword}
+              showPasswordFunction={() => setShowPassword(!showPassword)}
+            />
+          </div>
           <Button label="Entrar" type="submit" variant="outline"></Button>
         </form>
 
@@ -89,6 +97,7 @@ function LoginWithEmailAndPasswordForm() {
             variant="text-only"
             label="Crie uma agora!"
             className="text-xs"
+            onClick={() => navigate('/register')}
           />
         </p>
       </div>

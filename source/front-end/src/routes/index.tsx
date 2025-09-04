@@ -17,6 +17,7 @@ import { UserType } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
+import CustomerRegistration from '../pages/customer-registration'
 
 function BSBeautyRouter() {
   return (
@@ -26,6 +27,7 @@ function BSBeautyRouter() {
           <Route index element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth/google/callback" element={<Callback />} />
+          <Route path="/register" element={<CustomerRegistration />} />
           <Route
             element={
               <PrivateRoute

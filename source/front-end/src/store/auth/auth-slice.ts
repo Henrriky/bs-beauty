@@ -91,6 +91,7 @@ const authSlice = createSlice({
 })
 
 export { authSlice }
+export type { TokenParams }
 export const {
   setToken,
   setRegisterCompleted,
