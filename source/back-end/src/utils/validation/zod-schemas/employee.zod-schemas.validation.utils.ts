@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { SharedSchemas } from './shared-zod-schemas.validations.utils'
 
 class EmployeeSchemas {
   public static readonly socialMediaSchema = z.array(z.object({
@@ -28,7 +29,7 @@ class EmployeeSchemas {
       .regex(RegexPatterns.password, {
         message: "Confirm password must follow the same rules as password.",
       })
-      .optional(),  
+      .optional(),
   }).strict().superRefine((data, ctx) => {
     const hasPassword = !!data.password;
     const hasConfirm = !!data.confirmPassword;
@@ -48,6 +49,8 @@ class EmployeeSchemas {
       });
     }
   })
+
+  public static registerEmployeeBodySchema = SharedSchemas.registerBodySchema
 
   public static managerUpdateSchema = z.object({
     name: z.string().min(3).max(100).refine((string) => RegexPatterns.names.test(string)).optional(),
