@@ -9,7 +9,7 @@ import { Customer, Employee } from './types'
 import {
   CustomerRegistrationFormData,
   EmployeeRegistrationFormData,
-} from '../../pages/customer-registration/types'
+} from '../../pages/user-registration/types'
 
 export const authAPI = createApi({
   reducerPath: 'auth-api',

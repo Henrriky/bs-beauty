@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { SharedSchemas } from './shared-zod-schemas.validation.utils'
-import { RegexPatterns } from '../regex.validation.util'
 
 class CustomerSchemas {
   public static customerCompleteRegisterBodySchema = z
