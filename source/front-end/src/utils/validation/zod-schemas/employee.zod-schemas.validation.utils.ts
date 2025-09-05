@@ -43,7 +43,9 @@ class EmployeeSchemas {
 
   public static createSchema = z
     .object({
-      email: z.string({ required_error: 'O e-mail é obrigatório' }).email("Formato de e-mail inválido."),
+      email: z
+        .string({ required_error: 'O e-mail é obrigatório' })
+        .email('Formato de e-mail inválido.'),
       userType: z.enum(['MANAGER', 'EMPLOYEE']).optional(),
     })
     .strict()
@@ -74,6 +76,8 @@ class EmployeeSchemas {
       specialization: SharedSchemas.specializationSchema,
     })
     .strict()
+
+  public static registerEmployeeBodySchema = SharedSchemas.registerBodySchema
 }
 
 export { EmployeeSchemas }

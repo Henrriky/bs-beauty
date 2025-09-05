@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import {
   CustomerRegistrationFormData,
   OnSubmitCustomerRegistrationFormData,
+  OnSubmitEmployeeRegistrationFormData,
 } from '../types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
@@ -10,12 +11,15 @@ import { Button } from '../../../components/button/Button'
 import PasswordEyeIcon from '../../../components/password/PasswordEyeIcon'
 import { useState } from 'react'
 
-interface CustomerRegistrationProps {
+interface UserRegistrationProps {
   isLoading: boolean
-  handleSubmit: OnSubmitCustomerRegistrationFormData
+  handleSubmit:
+    | OnSubmitCustomerRegistrationFormData
+    | OnSubmitEmployeeRegistrationFormData
+  setEmail: React.Dispatch<React.SetStateAction<string>>
 }
 
-function CustomerRegistrationForm(props: CustomerRegistrationProps) {
+function UserRegistrationForm(props: UserRegistrationProps) {
   const {
     register,
     handleSubmit,
@@ -25,6 +29,10 @@ function CustomerRegistrationForm(props: CustomerRegistrationProps) {
   })
 
   const [showPassword, setShowPassword] = useState(false)
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    props.setEmail(event.target.value)
+  }
 
   return (
     <form
@@ -38,6 +46,7 @@ function CustomerRegistrationForm(props: CustomerRegistrationProps) {
         type="email"
         placeholder="Digite seu e-mail"
         error={errors?.email?.message?.toString()}
+        onChange={handleInputChange}
       />
       <div className="relative">
         <Input
@@ -85,4 +94,4 @@ function CustomerRegistrationForm(props: CustomerRegistrationProps) {
   )
 }
 
-export default CustomerRegistrationForm
+export default UserRegistrationForm

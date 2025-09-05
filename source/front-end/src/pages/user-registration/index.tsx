@@ -1,18 +1,37 @@
 import Title from '../../components/texts/Title'
 import useAppDispatch from '../../hooks/use-app-dispatch'
 import { authAPI } from '../../store/auth/auth-api'
-import CustomerRegisterForm from './components/CustomerRegistrationForm'
+import UserRegisterForm from './components/UserRegistrationForm'
 import * as AuthAPI from '../../api/auth-api'
 import { decodeUserToken } from '../../utils/decode-token'
 import { setRegisterCompleted, setToken } from '../../store/auth/auth-slice'
 import { toast } from 'react-toastify'
 import { OnSubmitCustomerRegistrationFormData } from './types'
 import { useNavigate } from 'react-router'
+import { z } from 'zod'
+import { useState } from 'react'
 
-function CustomerRegistration() {
+function UserRegistration() {
   const navigate = useNavigate()
   const dispatchRedux = useAppDispatch()
-  const [register, { isLoading }] = authAPI.useRegisterCustomerMutation()
+
+  const [email, setEmail] = useState('')
+
+  const emailSchema = z.string().email()
+
+  const isEmployeeEmail = authAPI.useFindEmployeeByEmailQuery(email, {
+    skip: !emailSchema.safeParse(email).success,
+  })
+
+  const [registerEmployee, employeeState] =
+    authAPI.useRegisterEmployeeMutation()
+
+  const [registerCustomer, customerState] =
+    authAPI.useRegisterCustomerMutation()
+
+  const register = isEmployeeEmail?.data ? registerEmployee : registerCustomer
+
+  const isLoading = employeeState.isLoading || customerState.isLoading
 
   async function handleUpdateProfileToken(email: string, password: string) {
     try {
@@ -67,9 +86,13 @@ function CustomerRegistration() {
   return (
     <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn">
       <Title align="center">Cadastre-se e Transforme Seu Estilo!</Title>
-      <CustomerRegisterForm handleSubmit={handleSubmit} isLoading={isLoading} />
+      <UserRegisterForm
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+        setEmail={setEmail}
+      />
     </div>
   )
 }
 
-export default CustomerRegistration
+export default UserRegistration
