@@ -47,7 +47,7 @@ export function Input({
           variant === 'outline'
             ? `text-sm text-[#A5A5A5] bg-transparent focus:outline-none cursor-text w-full border-solid border-b-2 ${borderColor} pb-2 focus-within:border-[#B19B86] transition-colors duration-300`
             : variant === 'solid'
-              ? `w-full text-sm text-[#A5A5A5] bg-[#1a1a1a] focus:outline-none cursor-text ${borderColor} border-[1px] border-opacity-10 rounded-2xl px-2 py-[10px] focus-within:border-[#B19B86] transition-colors duration-300 disabled:bg-[#272727]`
+              ? `text-sm text-[#A5A5A5] bg-[#1a1a1a] focus:outline-none cursor-text ${borderColor} border-[1px] border-opacity-10 rounded-2xl px-2 py-[10px] focus-within:border-[#B19B86] transition-colors duration-300 disabled:bg-[#272727]`
               : '',
           inputClassName,
         )}

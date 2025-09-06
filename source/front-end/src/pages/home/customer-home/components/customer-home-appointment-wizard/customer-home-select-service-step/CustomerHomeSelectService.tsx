@@ -45,7 +45,7 @@ function CustomerHomeSelectServiceContainer(props: Props) {
     isError: isErrorOffers,
     error: offersError,
   } = employeeAPI.useFetchServicesOfferedByEmployeeQuery(
-    { employeeId },
+    { employeeId: employeeId! },
     { skip: props.currentFlow !== 'professional' },
   )
 

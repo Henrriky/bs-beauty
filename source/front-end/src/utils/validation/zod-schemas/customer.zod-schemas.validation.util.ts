@@ -33,6 +33,8 @@ class CustomerSchemas {
       phone: SharedSchemas.phoneSchema,
     })
     .strict()
+
+  public static registerCustomerBodySchema = SharedSchemas.registerBodySchema
 }
 
 export { CustomerSchemas }

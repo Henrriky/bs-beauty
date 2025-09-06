@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { SharedSchemas } from './shared-zod-schemas.validations.utils'
 
 class CustomerSchemas {
   public static customerCompleteRegisterBodySchema = z.object({
@@ -26,6 +27,8 @@ class CustomerSchemas {
     email: z.string().email().optional(),
     phone: z.string().refine((value) => RegexPatterns.phone.test(value)).optional()
   }).strict()
+
+  public static registerCustomerBodySchema = SharedSchemas.registerBodySchema
 }
 
 export { CustomerSchemas }

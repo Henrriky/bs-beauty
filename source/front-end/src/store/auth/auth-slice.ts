@@ -4,7 +4,7 @@ import { CustomerOrEmployee } from './types'
 
 type TokenParams = {
   accessToken: string
-  googleAccessToken: string
+  googleAccessToken?: string
   expiresAt: number
 }
 
@@ -91,6 +91,7 @@ const authSlice = createSlice({
 })
 
 export { authSlice }
+export type { TokenParams }
 export const {
   setToken,
   setRegisterCompleted,

@@ -30,7 +30,7 @@ function CustomerHomeEmployeeCard(props: CustomerHomeEmployeeCardProps) {
       {props.currentFlow === 'service' && (
         <CustomerHomeOfferInfo
           offerEstimatedTime={props.estimatedTime || 'Não definido'}
-          offerPrice={props.price}
+          offerPrice={props.price!}
         />
       )}
     </label>
