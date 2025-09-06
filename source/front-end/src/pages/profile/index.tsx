@@ -36,7 +36,7 @@ function Profile() {
 
     try {
       const { accessToken } = await AuthAPI.loginWithGoogleAccessToken(
-        tokens.googleAccessToken
+        tokens.googleAccessToken,
       )
 
       const decodedToken = decodeUserToken(accessToken)
@@ -56,7 +56,7 @@ function Profile() {
             accessToken,
             expiresAt: decodedToken.exp!,
           },
-        })
+        }),
       )
 
       localStorage.setItem('token', accessToken)

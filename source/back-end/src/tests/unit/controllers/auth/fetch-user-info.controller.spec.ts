@@ -1,21 +1,21 @@
 import { StatusCodes } from 'http-status-codes'
-import { FetchUserInfoController } from '../../../../src/controllers/auth/fetch-user-info.controller'
-import { makeFetchUserInfoUseCase } from '../../../../src/factory/auth/make-fetch-user-info.use-case.factory.ts'
-import { InvalidUserTypeUseCaseError } from '../../../../src/services/use-cases/errors/invalid-user-type-use-case-error'
-import { NotFoundUseCaseError } from '../../../../src/services/use-cases/errors/not-found-error'
+import { FetchUserInfoController } from '../../../../controllers/auth/fetch-user-info.controller'
+import { makeFetchUserInfoUseCase } from '../../../../factory/auth/make-fetch-user-info.use-case.factory.ts'
+import { InvalidUserTypeUseCaseError } from '../../../../services/use-cases/errors/invalid-user-type-use-case-error'
+import { NotFoundUseCaseError } from '../../../../services/use-cases/errors/not-found-error'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { Request, Response } from 'express'
-import { MockRequest, mockRequest, mockResponse } from '../../utils/test-utilts.ts'
-import { FetchUserInfoUseCase } from '../../../../src/services/use-cases/auth/fetch-user-info.use-case.ts'
-import { createMock } from '../../utils/mocks.ts'
+import { type Response } from 'express'
+import { type MockRequest, mockRequest, mockResponse } from '../../utils/test-utilts'
+import { type FetchUserInfoUseCase } from '../../../../services/use-cases/auth/fetch-user-info.use-case'
+import { createMock } from '../../utils/mocks'
 
-vi.mock('../../../../src/factory/auth/make-fetch-user-info.use-case.factory.ts')
+vi.mock('@/factory/auth/make-fetch-user-info.use-case.factory.ts')
 
 describe('FetchUserInfoController', () => {
   let req: MockRequest
   let res: Response
-  let executeMock: ReturnType<typeof vi.fn>;
-  let usecaseMock: FetchUserInfoUseCase;;
+  let executeMock: ReturnType<typeof vi.fn>
+  let usecaseMock: FetchUserInfoUseCase
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -28,15 +28,15 @@ describe('FetchUserInfoController', () => {
         userType: 'EMPLOYEE',
         profilePhotoUrl: 'http://example.com/photo.jpg',
         registerCompleted: false,
-        userId: '12345',
+        userId: '12345'
       }
-    });
+    })
 
-    res = mockResponse();
+    res = mockResponse()
 
-    const result = createMock<FetchUserInfoUseCase>();
-    usecaseMock = result.usecase;
-    executeMock = result.executeMock;
+    const result = createMock<FetchUserInfoUseCase>()
+    usecaseMock = result.usecase
+    executeMock = result.executeMock
 
     vi.mocked(makeFetchUserInfoUseCase).mockImplementation(() => usecaseMock)
   })
@@ -59,7 +59,7 @@ describe('FetchUserInfoController', () => {
       expect(res.send).toHaveBeenCalledWith({ user: mockUser })
       expect(usecaseMock.execute).toHaveBeenCalledWith({
         email: 'user@example.com',
-        userType: "EMPLOYEE",
+        userType: 'EMPLOYEE'
       })
     })
 
@@ -102,6 +102,5 @@ describe('FetchUserInfoController', () => {
         message: 'Error trying to fetch user info, please check back-end logs...'
       })
     })
-
   })
 })

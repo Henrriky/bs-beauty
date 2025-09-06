@@ -8,12 +8,12 @@ config({ path: '.env.test', override: true })
 export default defineConfig({
   test: {
     globals: true,
-    include: ['tests/integration/**/*.integration.spec.ts'],
+    include: ['src/tests/integration/**/*.integration.spec.ts'],
     root: './',
     coverage: {
       reporter: ['text', 'html'],
     },
-    setupFiles: ['./tests/integration/setup-integration-tests.ts'],
+    setupFiles: ['./src/tests/integration/setup-integration-tests.ts'],
     fileParallelism: false,
     sequence: { concurrent: false },
   },

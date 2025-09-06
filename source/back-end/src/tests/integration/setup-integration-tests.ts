@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { beforeAll, afterAll } from 'vitest'
-import { prismaClient } from '../../src/lib/prisma'
+import { prismaClient } from '../../lib/prisma'
 
 let TABLES: string[] = []
 

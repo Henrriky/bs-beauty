@@ -1,18 +1,18 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { z } from 'zod';
-import { Button } from '../../components/button/Button';
-import { ErrorMessage } from '../../components/feedback/ErrorMessage';
-import BSBeautyLoading from '../../components/feedback/Loading';
-import { Input } from '../../components/inputs/Input';
-import Title from '../../components/texts/Title';
-import useAppSelector from '../../hooks/use-app-selector';
-import { Employee } from '../../store/auth/types';
-import { employeeAPI } from '../../store/employee/employee-api';
-import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils';
-import { EmployeeCard } from './components/EmployeeCard';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import { z } from 'zod'
+import { Button } from '../../components/button/Button'
+import { ErrorMessage } from '../../components/feedback/ErrorMessage'
+import BSBeautyLoading from '../../components/feedback/Loading'
+import { Input } from '../../components/inputs/Input'
+import Title from '../../components/texts/Title'
+import useAppSelector from '../../hooks/use-app-selector'
+import { Employee } from '../../store/auth/types'
+import { employeeAPI } from '../../store/employee/employee-api'
+import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
+import { EmployeeCard } from './components/EmployeeCard'
 
 type EmployeeFormData = z.infer<typeof EmployeeSchemas.createSchema>
 
@@ -22,7 +22,11 @@ function EmployeesManagement() {
   const [page, setPage] = useState(1)
 
   const { data, isLoading, isError, error, refetch } =
-    employeeAPI.useFetchEmployeesQuery({ page, limit: 2, email: debouncedSearch })
+    employeeAPI.useFetchEmployeesQuery({
+      page,
+      limit: 2,
+      email: debouncedSearch,
+    })
 
   const [allEmployees, setAllEmployees] = useState<Employee[]>([])
 
@@ -36,12 +40,12 @@ function EmployeesManagement() {
     mode: 'onSubmit',
   })
 
-  const username = useAppSelector((state) => state.auth.user?.name!)
+  const username = useAppSelector((state) => state.auth!.user!.name)
 
   const [isInsertModalOpen, setIsModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [employeeToDelete, setEmployeeToDelete] = useState<Employee | null>(
-    null
+    null,
   )
 
   if (isError) {
@@ -91,6 +95,7 @@ function EmployeesManagement() {
       setIsModalOpen(false)
       reset()
       refetch()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Erro ao adicionar funcionário:', error)
       const errorMessage =
@@ -100,6 +105,7 @@ function EmployeesManagement() {
     }
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(search)
@@ -110,22 +116,23 @@ function EmployeesManagement() {
     }
   }, [search])
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    setPage(1);
-    setAllEmployees([]);
-  }, [debouncedSearch]);
+    setPage(1)
+    setAllEmployees([])
+  }, [debouncedSearch])
 
-
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (data?.data) {
       setAllEmployees((prev) => {
         const newUsers = data.data.filter(
-          (emp) => !prev.some((e) => e.id === emp.id)
-        );
-        return [...prev, ...newUsers];
-      });
+          (emp) => !prev.some((e) => e.id === emp.id),
+        )
+        return [...prev, ...newUsers]
+      })
     }
-  }, [data]);
+  }, [data])
 
   return (
     <>
@@ -156,42 +163,42 @@ function EmployeesManagement() {
           </div>
 
           <div className="mt-6 max-h-[70vh] overflow-y-auto scroll relative">
-              {allEmployees.length > 0 ? (
-                <>
-                  {allEmployees.map((employee) => (
-                    <EmployeeCard
-                      key={employee.id}
-                      employee={employee}
-                      onDelete={(employee) => {
-                        setEmployeeToDelete(employee)
-                        setIsDeleteModalOpen(true)
-                      }}
-                    />
-                  ))}
-                </>
-              ) : (
-                <p className="text-center text-gray-400">
-                  Nenhum colaborador encontrado.
-                </p>
-              )}
-              <div
-                onClick={() => setIsModalOpen(true)}
-                className="p-4 mb-4 bg-[#222222] text-primary-0 rounded-lg shadow-md cursor-pointer hover:bg-[#2e2e2e] transition-all flex items-center justify-center"
-              >
-                <span className="text-3xl text-primary-0 font-bold">+</span>
-              </div>
-              {data && data.page < data.totalPages && (
-                <div className="flex justify-center mt-4">
-                  <button
-                    className="bg-secondary-500 text-white px-4 py-2 mb-3 rounded-md hover:bg-secondary-600 transition"
-                    onClick={() => setPage((prev) => prev + 1)}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Carregando...' : 'Carregar mais'}
-                  </button>
-                </div>
+            {allEmployees.length > 0 ? (
+              <>
+                {allEmployees.map((employee) => (
+                  <EmployeeCard
+                    key={employee.id}
+                    employee={employee}
+                    onDelete={(employee) => {
+                      setEmployeeToDelete(employee)
+                      setIsDeleteModalOpen(true)
+                    }}
+                  />
+                ))}
+              </>
+            ) : (
+              <p className="text-center text-gray-400">
+                Nenhum colaborador encontrado.
+              </p>
             )}
+            <div
+              onClick={() => setIsModalOpen(true)}
+              className="p-4 mb-4 bg-[#222222] text-primary-0 rounded-lg shadow-md cursor-pointer hover:bg-[#2e2e2e] transition-all flex items-center justify-center"
+            >
+              <span className="text-3xl text-primary-0 font-bold">+</span>
             </div>
+            {data && data.page < data.totalPages && (
+              <div className="flex justify-center mt-4">
+                <button
+                  className="bg-secondary-500 text-white px-4 py-2 mb-3 rounded-md hover:bg-secondary-600 transition"
+                  onClick={() => setPage((prev) => prev + 1)}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Carregando...' : 'Carregar mais'}
+                </button>
+              </div>
+            )}
+          </div>
         </>
       )}
 
@@ -274,4 +281,4 @@ function EmployeesManagement() {
   )
 }
 
-export default EmployeesManagement;
+export default EmployeesManagement

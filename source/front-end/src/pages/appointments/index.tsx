@@ -51,7 +51,7 @@ function Appointments() {
     return data.appointments.filter((appointment) =>
       switchButtonStatus === 'schedulled'
         ? schedulledStatuses.has(appointment.status.toString())
-        : finishedStatuses.has(appointment.status.toString())
+        : finishedStatuses.has(appointment.status.toString()),
     )
   }, [data, switchButtonStatus])
 
