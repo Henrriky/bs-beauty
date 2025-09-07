@@ -1,9 +1,8 @@
-import { Status, type Prisma } from '@prisma/client'
+import { type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type OfferRepository } from '../protocols/offer.repository'
 import { type PaginatedRequest } from '../../types/pagination'
 import { type OffersFilters } from '../../types/offers/offers-filters'
-import { type FetchValidAppointmentsByProfessionalOnDay } from '../types/offer-repository.types'
 
 class PrismaOfferRepository implements OfferRepository {
   public async findAll() {

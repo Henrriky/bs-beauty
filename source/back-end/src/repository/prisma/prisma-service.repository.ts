@@ -1,7 +1,7 @@
-import { Service, type Prisma } from '@prisma/client'
+import { type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type ServiceRepository } from '../protocols/service.repository'
-import { type PaginatedRequest, PaginatedResult } from '../../types/pagination'
+import { type PaginatedRequest } from '../../types/pagination'
 import { type ServiceFilters } from '../../types/services/service-filters'
 
 class PrismaServiceRepository implements ServiceRepository {
@@ -84,7 +84,7 @@ class PrismaServiceRepository implements ServiceRepository {
     const skip = (page - 1) * limit
 
     const where = {
-      name: filters.name ? { contains: filters.name } : undefined
+      name: (filters.name != null) ? { contains: filters.name } : undefined
     }
 
     const [data, total] = await Promise.all([

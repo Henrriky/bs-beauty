@@ -68,7 +68,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
             </h1>
             <h3 className="text-[#D9D9D9] text-xs text-opacity-55">
               {firstLetterOfWordToUpperCase(
-                props.appointment.offer?.professional?.name || 'Funcionário não definido'
+                props.appointment.offer?.professional?.name || 'Profissional não definido'
               )}
             </h3>
           </div>

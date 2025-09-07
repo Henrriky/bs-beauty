@@ -17,7 +17,7 @@ interface CompleteUserRegisterUseCaseInput {
 }
 
 class CompleteUserRegisterUseCase {
-  constructor(
+  constructor (
     private readonly customerRepository: CustomerRepository,
     private readonly professionalRepository: ProfessionalRepository
   ) { }
@@ -50,6 +50,7 @@ class CompleteUserRegisterUseCase {
         data
       )
     } else {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw new InvalidUserTypeUseCaseError(`Invalid user type provided ${userType}`)
     }
   }

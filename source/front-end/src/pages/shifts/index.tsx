@@ -49,6 +49,7 @@ const Shifts = () => {
       })
       setEditableShifts(defaultShifts)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   const initializeEditableShifts = (shifts: Shift[]) => {
@@ -131,6 +132,7 @@ const Shifts = () => {
       return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
     } catch (error) {
       console.error('Invalid ISO time:', isoTime)
+      console.error(error)
       return ''
     }
   }

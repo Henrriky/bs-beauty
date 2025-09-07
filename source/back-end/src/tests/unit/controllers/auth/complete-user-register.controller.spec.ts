@@ -1,37 +1,38 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { faker } from '@faker-js/faker'
 import { UserType } from '@prisma/client'
+import { type Response } from 'express'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { z } from 'zod'
-import { makeCompleteUserRegisterUseCase } from '../../../../src/factory/auth/make-complete-user-register.use-case.factory'
-import { CustomerSchemas } from '../../../../src/utils/validation/zod-schemas/customer.zod-schemas.validation.util'
-import { CompleteUserRegisterController } from '../../../../src/controllers/auth/complete-user-register.controller'
+import { CompleteUserRegisterController } from '../../../../controllers/auth/complete-user-register.controller'
+import { makeCompleteUserRegisterUseCase } from '../../../../factory/auth/make-complete-user-register.use-case.factory'
+import { CustomerSchemas } from '../../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
+import { type MockRequest, mockRequest, mockResponse } from '../../utils/test-utilts'
+import { type CompleteUserRegisterUseCase } from '../../../../services/use-cases/auth/complete-user-register.use-case'
+import { createMock } from '../../utils/mocks'
 
-vi.mock('../../../../src/factory/auth/make-complete-user-register.use-case.factory', () => ({
+vi.mock('@/factory/auth/make-complete-user-register.use-case.factory', () => ({
   makeCompleteUserRegisterUseCase: vi.fn()
 }))
 
 describe('CompleteUserRegisterController', () => {
-  let req: any
-  let res: any
-  let usecaseMock: any
+  let req: MockRequest
+  let res: Response
+  let usecaseMock: CompleteUserRegisterUseCase
 
   beforeEach(() => {
     vi.clearAllMocks()
 
-    req = {
+    req = mockRequest({
       headers: {},
       body: {}
-    }
+    })
 
-    res = {
-      status: vi.fn().mockReturnThis(),
-      send: vi.fn(),
-      json: vi.fn()
-    }
+    res = mockResponse()
 
-    usecaseMock = {
-      execute: vi.fn()
-    }
+    const result = createMock<CompleteUserRegisterUseCase>()
+    usecaseMock = result.usecase
+
     vi.mocked(makeCompleteUserRegisterUseCase).mockReturnValue(usecaseMock)
   })
 
@@ -46,7 +47,7 @@ describe('CompleteUserRegisterController', () => {
         sub: undefined,
         userType: UserType.CUSTOMER,
         registerCompleted: false
-      }
+      } as any
 
       vi.spyOn(CustomerSchemas.customerCompleteRegisterBodySchema, 'parse').mockReturnValue({
         name: faker.person.fullName(),
@@ -66,8 +67,9 @@ describe('CompleteUserRegisterController', () => {
       // arrange
       req.user = {
         sub: 'valid-user-id',
-        registerCompleted: true
-      }
+        registerCompleted: true,
+        userType: UserType.CUSTOMER
+      } as any
 
       // act
       await CompleteUserRegisterController.handle(req as any, res)
@@ -80,10 +82,9 @@ describe('CompleteUserRegisterController', () => {
     it('should return 400 for an invalid userType', async () => {
       // arrange
       req.user = {
-        sub: 'valid-user-id',
         userType: 'INVALID_USER_TYPE',
         registerCompleted: false
-      }
+      } as any
 
       // act
       await CompleteUserRegisterController.handle(req, res)
@@ -91,7 +92,7 @@ describe('CompleteUserRegisterController', () => {
       // assert
       expect(res.status).toHaveBeenCalledWith(400)
       expect(res.send).toHaveBeenCalledWith({
-        message: 'Invalid userType provided: INVALID_USER_TYPE'
+        message: 'Invalid user type provided: INVALID_USER_TYPE'
       })
     })
 
@@ -101,7 +102,7 @@ describe('CompleteUserRegisterController', () => {
         sub: 'valid-user-id',
         userType: UserType.CUSTOMER,
         registerCompleted: false
-      }
+      } as any
 
       vi.spyOn(CustomerSchemas.customerCompleteRegisterBodySchema, 'parse').mockImplementation(() => {
         throw new z.ZodError([
@@ -127,7 +128,7 @@ describe('CompleteUserRegisterController', () => {
         sub: 'valid-user-id',
         userType: UserType.CUSTOMER,
         registerCompleted: false
-      }
+      } as any
 
       vi.spyOn(CustomerSchemas.customerCompleteRegisterBodySchema, 'parse').mockImplementation(() => {
         throw new Error('Unexpected error')
@@ -149,7 +150,7 @@ describe('CompleteUserRegisterController', () => {
         sub: 'valid-user-id',
         userType: UserType.CUSTOMER,
         registerCompleted: false
-      }
+      } as any
 
       vi.spyOn(CustomerSchemas.customerCompleteRegisterBodySchema, 'parse').mockReturnValue({
         name: faker.person.fullName(),

@@ -41,7 +41,7 @@ function CompleteRegister() {
 
     try {
       const { accessToken } = await AuthAPI.loginWithGoogleAccessToken(
-        tokens.googleAccessToken
+        tokens.googleAccessToken,
       )
 
       const decodedToken = decodeUserToken(accessToken)
@@ -61,7 +61,7 @@ function CompleteRegister() {
             accessToken,
             expiresAt: decodedToken.exp!,
           },
-        })
+        }),
       )
 
       localStorage.setItem('token', accessToken)
@@ -79,7 +79,7 @@ function CompleteRegister() {
       .then(() => {
         dispatchRedux(
           // TODO: Improve this refreshing token by complete register route
-          setRegisterCompleted()
+          setRegisterCompleted(),
         )
         handleUpdateProfileToken()
         navigate('/register-completed')
@@ -93,7 +93,7 @@ function CompleteRegister() {
   useEffect(() => {
     if (user.registerCompleted) {
       toast.info(
-        'Você já completou seu registro, vamos te enviar para a tela inicial'
+        'Você já completou seu registro, vamos te enviar para a tela inicial',
       )
       navigate('/home')
     }

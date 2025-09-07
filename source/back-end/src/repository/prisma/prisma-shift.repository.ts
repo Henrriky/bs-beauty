@@ -1,4 +1,4 @@
-import { type WeekDays, type Prisma, Shift } from '@prisma/client'
+import { type WeekDays, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type ShiftRepository } from '../protocols/shift.repository'
 

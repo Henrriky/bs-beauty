@@ -1,6 +1,7 @@
 import { type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
-import { type AppointmentRepository } from '../protocols/appointment.repository'
+import { appointmentNonFinishedStatus, type AppointmentRepository } from '../protocols/appointment.repository'
+import { type FindNonFinishedByUserAndDay } from '../types/appointment-repository.types'
 
 class PrismaAppointmentRepository implements AppointmentRepository {
   public async findAll() {
@@ -99,7 +100,65 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async create(appointmentToCreate: Prisma.AppointmentCreateInput) {
+  public async findNonFinishedByUserAndDay (userId: string, dayToFetchAvailableSchedulling: Date) {
+    const startOfDay = new Date(dayToFetchAvailableSchedulling)
+    startOfDay.setHours(0, 0, 0, 0)
+
+    const endOfDay = new Date(dayToFetchAvailableSchedulling)
+    endOfDay.setHours(23, 59, 59, 999)
+
+    const nonFinishedAppointmentsByUserOnDay = await prismaClient
+      .appointment
+      .findMany({
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  customerId: userId
+                },
+                {
+                  offer: {
+                    employeeId: userId
+                  }
+                }
+              ]
+            },
+            {
+              appointmentDate: {
+                gte: startOfDay,
+                lte: endOfDay
+              }
+            },
+            {
+              status: {
+                in: appointmentNonFinishedStatus
+              }
+            }
+          ]
+        },
+        select: {
+          offer: true,
+          id: true,
+          observation: true,
+          status: true,
+          appointmentDate: true
+        }
+      })
+
+    return {
+      validAppointmentsOnDay: nonFinishedAppointmentsByUserOnDay.map(appointment => ({
+        id: appointment.id,
+        observation: appointment.observation,
+        status: appointment.status,
+        appointmentDate: appointment.appointmentDate,
+        appointmentId: appointment.id,
+        estimatedTime: appointment.offer.estimatedTime
+      }) satisfies FindNonFinishedByUserAndDay[0])
+    }
+  }
+
+  public async create (appointmentToCreate: Prisma.AppointmentCreateInput) {
     const newAppointment = await prismaClient.appointment.create({
       data: { ...appointmentToCreate }
     })

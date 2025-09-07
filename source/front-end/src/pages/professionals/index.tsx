@@ -40,7 +40,7 @@ function Professionals() {
     mode: 'onSubmit',
   })
 
-  const username = useAppSelector((state) => state.auth.user?.name!)
+  const username = useAppSelector((state) => state.auth!.user!.name)
 
   const [isInsertModalOpen, setIsModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -94,6 +94,7 @@ function Professionals() {
       setIsModalOpen(false)
       reset()
       refetch()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Erro ao adicionar funcionário:', error)
       const errorMessage =
@@ -103,6 +104,7 @@ function Professionals() {
     }
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(search)
@@ -113,6 +115,7 @@ function Professionals() {
     }
   }, [search])
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     setPage(1)
     setAllProfessionals([])
@@ -126,7 +129,12 @@ function Professionals() {
         )
         return [...prev, ...newUsers]
       })
+          (emp) => !prev.some((e) => e.id === emp.id),
+        )
+        return [...prev, ...newUsers]
+      })
     }
+  }, [data])
   }, [data])
 
   return (
@@ -193,6 +201,7 @@ function Professionals() {
                 </button>
               </div>
             )}
+          </div>
           </div>
         </>
       )}

@@ -1,5 +1,4 @@
 import { type Prisma, type Offer } from '@prisma/client'
-import { type FetchValidAppointmentsByProfessionalOnDay } from '../types/offer-repository.types'
 import { type PaginatedRequest, type PaginatedResult } from '../../types/pagination'
 import { type OffersFilters } from '../../types/offers/offers-filters'
 

@@ -1,8 +1,8 @@
 import express from 'express'
 import * as jwt from 'jsonwebtoken'
 import request from 'supertest'
-import { prismaClient } from '../../../src/lib/prisma'
-import { appRoutes } from '../../../src/router'
+import { prismaClient } from '../../../lib/prisma'
+import { appRoutes } from '../../../router'
 import { type Prisma } from '@prisma/client'
 
 describe('ProfessionalsController', () => {
