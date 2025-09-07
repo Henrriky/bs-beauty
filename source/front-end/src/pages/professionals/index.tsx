@@ -121,6 +121,7 @@ function Professionals() {
     setAllProfessionals([])
   }, [debouncedSearch])
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (data?.data) {
       setAllProfessionals((prev) => {
@@ -129,12 +130,7 @@ function Professionals() {
         )
         return [...prev, ...newUsers]
       })
-          (emp) => !prev.some((e) => e.id === emp.id),
-        )
-        return [...prev, ...newUsers]
-      })
     }
-  }, [data])
   }, [data])
 
   return (
@@ -201,7 +197,6 @@ function Professionals() {
                 </button>
               </div>
             )}
-          </div>
           </div>
         </>
       )}
