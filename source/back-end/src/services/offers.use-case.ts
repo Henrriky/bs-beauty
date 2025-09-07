@@ -116,7 +116,7 @@ class OffersUseCase {
     const estimatedTimeMs = serviceOffering.estimatedTime * 60_000
 
     const [
-      { validAppointmentsOnDay: nonFinishedAppointmentsByEmployeeOnDay },
+      { validAppointmentsOnDay: nonFinishedAppointmentsByProfessionalOnDay },
       { validAppointmentsOnDay: nonFinishedAppointmentsByCustomerOnDay }
     ] =
       await Promise.all([
@@ -130,14 +130,14 @@ class OffersUseCase {
         )
       ])
 
-    const nonFinishedAppointmentsByCustomerAndEmployeeOnDay = [
+    const nonFinishedAppointmentsByCustomerAndProfessionalOnDay = [
       ...nonFinishedAppointmentsByCustomerOnDay,
-      ...nonFinishedAppointmentsByEmployeeOnDay
+      ...nonFinishedAppointmentsByProfessionalOnDay
     ]
 
     const availableSchedulling: AvailablesSchedulling[] = []
 
-    const hasAppointments = Array.isArray(nonFinishedAppointmentsByCustomerAndEmployeeOnDay) && nonFinishedAppointmentsByCustomerAndEmployeeOnDay.length > 0
+    const hasAppointments = Array.isArray(nonFinishedAppointmentsByCustomerAndProfessionalOnDay) && nonFinishedAppointmentsByCustomerAndProfessionalOnDay.length > 0
     while ((currentStartTime + estimatedTimeMs) <= currentDayShiftEndTime) {
       const startTimestamp = currentStartTime
       const endTimestamp = startTimestamp + estimatedTimeMs
@@ -146,7 +146,7 @@ class OffersUseCase {
       let skipAheadTime = estimatedTimeMs
 
       if (hasAppointments) {
-        const overlappingAppointment = nonFinishedAppointmentsByCustomerAndEmployeeOnDay.find(appointment => {
+        const overlappingAppointment = nonFinishedAppointmentsByCustomerAndProfessionalOnDay.find(appointment => {
           const appointmentStart = appointment.appointmentDate.getTime()
           const appointmentDuration = appointment.estimatedTime * 60_000
           const appointmentEnd = appointmentStart + appointmentDuration

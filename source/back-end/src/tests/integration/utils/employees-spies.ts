@@ -1,27 +1,27 @@
 import { vi } from 'vitest'
-import { EmployeesUseCase } from '../../../services/employees.use-case'
-import * as factoryModule from '../../../factory/make-employees-use-case.factory'
-import { PrismaEmployeeRepository } from '../../../repository/prisma/prisma-employee.repository'
+import { ProfessionalsUseCase } from '../../../services/professionals.use-case'
+import * as factoryModule from '../../../factory/make-professionals-use-case.factory'
+import { PrismaProfessionalRepository } from '../../../repository/prisma/prisma-professional.repository'
 
-export function spyEmployeesWiring () {
-  const factory = vi.spyOn(factoryModule, 'makeEmployeesUseCaseFactory')
+export function spyProfessionalsWiring() {
+  const factory = vi.spyOn(factoryModule, 'makeProfessionalsUseCaseFactory')
 
   const usecase = {
-    executeFindAllPaginated: vi.spyOn(EmployeesUseCase.prototype, 'executeFindAllPaginated'),
-    executeCreate: vi.spyOn(EmployeesUseCase.prototype, 'executeCreate'),
-    executeFindById: vi.spyOn(EmployeesUseCase.prototype, 'executeFindById'),
-    executeUpdate: vi.spyOn(EmployeesUseCase.prototype, 'executeUpdate'),
-    executeDelete: vi.spyOn(EmployeesUseCase.prototype, 'executeDelete')
+    executeFindAllPaginated: vi.spyOn(ProfessionalsUseCase.prototype, 'executeFindAllPaginated'),
+    executeCreate: vi.spyOn(ProfessionalsUseCase.prototype, 'executeCreate'),
+    executeFindById: vi.spyOn(ProfessionalsUseCase.prototype, 'executeFindById'),
+    executeUpdate: vi.spyOn(ProfessionalsUseCase.prototype, 'executeUpdate'),
+    executeDelete: vi.spyOn(ProfessionalsUseCase.prototype, 'executeDelete')
   }
 
   const repository = {
-    findAllPaginated: vi.spyOn(PrismaEmployeeRepository.prototype, 'findAllPaginated'),
-    findAll: vi.spyOn(PrismaEmployeeRepository.prototype, 'findAll'),
-    findById: vi.spyOn(PrismaEmployeeRepository.prototype, 'findById'),
-    findByEmail: vi.spyOn(PrismaEmployeeRepository.prototype, 'findByEmail'),
-    create: vi.spyOn(PrismaEmployeeRepository.prototype, 'create'),
-    update: vi.spyOn(PrismaEmployeeRepository.prototype, 'update'),
-    delete: vi.spyOn(PrismaEmployeeRepository.prototype, 'delete')
+    findAllPaginated: vi.spyOn(PrismaProfessionalRepository.prototype, 'findAllPaginated'),
+    findAll: vi.spyOn(PrismaProfessionalRepository.prototype, 'findAll'),
+    findById: vi.spyOn(PrismaProfessionalRepository.prototype, 'findById'),
+    findByEmail: vi.spyOn(PrismaProfessionalRepository.prototype, 'findByEmail'),
+    create: vi.spyOn(PrismaProfessionalRepository.prototype, 'create'),
+    update: vi.spyOn(PrismaProfessionalRepository.prototype, 'update'),
+    delete: vi.spyOn(PrismaProfessionalRepository.prototype, 'delete')
   }
 
   return {
@@ -31,7 +31,7 @@ export function spyEmployeesWiring () {
   }
 }
 
-export function restoreAllSpies () {
+export function restoreAllSpies() {
   // limpa qualquer spy aberto
   vi.restoreAllMocks()
 }

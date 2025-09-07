@@ -119,7 +119,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
                 },
                 {
                   offer: {
-                    employeeId: userId
+                    professionalId: userId
                   }
                 }
               ]
