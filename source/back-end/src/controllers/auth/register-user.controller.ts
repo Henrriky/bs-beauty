@@ -16,7 +16,7 @@ class RegisterUserController {
 
       res.status(StatusCodes.CREATED).send({
         success: true,
-        message: 'Customer registered successfully'
+        message: 'Verification code sent to provided email'
       })
     } catch (error: any) {
       console.error(`Error trying to register customer.\nReason: ${error?.message}`)
