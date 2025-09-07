@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
 import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
 import { CustomError } from '../../../utils/errors/custom.error.util'
-import { CodeVerificationService } from './code-verification.service'
+import { CodeValidationService } from './code-validation.service'
 
 interface RegisterUserInput {
   email: string
@@ -19,7 +19,7 @@ export class RegisterUserUseCase {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly employeeRepository: EmployeeRepository,
-    private readonly codeVerificationService: CodeVerificationService,
+    private readonly codeValidationService: CodeValidationService,
     private readonly emailService: EmailService
   ) { }
 
@@ -39,7 +39,7 @@ export class RegisterUserUseCase {
       )
     }
 
-    const resendAllowed = await this.codeVerificationService.allowResendAndStartCooldown({
+    const resendAllowed = await this.codeValidationService.allowResendAndStartCooldown({
       purpose: 'register',
       recipientId: email,
       cooldownSeconds: RESEND_COOLDOWN_SECONDS,
@@ -52,7 +52,7 @@ export class RegisterUserUseCase {
     const code = (Math.floor(100000 + Math.random() * 900000)).toString()
     const passwordHash = await bcrypt.hash(password, 10)
 
-    await this.codeVerificationService.savePendingCode({
+    await this.codeValidationService.savePendingCode({
       purpose: 'register',
       recipientId: email,
       code: code,

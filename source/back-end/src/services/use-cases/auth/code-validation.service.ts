@@ -19,7 +19,7 @@ export type VerificationPurpose =
   | 'password_reset'
   | 'email_change'
 
-export class CodeVerificationService {
+export class CodeValidationService {
   constructor(
     private readonly cache: Cache
   ) { }

@@ -1,7 +1,7 @@
 import { type CustomerRepository } from '@/repository/protocols/customer.repository'
-import { UserType } from '@prisma/client'
 import { CustomError } from '@/utils/errors/custom.error.util'
-import { CodeVerificationService } from './code-verification.service'
+import { UserType } from '@prisma/client'
+import { CodeValidationService } from './code-validation.service'
 
 interface VerifyCustomerInput {
   email: string
@@ -11,14 +11,14 @@ interface VerifyCustomerInput {
 export class VerifyUserUseCase {
   constructor(
     private readonly customerRepository: CustomerRepository,
-    private readonly codeVerification: CodeVerificationService
+    private readonly codeValidationService: CodeValidationService
   ) { }
 
   async execute({ email, code }: VerifyCustomerInput): Promise<{ message: string }> {
     const emailAddress = email.trim().toLowerCase()
     const verificationCode = code.trim()
 
-    const result = await this.codeVerification.verifyCodeAndConsume({
+    const result = await this.codeValidationService.verifyCodeAndConsume({
       purpose: 'register',
       recipientId: emailAddress,
       code: verificationCode,
