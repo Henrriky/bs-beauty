@@ -6,6 +6,7 @@ import { verifyJwtTokenMiddleware } from '../../middlewares/auth/verify-jwt-toke
 import { ExchangeCodeByTokenController } from '../../controllers/auth/exchange-code-by-token.controller'
 import { FetchUserInfoController } from '../../controllers/auth/fetch-user-info.controller'
 import { RegisterUserController } from '../../controllers/auth/register-user.controller'
+import { CodeValidationController } from '@/controllers/auth/code-validation.controller'
 
 const authRoutes = Router()
 
@@ -17,5 +18,6 @@ authRoutes.get('/user', verifyJwtTokenMiddleware, FetchUserInfoController.handle
 authRoutes.post('/register', RegisterUserController.handleRegisterCustomer)
 authRoutes.put('/register', RegisterUserController.handleRegisterEmployee)
 authRoutes.get('/register/:email', RegisterUserController.handleFindEmployeeByEmail)
+authRoutes.post('/code-validation', CodeValidationController.handle)
 
 export { authRoutes }
