@@ -12,10 +12,10 @@ export const customerAPI = createApi({
     fetchCustomers: builder.query<
       PaginatedCustomersResponse,
       {
-        page?: number;
-        limit?: number;
-        name?: string;
-        email?: string;
+        page?: number
+        limit?: number
+        name?: string
+        email?: string
       }
     >({
       query: (params) => ({
@@ -26,12 +26,12 @@ export const customerAPI = createApi({
       providesTags: (result) =>
         result
           ? [
-            ...result.data.map(({ id }) => ({
-              type: 'Customers' as const,
-              id,
-            })),
-            { type: 'Customers', id: 'LIST' },
-          ]
+              ...result.data.map(({ id }) => ({
+                type: 'Customers' as const,
+                id,
+              })),
+              { type: 'Customers', id: 'LIST' },
+            ]
           : [{ type: 'Customers', id: 'LIST' }],
     }),
     getCustomerById: builder.query<Customer, string>({

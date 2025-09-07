@@ -19,59 +19,59 @@ interface AvailablesSchedulling {
 }
 
 class OffersUseCase {
-  constructor (
+  constructor(
     private readonly offerRepository: OfferRepository,
     private readonly shiftRepository: ShiftRepository,
     private readonly appointmentRepository: AppointmentRepository
   ) { }
 
-  public async executeFindAll (): Promise<OfferOutput> {
+  public async executeFindAll(): Promise<OfferOutput> {
     const offers = await this.offerRepository.findAll()
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
   }
 
-  public async executeFindById (offerId: string) {
+  public async executeFindById(offerId: string) {
     const offer = await this.offerRepository.findById(offerId)
     RecordExistence.validateRecordExistence(offer, 'Offer')
 
     return offer
   }
 
-  public async executeFindByServiceId (serviceId: string) {
+  public async executeFindByServiceId(serviceId: string) {
     const offer = await this.offerRepository.findByServiceId(serviceId)
     RecordExistence.validateRecordExistence(offer, 'Offer')
 
     return offer
   }
 
-  public async executeFindByEmployeeId (employeeId: string): Promise<OfferOutput> {
-    const offers = await this.offerRepository.findByEmployeeId(employeeId)
+  public async executeFindByProfessionalId(professionalId: string): Promise<OfferOutput> {
+    const offers = await this.offerRepository.findByProfessionalId(professionalId)
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
   }
 
-  public async executeCreate (offerToCreate: Prisma.OfferCreateInput) {
+  public async executeCreate(offerToCreate: Prisma.OfferCreateInput) {
     const offer = offerToCreate as unknown as Offer
     const serviceId = offer.serviceId
-    const employeeId = offer.employeeId
-    const offerFound = await this.offerRepository.findByEmployeeAndServiceId(serviceId, employeeId)
+    const professionalId = offer.professionalId
+    const offerFound = await this.offerRepository.findByProfessionalAndServiceId(serviceId, professionalId)
     RecordExistence.validateRecordNonExistence(offerFound, 'Offer')
     const newOffer = await this.offerRepository.create(offerToCreate)
 
     return newOffer
   }
 
-  public async executeUpdate (offerId: string, offerToUpdate: Prisma.OfferUpdateInput) {
+  public async executeUpdate(offerId: string, offerToUpdate: Prisma.OfferUpdateInput) {
     await this.executeFindById(offerId)
     const updatedOffer = await this.offerRepository.update(offerId, offerToUpdate)
 
     return updatedOffer
   }
 
-  public async executeDelete (offerId: string) {
+  public async executeDelete(offerId: string) {
     await this.executeFindById(offerId)
     const deletedOffer = await this.offerRepository.delete(offerId)
 
@@ -96,17 +96,17 @@ class OffersUseCase {
       throw new CustomError('Unable to fetch available scheduling because offer not exists or is not being offering', 400)
     }
 
-    const employeeShiftByDay = await this.shiftRepository.findByEmployeeAndWeekDay(serviceOffering.employeeId, DateFormatter.formatDayOfDateToWeekDay(dayToFetchAvailableSchedulling))
-    const isValidEmployeeShiftByDay = (employeeShiftByDay !== null) && !employeeShiftByDay.isBusy
+    const professionalShiftByDay = await this.shiftRepository.findByProfessionalAndWeekDay(serviceOffering.professionalId, DateFormatter.formatDayOfDateToWeekDay(dayToFetchAvailableSchedulling))
+    const isValidProfessionalShiftByDay = (professionalShiftByDay !== null) && !professionalShiftByDay.isBusy
 
-    if (!isValidEmployeeShiftByDay) {
-      throw new CustomError('Unable to fetch available scheduling because employee does not work on this day or not exists', 400, '')
+    if (!isValidProfessionalShiftByDay) {
+      throw new CustomError('Unable to fetch available scheduling because professional does not work on this day or not exists', 400, '')
     }
 
-    const { shiftEnd, shiftStart } = employeeShiftByDay
+    const { shiftEnd, shiftStart } = professionalShiftByDay
 
     const currentDayShiftEndTimeAsDate = new Date(dayToFetchAvailableSchedulling)
-    currentDayShiftEndTimeAsDate.setHours(employeeShiftByDay.shiftEnd.getHours(), shiftEnd.getMinutes(), shiftEnd.getSeconds(), shiftEnd.getMilliseconds())
+    currentDayShiftEndTimeAsDate.setHours(professionalShiftByDay.shiftEnd.getHours(), shiftEnd.getMinutes(), shiftEnd.getSeconds(), shiftEnd.getMilliseconds())
     const currentDayShiftEndTime = currentDayShiftEndTimeAsDate.getTime()
 
     const currentStartTimeAsDate = new Date(dayToFetchAvailableSchedulling)
@@ -116,12 +116,12 @@ class OffersUseCase {
     const estimatedTimeMs = serviceOffering.estimatedTime * 60_000
 
     const [
-      { validAppointmentsOnDay: nonFinishedAppointmentsByEmployeeOnDay },
+      { validAppointmentsOnDay: nonFinishedAppointmentsByProfessionalOnDay },
       { validAppointmentsOnDay: nonFinishedAppointmentsByCustomerOnDay }
     ] =
       await Promise.all([
         this.appointmentRepository.findNonFinishedByUserAndDay(
-          serviceOffering.employeeId,
+          serviceOffering.professionalId,
           dayToFetchAvailableSchedulling
         ),
         this.appointmentRepository.findNonFinishedByUserAndDay(
@@ -130,14 +130,14 @@ class OffersUseCase {
         )
       ])
 
-    const nonFinishedAppointmentsByCustomerAndEmployeeOnDay = [
+    const nonFinishedAppointmentsByCustomerAndProfessionalOnDay = [
       ...nonFinishedAppointmentsByCustomerOnDay,
-      ...nonFinishedAppointmentsByEmployeeOnDay
+      ...nonFinishedAppointmentsByProfessionalOnDay
     ]
 
     const availableSchedulling: AvailablesSchedulling[] = []
 
-    const hasAppointments = Array.isArray(nonFinishedAppointmentsByCustomerAndEmployeeOnDay) && nonFinishedAppointmentsByCustomerAndEmployeeOnDay.length > 0
+    const hasAppointments = Array.isArray(nonFinishedAppointmentsByCustomerAndProfessionalOnDay) && nonFinishedAppointmentsByCustomerAndProfessionalOnDay.length > 0
     while ((currentStartTime + estimatedTimeMs) <= currentDayShiftEndTime) {
       const startTimestamp = currentStartTime
       const endTimestamp = startTimestamp + estimatedTimeMs
@@ -146,7 +146,7 @@ class OffersUseCase {
       let skipAheadTime = estimatedTimeMs
 
       if (hasAppointments) {
-        const overlappingAppointment = nonFinishedAppointmentsByCustomerAndEmployeeOnDay.find(appointment => {
+        const overlappingAppointment = nonFinishedAppointmentsByCustomerAndProfessionalOnDay.find(appointment => {
           const appointmentStart = appointment.appointmentDate.getTime()
           const appointmentDuration = appointment.estimatedTime * 60_000
           const appointmentEnd = appointmentStart + appointmentDuration
@@ -174,11 +174,11 @@ class OffersUseCase {
     return { availableSchedulling }
   }
 
-  public async executeFindByEmployeeIdPaginated (
-    employeeId: string,
+  public async executeFindByProfessionalIdPaginated(
+    professionalId: string,
     params: PaginatedRequest<OffersFilters>
   ): Promise<PaginatedResult<Offer>> {
-    const result = await this.offerRepository.findByEmployeeIdPaginated(employeeId, params)
+    const result = await this.offerRepository.findByProfessionalIdPaginated(professionalId, params)
 
     return result
   }

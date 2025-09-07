@@ -23,7 +23,7 @@ class AppointmentServiceSchemas {
     appointmentDate: z.date().refine((date) => !isNaN(date.getTime()) && date < new Date()).optional()
   }).strict()
 
-  public static employeeUpdateSchema = z.object({
+  public static professionalUpdateSchema = z.object({
     status: z.nativeEnum(Status).optional(),
     appointmentDate: z.date().refine((date) => !isNaN(date.getTime()) && date < new Date()).optional()
   }).strict()

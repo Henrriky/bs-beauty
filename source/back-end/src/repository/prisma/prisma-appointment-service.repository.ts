@@ -26,7 +26,7 @@
 //           select: {
 //             id: true,
 //             estimatedTime: true,
-//             employee: true,
+//             professional: true,
 //             price: true,
 //             service: {
 //               select: {
@@ -97,18 +97,18 @@
 //     return deletedAppointmentService
 //   }
 
-//   public async findByCustomerOrEmployeeId (customerOrEmployeeId: string) {
+//   public async findByCustomerOrProfessionalId (customerOrProfessionalId: string) {
 //     const appointments = await prismaClient.appointmentService.findMany({
 //       where: {
 //         OR: [
 //           {
 //             appointment: {
-//               customerId: customerOrEmployeeId
+//               customerId: customerOrProfessionalId
 //             }
 //           },
 //           {
 //             serviceOffered: {
-//               employeeId: customerOrEmployeeId
+//               professionalId: customerOrProfessionalId
 //             }
 //           }
 //         ]
@@ -126,7 +126,7 @@
 //           select: {
 //             id: true,
 //             estimatedTime: true,
-//             employee: true,
+//             professional: true,
 //             service: {
 //               select: {
 //                 name: true

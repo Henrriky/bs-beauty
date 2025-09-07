@@ -1,4 +1,4 @@
-import { type $Enums, type Employee } from '@prisma/client'
+import { Appointment, type $Enums, type Professional } from '@prisma/client'
 import { type Decimal } from '@prisma/client/runtime/library'
 
 export interface FindNonFinishedByUserAndDay extends Array<{
@@ -21,7 +21,7 @@ export interface FindAppointmentByCustomerId {
   serviceOffered: {
     id: string
     estimatedTime: number
-    employee: Employee
+    professional: Professional
     service: {
       name: string
     }
@@ -41,7 +41,7 @@ export interface FindAppointmentById {
     id: string
     estimatedTime: number
     price: Decimal
-    employee: Employee
+    professional: Professional
     service: {
       name: string
     }

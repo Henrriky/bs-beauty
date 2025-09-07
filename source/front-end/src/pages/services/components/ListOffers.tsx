@@ -8,21 +8,21 @@ import { Service } from '../../../store/service/types'
 import { Offer } from '../../../store/offer/types'
 
 interface ListOffersProps {
-  employeeId: string
+  professionalId: string
   selectOffer: (param: Offer) => void
   openUpdateModal: () => void
   openDeleteModal: () => void
 }
 
 function ListOffers({
-  employeeId,
+  professionalId,
   openUpdateModal,
   openDeleteModal,
   selectOffer,
 }: ListOffersProps) {
   // TODO: CARREGAR MAIS OFERTAS QUANDO CHEGA NO LIMITE PADRÃO (10)
   const { data, isLoading, isError } = offerAPI.useGetOffersQuery({
-    employeeId,
+    professionalId,
   })
 
   const offers = data?.data
@@ -92,7 +92,6 @@ function ListOffers({
                 const service = servicesData.filter(
                   (serviceData) => serviceData.service?.id === offer.serviceId,
                 )
-
                 return (
                   <Button
                     label={

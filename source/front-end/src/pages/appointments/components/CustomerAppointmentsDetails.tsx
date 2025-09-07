@@ -74,7 +74,7 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
           type="text"
           variant="solid"
           value={
-            props.appointment.offer?.employee?.name ??
+            props.appointment.offer?.professional?.name ??
             'Funcionário não definido'
           }
           disabled

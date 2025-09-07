@@ -1,16 +1,16 @@
 import { prismaClient } from '../../../lib/prisma'
-import { PrismaEmployeeRepository } from '../../../repository/prisma/prisma-employee.repository'
-import { EmployeesUseCase } from '../../../services/employees.use-case'
+import { PrismaProfessionalRepository } from '../../../repository/prisma/prisma-professional.repository'
+import { ProfessionalsUseCase } from '../../../services/professionals.use-case'
 
-describe('EmployeesUseCase', () => {
-  let employeesUseCase: EmployeesUseCase
+describe('ProfessionalsUseCase', () => {
+  let professionalsUseCase: ProfessionalsUseCase
 
   beforeAll(async () => {
-    employeesUseCase = new EmployeesUseCase(new PrismaEmployeeRepository())
+    professionalsUseCase = new ProfessionalsUseCase(new PrismaProfessionalRepository())
   })
 
   beforeEach(async () => {
-    await prismaClient.employee.deleteMany({})
+    await prismaClient.professional.deleteMany({})
   })
 
   afterAll(async () => {
@@ -18,96 +18,96 @@ describe('EmployeesUseCase', () => {
   })
 
   it('should be defined', () => {
-    expect(employeesUseCase).toBeDefined()
+    expect(professionalsUseCase).toBeDefined()
   })
 
   describe('executeFindAll', () => {
-    it('should retrieve all employees', async () => {
+    it('should retrieve all professionals', async () => {
       // arrange
-      const employee1 = await prismaClient.employee.create({
+      const professional1 = await prismaClient.professional.create({
         data: { name: 'John Doe', email: 'john.doe@example.com' }
       })
 
-      const employee2 = await prismaClient.employee.create({
+      const professional2 = await prismaClient.professional.create({
         data: { name: 'Thomas Doe', email: 'thomas.doe@example.com' }
       })
 
-      const employee3 = await prismaClient.employee.create({
+      const professional3 = await prismaClient.professional.create({
         data: { name: 'Leon S. Kennedy', email: 'leon.s.kennedy@example.com' }
       })
 
       // act
-      const result = await employeesUseCase.executeFindAll()
+      const result = await professionalsUseCase.executeFindAll()
 
       // assert
-      expect(result.employees).toHaveLength(3)
-      expect(result.employees[0].name).toBe(employee1.name)
-      expect(result.employees[0].email).toBe(employee1.email)
-      expect(result.employees[1].name).toBe(employee2.name)
-      expect(result.employees[1].email).toBe(employee2.email)
-      expect(result.employees[2].name).toBe(employee3.name)
-      expect(result.employees[2].email).toBe(employee3.email)
+      expect(result.professionals).toHaveLength(3)
+      expect(result.professionals[0].name).toBe(professional1.name)
+      expect(result.professionals[0].email).toBe(professional1.email)
+      expect(result.professionals[1].name).toBe(professional2.name)
+      expect(result.professionals[1].email).toBe(professional2.email)
+      expect(result.professionals[2].name).toBe(professional3.name)
+      expect(result.professionals[2].email).toBe(professional3.email)
     })
   })
 
   describe('executeFindById', () => {
-    it('should return an employee by id from the database', async () => {
+    it('should return an professional by id from the database', async () => {
       // arrange
-      const employee = await prismaClient.employee.create({
+      const professional = await prismaClient.professional.create({
         data: { id: 'random-uuid', name: 'John Doe', email: 'john@example.com' }
       })
 
       // act
-      const result = await employeesUseCase.executeFindById('random-uuid')
+      const result = await professionalsUseCase.executeFindById('random-uuid')
 
       // assert
-      expect(result).toEqual(employee)
+      expect(result).toEqual(professional)
     })
   })
 
   describe('executeCreate', () => {
-    it('should create a new employee and store in the database', async () => {
+    it('should create a new professional and store in the database', async () => {
       // arrange
-      const newEmployee = { name: 'Mark Smith', email: 'mark@example.com' }
+      const newProfessional = { name: 'Mark Smith', email: 'mark@example.com' }
 
       // act
-      const createdEmployee = await employeesUseCase.executeCreate(newEmployee)
+      const createdProfessional = await professionalsUseCase.executeCreate(newProfessional)
 
       // assert
-      const employeeFromDb = await prismaClient.employee.findUnique({ where: { email: newEmployee.email } })
-      expect(createdEmployee).toEqual(employeeFromDb)
+      const professionalFromDb = await prismaClient.professional.findUnique({ where: { email: newProfessional.email } })
+      expect(createdProfessional).toEqual(professionalFromDb)
     })
   })
 
   describe('executeUpdate', () => {
-    it('should update an employee and save changes in the database', async () => {
+    it('should update an professional and save changes in the database', async () => {
       // arrange
-      const employee = await prismaClient.employee.create({
+      const professional = await prismaClient.professional.create({
         data: { id: 'random-uuid', name: 'John Doe', email: 'john@example.com' }
       })
 
       // act & assert
-      const updatedEmployee = await employeesUseCase.executeUpdate('random-uuid', { name: 'John Updated' })
-      expect(updatedEmployee.name).toEqual('John Updated')
-      const employeeFromDb = await prismaClient.employee.findUnique({ where: { id: employee.id } })
-      expect(employeeFromDb?.name).toEqual('John Updated')
+      const updatedProfessional = await professionalsUseCase.executeUpdate('random-uuid', { name: 'John Updated' })
+      expect(updatedProfessional.name).toEqual('John Updated')
+      const professionalFromDb = await prismaClient.professional.findUnique({ where: { id: professional.id } })
+      expect(professionalFromDb?.name).toEqual('John Updated')
     })
   })
 
   describe('executeDelete', () => {
-    it('should delete an employee from the database', async () => {
+    it('should delete an professional from the database', async () => {
       // arrange
-      const employee = await prismaClient.employee.create({
+      const professional = await prismaClient.professional.create({
         data: { id: 'random-uuid', name: 'John Doe', email: 'john@example.com' }
       })
 
       // act
-      const deletedEmployee = await employeesUseCase.executeDelete(employee.id)
+      const deletedProfessional = await professionalsUseCase.executeDelete(professional.id)
 
       // assert
-      expect(deletedEmployee.id).toEqual(employee.id)
-      const employeeFromDb = await prismaClient.employee.findUnique({ where: { id: employee.id } })
-      expect(employeeFromDb).toBeNull()
+      expect(deletedProfessional.id).toEqual(professional.id)
+      const professionalFromDb = await prismaClient.professional.findUnique({ where: { id: professional.id } })
+      expect(professionalFromDb).toBeNull()
     })
   })
 })

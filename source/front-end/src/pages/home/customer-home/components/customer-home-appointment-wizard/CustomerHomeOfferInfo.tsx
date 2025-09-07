@@ -1,12 +1,12 @@
 import { BanknotesIcon, ClockIcon } from '@heroicons/react/24/outline'
 
-interface CustomerHomeEmployeeCardOfferInfoProps {
+interface CustomerHomeProfessionalCardOfferInfoProps {
   offerPrice: string
   offerEstimatedTime: number | string
 }
 
-function CustomerHomeEmployeeCardOfferInfo(
-  props: CustomerHomeEmployeeCardOfferInfoProps,
+function CustomerHomeProfessionalCardOfferInfo(
+  props: CustomerHomeProfessionalCardOfferInfoProps,
 ) {
   return (
     <div className="flex flex-col gap-1">
@@ -29,4 +29,4 @@ function CustomerHomeEmployeeCardOfferInfo(
   )
 }
 
-export default CustomerHomeEmployeeCardOfferInfo
+export default CustomerHomeProfessionalCardOfferInfo

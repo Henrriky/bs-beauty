@@ -7,47 +7,47 @@ interface ShiftOutput {
 }
 
 class ShiftUseCase {
-  constructor (private readonly shiftRepository: ShiftRepository) {}
+  constructor(private readonly shiftRepository: ShiftRepository) { }
 
-  public async executeFindAllByEmployeeId (employeeId: string | undefined): Promise<ShiftOutput> {
-    const shifts = await this.shiftRepository.findAllByEmployeeId(employeeId)
+  public async executeFindAllByProfessionalId(professionalId: string | undefined): Promise<ShiftOutput> {
+    const shifts = await this.shiftRepository.findAllByProfessionalId(professionalId)
     RecordExistence.validateManyRecordsExistence(shifts, 'shifts')
 
     return { shifts }
   }
 
-  public async executeFindById (shiftId: string) {
+  public async executeFindById(shiftId: string) {
     const shift = await this.shiftRepository.findById(shiftId)
     RecordExistence.validateRecordExistence(shift, 'Shift')
 
     return shift
   }
 
-  public async executeFindByEmployeeId (employeeId: string | undefined): Promise<ShiftOutput> {
-    const shifts = await this.shiftRepository.findByEmployeeId(employeeId)
+  public async executeFindByProfessionalId(professionalId: string | undefined): Promise<ShiftOutput> {
+    const shifts = await this.shiftRepository.findByProfessionalId(professionalId)
     RecordExistence.validateManyRecordsExistence(shifts, 'shifts')
 
     return { shifts }
   }
 
-  public async executeCreate (shiftToCreate: Prisma.ShiftCreateInput) {
+  public async executeCreate(shiftToCreate: Prisma.ShiftCreateInput) {
     const shift = shiftToCreate as unknown as Shift
-    const employeeId = shift.employeeId
+    const professionalId = shift.professionalId
     const weekDay = shift.weekDay
-    const shiftFound = await this.shiftRepository.findByEmployeeAndWeekDay(employeeId, weekDay)
+    const shiftFound = await this.shiftRepository.findByProfessionalAndWeekDay(professionalId, weekDay)
     RecordExistence.validateRecordNonExistence(shiftFound, 'Shift')
     const newShift = await this.shiftRepository.create(shiftToCreate)
 
     return newShift
   }
 
-  public async executeUpdate (shiftId: string, shiftToUpdate: Prisma.ShiftUpdateInput) {
-    const existingShift = await this.executeFindByIdAndEmployeeId(shiftId, shiftToUpdate.employee?.connect?.id as unknown as string)
+  public async executeUpdate(shiftId: string, shiftToUpdate: Prisma.ShiftUpdateInput) {
+    const existingShift = await this.executeFindByIdAndProfessionalId(shiftId, shiftToUpdate.professional?.connect?.id as unknown as string)
     const updatedWeekDay = shiftToUpdate.weekDay as unknown as WeekDays
 
     if (updatedWeekDay != null) {
-      const employeeId = existingShift?.employeeId as unknown as string
-      const shiftFound = await this.shiftRepository.findByEmployeeAndWeekDay(employeeId, updatedWeekDay)
+      const professionalId = existingShift?.professionalId as unknown as string
+      const shiftFound = await this.shiftRepository.findByProfessionalAndWeekDay(professionalId, updatedWeekDay)
       RecordExistence.validateRecordNonExistence(shiftFound, 'Shift')
     }
 
@@ -56,15 +56,15 @@ class ShiftUseCase {
     return updatedShift
   }
 
-  public async executeDelete (shiftId: string) {
+  public async executeDelete(shiftId: string) {
     await this.executeFindById(shiftId)
     const deletedShift = await this.shiftRepository.delete(shiftId)
 
     return deletedShift
   }
 
-  public async executeFindByIdAndEmployeeId (shiftId: string, employeeId: string) {
-    const shift = await this.shiftRepository.findByIdAndEmployeeId(shiftId, employeeId)
+  public async executeFindByIdAndProfessionalId(shiftId: string, professionalId: string) {
+    const shift = await this.shiftRepository.findByIdAndProfessionalId(shiftId, professionalId)
     RecordExistence.validateRecordExistence(shift, 'Shift')
 
     return shift

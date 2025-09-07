@@ -4,7 +4,7 @@
 // import { type CustomerRepository } from '../repository/protocols/customer.repository'
 // import { CustomError } from '../utils/errors/custom.error.util'
 // import { FindAppointmentServiceById } from '../repository/types/appointment-repository.types'
-// import { EmployeeRepository } from '../repository/protocols/employee.repository'
+// import { ProfessionalRepository } from '../repository/protocols/professional.repository'
 
 // interface AppointmentServiceOutput {
 //   appointmentServices: AppointmentService[]
@@ -14,7 +14,7 @@
 //   constructor (
 //     private readonly appointmentServiceRepository: AppointmentServiceRepository,
 //     private readonly customerServiceRepository: CustomerRepository,
-//     private readonly employeeServiceRepository: EmployeeRepository
+//     private readonly professionalServiceRepository: ProfessionalRepository
 //   ) { }
 
 //   public async executeFindAll (): Promise<AppointmentServiceOutput> {
@@ -72,14 +72,14 @@
 //     return deletedAppointmentService
 //   }
 
-//   public async findByCustomerOrEmployeeId (customerOrEmployeeId: string) {
-//     const customer = await this.customerServiceRepository.findById(customerOrEmployeeId)
-//     const employee = await this.employeeServiceRepository.findById(customerOrEmployeeId)
-//     if (customer === null && employee === null) {
-//       throw new CustomError('Customer or Employee not found', 404, 'Please, provide a valid customer or employee')
+//   public async findByCustomerOrProfessionalId (customerOrProfessionalId: string) {
+//     const customer = await this.customerServiceRepository.findById(customerOrProfessionalId)
+//     const professional = await this.professionalServiceRepository.findById(customerOrProfessionalId)
+//     if (customer === null && professional === null) {
+//       throw new CustomError('Customer or Professional not found', 404, 'Please, provide a valid customer or professional')
 //     }
 
-//     const { appointments } = await this.appointmentServiceRepository.findByCustomerOrEmployeeId(customerOrEmployeeId)
+//     const { appointments } = await this.appointmentServiceRepository.findByCustomerOrProfessionalId(customerOrProfessionalId)
 
 //     return { appointments }
 //   }

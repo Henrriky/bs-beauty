@@ -39,11 +39,11 @@ class OffersController {
     }
   }
 
-  public static async handleFindByEmployeeId (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByProfessionalId (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeOffersUseCaseFactory()
-      const employeeId = req.params.employeeId
-      const { offers } = await useCase.executeFindByEmployeeId(employeeId)
+      const professionalId = req.params.professionalId
+      const { offers } = await useCase.executeFindByProfessionalId(professionalId)
 
       res.send({ offers })
     } catch (error) {
@@ -107,14 +107,14 @@ class OffersController {
     }
   }
 
-  public static async handleFindByEmployeeIdPaginated (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByProfessionalIdPaginated (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeOffersUseCaseFactory()
       const parsed = offerQuerySchema.parse(req.query)
       const { page, limit, ...filters } = parsed
-      const employeeId = req.params.employeeId
-      const result = await useCase.executeFindByEmployeeIdPaginated(
-        employeeId,
+      const professionalId = req.params.professionalId
+      const result = await useCase.executeFindByProfessionalIdPaginated(
+        professionalId,
         {
           page,
           limit,

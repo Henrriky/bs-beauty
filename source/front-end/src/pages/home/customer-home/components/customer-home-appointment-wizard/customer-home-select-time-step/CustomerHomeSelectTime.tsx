@@ -27,7 +27,7 @@ const maxDate = maxDateCopy
 function CustomerHomeSelectTimeContainer() {
   const { watch, setValue } = useFormContext<CreateAppointmentFormData>()
   const serviceOfferedId = watch('serviceOfferedId')
-  const employeeId = watch('employeeId')
+  const professionalId = watch('professionalId')
   const appointmentDayPicked = watch('appointmentDayPicked')
   const appointmentDateStr = watch('appointmentDate')
 
@@ -39,7 +39,7 @@ function CustomerHomeSelectTimeContainer() {
     data: schedullingData,
     isLoading: schedullingIsLoading,
     isError: schedullingIsError,
-  } = offerAPI.useFetchForAvailableSchedulesFromEmployeeOfferQuery(
+  } = offerAPI.useFetchForAvailableSchedulesFromProfessionalOfferQuery(
     {
       serviceOfferedId,
       dayToFetchAvailableSchedulling: appointmentDayPicked
@@ -51,7 +51,7 @@ function CustomerHomeSelectTimeContainer() {
     },
   )
 
-  if (!serviceOfferedId || !employeeId) {
+  if (!serviceOfferedId || !professionalId) {
     toast.error(
       'Por favor, selecione um dos profissionais para acessar os horários',
     )
@@ -66,18 +66,18 @@ function CustomerHomeSelectTimeContainer() {
   }
 
   const { data, isLoading, isError, error } =
-    shiftAPI.useFindShiftsByEmployeeQuery({
-      employeeId,
+    shiftAPI.useFindShiftsByProfessionalQuery({
+      professionalId,
     })
 
   if (isLoading)
     return (
-      <BSBeautyLoading title="Carregando os horários do funcionários escolhido..." />
+      <BSBeautyLoading title="Carregando os horários do profissionais escolhido..." />
     )
 
   if (isError) {
     toast.error('Erro ao carregar os horários do funcionário')
-    console.error(`Error trying to fetch employee time`, error)
+    console.error(`Error trying to fetch professional time`, error)
 
     return (
       <ErrorMessage
@@ -166,7 +166,7 @@ function CustomerHomeSelectTimeContainer() {
         <div className="bg-[#595149] w-full h-0.5 mb-4"></div>
         <div>
           {schedullingIsLoading ? (
-            <BSBeautyLoading title="Carregando os horários do funcionários escolhido..." />
+            <BSBeautyLoading title="Carregando os horários do profissionais escolhido..." />
           ) : schedullingIsError ? (
             <ErrorMessage
               message={

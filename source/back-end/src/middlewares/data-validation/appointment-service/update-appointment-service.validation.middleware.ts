@@ -7,7 +7,7 @@
 
 // const validateUpdateAppointmentService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 //   try {
-//     const roles: Role[] = [Role.MANAGER, Role.EMPLOYEE]
+//     const roles: Role[] = [Role.MANAGER, Role.PROFESSIONAL]
 //     const role = req.headers.role as Role
 //     const requestBody = req.body
 
@@ -16,7 +16,7 @@
 //     }
 
 //     if (roles.includes(role)) {
-//       AppointmentServiceSchemas.employeeUpdateSchema.parse(requestBody)
+//       AppointmentServiceSchemas.professionalUpdateSchema.parse(requestBody)
 //     }
 
 //     requestBody.appointmentDate = DateFormatter.formatAppointmentDate(req)

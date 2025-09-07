@@ -1,16 +1,16 @@
 import { type z } from 'zod'
 import { type CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
-import { type EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
+import { type ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { UserType } from '@prisma/client'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
-import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
+import { type ProfessionalRepository } from '../../../repository/protocols/professional.repository'
 import { InvalidUserTypeUseCaseError } from '../errors/invalid-user-type-use-case-error'
 import { ResourceWithAttributAlreadyExists } from '../errors/resource-with-attribute-alreay-exists'
 
-type CompleteCustomerOrEmployeeRegister = z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema> | z.infer<typeof EmployeeSchemas.employeeCompleteRegisterBodySchema>
+type CompleteCustomerOrProfessionalRegister = z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema> | z.infer<typeof ProfessionalSchemas.professionalCompleteRegisterBodySchema>
 
 interface CompleteUserRegisterUseCaseInput {
-  userData: CompleteCustomerOrEmployeeRegister
+  userData: CompleteCustomerOrProfessionalRegister
   userId: string
   userEmail: string
   userType: UserType
@@ -19,10 +19,10 @@ interface CompleteUserRegisterUseCaseInput {
 class CompleteUserRegisterUseCase {
   constructor (
     private readonly customerRepository: CustomerRepository,
-    private readonly employeeRepository: EmployeeRepository
+    private readonly professionalRepository: ProfessionalRepository
   ) { }
 
-  async execute ({ userData, userId, userEmail, userType }: CompleteUserRegisterUseCaseInput): Promise<void> {
+  async execute({ userData, userId, userEmail, userType }: CompleteUserRegisterUseCaseInput): Promise<void> {
     const data = {
       ...userData,
       registerCompleted: true
@@ -43,8 +43,8 @@ class CompleteUserRegisterUseCase {
         userEmail,
         data
       )
-    } else if (userType === UserType.EMPLOYEE || userType === UserType.MANAGER) {
-      await this.employeeRepository.updateByEmailAndGoogleId(
+    } else if (userType === UserType.PROFESSIONAL || userType === UserType.MANAGER) {
+      await this.professionalRepository.updateByEmailAndGoogleId(
         userId,
         userEmail,
         data
@@ -56,4 +56,4 @@ class CompleteUserRegisterUseCase {
   }
 }
 
-export { CompleteUserRegisterUseCase, type CompleteCustomerOrEmployeeRegister }
+export { CompleteUserRegisterUseCase, type CompleteCustomerOrProfessionalRegister }

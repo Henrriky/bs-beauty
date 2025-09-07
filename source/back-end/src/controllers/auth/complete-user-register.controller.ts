@@ -4,7 +4,7 @@ import { type Request, type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { z } from 'zod'
 import { formatValidationErrors } from '../../utils/formatting/zod-validation-errors.formatting.util'
-import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
+import { ProfessionalSchemas } from '../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { CustomerSchemas } from '../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
 import { makeCompleteUserRegisterUseCase } from '../../factory/auth/make-complete-user-register.use-case.factory'
 import { UserType } from '@prisma/client'
@@ -13,8 +13,8 @@ import { ResourceWithAttributAlreadyExists } from '../../services/use-cases/erro
 
 const userTypesToSchemas = {
   [UserType.CUSTOMER]: CustomerSchemas.customerCompleteRegisterBodySchema,
-  [UserType.EMPLOYEE]: EmployeeSchemas.employeeCompleteRegisterBodySchema,
-  [UserType.MANAGER]: EmployeeSchemas.employeeCompleteRegisterBodySchema
+  [UserType.PROFESSIONAL]: ProfessionalSchemas.professionalCompleteRegisterBodySchema,
+  [UserType.MANAGER]: ProfessionalSchemas.professionalCompleteRegisterBodySchema
 }
 
 class CompleteUserRegisterController {
@@ -31,7 +31,7 @@ class CompleteUserRegisterController {
         throw new InvalidUserTypeUseCaseError(`Invalid user type provided: ${req.user.userType}`)
       }
 
-      const customerOrEmployee = schema.parse(req.body)
+      const customerOrProfessional = schema.parse(req.body)
 
       if (!req.user.sub) {
         res.status(StatusCodes.BAD_REQUEST).send({ message: 'User ID is missing' })
@@ -41,7 +41,7 @@ class CompleteUserRegisterController {
       const usecase = makeCompleteUserRegisterUseCase()
 
       await usecase.execute({
-        userData: customerOrEmployee,
+        userData: customerOrProfessional,
         userId: req.user.sub,
         userType: req.user.userType,
         userEmail: req.user.email

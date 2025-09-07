@@ -14,7 +14,7 @@ import Title from '../../components/texts/Title'
 
 const userTypeToAppointmentComponents = {
   [UserType.CUSTOMER]: CustomerAppointments,
-  [UserType.EMPLOYEE]: CustomerAppointments,
+  [UserType.PROFESSIONAL]: CustomerAppointments,
   [UserType.MANAGER]: CustomerAppointments,
 }
 
@@ -24,7 +24,7 @@ function Appointments() {
   const user = useAppSelector((state) => state.auth.user!)
 
   const { data, isLoading, isError, error } =
-    appointmentAPI.useFindAppointmentsByCustomerOrEmployeeIdQuery()
+    appointmentAPI.useFindAppointmentsByCustomerOrProfessionalIdQuery()
 
   if (isError) {
     toast.error('Erro ao carregar os agendamentos')

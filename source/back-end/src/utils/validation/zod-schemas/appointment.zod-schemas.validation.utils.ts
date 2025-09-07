@@ -18,7 +18,7 @@ class AppointmentSchemas {
     observation: z.string().max(255).transform((val) => (val === undefined || val.trim() === '' ? '' : val.trim())).refine((string) => RegexPatterns.content.test(string)).optional()
   }).strict()
 
-  public static employeeUpdateSchema = z.object({
+  public static professionalUpdateSchema = z.object({
     status: z.nativeEnum(Status).optional()
   }).strict()
 }

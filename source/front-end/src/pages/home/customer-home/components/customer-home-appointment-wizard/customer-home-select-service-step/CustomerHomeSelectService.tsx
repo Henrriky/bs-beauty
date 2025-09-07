@@ -6,7 +6,7 @@ import { serviceAPI } from '../../../../../../store/service/service-api'
 import { CreateAppointmentFormData } from '../types'
 import CustomerHomeServiceCard from './CustomerHomeServiceCard'
 import { ErrorMessage } from '../../../../../../components/feedback/ErrorMessage'
-import { employeeAPI } from '../../../../../../store/employee/employee-api'
+import { professionalAPI } from '../../../../../../store/professional/professional-api'
 import { FaceFrownIcon } from '@heroicons/react/24/outline'
 
 interface Props {
@@ -18,9 +18,9 @@ function CustomerHomeSelectServiceContainer(props: Props) {
     useFormContext<CreateAppointmentFormData>()
   const serviceSelectedId = watch('serviceId')
   const serviceOfferedId = watch('serviceOfferedId')
-  const employeeId = watch('employeeId')
+  const professionalId = watch('professionalId')
 
-  if (!employeeId && props.currentFlow === 'professional') {
+  if (!professionalId && props.currentFlow === 'professional') {
     toast.error(
       'Por favor, selecione um funcionário para acessar a etapa de selecionar os serviços',
     )
@@ -44,8 +44,8 @@ function CustomerHomeSelectServiceContainer(props: Props) {
     isLoading: isLoadingOffers,
     isError: isErrorOffers,
     error: offersError,
-  } = employeeAPI.useFetchServicesOfferedByEmployeeQuery(
-    { employeeId },
+  } = professionalAPI.useFetchServicesOfferedByProfessionalQuery(
+    { professionalId },
     { skip: props.currentFlow !== 'professional' },
   )
 
@@ -53,8 +53,8 @@ function CustomerHomeSelectServiceContainer(props: Props) {
   // TODO: POSSÍVEL CRIAÇÃO DE INPUT DE BUSCA PARA BUSCAR PELO NOME (O PARÂMETRO JÁ ESTÁ FEITO NA API)
 
   const servicesData = Array.isArray(data?.data) ? data.data : []
-  const offersDataArray = Array.isArray(offersData?.employee.offers)
-    ? offersData?.employee.offers
+  const offersDataArray = Array.isArray(offersData?.professional.offers)
+    ? offersData?.professional.offers
     : []
 
   const services =

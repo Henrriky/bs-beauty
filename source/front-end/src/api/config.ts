@@ -12,7 +12,7 @@ export const API_VARIABLES = {
   },
   USER_ENDPOINTS: {
     UPDATE_CUSTOMER_PROFILE: '/customers',
-    UPDATE_EMPLOYEE_PROFILE: '/employees',
+    UPDATE_PROFESSIONAL_PROFILE: '/professionals',
   },
   CUSTOMERS_ENDPOINTS: {
     FETCH_CUSTOMERS: '/customers',
@@ -20,12 +20,12 @@ export const API_VARIABLES = {
   },
   SERVICES_ENDPOINTS: {
     ENDPOINT: '/services',
-    FETCH_EMPLOYEES_OFFERING_SERVICE: (serviceId: string) =>
-      `/services/${serviceId}/offer/employees`,
+    FETCH_PROFESSIONALS_OFFERING_SERVICE: (serviceId: string) =>
+      `/services/${serviceId}/offer/professionals`,
   },
   OFFERS_ENDPOINTS: {
     ENDPOINT: '/offers',
-    FETCH_FOR_AVAILABLE_SCHEDULES_FROM_EMPLOYEE_OFFER: (
+    FETCH_FOR_AVAILABLE_SCHEDULES_FROM_PROFESSIONAL_OFFER: (
       serviceOfferedId: string,
       dayToFetchAvailableSchedulling: string,
     ) =>
@@ -33,16 +33,17 @@ export const API_VARIABLES = {
   },
   SHIFTS_ENDPOINTS: {
     ENDPOINT: '/shifts',
-    FIND_SHIFTS_BY_EMPLOYEE: (employeeId: string) =>
-      `/shifts/employee/${employeeId}`,
+    FIND_SHIFTS_BY_PROFESSIONAL: (professionalId: string) =>
+      `/shifts/professional/${professionalId}`,
     UPDATE_SHIFT: (shiftId: string) => `/shifts/${shiftId}`,
   },
-  EMPLOYEES_ENDPOINTS: {
-    FETCH_EMPLOYEES: '/employees',
-    CREATE_EMPLOYEE: '/employees',
-    DELETE_EMPLOYEE: (employeeId: string) => `/employees/${employeeId}`,
-    FETCH_SERVICES_OFFERED_BY_EMPLOYEE: (employeeId: string) =>
-      `/employees/${employeeId}/offers/service`,
+  PROFESSIONALS_ENDPOINTS: {
+    FETCH_PROFESSIONALS: '/professionals',
+    CREATE_PROFESSIONAL: '/professionals',
+    DELETE_PROFESSIONAL: (professionalId: string) =>
+      `/professionals/${professionalId}`,
+    FETCH_SERVICES_OFFERED_BY_PROFESSIONAL: (professionalId: string) =>
+      `/professionals/${professionalId}/offers/service`,
   },
   APPOINTMENTS_ENDPOINTS: {
     CREATE_APPOINTMENT: '/appointments',
@@ -57,7 +58,7 @@ export const API_VARIABLES = {
   },
   ANALYTICS_ENDPOINTS: {
     FETCH_ANALYTICS: '/analytics',
-    FETCH_ANALYTICS_BY_EMPLOYEE: (employeeId: string) =>
-      `/analytics/${employeeId}`,
+    FETCH_ANALYTICS_BY_PROFESSIONAL: (professionalId: string) =>
+      `/analytics/${professionalId}`,
   },
 } as const

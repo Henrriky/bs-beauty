@@ -14,13 +14,13 @@ export const analyticsAPI = createApi({
         method: 'GET',
       }),
     }),
-    fetchAnalyticsByEmployeeId: builder.query<
+    fetchAnalyticsByProfessionalId: builder.query<
       Analytics,
-      { employeeId: string }
+      { professionalId: string }
     >({
-      query: ({ employeeId }) => ({
-        url: API_VARIABLES.ANALYTICS_ENDPOINTS.FETCH_ANALYTICS_BY_EMPLOYEE(
-          employeeId,
+      query: ({ professionalId }) => ({
+        url: API_VARIABLES.ANALYTICS_ENDPOINTS.FETCH_ANALYTICS_BY_PROFESSIONAL(
+          professionalId,
         ),
         method: 'GET',
       }),

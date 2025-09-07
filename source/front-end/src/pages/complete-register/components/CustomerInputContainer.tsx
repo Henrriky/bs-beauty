@@ -6,13 +6,13 @@ import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.
 import { Button } from '../../../components/button/Button'
 import {
   CustomerCompleteRegisterFormData,
-  OnSubmitEmployeeOrCustomerForm,
+  OnSubmitProfessionalOrCustomerForm,
 } from '../types'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 
 interface CustomerInputContainerProps {
   isLoading: boolean
-  handleSubmit: OnSubmitEmployeeOrCustomerForm
+  handleSubmit: OnSubmitProfessionalOrCustomerForm
 }
 
 // TODO: Separate Social Media to a Component

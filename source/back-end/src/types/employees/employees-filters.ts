@@ -1,4 +1,4 @@
-export interface EmployeesFilters {
+export interface ProfessionalsFilters {
   name?: string
   email?: string
 }

@@ -29,7 +29,7 @@ function ServiceDashboard() {
   const { data } = authAPI.useFetchUserInfoQuery()
   const user = useAppSelector((state) => state.auth.user!)
   const isManager = user.userType === UserType.MANAGER
-  const employeeId = data?.user.id
+  const professionalId = data?.user.id
 
   const toggleDiv = (div: string | SetStateAction<null>) => {
     if (expandedDiv === div) {
@@ -70,7 +70,7 @@ function ServiceDashboard() {
             text="Ofertas criadas"
             node={
               <ListOffers
-                employeeId={employeeId as string}
+                professionalId={professionalId as string}
                 openUpdateModal={() => setOpenUpdateOfferModal(true)}
                 openDeleteModal={() => setOpenDeleteOfferModal(true)}
                 selectOffer={(offer) => setOffer(offer)}
@@ -99,7 +99,7 @@ function ServiceDashboard() {
           <CreateOfferForm
             service={service as unknown as Service}
             onClose={() => setOpenCreateOfferModal(false)}
-            employeeId={employeeId}
+            professionalId={professionalId}
           />
         </Modal>
         <Modal

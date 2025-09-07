@@ -1,21 +1,21 @@
 import { z } from 'zod'
 import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
-import { EmployeeSchemas } from '../../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
+import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 
 type CustomerCompleteRegisterFormData = z.infer<
   typeof CustomerSchemas.customerCompleteRegisterBodySchema
 >
 
-type EmployeeCompleteRegisterFormData = z.infer<
-  typeof EmployeeSchemas.employeeUpdateSchema
+type ProfessionalCompleteRegisterFormData = z.infer<
+  typeof ProfessionalSchemas.professionalUpdateSchema
 >
 
-type OnSubmitEmployeeOrCustomerForm = (
-  data: CustomerCompleteRegisterFormData | EmployeeCompleteRegisterFormData,
+type OnSubmitProfessionalOrCustomerForm = (
+  data: CustomerCompleteRegisterFormData | ProfessionalCompleteRegisterFormData,
 ) => Promise<void>
 
 export type {
   CustomerCompleteRegisterFormData,
-  EmployeeCompleteRegisterFormData,
-  OnSubmitEmployeeOrCustomerForm,
+  ProfessionalCompleteRegisterFormData,
+  OnSubmitProfessionalOrCustomerForm,
 }

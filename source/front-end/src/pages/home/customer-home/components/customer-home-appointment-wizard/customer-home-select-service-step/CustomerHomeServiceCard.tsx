@@ -1,10 +1,11 @@
 import { BriefcaseIcon } from '@heroicons/react/24/outline'
 import CustomerHomeServiceCardTitle from './CustomerHomeServiceCardTitle'
 import CustomerHomeServiceCardDescription from './CustomerHomeServiceCardDescription'
-import { ServicesOfferedByEmployeeOffer } from '../../../../../../store/employee/types'
+import { ServicesOfferedByProfessionalOffer } from '../../../../../../store/professional/types'
 import CustomerHomeOfferInfo from '../CustomerHomeOfferInfo'
 
-interface CustomerHomeServiceCardProps extends ServicesOfferedByEmployeeOffer {
+interface CustomerHomeServiceCardProps
+  extends ServicesOfferedByProfessionalOffer {
   key: string
   for: string
   isSelected: boolean

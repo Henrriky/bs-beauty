@@ -1,12 +1,12 @@
 import { type Prisma } from '@prisma/client'
 
-interface EmployeesOfferingService {
+interface ProfessionalsOfferingService {
   id: string
   offers: Array<{
     id: string
     estimatedTime: number
     price: Prisma.Decimal
-    employee: {
+    professional: {
       id: string
       name: string | null
       specialization: string | null
@@ -15,4 +15,4 @@ interface EmployeesOfferingService {
   }>
 }
 
-export type { EmployeesOfferingService }
+export type { ProfessionalsOfferingService }

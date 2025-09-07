@@ -5,7 +5,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { API_VARIABLES } from '../../api/config'
 import {
   CustomerUpdateAppointmentFormData,
-  EmployeeUpdateAppointmentFormData,
+  ProfessionalUpdateAppointmentFormData,
 } from '../../pages/appointments/types'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import {
@@ -31,7 +31,7 @@ export const appointmentAPI = createApi({
       void,
       (
         | CustomerUpdateAppointmentFormData
-        | EmployeeUpdateAppointmentFormData
+        | ProfessionalUpdateAppointmentFormData
       ) & { id: string }
     >({
       query: (data) => ({
@@ -45,7 +45,7 @@ export const appointmentAPI = createApi({
         },
       }),
     }),
-    findAppointmentsByCustomerOrEmployeeId: builder.query<
+    findAppointmentsByCustomerOrProfessionalId: builder.query<
       {
         appointments: FindAppointmentByCustomerId[]
       },
@@ -76,7 +76,7 @@ export const appointmentAPI = createApi({
         method: 'GET',
       }),
     }),
-    fetchEmployeeAppointmentsByAllOffers: builder.query<
+    fetchProfessionalAppointmentsByAllOffers: builder.query<
       { appointments: Appointment[] },
       string
     >({
@@ -85,7 +85,7 @@ export const appointmentAPI = createApi({
       async queryFn(userId, _queryApi, _extraOptions, fetchWithBQ) {
         try {
           const offersResponse = await fetchWithBQ({
-            url: `/offers/employee/${userId}`,
+            url: `/offers/professional/${userId}`,
           })
 
           const serviceOfferedIds =

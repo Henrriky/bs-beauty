@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { AppointmentSchemas } from "../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils"
 // import { AppointmentServiceSchemas } from "../../utils/validation/zod-schemas/appointment-service.zod-schemas.validation.util"
-import { Employee } from "../auth/types"
+import { Professional } from "../auth/types"
 
 export enum Status {
   PENDING = "PENDING",
@@ -42,7 +42,7 @@ export interface FindAppointmentByCustomerId {
   // serviceOffered: {
   //   id: string
   //   estimatedTime: number
-  //   employee: Employee
+  //   professional: Professional
   //   service: {
   //     name: string
   //   }
@@ -50,7 +50,7 @@ export interface FindAppointmentByCustomerId {
   offer: {
     id: string
     estimatedTime: number
-    employee: Employee
+    professional: Professional
     service: {
       name: string
     }
@@ -67,7 +67,7 @@ export interface FindAppointmentById {
     id: string
     estimatedTime: number
     price: string
-    employee: Employee
+    professional: Professional
     service: {
       name: string
     }

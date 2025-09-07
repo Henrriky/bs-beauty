@@ -4,13 +4,13 @@ import { appointmentNonFinishedStatus, type AppointmentRepository } from '../pro
 import { type FindNonFinishedByUserAndDay } from '../types/appointment-repository.types'
 
 class PrismaAppointmentRepository implements AppointmentRepository {
-  public async findAll () {
+  public async findAll() {
     const appointments = await prismaClient.appointment.findMany()
 
     return appointments
   }
 
-  public async findById (id: string) {
+  public async findById(id: string) {
     const appointment = await prismaClient.appointment.findUnique({
       where: { id },
       select: {
@@ -27,13 +27,13 @@ class PrismaAppointmentRepository implements AppointmentRepository {
             id: true,
             estimatedTime: true,
             price: true,
-            employeeId: true,
+            professionalId: true,
             service: {
               select: {
                 name: true
               }
             },
-            employee: true
+            professional: true
           }
         }
       }
@@ -42,16 +42,16 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointment
   }
 
-  public async findByCustomerOrEmployeeId (customerOrEmployeeId: string) {
+  public async findByCustomerOrProfessionalId(customerOrProfessionalId: string) {
     const appointments = await prismaClient.appointment.findMany({
       where: {
         OR: [
           {
-            customerId: customerOrEmployeeId
+            customerId: customerOrProfessionalId
           },
           {
             offer: {
-              employeeId: customerOrEmployeeId
+              professionalId: customerOrProfessionalId
             }
           }
         ]
@@ -69,13 +69,13 @@ class PrismaAppointmentRepository implements AppointmentRepository {
           select: {
             id: true,
             estimatedTime: true,
-            employeeId: true,
+            professionalId: true,
             service: {
               select: {
                 name: true
               }
             },
-            employee: true
+            professional: true
           }
         }
       }
@@ -84,7 +84,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async findByAppointmentDate (appointmentDate: Date) {
+  public async findByAppointmentDate(appointmentDate: Date) {
     const appointments = await prismaClient.appointment.findMany({
       where: { appointmentDate }
     })
@@ -92,7 +92,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async findByServiceOfferedId (serviceOfferedId: string) {
+  public async findByServiceOfferedId(serviceOfferedId: string) {
     const appointments = await prismaClient.appointment.findMany({
       where: { serviceOfferedId }
     })
@@ -119,7 +119,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
                 },
                 {
                   offer: {
-                    employeeId: userId
+                    professionalId: userId
                   }
                 }
               ]
@@ -166,7 +166,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return newAppointment
   }
 
-  public async update (id: string, appointmentToUpdate: Prisma.AppointmentUpdateInput) {
+  public async update(id: string, appointmentToUpdate: Prisma.AppointmentUpdateInput) {
     const updatedAppointment = await prismaClient.appointment.update({
       where: { id },
       data: { ...appointmentToUpdate }
@@ -175,7 +175,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return updatedAppointment
   }
 
-  public async delete (id: string) {
+  public async delete(id: string) {
     const deletedAppointment = await prismaClient.appointment.delete({
       where: { id }
     })
