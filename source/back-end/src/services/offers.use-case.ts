@@ -106,7 +106,7 @@ class OffersUseCase {
     const { shiftEnd, shiftStart } = professionalShiftByDay
 
     const currentDayShiftEndTimeAsDate = new Date(dayToFetchAvailableSchedulling)
-    currentDayShiftEndTimeAsDate.setHours(professionalShiftByDay.shiftEnd.getHours(), shiftEnd.getMinutes(), shiftEnd.getSeconds(), shiftEnd.getMilliseconds())
+    currentDayShiftEndTimeAsDate.setHours(shiftEnd.getHours(), shiftEnd.getMinutes(), shiftEnd.getSeconds(), shiftEnd.getMilliseconds())
     const currentDayShiftEndTime = currentDayShiftEndTimeAsDate.getTime()
 
     const currentStartTimeAsDate = new Date(dayToFetchAvailableSchedulling)

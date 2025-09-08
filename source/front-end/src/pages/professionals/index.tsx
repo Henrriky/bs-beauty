@@ -121,21 +121,21 @@ function Professionals() {
     setAllProfessionals([])
   }, [debouncedSearch])
 
-  useEffect(() => {
-    if (data?.data) {
-      setAllProfessionals((prev) => {
-        const newUsers = data.data.filter(
-          (emp) => !prev.some((e) => e.id === emp.id),
-        )
-        return [...prev, ...newUsers]
-      })
-          (emp) => !prev.some((e) => e.id === emp.id),
-        )
-        return [...prev, ...newUsers]
-      })
-    }
-  }, [data])
-  }, [data])
+  // useEffect(() => {
+  //   if (data?.data) {
+  //     setAllProfessionals((prev) => {
+  //       const newUsers = data.data.filter(
+  //         (emp) => !prev.some((e) => e.id === emp.id),
+  //       )
+  //       return [...prev, ...newUsers]
+  //     })
+  //         (emp) => !prev.some((e) => e.id === emp.id),
+  //       )
+  //       return [...prev, ...newUsers]
+  //     })
+  //   }
+  // }, [data])
+  // }, [data])
 
   return (
     <>
@@ -153,7 +153,7 @@ function Professionals() {
           <BSBeautyLoading title="Carregando as informações..." />
         </div>
       ) : (
-        <>
+        <div>
           <div className="mb-6">
             <input
               type="text"
@@ -202,10 +202,8 @@ function Professionals() {
               </div>
             )}
           </div>
-          </div>
-        </>
+        </div>
       )}
-
       {isDeleteModalOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
@@ -242,7 +240,6 @@ function Professionals() {
           </div>
         </div>
       )}
-
       {isInsertModalOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
