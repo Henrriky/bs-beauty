@@ -89,18 +89,18 @@ model Service {
 }
 
 model Offer {
-  id            String   @id @default(uuid())
-  estimatedTime Int      @map("estimated_time")
-  price         Decimal  @db.Decimal(10, 2)
-  isOffering    Boolean  @default(false) @map("is_offering")
-  serviceId     String   @map("service_id")
-  professionalId    String   @map("professional_id")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id             String   @id @default(uuid())
+  estimatedTime  Int      @map("estimated_time")
+  price          Decimal  @db.Decimal(10, 2)
+  isOffering     Boolean  @default(false) @map("is_offering")
+  serviceId      String   @map("service_id")
+  professionalId String   @map("professional_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
   appointments Appointment[]
   service      Service       @relation(fields: [serviceId], references: [id])
-  professional     Professional      @relation(fields: [professionalId], references: [id])
+  professional Professional  @relation(fields: [professionalId], references: [id])
 
   @@map("offer")
 }
@@ -119,19 +119,19 @@ model Professional {
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
-  shifts       Shift[]
-  offers       Offer[]
+  shifts           Shift[]
+  offers           Offer[]
   professionalRole ProfessionalRole[]
 
   @@map("professional")
 }
 
 model Shift {
-  id         String   @id @default(uuid())
-  weekDay    WeekDays @map("week_day")
-  isBusy     Boolean  @default(false) @map("is_busy")
-  shiftStart DateTime @map("shift_start")
-  shiftEnd   DateTime @map("shift_end")
+  id             String   @id @default(uuid())
+  weekDay        WeekDays @map("week_day")
+  isBusy         Boolean  @default(false) @map("is_busy")
+  shiftStart     DateTime @map("shift_start")
+  shiftEnd       DateTime @map("shift_end")
   professionalId String   @map("professional_id")
 
   professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
@@ -147,20 +147,20 @@ model Role {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  professionalRole   ProfessionalRole[]
-  rolePermission RolePermission[]
+  professionalRole ProfessionalRole[]
+  rolePermission   RolePermission[]
 
   @@map("role")
 }
 
 model ProfessionalRole {
-  id         String   @id @default(uuid())
+  id             String   @id @default(uuid())
   professionalId String   @map("professional_id")
-  roleId     String   @map("role_id")
-  createdAt  DateTime @default(now()) @map("created_at")
+  roleId         String   @map("role_id")
+  createdAt      DateTime @default(now()) @map("created_at")
 
   professional Professional @relation(fields: [professionalId], references: [id])
-  role     Role     @relation(fields: [roleId], references: [id])
+  role         Role         @relation(fields: [roleId], references: [id])
 
   @@map("professional_role")
 }
@@ -189,6 +189,17 @@ model RolePermission {
   permission Permission @relation(fields: [permissionId], references: [id])
 
   @@map("role_permission")
+}
+
+model SalonSettings {
+  id               Int     @id @default(1)
+  name             String
+  openingHours     Json?   @map("opening_hours")
+  address          String?
+  contactInfo      Json?   @map("contact_info")
+  schedulingWindow Int?    @map("scheduling_window")
+
+  @@map("salon_settings")
 }
 
 enum WeekDays {
