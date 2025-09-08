@@ -2,6 +2,7 @@ import { useFormContext } from 'react-hook-form'
 import { CreateAppointmentFormData } from '../types'
 import { serviceAPI } from '../../../../../../store/service/service-api'
 import ProfilePicture from '../../../../../profile/components/ProfilePicture'
+import PaymentMethods from './PaymentMethods'
 
 function CustomerHomeReviewStep() {
   const { watch } = useFormContext<CreateAppointmentFormData>()
@@ -58,7 +59,7 @@ function CustomerHomeReviewStep() {
       <h2 className="text-xl font-semibold text-secondary-200 border-b pb-2">
         Revise seu Agendamento
       </h2>
-      <div className="space-y-2 flex flex-col gap-4">
+      <div className="space-y-2 flex flex-col gap-4 pb-10">
         <div className="flex gap-4 ">
           <ProfilePicture
             size="md"
@@ -93,6 +94,7 @@ function CustomerHomeReviewStep() {
           {price?.toFixed(2)}
         </p>
       </div>
+      <PaymentMethods />
     </div>
   )
 }
