@@ -7,37 +7,37 @@ interface NotificationsOutput {
 }
 
 class NotificationsUseCase {
-  constructor(private readonly notificationRepository: NotificationRepository) { }
+  constructor (private readonly notificationRepository: NotificationRepository) { }
 
-  public async executeFindAll(): Promise<NotificationsOutput> {
+  public async executeFindAll (): Promise<NotificationsOutput> {
     const notifications = await this.notificationRepository.findAll()
     RecordExistence.validateManyRecordsExistence(notifications, 'notifications')
 
     return { notifications }
   }
 
-  public async executeFindById(notificationId: string): Promise<Notification | null> {
+  public async executeFindById (notificationId: string): Promise<Notification | null> {
     const notification = await this.notificationRepository.findById(notificationId)
     RecordExistence.validateRecordExistence(notification, 'Notification')
 
     return notification
   }
 
-  public async executeFindByUserId(userId: string): Promise<NotificationsOutput> {
+  public async executeFindByUserId (userId: string): Promise<NotificationsOutput> {
     const notifications = await this.notificationRepository.findByUserId(userId)
     RecordExistence.validateManyRecordsExistence(notifications, 'notifications')
 
     return { notifications }
   }
 
-  public async executeDelete(notificationId: string) {
+  public async executeDelete (notificationId: string) {
     await this.executeFindById(notificationId)
     const deletedNotification = await this.notificationRepository.delete(notificationId)
 
     return deletedNotification
   }
 
-  public async executeMarkAsRead(notificationId: string) {
+  public async executeMarkAsRead (notificationId: string) {
     const notification = await this.executeFindById(notificationId)
     if (notification?.readAt != null) {
       return notification
@@ -47,7 +47,7 @@ class NotificationsUseCase {
     return readNotification
   }
 
-  public async sendAppointmentNotification(appointmentId: string) {
+  public async sendAppointmentNotification (appointmentId: string) {
     // const appointmentUseCase = makeAppointmentsUseCaseFactory()
     // const appointment = await appointmentUseCase.executeFindById(appointmentId)
 

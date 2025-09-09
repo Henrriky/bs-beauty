@@ -19,41 +19,41 @@ interface AvailablesSchedulling {
 }
 
 class OffersUseCase {
-  constructor(
+  constructor (
     private readonly offerRepository: OfferRepository,
     private readonly shiftRepository: ShiftRepository,
     private readonly appointmentRepository: AppointmentRepository
   ) { }
 
-  public async executeFindAll(): Promise<OfferOutput> {
+  public async executeFindAll (): Promise<OfferOutput> {
     const offers = await this.offerRepository.findAll()
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
   }
 
-  public async executeFindById(offerId: string) {
+  public async executeFindById (offerId: string) {
     const offer = await this.offerRepository.findById(offerId)
     RecordExistence.validateRecordExistence(offer, 'Offer')
 
     return offer
   }
 
-  public async executeFindByServiceId(serviceId: string) {
+  public async executeFindByServiceId (serviceId: string) {
     const offer = await this.offerRepository.findByServiceId(serviceId)
     RecordExistence.validateRecordExistence(offer, 'Offer')
 
     return offer
   }
 
-  public async executeFindByProfessionalId(professionalId: string): Promise<OfferOutput> {
+  public async executeFindByProfessionalId (professionalId: string): Promise<OfferOutput> {
     const offers = await this.offerRepository.findByProfessionalId(professionalId)
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
   }
 
-  public async executeCreate(offerToCreate: Prisma.OfferCreateInput) {
+  public async executeCreate (offerToCreate: Prisma.OfferCreateInput) {
     const offer = offerToCreate as unknown as Offer
     const serviceId = offer.serviceId
     const professionalId = offer.professionalId
@@ -64,14 +64,14 @@ class OffersUseCase {
     return newOffer
   }
 
-  public async executeUpdate(offerId: string, offerToUpdate: Prisma.OfferUpdateInput) {
+  public async executeUpdate (offerId: string, offerToUpdate: Prisma.OfferUpdateInput) {
     await this.executeFindById(offerId)
     const updatedOffer = await this.offerRepository.update(offerId, offerToUpdate)
 
     return updatedOffer
   }
 
-  public async executeDelete(offerId: string) {
+  public async executeDelete (offerId: string) {
     await this.executeFindById(offerId)
     const deletedOffer = await this.offerRepository.delete(offerId)
 
@@ -174,7 +174,7 @@ class OffersUseCase {
     return { availableSchedulling }
   }
 
-  public async executeFindByProfessionalIdPaginated(
+  public async executeFindByProfessionalIdPaginated (
     professionalId: string,
     params: PaginatedRequest<OffersFilters>
   ): Promise<PaginatedResult<Offer>> {
