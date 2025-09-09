@@ -1,10 +1,11 @@
-import { type Encrypter } from '../../protocols/encrypter.protocol'
+import bcrypt from 'bcrypt'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
 import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
 import { type CustomerOrEmployee } from '../../../types/customer-or-employee.type'
-import { type OAuthIdentityProvider } from '../../protocols/oauth-identity-provider.protocol'
-import bcrypt from 'bcrypt'
 import { CustomError } from '../../../utils/errors/custom.error.util'
+import { type Encrypter } from '../../protocols/encrypter.protocol'
+import { type OAuthIdentityProvider } from '../../protocols/oauth-identity-provider.protocol'
+import { RefreshTokenService } from '@/services/encrypter/refresh-token.service'
 
 interface LoginUseCaseInput {
   token?: string
@@ -13,7 +14,8 @@ interface LoginUseCaseInput {
 }
 
 interface LoginUseCaseOutput {
-  accessToken: string
+  accessToken: string,
+  refreshToken: string
 }
 
 class LoginUseCase {
@@ -21,12 +23,23 @@ class LoginUseCase {
     private readonly customerRepository: CustomerRepository,
     private readonly employeeRepository: EmployeeRepository,
     private readonly encrypter: Encrypter,
-    private readonly identityProvider: OAuthIdentityProvider
-  ) {
+    private readonly identityProvider: OAuthIdentityProvider,
+    private readonly refreshTokenService: RefreshTokenService
+  ) { }
 
-  }
-
-  async execute({ token, email, password }: LoginUseCaseInput): Promise<LoginUseCaseOutput> {
+  async execute(
+    {
+      token,
+      email,
+      password,
+    }:
+      LoginUseCaseInput &
+      {
+        meta?: {
+          ip?: string;
+          userAgent?: string
+        }
+      }): Promise<LoginUseCaseOutput> {
     let customerOrEmployee: CustomerOrEmployee | null = null
 
     if (token) {
@@ -57,17 +70,7 @@ class LoginUseCase {
         }
       }
 
-      const { accessToken } = await this.encrypter.encrypt({
-        userId,
-        id: customerOrEmployee.id,
-        userType: customerOrEmployee.userType,
-        email: customerOrEmployee.email,
-        name: customerOrEmployee.name,
-        registerCompleted: customerOrEmployee.registerCompleted,
-        profilePhotoUrl
-      })
-
-      return { accessToken }
+      return this.issueTokensForUser(customerOrEmployee)
     } else if (email && password) {
       const customer = await this.customerRepository.findByEmail(email)
       const employee = await this.employeeRepository.findByEmail(email)
@@ -90,23 +93,28 @@ class LoginUseCase {
 
       customerOrEmployee = { ...user, userId: user.id } as CustomerOrEmployee
 
-      const userId = customerOrEmployee.id
-      const profilePhotoUrl = customerOrEmployee.profilePhotoUrl ?? ''
-
-      const { accessToken } = await this.encrypter.encrypt({
-        userId,
-        id: customerOrEmployee.id,
-        userType: customerOrEmployee.userType,
-        email: customerOrEmployee.email,
-        name: customerOrEmployee.name,
-        registerCompleted: customerOrEmployee.registerCompleted,
-        profilePhotoUrl
-      })
-
-      return { accessToken }
+      return this.issueTokensForUser(customerOrEmployee)
     }
 
-    throw new Error('Invalid credentials') 
+    throw new Error('Invalid credentials')
+  }
+
+  private async issueTokensForUser(user: CustomerOrEmployee & { userId?: string }): Promise<LoginUseCaseOutput> {
+    const subjectUserId = user.userId ?? user.id
+    const profilePhotoUrl = user.profilePhotoUrl ?? ''
+
+    const { accessToken } = await this.encrypter.encrypt({
+      userId: subjectUserId,
+      id: user.id,
+      userType: user.userType,
+      email: user.email,
+      name: user.name,
+      registerCompleted: user.registerCompleted,
+      profilePhotoUrl
+    })
+
+    const { refreshToken } = await this.refreshTokenService.issue(user.id)
+    return { accessToken, refreshToken }
   }
 }
 

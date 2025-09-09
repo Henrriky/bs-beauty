@@ -16,10 +16,10 @@ class LoginController {
 
       if (googleAccessToken) {
         const usecase = makeLoginUseCase()
-        const { accessToken } = await usecase.execute({
+        const { accessToken, refreshToken } = await usecase.execute({
           token: googleAccessToken
         })
-        res.status(StatusCodes.OK).send({ accessToken })
+        res.status(StatusCodes.OK).send({ accessToken, refreshToken })
         return
       } else {
         const parsed = PasswordLoginSchema.safeParse(req.body)
@@ -31,8 +31,8 @@ class LoginController {
         }
         const { email, password } = parsed.data
         const usecase = makeLoginUseCase()
-        const { accessToken } = await usecase.execute({ email, password })
-        res.status(StatusCodes.OK).send({ accessToken })
+        const { accessToken, refreshToken } = await usecase.execute({ email, password })
+        res.status(StatusCodes.OK).send({ accessToken, refreshToken })
         return
       }
 
