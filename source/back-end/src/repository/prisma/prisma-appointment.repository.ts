@@ -159,7 +159,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return await prismaClient.appointment.count({
       where: {
         customerId,
-        appointmentDate: {
+        createdAt: {
           gte: startOfDay,
           lte: endOfDay
         }
