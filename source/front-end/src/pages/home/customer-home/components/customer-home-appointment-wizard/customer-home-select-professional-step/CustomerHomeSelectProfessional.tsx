@@ -36,7 +36,7 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
 
   const { data, isLoading, isError, error } =
     serviceAPI.useFetchProfessionalsOfferingServiceQuery(
-      { serviceId },
+      { serviceId: serviceId ?? '' },
       { skip: props.currentFlow !== 'service' },
     )
 
@@ -68,9 +68,9 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
     props.currentFlow === 'service'
       ? (data?.professionalsOfferingService.offers ?? [])
       : (professionalsData?.data.map((professional) => ({
-        id: `${professional.id}`,
-        professional,
-      })) ?? [])
+          id: `${professional.id}`,
+          professional,
+        })) ?? [])
 
   if (professionalsToShow.length === 0) {
     return (

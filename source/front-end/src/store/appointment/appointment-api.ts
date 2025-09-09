@@ -12,7 +12,7 @@ import {
   Appointment,
   CreateAppointmentAPIData,
   FindAppointmentByCustomerId,
-  FindAppointmentById
+  FindAppointmentById,
 } from './types'
 
 export const appointmentAPI = createApi({
@@ -35,9 +35,7 @@ export const appointmentAPI = createApi({
       ) & { id: string }
     >({
       query: (data) => ({
-        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.UPDATE_APPOINTMENT(
-          data.id,
-        ),
+        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.UPDATE_APPOINTMENT(data.id),
         method: 'PUT',
         body: {
           ...data,
@@ -105,15 +103,13 @@ export const appointmentAPI = createApi({
           const appointmentResponses = await Promise.all(appointmentPromises)
 
           const allAppointments = appointmentResponses
-            .filter(
-              (response: { data?: { appointments?: Appointment[] } }) =>
-                Array.isArray(response.data?.appointments),
+            .filter((response: { data?: { appointments?: Appointment[] } }) =>
+              Array.isArray(response.data?.appointments),
             )
             .flatMap(
               (response: { data?: { appointments?: Appointment[] } }) =>
                 response.data?.appointments ?? [],
             )
-
 
           return { data: { appointments: allAppointments } }
         } catch (error) {
