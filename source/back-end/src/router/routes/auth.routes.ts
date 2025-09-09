@@ -9,6 +9,7 @@ import { RegisterUserController } from '../../controllers/auth/register-user.con
 import { verifyJwtTokenMiddleware } from '../../middlewares/auth/verify-jwt-token.middleware'
 import { PasswordResetRequestController } from '@/controllers/auth/password-reset-request.controller'
 import { PasswordResetSetPasswordController } from '@/controllers/auth/password-reset-set-password.controller'
+import { GenerateTokensController } from '@/controllers/auth/generate-tokens.controller'
 
 const authRoutes = Router()
 
@@ -23,5 +24,6 @@ authRoutes.get('/register/:email', RegisterUserController.handleFindEmployeeByEm
 authRoutes.post('/code-validation', CodeValidationController.handle)
 authRoutes.post('/password-reset/request', PasswordResetRequestController.handle)
 authRoutes.post('/password-reset/set-password', PasswordResetSetPasswordController.handle)
+authRoutes.post('/new-tokens', GenerateTokensController.handle)
 
 export { authRoutes }
