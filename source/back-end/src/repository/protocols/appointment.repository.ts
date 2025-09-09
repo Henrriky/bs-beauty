@@ -3,11 +3,38 @@ import { type FindNonFinishedByUserAndDay } from '../types/appointment-repositor
 
 const appointmentNonFinishedStatus = [Status.PENDING, Status.RESCHEDULED, Status.CONFIRMED, Status.FINISHED]
 
+export type FindByIdAppointments = Prisma.AppointmentGetPayload<{
+  where: { id: string }
+  select: {
+    id: true
+    observation: true
+    status: true
+    appointmentDate: true
+    customerId: true
+    serviceOfferedId: true
+    createdAt: true
+    updatedAt: true
+    offer: {
+      select: {
+        id: true
+        estimatedTime: true
+        price: true
+        professionalId: true
+        service: {
+          select: {
+            name: true
+          }
+        }
+        professional: true
+      }
+    }
+  }
+}>
+
 interface AppointmentRepository {
   findAll: () => Promise<Appointment[]>
-  findById: (id: string) => Promise<Appointment | null>
+  findById: (id: string) => Promise<FindByIdAppointments | null>
   findByCustomerOrProfessionalId: (customerOrProfessionalId: string) => Promise<Appointment[]>
-  findByAppointmentDate: (date: Date) => Promise<Appointment[]>
   findByServiceOfferedId: (id: string) => Promise<Appointment[]>
   findNonFinishedByUserAndDay: (
     userId: string,

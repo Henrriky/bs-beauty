@@ -84,14 +84,6 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async findByAppointmentDate (appointmentDate: Date) {
-    const appointments = await prismaClient.appointment.findMany({
-      where: { appointmentDate }
-    })
-
-    return appointments
-  }
-
   public async findByServiceOfferedId (serviceOfferedId: string) {
     const appointments = await prismaClient.appointment.findMany({
       where: { serviceOfferedId }
