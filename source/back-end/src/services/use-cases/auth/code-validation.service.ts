@@ -16,8 +16,7 @@ type PendingEntry = {
 
 export type VerificationPurpose =
   | 'register'
-  | 'password_reset'
-  | 'email_change'
+  | 'passwordReset'
 
 export class CodeValidationService {
   constructor(

@@ -1,5 +1,4 @@
-// services/use-cases/auth/register-customer.use-case.ts
-import { EmailService, sendVerificationCode } from '@/services/email/email.service'
+import { EmailService } from '@/services/email/email.service'
 import { Employee } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
@@ -63,7 +62,8 @@ export class RegisterUserUseCase {
     await this.emailService.sendVerificationCode({
       to: email,
       code,
-      expirationCodeTime: PENDING_TTL_SECONDS
+      expirationCodeTime: PENDING_TTL_SECONDS,
+      purpose: 'register'
     })
   }
 

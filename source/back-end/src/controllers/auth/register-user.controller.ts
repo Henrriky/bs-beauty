@@ -14,7 +14,7 @@ class RegisterUserController {
       const usecase = makeRegisterUserUseCase()
       await usecase.executeRegisterCustomer(body)
 
-      res.status(StatusCodes.CREATED).send({
+      res.status(StatusCodes.OK).send({
         success: true,
         message: 'Verification code sent to provided email'
       })
