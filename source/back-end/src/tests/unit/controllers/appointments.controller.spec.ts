@@ -28,7 +28,6 @@ describe('AppointmentsController', () => {
       executeFindAll: vi.fn(),
       executeFindById: vi.fn(),
       executeFindByCustomerOrProfessionalId: vi.fn(),
-      executeFindByAppointmentDate: vi.fn(),
       executeFindByServiceOfferedId: vi.fn(),
       executeCreate: vi.fn(),
       executeUpdate: vi.fn(),
