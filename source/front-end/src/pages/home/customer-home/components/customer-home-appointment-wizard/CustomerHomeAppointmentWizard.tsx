@@ -17,6 +17,7 @@ import { CreateAppointmentFormData } from './types'
 import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-appointment-success.svg'
 import { toast } from 'react-toastify'
 import CustomerHomeSelectAppointmentFlow from './CustomerHomeSelectAppointmentFlow'
+import CustomerHomeReviewStep from './customer-home-review-step/CustomerHomeReview'
 
 type Step = {
   currentStepName: string
@@ -71,8 +72,16 @@ function createSteps(currentFlow: 'service' | 'professional'): Step {
     previousStep: secondSelectStep,
   }
 
+  const reviewStep: Step = {
+    currentStepName: 'Revisão',
+    currentStepAppointmentForm: CustomerHomeReviewStep,
+    nextStep: null,
+    previousStep: selectAppointmentTimeStep,
+  }
+
   firstSelectStep.nextStep = secondSelectStep
   secondSelectStep.nextStep = selectAppointmentTimeStep
+  selectAppointmentTimeStep.nextStep = reviewStep
 
   return firstSelectStep
 }
@@ -176,6 +185,25 @@ function CustomerHomeAppointmentWizard() {
               }
             />
           )}
+          {
+            <Button
+              className={`${currentStep.nextStep ? 'invisible hidden' : ''} disabled:text-zinc-600`}
+              type="button"
+              variant="text-only"
+              label={currentStep.nextStep?.currentStepName}
+              onClick={() =>
+                setCurrentStep((currentStep) => {
+                  if (currentStep.previousStep) {
+                    return {
+                      ...currentStep.previousStep,
+                    }
+                  } else {
+                    return { ...currentStep }
+                  }
+                })
+              }
+            />
+          }
           {
             <Button
               className={`${currentStep.nextStep ? 'invisible hidden' : ''} disabled:text-zinc-600`}

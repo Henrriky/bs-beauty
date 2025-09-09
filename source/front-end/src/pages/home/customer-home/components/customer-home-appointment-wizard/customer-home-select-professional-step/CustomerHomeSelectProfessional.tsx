@@ -68,9 +68,9 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
     props.currentFlow === 'service'
       ? (data?.professionalsOfferingService.offers ?? [])
       : (professionalsData?.data.map((professional) => ({
-        id: `${professional.id}`,
-        professional,
-      })) ?? [])
+          id: `${professional.id}`,
+          professional,
+        })) ?? [])
 
   if (professionalsToShow.length === 0) {
     return (
@@ -117,7 +117,13 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
                 key={offerOrProfessional.id}
                 for={offerOrProfessional.id}
                 {...offerOrProfessional}
-                onClick={() => setValue('professionalId', professional.id)}
+                onClick={() => {
+                  setValue('professionalId', professional.id)
+                  setValue(
+                    'professionalName',
+                    professional.name || 'Não definido',
+                  )
+                }}
               />
             </div>
           )
