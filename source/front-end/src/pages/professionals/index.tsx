@@ -122,6 +122,7 @@ function Professionals() {
   }, [debouncedSearch])
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (data?.data) {
       setAllProfessionals((prev) => {

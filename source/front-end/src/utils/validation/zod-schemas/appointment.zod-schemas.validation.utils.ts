@@ -35,6 +35,10 @@ class AppointmentSchemas {
       appointmentDayPicked: z.string().optional(),
       serviceId: z.string().optional(),
       professionalId: z.string().optional(),
+      professionalName: z.string().optional(),
+      estimatedTime: z.number().optional(),
+      price: z.number().optional(),
+      professionalPhotoUrl: z.string().optional(),
     })
     .strict()
 
