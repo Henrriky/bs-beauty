@@ -1,7 +1,7 @@
 import { type Response } from 'express'
 import { type AppointmentsUseCase } from '@/services/appointments.use-case'
 import { type Mocked } from 'vitest'
-import { type Appointment, Status } from '@prisma/client'
+import { $Enums, type Appointment, Status } from '@prisma/client'
 import { faker } from '@faker-js/faker'
 
 import { mockRequest, mockResponse, type MockRequest } from '../utils/test-utilts'
@@ -20,7 +20,18 @@ describe('AppointmentsController', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
-    req = mockRequest()
+    req = mockRequest({
+      user: {
+        id: 'mocked-id',
+        userId: 'mocked-id',
+        sub: 'mocked-id',
+        userType: $Enums.UserType.MANAGER,
+        email: faker.internet.email(),
+        name: faker.person.firstName(),
+        registerCompleted: true,
+        profilePhotoUrl: faker.image.url()
+      }
+    })
     res = mockResponse()
     next = vi.fn()
 
