@@ -40,6 +40,10 @@ interface AppointmentRepository {
     userId: string,
     dayToFetchAvailableSchedulling: Date
   ) => Promise<{ validAppointmentsOnDay: FindNonFinishedByUserAndDay } >
+  countCustomerAppointmentsPerDay: (
+    customerId: string,
+    day?: Date,
+  ) => Promise<number>
   create: (newAppointment: Prisma.AppointmentCreateInput) => Promise<Appointment>
   update: (id: string, updatedAppointment: Prisma.AppointmentUpdateInput) => Promise<Appointment>
   delete: (id: string) => Promise<Appointment>

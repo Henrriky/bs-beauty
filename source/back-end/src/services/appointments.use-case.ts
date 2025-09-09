@@ -5,7 +5,10 @@ import { type CustomerRepository } from '../repository/protocols/customer.reposi
 import { type ProfessionalRepository } from '../repository/protocols/professional.repository'
 import { CustomError } from '../utils/errors/custom.error.util'
 
-const MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS = 30 * 60 * 1000
+export const MINIMUM_SCHEDULLING_TIME_MINUTES = 30
+export const MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS = MINIMUM_SCHEDULLING_TIME_MINUTES * 60 * 1000
+
+export const MAXIMUM_APPOINTMENTS_PER_DAY = 10
 
 interface AppointmentOutput {
   appointments: Appointment[]
@@ -51,14 +54,14 @@ class AppointmentsUseCase {
     return { appointments }
   }
 
-  public async executeCreate (appointmentToCreate: Prisma.AppointmentCreateInput) {
+  public async executeCreate (appointmentToCreate: Prisma.AppointmentCreateInput, customerId: string) {
     const { appointmentDate } = appointmentToCreate
 
     const currentTimestamp = new Date()
     const appointmentTimestamp = new Date(appointmentDate)
 
     if (isNaN(appointmentTimestamp.getTime())) {
-      throw new CustomError(`Invalid appoitnment date provided: ${String(appointmentDate)}`, 409)
+      throw new CustomError(`Invalid appointment date provided: ${String(appointmentDate)}`, 409)
     }
 
     if (appointmentTimestamp < currentTimestamp) {
@@ -68,7 +71,17 @@ class AppointmentsUseCase {
     const remainingTimeUntilAppointment = appointmentTimestamp.getTime() - currentTimestamp.getTime()
     if (remainingTimeUntilAppointment < MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS) {
       throw new CustomError(
-        'The selected time must be at least 30 minutes in the future.',
+        `The selected time must be at least ${MINIMUM_SCHEDULLING_TIME_MINUTES} minutes in the future.`,
+        409
+      )
+    }
+
+    const appointmentsCount = await this.appointmentRepository.countCustomerAppointmentsPerDay(customerId)
+    const maxAppointmentPerDayReached = appointmentsCount >= MAXIMUM_APPOINTMENTS_PER_DAY
+
+    if (maxAppointmentPerDayReached) {
+      throw new CustomError(
+        'You have reached the maximum number of appointments for today, please try again tomorrow.',
         409
       )
     }

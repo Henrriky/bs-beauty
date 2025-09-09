@@ -150,6 +150,23 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     }
   }
 
+  public async countCustomerAppointmentsPerDay (customerId: string, day: Date = new Date()): Promise<number> {
+    const startOfDay = new Date(day)
+    startOfDay.setHours(0, 0, 0, 0)
+    const endOfDay = new Date(day)
+    endOfDay.setHours(23, 59, 59, 59)
+
+    return await prismaClient.appointment.count({
+      where: {
+        customerId,
+        appointmentDate: {
+          gte: startOfDay,
+          lte: endOfDay
+        }
+      }
+    })
+  }
+
   public async create (appointmentToCreate: Prisma.AppointmentCreateInput) {
     const newAppointment = await prismaClient.appointment.create({
       data: { ...appointmentToCreate }

@@ -55,7 +55,8 @@ class AppointmentController {
     try {
       const appointmentToCreate: Prisma.AppointmentCreateInput = req.body
       const useCase = makeAppointmentsUseCaseFactory()
-      const newAppointment = await useCase.executeCreate(appointmentToCreate)
+      const userId = req.user.id
+      const newAppointment = await useCase.executeCreate(appointmentToCreate, userId)
       res.status(201)
       res.send(newAppointment)
     } catch (error) {
