@@ -4,7 +4,7 @@ import { app } from '../../app'
 import { getProfessionalToken } from './utils/auth'
 import { type Service } from '@prisma/client'
 import { spyServicesWiring } from './utils/services-spies'
-import { ServiceFactory } from '../factories/service.factory'
+import { ServiceFactory } from './factories/service.factory'
 
 describe('Services API (Integration Test)', () => {
   let token: string

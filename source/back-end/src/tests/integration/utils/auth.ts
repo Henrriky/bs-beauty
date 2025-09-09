@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-import { CustomerFactory } from '@/tests/factories/customer.factory'
-import { ProfessionalFactory } from '@/tests/factories/professional.factory'
+import { CustomerFactory } from '@/tests/integration/factories/customer.factory'
+import { ProfessionalFactory } from '@/tests/integration/factories/professional.factory'
 import { $Enums, type Professional, type Customer } from '@prisma/client'
 import { ENV } from '@/config/env'
 import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'

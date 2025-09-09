@@ -5,7 +5,7 @@ import { app } from '../../app'
 import { getProfessionalToken } from './utils/auth'
 import { faker } from '@faker-js/faker'
 import { spyProfessionalsWiring } from './utils/employees-spies'
-import { ProfessionalFactory } from '../factories/professional.factory'
+import { ProfessionalFactory } from './factories/professional.factory'
 
 describe('Professionals API (Integration Test)', () => {
   let token: string

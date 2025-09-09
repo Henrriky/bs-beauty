@@ -1,12 +1,12 @@
 import request from 'supertest'
-import { OfferFactory } from '../factories/offer.factory'
+import { OfferFactory } from './factories/offer.factory'
 import { app } from '@/app'
 import { getCustomerToken, getProfessionalToken } from './utils/auth'
-import { AppointmentsFactory } from '../factories/appointment.factory'
+import { AppointmentsFactory } from './factories/appointment.factory'
 import { type Customer, type Appointment, $Enums, type Professional } from '@prisma/client'
 import { prismaClient } from '@/lib/prisma'
-import { CustomerFactory } from '../factories/customer.factory'
-import { ProfessionalFactory } from '../factories/professional.factory'
+import { CustomerFactory } from './factories/customer.factory'
+import { ProfessionalFactory } from './factories/professional.factory'
 
 describe('Appointments API (Integration Test)', () => {
   let customer: Customer
