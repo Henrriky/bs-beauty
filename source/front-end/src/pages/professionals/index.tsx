@@ -121,21 +121,17 @@ function Professionals() {
     setAllProfessionals([])
   }, [debouncedSearch])
 
-  // useEffect(() => {
-  //   if (data?.data) {
-  //     setAllProfessionals((prev) => {
-  //       const newUsers = data.data.filter(
-  //         (emp) => !prev.some((e) => e.id === emp.id),
-  //       )
-  //       return [...prev, ...newUsers]
-  //     })
-  //         (emp) => !prev.some((e) => e.id === emp.id),
-  //       )
-  //       return [...prev, ...newUsers]
-  //     })
-  //   }
-  // }, [data])
-  // }, [data])
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    if (data?.data) {
+      setAllProfessionals((prev) => {
+        const newUsers = data.data.filter(
+          (emp) => !prev.some((e) => e.id === emp.id),
+        )
+        return [...prev, ...newUsers]
+      })
+    }
+  }, [data])
 
   return (
     <>
