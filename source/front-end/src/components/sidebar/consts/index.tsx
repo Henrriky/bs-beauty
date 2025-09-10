@@ -5,6 +5,7 @@ import {
   ClipboardDocumentCheckIcon,
   ClockIcon,
   HomeIcon,
+  InformationCircleIcon,
   UserIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
@@ -43,6 +44,11 @@ const sideBarItems: SideBarOptions = {
       name: 'Agendamentos',
       icon: <CalendarDaysIcon className="size-6" />,
       navigateTo: '/appointments',
+    },
+    {
+      name: 'Informações do Salão',
+      icon: <InformationCircleIcon className="size-6"/>,
+      navigateTo: '/salon-info',
     },
   ],
   [UserType.CUSTOMER]: [

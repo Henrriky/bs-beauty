@@ -17,6 +17,7 @@ import { UserType } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
+import SalonInfo from '../pages/salon-info'
 
 function BSBeautyRouter() {
   return (
@@ -44,6 +45,7 @@ function BSBeautyRouter() {
                 path="/appointments/:appointmentId"
                 element={<AppointmentDetails />}
               />
+              <Route path="/salon-info" element={<SalonInfo />} />
 
               {/* CUSTOMER ROUTES */}
               <Route
