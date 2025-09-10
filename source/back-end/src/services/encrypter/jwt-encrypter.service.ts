@@ -6,7 +6,7 @@ import { ENV } from '../../config/env'
 import type { StringValue } from 'ms'
 
 class JwtEncrypterService implements Encrypter {
-  async encrypt(params: CustomerOrProfessional & { userId: string, profilePhotoUrl: string }): Promise<{ accessToken: string }> {
+  async encrypt (params: CustomerOrProfessional & { userId: string, profilePhotoUrl: string }): Promise<{ accessToken: string }> {
     const secret: string = ENV.JWT_SECRET
     const expiresIn: StringValue = ENV.JWT_EXPIRES_IN as StringValue
 

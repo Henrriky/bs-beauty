@@ -13,7 +13,7 @@ interface LoginUseCaseOutput {
 }
 
 class LoginUseCase {
-  constructor(
+  constructor (
     private readonly customerRepository: CustomerRepository,
     private readonly professionalRepository: ProfessionalRepository,
     private readonly encrypter: Encrypter,
@@ -22,7 +22,7 @@ class LoginUseCase {
 
   }
 
-  async execute({ token }: LoginUseCaseInput): Promise<LoginUseCaseOutput> {
+  async execute ({ token }: LoginUseCaseInput): Promise<LoginUseCaseOutput> {
     const { userId, email, profilePhotoUrl } = await this.identityProvider.fetchUserInformationsFromToken(token)
 
     let customerOrProfessional: CustomerOrProfessional

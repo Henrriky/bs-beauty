@@ -2,7 +2,7 @@ import { PrismaCustomerRepository } from '../../repository/prisma/prisma-custome
 import { PrismaProfessionalRepository } from '../../repository/prisma/prisma-professional.repository'
 import { FetchUserInfoUseCase } from '../../services/use-cases/auth/fetch-user-info.use-case'
 
-function makeFetchUserInfoUseCase() {
+function makeFetchUserInfoUseCase () {
   const customerRepository = new PrismaCustomerRepository()
   const professionalRepository = new PrismaProfessionalRepository()
   const usecase = new FetchUserInfoUseCase(

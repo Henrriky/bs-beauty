@@ -36,7 +36,7 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
 
   const { data, isLoading, isError, error } =
     serviceAPI.useFetchProfessionalsOfferingServiceQuery(
-      { serviceId },
+      { serviceId: serviceId ?? '' },
       { skip: props.currentFlow !== 'service' },
     )
 

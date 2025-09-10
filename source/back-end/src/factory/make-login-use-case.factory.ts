@@ -4,7 +4,7 @@ import { JwtEncrypterService } from '../services/encrypter/jwt-encrypter.service
 import { GoogleAuthIdentityProvider } from '../services/identity-providers/google-oauth-identity-provider.service'
 import { LoginUseCase } from '../services/use-cases/auth/login.use-case'
 
-function makeLoginUseCase() {
+function makeLoginUseCase () {
   const customerRepository = new PrismaCustomerRepository()
   const professionalRepository = new PrismaProfessionalRepository()
   const encrypter = new JwtEncrypterService()

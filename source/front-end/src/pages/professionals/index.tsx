@@ -122,6 +122,7 @@ function Professionals() {
   }, [debouncedSearch])
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (data?.data) {
       setAllProfessionals((prev) => {
@@ -149,7 +150,7 @@ function Professionals() {
           <BSBeautyLoading title="Carregando as informações..." />
         </div>
       ) : (
-        <>
+        <div>
           <div className="mb-6">
             <input
               type="text"
@@ -198,9 +199,8 @@ function Professionals() {
               </div>
             )}
           </div>
-        </>
+        </div>
       )}
-
       {isDeleteModalOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"
@@ -237,7 +237,6 @@ function Professionals() {
           </div>
         </div>
       )}
-
       {isInsertModalOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20"

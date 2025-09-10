@@ -13,10 +13,10 @@ class NotificationSchemas {
 
     return (professionalId != null && customerId == null) || (professionalId == null && customerId != null)
   },
-    {
-      message: "Cannot set both 'professionalId' and 'customerId'",
-      path: ['professionalId', 'customerId']
-    })
+  {
+    message: "Cannot set both 'professionalId' and 'customerId'",
+    path: ['professionalId', 'customerId']
+  })
 }
 
 export { NotificationSchemas }

@@ -1,24 +1,35 @@
 import request from 'supertest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { app } from '../../../app'
-import { getManagerToken } from '../utils/auth'
+import { app } from '../../app'
+import { getProfessionalToken } from './utils/auth'
 import { type Service } from '@prisma/client'
-import { spyServicesWiring } from '../utils/services-spies'
+import { spyServicesWiring } from './utils/services-spies'
+import { ServiceFactory } from './factories/service.factory'
 
-describe('ServicesController', () => {
+describe('Services API (Integration Test)', () => {
   let token: string
 
   beforeEach(async () => {
     vi.restoreAllMocks()
-    token = getManagerToken()
+    const { token: professionalToken } = await getProfessionalToken()
+    token = professionalToken
   })
 
-  describe('handleFindAllPaginated', () => {
+  describe('[GET] /api/services', () => {
     it('should return a list of services', async () => {
       // arrange
-      const service1 = await createShift('First Service', 'First category')
-      const service2 = await createShift('Second Service', 'Second category')
-      const service3 = await createShift('Third Service', 'Third category')
+      const service1 = await ServiceFactory.makeService({
+        name: 'First Service',
+        category: 'First category'
+      })
+      const service2 = await ServiceFactory.makeService({
+        name: 'Second Service',
+        category: 'Second category'
+      })
+      const service3 = await ServiceFactory.makeService({
+        name: 'Third Service',
+        category: 'Third category'
+      })
       const spies = spyServicesWiring()
 
       // act
@@ -41,10 +52,13 @@ describe('ServicesController', () => {
     })
   })
 
-  describe('handleFindById', () => {
+  describe('[GET] /api/services/:id', () => {
     it('should find service by id', async () => {
       // arrange
-      const service = await createShift('Service to find', 'Category')
+      const service = await ServiceFactory.makeService({
+        name: 'Service to find',
+        category: 'Category'
+      })
       const spies = spyServicesWiring()
 
       // act
@@ -65,7 +79,7 @@ describe('ServicesController', () => {
     })
   })
 
-  describe('handleCreate', () => {
+  describe('[POST] /api/services', () => {
     it('should create a new service', async () => {
       // arrange
       const spies = spyServicesWiring()
@@ -105,10 +119,13 @@ describe('ServicesController', () => {
     })
   })
 
-  describe('handleUpdate', () => {
+  describe('[PUT] /api/services/:id', () => {
     it('should update a service', async () => {
       // arrange
-      const service = await createShift('Service to update', 'Category')
+      const service = await ServiceFactory.makeService({
+        name: 'Service to update',
+        category: 'Category'
+      })
       const spies = spyServicesWiring()
 
       // act
@@ -127,10 +144,13 @@ describe('ServicesController', () => {
     })
   })
 
-  describe('handleDelete', () => {
+  describe('[DELETE] /api/services/:id', () => {
     it('should delete a service', async () => {
       // arrange
-      const service = await createShift('Service to delete', 'Category')
+      const service = await ServiceFactory.makeService({
+        name: 'Service to delete',
+        category: 'Category'
+      })
       const spies = spyServicesWiring()
 
       // act
@@ -145,20 +165,4 @@ describe('ServicesController', () => {
       expect(spies.repository.delete).toHaveBeenCalledTimes(1)
     })
   })
-
-  async function createShift (name: string, category: string) {
-    const createResponse = await request(app)
-      .post('/api/services')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        name,
-        category
-      })
-
-    return {
-      id: createResponse.body.id,
-      name: createResponse.body.name,
-      category: createResponse.body.category
-    }
-  }
 })
