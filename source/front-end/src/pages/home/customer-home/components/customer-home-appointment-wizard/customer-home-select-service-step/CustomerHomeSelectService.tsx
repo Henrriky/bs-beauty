@@ -19,6 +19,7 @@ function CustomerHomeSelectServiceContainer(props: Props) {
   const serviceSelectedId = watch('serviceId')
   const serviceOfferedId = watch('serviceOfferedId')
   const professionalId = watch('professionalId')
+  const paymentMethods = watch('paymentMethods')
 
   if (!professionalId && props.currentFlow === 'professional') {
     toast.error(
@@ -124,7 +125,10 @@ function CustomerHomeSelectServiceContainer(props: Props) {
                 key={service.id}
                 for={service.id}
                 {...service}
-                onClick={() => setValue('serviceId', serviceOffered.id)}
+                onClick={() => {
+                  setValue('serviceId', serviceOffered.id)
+                  setValue('paymentMethods', paymentMethods)
+                }}
               />
             </div>
           )

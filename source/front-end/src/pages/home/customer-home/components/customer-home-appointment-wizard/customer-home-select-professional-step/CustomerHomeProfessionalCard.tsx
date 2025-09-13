@@ -14,6 +14,7 @@ interface CustomerHomeProfessionalCardProps
 function CustomerHomeProfessionalCard(
   props: CustomerHomeProfessionalCardProps,
 ) {
+  console.log(props)
   return (
     <label
       className={`flex items-center justify-between h-20 py-2 px-6 rounded-2xl mt-5 bg-[#262626] hover:cursor-pointer 

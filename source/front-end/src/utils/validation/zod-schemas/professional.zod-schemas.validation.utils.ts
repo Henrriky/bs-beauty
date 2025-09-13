@@ -45,7 +45,7 @@ class ProfessionalSchemas {
           'Por favor, forneça um nome válido.',
         ),
       socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
-      paymentMethod: ProfessionalSchemas.paymentMethodSchema.optional(),
+      paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
       contact: z
         .string({ message: 'O telefone de contato é obrigatório' })
         .refine(
@@ -69,7 +69,7 @@ class ProfessionalSchemas {
       name: SharedSchemas.nameSchema,
       email: z.string().email().optional(),
       socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
-      paymentMethod: ProfessionalSchemas.paymentMethodSchema.optional(),
+      paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
       contact: z
         .string()
         .refine((value) => RegexPatterns.phone.test(value))
@@ -84,7 +84,7 @@ class ProfessionalSchemas {
       name: SharedSchemas.nameSchema,
       email: z.string().email().optional(),
       socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
-      paymentMethod: ProfessionalSchemas.paymentMethodSchema.optional(),
+      paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
       contact: z
         .string()
         .refine((value) => RegexPatterns.phone.test(value))

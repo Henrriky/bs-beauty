@@ -111,7 +111,7 @@ model Professional {
   email             String   @unique
   googleId          String?  @unique @map("google_id")
   registerCompleted Boolean  @default(false) @map("register_completed")
-  paymentMethods     Json?    @map("payment_methods")
+  paymentMethods    Json?    @map("payment_methods")
   socialMedia       Json?    @map("social_media")
   contact           String?  @unique
   specialization    String?
