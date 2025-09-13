@@ -3,7 +3,8 @@ import { type ProfessionalRepository } from '../repository/protocols/professiona
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
 import { type ServicesOfferedByProfessional } from '../repository/types/professional-repository.types'
-import { type ProfessionalsFilters } from '../types/professionals/professionals-filters'
+import { type PartialHandleFetchServicesOfferedByProfessionalQuerySchema } from '@/utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
+import { type ProfessionalsFilters } from '@/types/employees/employees-filters'
 
 interface ProfessionalsOutput {
   professionals: Professional[]
@@ -50,8 +51,11 @@ class ProfessionalsUseCase {
     return deletedProfessional
   }
 
-  public async fetchServicesOfferedByProfessional (professionalId: string): Promise<{ professional: ServicesOfferedByProfessional }> {
-    const { professional } = await this.professionalRepository.fetchServicesOfferedByProfessional(professionalId)
+  public async fetchServicesOfferedByProfessional (
+    professionalId: string,
+    params: PaginatedRequest<PartialHandleFetchServicesOfferedByProfessionalQuerySchema>
+  ): Promise<{ professional: ServicesOfferedByProfessional }> {
+    const { professional } = await this.professionalRepository.fetchServicesOfferedByProfessional(professionalId, params)
     RecordExistence.validateRecordExistence(professional, 'Professional')
 
     return { professional }

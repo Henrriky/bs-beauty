@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import { makeProfessionalsUseCaseFactory } from '../factory/make-professionals-use-case.factory'
 import type { Prisma } from '@prisma/client'
 import { StatusCodes } from 'http-status-codes'
-import { professionalQuerySchema } from '../utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
+import { handleFetchServicesOfferedByProfessionalQuerySchema, professionalQuerySchema } from '../utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
 
 class ProfessionalsController {
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
@@ -75,7 +75,15 @@ class ProfessionalsController {
   public static async handleFetchServicesOfferedByProfessional (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeProfessionalsUseCaseFactory()
-      const { professional } = await useCase.fetchServicesOfferedByProfessional(req.params.id)
+      const parsed = handleFetchServicesOfferedByProfessionalQuerySchema.parse(req.query)
+      const { page, limit, ...filters } = parsed
+      const { professional } = await useCase.fetchServicesOfferedByProfessional(
+        req.params.id,
+        {
+          page,
+          limit,
+          filters
+        })
 
       res.send({ professional })
     } catch (error) {
