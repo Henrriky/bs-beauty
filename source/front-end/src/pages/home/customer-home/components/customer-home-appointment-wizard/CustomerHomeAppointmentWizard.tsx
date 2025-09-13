@@ -10,7 +10,6 @@ import { appointmentAPI } from '../../../../../store/appointment/appointment-api
 import { AppointmentSchemas } from '../../../../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils'
 import Modal from '../../../../services/components/Modal'
 import CustomerHomeSelectProfessionalContainer from './customer-home-select-professional-step/CustomerHomeSelectProfessional'
-import CustomerHomeSelectServiceContainer from './customer-home-select-service-step/CustomerHomeSelectService'
 import CustomerHomeSelectTimeContainer from './customer-home-select-time-step/CustomerHomeSelectTime'
 import { CreateAppointmentFormData } from './types'
 
@@ -18,6 +17,7 @@ import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-app
 import { toast } from 'react-toastify'
 import CustomerHomeSelectAppointmentFlow from './CustomerHomeSelectAppointmentFlow'
 import CustomerHomeReviewStep from './customer-home-review-step/CustomerHomeReview'
+import CustomerHomeSelectServiceContainer from './customer-home-select-service-step'
 
 type Step = {
   currentStepName: string

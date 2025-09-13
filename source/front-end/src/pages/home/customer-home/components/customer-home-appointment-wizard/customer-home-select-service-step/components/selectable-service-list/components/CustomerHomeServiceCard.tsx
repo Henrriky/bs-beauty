@@ -1,8 +1,6 @@
 import { BriefcaseIcon } from '@heroicons/react/24/outline'
-import CustomerHomeServiceCardTitle from './CustomerHomeServiceCardTitle'
-import CustomerHomeServiceCardDescription from './CustomerHomeServiceCardDescription'
-import { ServicesOfferedByProfessionalOffer } from '../../../../../../store/professional/types'
-import CustomerHomeOfferInfo from '../CustomerHomeOfferInfo'
+import { ServicesOfferedByProfessionalOffer } from '../../../../../../../../../store/professional/types.ts'
+import CustomerHomeOfferInfo from '../../../../CustomerHomeOfferInfo.tsx'
 
 interface CustomerHomeServiceCardProps
   extends ServicesOfferedByProfessionalOffer {
@@ -27,17 +25,17 @@ function CustomerHomeServiceCard(props: CustomerHomeServiceCardProps) {
       </div>
       <div className="w-[1.5px] h-full bg-[#595149] rounded-sm"></div>
       <div className="flex flex-col">
-        <CustomerHomeServiceCardTitle>
+        <h1 className="text-[#D9D9D9] text-base text-opacity-85">
           {props.service.name}
-        </CustomerHomeServiceCardTitle>
-        <CustomerHomeServiceCardDescription>
-          {props.service.description}
-        </CustomerHomeServiceCardDescription>
+        </h1>
+        <h1 className="text-[#D9D9D9] text-xs text-opacity-55">
+          {props.service.category}
+        </h1>
       </div>
       {props.currentFlow === 'professional' && (
         <CustomerHomeOfferInfo
           offerEstimatedTime={props.estimatedTime || 'Não definido'}
-          offerPrice={props.price}
+          offerPrice={props.price ?? 'Não definido'}
         />
       )}
     </label>
