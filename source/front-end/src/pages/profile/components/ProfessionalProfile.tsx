@@ -9,7 +9,7 @@ import { userAPI } from '../../../store/user/user-api'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { ProfessionalUpdateProfileFormData } from '../types'
-import PaymentMethodsInput from '../../../components/inputs/payment-methods-input/social-media-input/PaymentMethodsContainerInput'
+import PaymentMethodsInput from '../../../components/inputs/payment-methods-input/PaymentMethodsContainerInput'
 
 interface ProfessionalProfileProps {
   userInfo: Professional

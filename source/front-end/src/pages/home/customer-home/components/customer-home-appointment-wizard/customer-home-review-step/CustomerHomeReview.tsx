@@ -95,7 +95,9 @@ function CustomerHomeReviewStep() {
           {price?.toFixed(2)}
         </p>
       </div>
-      {paymentMethods && <PaymentMethodsContainer methods={paymentMethods} />}
+      {paymentMethods && paymentMethods.length > 0 && (
+        <PaymentMethodsContainer methods={paymentMethods} />
+      )}
     </div>
   )
 }

@@ -19,7 +19,6 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
   const serviceId = watch('serviceId')
   const serviceOfferedId = watch('serviceOfferedId')
   const professionalId = watch('professionalId')
-  console.log(props)
 
   if (!serviceId && props.currentFlow === 'service') {
     toast.error(
@@ -40,8 +39,6 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
       { serviceId },
       { skip: props.currentFlow !== 'service' },
     )
-
-
 
   const {
     data: professionalsData,

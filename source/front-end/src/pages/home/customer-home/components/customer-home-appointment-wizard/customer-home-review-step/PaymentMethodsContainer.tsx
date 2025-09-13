@@ -24,7 +24,7 @@ const paymentMethodNames: { [key: string]: string } = {
   cash: 'Dinheiro',
   'payment-link': 'Link de Pagamento',
   pix: 'Pix',
-  'bank-slip': 'Transferência Bancária',
+  'bank-slip': 'Boleto Bancario',
   'credit-card': 'Cartão de Crédito',
 }
 
