@@ -1,6 +1,7 @@
 import {
   BanknotesIcon,
-  BriefcaseIcon,
+  BuildingLibraryIcon,
+  CircleStackIcon,
   CreditCardIcon,
   LinkIcon,
   QrCodeIcon,
@@ -11,21 +12,21 @@ const knownPaymentMethods = new Map<
   string,
   React.ComponentType<{ className?: string }>
 >([
-  ['card', CreditCardIcon],
+  ['bank-transfer', BuildingLibraryIcon],
   ['cash', BanknotesIcon],
+  ['credit-card', CreditCardIcon],
+  ['debit-card', CreditCardIcon],
   ['payment-link', LinkIcon],
   ['pix', QrCodeIcon],
-  ['credit-card', CreditCardIcon],
-  ['bank-slip', BriefcaseIcon],
 ])
 
 const paymentMethodNames: { [key: string]: string } = {
-  card: 'Cartão de Crédito',
+  'bank-transfer': 'Transferência',
   cash: 'Dinheiro',
+  'credit-card': 'Cartão de Crédito',
+  'debit-card': 'Cartão de Crédito',
   'payment-link': 'Link de Pagamento',
   pix: 'Pix',
-  'bank-slip': 'Boleto Bancario',
-  'credit-card': 'Cartão de Crédito',
 }
 
 function getPaymentMethodName(methodKey: string): string {
@@ -52,7 +53,12 @@ function PaymentMethodsContainer({ methods }: PaymentMethodsList) {
               icon={IconComponent}
               name={getPaymentMethodName(method.name)}
             />
-          ) : null
+          ) : (
+            <PaymentMethodCard
+              icon={CircleStackIcon}
+              name={getPaymentMethodName(method.name)}
+            />
+          )
         })}
       </div>
     </div>

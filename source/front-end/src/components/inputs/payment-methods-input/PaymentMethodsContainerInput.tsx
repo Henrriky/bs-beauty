@@ -7,8 +7,9 @@ const PREDEFINED_METHODS = [
   { value: 'credit-card', label: 'Cartão de Crédito' },
   { value: 'pix', label: 'Pix' },
   { value: 'cash', label: 'Dinheiro' },
-  { value: 'bank-slip', label: 'Boleto Bancário' },
   { value: 'bank-transfer', label: 'Transferência' },
+  { value: 'debit-card', label: 'Cartão de Débito' },
+  { value: 'payment-link', label: 'Link de Pagamento' },
 ]
 
 type PaymentMethod = {
@@ -78,12 +79,12 @@ export default function PaymentMethodsInput({
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto p-4 bg-[#2a2a2a] rounded-lg text-white">
+    <div className="w-full max-w-lg mx-auto rounded-lg text-white">
       <label className="text-sm font-medium text-[#D9D9D9]">
         Métodos de Pagamento Aceitos
       </label>
 
-      <div className="mt-2 flex min-h-[48px] flex-wrap items-center gap-2 rounded-md border border-gray-600 p-2">
+      <div className="mt-2 flex min-h-[48px] flex-wrap items-center border border-[#B19B86] gap-2 rounded-md p-2 bg-[#1a1a1a]">
         {value.length > 0 ? (
           value.map((method) => (
             <span
@@ -108,7 +109,7 @@ export default function PaymentMethodsInput({
         )}
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 ">
         <div>
           <label htmlFor="payment-method-select" className="sr-only">
             Adicionar método de pagamento da lista
@@ -117,19 +118,19 @@ export default function PaymentMethodsInput({
             id="payment-method-select"
             value=""
             onChange={(e) => handleAddMethod(e.target.value)}
-            className="h-12 w-full cursor-pointer rounded-md border border-[#B19B86] bg-transparent px-3 text-white focus:border-primary-100 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-12 w-full cursor-pointer rounded-full border border-[#B19B86] bg-[#1a1a1a] px-3 text-white focus:border-primary-100 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             disabled={availableMethodsInDropdown.length === 0}
           >
             <option value="" disabled className="text-gray-500">
               {availableMethodsInDropdown.length > 0
                 ? 'Adicionar da lista'
-                : 'Todos já foram adicionados'}
+                : 'Opções esgotadas'}
             </option>
             {availableMethodsInDropdown.map((method) => (
               <option
                 key={method.value}
                 value={method.value}
-                className="bg-gray-800 text-white"
+                className="bg-[#2a2a2a] text-white"
               >
                 {method.label}
               </option>
@@ -137,7 +138,7 @@ export default function PaymentMethodsInput({
           </select>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-between">
           <Input
             id="custom-method-input"
             type="text"
@@ -152,7 +153,7 @@ export default function PaymentMethodsInput({
             onClick={handleAddCustomMethod}
             disabled={!customMethodName.trim()}
             label={<PlusIcon className="size-5" />}
-            className="w-11 flex"
+            className="max-w-40 sm:w-12 flex"
           ></Button>
         </div>
       </div>
