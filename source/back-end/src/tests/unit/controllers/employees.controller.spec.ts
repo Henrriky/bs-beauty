@@ -100,6 +100,7 @@ describe('ProfessionalsController', () => {
         registerCompleted: true,
         googleId: 'google-id-123',
         socialMedia: null,
+        paymentMethods: null,
         contact: null,
         specialization: null,
         profilePhotoUrl: null,
