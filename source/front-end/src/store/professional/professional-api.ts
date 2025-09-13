@@ -4,7 +4,8 @@ import { Professional } from '../auth/types'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import {
   PaginatedProfessionalsResponse,
-  ServicesOfferedByProfessional,
+  ServicesOfferedByProfessionalParams,
+  ServicesOfferedByProfessionalResponse,
 } from './types'
 
 export const professionalAPI = createApi({
@@ -53,14 +54,18 @@ export const professionalAPI = createApi({
       invalidatesTags: ['Professionals'],
     }),
     fetchServicesOfferedByProfessional: builder.query<
-      { professional: ServicesOfferedByProfessional },
-      { professionalId: string }
+      { professional: ServicesOfferedByProfessionalResponse },
+      ServicesOfferedByProfessionalParams
     >({
-      query: ({ professionalId }) => ({
+      query: (params) => ({
         url: API_VARIABLES.PROFESSIONALS_ENDPOINTS.FETCH_SERVICES_OFFERED_BY_PROFESSIONAL(
-          professionalId,
+          params.professionalId,
         ),
         method: 'GET',
+        params: {
+          ...params,
+          professionalAPI: undefined,
+        },
       }),
     }),
   }),

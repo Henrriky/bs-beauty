@@ -1,3 +1,5 @@
+import { PaginatedRequest, PaginatedResponse } from '../types'
+
 export type Service = {
   id: string
   name: string
@@ -24,10 +26,10 @@ export type ProfessionalsOfferingService = {
   offers: Array<ProfessionalsOfferingServiceOffer>
 }
 
-export interface PaginatedServicesResponse {
-  data: Service[]
-  total: number
-  page: number
-  totalPages: number
-  limit: number
-}
+export type FindAllServicesParams = {
+  name?: string | undefined
+  category?: string | undefined
+  q?: string | undefined
+} & PaginatedRequest
+
+export type FindAllServicesResponse = PaginatedResponse<Service>
