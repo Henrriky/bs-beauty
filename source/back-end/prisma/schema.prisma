@@ -191,15 +191,17 @@ model RolePermission {
   @@map("role_permission")
 }
 
-model SalonSettings {
-  id               Int     @id @default(1)
-  name             String
-  openingHours     Json?   @map("opening_hours")
-  address          String?
-  contactInfo      Json?   @map("contact_info")
-  schedulingWindow Int?    @map("scheduling_window")
+model SalonInfo {
+  id                 Int      @id @default(1)
+  name               String
+  openingHours       Json?    @map("opening_hours")
+  salonAddress       String?
+  salonEmail         String?  @map("salon_email")
+  salonPhoneNumber   String?  @map("salon_phone_number")
+  minimumAdvanceTime Int?     @map("minimum_advance_time")
+  updatedAt          DateTime @updatedAt @map("updated_at")
 
-  @@map("salon_settings")
+  @@map("salon_info")
 }
 
 enum WeekDays {
