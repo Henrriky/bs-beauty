@@ -8,6 +8,12 @@ import { userAPI } from '../../../store/user/user-api'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
 import { CustomerUpdateProfileFormData } from './types'
+import { Checkbox } from '../../../components/inputs/Checkbox'
+import Modal from '../../services/components/Modal'
+import { useState } from 'react'
+import Subtitle from '../../../components/texts/Subtitle'
+import SuccessfullAppointmentCreationIcon from '../../../../src/assets/create-appointment-success.svg'
+
 
 interface CustomerProfileProps {
   userInfo: Customer
@@ -36,6 +42,7 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
       phone: userInfo.phone || undefined,
       name: userInfo.name || undefined,
       email: userInfo.email || undefined,
+      alwaysAllowImageUse: userInfo.alwaysAllowImageUse ?? false,
     },
   })
 
@@ -55,6 +62,8 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
       })
   }
 
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
+  
   return (
     <form
       className="flex flex-col gap-10 w-full"
@@ -106,6 +115,20 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
         value={userInfo.email}
         disabled
       />
+      <Checkbox
+        registration={{
+          ...register('alwaysAllowImageUse'),
+        }}
+        label="Permitir o uso de minha imagem."
+        id="alwaysAllowImageUse"
+        error={errors?.alwaysAllowImageUse?.message?.toString()}
+      />
+      <span
+        onClick={() => setModalIsOpen(true)}
+        className="text-primary-100 hover:text-primary-0 hover:cursor-pointer hover:underline transition-all w-fit"
+      >
+        O que é isso?
+      </span>
       <Button
         type="submit"
         label={
@@ -120,6 +143,35 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
         }
         disabled={isLoading}
       />
+      <Modal
+        className="bg-[#54493F] font-normal relative"
+        isOpen={modalIsOpen}
+        onClose={() => {
+          setModalIsOpen(false)
+        }}
+      >
+        <img
+          src={SuccessfullAppointmentCreationIcon}
+          alt="Ícone de seta"
+          className="absolute -top-[40px] max-w-[150px] max-h-[150px]"
+        />
+        <div className="flex flex-col items-center justify-between h-full pt-8 pb-4">
+          <div className="flex-grow flex items-center justify-center">
+            <Subtitle className="text-[#B5B5B5]" align="center">
+              A permissão para uso de imagem se refere a permissão de retirar
+              fotos durante os procedimentos para divulgar nas redes sociais.
+            </Subtitle>
+          </div>
+          <Button
+            className="transition-all bg-[#A4978A] text-[#54493F] font-medium hover:bg-[#4e483f] hover:text-white"
+            label={'Ok'}
+            id={'agree'}
+            onClick={() => {
+              setModalIsOpen(false)
+            }}
+          />
+        </div>
+      </Modal>
     </form>
   )
 }

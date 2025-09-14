@@ -31,6 +31,7 @@ class CustomerSchemas {
           message: 'Por favor, forneça um e-mail válido',
         }),
       phone: SharedSchemas.phoneSchema,
+      alwaysAllowImageUse: z.boolean().optional(),
     })
     .strict()
 }
