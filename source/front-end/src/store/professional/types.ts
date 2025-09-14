@@ -12,6 +12,7 @@ export type ServicesOfferedByProfessionalOffer = {
   id: string
   estimatedTime?: number
   price?: string
+  paymentMethods: { name: string }[] | null | undefined
   service: {
     id: string
     name: string
@@ -22,5 +23,6 @@ export type ServicesOfferedByProfessionalOffer = {
 
 export type ServicesOfferedByProfessional = {
   id: string
+  paymentMethods: { name: string }[] | undefined
   offers: ServicesOfferedByProfessionalOffer[]
 }

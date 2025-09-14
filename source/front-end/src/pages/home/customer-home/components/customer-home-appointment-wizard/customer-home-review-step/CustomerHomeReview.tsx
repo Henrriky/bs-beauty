@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form'
 import { CreateAppointmentFormData } from '../types'
 import { serviceAPI } from '../../../../../../store/service/service-api'
 import ProfilePicture from '../../../../../profile/components/ProfilePicture'
-import PaymentMethods from './PaymentMethods'
+import PaymentMethodsContainer from './PaymentMethodsContainer'
 
 function CustomerHomeReviewStep() {
   const { watch } = useFormContext<CreateAppointmentFormData>()
@@ -13,11 +13,12 @@ function CustomerHomeReviewStep() {
     return <div className="text-red-600 text-xl">Ocorreu um erro!</div>
 
   const { data: serviceData } = serviceAPI.useGetServiceByIdQuery(serviceId)
-  const professionalName = watch('professionalName')
+  const professionalName = watch('name')
   const professionalPhotoUrl = watch('professionalPhotoUrl')
   const appointmentDateValue = watch('appointmentDate')
   const durationInMinutes = watch('estimatedTime')
   const price = watch('price')
+  const paymentMethods = watch('paymentMethods')
 
   const initialDate = appointmentDateValue
     ? new Date(appointmentDateValue)
@@ -94,7 +95,9 @@ function CustomerHomeReviewStep() {
           {price?.toFixed(2)}
         </p>
       </div>
-      <PaymentMethods />
+      {paymentMethods && paymentMethods.length > 0 && (
+        <PaymentMethodsContainer methods={paymentMethods} />
+      )}
     </div>
   )
 }

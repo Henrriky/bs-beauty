@@ -38,6 +38,7 @@ export type Professional = {
   googleId: string | null;
   registerCompleted: boolean;
   socialMedia: { name: string, url: string }[] | null;
+  paymentMethods: { name: string, }[] | null;
   contact: string | null;
   specialization: string | null;
   profilePhotoUrl: string;

@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { app } from '../../app'
 import { getProfessionalToken } from './utils/auth'
 import { faker } from '@faker-js/faker'
-import { spyProfessionalsWiring } from './utils/employees-spies'
+import { spyProfessionalsWiring } from './utils/professionals-spies'
 import { ProfessionalFactory } from './factories/professional.factory'
 
 describe('Professionals API (Integration Test)', () => {
