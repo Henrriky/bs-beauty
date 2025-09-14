@@ -31,6 +31,8 @@ class ProfessionalSchemas {
         .strict(),
     )
     .max(10, 'Adicione no máximo 10 métodos de pagamento')
+    .optional()
+    .nullable()
 
   public static readonly professionalCompleteRegisterBodySchema = z
     .object({

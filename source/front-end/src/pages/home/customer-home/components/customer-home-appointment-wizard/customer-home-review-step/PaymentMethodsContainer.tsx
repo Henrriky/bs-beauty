@@ -50,11 +50,13 @@ function PaymentMethodsContainer({ methods }: PaymentMethodsList) {
           const IconComponent = knownPaymentMethods.get(method.name)
           return IconComponent ? (
             <PaymentMethodCard
+              key={method.name}
               icon={IconComponent}
               name={getPaymentMethodName(method.name)}
             />
           ) : (
             <PaymentMethodCard
+              key={method.name}
               icon={CircleStackIcon}
               name={getPaymentMethodName(method.name)}
             />
