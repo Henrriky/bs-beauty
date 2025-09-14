@@ -62,7 +62,7 @@ export const API_VARIABLES = {
       `/analytics/${professionalId}`,
   },
   SALON_INFO_ENDPOINTS: {
-    FETCH_SALON_INFO: (id: number) => `/salon-settings/${id}`,
-    UPDATE_SALON_INFO: (id: number) => `/salon-settings/${id}`,
+    FETCH_SALON_INFO: (id: number) => `/salon-info/${id}`,
+    UPDATE_SALON_INFO: (id: number) => `/salon-info/${id}`,
   },
 } as const

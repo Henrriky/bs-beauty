@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  await prisma.salonSettings.upsert({
+  await prisma.salonInfo.upsert({
     where: { id: 1 },
     update: {},
     create: {
