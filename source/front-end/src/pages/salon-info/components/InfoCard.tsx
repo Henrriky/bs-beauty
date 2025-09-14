@@ -3,6 +3,7 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import InfoCardInput from './InfoCardInput'
 import { SalonInfoUpdateFormData } from '../types'
 import { UseFormRegister } from 'react-hook-form'
+import { SalonInfo } from '../../../store/salon-info/types'
 
 interface InfoCardProps {
   name: string
@@ -16,6 +17,7 @@ interface InfoCardProps {
   }[]
   showAddNewButton?: boolean
   register: UseFormRegister<SalonInfoUpdateFormData>
+  salonData: SalonInfo | undefined
 }
 
 function InfoCard({
@@ -24,6 +26,7 @@ function InfoCard({
   showAddNewButton = true,
   inputInfos,
   register,
+  salonData,
 }: InfoCardProps) {
   return (
     <div className="flex flex-col gap-6 p-4 mb-2 bg-[#222222] text-primary-0 rounded-lg shadow-md">
@@ -44,6 +47,7 @@ function InfoCard({
               index={index}
               errors={inputInfo.error}
               onChange={inputInfo.onChange}
+              salonData={salonData}
             />
           )
         })}

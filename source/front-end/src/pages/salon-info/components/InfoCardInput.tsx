@@ -3,6 +3,7 @@ import { Input } from '../../../components/inputs/Input'
 import { SalonInfoUpdateFormData } from '../types'
 import OpeningHoursInput from './inputs/OpeningHoursInput'
 import { HTMLInputTypeAttribute } from 'react'
+import { SalonInfo } from '../../../store/salon-info/types'
 
 interface InfoCardInputProps {
   id: string
@@ -13,6 +14,7 @@ interface InfoCardInputProps {
   register: UseFormRegister<SalonInfoUpdateFormData>
   errors: string | undefined
   onChange?: (e: any) => void
+  salonData: SalonInfo | undefined
 }
 
 function InfoCardInput({
@@ -24,6 +26,7 @@ function InfoCardInput({
   register,
   errors,
   onChange,
+  salonData,
 }: InfoCardInputProps) {
   return inputType === 'time' ? (
     <OpeningHoursInput
@@ -31,6 +34,7 @@ function InfoCardInput({
       inputType={inputType}
       index={index}
       register={register}
+      salonData={salonData}
     />
   ) : (
     <div className="relative">

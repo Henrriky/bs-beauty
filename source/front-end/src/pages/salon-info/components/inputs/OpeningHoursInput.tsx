@@ -2,12 +2,14 @@ import { HTMLInputTypeAttribute, useState } from 'react'
 import { Input } from '../../../../components/inputs/Input'
 import { SalonInfoUpdateFormData } from '../../types'
 import { UseFormRegister } from 'react-hook-form'
+import { SalonInfo } from '../../../../store/salon-info/types'
 
 interface OpeningHoursInputProps {
   label: string
   inputType: HTMLInputTypeAttribute
   index: number
   register: UseFormRegister<SalonInfoUpdateFormData>
+  salonData: SalonInfo | undefined
 }
 
 function OpeningHoursInput({
@@ -15,8 +17,11 @@ function OpeningHoursInput({
   inputType,
   index,
   register,
+  salonData,
 }: OpeningHoursInputProps) {
-  const [isClosed, setIsClosed] = useState(false)
+  const [isClosed, setIsClosed] = useState(
+    salonData?.openingHours?.at(index)?.isClosed,
+  )
 
   const openingHoursInitialHourField =
     `openingHours.${index}.initialHour` as `openingHours.${number}.initialHour`

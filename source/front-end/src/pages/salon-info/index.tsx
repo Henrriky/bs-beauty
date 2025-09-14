@@ -102,6 +102,7 @@ function SalonInfo() {
           ]}
           showAddNewButton={false}
           register={register}
+          salonData={salonInfoData}
         />
         <InfoCard
           name="Antecedência mínima"
@@ -155,20 +156,22 @@ function SalonInfo() {
           showAddNewButton={false}
           register={register}
         />
-        <Button
-          type="submit"
-          label={
-            isLoading ? (
-              <div className="flex justify-center items-center gap-4">
-                <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
-                <p className="text-sm">Salvando...</p>
-              </div>
-            ) : (
-              'Salvar alterações'
-            )
-          }
-          disabled={false}
-        />
+        {isManager && (
+          <Button
+            type="submit"
+            label={
+              isLoading ? (
+                <div className="flex justify-center items-center gap-4">
+                  <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
+                  <p className="text-sm">Salvando...</p>
+                </div>
+              ) : (
+                'Salvar alterações'
+              )
+            }
+            disabled={false}
+          />
+        )}
       </form>
     </div>
   )
