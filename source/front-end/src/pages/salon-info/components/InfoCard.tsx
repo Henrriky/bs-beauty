@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { HTMLInputTypeAttribute } from 'react'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
-import { ZodSchema } from 'zod'
 import InfoCardInput from './InfoCardInput'
+import { SalonInfoUpdateFormData } from '../types'
+import { UseFormRegister } from 'react-hook-form'
 
 interface InfoCardProps {
   name: string
   icon: React.ReactNode
   inputInfos: {
     label: string
-    inputType: string
+    inputType: HTMLInputTypeAttribute
+    fieldName: keyof SalonInfoUpdateFormData
+    error?: string | undefined
+    onChange?: (e: any) => void
   }[]
-  schema?: ZodSchema<unknown>
   showAddNewButton?: boolean
+  register: UseFormRegister<SalonInfoUpdateFormData>
 }
 
 function InfoCard({
@@ -19,6 +23,7 @@ function InfoCard({
   icon,
   showAddNewButton = true,
   inputInfos,
+  register,
 }: InfoCardProps) {
   return (
     <div className="flex flex-col gap-6 p-4 mb-2 bg-[#222222] text-primary-0 rounded-lg shadow-md">
@@ -26,7 +31,7 @@ function InfoCard({
         {icon}
         <p className="text-base text-primary-0">{name}</p>
       </div>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-8">
         {inputInfos.map((inputInfo, index) => {
           return (
             <InfoCardInput
@@ -34,6 +39,11 @@ function InfoCard({
               id={index + '-input'}
               inputType={inputInfo.inputType}
               label={inputInfo.label}
+              fieldName={inputInfo.fieldName}
+              register={register}
+              index={index}
+              errors={inputInfo.error}
+              onChange={inputInfo.onChange}
             />
           )
         })}

@@ -1,28 +1,47 @@
-import { PencilSquareIcon } from '@heroicons/react/24/outline'
+import { UseFormRegister } from 'react-hook-form'
 import { Input } from '../../../components/inputs/Input'
+import { SalonInfoUpdateFormData } from '../types'
+import OpeningHoursInput from './inputs/OpeningHoursInput'
+import { HTMLInputTypeAttribute } from 'react'
 
 interface InfoCardInputProps {
   id: string
-  inputType: string
+  inputType: HTMLInputTypeAttribute
   label: string
+  fieldName: keyof SalonInfoUpdateFormData
+  index: number
+  register: UseFormRegister<SalonInfoUpdateFormData>
+  errors: string | undefined
+  onChange?: (e: any) => void
 }
 
-function InfoCardInput({ id, inputType, label }: InfoCardInputProps) {
+function InfoCardInput({
+  id,
+  inputType,
+  label,
+  fieldName,
+  index,
+  register,
+  errors,
+  onChange,
+}: InfoCardInputProps) {
   return inputType === 'time' ? (
-    <div className="relative">
-      <p className="text-sm mb-1">{label}</p>
-      <div className="flex justify-between w-1/3">
-        <p className="text-sm">Das</p>
-        <Input id={id} type={inputType} inputClassName="text-primary-0" />
-        <p className="text-sm">até</p>
-        <Input id={id} type={inputType} inputClassName="text-primary-0" />
-      </div>
-      <PencilSquareIcon className="size-5 stroke-[#A5A5A5] absolute inset-y-[20px] right-2 hover:stroke-[#D9D9D9] transition-all" />
-    </div>
+    <OpeningHoursInput
+      label={label}
+      inputType={inputType}
+      index={index}
+      register={register}
+    />
   ) : (
     <div className="relative">
-      <Input id={id} type={inputType} label={label} />
-      <PencilSquareIcon className="size-5 stroke-[#A5A5A5] absolute inset-y-[15px] right-2 hover:stroke-[#D9D9D9] transition-all" />
+      <Input
+        id={id}
+        type={inputType}
+        label={label}
+        registration={{ ...register(fieldName) }}
+        error={errors}
+        onChange={onChange}
+      />
     </div>
   )
 }

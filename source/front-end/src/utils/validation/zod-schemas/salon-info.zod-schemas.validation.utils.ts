@@ -6,12 +6,18 @@ class SalonInfoSchemas {
     z
       .object({
         name: z.string(),
-        initialHour: z.string().regex(RegexPatterns.time, {
-          message: 'Invalid hour. Please use HH:mm format (00:00 - 23:59).',
-        }),
-        finalHour: z.string().regex(RegexPatterns.time, {
-          message: 'Invalid hour. Please use HH:mm format (00:00 - 23:59).',
-        }),
+        initialHour: z
+          .string()
+          .regex(RegexPatterns.time, {
+            message: 'Invalid hour. Please use HH:mm format (00:00 - 23:59).',
+          })
+          .optional(),
+        finalHour: z
+          .string()
+          .regex(RegexPatterns.time, {
+            message: 'Invalid hour. Please use HH:mm format (00:00 - 23:59).',
+          })
+          .optional(),
         isClosed: z.boolean(),
       })
       .strict(),
@@ -20,13 +26,20 @@ class SalonInfoSchemas {
   public static readonly updateSchema = z
     .object({
       openingHours: this.openingHoursSchema.optional(),
-      salonAddress: z.string().optional(),
-      salonEmail: z.string().email().optional(),
+      salonAddress: z
+        .string()
+        .refine((value) => RegexPatterns.address.test(value), {
+          message: 'Endereço inválido.',
+        })
+        .optional(),
+      salonEmail: z.string().email({ message: 'E-mail inválido.' }).optional(),
       salonPhoneNumber: z
         .string()
-        .refine((value) => RegexPatterns.phone.test(value))
+        .refine((value) => RegexPatterns.phone.test(value), {
+          message: 'Número inválido.',
+        })
         .optional(),
-      minimumAdvanceTime: z.number().optional(),
+      minimumAdvanceTime: z.string().optional(),
     })
     .strict()
 }
