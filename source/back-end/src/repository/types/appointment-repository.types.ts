@@ -1,4 +1,4 @@
-import { Appointment, type $Enums, type Professional } from '@prisma/client'
+import { type $Enums, type Professional } from '@prisma/client'
 import { type Decimal } from '@prisma/client/runtime/library'
 
 export interface FindNonFinishedByUserAndDay extends Array<{

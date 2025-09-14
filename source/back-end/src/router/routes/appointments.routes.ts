@@ -8,9 +8,7 @@ import { validateUpdateAppointment } from '../../middlewares/data-validation/app
 const appointmentRoutes = Router()
 
 appointmentRoutes.get('/', AppointmentController.handleFindAll)
-appointmentRoutes.get('/customer/:customerId', AppointmentController.handleFindByCustomerOrProfessionalId)
 appointmentRoutes.get('/customer', routeAuthMiddleware([UserType.CUSTOMER, UserType.PROFESSIONAL, UserType.MANAGER]), AppointmentController.handleFindByCustomerOrProfessionalId)
-appointmentRoutes.get('/date/:appointmentDate', AppointmentController.handleFindByAppointmentDate)
 appointmentRoutes.get('/offer/:serviceOfferedId', AppointmentController.handleFindByServiceOfferedId)
 appointmentRoutes.get('/:id', AppointmentController.handleFindById)
 appointmentRoutes.post('/', routeAuthMiddleware([UserType.CUSTOMER]), routeAuthMiddleware([UserType.CUSTOMER, UserType.PROFESSIONAL, UserType.MANAGER]), validateCreateAppointment, AppointmentController.handleCreate)

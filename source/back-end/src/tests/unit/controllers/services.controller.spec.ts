@@ -160,11 +160,11 @@ describe('ServicesController', () => {
               id: 'professional-2',
               name: 'Jane Smith',
               specialization: 'Makeup Artist',
-              profilePhotoUrl: 'https://example.com/jane-smith.jpg',
-            },
-          },
-        ],
-      };
+              profilePhotoUrl: 'https://example.com/jane-smith.jpg'
+            }
+          }
+        ]
+      }
       useCaseMock.fetchProfessionalsOfferingService.mockResolvedValue({ professionalsOfferingService })
       req.params.id = 'random-uuid-service-1'
 

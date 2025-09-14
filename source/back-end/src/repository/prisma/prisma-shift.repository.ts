@@ -3,7 +3,7 @@ import { prismaClient } from '../../lib/prisma'
 import { type ShiftRepository } from '../protocols/shift.repository'
 
 class PrismaShiftRepository implements ShiftRepository {
-  public async findAllByProfessionalId(professionalId: string | undefined) {
+  public async findAllByProfessionalId (professionalId: string | undefined) {
     const shifts = await prismaClient.shift.findMany({
       where: { professionalId }
     })
@@ -11,7 +11,7 @@ class PrismaShiftRepository implements ShiftRepository {
     return shifts
   }
 
-  public async findById(id: string) {
+  public async findById (id: string) {
     const shift = await prismaClient.shift.findUnique({
       where: { id }
     })
@@ -19,14 +19,14 @@ class PrismaShiftRepository implements ShiftRepository {
     return shift
   }
 
-  async findByIdAndProfessionalId(id: string, professionalId: string) {
+  async findByIdAndProfessionalId (id: string, professionalId: string) {
     const shift = await prismaClient.shift.findFirst({
       where: { id, professionalId }
     })
     return shift
   }
 
-  public async findByProfessionalId(professionalId: string | undefined) {
+  public async findByProfessionalId (professionalId: string | undefined) {
     const shifts = await prismaClient.shift.findMany({
       where: { professionalId }
     })
@@ -34,7 +34,7 @@ class PrismaShiftRepository implements ShiftRepository {
     return shifts
   }
 
-  public async findByProfessionalAndWeekDay(professionalId: string, weekDay: WeekDays) {
+  public async findByProfessionalAndWeekDay (professionalId: string, weekDay: WeekDays) {
     const shift = await prismaClient.shift.findFirst({
       where: { professionalId, weekDay }
     })
@@ -42,7 +42,7 @@ class PrismaShiftRepository implements ShiftRepository {
     return shift
   }
 
-  public async create(shiftToCreate: Prisma.ShiftCreateInput) {
+  public async create (shiftToCreate: Prisma.ShiftCreateInput) {
     const newShift = await prismaClient.shift.create({
       data: { ...shiftToCreate }
     })
@@ -50,7 +50,7 @@ class PrismaShiftRepository implements ShiftRepository {
     return newShift
   }
 
-  public async update(id: string, shiftToUpdate: Prisma.ShiftUpdateInput) {
+  public async update (id: string, shiftToUpdate: Prisma.ShiftUpdateInput) {
     const { shiftStart, shiftEnd, ...otherFields } = shiftToUpdate
     const updatedShift = await prismaClient.shift.update({
       where: { id },
@@ -60,7 +60,7 @@ class PrismaShiftRepository implements ShiftRepository {
     return updatedShift
   }
 
-  public async delete(id: string) {
+  public async delete (id: string) {
     const deletedShift = await prismaClient.shift.delete({
       where: { id }
     })

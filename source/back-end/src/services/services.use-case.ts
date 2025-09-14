@@ -10,23 +10,23 @@ interface ServicesOutput {
 }
 
 class ServicesUseCase {
-  constructor(private readonly serviceRepository: ServiceRepository) { }
+  constructor (private readonly serviceRepository: ServiceRepository) { }
 
-  public async executeFindAll(): Promise<ServicesOutput> {
+  public async executeFindAll (): Promise<ServicesOutput> {
     const services = await this.serviceRepository.findAll()
     RecordExistence.validateManyRecordsExistence(services, 'services')
 
     return { services }
   }
 
-  public async executeFindById(serviceId: string): Promise<Service | null> {
+  public async executeFindById (serviceId: string): Promise<Service | null> {
     const service = await this.serviceRepository.findById(serviceId)
     RecordExistence.validateRecordExistence(service, 'Service')
 
     return service
   }
 
-  public async fetchProfessionalsOfferingService(serviceId: string): Promise<{ professionalsOfferingService: ProfessionalsOfferingService }> {
+  public async fetchProfessionalsOfferingService (serviceId: string): Promise<{ professionalsOfferingService: ProfessionalsOfferingService }> {
     const { professionalsOfferingService } = await this.serviceRepository.fetchProfessionalsOfferingService(serviceId)
     RecordExistence.validateRecordExistence(professionalsOfferingService, 'Service')
 
@@ -34,26 +34,26 @@ class ServicesUseCase {
     return { professionalsOfferingService: professionalsOfferingService! }
   }
 
-  public async executeCreate(newService: Prisma.ServiceCreateInput) {
+  public async executeCreate (newService: Prisma.ServiceCreateInput) {
     const service = await this.serviceRepository.create(newService)
 
     return service
   }
 
-  public async executeUpdate(serviceId: string, updatedService: Prisma.ServiceUpdateInput) {
+  public async executeUpdate (serviceId: string, updatedService: Prisma.ServiceUpdateInput) {
     await this.executeFindById(serviceId)
     const service = await this.serviceRepository.update(serviceId, updatedService)
 
     return service
   }
 
-  public async executeDelete(serviceId: string) {
+  public async executeDelete (serviceId: string) {
     await this.executeFindById(serviceId)
     const service = await this.serviceRepository.delete(serviceId)
     return service
   }
 
-  public async executeFindAllPaginated(
+  public async executeFindAllPaginated (
     params: PaginatedRequest<ServiceFilters>
   ): Promise<PaginatedResult<Service>> {
     const result = await this.serviceRepository.findAllPaginated(params)

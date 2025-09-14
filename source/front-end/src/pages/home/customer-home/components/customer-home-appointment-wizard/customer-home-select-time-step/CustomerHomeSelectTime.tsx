@@ -18,6 +18,7 @@ import { weekDaysEnumToNumberRepresentation } from '../../../../../../utils/form
 import { offerAPI } from '../../../../../../store/offer/offer-api'
 import Subtitle from '../../../../../../components/texts/Subtitle'
 import CustomerHomeSelectTimeCard from './CustomerHomeSelectTimeCard'
+import { MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS } from './constants'
 
 const minDate = new Date()
 const maxDateCopy = new Date()
@@ -205,7 +206,9 @@ function CustomerHomeSelectTimeContainer() {
                             startDate={schedullingDate.startTimestamp}
                             isBusy={
                               schedullingDate.isBusy ||
-                              schedullingDate.startTimestamp < Date.now()
+                              schedullingDate.startTimestamp < Date.now() ||
+                              schedullingDate.startTimestamp - Date.now() <
+                                MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS
                             }
                             onClick={() => {
                               setValue(
@@ -213,7 +216,7 @@ function CustomerHomeSelectTimeContainer() {
                                 new Date(
                                   Number(schedullingDate.startTimestamp),
                                 ).toISOString(),
-                              ) // <-- Aqui
+                              )
                             }}
                           />
                         </div>
