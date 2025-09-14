@@ -1,24 +1,26 @@
 import { type Professional } from '@prisma/client'
 import request from 'supertest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { app } from '../../../app'
-import { getManagerToken } from '../utils/auth'
-import { spyProfessionalsWiring } from '../utils/professionals-spies'
+import { app } from '../../app'
+import { getProfessionalToken } from './utils/auth'
 import { faker } from '@faker-js/faker'
+import { spyProfessionalsWiring } from './utils/professionals-spies'
+import { ProfessionalFactory } from './factories/professional.factory'
 
-describe('ProfessionalsController', () => {
+describe('Professionals API (Integration Test)', () => {
   let token: string
 
   beforeEach(async () => {
     vi.restoreAllMocks()
-    token = getManagerToken()
+    const { token: professionalToken } = await getProfessionalToken()
+    token = professionalToken
   })
 
-  describe('handleFindAll - [GET /api/professionals]', () => {
+  describe('[GET] /api/professionals', () => {
     it('should return a list of professionals', async () => {
       // arrange
-      const professional1 = await createProfessional()
-      const professional2 = await createProfessional()
+      const professional1 = await ProfessionalFactory.makeProfessional()
+      const professional2 = await ProfessionalFactory.makeProfessional()
 
       const spies = spyProfessionalsWiring()
 
@@ -32,7 +34,7 @@ describe('ProfessionalsController', () => {
 
       // assert
       expect(response.status).toBe(200)
-      expect(response.body.data).toHaveLength(2)
+      expect(response.body.data).toHaveLength(3)
       expect(data.map((e: Professional) => e.email)).toEqual(
         expect.arrayContaining([professional1.email, professional2.email])
       )
@@ -43,8 +45,8 @@ describe('ProfessionalsController', () => {
 
     it('should return a list of professionals when email filter is set', async () => {
       // arrange
-      const targetProfessional = await createProfessional()
-      await createProfessional()
+      const targetProfessional = await ProfessionalFactory.makeProfessional()
+      await ProfessionalFactory.makeProfessional()
 
       // act
       const response = await request(app)
@@ -65,10 +67,10 @@ describe('ProfessionalsController', () => {
 
     it('should return a list of professionals when name filter is set', async () => {
       // arrange
-      const targetProfessional = await createProfessional()
+      const targetProfessional = await ProfessionalFactory.makeProfessional()
       const newName = 'Updated name'
       const spies = spyProfessionalsWiring()
-      await createProfessional()
+      await ProfessionalFactory.makeProfessional()
 
       await request(app).put(`/api/professionals/${targetProfessional.id}`)
         .set('Authorization', `Bearer ${token}`)
@@ -95,10 +97,10 @@ describe('ProfessionalsController', () => {
     })
   })
 
-  describe('handleFindById', () => {
+  describe('[GET] /api/professionals/:id', () => {
     it('should return an professional by id', async () => {
       // arrange
-      const { id } = await createProfessional()
+      const { id } = await ProfessionalFactory.makeProfessional()
 
       const spies = spyProfessionalsWiring()
 
@@ -114,7 +116,7 @@ describe('ProfessionalsController', () => {
     })
   })
 
-  describe('handleCreate', () => {
+  describe('[POST] /api/professionals', () => {
     it('should create an professional', async () => {
       // arrange
       const spies = spyProfessionalsWiring()
@@ -176,10 +178,10 @@ describe('ProfessionalsController', () => {
     })
   })
 
-  describe('handleUpdate', () => {
+  describe('[PUT] /api/professionals/:id', () => {
     it('should update an professional', async () => {
       // arrange
-      const { id } = await createProfessional()
+      const { id } = await ProfessionalFactory.makeProfessional()
 
       const updatedEmail = faker.internet.email()
       const updatedName = faker.person.fullName()
@@ -202,10 +204,10 @@ describe('ProfessionalsController', () => {
     })
   })
 
-  describe('handleDelete', () => {
+  describe('[DELETE] /api/professionals/:id', () => {
     it('should create and delete an professional', async () => {
       // arrange
-      const { id } = await createProfessional()
+      const { id } = await ProfessionalFactory.makeProfessional()
 
       const spies = spyProfessionalsWiring()
 
@@ -221,21 +223,4 @@ describe('ProfessionalsController', () => {
       expect(spies.usecase.executeDelete).toHaveBeenCalledTimes(1)
     })
   })
-
-  async function createProfessional() {
-    const email = faker.internet.email()
-
-    const createResponse = await request(app)
-      .post('/api/professionals')
-      .set('Authorization', `Bearer ${token}`)
-      .send({ email })
-
-    expect(createResponse.status).toBe(201)
-    const created = createResponse.body as Professional
-    expect(created).toHaveProperty('id')
-
-    return {
-      ...created
-    } satisfies Professional
-  }
 })

@@ -7,16 +7,16 @@ import { Button } from '../../../../../components/button/Button'
 import Subtitle from '../../../../../components/texts/Subtitle'
 import useAppSelector from '../../../../../hooks/use-app-selector'
 import { appointmentAPI } from '../../../../../store/appointment/appointment-api'
-import { AppointmentSchemas } from '../../../../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils'
 import Modal from '../../../../services/components/Modal'
 import CustomerHomeSelectProfessionalContainer from './customer-home-select-professional-step/CustomerHomeSelectProfessional'
 import CustomerHomeSelectServiceContainer from './customer-home-select-service-step/CustomerHomeSelectService'
 import CustomerHomeSelectTimeContainer from './customer-home-select-time-step/CustomerHomeSelectTime'
-import { CreateAppointmentFormData } from './types'
+import { appointmentFormData, CreateAppointmentFormData } from './types'
 
 import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-appointment-success.svg'
 import { toast } from 'react-toastify'
 import CustomerHomeSelectAppointmentFlow from './CustomerHomeSelectAppointmentFlow'
+import CustomerHomeReviewStep from './customer-home-review-step/CustomerHomeReview'
 
 type Step = {
   currentStepName: string
@@ -71,8 +71,16 @@ function createSteps(currentFlow: 'service' | 'professional'): Step {
     previousStep: secondSelectStep,
   }
 
+  const reviewStep: Step = {
+    currentStepName: 'Revisão',
+    currentStepAppointmentForm: CustomerHomeReviewStep,
+    nextStep: null,
+    previousStep: selectAppointmentTimeStep,
+  }
+
   firstSelectStep.nextStep = secondSelectStep
   secondSelectStep.nextStep = selectAppointmentTimeStep
+  selectAppointmentTimeStep.nextStep = reviewStep
 
   return firstSelectStep
 }
@@ -89,9 +97,10 @@ function CustomerHomeAppointmentWizard() {
   const userType = useAppSelector((state) => state?.auth?.user?.userType)
   const navigate = useNavigate()
   const createAppointmentForm = useForm<CreateAppointmentFormData>({
-    resolver: zodResolver(AppointmentSchemas.createSchemaForm),
+    resolver: zodResolver(appointmentFormData),
   })
-  const { handleSubmit } = createAppointmentForm
+  const { handleSubmit, watch } = createAppointmentForm
+  const selectedDate = watch('appointmentDate')
 
   const [makeAppointment, { isLoading: isLoadingMakeAppointment }] =
     appointmentAPI.useMakeAppointmentMutation()
@@ -160,9 +169,14 @@ function CustomerHomeAppointmentWizard() {
           )}
           {currentStep.nextStep && (
             <Button
+              className="disabled:text-zinc-600"
               variant="text-only"
               type="button"
               label={currentStep.nextStep.currentStepName}
+              disabled={
+                currentStep.currentStepName === 'Selecionar horário' &&
+                selectedDate === undefined
+              }
               onClick={() =>
                 setCurrentStep((currentStep) => {
                   if (currentStep.nextStep) {
@@ -176,6 +190,7 @@ function CustomerHomeAppointmentWizard() {
               }
             />
           )}
+
           {
             <Button
               className={`${currentStep.nextStep ? 'invisible hidden' : ''} disabled:text-zinc-600`}

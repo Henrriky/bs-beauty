@@ -22,7 +22,7 @@ class CompleteUserRegisterUseCase {
     private readonly professionalRepository: ProfessionalRepository
   ) { }
 
-  async execute({ userData, userId, userEmail, userType }: CompleteUserRegisterUseCaseInput): Promise<void> {
+  async execute ({ userData, userId, userEmail, userType }: CompleteUserRegisterUseCaseInput): Promise<void> {
     const data = {
       ...userData,
       registerCompleted: true

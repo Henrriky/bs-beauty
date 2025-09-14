@@ -1,30 +1,29 @@
-import { AnalyticsController } from '../../../src/controllers/analytics.controller'
-import { makeAppointmentServicesUseCaseFactory } from '../../../src/factory/make-appointment-services-use-case.factory'
-import { makeCustomersUseCaseFactory } from '../../../src/factory/make-customers-use-case.factory'
-import { makeServiceUseCaseFactory } from '../../../src/factory/make-service-use-case.factory'
-import { makeProfessionalsUseCaseFactory } from '../../../src/factory/make-professionals-use-case.factory'
-import { makeOffersUseCaseFactory } from '../../../src/factory/make-offers-use-case.factory'
-import { makeAppointmentsUseCaseFactory } from '../../../src/factory/make-appointments-use-case.factory'
-import { type AppointmentService } from '@prisma/client'
+import { AnalyticsController } from '../../../controllers/analytics.controller'
+import { makeCustomersUseCaseFactory } from '../../../factory/make-customers-use-case.factory'
+import { makeServiceUseCaseFactory } from '../../../factory/make-service-use-case.factory'
+import { makeProfessionalsUseCaseFactory } from '../../../factory/make-professionals-use-case.factory'
+import { makeOffersUseCaseFactory } from '../../../factory/make-offers-use-case.factory'
+import { makeAppointmentsUseCaseFactory } from '../../../factory/make-appointments-use-case.factory'
 import { vi } from 'vitest'
+import { type Appointment } from '@prisma/client'
 
-vi.mock('../../../src/factory/make-appointment-services-use-case.factory.ts')
-vi.mock('../../../src/factory/make-customers-use-case.factory.ts')
-vi.mock('../../../src/factory/make-service-use-case.factory.ts')
-vi.mock('../../../src/factory/make-professionals-use-case.factory.ts')
-vi.mock('../../../src/factory/make-offers-use-case.factory.ts')
-vi.mock('../../../src/factory/make-appointments-use-case.factory.ts')
+vi.mock('@/services/appointments.use-case.ts')
+vi.mock('@/factory/make-appointments-use-case.factory')
+vi.mock('@/factory/make-customers-use-case.factory.ts')
+vi.mock('@/factory/make-service-use-case.factory.ts')
+vi.mock('@/factory/make-professionals-use-case.factory.ts')
+vi.mock('@/factory/make-offers-use-case.factory.ts')
+vi.mock('@/factory/make-appointments-use-case.factory.ts')
 
 describe('AnalyticsController', () => {
   let req: any
   let res: any
   let next: any
-  let appointmentServicesUseCaseMock: any
+  let appointmentsUseCaseMock: any
   let customerUseCaseMock: any
   let serviceUseCaseMock: any
   let professionalUseCaseMock: any
   let offerUseCaseMock: any
-  let appointmentUseCaseMock: any
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -39,7 +38,7 @@ describe('AnalyticsController', () => {
 
     next = vi.fn()
 
-    appointmentServicesUseCaseMock = {
+    appointmentsUseCaseMock = {
       executeFindAll: vi.fn(),
       executeFindByServiceOfferedId: vi.fn()
     }
@@ -61,16 +60,11 @@ describe('AnalyticsController', () => {
       executeFindByProfessionalId: vi.fn()
     }
 
-    appointmentUseCaseMock = {
-      executeFindById: vi.fn()
-    }
-
-    vi.mocked(makeAppointmentServicesUseCaseFactory).mockReturnValue(appointmentServicesUseCaseMock)
+    vi.mocked(makeAppointmentsUseCaseFactory).mockReturnValue(appointmentsUseCaseMock)
     vi.mocked(makeCustomersUseCaseFactory).mockReturnValue(customerUseCaseMock)
     vi.mocked(makeServiceUseCaseFactory).mockReturnValue(serviceUseCaseMock)
     vi.mocked(makeProfessionalsUseCaseFactory).mockReturnValue(professionalUseCaseMock)
     vi.mocked(makeOffersUseCaseFactory).mockReturnValue(offerUseCaseMock)
-    vi.mocked(makeAppointmentsUseCaseFactory).mockReturnValue(appointmentUseCaseMock)
   })
 
   afterEach(() => {
@@ -84,11 +78,14 @@ describe('AnalyticsController', () => {
   describe('handleFindAll', () => {
     it('should return analytics data', async () => {
       // arrange
-      const appointmentServices = [
+      const appointments = [
         { id: '1', status: 'PENDING', serviceOfferedId: '1' },
         { id: '2', status: 'FINISHED', serviceOfferedId: '2' }
-      ] as AppointmentService[]
-      appointmentServicesUseCaseMock.executeFindAll.mockResolvedValue({ appointmentServices })
+      ] as Appointment[]
+      appointmentsUseCaseMock.executeFindAll.mockResolvedValue({ appointments })
+
+      const offer = { id: '1', price: 100 }
+      offerUseCaseMock.executeFindById.mockResolvedValue(offer)
 
       const customers = [{ id: '1' }, { id: '2' }]
       customerUseCaseMock.executeFindAll.mockResolvedValue({ customers })
@@ -98,9 +95,6 @@ describe('AnalyticsController', () => {
 
       const professionals = [{ id: '1' }, { id: '2' }]
       professionalUseCaseMock.executeFindAll.mockResolvedValue({ professionals })
-
-      const offer = { id: '1', price: 100 }
-      offerUseCaseMock.executeFindById.mockResolvedValue(offer)
 
       // act
       await AnalyticsController.handleFindAll(req, res, next)
@@ -121,7 +115,7 @@ describe('AnalyticsController', () => {
     it('should handle errors and call next', async () => {
       // arrange
       const error = new Error('Database connection failed')
-      appointmentServicesUseCaseMock.executeFindAll.mockRejectedValue(error)
+      appointmentsUseCaseMock.executeFindAll.mockRejectedValue(error)
 
       // act
       await AnalyticsController.handleFindAll(req, res, next)
@@ -141,14 +135,11 @@ describe('AnalyticsController', () => {
       const offers = [{ id: '1', price: 100 }]
       offerUseCaseMock.executeFindByProfessionalId.mockResolvedValue({ offers })
 
-      const appointmentServices = [
-        { id: '1', status: 'PENDING', serviceOfferedId: '1', appointmentId: '1' },
-        { id: '2', status: 'FINISHED', serviceOfferedId: '1', appointmentId: '2' }
-      ] as AppointmentService[]
-      appointmentServicesUseCaseMock.executeFindByServiceOfferedId.mockResolvedValue({ appointmentServices })
-
-      const appointment = { id: '1', customerId: '1' }
-      appointmentUseCaseMock.executeFindById.mockResolvedValue(appointment)
+      const appointments = [
+        { id: '1', status: 'PENDING', serviceOfferedId: '1' },
+        { id: '2', status: 'FINISHED', serviceOfferedId: '2' }
+      ] as Appointment[]
+      appointmentsUseCaseMock.executeFindByServiceOfferedId.mockResolvedValue({ appointments })
 
       // act
       await AnalyticsController.handleFindByProfessionalId(req, res, next)

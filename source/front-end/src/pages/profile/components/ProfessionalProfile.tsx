@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { Button } from '../../../components/button/Button'
 import { Input } from '../../../components/inputs/Input'
@@ -9,6 +9,7 @@ import { userAPI } from '../../../store/user/user-api'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { ProfessionalUpdateProfileFormData } from '../types'
+import PaymentMethodsInput from '../../../components/inputs/payment-methods-input/PaymentMethodsContainerInput'
 
 interface ProfessionalProfileProps {
   userInfo: Professional
@@ -36,6 +37,7 @@ function ProfessionalProfile({
       email: userInfo.email || undefined,
       socialMedia: userInfo.socialMedia || undefined,
       specialization: userInfo.specialization || undefined,
+      paymentMethods: userInfo.paymentMethods || undefined,
     },
   })
   const {
@@ -120,6 +122,21 @@ function ProfessionalProfile({
         register={register}
         errors={errors}
         appendNewSocialMedia={appendNewSocialMedia}
+      />
+      <Controller
+        name="paymentMethods"
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <div>
+            <PaymentMethodsInput
+              value={field.value}
+              onChange={field.onChange}
+            />
+            {error && (
+              <p className="mt-1 text-sm text-red-600">{error.message}</p>
+            )}
+          </div>
+        )}
       />
       <Button
         type="submit"

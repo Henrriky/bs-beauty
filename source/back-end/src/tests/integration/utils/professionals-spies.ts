@@ -3,7 +3,7 @@ import { ProfessionalsUseCase } from '../../../services/professionals.use-case'
 import * as factoryModule from '../../../factory/make-professionals-use-case.factory'
 import { PrismaProfessionalRepository } from '../../../repository/prisma/prisma-professional.repository'
 
-export function spyProfessionalsWiring() {
+export function spyProfessionalsWiring () {
   const factory = vi.spyOn(factoryModule, 'makeProfessionalsUseCaseFactory')
 
   const usecase = {
@@ -31,7 +31,7 @@ export function spyProfessionalsWiring() {
   }
 }
 
-export function restoreAllSpies() {
+export function restoreAllSpies () {
   // limpa qualquer spy aberto
   vi.restoreAllMocks()
 }

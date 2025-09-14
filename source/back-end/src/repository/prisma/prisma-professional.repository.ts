@@ -5,7 +5,7 @@ import { type ProfessionalRepository } from '../protocols/professional.repositor
 import { type ProfessionalsFilters } from '../../types/professionals/professionals-filters'
 
 class PrismaProfessionalRepository implements ProfessionalRepository {
-  public async findAll() {
+  public async findAll () {
     const professionals = await prismaClient.professional.findMany({
       orderBy: { createdAt: 'asc' }
     })
@@ -13,7 +13,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professionals
   }
 
-  public async findById(professionalId: string) {
+  public async findById (professionalId: string) {
     const professional = await prismaClient.professional.findUnique({
       where: { id: professionalId }
     })
@@ -21,14 +21,14 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professional
   }
 
-  public async findByEmail(email: string) {
+  public async findByEmail (email: string) {
     const professional = await prismaClient.professional.findUnique({
       where: { email }
     })
     return professional
   }
 
-  public async create(newProfessional: Prisma.ProfessionalCreateInput) {
+  public async create (newProfessional: Prisma.ProfessionalCreateInput) {
     const professional = await prismaClient.professional.create({
       data: { ...newProfessional }
     })
@@ -36,7 +36,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professional
   }
 
-  public async update(professionalId: string, professionalToUpdate: Prisma.ProfessionalUpdateInput) {
+  public async update (professionalId: string, professionalToUpdate: Prisma.ProfessionalUpdateInput) {
     const professionalUpdated = await prismaClient.professional.update({
       where: { id: professionalId },
       data: { ...professionalToUpdate }
@@ -45,7 +45,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professionalUpdated
   }
 
-  async updateByEmailAndGoogleId(
+  async updateByEmailAndGoogleId (
     googleId: string,
     email: string,
     professionalData: Prisma.ProfessionalUpdateInput
@@ -64,7 +64,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professional
   }
 
-  public async updateProfessionalByEmail(email: string, professionalToUpdate: Prisma.ProfessionalUpdateInput) {
+  public async updateProfessionalByEmail (email: string, professionalToUpdate: Prisma.ProfessionalUpdateInput) {
     const professionalUpdated = await prismaClient.professional.update({
       where: { email },
       data: { ...professionalToUpdate }
@@ -73,7 +73,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professionalUpdated
   }
 
-  public async delete(professionalId: string) {
+  public async delete (professionalId: string) {
     const professionalDeleted = await prismaClient.professional.delete({
       where: { id: professionalId }
     })
@@ -81,7 +81,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professionalDeleted
   }
 
-  public async fetchServicesOfferedByProfessional(professionalId: string) {
+  public async fetchServicesOfferedByProfessional (professionalId: string) {
     const professional = await prismaClient.professional.findUnique({
       where: {
         id: professionalId
@@ -126,7 +126,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return { professional: mappedProfessional }
   }
 
-  public async findAllPaginated(
+  public async findAllPaginated (
     params: PaginatedRequest<ProfessionalsFilters>
   ) {
     const { page, limit, filters } = params

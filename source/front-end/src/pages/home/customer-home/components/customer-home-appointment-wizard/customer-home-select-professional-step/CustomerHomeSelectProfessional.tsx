@@ -36,7 +36,7 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
 
   const { data, isLoading, isError, error } =
     serviceAPI.useFetchProfessionalsOfferingServiceQuery(
-      { serviceId },
+      { serviceId: serviceId ?? '' },
       { skip: props.currentFlow !== 'service' },
     )
 
@@ -68,9 +68,9 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
     props.currentFlow === 'service'
       ? (data?.professionalsOfferingService.offers ?? [])
       : (professionalsData?.data.map((professional) => ({
-        id: `${professional.id}`,
-        professional,
-      })) ?? [])
+          id: `${professional.id}`,
+          professional,
+        })) ?? [])
 
   if (professionalsToShow.length === 0) {
     return (
@@ -101,7 +101,6 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
       {professionalsToShow &&
         professionalsToShow.map((offerOrProfessional) => {
           const professional = offerOrProfessional.professional
-
           return (
             <div key={`professional-${professional.id}`}>
               <input
@@ -117,7 +116,11 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
                 key={offerOrProfessional.id}
                 for={offerOrProfessional.id}
                 {...offerOrProfessional}
-                onClick={() => setValue('professionalId', professional.id)}
+                onClick={() => {
+                  setValue('professionalId', professional.id)
+                  setValue('name', professional.name || 'Não definido')
+                  setValue('paymentMethods', professional.paymentMethods)
+                }}
               />
             </div>
           )

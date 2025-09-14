@@ -19,6 +19,21 @@ class ProfessionalSchemas {
     )
     .max(5)
 
+  public static readonly paymentMethodSchema = z
+    .array(
+      z
+        .object({
+          name: z
+            .string({ message: 'O nome é obrigatório' })
+            .min(1, 'O nome deve ter no mínimo 1 caracter')
+            .max(50, 'O nome deve ter no mínimo 50 caracteres'),
+        })
+        .strict(),
+    )
+    .max(10, 'Adicione no máximo 10 métodos de pagamento')
+    .optional()
+    .nullable()
+
   public static readonly professionalCompleteRegisterBodySchema = z
     .object({
       name: z
@@ -32,6 +47,7 @@ class ProfessionalSchemas {
           'Por favor, forneça um nome válido.',
         ),
       socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
+      paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
       contact: z
         .string({ message: 'O telefone de contato é obrigatório' })
         .refine(
@@ -55,6 +71,7 @@ class ProfessionalSchemas {
       name: SharedSchemas.nameSchema,
       email: z.string().email().optional(),
       socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
+      paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
       contact: z
         .string()
         .refine((value) => RegexPatterns.phone.test(value))
@@ -69,6 +86,7 @@ class ProfessionalSchemas {
       name: SharedSchemas.nameSchema,
       email: z.string().email().optional(),
       socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
+      paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
       contact: z
         .string()
         .refine((value) => RegexPatterns.phone.test(value))
