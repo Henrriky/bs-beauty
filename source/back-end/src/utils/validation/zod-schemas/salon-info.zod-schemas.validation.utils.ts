@@ -21,8 +21,9 @@ class SalonInfoSchemas {
   public static readonly updateSchema = z.object({
     openingHours: this.openingHoursSchema.optional(),
     salonAddress: z.string().optional(),
-    contactInfo: this.contactInfoSchema.optional(),
-    schedulingWindow: z.number().optional()
+    salonEmail: z.string().email().optional(),
+    salonPhoneNumber: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
+    minimumAdvanceTime: z.number().optional()
   }).strict()
 }
 
