@@ -1,9 +1,9 @@
 import { UseFormRegister } from 'react-hook-form'
-import { Input } from '../../../components/inputs/Input'
-import { SalonInfoUpdateFormData } from '../types'
-import OpeningHoursInput from './inputs/OpeningHoursInput'
+import { Input } from '../../../../components/inputs/Input'
+import { SalonInfoUpdateFormData } from '../../types'
+import OpeningHoursInput from '../inputs/OpeningHoursInput'
 import { HTMLInputTypeAttribute } from 'react'
-import { SalonInfo } from '../../../store/salon-info/types'
+import { SalonInfo } from '../../../../store/salon-info/types'
 
 interface InfoCardInputProps {
   id: string
@@ -14,7 +14,7 @@ interface InfoCardInputProps {
   register: UseFormRegister<SalonInfoUpdateFormData>
   errors: string | undefined
   onChange?: (e: any) => void
-  salonData: SalonInfo | undefined
+  salonData?: SalonInfo | undefined
 }
 
 function InfoCardInput({

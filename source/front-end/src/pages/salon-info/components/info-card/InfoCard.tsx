@@ -1,9 +1,9 @@
 import React, { HTMLInputTypeAttribute } from 'react'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import InfoCardInput from './InfoCardInput'
-import { SalonInfoUpdateFormData } from '../types'
+import { SalonInfoUpdateFormData } from '../../types'
 import { UseFormRegister } from 'react-hook-form'
-import { SalonInfo } from '../../../store/salon-info/types'
+import { SalonInfo } from '../../../../store/salon-info/types'
 
 interface InfoCardProps {
   name: string
@@ -17,7 +17,7 @@ interface InfoCardProps {
   }[]
   showAddNewButton?: boolean
   register: UseFormRegister<SalonInfoUpdateFormData>
-  salonData: SalonInfo | undefined
+  salonData?: SalonInfo | undefined
 }
 
 function InfoCard({

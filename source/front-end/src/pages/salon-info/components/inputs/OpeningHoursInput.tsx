@@ -9,7 +9,7 @@ interface OpeningHoursInputProps {
   inputType: HTMLInputTypeAttribute
   index: number
   register: UseFormRegister<SalonInfoUpdateFormData>
-  salonData: SalonInfo | undefined
+  salonData?: SalonInfo | undefined
 }
 
 function OpeningHoursInput({
