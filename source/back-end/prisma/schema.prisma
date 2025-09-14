@@ -198,7 +198,7 @@ model SalonInfo {
   salonAddress       String?
   salonEmail         String?  @map("salon_email")
   salonPhoneNumber   String?  @map("salon_phone_number")
-  minimumAdvanceTime Int?     @map("minimum_advance_time")
+  minimumAdvanceTime String?     @map("minimum_advance_time")
   updatedAt          DateTime @updatedAt @map("updated_at")
 
   @@map("salon_info")
