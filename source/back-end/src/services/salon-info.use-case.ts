@@ -1,20 +1,20 @@
-import { SalonSettingsRepository } from '@/repository/protocols/salon-settings.repository'
-import { Prisma, SalonSettings } from '@prisma/client'
+import { type SalonInfoRepository } from '@/repository/protocols/salon-info.repository'
+import { type Prisma, type SalonInfo } from '@prisma/client'
 
-class SalonSettingsUseCase {
-  constructor(private readonly salonSettingsRepository: SalonSettingsRepository) { }
+class SalonInfoUseCase {
+  constructor (private readonly salonSettingsRepository: SalonInfoRepository) { }
 
-  public async executeFetchInfo(id: number): Promise<SalonSettings | null> {
+  public async executeFetchInfo (id: number): Promise<SalonInfo | null> {
     const salonInfo = await this.salonSettingsRepository.fetchInfo(id)
 
     return salonInfo
   }
 
-  public async executeUpdateInfo(id: number, data: Prisma.SalonSettingsUpdateInput) {
+  public async executeUpdateInfo (id: number, data: Prisma.SalonInfoUpdateInput) {
     const updatedSalonInfo = await this.salonSettingsRepository.updateInfo(id, data)
 
     return updatedSalonInfo
   }
 }
 
-export { SalonSettingsUseCase }
+export { SalonInfoUseCase }

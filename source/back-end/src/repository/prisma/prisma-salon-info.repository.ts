@@ -1,24 +1,24 @@
-import { SalonSettings, Prisma } from '@prisma/client'
-import { SalonSettingsRepository } from '../protocols/salon-settings.repository'
+import { type Prisma } from '@prisma/client'
+import { type SalonInfoRepository } from '../protocols/salon-info.repository'
 import { prismaClient } from '../../lib/prisma'
 
-class PrismaSalonSettingsRepository implements SalonSettingsRepository {
+class PrismaSalonInfoRepository implements SalonInfoRepository {
   public async fetchInfo (id: number) {
-    const salonInfo = await prismaClient.salonSettings.findUnique({
+    const salonInfo = await prismaClient.salonInfo.findUnique({
       where: { id }
     })
 
     return salonInfo
   }
-  public async updateInfo(id: number, data: Prisma.SalonSettingsUpdateInput) {
-    const updatedSalonInfo = await prismaClient.salonSettings.update({
+
+  public async updateInfo (id: number, data: Prisma.SalonInfoUpdateInput) {
+    const updatedSalonInfo = await prismaClient.salonInfo.update({
       where: { id },
       data: { ...data }
     })
 
     return updatedSalonInfo
   }
-
 }
 
-export { PrismaSalonSettingsRepository }
+export { PrismaSalonInfoRepository }

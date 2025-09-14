@@ -1,10 +1,10 @@
-import { SalonSettingsController } from '@/controllers/salon-settings.controller'
+import { SalonInfoController } from '@/controllers/salon-info.controller'
 import { routeAuthMiddleware } from '@/middlewares/route-auth.middleware'
 import { Router } from 'express'
 
-const salonSettingsRoutes = Router()
+const salonInfoRoutes = Router()
 
-salonSettingsRoutes.get('/:id', routeAuthMiddleware(['MANAGER', 'PROFESSIONAL', 'CUSTOMER']), SalonSettingsController.handleFetchInfo)
-salonSettingsRoutes.put('/:id', routeAuthMiddleware(['MANAGER']), SalonSettingsController.handleUpdateInfo)
+salonInfoRoutes.get('/:id', routeAuthMiddleware(['MANAGER', 'PROFESSIONAL', 'CUSTOMER']), SalonInfoController.handleFetchInfo)
+salonInfoRoutes.put('/:id', routeAuthMiddleware(['MANAGER']), SalonInfoController.handleUpdateInfo)
 
-export { salonSettingsRoutes }
+export { salonInfoRoutes }

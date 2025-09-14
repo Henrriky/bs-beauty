@@ -10,7 +10,7 @@ import { errorHandlerMiddleware } from '../middlewares/error-handler.middleware'
 import { authRoutes } from './routes/auth.routes'
 import { verifyJwtTokenMiddleware } from '../middlewares/auth/verify-jwt-token.middleware'
 import { analyticsServiceRoutes } from './routes/analytics.routes'
-import { salonSettingsRoutes } from './routes/salon-settings.routes'
+import { salonInfoRoutes } from './routes/salon-info.routes'
 
 const appRoutes = Router()
 
@@ -23,7 +23,7 @@ appRoutes.use('/appointments', verifyJwtTokenMiddleware, appointmentRoutes)
 appRoutes.use('/shifts', verifyJwtTokenMiddleware, shiftRoutes)
 appRoutes.use('/offers', verifyJwtTokenMiddleware, offerRoutes)
 appRoutes.use('/analytics', verifyJwtTokenMiddleware, analyticsServiceRoutes)
-appRoutes.use('/salon-settings', verifyJwtTokenMiddleware, salonSettingsRoutes)
+appRoutes.use('/salon-info', verifyJwtTokenMiddleware, salonInfoRoutes)
 appRoutes.use(errorHandlerMiddleware)
 
 export { appRoutes }

@@ -1,8 +1,8 @@
-import { Prisma, SalonSettings } from '@prisma/client';
+import { type Prisma, type SalonInfo } from '@prisma/client'
 
-interface SalonSettingsRepository {
-  fetchInfo: (id: number) => Promise<SalonSettings | null>
-  updateInfo: (id: number, data: Prisma.SalonSettingsUpdateInput) => Promise<SalonSettings>
+interface SalonInfoRepository {
+  fetchInfo: (id: number) => Promise<SalonInfo | null>
+  updateInfo: (id: number, data: Prisma.SalonInfoUpdateInput) => Promise<SalonInfo>
 }
 
-export type { SalonSettingsRepository }
+export type { SalonInfoRepository }

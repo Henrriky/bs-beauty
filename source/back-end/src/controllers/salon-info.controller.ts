@@ -1,12 +1,12 @@
-import { makeSalonSettingsUseCaseFactory } from '@/factory/make-salon-settings-use-case.factory';
-import { Prisma } from '@prisma/client';
-import { NextFunction, Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
+import { makeSalonInfoUseCaseFactory } from '@/factory/make-salon-info-use-case.factory'
+import { type Prisma } from '@prisma/client'
+import { type NextFunction, type Request, type Response } from 'express'
+import { StatusCodes } from 'http-status-codes'
 
-class SalonSettingsController {
-  public static async handleFetchInfo(req: Request, res: Response, next: NextFunction) {
+class SalonInfoController {
+  public static async handleFetchInfo (req: Request, res: Response, next: NextFunction) {
     try {
-      const useCase = makeSalonSettingsUseCaseFactory()
+      const useCase = makeSalonInfoUseCaseFactory()
       const id = parseInt(req.params.id)
       const salonInfo = await useCase.executeFetchInfo(id)
 
@@ -16,11 +16,11 @@ class SalonSettingsController {
     }
   }
 
-  public static async handleUpdateInfo(req: Request, res: Response, next: NextFunction) {
+  public static async handleUpdateInfo (req: Request, res: Response, next: NextFunction) {
     try {
-      const newSalonInfo: Prisma.SalonSettingsUpdateInput = req.body
+      const newSalonInfo: Prisma.SalonInfoUpdateInput = req.body
       const id = parseInt(req.params.id)
-      const useCase = makeSalonSettingsUseCaseFactory()
+      const useCase = makeSalonInfoUseCaseFactory()
       const updatedSalonInfo = await useCase.executeUpdateInfo(id, newSalonInfo)
 
       res.status(StatusCodes.OK).send(updatedSalonInfo)
@@ -30,4 +30,4 @@ class SalonSettingsController {
   }
 }
 
-export { SalonSettingsController }
+export { SalonInfoController }
