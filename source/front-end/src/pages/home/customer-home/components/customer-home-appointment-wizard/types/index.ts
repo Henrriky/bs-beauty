@@ -14,6 +14,7 @@ export const appointmentFormData = AppointmentSchemas.createSchemaForm
     professionalPhotoUrl: z.string(),
     estimatedTime: z.number(),
     price: z.number(),
+    allowImageUse: z.boolean(),
   })
 
 type CreateAppointmentFormData = z.infer<typeof appointmentFormData>

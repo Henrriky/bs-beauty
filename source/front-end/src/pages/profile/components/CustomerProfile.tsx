@@ -12,8 +12,7 @@ import { Checkbox } from '../../../components/inputs/Checkbox'
 import Modal from '../../services/components/Modal'
 import { useState } from 'react'
 import Subtitle from '../../../components/texts/Subtitle'
-import SuccessfullAppointmentCreationIcon from '../../../../src/assets/create-appointment-success.svg'
-
+import ExclamationMarkIcon from '../../../../src/assets/exclamation-mark.svg'
 
 interface CustomerProfileProps {
   userInfo: Customer
@@ -63,7 +62,7 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
   }
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
-  
+
   return (
     <form
       className="flex flex-col gap-10 w-full"
@@ -151,7 +150,7 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
         }}
       >
         <img
-          src={SuccessfullAppointmentCreationIcon}
+          src={ExclamationMarkIcon}
           alt="Ícone de seta"
           className="absolute -top-[40px] max-w-[150px] max-h-[150px]"
         />

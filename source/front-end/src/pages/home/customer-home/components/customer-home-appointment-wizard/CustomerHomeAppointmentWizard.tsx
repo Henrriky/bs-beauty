@@ -111,6 +111,7 @@ function CustomerHomeAppointmentWizard() {
       appointmentDate: data.appointmentDate,
       serviceOfferedId: data.serviceOfferedId,
       customerId: customerId!,
+      allowImageUse: data.allowImageUse,
     }
 
     try {
