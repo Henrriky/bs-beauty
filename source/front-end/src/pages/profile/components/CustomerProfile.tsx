@@ -13,6 +13,7 @@ import Modal from '../../services/components/Modal'
 import { useState } from 'react'
 import Subtitle from '../../../components/texts/Subtitle'
 import ExclamationMarkIcon from '../../../../src/assets/exclamation-mark.svg'
+import { useNavigate } from 'react-router'
 
 interface CustomerProfileProps {
   userInfo: Customer
@@ -21,6 +22,7 @@ interface CustomerProfileProps {
 
 function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
   const [updateProfile, { isLoading }] = userAPI.useUpdateProfileMutation()
+  const navigate = useNavigate()
 
   const {
     register,
@@ -41,7 +43,7 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
       phone: userInfo.phone || undefined,
       name: userInfo.name || undefined,
       email: userInfo.email || undefined,
-      alwaysAllowImageUse: userInfo.alwaysAllowImageUse ?? false,
+      alwaysAllowImageUse: userInfo.alwaysAllowImageUse ?? undefined,
     },
   })
 
@@ -54,6 +56,7 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
       .then(() => {
         toast.success('Perfil atualizado com sucesso!')
         onProfileUpdate()
+        navigate(0)
       })
       .catch((error: unknown) => {
         console.error('Error trying to complete register', error)
