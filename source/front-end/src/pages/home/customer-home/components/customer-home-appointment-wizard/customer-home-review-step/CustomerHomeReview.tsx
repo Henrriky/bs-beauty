@@ -3,22 +3,49 @@ import { CreateAppointmentFormData } from '../types'
 import { serviceAPI } from '../../../../../../store/service/service-api'
 import ProfilePicture from '../../../../../profile/components/ProfilePicture'
 import PaymentMethodsContainer from './PaymentMethodsContainer'
+import { customerAPI } from '../../../../../../store/customer/customer-api'
+import { useEffect, useState } from 'react'
+import ExclamationMarkIcon from '../../../../../../assets/exclamation-mark.svg'
+import Modal from '../../../../../services/components/Modal'
+import { Button } from '../../../../../../components/button/Button'
+import Subtitle from '../../../../../../components/texts/Subtitle'
+
 
 function CustomerHomeReviewStep() {
-  const { watch } = useFormContext<CreateAppointmentFormData>()
+  const { watch, setValue } = useFormContext<CreateAppointmentFormData>()
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
 
   const serviceId = watch('serviceId')
-
-  if (!serviceId)
-    return <div className="text-red-600 text-xl">Ocorreu um erro!</div>
-
-  const { data: serviceData } = serviceAPI.useGetServiceByIdQuery(serviceId)
   const professionalName = watch('name')
   const professionalPhotoUrl = watch('professionalPhotoUrl')
   const appointmentDateValue = watch('appointmentDate')
   const durationInMinutes = watch('estimatedTime')
   const price = watch('price')
   const paymentMethods = watch('paymentMethods')
+  const customerId = watch('customerId')
+  const allowImageUse = watch('allowImageUse')
+
+  const { data: serviceData } = serviceAPI.useGetServiceByIdQuery(serviceId, {
+    skip: !serviceId,
+  })
+
+  const { data: customerData } = customerAPI.useGetCustomerByIdQuery(
+    customerId,
+    {
+      skip: !customerId,
+    },
+  )
+
+  const alwaysAllowImageUse = customerData?.alwaysAllowImageUse
+
+  useEffect(() => {
+    if (alwaysAllowImageUse === false) setModalIsOpen(true)
+
+    if (alwaysAllowImageUse === true) setValue('allowImageUse', true)
+  }, [alwaysAllowImageUse, setValue])
+
+  if (!serviceId)
+    return <div className="text-red-600 text-xl">Ocorreu um erro!</div>
 
   const initialDate = appointmentDateValue
     ? new Date(appointmentDateValue)
@@ -54,7 +81,7 @@ function CustomerHomeReviewStep() {
         minute: '2-digit',
       })
     : '--:--'
-
+    
   return (
     <div className="p-8 rounded-lg space-y-4 bg-[#262626]">
       <h2 className="text-xl font-semibold text-secondary-200 border-b pb-2">
@@ -98,6 +125,49 @@ function CustomerHomeReviewStep() {
       {paymentMethods && paymentMethods.length > 0 && (
         <PaymentMethodsContainer methods={paymentMethods} />
       )}
+      <Modal
+        className="bg-[#54493F] font-normal relative"
+        isOpen={modalIsOpen}
+        onClose={() => {
+          setModalIsOpen(false)
+        }}
+      >
+        <img
+          src={ExclamationMarkIcon}
+          alt="Ícone de seta"
+          className="absolute -top-[40px] max-w-[150px] max-h-[150px]"
+        />
+        <div className="flex flex-col items-center justify-between h-full pt-8 pb-4">
+          <div className="flex-grow flex flex-col items-center justify-center gap-2">
+            <Subtitle className="text-[#B5B5B5]" align="center">
+              Deseja permitir o uso de sua imagem? Podemos fazer fotos ou vídeos para divulgação do Salão.
+            </Subtitle>
+            <Subtitle className="text-primary-100 text-sm" align="center">
+              Você também pode desativar essa mensagem alterando as opções na aba Perfil.
+            </Subtitle>
+          </div>
+          <div className="flex gap-2 justify-between w-full">
+            <Button
+              className="transition-all bg-[#A4978A] text-[#54493F] font-medium hover:bg-[#4e483f] hover:text-white"
+              label={'Sim'}
+              id={'agree'}
+              onClick={() => {
+                setModalIsOpen(false)
+                setValue('allowImageUse', true)
+              }}
+            />
+            <Button
+              className="transition-all bg-[#A4978A] text-[#54493F] font-medium hover:bg-[#4e483f] hover:text-white"
+              label={'Não'}
+              id={'disagree'}
+              onClick={() => {
+                setModalIsOpen(false)
+                setValue('allowImageUse', false)
+              }}
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }
