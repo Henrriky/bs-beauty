@@ -39,10 +39,10 @@ function CustomerHomeReviewStep() {
   const alwaysAllowImageUse = customerData?.alwaysAllowImageUse
 
   useEffect(() => {
-    if (alwaysAllowImageUse === false) {
-      setModalIsOpen(true)
-    }
-  }, [alwaysAllowImageUse])
+    if (alwaysAllowImageUse === false) setModalIsOpen(true)
+
+    if (alwaysAllowImageUse === true) setValue('allowImageUse', true)
+  }, [alwaysAllowImageUse, setValue])
 
   if (!serviceId)
     return <div className="text-red-600 text-xl">Ocorreu um erro!</div>
@@ -154,7 +154,6 @@ function CustomerHomeReviewStep() {
               onClick={() => {
                 setModalIsOpen(false)
                 setValue('allowImageUse', true)
-                console.log(allowImageUse)
               }}
             />
             <Button
@@ -164,7 +163,6 @@ function CustomerHomeReviewStep() {
               onClick={() => {
                 setModalIsOpen(false)
                 setValue('allowImageUse', false)
-                console.log(allowImageUse)
               }}
             />
           </div>
