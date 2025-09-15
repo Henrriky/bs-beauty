@@ -23,7 +23,7 @@ class SalonInfoSchemas {
     salonAddress: z.string().optional(),
     salonEmail: z.string().email().optional(),
     salonPhoneNumber: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
-    minimumAdvanceTime: z.number().optional()
+    minimumAdvanceTime: z.string().optional()
   }).strict()
 }
 
