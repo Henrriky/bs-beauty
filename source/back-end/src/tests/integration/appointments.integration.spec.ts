@@ -275,7 +275,8 @@ describe('Appointments API (Integration Test)', () => {
       const appointment: Partial<Appointment> = {
         appointmentDate,
         customerId: customer.id,
-        serviceOfferedId: offer.id
+        serviceOfferedId: offer.id,
+        allowImageUse: true
       }
 
       const response = await request(app)
@@ -288,7 +289,8 @@ describe('Appointments API (Integration Test)', () => {
         expect.objectContaining({
           id: expect.any(String),
           serviceOfferedId: appointment.serviceOfferedId,
-          appointmentDate: appointmentDate.toISOString()
+          appointmentDate: appointmentDate.toISOString(),
+          allowImageUse: expect.any(Boolean)
         })
       )
 
@@ -304,7 +306,8 @@ describe('Appointments API (Integration Test)', () => {
       const appointment: Partial<Appointment> = {
         appointmentDate: new Date('invalid-date'),
         customerId: customer.id,
-        serviceOfferedId: offer.id
+        serviceOfferedId: offer.id,
+        allowImageUse: true
       }
 
       const response = await request(app)
@@ -323,7 +326,8 @@ describe('Appointments API (Integration Test)', () => {
       const appointment: Partial<Appointment> = {
         appointmentDate: appointmentDateTooSoon,
         customerId: customer.id,
-        serviceOfferedId: offer.id
+        serviceOfferedId: offer.id,
+        allowImageUse: true
       }
       const response = await request(app)
         .post('/api/appointments')
@@ -342,7 +346,8 @@ describe('Appointments API (Integration Test)', () => {
       const appointment: Partial<Appointment> = {
         appointmentDate: appointmentDateInPast,
         customerId: customer.id,
-        serviceOfferedId: offer.id
+        serviceOfferedId: offer.id,
+        allowImageUse: true
       }
 
       const response = await request(app)
@@ -362,7 +367,8 @@ describe('Appointments API (Integration Test)', () => {
         const appointment: Partial<Appointment> = {
           appointmentDate,
           customerId: customer.id,
-          serviceOfferedId: offer.id
+          serviceOfferedId: offer.id,
+          allowImageUse: true
         }
 
         await request(app)
@@ -375,7 +381,8 @@ describe('Appointments API (Integration Test)', () => {
       const appointment: Partial<Appointment> = {
         appointmentDate,
         customerId: customer.id,
-        serviceOfferedId: offer.id
+        serviceOfferedId: offer.id,
+        allowImageUse: true
       }
 
       // Try to create one more appointment on same day

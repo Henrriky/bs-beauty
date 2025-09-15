@@ -11,7 +11,8 @@ class AppointmentSchemas {
       .string()
       .refine((value) => !isNaN(Date.parse(value)), {
         message: 'appointmentDate must be a valid ISO date string'
-      })
+      }),
+    allowImageUse: z.boolean()  
   }).strict()
 
   public static customerUpdateSchema = z.object({

@@ -10,6 +10,7 @@ export type FindByIdAppointments = Prisma.AppointmentGetPayload<{
     observation: true
     status: true
     appointmentDate: true
+    allowImageUse: true
     customerId: true
     serviceOfferedId: true
     createdAt: true
