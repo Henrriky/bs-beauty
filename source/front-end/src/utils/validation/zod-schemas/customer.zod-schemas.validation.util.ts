@@ -1,12 +1,30 @@
 import { z } from 'zod'
 import { SharedSchemas } from './shared-zod-schemas.validation.utils'
 
+const discoveryEnum = z.enum([
+  'INSTAGRAM',
+  'FACEBOOK',
+  'TIKTOK',
+  'GOOGLE',
+  'WHATSAPP',
+  'WALK_IN',
+  'OTHER',
+])
+
+const discoverySourceSchema = z.preprocess(
+  (v) => (v === '' ? undefined : v),
+  discoveryEnum.optional()
+).refine((v) => v !== undefined, {
+  message: 'Selecione uma opção',
+})
+
 class CustomerSchemas {
   public static customerCompleteRegisterBodySchema = z
     .object({
       name: SharedSchemas.nameSchema,
       birthdate: SharedSchemas.birthdateSchema,
       phone: SharedSchemas.phoneSchema,
+      discoverySource: discoverySourceSchema,
     })
     .strict()
 
