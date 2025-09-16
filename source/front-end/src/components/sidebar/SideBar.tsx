@@ -6,7 +6,7 @@ import ProfilePicture from '../../pages/profile/components/ProfilePicture'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
 import sideBarItems from './consts'
 import { useDispatch } from 'react-redux'
-import { logout } from '../../store/auth/auth-slice'
+import { serverLogout } from '../../store/auth/server-logout'
 
 interface SideBarItemProps {
   path: string
@@ -119,12 +119,10 @@ function SideBarItem(props: SideBarItemProps) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (props.children === 'Sair') {
-      dispatch(logout())
-      localStorage.removeItem('token')
-      localStorage.removeItem('googleAccessToken')
-      navigate('/')
+      await dispatch<any>(serverLogout())
+      navigate('/', { replace: true })    
     } else {
       navigate(`${props.path}`)
     }

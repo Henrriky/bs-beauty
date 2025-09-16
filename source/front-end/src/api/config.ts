@@ -10,6 +10,8 @@ export const API_VARIABLES = {
     LOGIN_WITH_GOOGLE_ACCESS_TOKEN: '/auth/login',
     FETCH_USER_INFO: '/auth/user',
     REGISTER_USER: '/auth/register',
+    NEW_TOKENS: '/auth/new-tokens',
+    LOGOUT: '/auth/logout'
   },
   USER_ENDPOINTS: {
     UPDATE_CUSTOMER_PROFILE: '/customers',

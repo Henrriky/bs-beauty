@@ -41,6 +41,7 @@ const loginWithGoogleAccessToken = async (
         headers: {
           Authorization: `Bearer ${googleAccessToken}`,
         },
+        withCredentials: true,
       },
     )
   return { accessToken: response.data.accessToken }
@@ -56,6 +57,9 @@ const loginWithEmailAndPassword = async (
     await axiosInstance.post<LoginWithEmailAndPasswordAPIResponse>(
       API_VARIABLES.AUTH_ENDPOINTS.LOGIN_WITH_GOOGLE_ACCESS_TOKEN,
       { email, password },
+      {
+        withCredentials: true,
+      }
     )
   return { accessToken: response.data.accessToken }
 }

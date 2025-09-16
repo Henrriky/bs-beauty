@@ -62,6 +62,10 @@ const authSlice = createSlice({
       state,
       action: PayloadAction<{ token: TokenParams; user: CustomerOrEmployee }>,
     ) => {
+      localStorage.setItem('token', action.payload.token.accessToken)
+      if (action.payload.token.googleAccessToken) {
+        localStorage.setItem('googleAccessToken', action.payload.token.googleAccessToken)
+      }
       return {
         ...state,
         ...action.payload,
