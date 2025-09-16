@@ -72,6 +72,21 @@ export class RefreshTokenService {
     return { userId, ...next }
   }
 
+  async revokeByJwt(incomingRefreshJwt: string) {
+    let payload: (JwtPayload & { sub?: string; jti?: string }) | null = null
+
+    try {
+      payload = jwt.verify(incomingRefreshJwt, this.secret) as JwtPayload
+    } catch {
+      payload = jwt.decode(incomingRefreshJwt) as JwtPayload | null
+    }
+
+    const jti = payload?.jti
+    if (!jti) return
+
+    await this.revokeOne(String(jti)).catch(() => { })
+  }
+
   async revokeOne(refreshTokenId: string) {
     const entry = await this.cache.get<RefreshEntry>(refreshKey(refreshTokenId))
     if (!entry) return

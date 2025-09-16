@@ -1,24 +1,15 @@
 import { makeGenerateTokensUseCase } from '@/factory/auth/make-generate-tokens.use-case.factory'
-import { GenerateTokensUseCase } from '@/services/use-cases/auth/generate-tokens.use-case'
+import { REFRESH_COOKIE_NAME, setRefreshCookie } from '@/utils/cookies/refresh-cookie'
 import { type NextFunction, type Request, type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-function extractRefreshToken(req: Request): string | null {
-  const auth = req.get('authorization')
-  if (auth) {
-    const parts = auth.trim().split(' ')
-    const bearerPart = parts[0]?.toLowerCase()
-    if (bearerPart === 'bearer') {
-      if (parts[1]) return parts[1]
-    }
-  }
-  return req.get('x-refresh-token') ?? null
-}
+const REFRESH_TOKEN_MAX_AGE = 30 * 24 * 60 * 60 * 1000 
 
-export class GenerateTokensController {
+class GenerateTokensController {
   static async handle(req: Request, res: Response, next: NextFunction) {
     try {
-      const incomingRefreshJwt = extractRefreshToken(req)
+      const incomingRefreshJwt = req.cookies && req.cookies[REFRESH_COOKIE_NAME]
+
       if (!incomingRefreshJwt) {
         return res
           .status(StatusCodes.UNAUTHORIZED)
@@ -28,6 +19,7 @@ export class GenerateTokensController {
       const usecase = makeGenerateTokensUseCase()
 
       const { accessToken, refreshToken: newRefreshToken } = await usecase.execute(incomingRefreshJwt)
+      setRefreshCookie(res, newRefreshToken, REFRESH_TOKEN_MAX_AGE)
 
       return res
         .status(StatusCodes.OK)
@@ -47,3 +39,5 @@ export class GenerateTokensController {
     }
   }
 }
+
+export { GenerateTokensController }

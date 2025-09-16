@@ -10,6 +10,7 @@ import { verifyJwtTokenMiddleware } from '../../middlewares/auth/verify-jwt-toke
 import { PasswordResetRequestController } from '@/controllers/auth/password-reset-request.controller'
 import { PasswordResetSetPasswordController } from '@/controllers/auth/password-reset-set-password.controller'
 import { GenerateTokensController } from '@/controllers/auth/generate-tokens.controller'
+import { LogoutController } from '@/controllers/auth/logout.controller'
 
 const authRoutes = Router()
 
@@ -25,5 +26,6 @@ authRoutes.post('/code-validation', CodeValidationController.handle)
 authRoutes.post('/password-reset/request', PasswordResetRequestController.handle)
 authRoutes.post('/password-reset/set-password', PasswordResetSetPasswordController.handle)
 authRoutes.post('/new-tokens', GenerateTokensController.handle)
+authRoutes.post('/logout', LogoutController.handle)
 
 export { authRoutes }
