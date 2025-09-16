@@ -17,6 +17,8 @@ interface UserRegistrationProps {
     | OnSubmitCustomerRegistrationFormData
     | OnSubmitEmployeeRegistrationFormData
   setEmail: React.Dispatch<React.SetStateAction<string>>
+  setPassword: React.Dispatch<React.SetStateAction<string>>
+  isOpen: boolean
 }
 
 function UserRegistrationForm(props: UserRegistrationProps) {
@@ -30,8 +32,16 @@ function UserRegistrationForm(props: UserRegistrationProps) {
 
   const [showPassword, setShowPassword] = useState(false)
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     props.setEmail(event.target.value)
+  }
+
+  const handlePasswordInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    props.setPassword(event.target.value)
   }
 
   return (
@@ -46,7 +56,7 @@ function UserRegistrationForm(props: UserRegistrationProps) {
         type="email"
         placeholder="Digite seu e-mail"
         error={errors?.email?.message?.toString()}
-        onChange={handleInputChange}
+        onChange={handleEmailInputChange}
       />
       <div className="relative">
         <Input
@@ -56,6 +66,7 @@ function UserRegistrationForm(props: UserRegistrationProps) {
           type={showPassword ? 'text' : 'password'}
           placeholder="Digite sua senha"
           error={errors?.password?.message?.toString()}
+          onChange={handlePasswordInputChange}
         />
         <PasswordEyeIcon
           showPassword={showPassword}
@@ -79,10 +90,10 @@ function UserRegistrationForm(props: UserRegistrationProps) {
       <Button
         type="submit"
         label={
-          props.isLoading ? (
+          props.isLoading && !props.isOpen ? (
             <div className="flex justify-center items-center gap-4">
               <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
-              <p className="text-sm">Finalizar cadastro</p>
+              <p className="text-sm">Carregando...</p>
             </div>
           ) : (
             'Prosseguir para próxima etapa'

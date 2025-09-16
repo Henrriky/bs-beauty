@@ -59,5 +59,15 @@ export const authAPI = createApi({
         method: 'GET',
       }),
     }),
+    validateCode: builder.mutation<
+      { success: boolean },
+      { purpose: string; email: string; code: string }
+    >({
+      query: (data) => ({
+        url: API_VARIABLES.AUTH_ENDPOINTS.CODE_VALIDATION,
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 })
