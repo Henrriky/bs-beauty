@@ -60,11 +60,35 @@ export const authAPI = createApi({
       }),
     }),
     validateCode: builder.mutation<
-      { success: boolean },
+      { success: boolean; ticket?: string },
       { purpose: string; email: string; code: string }
     >({
       query: (data) => ({
         url: API_VARIABLES.AUTH_ENDPOINTS.CODE_VALIDATION,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    requestPasswordReset: builder.mutation<
+      { success: boolean },
+      { email: string }
+    >({
+      query: (data) => ({
+        url: API_VARIABLES.AUTH_ENDPOINTS.REQUEST_PASSWORD_RESET,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    resetPassword: builder.mutation<
+      { success: boolean },
+      {
+        ticket: string | undefined
+        newPassword: string
+        confirmNewPassword: string
+      }
+    >({
+      query: (data) => ({
+        url: API_VARIABLES.AUTH_ENDPOINTS.SET_NEW_PASSWORD,
         method: 'POST',
         body: data,
       }),

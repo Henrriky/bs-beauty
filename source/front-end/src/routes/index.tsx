@@ -18,6 +18,8 @@ import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
 import UserRegistration from '../pages/user-registration'
+import PasswordReset from '../pages/password-reset'
+import PasswordResetCompleted from '../pages/password-reset/components/PasswordResetCompleted'
 
 function BSBeautyRouter() {
   return (
@@ -28,6 +30,11 @@ function BSBeautyRouter() {
           <Route path="/login" element={<Login />} />
           <Route path="/auth/google/callback" element={<Callback />} />
           <Route path="/register" element={<UserRegistration />} />
+          <Route path="/reset-password" element={<PasswordReset />} />
+          <Route
+            path="/password-reset-completed"
+            element={<PasswordResetCompleted />}
+          />
           <Route
             element={
               <PrivateRoute

@@ -11,7 +11,10 @@ export const API_VARIABLES = {
     FETCH_USER_INFO: '/auth/user',
     REGISTER_USER: '/auth/register',
     NEW_TOKENS: '/auth/new-tokens',
-    LOGOUT: '/auth/logout'
+    CODE_VALIDATION: '/auth/code-validation',
+    REQUEST_PASSWORD_RESET: '/auth/password-reset/request',
+    SET_NEW_PASSWORD: '/auth/password-reset/set-password',
+    LOGOUT: '/auth/logout',
   },
   USER_ENDPOINTS: {
     UPDATE_CUSTOMER_PROFILE: '/customers',

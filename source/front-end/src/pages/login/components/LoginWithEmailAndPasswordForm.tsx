@@ -90,16 +90,26 @@ function LoginWithEmailAndPasswordForm() {
           </div>
           <Button label="Entrar" type="submit" variant="outline"></Button>
         </form>
-
-        <p className="text-[#DBDBDB] text-xs">
-          Não possui conta? {''}
-          <Button
-            variant="text-only"
-            label="Crie uma agora!"
-            className="text-xs"
-            onClick={() => navigate('/register')}
-          />
-        </p>
+        <div className="flex flex-col items-center">
+          <p className="text-[#DBDBDB] text-xs">
+            Não possui conta? {''}
+            <Button
+              variant="text-only"
+              label="Crie uma agora!"
+              className="text-xs"
+              onClick={() => navigate('/register')}
+            />
+          </p>
+          <p className="text-[#DBDBDB] text-xs">
+            Esqueceu sua senha? {''}
+            <Button
+              variant="text-only"
+              label="Redefinir senha"
+              className="text-xs"
+              onClick={() => navigate('/reset-password')}
+            />
+          </p>
+        </div>
       </div>
     </>
   )
