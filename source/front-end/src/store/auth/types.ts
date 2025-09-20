@@ -24,6 +24,7 @@ export type Customer = {
   googleId: string | null;
   phone: string | null;
   profilePhotoUrl: string | null;
+  alwaysAllowImageUse: boolean | null;
   userType: UserType;
   referrerId: string;
   referralCount: number;
@@ -38,6 +39,7 @@ export type Professional = {
   googleId: string | null;
   registerCompleted: boolean;
   socialMedia: { name: string, url: string }[] | null;
+  paymentMethods: { name: string, }[] | null;
   contact: string | null;
   specialization: string | null;
   profilePhotoUrl: string;

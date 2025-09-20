@@ -15,7 +15,9 @@ export type ProfessionalUpdateAppointmentFormData = z.infer<
 >
 
 export type OnSubmitAppointmentDetailsUpdateForm = (
-  data: ProfessionalUpdateAppointmentFormData | CustomerUpdateAppointmentFormData,
+  data:
+    | ProfessionalUpdateAppointmentFormData
+    | CustomerUpdateAppointmentFormData,
 ) => Promise<void>
 
 export interface AppointmentDetailsComponentProps {

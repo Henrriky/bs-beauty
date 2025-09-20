@@ -14,6 +14,7 @@ import Title from '../../../components/texts/Title'
 import {
   BriefcaseIcon,
   CalendarDaysIcon,
+  CameraIcon,
   ChatBubbleOvalLeftIcon,
   CheckIcon,
   CurrencyDollarIcon,
@@ -163,6 +164,21 @@ function ProfessionalAppointmentDetails(
           variant="solid"
           value={Formatter.formatApplicationStatusToPrettyRepresentation(
             props.appointment.status,
+          )}
+          disabled
+        />
+        <Input
+          label={
+            <p className="flex gap-1 items-center">
+              <CameraIcon className="size-5" />
+              Uso de imagem
+            </p>
+          }
+          id="imageUse"
+          type="text"
+          variant="solid"
+          value={Formatter.formatImageUsageToPrettyRepresentation(
+            props.appointment.allowImageUse,
           )}
           disabled
         />

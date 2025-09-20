@@ -60,7 +60,10 @@ const authSlice = createSlice({
   reducers: {
     setToken: (
       state,
-      action: PayloadAction<{ token: TokenParams; user: CustomerOrProfessional }>,
+      action: PayloadAction<{
+        token: TokenParams
+        user: CustomerOrProfessional
+      }>,
     ) => {
       return {
         ...state,

@@ -14,19 +14,20 @@ datasource db {
 }
 
 model Customer {
-  id                String    @id @default(uuid())
-  name              String?   @default("Usuário")
-  registerCompleted Boolean   @default(false) @map("register_completed")
-  birthdate         DateTime?
-  email             String    @unique
-  googleId          String?   @unique @map("google_id")
-  phone             String?   @unique
-  profilePhotoUrl   String?
-  userType          UserType  @default(CUSTOMER) @map("user_type")
-  referrerId        String?   @map("referrer_id")
-  referralCount     Int       @default(0) @map("referral_count")
-  createdAt         DateTime  @default(now()) @map("created_at")
-  updatedAt         DateTime  @updatedAt @map("updated_at")
+  id                  String    @id @default(uuid())
+  name                String?   @default("Usuário")
+  registerCompleted   Boolean   @default(false) @map("register_completed")
+  birthdate           DateTime?
+  email               String    @unique
+  googleId            String?   @unique @map("google_id")
+  phone               String?   @unique
+  profilePhotoUrl     String?
+  userType            UserType  @default(CUSTOMER) @map("user_type")
+  referrerId          String?   @map("referrer_id")
+  referralCount       Int       @default(0) @map("referral_count")
+  alwaysAllowImageUse Boolean   @default(false) @map("always_allow_image_use")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
 
   appointments Appointment[]
   referrer     Customer?     @relation("refers", fields: [referrerId], references: [id])
@@ -40,6 +41,7 @@ model Appointment {
   observation      String?
   status           Status   @default(PENDING)
   appointmentDate  DateTime @map("appointment_date")
+  allowImageUse    Boolean  @default(false) @map("allows_image_use")
   customerId       String   @map("customer_id")
   serviceOfferedId String   @map("service_id")
   createdAt        DateTime @default(now()) @map("created_at")
@@ -111,6 +113,7 @@ model Professional {
   email             String   @unique
   googleId          String?  @unique @map("google_id")
   registerCompleted Boolean  @default(false) @map("register_completed")
+  paymentMethods    Json?    @map("payment_methods")
   socialMedia       Json?    @map("social_media")
   contact           String?  @unique
   specialization    String?

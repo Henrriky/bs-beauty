@@ -23,6 +23,7 @@ export interface Appointment {
   observation: string | null;
   status: Status;
   appointmentDate: string;
+  allowImageUse: boolean
   customerId: string;
   serviceOfferedId: string;
   createdAt: Date;
@@ -34,6 +35,7 @@ export interface FindAppointmentByCustomerId {
   observation: string | null;
   status: Status;
   appointmentDate: string;
+  allowImageUse: boolean
   customerId: string;
   serviceOfferedId: string;
   createdAt: Date;
@@ -61,6 +63,7 @@ export interface FindAppointmentById {
   observation: string | null
   status: Status
   appointmentDate: string
+  allowImageUse: boolean
   customerId: string
   serviceOfferedId: string
   offer: {

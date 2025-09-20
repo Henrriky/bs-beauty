@@ -101,7 +101,6 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
       {professionalsToShow &&
         professionalsToShow.map((offerOrProfessional) => {
           const professional = offerOrProfessional.professional
-
           return (
             <div key={`professional-${professional.id}`}>
               <input
@@ -119,10 +118,8 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
                 {...offerOrProfessional}
                 onClick={() => {
                   setValue('professionalId', professional.id)
-                  setValue(
-                    'professionalName',
-                    professional.name || 'Não definido',
-                  )
+                  setValue('name', professional.name || 'Não definido')
+                  setValue('paymentMethods', professional.paymentMethods)
                 }}
               />
             </div>

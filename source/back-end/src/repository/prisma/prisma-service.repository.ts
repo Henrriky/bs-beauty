@@ -40,7 +40,8 @@ class PrismaServiceRepository implements ServiceRepository {
                 id: true,
                 name: true,
                 specialization: true,
-                profilePhotoUrl: true
+                profilePhotoUrl: true,
+                paymentMethods: true
               }
             }
           }

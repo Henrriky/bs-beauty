@@ -3,7 +3,7 @@ import { ServicesOfferedByProfessionalOffer } from '../../../../../../../../../s
 import CustomerHomeOfferInfo from '../../../../CustomerHomeOfferInfo.tsx'
 
 interface CustomerHomeServiceCardProps
-  extends ServicesOfferedByProfessionalOffer {
+  extends Omit<ServicesOfferedByProfessionalOffer, 'paymentMethods'> {
   key: string
   for: string
   isSelected: boolean

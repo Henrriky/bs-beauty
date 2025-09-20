@@ -39,6 +39,7 @@ function SelectableServiceList({
     useFormContext<CreateAppointmentFormData>()
   const serviceSelectedId = watch('serviceId')
   const serviceOfferedId = watch('serviceOfferedId')
+  const paymentMethods = watch('paymentMethods')
 
   const fieldToRegister =
     currentFlow === 'service' ? 'serviceId' : 'serviceOfferedId'
@@ -63,7 +64,10 @@ function SelectableServiceList({
           key={service.id}
           for={service.id}
           {...service}
-          onClick={() => setValue('serviceId', serviceOffered.id)}
+          onClick={() => {
+            setValue('serviceId', serviceOffered.id)
+            setValue('paymentMethods', paymentMethods)
+          }}
         />
       </div>
     )

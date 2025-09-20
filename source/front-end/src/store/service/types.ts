@@ -18,6 +18,7 @@ export type ProfessionalsOfferingServiceOffer = {
     name: string | null
     specialization: string | null
     profilePhotoUrl: string | null
+    paymentMethods: { name: string }[] | undefined
   }
 }
 
