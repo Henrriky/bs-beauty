@@ -1,4 +1,5 @@
-name: Run Unit Tests
+name: Frontend CI Pipeline
+
 
 on:
   push:
@@ -6,16 +7,16 @@ on:
       - main
       - develop
     paths:
-      - 'source/back-end/**'
+      - 'source/front-end/**'
   pull_request:
     paths:
-      - 'source/back-end/**'
+      - 'source/front-end/**'
 
 jobs:
-  run-unit-tests:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
 
+  run-typescript-type-check:
+    name: Run TypeScript Type Check
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -26,9 +27,9 @@ jobs:
           node-version: '20.x'
 
       - name: Install dependencies
-        working-directory: source/back-end
+        working-directory: source/front-end
         run: npm install
 
-      - name: Run Unit Tests
-        working-directory: source/back-end
-        run: npm run test:unit
+      - name: Run TypeScript Check
+        working-directory: source/front-end
+        run: npx tsc --build --noEmit
