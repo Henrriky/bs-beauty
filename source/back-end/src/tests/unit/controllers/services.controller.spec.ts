@@ -101,6 +101,8 @@ describe('ServicesController', () => {
         id: 'random-uuid',
         name: 'Service 1',
         description: 'Description 1',
+        status: 'APPROVED',
+        createdBy: 'user-123',
         category: 'Category 1',
         createdAt: new Date('2025-01-01T09:00:00'),
         updatedAt: new Date('2025-01-01T09:00:00')
