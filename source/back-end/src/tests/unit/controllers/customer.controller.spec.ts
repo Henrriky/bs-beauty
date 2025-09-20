@@ -118,6 +118,7 @@ describe('CustomerController', () => {
         referrerId: null,
         referralCount: 0,
         createdAt: new Date(),
+        alwaysAllowImageUse: false,
         updatedAt: new Date()
       }
       usecaseMock.executeFindById.mockResolvedValueOnce(customer)

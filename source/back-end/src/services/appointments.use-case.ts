@@ -61,7 +61,7 @@ class AppointmentsUseCase {
     const appointmentTimestamp = new Date(appointmentDate)
 
     if (isNaN(appointmentTimestamp.getTime())) {
-      throw new CustomError(`Invalid appointment date provided: ${String(appointmentDate)}`, 409)
+      throw new CustomError(`Invalid appointment date provided: ${String(appointmentDate)}`, 400)
     }
 
     if (appointmentTimestamp < currentTimestamp) {

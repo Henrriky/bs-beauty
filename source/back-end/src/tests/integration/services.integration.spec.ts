@@ -5,6 +5,8 @@ import { getProfessionalToken } from './utils/auth'
 import { type Service } from '@prisma/client'
 import { spyServicesWiring } from './utils/services-spies'
 import { ServiceFactory } from './factories/service.factory'
+import { OfferFactory } from './factories/offer.factory'
+import { ProfessionalFactory } from './factories/professional.factory'
 
 describe('Services API (Integration Test)', () => {
   let token: string
@@ -49,6 +51,279 @@ describe('Services API (Integration Test)', () => {
 
       expect(spies.usecase.executeFindAllPaginated).toHaveBeenCalledTimes(1)
       expect(spies.repository.findAllPaginated).toHaveBeenCalledTimes(1)
+    })
+
+    describe('when filtering with "q" query parameter', () => {
+      it('should return services filtered by name when "q" matches service name', async () => {
+        const nameToSearch = 'Service to Searc'
+
+        const [service1, service2] = await Promise.all([
+          await ServiceFactory.makeService({
+            name: nameToSearch,
+            category: 'Category One',
+            description: 'This is a test service'
+          }),
+          await ServiceFactory.makeService({
+            name: nameToSearch,
+            category: 'Category One',
+            description: 'This is a test service'
+          })
+        ])
+
+        const response = await request(app)
+          .get('/api/services')
+          .set('Authorization', `Bearer ${token}`)
+          .query({ page: 1, limit: 10, q: nameToSearch })
+
+        // assert
+        expect(response.status).toBe(200)
+        expect(response.body.data).toHaveLength(2)
+        expect(response.body.data.map((e: Service) => e.name)).toEqual(
+          expect.arrayContaining([service1.name, service2.name])
+        )
+      })
+
+      it('should return services filtered by description when "q" matches service description', async () => {
+        const descriptionToSearch = 'Description to Search'
+
+        const [service1, service2] = await Promise.all([
+          await ServiceFactory.makeService({
+            name: 'Service One',
+            category: 'Category One',
+            description: descriptionToSearch
+          }),
+          await ServiceFactory.makeService({
+            name: descriptionToSearch,
+            category: 'Service two',
+            description: descriptionToSearch
+          })
+        ])
+
+        const response = await request(app)
+          .get('/api/services')
+          .set('Authorization', `Bearer ${token}`)
+          .query({ page: 1, limit: 10, q: descriptionToSearch })
+
+        // assert
+        expect(response.status).toBe(200)
+        expect(response.body.data).toHaveLength(2)
+        expect(response.body.data.map((e: Service) => e.name)).toEqual(
+          expect.arrayContaining([service1.name, service2.name])
+        )
+      })
+
+      it('should return services filtered by professional when "q" matches name of service professional', async () => {
+        const nameOfProfessionalToSearch = 'John Doe'
+
+        const [service1, service2] = await Promise.all([
+          await ServiceFactory.makeService({
+            name: 'Service One',
+            category: 'Category One',
+            description: 'This is a test service'
+          }),
+          await ServiceFactory.makeService({
+            name: 'Service Two',
+            category: 'Service two',
+            description: 'This is a test service'
+          })
+        ])
+
+        const professional = await ProfessionalFactory.makeProfessional({
+          name: nameOfProfessionalToSearch
+        })
+
+        await Promise.all([
+          await OfferFactory.makeOffer({
+            service: { connect: { id: service1.id } },
+            professional: { connect: { id: professional.id } }
+          }),
+          await OfferFactory.makeOffer({
+            service: { connect: { id: service2.id } },
+            professional: { connect: { id: professional.id } }
+          })
+        ])
+
+        const response = await request(app)
+          .get('/api/services')
+          .set('Authorization', `Bearer ${token}`)
+          .query({ page: 1, limit: 10, q: nameOfProfessionalToSearch })
+
+        // assert
+        expect(response.status).toBe(200)
+        expect(response.body.data).toHaveLength(2)
+        expect(response.body.data.map((e: Service) => e.name)).toEqual(
+          expect.arrayContaining([service1.name, service2.name])
+        )
+      })
+
+      it('should return empty array when "q" parameter matches no services', async () => {
+        await ServiceFactory.makeService({
+          name: 'Completely Different Service',
+          category: 'Different Category',
+          description: 'Different description'
+        })
+
+        const response = await request(app)
+          .get('/api/services')
+          .set('Authorization', `Bearer ${token}`)
+          .query({ page: 1, limit: 10, q: 'NonExistentSearchTerm' })
+
+        expect(response.status).toBe(200)
+        expect(response.body.data).toHaveLength(0)
+      })
+    })
+
+    describe('when filtering with "category" query parameter', () => {
+      it('should return services filtered by category', async () => {
+        const categoryToSearch = 'Specific Category'
+
+        const [service1, service2] = await Promise.all([
+          ServiceFactory.makeService({
+            name: 'Service One',
+            category: categoryToSearch,
+            description: 'Description one'
+          }),
+          ServiceFactory.makeService({
+            name: 'Service Two',
+            category: categoryToSearch,
+            description: 'Description two'
+          })
+        ])
+
+        // Create a service with different category to ensure filtering works
+        await ServiceFactory.makeService({
+          name: 'Service Three',
+          category: 'Different Category',
+          description: 'Description three'
+        })
+
+        const response = await request(app)
+          .get('/api/services')
+          .set('Authorization', `Bearer ${token}`)
+          .query({ page: 1, limit: 10, category: categoryToSearch })
+
+        expect(response.status).toBe(200)
+        expect(response.body.data).toHaveLength(2)
+        expect(response.body.data.map((e: Service) => e.name)).toEqual(
+          expect.arrayContaining([service1.name, service2.name])
+        )
+      })
+
+      it('should return empty array when "category" parameter matches no services', async () => {
+        await ServiceFactory.makeService({
+          name: 'Completely Different Service',
+          category: 'Different Category',
+          description: 'Different description'
+        })
+
+        const response = await request(app)
+          .get('/api/services')
+          .set('Authorization', `Bearer ${token}`)
+          .query({ page: 1, limit: 10, q: 'NonExistentCategory' })
+
+        expect(response.status).toBe(200)
+        expect(response.body.data).toHaveLength(0)
+      })
+    })
+
+    describe('when combining multiple filters', () => {
+      it('should return services matching both "q" and "category" parameters', async () => {
+        const categoryToSearch = 'Hair Services'
+        const nameToSearch = 'Premium'
+
+        const service1 = await ServiceFactory.makeService({
+          name: 'Premium Hair Cut',
+          category: categoryToSearch,
+          description: 'High-end hair cutting service'
+        })
+
+        // Create services that shouldn't match the combined filters
+        await Promise.all([
+          ServiceFactory.makeService({
+            name: 'Basic Hair Cut',
+            category: categoryToSearch,
+            description: 'Standard hair cutting service'
+          }),
+          ServiceFactory.makeService({
+            name: 'Premium Facial',
+            category: 'Skincare Services',
+            description: 'High-end facial treatment'
+          })
+        ])
+
+        const response = await request(app)
+          .get('/api/services')
+          .set('Authorization', `Bearer ${token}`)
+          .query({ page: 1, limit: 10, q: nameToSearch, category: categoryToSearch })
+
+        expect(response.status).toBe(200)
+        expect(response.body.data).toHaveLength(1)
+        expect(response.body.data[0].name).toBe(service1.name)
+        expect(response.body.data[0].category).toBe(service1.category)
+      })
+
+      it('should return services matching "q" parameter across name and description with specific category', async () => {
+        const categoryToSearch = 'Beauty Services'
+        const searchTerm = 'relaxing'
+
+        const [service1, service2] = await Promise.all([
+          ServiceFactory.makeService({
+            name: 'Relaxing Massage',
+            category: categoryToSearch,
+            description: 'Therapeutic body massage'
+          }),
+          ServiceFactory.makeService({
+            name: 'Facial Treatment',
+            category: categoryToSearch,
+            description: 'Relaxing facial experience'
+          })
+        ])
+
+        // Create a service that matches the search term but not the category
+        await ServiceFactory.makeService({
+          name: 'Relaxing Spa',
+          category: 'Wellness Services',
+          description: 'Full spa experience'
+        })
+
+        const response = await request(app)
+          .get('/api/services')
+          .set('Authorization', `Bearer ${token}`)
+          .query({ page: 1, limit: 10, q: searchTerm, category: categoryToSearch })
+
+        expect(response.status).toBe(200)
+        expect(response.body.data).toHaveLength(2)
+        expect(response.body.data.map((e: Service) => e.name)).toEqual(
+          expect.arrayContaining([service1.name, service2.name])
+        )
+        // Verify all returned services belong to the specified category
+        response.body.data.forEach((service: Service) => {
+          expect(service.category).toBe(categoryToSearch)
+        })
+      })
+
+      it('should return empty array when combining filters that have no matches', async () => {
+        await Promise.all([
+          ServiceFactory.makeService({
+            name: 'Hair Cut',
+            category: 'Hair Services',
+            description: 'Professional hair cutting'
+          }),
+          ServiceFactory.makeService({
+            name: 'Facial Treatment',
+            category: 'Skincare Services',
+            description: 'Professional facial care'
+          })
+        ])
+
+        const response = await request(app)
+          .get('/api/services')
+          .set('Authorization', `Bearer ${token}`)
+          .query({ page: 1, limit: 10, q: 'NonExistentTerm', category: 'Hair Services' })
+
+        expect(response.status).toBe(200)
+        expect(response.body.data).toHaveLength(0)
+      })
     })
   })
 

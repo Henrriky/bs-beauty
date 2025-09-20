@@ -3,7 +3,7 @@ import { type ServiceRepository } from '../repository/protocols/service.reposito
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { type ProfessionalsOfferingService } from '../repository/types/service-repository.types'
 import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
-import { type ServiceFilters } from '../types/services/service-filters'
+import { type PartialServiceQuerySchema } from '@/utils/validation/zod-schemas/pagination/services/services-query.schema'
 
 interface ServicesOutput {
   services: Service[]
@@ -54,7 +54,7 @@ class ServicesUseCase {
   }
 
   public async executeFindAllPaginated (
-    params: PaginatedRequest<ServiceFilters>
+    params: PaginatedRequest<PartialServiceQuerySchema>
   ): Promise<PaginatedResult<Service>> {
     const result = await this.serviceRepository.findAllPaginated(params)
 

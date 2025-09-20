@@ -3,13 +3,13 @@ import { API_VARIABLES } from '../../api/config'
 import {
   CreateServiceFormData,
   UpdateServiceFormData,
-  // UpdateServiceFormData,
 } from '../../pages/services/components/types'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import {
   ProfessionalsOfferingService,
-  PaginatedServicesResponse,
   Service,
+  FindAllServicesParams,
+  FindAllServicesResponse,
 } from './types'
 
 export const serviceAPI = createApi({
@@ -17,14 +17,7 @@ export const serviceAPI = createApi({
   baseQuery: baseQueryWithAuth,
   tagTypes: ['Services'],
   endpoints: (builder) => ({
-    getServices: builder.query<
-      PaginatedServicesResponse,
-      {
-        page?: number
-        limit?: number
-        name?: string
-      }
-    >({
+    getServices: builder.query<FindAllServicesResponse, FindAllServicesParams>({
       query: (params) => ({
         url: API_VARIABLES.SERVICES_ENDPOINTS.ENDPOINT,
         method: 'GET',
