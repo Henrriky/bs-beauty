@@ -11,9 +11,7 @@ interface OfferRepository {
   create: (offerToCreate: Prisma.OfferCreateInput) => Promise<Offer>
   update: (id: string, offerToUpdate: Prisma.OfferUpdateInput) => Promise<Offer>
   delete: (id: string) => Promise<Offer>
-  fetchValidAppointmentsByProfessionalOnDay: (professionalId: string, dayToFetchAvailableSchedulling: Date) => Promise<{ validAppointmentsOnDay: FetchValidAppointmentsByProfessionalOnDay | null }>
   findByProfessionalIdPaginated: (professionalId: string, params: PaginatedRequest<OffersFilters>) => Promise<PaginatedResult<Offer>>
-  // fetchValidWorkingDaysByOfferAndMonth: (serviceOfferingId: string, monthToVerify: number) => Promise<>
 }
 
 export { type OfferRepository }

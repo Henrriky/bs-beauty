@@ -1,6 +1,7 @@
 import { type AppointmentRepository } from '@/repository/protocols/appointment.repository'
 import { type CustomerRepository } from '@/repository/protocols/customer.repository'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
+import { type ServiceRepository } from '@/repository/protocols/service.repository'
 import { type Mocked } from 'vitest'
 
 vi.mock('@/factory/make-appointments-use-case.factory')
@@ -42,4 +43,14 @@ const MockProfessionalRepository: Mocked<ProfessionalRepository> = {
   findAllPaginated: vi.fn()
 }
 
-export { MockAppointmentRepository, MockCustomerRepository, MockProfessionalRepository }
+const MockServiceRepository: Mocked<ServiceRepository> = {
+  findAll: vi.fn(),
+  findById: vi.fn(),
+  fetchProfessionalsOfferingService: vi.fn(),
+  create: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn(),
+  findAllPaginated: vi.fn()
+}
+
+export { MockAppointmentRepository, MockCustomerRepository, MockProfessionalRepository, MockServiceRepository }
