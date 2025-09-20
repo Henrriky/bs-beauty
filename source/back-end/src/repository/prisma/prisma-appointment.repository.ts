@@ -64,6 +64,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
         appointmentDate: true,
         customerId: true,
         serviceOfferedId: true,
+        allowImageUse: true,
         createdAt: true,
         updatedAt: true,
         offer: {

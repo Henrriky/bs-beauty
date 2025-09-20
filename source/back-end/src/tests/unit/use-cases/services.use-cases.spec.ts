@@ -228,7 +228,10 @@ describe('ServicesUseCase (Unit Tests)', () => {
             id: faker.string.uuid(),
             name: faker.person.fullName(),
             specialization: faker.person.jobType(),
-            profilePhotoUrl: faker.internet.url()
+            profilePhotoUrl: faker.internet.url(),
+            paymentMethods: [
+              { name: 'Cartão de Crédito' }
+            ]
           }
         }]
       }

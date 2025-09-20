@@ -32,7 +32,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
           specialization: faker.person.jobType(),
           createdAt: faker.date.past(),
           updatedAt: faker.date.past(),
-          profilePhotoUrl: faker.internet.url()
+          profilePhotoUrl: faker.internet.url(),
+          paymentMethods: null
         }
       ]
 
@@ -65,7 +66,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.person.jobType(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
-        profilePhotoUrl: faker.internet.url()
+        profilePhotoUrl: faker.internet.url(),
+        paymentMethods: null
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(professional)
@@ -109,7 +111,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: professionalToCreate.specialization ?? null,
         profilePhotoUrl: professionalToCreate.profilePhotoUrl ?? null,
         createdAt: faker.date.past(),
-        updatedAt: faker.date.past()
+        updatedAt: faker.date.past(),
+        paymentMethods: null
       }
 
       MockProfessionalRepository.findByEmail.mockResolvedValue(null)
@@ -144,7 +147,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: professionalToCreate.specialization ?? null,
         profilePhotoUrl: professionalToCreate.profilePhotoUrl ?? null,
         createdAt: faker.date.past(),
-        updatedAt: faker.date.past()
+        updatedAt: faker.date.past(),
+        paymentMethods: null
       }
 
       MockProfessionalRepository.findByEmail.mockResolvedValue(existingProfessional)
@@ -174,7 +178,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: professionalToUpdate.specialization as string,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
-        profilePhotoUrl: faker.internet.url()
+        profilePhotoUrl: faker.internet.url(),
+        paymentMethods: null
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(updatedProfessional)
@@ -213,7 +218,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.person.jobType(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
-        profilePhotoUrl: faker.internet.url()
+        profilePhotoUrl: faker.internet.url(),
+        paymentMethods: null
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(professional)
@@ -256,7 +262,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: params.filters.specialization,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
-        profilePhotoUrl: faker.internet.url()
+        profilePhotoUrl: faker.internet.url(),
+        paymentMethods: null
       }
 
       const paginatedResult = {

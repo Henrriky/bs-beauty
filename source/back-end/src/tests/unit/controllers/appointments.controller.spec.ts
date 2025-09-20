@@ -63,6 +63,7 @@ describe('AppointmentsController', () => {
         status: Status.PENDING,
         appointmentDate: appointmentDateOneHourInFuture,
         observation: '',
+        allowImageUse: false,
         createdAt: new Date(),
         updatedAt: new Date()
       }

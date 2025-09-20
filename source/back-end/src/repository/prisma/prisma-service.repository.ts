@@ -21,7 +21,7 @@ class PrismaServiceRepository implements ServiceRepository {
   }
 
   public async fetchProfessionalsOfferingService (serviceId: string) {
-    const professionalsOfferingService = await prismaClient.service.findUnique({
+    const professionalsOfferingServiceRaw = await prismaClient.service.findUnique({
       where: {
         id: serviceId
       },
@@ -48,6 +48,27 @@ class PrismaServiceRepository implements ServiceRepository {
         }
       }
     })
+
+    let professionalsOfferingService: any = null
+    if (professionalsOfferingServiceRaw != null) {
+      professionalsOfferingService = {
+        id: professionalsOfferingServiceRaw.id,
+        offers: professionalsOfferingServiceRaw.offers.map((offer: any) => ({
+          id: offer.id,
+          estimatedTime: offer.estimatedTime,
+          price: offer.price,
+          professional: {
+            id: offer.professional.id,
+            name: offer.professional.name,
+            specialization: offer.professional.specialization,
+            profilePhotoUrl: offer.professional.profilePhotoUrl,
+            paymentMethods: Array.isArray(offer.professional.paymentMethods)
+              ? offer.professional.paymentMethods
+              : []
+          }
+        }))
+      }
+    }
 
     return { professionalsOfferingService }
   }
