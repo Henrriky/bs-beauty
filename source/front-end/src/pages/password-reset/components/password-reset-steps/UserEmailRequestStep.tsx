@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router'
 import { Button } from '../../../../components/button/Button'
 import { Input } from '../../../../components/inputs/Input'
 
@@ -15,6 +16,8 @@ function UserEmailRequestStep({
   isLoading,
   handleOnClick,
 }: UserEmailRequestStepProps) {
+  const navigate = useNavigate()
+
   const handleEmailInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -31,20 +34,27 @@ function UserEmailRequestStep({
         placeholder="E-mail"
         onChange={handleEmailInputChange}
       />
-      <Button
-        label={
-          isLoading ? (
-            <div className="flex justify-center items-center gap-4">
-              <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
-              <p className="text-sm">Carregando...</p>
-            </div>
-          ) : (
-            'Enviar código de verificação'
-          )
-        }
-        disabled={isLoading}
-        onClick={handleOnClick}
-      />
+      <div className="flex gap-3">
+        <Button
+          label="Cancelar"
+          variant="outline"
+          onClick={() => navigate('/')}
+        />
+        <Button
+          label={
+            isLoading ? (
+              <div className="flex justify-center items-center gap-4">
+                <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
+                <p className="text-sm">Carregando...</p>
+              </div>
+            ) : (
+              'Enviar código de verificação'
+            )
+          }
+          disabled={isLoading}
+          onClick={handleOnClick}
+        />
+      </div>
     </div>
   )
 }

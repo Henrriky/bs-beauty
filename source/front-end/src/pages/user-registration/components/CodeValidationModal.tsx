@@ -74,7 +74,7 @@ function CodeValidationModal({
   const data = {
     purpose: 'register',
     email,
-    code,
+    code: code.trim(),
   }
 
   useEffect(() => {

@@ -70,7 +70,7 @@ function CodeValidationStep({
   const data = {
     purpose: 'passwordReset',
     email,
-    code,
+    code: code.trim(),
   }
 
   useEffect(() => {
