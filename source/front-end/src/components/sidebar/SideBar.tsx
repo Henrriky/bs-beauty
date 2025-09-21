@@ -45,7 +45,7 @@ function SideBar() {
               onClick={() => navigate('/profile')}
             >
               <ProfilePicture
-                profilePhotoUrl={user.profilePhotoUrl}
+                profilePhotoUrl={user.profilePhotoUrl ?? ''}
                 size="sm"
               />
             </div>
@@ -77,7 +77,7 @@ function SideBar() {
                 onClick={() => navigate('/profile')}
               >
                 <ProfilePicture
-                  profilePhotoUrl={user.profilePhotoUrl}
+                  profilePhotoUrl={user.profilePhotoUrl ?? ''}
                   size="sm"
                 />
               </div>
@@ -122,7 +122,7 @@ function SideBarItem(props: SideBarItemProps) {
   const handleClick = async () => {
     if (props.children === 'Sair') {
       await dispatch<any>(serverLogout())
-      navigate('/', { replace: true })    
+      navigate('/', { replace: true })
     } else {
       navigate(`${props.path}`)
     }
