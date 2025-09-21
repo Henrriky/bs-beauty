@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { faker } from '@faker-js/faker'
-import { type Customer, type Prisma, UserType } from '@prisma/client'
+import { type Customer, DiscoverySource, type Prisma, UserType } from '@prisma/client'
 import { type Response } from 'express'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CustomersController } from '../../../controllers/customers.controller'
@@ -119,6 +119,7 @@ describe('CustomerController', () => {
         referralCount: 0,
         createdAt: new Date(),
         alwaysAllowImageUse: false,
+        discoverySource: DiscoverySource.INSTAGRAM,
         updatedAt: new Date()
       }
       usecaseMock.executeFindById.mockResolvedValueOnce(customer)

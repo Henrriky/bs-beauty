@@ -1,5 +1,11 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { DiscoverySource } from '@prisma/client'
+
+const discoverySourceSchema = z.preprocess(
+  (v) => (v === '' ? undefined : v),
+  z.nativeEnum(DiscoverySource).optional()
+).refine((v) => v !== undefined, { message: 'Selecione uma opção' })
 
 class CustomerSchemas {
   public static customerCompleteRegisterBodySchema = z.object({
@@ -10,7 +16,8 @@ class CustomerSchemas {
       }
       return arg
     }, z.date().refine((date) => !isNaN(date.getTime()) && date < new Date())),
-    phone: z.string().refine((value) => RegexPatterns.phone.test(value))
+    phone: z.string().refine((value) => RegexPatterns.phone.test(value)),
+    discoverySource: discoverySourceSchema,
   }).strict()
 
   public static createSchema = z.object({

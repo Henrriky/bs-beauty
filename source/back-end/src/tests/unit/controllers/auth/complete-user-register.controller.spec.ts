@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { faker } from '@faker-js/faker'
-import { UserType } from '@prisma/client'
+import { DiscoverySource, UserType } from '@prisma/client'
 import { type Response } from 'express'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { z } from 'zod'
@@ -52,7 +52,8 @@ describe('CompleteUserRegisterController', () => {
       vi.spyOn(CustomerSchemas.customerCompleteRegisterBodySchema, 'parse').mockReturnValue({
         name: faker.person.fullName(),
         birthdate: faker.date.birthdate(),
-        phone: faker.phone.number()
+        phone: faker.phone.number(),
+        discoverySource: DiscoverySource.GOOGLE
       })
 
       // act
@@ -155,7 +156,8 @@ describe('CompleteUserRegisterController', () => {
       vi.spyOn(CustomerSchemas.customerCompleteRegisterBodySchema, 'parse').mockReturnValue({
         name: faker.person.fullName(),
         birthdate: faker.date.birthdate(),
-        phone: faker.phone.number()
+        phone: faker.phone.number(),
+        discoverySource: DiscoverySource.INSTAGRAM
       })
 
       // act
