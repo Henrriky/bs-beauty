@@ -21,6 +21,7 @@
     "coverage:int": "vitest run --config ./vitest.int.config.ts --coverage",
     "db:test:up": "docker compose -f ../docker-compose.dev.yaml up -d db-test",
     "db:test:down": "docker compose -f ../docker-compose.dev.yaml down -v",
+    "prisma:dev:push": "dotenv -e .env -- npx prisma db push",
     "prisma:test:push": "dotenv -e .env.test -- npx prisma db push --skip-generate"
   },
   "dependencies": {
