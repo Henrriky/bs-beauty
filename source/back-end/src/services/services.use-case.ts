@@ -1,9 +1,9 @@
 import { type Service, type Prisma } from '@prisma/client'
 import { type ServiceRepository } from '../repository/protocols/service.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
-import { type EmployeesOfferingService } from '../repository/types/service-repository.types'
+import { type ProfessionalsOfferingService } from '../repository/types/service-repository.types'
 import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
-import { type ServiceFilters } from '../types/services/service-filters'
+import { type PartialServiceQuerySchema } from '@/utils/validation/zod-schemas/pagination/services/services-query.schema'
 
 interface ServicesOutput {
   services: Service[]
@@ -26,12 +26,12 @@ class ServicesUseCase {
     return service
   }
 
-  public async fetchEmployeesOfferingService (serviceId: string): Promise<{ employeesOfferingService: EmployeesOfferingService }> {
-    const { employeesOfferingService } = await this.serviceRepository.fetchEmployeesOfferingService(serviceId)
-    RecordExistence.validateRecordExistence(employeesOfferingService, 'Service')
+  public async fetchProfessionalsOfferingService (serviceId: string): Promise<{ professionalsOfferingService: ProfessionalsOfferingService }> {
+    const { professionalsOfferingService } = await this.serviceRepository.fetchProfessionalsOfferingService(serviceId)
+    RecordExistence.validateRecordExistence(professionalsOfferingService, 'Service')
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return { employeesOfferingService: employeesOfferingService! }
+    return { professionalsOfferingService: professionalsOfferingService! }
   }
 
   public async executeCreate (newService: Prisma.ServiceCreateInput) {
@@ -54,7 +54,7 @@ class ServicesUseCase {
   }
 
   public async executeFindAllPaginated (
-    params: PaginatedRequest<ServiceFilters>
+    params: PaginatedRequest<PartialServiceQuerySchema>
   ): Promise<PaginatedResult<Service>> {
     const result = await this.serviceRepository.findAllPaginated(params)
 

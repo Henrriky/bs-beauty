@@ -1,7 +1,7 @@
-import { type CustomerOrEmployee } from '../../types/customer-or-employee.type'
+import { type CustomerOrProfessional } from '../../types/customer-or-professional.type'
 
 interface Encrypter {
-  encrypt: (params: CustomerOrEmployee & { userId: string, profilePhotoUrl: string }) => Promise<{ accessToken: string }>
+  encrypt: (params: CustomerOrProfessional & { userId: string, profilePhotoUrl: string }) => Promise<{ accessToken: string }>
 }
 
 export type { Encrypter }

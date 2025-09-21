@@ -14,6 +14,7 @@ import Title from '../../../components/texts/Title'
 import {
   BriefcaseIcon,
   CalendarDaysIcon,
+  CameraIcon,
   ChatBubbleOvalLeftIcon,
   CurrencyDollarIcon,
   InformationCircleIcon,
@@ -74,7 +75,7 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
           type="text"
           variant="solid"
           value={
-            props.appointment.offer?.employee?.name ??
+            props.appointment.offer?.professional?.name ??
             'Funcionário não definido'
           }
           disabled
@@ -136,6 +137,21 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
           variant="solid"
           value={Formatter.formatApplicationStatusToPrettyRepresentation(
             props.appointment.status,
+          )}
+          disabled
+        />
+        <Input
+          label={
+            <p className="flex gap-1 items-center">
+              <CameraIcon className="size-5" />
+              Uso de imagem
+            </p>
+          }
+          id="imageUse"
+          type="text"
+          variant="solid"
+          value={Formatter.formatImageUsageToPrettyRepresentation(
+            props.appointment.allowImageUse,
           )}
           disabled
         />

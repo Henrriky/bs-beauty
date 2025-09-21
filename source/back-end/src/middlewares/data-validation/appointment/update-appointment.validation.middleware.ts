@@ -6,7 +6,7 @@ import { UserType } from '@prisma/client'
 
 const validateUpdateAppointment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const userTypes: UserType[] = [UserType.MANAGER, UserType.EMPLOYEE]
+    const userTypes: UserType[] = [UserType.MANAGER, UserType.PROFESSIONAL]
     const userType = req.headers.userType as UserType
     const requestBody = req.body
 
@@ -15,7 +15,7 @@ const validateUpdateAppointment = async (req: Request, res: Response, next: Next
     }
 
     if (userTypes.includes(userType)) {
-      AppointmentSchemas.employeeUpdateSchema.parse(requestBody)
+      AppointmentSchemas.professionalUpdateSchema.parse(requestBody)
     }
 
     next()

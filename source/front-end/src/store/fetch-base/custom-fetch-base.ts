@@ -1,4 +1,9 @@
-import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import {
+  BaseQueryFn,
+  FetchArgs,
+  fetchBaseQuery,
+  FetchBaseQueryError,
+} from '@reduxjs/toolkit/query'
 import { API_VARIABLES } from '../../api/config'
 import { RootState } from '../../hooks/use-app-selector'
 import { ResponseWithErrorBody } from './types'

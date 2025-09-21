@@ -24,7 +24,10 @@ function ListServices({
 
   // TODO: CARREGAR MAIS SERVIÇOS QUANDO CHEGA NO LIMITE PADRÃO (10)
   // TODO: POSSÍVEL CRIAÇÃO DE INPUT DE BUSCA PARA BUSCAR PELO NOME (O PARÂMETRO JÁ ESTÁ FEITO NA API)
-  const { data, isLoading, isError } = serviceAPI.useGetServicesQuery({})
+  const { data, isLoading, isError } = serviceAPI.useGetServicesQuery({
+    page: 1,
+    limit: 50,
+  })
 
   const services = data?.data || []
 

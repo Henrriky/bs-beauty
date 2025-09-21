@@ -1,13 +1,24 @@
 import { BanknotesIcon, ClockIcon } from '@heroicons/react/24/outline'
+import { useEffect } from 'react'
+import { CreateAppointmentFormData } from './types'
+import { useFormContext } from 'react-hook-form'
 
-interface CustomerHomeEmployeeCardOfferInfoProps {
+interface CustomerHomeProfessionalCardOfferInfoProps {
   offerPrice: string
   offerEstimatedTime: number | string
 }
 
-function CustomerHomeEmployeeCardOfferInfo(
-  props: CustomerHomeEmployeeCardOfferInfoProps,
+function CustomerHomeProfessionalCardOfferInfo(
+  props: CustomerHomeProfessionalCardOfferInfoProps,
 ) {
+  const { setValue } = useFormContext<CreateAppointmentFormData>()
+
+  useEffect(() => {
+    if (props.offerEstimatedTime) {
+      setValue('estimatedTime', Number(props.offerEstimatedTime))
+      setValue('price', Number(props.offerPrice))
+    }
+  }, [props.offerEstimatedTime, setValue, props.offerPrice])
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-center gap-2">
@@ -29,4 +40,4 @@ function CustomerHomeEmployeeCardOfferInfo(
   )
 }
 
-export default CustomerHomeEmployeeCardOfferInfo
+export default CustomerHomeProfessionalCardOfferInfo

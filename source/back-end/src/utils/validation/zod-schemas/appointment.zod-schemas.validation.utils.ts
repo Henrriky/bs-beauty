@@ -11,14 +11,15 @@ class AppointmentSchemas {
       .string()
       .refine((value) => !isNaN(Date.parse(value)), {
         message: 'appointmentDate must be a valid ISO date string'
-      })
+      }),
+    allowImageUse: z.boolean()  
   }).strict()
 
   public static customerUpdateSchema = z.object({
     observation: z.string().max(255).transform((val) => (val === undefined || val.trim() === '' ? '' : val.trim())).refine((string) => RegexPatterns.content.test(string)).optional()
   }).strict()
 
-  public static employeeUpdateSchema = z.object({
+  public static professionalUpdateSchema = z.object({
     status: z.nativeEnum(Status).optional()
   }).strict()
 }

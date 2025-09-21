@@ -21,7 +21,7 @@ interface LoginUseCaseOutput {
 class LoginUseCase {
   constructor (
     private readonly customerRepository: CustomerRepository,
-    private readonly employeeRepository: EmployeeRepository,
+    private readonly professionalRepository: ProfessionalRepository,
     private readonly encrypter: Encrypter,
     private readonly identityProvider: OAuthIdentityProvider,
     private readonly refreshTokenService: RefreshTokenService

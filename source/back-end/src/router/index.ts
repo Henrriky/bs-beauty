@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { serviceRoutes } from './routes/services.routes'
 import { customerRoutes } from './routes/customers.routes'
-import { employeeRoutes } from './routes/employees.routes'
+import { professionalRoutes } from './routes/professionals.routes'
 import { notificationRoutes } from './routes/notifications.routes'
 import { appointmentRoutes } from './routes/appointments.routes'
 import { shiftRoutes } from './routes/shift.routes'
@@ -14,7 +14,7 @@ import { analyticsServiceRoutes } from './routes/analytics.routes'
 const appRoutes = Router()
 
 appRoutes.use('/auth', authRoutes)
-appRoutes.use('/employees', verifyJwtTokenMiddleware, employeeRoutes)
+appRoutes.use('/professionals', verifyJwtTokenMiddleware, professionalRoutes)
 appRoutes.use('/services', verifyJwtTokenMiddleware, serviceRoutes)
 appRoutes.use('/customers', verifyJwtTokenMiddleware, customerRoutes)
 appRoutes.use('/notifications', verifyJwtTokenMiddleware, notificationRoutes)

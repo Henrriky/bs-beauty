@@ -15,13 +15,13 @@ export const offerAPI = createApi({
     getOffers: builder.query<
       PaginatedOffersResponse,
       {
-        employeeId: string
+        professionalId: string
         page?: number
         limit?: number
       }
     >({
-      query: ({ employeeId, page, limit }) => ({
-        url: `${API_VARIABLES.OFFERS_ENDPOINTS.ENDPOINT}/employee/${employeeId}`,
+      query: ({ professionalId, page, limit }) => ({
+        url: `${API_VARIABLES.OFFERS_ENDPOINTS.ENDPOINT}/professional/${professionalId}`,
         method: 'GET',
         params: {
           page,
@@ -59,12 +59,12 @@ export const offerAPI = createApi({
       }),
       invalidatesTags: ['Offers'],
     }),
-    fetchForAvailableSchedulesFromEmployeeOffer: builder.query<
+    fetchForAvailableSchedulesFromProfessionalOffer: builder.query<
       { availableSchedulling: AvailableSchedulling[] },
       { serviceOfferedId: string; dayToFetchAvailableSchedulling: string }
     >({
       query: ({ serviceOfferedId, dayToFetchAvailableSchedulling }) => ({
-        url: API_VARIABLES.OFFERS_ENDPOINTS.FETCH_FOR_AVAILABLE_SCHEDULES_FROM_EMPLOYEE_OFFER(
+        url: API_VARIABLES.OFFERS_ENDPOINTS.FETCH_FOR_AVAILABLE_SCHEDULES_FROM_PROFESSIONAL_OFFER(
           serviceOfferedId,
           dayToFetchAvailableSchedulling,
         ),

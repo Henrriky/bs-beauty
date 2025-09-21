@@ -10,12 +10,14 @@ export type CustomerUpdateAppointmentFormData = z.infer<
   typeof AppointmentSchemas.customerUpdateSchema
 >
 
-export type EmployeeUpdateAppointmentFormData = z.infer<
-  typeof AppointmentSchemas.employeeUpdateSchema
+export type ProfessionalUpdateAppointmentFormData = z.infer<
+  typeof AppointmentSchemas.professionalUpdateSchema
 >
 
 export type OnSubmitAppointmentDetailsUpdateForm = (
-  data: EmployeeUpdateAppointmentFormData | CustomerUpdateAppointmentFormData,
+  data:
+    | ProfessionalUpdateAppointmentFormData
+    | CustomerUpdateAppointmentFormData,
 ) => Promise<void>
 
 export interface AppointmentDetailsComponentProps {

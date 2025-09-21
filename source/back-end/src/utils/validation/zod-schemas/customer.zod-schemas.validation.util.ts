@@ -25,7 +25,8 @@ class CustomerSchemas {
     name: z.string().min(3).max(100).refine((string) => RegexPatterns.names.test(string)).optional(),
     birthdate: z.date().refine((date) => !isNaN(date.getTime()) && date < new Date()).optional(),
     email: z.string().email().optional(),
-    phone: z.string().refine((value) => RegexPatterns.phone.test(value)).optional()
+    alwaysAllowImageUse: z.boolean().optional(),
+    phone: z.string().refine((value) => RegexPatterns.phone.test(value))
   }).strict()
 
   public static registerCustomerBodySchema = SharedSchemas.registerBodySchema
