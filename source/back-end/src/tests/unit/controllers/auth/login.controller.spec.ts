@@ -14,6 +14,7 @@ vi.mock('@/factory/make-login-use-case.factory', () => ({
 describe('LoginController', () => {
   let req: MockRequest
   let res: Response
+  let next: any
   let executeMock: ReturnType<typeof vi.fn>
   let usecaseMock: LoginUseCase
 
@@ -21,6 +22,7 @@ describe('LoginController', () => {
     vi.clearAllMocks()
     req = mockRequest()
     res = mockResponse()
+    next = vi.fn()
 
     const result = createMock<LoginUseCase>()
     usecaseMock = result.usecase
@@ -36,7 +38,7 @@ describe('LoginController', () => {
   describe('handle', () => {
     it('should return 401 if no authorization header is provided', async () => {
       // act
-      await LoginController.handle(req, res)
+      await LoginController.handle(req, res, next)
 
       // assert
       expect(res.status).toHaveBeenCalledWith(StatusCodes.UNAUTHORIZED)
@@ -50,7 +52,7 @@ describe('LoginController', () => {
       executeMock.mockResolvedValueOnce({ accessToken: 'fake_access_token' })
 
       // act
-      await LoginController.handle(req, res)
+      await LoginController.handle(req, res, next)
 
       // assert
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK)
@@ -64,7 +66,7 @@ describe('LoginController', () => {
       executeMock.mockRejectedValueOnce(new Error('Use case failure'))
 
       // act
-      await LoginController.handle(req, res)
+      await LoginController.handle(req, res, next)
 
       // assert
       expect(res.status).toHaveBeenCalledWith(StatusCodes.INTERNAL_SERVER_ERROR)

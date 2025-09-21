@@ -22,9 +22,11 @@ const MockCustomerRepository: Mocked<CustomerRepository> = {
   findAll: vi.fn(),
   findById: vi.fn(),
   findByEmailOrPhone: vi.fn(),
+  findByEmail: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   updateByEmailAndGoogleId: vi.fn(),
+  updateByEmail: vi.fn(),
   updateOrCreate: vi.fn(),
   delete: vi.fn(),
   findAllPaginated: vi.fn()
