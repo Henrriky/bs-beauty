@@ -59,10 +59,10 @@ function LoginWithEmailAndPasswordForm() {
 
   return (
     <>
-      <div className="flex justify-center items-center flex-col gap-3">
+      <div className="flex justify-center items-center flex-col gap-3 w-full">
         <form
           onSubmit={handleStandardLoginButtonClick}
-          className="flex justify-center items-center flex-col gap-3"
+          className="flex justify-center items-center flex-col gap-3 w-[340px]"
         >
           <Input
             id="email"
@@ -70,17 +70,16 @@ function LoginWithEmailAndPasswordForm() {
             variant="solid"
             value={email}
             placeholder="E-mail"
-            inputClassName="w-[340px]"
             onChange={(e) => setEmail(e.target.value)}
+            wrapperClassName="w-full"
           ></Input>
-          <div className="relative">
+          <div className="relative w-full">
             <Input
               id="password"
               type={showPassword ? 'text' : 'password'}
               variant="solid"
               value={password}
               placeholder="Senha"
-              inputClassName="w-[340px]"
               onChange={(e) => setPassword(e.target.value)}
             ></Input>
             <PasswordEyeIcon
