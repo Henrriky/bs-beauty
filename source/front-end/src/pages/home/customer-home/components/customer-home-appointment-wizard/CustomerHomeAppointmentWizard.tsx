@@ -9,7 +9,6 @@ import useAppSelector from '../../../../../hooks/use-app-selector'
 import { appointmentAPI } from '../../../../../store/appointment/appointment-api'
 import Modal from '../../../../services/components/Modal'
 import CustomerHomeSelectProfessionalContainer from './customer-home-select-professional-step/CustomerHomeSelectProfessional'
-import CustomerHomeSelectServiceContainer from './customer-home-select-service-step/CustomerHomeSelectService'
 import CustomerHomeSelectTimeContainer from './customer-home-select-time-step/CustomerHomeSelectTime'
 import { appointmentFormData, CreateAppointmentFormData } from './types'
 
@@ -17,6 +16,7 @@ import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-app
 import { toast } from 'react-toastify'
 import CustomerHomeSelectAppointmentFlow from './CustomerHomeSelectAppointmentFlow'
 import CustomerHomeReviewStep from './customer-home-review-step/CustomerHomeReview'
+import CustomerHomeSelectServiceContainer from './customer-home-select-service-step'
 
 type Step = {
   currentStepName: string

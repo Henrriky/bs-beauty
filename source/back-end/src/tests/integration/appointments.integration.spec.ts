@@ -301,7 +301,7 @@ describe('Appointments API (Integration Test)', () => {
       expect(appointmentOnDatabase).toBeTruthy()
     })
 
-    it('should return 409 if trying to create an appointment with invalid date', async () => {
+    it('should return 400 if trying to create an appointment with invalid date', async () => {
       const offer = await OfferFactory.makeOffer()
       const appointment: Partial<Appointment> = {
         appointmentDate: new Date('invalid-date'),
@@ -315,8 +315,8 @@ describe('Appointments API (Integration Test)', () => {
         .set(defaultAuthorizationHeader)
         .send(appointment)
 
-      expect(response.status).toBe(409)
-      expect(response.body.message).toContain('Invalid appointment date provided')
+      expect(response.status).toBe(400)
+      expect(response.body.message).toContain('Validation Error')
     })
 
     it(`should return 409 if trying to create an appointment with less than ${MINIMUM_SCHEDULLING_TIME_MINUTES} minutes in advance`, async () => {

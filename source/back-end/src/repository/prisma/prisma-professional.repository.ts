@@ -2,7 +2,8 @@ import { type Professional, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type PaginatedRequest } from '../../types/pagination'
 import { type ProfessionalRepository } from '../protocols/professional.repository'
-import { type ProfessionalsFilters } from '../../types/professionals/professionals-filters'
+import { type ProfessionalsFilters } from '@/types/employees/employees-filters'
+import { type PartialHandleFetchServicesOfferedByProfessionalQuerySchema } from '@/utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
 
 class PrismaProfessionalRepository implements ProfessionalRepository {
   public async findAll () {
@@ -81,17 +82,48 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professionalDeleted
   }
 
-  public async fetchServicesOfferedByProfessional (professionalId: string) {
+  public async fetchServicesOfferedByProfessional (professionalId: string, { page, limit, filters }: PaginatedRequest<PartialHandleFetchServicesOfferedByProfessionalQuerySchema>) {
+    const skip = (page - 1) * limit
+
+    const professionalWhere: Prisma.ProfessionalWhereUniqueInput = {
+      id: professionalId
+    }
+
+    const offersWhere: Prisma.OfferWhereInput = {
+      isOffering: true,
+      ...(filters.category != null && filters.category !== '')
+        ? { service: { category: filters.category } }
+        : undefined,
+      ...(filters.q != null && filters.q !== '')
+        ? {
+            OR: [
+              {
+                service: {
+                  name: {
+                    contains: filters.q
+                  }
+                }
+              },
+              {
+                service: {
+                  description: {
+                    contains: filters.q
+                  }
+                }
+              }
+            ]
+          }
+        : undefined
+    }
+
     const professional = await prismaClient.professional.findUnique({
-      where: {
-        id: professionalId
-      },
+      where: professionalWhere,
       select: {
         id: true,
         offers: {
-          where: {
-            isOffering: true
-          },
+          skip,
+          take: limit,
+          where: offersWhere,
           select: {
             id: true,
             estimatedTime: true,

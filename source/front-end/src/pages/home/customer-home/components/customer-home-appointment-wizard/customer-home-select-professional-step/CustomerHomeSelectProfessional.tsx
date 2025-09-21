@@ -100,7 +100,11 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
 
       {professionalsToShow &&
         professionalsToShow.map((offerOrProfessional) => {
-          const professional = offerOrProfessional.professional
+          const professional = {
+            ...offerOrProfessional.professional,
+            paymentMethods:
+              offerOrProfessional.professional.paymentMethods ?? undefined,
+          }
           return (
             <div key={`professional-${professional.id}`}>
               <input
@@ -116,6 +120,7 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
                 key={offerOrProfessional.id}
                 for={offerOrProfessional.id}
                 {...offerOrProfessional}
+                professional={professional}
                 onClick={() => {
                   setValue('professionalId', professional.id)
                   setValue('name', professional.name || 'Não definido')

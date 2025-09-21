@@ -21,7 +21,13 @@ export type ServicesOfferedByProfessionalOffer = {
   }
 }
 
-export type ServicesOfferedByProfessional = {
+export type ServicesOfferedByProfessionalParams = {
+  professionalId: string
+  category?: string | undefined
+  q?: string | undefined
+}
+
+export type ServicesOfferedByProfessionalResponse = {
   id: string
   paymentMethods: { name: string }[] | undefined
   offers: ServicesOfferedByProfessionalOffer[]

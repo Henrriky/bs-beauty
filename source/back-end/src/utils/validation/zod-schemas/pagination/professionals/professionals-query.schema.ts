@@ -7,3 +7,13 @@ export const professionalQuerySchema = basePaginationSchema.extend({
 })
 
 export type ProfessionalQuerySchema = z.infer<typeof professionalQuerySchema>
+
+export const partialHandleFetchServicesOfferedByProfessionalQuerySchema = {
+  q: z.string().max(50).optional(),
+  category: z.string().max(30).optional()
+}
+
+export const handleFetchServicesOfferedByProfessionalQuerySchema = basePaginationSchema.extend(partialHandleFetchServicesOfferedByProfessionalQuerySchema)
+
+export type HandleFetchServicesOfferedByProfessionalQuerySchema = z.infer<typeof handleFetchServicesOfferedByProfessionalQuerySchema>
+export type PartialHandleFetchServicesOfferedByProfessionalQuerySchema = Pick<z.infer<typeof handleFetchServicesOfferedByProfessionalQuerySchema>, 'q' | 'category' >

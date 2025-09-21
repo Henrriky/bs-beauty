@@ -129,7 +129,7 @@ function ProfessionalProfile({
         render={({ field, fieldState: { error } }) => (
           <div>
             <PaymentMethodsInput
-              value={field.value}
+              value={field.value ?? undefined}
               onChange={field.onChange}
             />
             {error && (

@@ -3,7 +3,7 @@ import CustomerHomeProfessionalCardPersonalInfo from './CustomerHomeProfessional
 import CustomerHomeOfferInfo from '../CustomerHomeOfferInfo'
 
 interface CustomerHomeProfessionalCardProps
-  extends ProfessionalsOfferingServiceOffer {
+  extends Omit<ProfessionalsOfferingServiceOffer, 'paymentMethods'> {
   key: string
   for: string
   isSelected: boolean
