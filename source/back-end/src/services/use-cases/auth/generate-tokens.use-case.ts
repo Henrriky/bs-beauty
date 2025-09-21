@@ -1,5 +1,5 @@
 import { CustomerRepository } from "@/repository/protocols/customer.repository";
-import { EmployeeRepository } from "@/repository/protocols/employee.repository";
+import { ProfessionalRepository } from "@/repository/protocols/professional.repository";
 import { RefreshTokenService } from "@/services/encrypter/refresh-token.service";
 import { Encrypter } from "@/services/protocols/encrypter.protocol";
 import { CustomError } from "@/utils/errors/custom.error.util";
@@ -7,7 +7,7 @@ import { CustomError } from "@/utils/errors/custom.error.util";
 class GenerateTokensUseCase {
   constructor(
     private readonly customerRepository: CustomerRepository,
-    private readonly employeeRepository: EmployeeRepository,
+    private readonly professionalRepository: ProfessionalRepository,
     private readonly encrypter: Encrypter,
     private readonly refreshTokenService: RefreshTokenService
   ) { }
@@ -15,7 +15,7 @@ class GenerateTokensUseCase {
   async execute(token: string) {
     const { userId, refreshToken: newRefreshToken } = await this.refreshTokenService.rotate(token)
 
-    const user = await this.customerRepository.findById(userId) ?? await this.employeeRepository.findById(userId)
+    const user = await this.customerRepository.findById(userId) ?? await this.professionalRepository.findById(userId)
 
     if (!user) {
       throw new CustomError(

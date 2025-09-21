@@ -1,8 +1,8 @@
 import { EmailService } from '@/services/email/email.service'
-import { Employee } from '@prisma/client'
+import { Professional } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
-import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
+import { type ProfessionalRepository } from '../../../repository/protocols/professional.repository'
 import { CustomError } from '../../../utils/errors/custom.error.util'
 import { CodeValidationService } from './code-validation.service'
 
@@ -17,7 +17,7 @@ const PENDING_TTL_SECONDS = 600
 export class RegisterUserUseCase {
   constructor(
     private readonly customerRepository: CustomerRepository,
-    private readonly employeeRepository: EmployeeRepository,
+    private readonly professionalRepository: ProfessionalRepository,
     private readonly codeValidationService: CodeValidationService,
     private readonly emailService: EmailService
   ) { }
@@ -25,12 +25,12 @@ export class RegisterUserUseCase {
   async executeRegisterCustomer(input: RegisterUserInput): Promise<void> {
     const { email, password } = input
 
-    const [customerByEmail, employeeByEmail] = await Promise.all([
+    const [customerByEmail, professionalByEmail] = await Promise.all([
       this.customerRepository.findByEmail(email),
-      this.employeeRepository.findByEmail(email)
+      this.professionalRepository.findByEmail(email)
     ])
 
-    if (customerByEmail || employeeByEmail) {
+    if (customerByEmail || professionalByEmail) {
       throw new CustomError(
         `Bad Request`,
         400,
@@ -67,21 +67,21 @@ export class RegisterUserUseCase {
     })
   }
 
-  async executeRegisterEmployee(input: RegisterUserInput): Promise<void> {
+  async executeRegisterProfessional(input: RegisterUserInput): Promise<void> {
     const { email, password } = input
 
     const passwordHash = await bcrypt.hash(password, 10)
 
-    await this.employeeRepository.updateEmployeeByEmail(email, {
+    await this.professionalRepository.updateProfessionalByEmail(email, {
       email,
       passwordHash,
     })
   }
 
-  async executeFindEmployeeByEmail(email: string): Promise<Employee | null> {
-    const employeeByEmail = await this.employeeRepository.findByEmail(email)
+  async executeFindProfessionalByEmail(email: string): Promise<Professional | null> {
+    const professionalByEmail = await this.professionalRepository.findByEmail(email)
 
-    if (!employeeByEmail) {
+    if (!professionalByEmail) {
       throw new CustomError(
         `Bad Request`,
         400,
@@ -89,6 +89,6 @@ export class RegisterUserUseCase {
       )
     }
 
-    return employeeByEmail
+    return professionalByEmail
   }
 }

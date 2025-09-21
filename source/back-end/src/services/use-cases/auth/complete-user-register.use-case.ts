@@ -17,12 +17,12 @@ interface CompleteUserRegisterUseCaseInput {
 }
 
 class CompleteUserRegisterUseCase {
-  constructor (
+  constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly professionalRepository: ProfessionalRepository
   ) { }
 
-  async execute ({ userData, userId, userEmail, userType }: CompleteUserRegisterUseCaseInput): Promise<void> {
+  async execute({ userData, userId, userEmail, userType }: CompleteUserRegisterUseCaseInput): Promise<void> {
     const data = {
       ...userData,
       registerCompleted: true
@@ -53,16 +53,16 @@ class CompleteUserRegisterUseCase {
         }
       }
     } else if (userType === UserType.EMPLOYEE || userType === UserType.MANAGER) {
-      const existingEmployee = await this.employeeRepository.findByEmail(userEmail)
-      if (existingEmployee) {
-        if (existingEmployee.googleId && !existingEmployee.passwordHash) {
-          await this.employeeRepository.updateByEmailAndGoogleId(
+      const existingProfessional = await this.professionalRepository.findByEmail(userEmail)
+      if (existingProfessional) {
+        if (existingProfessional.googleId && !existingProfessional.passwordHash) {
+          await this.professionalRepository.updateByEmailAndGoogleId(
             userId,
             userEmail,
             data
           )
         } else {
-          await this.employeeRepository.updateEmployeeByEmail(userEmail, data)
+          await this.professionalRepository.updateProfessionalByEmail(userEmail, data)
         }
       }
 

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
-import { type EmployeeRepository } from '../../../repository/protocols/employee.repository'
-import { type CustomerOrEmployee } from '../../../types/customer-or-employee.type'
+import { type ProfessionalRepository } from '../../../repository/protocols/professional.repository'
+import { type CustomerOrProfessional } from '../../../types/customer-or-professional.type'
 import { CustomError } from '../../../utils/errors/custom.error.util'
 import { type Encrypter } from '../../protocols/encrypter.protocol'
 import { type OAuthIdentityProvider } from '../../protocols/oauth-identity-provider.protocol'
@@ -19,7 +19,7 @@ interface LoginUseCaseOutput {
 }
 
 class LoginUseCase {
-  constructor (
+  constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly professionalRepository: ProfessionalRepository,
     private readonly encrypter: Encrypter,
@@ -40,14 +40,14 @@ class LoginUseCase {
           userAgent?: string
         }
       }): Promise<LoginUseCaseOutput> {
-    let customerOrEmployee: CustomerOrEmployee | null = null
+    let customerOrProfessional: CustomerOrProfessional | null = null
 
     if (token) {
       const { userId, email, profilePhotoUrl } = await this.identityProvider.fetchUserInformationsFromToken(token)
 
-      const employeeAlreadyExists = await this.employeeRepository.findByEmail(email)
+      const professionalAlreadyExists = await this.professionalRepository.findByEmail(email)
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      if (!employeeAlreadyExists) {
+      if (!professionalAlreadyExists) {
         const customer = await this.customerRepository.updateOrCreate({
           email
         }, {
@@ -55,27 +55,27 @@ class LoginUseCase {
           googleId: userId,
           profilePhotoUrl
         })
-        customerOrEmployee = {
+        customerOrProfessional = {
           ...customer,
           userId
         }
       } else {
-        const employee = await this.employeeRepository.updateEmployeeByEmail(email, {
+        const professional = await this.professionalRepository.updateProfessionalByEmail(email, {
           googleId: userId,
           profilePhotoUrl
         })
-        customerOrEmployee = {
-          ...employee,
+        customerOrProfessional = {
+          ...professional,
           userId
         }
       }
 
-      return this.issueTokensForUser(customerOrEmployee)
+      return this.issueTokensForUser(customerOrProfessional)
     } else if (email && password) {
       const customer = await this.customerRepository.findByEmail(email)
-      const employee = await this.employeeRepository.findByEmail(email)
+      const professional = await this.professionalRepository.findByEmail(email)
 
-      const user = customer ?? employee
+      const user = customer ?? professional
 
       let isPasswordValid: boolean = false;
 
@@ -91,15 +91,15 @@ class LoginUseCase {
         )
       }
 
-      customerOrEmployee = { ...user, userId: user.id } as CustomerOrEmployee
+      customerOrProfessional = { ...user, userId: user.id } as CustomerOrProfessional
 
-      return this.issueTokensForUser(customerOrEmployee)
+      return this.issueTokensForUser(customerOrProfessional)
     }
 
     throw new Error('Invalid credentials')
   }
 
-  private async issueTokensForUser(user: CustomerOrEmployee & { userId?: string }): Promise<LoginUseCaseOutput> {
+  private async issueTokensForUser(user: CustomerOrProfessional & { userId?: string }): Promise<LoginUseCaseOutput> {
     const subjectUserId = user.userId ?? user.id
     const profilePhotoUrl = user.profilePhotoUrl ?? ''
 

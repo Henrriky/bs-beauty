@@ -5,10 +5,10 @@ import {
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import { API_VARIABLES } from '../../api/config'
-import { Customer, Employee } from './types'
+import { Customer, Professional } from './types'
 import {
   CustomerRegistrationFormData,
-  EmployeeRegistrationFormData,
+  ProfessionalRegistrationFormData,
 } from '../../pages/user-registration/types'
 
 export const authAPI = createApi({
@@ -43,9 +43,9 @@ export const authAPI = createApi({
         body: data,
       }),
     }),
-    registerEmployee: builder.mutation<
+    registerProfessional: builder.mutation<
       { success: boolean },
-      EmployeeRegistrationFormData
+      ProfessionalRegistrationFormData
     >({
       query: (data) => ({
         url: API_VARIABLES.AUTH_ENDPOINTS.REGISTER_USER,
@@ -53,7 +53,7 @@ export const authAPI = createApi({
         body: data,
       }),
     }),
-    findEmployeeByEmail: builder.query<Employee, string>({
+    findProfessionalByEmail: builder.query<Professional, string>({
       query: (email) => ({
         url: `${API_VARIABLES.AUTH_ENDPOINTS.REGISTER_USER}/${email}`,
         method: 'GET',

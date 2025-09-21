@@ -56,7 +56,7 @@ class ProfessionalSchemas {
     }
   })
 
-  public static registerEmployeeBodySchema = SharedSchemas.registerBodySchema
+  public static registerProfessionalBodySchema = SharedSchemas.registerBodySchema
 
   public static managerUpdateSchema = z.object({
     name: z.string().min(3).max(100).refine((string) => RegexPatterns.names.test(string)).optional(),

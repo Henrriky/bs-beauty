@@ -4,7 +4,7 @@ import { makeRegisterUserUseCase } from '../../factory/auth/make-register-user.u
 import { CustomerSchemas } from '../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
 import { formatValidationErrors } from '../../utils/formatting/zod-validation-errors.formatting.util'
 import { z } from 'zod'
-import { EmployeeSchemas } from '../../utils/validation/zod-schemas/employee.zod-schemas.validation.utils'
+import { ProfessionalSchemas } from '../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 
 class RegisterUserController {
   public static async handleRegisterCustomer(req: Request, res: Response, next: NextFunction) {
@@ -28,19 +28,19 @@ class RegisterUserController {
     }
   }
 
-  public static async handleRegisterEmployee(req: Request, res: Response, next: NextFunction) {
+  public static async handleRegisterProfessional(req: Request, res: Response, next: NextFunction) {
     try {
-      const body = EmployeeSchemas.registerEmployeeBodySchema.parse(req.body)
+      const body = ProfessionalSchemas.registerProfessionalBodySchema.parse(req.body)
 
       const useCase = makeRegisterUserUseCase()
-      await useCase.executeRegisterEmployee(body)
+      await useCase.executeRegisterProfessional(body)
 
       res.status(StatusCodes.CREATED).send({
         success: true,
-        message: 'Employee registered successfully'
+        message: 'Professional registered successfully'
       })
     } catch (error: any) {
-      console.error(`Error trying to register employee.\nReason: ${error?.message}`)
+      console.error(`Error trying to register professional.\nReason: ${error?.message}`)
       if (error instanceof z.ZodError) {
         formatValidationErrors(error, res)
         return
@@ -49,16 +49,16 @@ class RegisterUserController {
     }
   }
 
-  public static async handleFindEmployeeByEmail(req: Request, res: Response, next: NextFunction) {
+  public static async handleFindProfessionalByEmail(req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeRegisterUserUseCase()
-      const employee = await useCase.executeFindEmployeeByEmail(req.params.email)
+      const professional = await useCase.executeFindProfessionalByEmail(req.params.email)
 
       res.status(StatusCodes.OK).send({
-        employee,
+        professional,
       })
     } catch (error: any) {
-      console.error(`Error trying to fetch employee.\nReason: ${error?.message}`)
+      console.error(`Error trying to fetch professional.\nReason: ${error?.message}`)
       if (error instanceof z.ZodError) {
         formatValidationErrors(error, res)
         return

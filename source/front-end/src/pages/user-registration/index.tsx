@@ -22,19 +22,19 @@ function UserRegistration() {
 
   const emailSchema = z.string().email()
 
-  const isEmployeeEmail = authAPI.useFindEmployeeByEmailQuery(email, {
+  const isProfessionalEmail = authAPI.useFindProfessionalByEmailQuery(email, {
     skip: !emailSchema.safeParse(email).success,
   })
 
-  const [registerEmployee, employeeState] =
-    authAPI.useRegisterEmployeeMutation()
+  const [registerProfessional, professionalState] =
+    authAPI.useRegisterProfessionalMutation()
 
   const [registerCustomer, customerState] =
     authAPI.useRegisterCustomerMutation()
 
-  const register = isEmployeeEmail?.data ? registerEmployee : registerCustomer
+  const register = isProfessionalEmail?.data ? registerProfessional : registerCustomer
 
-  const isLoading = employeeState.isLoading || customerState.isLoading
+  const isLoading = professionalState.isLoading || customerState.isLoading
 
   async function handleUpdateProfileToken(email: string, password: string) {
     try {
@@ -76,7 +76,7 @@ function UserRegistration() {
     await register(data)
       .unwrap()
       .then(() => {
-        if (isEmployeeEmail.data) {
+        if (isProfessionalEmail.data) {
           handleUpdateProfileToken(data.email, data.password)
           navigate('/complete-register')
           return

@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 import {
   CustomerRegistrationFormData,
   OnSubmitCustomerRegistrationFormData,
-  OnSubmitEmployeeRegistrationFormData,
+  OnSubmitProfessionalRegistrationFormData,
 } from '../types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
@@ -14,8 +14,8 @@ import { useState } from 'react'
 interface UserRegistrationProps {
   isLoading: boolean
   handleSubmit:
-    | OnSubmitCustomerRegistrationFormData
-    | OnSubmitEmployeeRegistrationFormData
+  | OnSubmitCustomerRegistrationFormData
+  | OnSubmitProfessionalRegistrationFormData
   setEmail: React.Dispatch<React.SetStateAction<string>>
   setPassword: React.Dispatch<React.SetStateAction<string>>
   isOpen: boolean

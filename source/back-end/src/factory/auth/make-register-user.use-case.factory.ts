@@ -2,19 +2,19 @@ import { RedisCacheProvider } from '@/services/cache/redis-cache-provider.servic
 import { EmailService } from '@/services/email/email.service'
 import { CodeValidationService } from '@/services/use-cases/auth/code-validation.service'
 import { PrismaCustomerRepository } from '../../repository/prisma/prisma-customer.repository'
-import { PrismaEmployeeRepository } from '../../repository/prisma/prisma-employee.repository'
+import { PrismaProfessionalRepository } from '../../repository/prisma/prisma-professional.repository'
 import { RegisterUserUseCase } from '../../services/use-cases/auth/register-user.use-case'
 
 const makeRegisterUserUseCase = () => {
   const customerRepo = new PrismaCustomerRepository()
-  const employeeRepo = new PrismaEmployeeRepository()
+  const professionalRepo = new PrismaProfessionalRepository()
   const cacheService = new RedisCacheProvider()
   const codeVerificationService = new CodeValidationService(cacheService)
   const emailService = new EmailService()
 
   const usecase = new RegisterUserUseCase(
     customerRepo,
-    employeeRepo,
+    professionalRepo,
     codeVerificationService,
     emailService
   )
