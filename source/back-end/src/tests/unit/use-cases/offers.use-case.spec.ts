@@ -7,6 +7,7 @@ import {
 } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
 import { Prisma, type Offer, type Service, ServiceStatus, type Shift, WeekDays } from '@prisma/client'
+import { DateFormatter } from '@/utils/formatting/date.formatting.util'
 
 describe('OffersUseCase (Unit Tests)', () => {
   let offersUseCase: OffersUseCase
@@ -410,6 +411,7 @@ describe('OffersUseCase (Unit Tests)', () => {
       const serviceOfferingId = faker.string.uuid()
       const professionalId = faker.string.uuid()
       const dayToFetch = new Date('2025-09-20T00:00:00.000Z')
+      const dayOfWeekToFetch = DateFormatter.formatDayOfDateToWeekDay(dayToFetch)
 
       const offer: Offer = {
         id: serviceOfferingId,
@@ -424,7 +426,7 @@ describe('OffersUseCase (Unit Tests)', () => {
 
       const shift: Shift = {
         id: faker.string.uuid(),
-        weekDay: WeekDays.FRIDAY,
+        weekDay: dayOfWeekToFetch,
         isBusy: false,
         shiftStart: new Date('2025-09-20T08:00:00.000Z'),
         shiftEnd: new Date('2025-09-20T18:00:00.000Z'),
@@ -446,7 +448,7 @@ describe('OffersUseCase (Unit Tests)', () => {
       expect(result).toHaveProperty('availableSchedulling')
       expect(Array.isArray(result.availableSchedulling)).toBe(true)
       expect(MockOfferRepository.findById).toHaveBeenCalledWith(serviceOfferingId)
-      expect(MockShiftRepository.findByProfessionalAndWeekDay).toHaveBeenCalledWith(professionalId, WeekDays.FRIDAY)
+      expect(MockShiftRepository.findByProfessionalAndWeekDay).toHaveBeenCalledWith(professionalId, dayOfWeekToFetch)
     })
 
     it('should throw an error if offer does not exist or is not offering', async () => {
