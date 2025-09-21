@@ -6,7 +6,7 @@ import {
   MockShiftRepository
 } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { Prisma, type Offer, type Service, ServiceStatus, type Shift, WeekDays } from '@prisma/client'
+import { Prisma, type Offer, type Service, ServiceStatus, type Shift } from '@prisma/client'
 import { DateFormatter } from '@/utils/formatting/date.formatting.util'
 
 describe('OffersUseCase (Unit Tests)', () => {
