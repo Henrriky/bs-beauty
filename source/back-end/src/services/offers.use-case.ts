@@ -1,4 +1,4 @@
-import { type Prisma, type Offer } from '@prisma/client'
+import { type Prisma, type Offer, ServiceStatus } from '@prisma/client'
 import { type OfferRepository } from '../repository/protocols/offer.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { CustomError } from '../utils/errors/custom.error.util'
@@ -7,6 +7,7 @@ import { DateFormatter } from '../utils/formatting/date.formatting.util'
 import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
 import { type OffersFilters } from '../types/offers/offers-filters'
 import { type AppointmentRepository } from '../repository/protocols/appointment.repository'
+import { type ServiceRepository } from '@/repository/protocols/service.repository'
 
 interface OfferOutput {
   offers: Offer[]
@@ -18,11 +19,14 @@ interface AvailablesSchedulling {
   isBusy: boolean
 }
 
+const VALID_STATUS_OF_SERVICE_TO_OFFER = ServiceStatus.APPROVED
+
 class OffersUseCase {
   constructor (
     private readonly offerRepository: OfferRepository,
     private readonly shiftRepository: ShiftRepository,
-    private readonly appointmentRepository: AppointmentRepository
+    private readonly appointmentRepository: AppointmentRepository,
+    private readonly serviceRepository: ServiceRepository
   ) { }
 
   public async executeFindAll (): Promise<OfferOutput> {
@@ -59,6 +63,14 @@ class OffersUseCase {
     const professionalId = offer.professionalId
     const offerFound = await this.offerRepository.findByProfessionalAndServiceId(serviceId, professionalId)
     RecordExistence.validateRecordNonExistence(offerFound, 'Offer')
+
+    const service = await this.serviceRepository.findById(serviceId)
+    RecordExistence.validateRecordExistence(service, 'Service')
+    const serviceHasValidStatus = service?.status === VALID_STATUS_OF_SERVICE_TO_OFFER
+    if (!serviceHasValidStatus) {
+      throw new CustomError('Bad Request', 400, `Service must be ${VALID_STATUS_OF_SERVICE_TO_OFFER.toString()} to create an offer.`)
+    }
+
     const newOffer = await this.offerRepository.create(offerToCreate)
 
     return newOffer
