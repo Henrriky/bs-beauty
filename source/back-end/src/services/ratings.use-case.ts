@@ -26,7 +26,7 @@ class RatingsUseCase {
   }
 
   public async executeCreate (ratingToCreate: Prisma.RatingCreateInput) {
-    RecordExistence.validateRecordNonExistence(ratingToCreate, this.entityName)
+    // RecordExistence.validateRecordNonExistence(ratingToCreate, this.entityName)
     const newRating = await this.ratingRepository.create(ratingToCreate)
 
     return newRating

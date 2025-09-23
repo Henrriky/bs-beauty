@@ -1,4 +1,5 @@
 import { makeRatingsUseCaseFactory } from "@/factory/make-ratings-use-case.factory"
+import { Prisma } from "@prisma/client"
 import { NextFunction, Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
 
@@ -25,6 +26,45 @@ class RatingsController {
             next(error)
         }
     }
+
+  public static async handleCreate (req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeRatingsUseCaseFactory()
+      const ratingToCreate: Prisma.RatingCreateInput = req.body
+      const newRating = await useCase.executeCreate(ratingToCreate)
+
+      res.send(newRating)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleUpdate (req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeRatingsUseCaseFactory()
+      const ratingId = req.params.id
+      const ratingToUpdate: Prisma.RatingUpdateInput = req.body
+      const updatedRating = await useCase.executeUpdate(ratingId, ratingToUpdate)
+
+      res.send(updatedRating)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleDelete (req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeRatingsUseCaseFactory()
+      const ratingId = req.params.id
+      const deletedRating = await useCase.executeDelete(ratingId)
+
+      res.send(deletedRating)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  
 }
 
 export { RatingsController }
