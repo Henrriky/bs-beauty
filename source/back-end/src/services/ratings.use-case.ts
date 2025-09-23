@@ -13,7 +13,7 @@ class RatingsUseCase {
 
   public async executeFindAll (): Promise<RatingsOutput> {
     const ratings = await this.ratingRepository.findAll()
-    RecordExistence.validateManyRecordsExistence(ratings, 'ratings')
+    RecordExistence.validateManyRecordsExistence(ratings, this.entityName)
 
     return { ratings }
   }
@@ -25,8 +25,18 @@ class RatingsUseCase {
     return rating
   }
 
+  public async executeFindByAppointmentId (appointmentId: string): Promise<Rating | null> {
+    const rating = await this.ratingRepository.findById(appointmentId)
+    RecordExistence.validateRecordExistence(rating, this.entityName)
+
+    return rating
+  }
+
   public async executeCreate (ratingToCreate: Prisma.RatingCreateInput) {
-    // RecordExistence.validateRecordNonExistence(ratingToCreate, this.entityName)
+    const rating = ratingToCreate as unknown as Rating
+    const appointmentId = rating.appointmentId
+    const foundRating = await this.ratingRepository.findByAppointmentId(appointmentId)
+    RecordExistence.validateRecordNonExistence(foundRating, this.entityName)
     const newRating = await this.ratingRepository.create(ratingToCreate)
 
     return newRating

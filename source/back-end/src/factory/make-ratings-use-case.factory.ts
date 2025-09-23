@@ -2,8 +2,8 @@ import { PrismaRatingRepository } from '../repository/prisma/prisma-rating.repos
 import { RatingsUseCase } from '../services/ratings.use-case'
 
 function makeRatingsUseCaseFactory () {
-  const repository = new PrismaRatingRepository()
-  const usecase = new RatingsUseCase(repository)
+  const ratingsRepository = new PrismaRatingRepository()
+  const usecase = new RatingsUseCase(ratingsRepository)
 
   return usecase
 }
