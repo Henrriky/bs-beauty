@@ -58,7 +58,7 @@ model Appointment {
 
 model Rating {
   id            String   @id @default(uuid())
-  score         Int      @default(1)
+  score         Int?      @default(1)
   comment       String?
   createdAt     DateTime @default(now()) @map("created_at")
   appointmentId String   @unique @map("appointment_id")
