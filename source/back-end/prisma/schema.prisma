@@ -14,25 +14,26 @@ datasource db {
 }
 
 model Customer {
-  id                  String    @id @default(uuid())
-  name                String?   @default("Usuário")
-  registerCompleted   Boolean   @default(false) @map("register_completed")
+  id                  String           @id @default(uuid())
+  name                String?          @default("Usuário")
+  registerCompleted   Boolean          @default(false) @map("register_completed")
   birthdate           DateTime?
-  email               String    @unique
-  googleId            String?   @unique @map("google_id")
-  phone               String?   @unique
+  email               String           @unique
+  googleId            String?          @unique @map("google_id")
+  phone               String?          @unique
   profilePhotoUrl     String?
-  userType            UserType  @default(CUSTOMER) @map("user_type")
-  referrerId          String?   @map("referrer_id")
-  referralCount       Int       @default(0) @map("referral_count")
-  alwaysAllowImageUse Boolean   @default(false) @map("always_allow_image_use")
+  userType            UserType         @default(CUSTOMER) @map("user_type")
+  referrerId          String?          @map("referrer_id")
+  referralCount       Int              @default(0) @map("referral_count")
+  alwaysAllowImageUse Boolean          @default(false) @map("always_allow_image_use")
   discoverySource     DiscoverySource? @map("discovery_source")
-  createdAt           DateTime  @default(now()) @map("created_at")
-  updatedAt           DateTime  @updatedAt @map("updated_at")
+  createdAt           DateTime         @default(now()) @map("created_at")
+  updatedAt           DateTime         @updatedAt @map("updated_at")
 
   appointments Appointment[]
-  referrer     Customer?     @relation("refers", fields: [referrerId], references: [id])
-  referrals    Customer[]    @relation("refers")
+  referrer     Customer?       @relation("refers", fields: [referrerId], references: [id])
+  referrals    Customer[]      @relation("refers")
+  payments     PaymentRecord[]
 
   @@map("customer")
 }
@@ -45,6 +46,7 @@ model Appointment {
   allowImageUse    Boolean  @default(false) @map("allows_image_use")
   customerId       String   @map("customer_id")
   serviceOfferedId String   @map("service_id")
+  paymentRecordId  String?  @map("payment_record_id")
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
@@ -52,6 +54,7 @@ model Appointment {
   rating        Rating?
   customer      Customer       @relation(fields: [customerId], references: [id])
   offer         Offer          @relation(fields: [serviceOfferedId], references: [id])
+  payment       PaymentRecord? @relation(fields: [paymentRecordId], references: [id])
 
   @@map("appointment")
 }
@@ -104,6 +107,7 @@ model Offer {
   appointments Appointment[]
   service      Service       @relation(fields: [serviceId], references: [id])
   professional Professional  @relation(fields: [professionalId], references: [id])
+  payments     PaymentItem[]
 
   @@map("offer")
 }
@@ -126,6 +130,7 @@ model Professional {
   shifts           Shift[]
   offers           Offer[]
   professionalRole ProfessionalRole[]
+  payments         PaymentRecord[]
 
   @@map("professional")
 }
@@ -195,6 +200,37 @@ model RolePermission {
   @@map("role_permission")
 }
 
+model PaymentRecord {
+  id             String   @id @default(uuid())
+  totalValue     Decimal  @map("total_value") @db.Decimal(10, 2)
+  paymentMethod  String   @map("payment_method")
+  customerId     String   @map("customer_id")
+  professionalId String   @map("professional_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  professional Professional  @relation(fields: [professionalId], references: [id])
+  customer     Customer      @relation(fields: [customerId], references: [id])
+  items        PaymentItem[]
+  appointments Appointment[]
+
+  @@map("payment_record")
+}
+
+model PaymentItem {
+  id              String  @id @default(uuid())
+  quantity        Int     @default(1)
+  discount        Decimal @db.Decimal(4, 3)
+  price           Decimal @db.Decimal(10, 2)
+  paymentRecordId String  @map("payment_record_id")
+  offerId         String  @map("offer_id")
+
+  paymentRecord PaymentRecord @relation(fields: [paymentRecordId], references: [id])
+  offer         Offer         @relation(fields: [offerId], references: [id])
+
+  @@map("payment_item")
+}
+
 enum WeekDays {
   SUNDAY
   MONDAY
@@ -228,12 +264,12 @@ enum Action {
 }
 
 enum DiscoverySource {
-  REFERRAL    
+  REFERRAL
   INSTAGRAM
   FACEBOOK
   TIKTOK
   GOOGLE
   WHATSAPP
-  WALK_IN      
+  WALK_IN
   OTHER
 }
