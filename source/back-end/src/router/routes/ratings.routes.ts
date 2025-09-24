@@ -8,8 +8,8 @@ const ratingRoutes = Router()
 
 ratingRoutes.get('/', RatingsController.handleFindAll)
 ratingRoutes.get('/:id', RatingsController.handleFindById)
-ratingRoutes.post('/', routeAuthMiddleware(['CUSTOMER', 'MANAGER']), validateCreateRating, RatingsController.handleCreate)
-ratingRoutes.put('/:id', routeAuthMiddleware(['CUSTOMER', 'MANAGER']), validateUpdateRating, RatingsController.handleUpdate)
-ratingRoutes.delete('/:id', routeAuthMiddleware(['CUSTOMER', 'MANAGER']), RatingsController.handleDelete)
+ratingRoutes.post('/', routeAuthMiddleware(['PROFESSIONAL', 'MANAGER']), validateCreateRating, RatingsController.handleCreate)
+ratingRoutes.put('/:id', validateUpdateRating, RatingsController.handleUpdate)
+ratingRoutes.delete('/:id', routeAuthMiddleware(['MANAGER']), RatingsController.handleDelete)
 
 export { ratingRoutes }

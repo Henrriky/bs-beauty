@@ -13,6 +13,7 @@ appointmentRoutes.get('/offer/:serviceOfferedId', AppointmentController.handleFi
 appointmentRoutes.get('/:id', AppointmentController.handleFindById)
 appointmentRoutes.post('/', routeAuthMiddleware([UserType.CUSTOMER]), routeAuthMiddleware([UserType.CUSTOMER, UserType.PROFESSIONAL, UserType.MANAGER]), validateCreateAppointment, AppointmentController.handleCreate)
 appointmentRoutes.put('/:id', routeAuthMiddleware([UserType.CUSTOMER, UserType.PROFESSIONAL, UserType.MANAGER]), validateUpdateAppointment, AppointmentController.handleUpdate)
+appointmentRoutes.put('/:id/finish', routeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateUpdateAppointment, AppointmentController.handleFinishAppointment)
 appointmentRoutes.delete('/:id', AppointmentController.handleDelete)
 
 export { appointmentRoutes }

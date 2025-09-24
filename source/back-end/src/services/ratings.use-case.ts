@@ -1,6 +1,7 @@
 import { type Rating, type Prisma } from '@prisma/client'
 import { type RatingRepository } from '../repository/protocols/rating.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { CustomError } from '@/utils/errors/custom.error.util'
 
 interface RatingsOutput {
   ratings: Rating[]
@@ -26,7 +27,7 @@ class RatingsUseCase {
   }
 
   public async executeFindByAppointmentId (appointmentId: string): Promise<Rating | null> {
-    const rating = await this.ratingRepository.findById(appointmentId)
+    const rating = await this.ratingRepository.findByAppointmentId(appointmentId)
     RecordExistence.validateRecordExistence(rating, this.entityName)
 
     return rating
@@ -35,6 +36,18 @@ class RatingsUseCase {
   public async executeCreate (ratingToCreate: Prisma.RatingCreateInput) {
     const rating = ratingToCreate as unknown as Rating
     const appointmentId = rating.appointmentId
+    const foundRating = await this.ratingRepository.findByAppointmentId(appointmentId)
+    RecordExistence.validateRecordNonExistence(foundRating, this.entityName)
+    const newRating = await this.ratingRepository.create(ratingToCreate)
+
+    return newRating
+  }
+
+  public async executeCreateOnAppointmentConclusion (ratingToCreate: Prisma.RatingCreateInput) {
+    const appointmentId = ratingToCreate.appointment.connect?.id
+    if (!appointmentId)
+      throw new CustomError('The appointment Id was not passed.', 400)
+    
     const foundRating = await this.ratingRepository.findByAppointmentId(appointmentId)
     RecordExistence.validateRecordNonExistence(foundRating, this.entityName)
     const newRating = await this.ratingRepository.create(ratingToCreate)

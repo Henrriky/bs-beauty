@@ -55,6 +55,8 @@ export const API_VARIABLES = {
       `/appointments/${appointmentId}`,
     UPDATE_APPOINTMENT: (appointmentId: string) =>
       `/appointments/${appointmentId}`,
+    FINISH_APPOINTMENT: (appointmentId: string) =>
+      `/appointments/${appointmentId}/finish`,
   },
   ANALYTICS_ENDPOINTS: {
     FETCH_ANALYTICS: '/analytics',

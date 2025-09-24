@@ -43,6 +43,19 @@ export const appointmentAPI = createApi({
         },
       }),
     }),
+    finishAppointment: builder.mutation<
+      void,
+      ProfessionalUpdateAppointmentFormData & { id: string }
+    >({
+      query: (data) => ({
+        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.FINISH_APPOINTMENT(data.id),
+        method: 'PUT',
+        body: {
+          ...data,
+          id: undefined,
+        },
+      }),
+    }),
     findAppointmentsByCustomerOrProfessionalId: builder.query<
       {
         appointments: FindAppointmentByCustomerId[]

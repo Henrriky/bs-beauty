@@ -1,6 +1,8 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use-case.factory'
 import { type Prisma } from '@prisma/client'
+import { StatusCodes } from 'http-status-codes'
+import { makeRatingsUseCaseFactory } from '@/factory/make-ratings-use-case.factory'
 
 class AppointmentController {
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
@@ -75,6 +77,35 @@ class AppointmentController {
       res.send(updatedAppointment)
     } catch (error) {
       next(error)
+    }
+  }
+
+  public static async handleFinishAppointment(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const appointmentId = req.params.id;
+      const userId = req.user.id
+      const appointmentsUseCase = makeAppointmentsUseCaseFactory();
+      const ratingsUseCase = makeRatingsUseCaseFactory();
+      const updatedAppointment = await appointmentsUseCase.executeUpdate(
+        userId,
+        appointmentId,
+        { status: 'FINISHED' }
+      );
+
+      const newRating: Prisma.RatingCreateInput = {
+        appointment: {
+          connect: { id: appointmentId }
+        }
+      };
+
+      await ratingsUseCase.executeCreateOnAppointmentConclusion(newRating);
+      res.status(StatusCodes.OK).send(updatedAppointment);
+    } catch (error) {
+      next(error);
     }
   }
 
