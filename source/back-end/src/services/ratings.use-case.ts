@@ -10,30 +10,30 @@ interface RatingsOutput {
 class RatingsUseCase {
   private readonly entityName = 'Rating'
 
-  constructor (private readonly ratingRepository: RatingRepository) { }
+  constructor(private readonly ratingRepository: RatingRepository) { }
 
-  public async executeFindAll (): Promise<RatingsOutput> {
+  public async executeFindAll(): Promise<RatingsOutput> {
     const ratings = await this.ratingRepository.findAll()
     RecordExistence.validateManyRecordsExistence(ratings, this.entityName)
 
     return { ratings }
   }
 
-  public async executeFindById (ratingId: string): Promise<Rating | null> {
+  public async executeFindById(ratingId: string): Promise<Rating | null> {
     const rating = await this.ratingRepository.findById(ratingId)
     RecordExistence.validateRecordExistence(rating, this.entityName)
 
     return rating
   }
 
-  public async executeFindByAppointmentId (appointmentId: string): Promise<Rating | null> {
+  public async executeFindByAppointmentId(appointmentId: string): Promise<Rating | null> {
     const rating = await this.ratingRepository.findByAppointmentId(appointmentId)
     RecordExistence.validateRecordExistence(rating, this.entityName)
 
     return rating
   }
 
-  public async executeCreate (ratingToCreate: Prisma.RatingCreateInput) {
+  public async executeCreate(ratingToCreate: Prisma.RatingCreateInput) {
     const rating = ratingToCreate as unknown as Rating
     const appointmentId = rating.appointmentId
     const foundRating = await this.ratingRepository.findByAppointmentId(appointmentId)
@@ -43,26 +43,14 @@ class RatingsUseCase {
     return newRating
   }
 
-  public async executeCreateOnAppointmentConclusion (ratingToCreate: Prisma.RatingCreateInput) {
-    const appointmentId = ratingToCreate.appointment.connect?.id
-    if (!appointmentId)
-      throw new CustomError('The appointment Id was not passed.', 400)
-    
-    const foundRating = await this.ratingRepository.findByAppointmentId(appointmentId)
-    RecordExistence.validateRecordNonExistence(foundRating, this.entityName)
-    const newRating = await this.ratingRepository.create(ratingToCreate)
-
-    return newRating
-  }
-
-  public async executeUpdate (ratingId: string, ratingToUpdate: Prisma.RatingUpdateInput) {
+  public async executeUpdate(ratingId: string, ratingToUpdate: Prisma.RatingUpdateInput) {
     await this.executeFindById(ratingId)
     const updatedRating = await this.ratingRepository.update(ratingId, ratingToUpdate)
 
     return updatedRating
   }
 
-  public async executeDelete (ratingId: string) {
+  public async executeDelete(ratingId: string) {
     await this.executeFindById(ratingId)
     const deletedRating = await this.ratingRepository.delete(ratingId)
 

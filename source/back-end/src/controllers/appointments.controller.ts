@@ -89,20 +89,10 @@ class AppointmentController {
       const appointmentId = req.params.id;
       const userId = req.user.id
       const appointmentsUseCase = makeAppointmentsUseCaseFactory();
-      const ratingsUseCase = makeRatingsUseCaseFactory();
-      const updatedAppointment = await appointmentsUseCase.executeUpdate(
+      const updatedAppointment = await appointmentsUseCase.executeFinishAppointment(
         userId,
-        appointmentId,
-        { status: 'FINISHED' }
+        appointmentId
       );
-
-      const newRating: Prisma.RatingCreateInput = {
-        appointment: {
-          connect: { id: appointmentId }
-        }
-      };
-
-      await ratingsUseCase.executeCreateOnAppointmentConclusion(newRating);
       res.status(StatusCodes.OK).send(updatedAppointment);
     } catch (error) {
       next(error);
