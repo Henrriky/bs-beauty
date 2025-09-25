@@ -163,6 +163,108 @@ Para a **apresentação final**, definimos claramente as **responsabilidades** d
 
 *Por Giovanna Carvalho*
 
-# Semana 16 - 30/06 a 06.07
+## Semana 16 - 30.06.2025 a 06.07.2025
+
+Durante esta última semana antes da apresentação do **MVP**, foram feitas **correções** pontuais na documentação para ajustar valores errados na parte de Viabilidade Financeira e corrigir o prontuário dos integrantes do grupo. Adicionalmente, realizamos alguns **ajustes finais** no MVP com base no *feedback* coletado na semana anterior com o orientador. Além disso, o problema de sobreposição de agendamentos que existia no MVP foi resolvido. 
+
+Por fim, finalizamos o design e a criação dos slides a serem utilizados na **apresentação final** do MVP.
+
+> Resumo: Correções MVP e documentação; finalização apresentação final.
+
+*Por Giovanna Carvalho*
+
+## Semana 17 - 07.07.2025 a 13.07.2025
+
+Durante esta semana, os esforços foram concentrados na finalização e realização da apresentação do MVP do projeto. No repositório, incluímos os arquivos de configuração necessários para gerar o **vídeo Gource** e fizemos o upload no YouTube.
+
+No dia **08/07**, realizamos a **apresentação do nosso MVP** para os professores orientadores e a turma. Na ocasião, abordamos o **bjetivo** do projeto, o **Problema Identificado**, a **Solução Proposta** e a **Descrição do Negócio**. Por fim, detalhamos a **Arquitetura do Sistema** e a **Viabilidade** do projeto. Também apresentamos o vídeo Gource e algumas estatísticas geradas pelo GitHub para apontar a contribuição de cada membro. 
+
+Ao final, coletamos diversos *feedbacks* com os professores presentes na banca a fim de **promover melhorias** no sistema.
+
+> Resumo: Vídeo Gource gerado, apresentação MVP realizada; *feedbacks* da banca coletados.
+
+*Por Giovanna Carvalho*
+
+## Semanas 18, 19 e 20 - 14.07.2025 a 03.08.2025
+
+Após a apresentação final, fomos **aprovados** na disciplina de **SPOPIE1** e, com o encerramento das atividades, entramos em **recesso acadêmico**. Aproveitamos esse período para descansar e recuperar as energias necessárias para dar continuidade ao desenvolvimento do projeto no próximo semestre, na disciplina de **SPOPIE2**.
+
+Desta forma, não tivemos nenhuma atividade significativa, com exceção de algumas alterações pontuais em arquivos README presentes no repositório remoto.
+
+> Resumo: Aprovação em SPOPIE1; recesso acadêmico.
+
+*Por Giovanna Carvalho*
+
+## Semana 21 - 04.08.2025 a 10.08.2025
+
+Com o fim do recesso e antes do começo do segundo semestre letivo, retomamos as atividades do projeto. Durante a semana, fizemos um estudo de ferramentas voltadas para gerenciamento Scrum visando substituir o Notion, que apresentava certas limitações.
+
+Após a análise, optamos pela ferramenta Taiga por ser uma plataforma simples, fácil de utilizar e por suprir as necessidades da equipe para a próxima fase do desenvolvimento.
+
+> Resumo: Retorno às atividades; escolha do Taiga para gerenciamento Scrum.
+
+*Por Giovanna Carvalho*
+
+## Semana 22 - 11.08.2025 a 17.08.2025
+
+Nesta semana, iniciamos a organização do nosso **product backlog** no Taiga, adicionando as **features** que serão implementadas no sistema.
+
+Além disso, realizamos outras alterações no ambiente da ferramenta para adequá-lo às nossas necessidades, como a definição dos **papéis** de cada membro da equipe.
+
+> Resumo: Organização product backlog; definição papéis da equipe.
+
+*Por Giovanna Carvalho*
+
+## Semana 23 - 18.08.2025 a 24.08.2025
+
+Durante esta semana, a pedido do novo professor orientador Johnata, elaboramos um **planejamento das sprints** do projeto a fim de detalhar o período de duração de cada sprint, bem como as features que planejamos desenvolver em cada momento.
+
+Seguindo também as orientações do orientador Marcelo Tavares, entramos em contato novamente com nossa entidade parceira a fim de **validar** e formalizar os **requisitos** do sistema antes de iniciar o desenvolvimento. Nesse momento, expomos o que seríamos capazes de entregar e o que ficaria de fora por agora, como o envio de mensagens via SMS e Whatsapp.
+
+> Resumo: Planejamento sprints; formalização de requisitos com a entidade parceira.
+
+*Por Giovanna Carvalho*
+
+## Semana 24 - 25.08.2025 a 31.08.2025
+
+A semana 24 marca o começo da **Sprint 1** do projeto e, portanto, do desenvolvimento do sistema além do MVP. Nele, focamos em **corrigir** um bug de **sobreposição** de agendamentos identificado na banca de SPOPIE1 e também trabalhamos em uma forma alternativa de **cadastro/login** diferente do `Google OAuth`.
+
+Para isso, as tarefas foram distribuídas entre os membros: 
+- Alyson definiu as atividades e implementou as novas telas de autenticação; 
+- Bruno criou o design da tela; 
+- Eliel revisou a modelagem do banco de dados e realizou refatorações no front-end; 
+- Giovanna realizou os testes de integração das funcionalidades; 
+- Henrique implementou a lógica da nova autenticação; 
+- Henrriky corrigiu o bug de sobreposição.
+
+> Resumo: Sprint 1; correção do bug de sobreposição; implementação novo método de autenticação.
+
+*Por Giovanna Carvalho*
+
+## Semana 25 - 01.09.2025 a 07.09.2025
+
+Nesta semana, iniciamos a **Sprint 2**, focado em realizar **melhorias** no processo de **agendamento** do salão. O desenvolvimento incluiu a exibição de um resumo do agendamento e das formas de pagamento aceitas. Também foi implementada uma antecedência mínima e uma limitação na quantidade de agendamentos diários a fim de evitar possíveis *spams*.
+
+As tarefas foram distribuídas da seguinte forma: 
+- Alyson e Henrriky definiram as atividades do grupo; 
+- Eliel implementou a tela de resumo do agendamento; 
+- Henrriky implementou as regras de antecedência e limitação;
+- Giovanna reaçizou os testes de integração das regras de limitação; 
+- Bruno desenvolveu o design da tela de configuração das informações do salão, que foi implementada por Alyson. 
+- Henrique implementou novas lógicas para verificação de e-mail, redefinição de senha e refresh token.
+
+> Resumo: Sprint 2; melhorias no agendamento; implementação lógicas de autenticação.
+
+*Por Giovanna Carvalho*
+
+## Semana 26 - 15.09.2025 a 21.09.2025
+
+Nesta semana, a **Sprint 3** foi voltado para realizar melhorias de **segurança** nos processos de **login e cadastro**, bem como aprimorar a experiência dos clientes na **exibição dos serviços**. Para isso, os serviços foram agrupados por categoria e um filtro de busca foi implementado na tela de agendamento.
+
+Ademais, implementamos algumas funcionalidades extras a pedido da entidade parceira, como um informe de **captação de clientes** (para que saibam como conheceram o salão) e a **autorização de uso de imagem** para divulgação dos serviços. 
+
+Em paralelo, iniciamos o desenvolvimento do design das telas de **relatórios do sistema**, com foco em dados financeiros e de produtividade.
+
+> Resumo: Melhorias de segurança; filtro de serviços; implementação de captação de clientes e autorização de uso de imagem.
 
 *Por Giovanna Carvalho*
