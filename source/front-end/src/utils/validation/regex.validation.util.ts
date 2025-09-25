@@ -18,6 +18,7 @@ class RegexPatterns {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
 
   public static readonly time = /^([01]\d|2[0-3]):([0-5]\d)$/
+  public static readonly address = /^[A-Za-zÀ-ÿ0-9\s,º°\-.']{5,200}$/
 }
 
 export { RegexPatterns }
