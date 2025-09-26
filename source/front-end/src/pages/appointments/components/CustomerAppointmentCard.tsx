@@ -13,6 +13,7 @@ import { Formatter } from '../../../utils/formatter/formatter.util'
 import { Button } from '../../../components/button/Button'
 import { ListAppointmentsButtonStatus } from '../types'
 import { Link } from 'react-router-dom'
+import { ratingAPI } from '../../../store/rating/rating-api'
 
 interface CustomerAppointmentCardProps {
   appointment: FindAppointmentByCustomerId
@@ -21,6 +22,12 @@ interface CustomerAppointmentCardProps {
 
 function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
   const isSchedulled = props.switchButtonStatus === 'schedulled'
+
+  const { data } = ratingAPI.useGetRatingByIdQuery(props.appointment.id)
+  console.log(data)
+  const hasPendingRating =
+    props.appointment.rating !== null &&
+    props.appointment.rating?.score === null
 
   return (
     <label className="flex gap-12 text-[#C0C0C0] mt-2 items-center">
@@ -47,7 +54,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
       </div>
       <div
         className={`flex justify-between py-4 px-6 rounded-2xl mt-5 bg-[#262626]
-              transition-all duration-300 ease-in-out flex-grow flex-col sm:flex-row sm:items-center`}
+              transition-all duration-300 ease-in-out flex-grow flex-col sm:flex-row sm:items-center  ${hasPendingRating ? 'border-r-4' : 'border-none'} border-secondary-300`}
       >
         <div className="flex items gap-4">
           <div className="">
