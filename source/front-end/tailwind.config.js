@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Kumbh Sans'],
+        fredoka: ['Fredoka', 'sans-serif'],
       },
       animation: {
         fadeIn: 'fadeIn 0.8s ease-out forwards',
