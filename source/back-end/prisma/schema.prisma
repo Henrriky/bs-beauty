@@ -26,6 +26,7 @@ model Customer {
   referrerId          String?   @map("referrer_id")
   referralCount       Int       @default(0) @map("referral_count")
   alwaysAllowImageUse Boolean   @default(false) @map("always_allow_image_use")
+  discoverySource     DiscoverySource? @map("discovery_source")
   createdAt           DateTime  @default(now()) @map("created_at")
   updatedAt           DateTime  @updatedAt @map("updated_at")
 
@@ -234,4 +235,15 @@ enum Action {
   READ
   UPDATE
   DELETE
+}
+
+enum DiscoverySource {
+  REFERRAL    
+  INSTAGRAM
+  FACEBOOK
+  TIKTOK
+  GOOGLE
+  WHATSAPP
+  WALK_IN      
+  OTHER
 }
