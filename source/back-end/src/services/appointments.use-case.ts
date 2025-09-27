@@ -96,7 +96,7 @@ class AppointmentsUseCase {
 
     if (newAppointment) {
       if (ENV.NOTIFY_ASYNC_ENABLED) {
-        notificationBus.emit('appointment.created', { appointment: newAppointment, userDetails })
+        notificationBus.emit('appointment.created', { appointment: newAppointment })
       }
     }
 
@@ -119,7 +119,7 @@ class AppointmentsUseCase {
 
     if (updatedAppointment.status === Status.CONFIRMED) {
       if (ENV.NOTIFY_ASYNC_ENABLED) {
-        notificationBus.emit('appointment.confirmed', { appointment: updatedAppointment, userDetails })
+        notificationBus.emit('appointment.confirmed', { appointment: updatedAppointment })
       }
     }
 
@@ -127,7 +127,6 @@ class AppointmentsUseCase {
       if (ENV.NOTIFY_ASYNC_ENABLED) {
         notificationBus.emit('appointment.cancelled', {
           appointment: updatedAppointment,
-          userDetails,
           cancelledBy: userType
         })
       }

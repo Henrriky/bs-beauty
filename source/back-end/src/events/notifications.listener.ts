@@ -14,25 +14,25 @@ export function registerNotificationListeners() {
   notificationBus.on('appointment.confirmed', ({ appointment, userDetails }: { appointment: FindByIdAppointments, userDetails: TokenPayload }) => {
     enqueue(async () => {
       const useCase = makeNotificationsUseCaseFactory()
-      await useCase.executeSendOnAppointmentConfirmed(appointment, userDetails)
+      await useCase.executeSendOnAppointmentConfirmed(appointment)
     })
   })
 
   notificationBus.on('appointment.created', ({ appointment, userDetails }: { appointment: FindByIdAppointments, userDetails: TokenPayload }) => {
     enqueue(async () => {
       const useCase = makeNotificationsUseCaseFactory()
-      await useCase.executeSendOnAppointmentCreated(appointment, userDetails)
+      await useCase.executeSendOnAppointmentCreated(appointment)
     })
   })
 
   notificationBus.on('appointment.cancelled', (
-    { appointment, userDetails, cancelledBy }: { appointment: FindByIdAppointments; userDetails: TokenPayload, cancelledBy: CancelledBy }
+    { appointment, cancelledBy }: { appointment: FindByIdAppointments; userDetails: TokenPayload, cancelledBy: CancelledBy }
   ) => {
     enqueue(async () => {
       const useCase = makeNotificationsUseCaseFactory()
       const notifyCustomer = cancelledBy !== 'CUSTOMER'
       const notifyProfessional = cancelledBy === 'CUSTOMER'
-      await useCase.executeSendOnAppointmentCancelled(appointment, userDetails, { notifyCustomer, notifyProfessional })
+      await useCase.executeSendOnAppointmentCancelled(appointment, { notifyCustomer, notifyProfessional })
     })
   })
 }

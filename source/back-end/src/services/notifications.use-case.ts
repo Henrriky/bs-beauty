@@ -34,7 +34,7 @@ class NotificationsUseCase {
     return deletedNotification
   }
 
-  public async executeSendOnAppointmentCreated(appointment: FindByIdAppointments, userDetails: TokenPayload): Promise<void> {
+  public async executeSendOnAppointmentCreated(appointment: FindByIdAppointments): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
 
     const professionalEmail = appointment.offer.professional.email
@@ -60,7 +60,7 @@ class NotificationsUseCase {
             marker,
             title: 'Agendamento Criado',
             message: `${professionalMarker} | Novo atendimento de ${serviceName} para ${customerName} em ${appointmentDateISO}.`,
-            recipientType: userDetails.userType,
+            recipientType: UserType.PROFESSIONAL,
             type: NotificationType.APPOINTMENT
           })
         }
@@ -80,7 +80,7 @@ class NotificationsUseCase {
 
   }
 
-  public async executeSendOnAppointmentConfirmed(appointment: FindByIdAppointments, userDetails: TokenPayload): Promise<void> {
+  public async executeSendOnAppointmentConfirmed(appointment: FindByIdAppointments): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
     const serviceName = appointment.offer.service.name
     const professionalName = appointment.offer.professional.name ?? 'Profissional'
@@ -104,7 +104,7 @@ class NotificationsUseCase {
           marker,
           recipientId,
           title: 'Agendamento confirmado',
-          recipientType: userDetails.userType,
+          recipientType: UserType.CUSTOMER,
           type: NotificationType.APPOINTMENT
         })
       }
@@ -126,7 +126,6 @@ class NotificationsUseCase {
 
   public async executeSendOnAppointmentCancelled(
     appointment: FindByIdAppointments,
-    userDetails: TokenPayload,
     options: { notifyCustomer: boolean; notifyProfessional: boolean }
   ): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
@@ -155,7 +154,7 @@ class NotificationsUseCase {
             marker,
             title: 'Agendamento cancelado',
             message: `${customerMarker} | Seu agendamento de ${serviceName} com ${professionalName} foi cancelado (data original: ${appointmentDateISO}).`,
-            recipientType: userDetails.userType,
+            recipientType: UserType.CUSTOMER,
             type: NotificationType.APPOINTMENT
           })
         }
@@ -194,7 +193,7 @@ class NotificationsUseCase {
             marker,
             title: 'Agendamento cancelado',
             message: `${professionalMarker} | Atendimento de ${serviceName} para ${customerName} foi cancelado (data original: ${appointmentDateISO}).`,
-            recipientType: userDetails.userType,
+            recipientType: UserType.PROFESSIONAL,
             type: NotificationType.APPOINTMENT
           })
         }
