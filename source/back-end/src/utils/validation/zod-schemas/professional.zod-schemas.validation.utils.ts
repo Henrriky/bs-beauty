@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { NotificationChannel } from '@prisma/client'
 
 class ProfessionalSchemas {
   public static readonly socialMediaSchema = z.array(z.object({
@@ -34,7 +35,8 @@ class ProfessionalSchemas {
     paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
     contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
     userType: z.enum(['MANAGER', 'PROFESSIONAL']).optional(),
-    specialization: z.string().min(3).max(3).optional()
+    specialization: z.string().min(3).max(30).optional(),
+    notificationPreference: z.nativeEnum(NotificationChannel).optional()
   }).strict()
 
   public static professionalUpdateSchema = z.object({
@@ -43,7 +45,8 @@ class ProfessionalSchemas {
     socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
     paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
     contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
-    specialization: z.string().min(3).max(3).optional()
+    specialization: z.string().min(3).max(30).optional(),
+    notificationPreference: z.nativeEnum(NotificationChannel).optional()
   }).strict()
 }
 
