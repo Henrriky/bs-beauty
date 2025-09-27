@@ -33,7 +33,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
           createdAt: faker.date.past(),
           updatedAt: faker.date.past(),
           profilePhotoUrl: faker.internet.url(),
-          paymentMethods: null
+          paymentMethods: null,
+          notificationPreference: 'BOTH',
         }
       ]
 
@@ -67,7 +68,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
-        paymentMethods: null
+        paymentMethods: null,
+        notificationPreference: 'BOTH',
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(professional)
@@ -112,7 +114,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: professionalToCreate.profilePhotoUrl ?? null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
-        paymentMethods: null
+        paymentMethods: null,
+        notificationPreference: 'BOTH',
       }
 
       MockProfessionalRepository.findByEmail.mockResolvedValue(null)
@@ -148,7 +151,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: professionalToCreate.profilePhotoUrl ?? null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
-        paymentMethods: null
+        paymentMethods: null,
+        notificationPreference: 'BOTH',
       }
 
       MockProfessionalRepository.findByEmail.mockResolvedValue(existingProfessional)
@@ -179,7 +183,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
-        paymentMethods: null
+        paymentMethods: null,
+        notificationPreference: 'BOTH',
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(updatedProfessional)
@@ -219,6 +224,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
+        notificationPreference: 'BOTH',
         paymentMethods: null
       }
 
@@ -263,7 +269,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
-        paymentMethods: null
+        paymentMethods: null,
+        notificationPreference: 'BOTH'
       }
 
       const paginatedResult = {
