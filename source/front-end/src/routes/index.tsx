@@ -19,13 +19,14 @@ import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
 import LandingPage from '../pages/landing-page'
 
+
 function BSBeautyRouter() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
-          <Route path="/login" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/auth/google/callback" element={<Callback />} />
           <Route
             element={

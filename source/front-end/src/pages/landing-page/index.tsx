@@ -1,15 +1,14 @@
-import googleIcon from '../../assets/google.svg'
 import logo from'../../assets/logo.svg'
 import insidePhoto from '../../assets/inside-photo.png'
 import arrowDown from '../../assets/keyboard_arrow_down.svg'
 import stars from '../../assets/five-stars.svg'
 import location from '../../assets/location_on.svg'
 import calendar from '../../assets/calendar.svg'
-import * as AuthAPI from '../../api/auth-api'
-import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import useAppSelector from '../../hooks/use-app-selector'
+import { Button } from '../../components/button/Button'
+
 
 function LandingPage() {
   const navigate = useNavigate()
@@ -34,19 +33,10 @@ function LandingPage() {
       navigate,
     ])
   
-    async function handleButtonClick() {
-      try {
-        const { authorizationUrl } = await AuthAPI.fetchGoogleRedirectUri()
-        window.location.href = authorizationUrl
-      } catch (error) {
-        console.error(error)
-        toast.error('Erro ao buscar a URL de Autenticação')
-      }
-    }
 
   return (
     <>
-      <div className="flex justify-start items-center h-[1711px] overflow-auto flex-col">
+      <div className="flex justify-start items-center overflow-auto flex-col">
         
         <img
           src={logo}
@@ -88,58 +78,60 @@ function LandingPage() {
         />
 
         
-        <div>
-          <button
-            onClick={handleButtonClick}
-            className="flex justify-center items-center gap-2.5 bg-[#DBDBDB] p-2 rounded w-[320px] text-[#1E1E1E] text-sm font-medium rounded-tl-3xl rounded-tr-sm rounded-br-3xl rounded-bl-sm z-10 relative"
-          >
-            <img src={googleIcon} alt="Ícone do Google" />
-            Logar com o Google
-          </button>
-        </div>
+          <Button 
+            onClick={() => navigate("/login")}
+            className="justify-center items-center w-[260px]" label="Entrar" type="submit" variant="outline">
+          </Button>
 
         <img
           src={arrowDown}
           alt="Seta Para Baixo"
+          className="cursor-pointer"
+          onClick={() => {
+            window.scrollBy({ top: 760, behavior: "smooth" });
+          }}
         />
         </div>
 
-        <div className="w-[120%] h-[3px] bg-[#595149] shadow-[0px_6px_4px_6px_rgba(0,0,0,0.25)] shrink-0"></div>
-        <div className='my-[42px] '>
-        <img
-          src={insidePhoto}
-          alt="Salão"
-          className='rounded-3xl mx-auto'
-        />
+        <div className="w-[100%] h-[6px] bg-[#595149] shadow-[0px_6px_4px_6px_rgba(0,0,0,0.20)] shrink-0"></div>
         
-        <div className='flex justify-start'>
-            <img
-            src={location}
-            alt="Localização"
-            />
-            <h2 className="text-[#D9D9D9] text-[24px] font-kumbh font-bold">
-                Nosso endereço:
-            </h2>
-        </div>
+        <div className='my-[34px] '> </div>
         
-        <p className="text-[#D9D9D9] text-[16px] font-kumbh font-semibold">
-            Rua Luís Pitta, 206 – Cidade São Mateus, São Paulo – SP
-        </p>
        
-        </div>
-        <div className="w-[120%] h-[1px] bg-[#595149] shrink-0"></div>
+        <div className="max-w-5xl mx-auto">
+          <img
+            src={insidePhoto}
+            alt="Salão"
+            className="rounded-3xl w-full object-cover mb-8"
+          />
 
+          <div className="flex items-center mb-2">
+            <img src={location} alt="Localização" className="w-8 h-8 mr-2 font-semibold"/>
+            <p className="text-[#D9D9D9] text-2xl font-kumbh ">
+              Nosso endereço:
+            </p>
+          </div>
+
+          <p className="text-[#D9D9D9] text-base font-kumbh font-semibold pl-4">
+            Rua Luís Pitta, 206 – Cidade São Mateus, São Paulo – SP
+          </p>
         
-        <div className='flex justify-start'>
-            <img
-                src={calendar}
-                alt="Calendário"
-            />
-            <h2 className="text-[#D9D9D9] text-[24px] font-kumbh font-bold">
-                Horários de Funcionamento:
-            </h2>
-        </div>
-        <div className="w-[80%] text-[16px] text-[#D9D9D9] p-6 max-w-md font-semibold font-kumbh">
+
+          <div className='my-[24px] '> </div>
+          <div className="w-[100%] h-[3px] bg-[#595149] shrink-0"></div>
+          <div className='my-[24px] '> </div>
+
+
+          
+          <div className="flex items-center mb-2 my-8">
+            <img src={calendar} alt="Calendário" className="w-8 h-6 mr-2 font-semibold"/>
+            <p className="text-[#D9D9D9] text-2xl font-kumbh ">
+              Horários de Funcionamento:
+            </p>
+          </div>
+          
+          <div className='flex justify-center'>
+          <div className="w-[100%] text-[16px] text-[#D9D9D9] p-6 max-w-md font-semibold font-kumbh">
             {[
                 { day: "Segunda-Feira", time: "08:00 - 19:00" },
                 { day: "Terça-Feira", time: "08:00 - 19:00" },
@@ -156,18 +148,21 @@ function LandingPage() {
                 </div>
             ))}
         </div>
+        </div>
+        </div>
+
+        
+        
+        
 
         <div className="w-[80%] text-center font-normal text-[#A4978A] font-['Fredoka']">Faça seu login e venha aproveitar os nossos serviços!</div>
 
-        <div>
-          <button
-            onClick={handleButtonClick}
-            className="flex justify-center items-center gap-2.5 bg-[#DBDBDB] p-2 rounded w-[320px] text-[#1E1E1E] text-sm font-medium rounded-tl-3xl rounded-tr-sm rounded-br-3xl rounded-bl-sm z-10 relative"
-          >
-            <img src={googleIcon} alt="Ícone do Google" />
-            Logar com o Google
-          </button>
-        </div>
+
+        <Button 
+          onClick={() => navigate("/login")}
+          className="justify-center items-center w-[260px] my-8" label="Entrar" type="submit" variant="outline">
+        </Button>
+
         
       </div>
     </>
