@@ -1,5 +1,5 @@
 import { NotificationDTO } from "../../../store/notification/types"
-import { buildCompactTitle, buildDate, buildTitle, buildTitleWithDate } from "../utils/format"
+import { buildDate, buildTitle } from "../utils/format"
 
 interface NotificationItemProps {
   notification: NotificationDTO
