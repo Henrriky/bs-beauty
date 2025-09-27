@@ -3,7 +3,7 @@ import { Button } from "../../components/button/Button"
 import Title from "../../components/texts/Title"
 import ListNotifications from "./components/ListNotifications"
 
-type ReadSwitch = 'UNREAD' | 'READ'
+type ReadSwitch = 'UNREAD' | 'READ' | 'ALL'
 
 function Notifications() {
   const [readSwitch, setReadSwitch] = useState<ReadSwitch>('UNREAD')
@@ -27,10 +27,17 @@ function Notifications() {
         {/* SWITCH BUTTONS */}
         <div className="flex">
           <Button
+            label="Todas"
+            variant="outline"
+            outlineVariantBorderStyle="solid"
+            className={`rounded-r-none ${readSwitch === 'ALL' ? 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default' : ''}`}
+            onClick={() => setReadSwitch('ALL')}
+          />
+          <Button
             label="Não lidas"
             variant="outline"
             outlineVariantBorderStyle="solid"
-            className={`rounded-r-none ${readSwitch === 'UNREAD' ? 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default' : ''}`}
+            className={`rounded-none ${readSwitch === 'UNREAD' ? 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default' : ''}`}
             onClick={() => setReadSwitch('UNREAD')}
           />
           <Button

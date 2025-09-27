@@ -64,7 +64,7 @@ function ListNotifications({ params }: { params: Params }) {
 
   return (
     <>
-      {/* Barra de ações: só nas NÃO lidas */}
+
       {!isReadTab && notifications.length > 0 && (
         <div className="flex items-center gap-2 mt-3 mb-1 justify-end">
           <Button
