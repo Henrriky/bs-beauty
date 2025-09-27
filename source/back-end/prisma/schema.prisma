@@ -27,6 +27,7 @@ model Customer {
   referralCount       Int       @default(0) @map("referral_count")
   alwaysAllowImageUse Boolean   @default(false) @map("always_allow_image_use")
   discoverySource     DiscoverySource? @map("discovery_source")
+  notificationPreference NotificationChannel? @default(NONE) @map("notification_preference")
   createdAt           DateTime  @default(now()) @map("created_at")
   updatedAt           DateTime  @updatedAt @map("updated_at")
 
@@ -68,13 +69,16 @@ model Rating {
 
 model Notification {
   id            String    @id @default(uuid())
+  marker        String    @unique
   message       String
   createdAt     DateTime  @default(now()) @map("created_at")
   readAt        DateTime? @map("read_at")
+  recipientId   String    @map("recipient_id")
   appointmentId String    @map("appointment_id")
 
   appointment Appointment @relation(fields: [appointmentId], references: [id])
 
+  @@index([recipientId, readAt, createdAt])
   @@map("notification")
 }
 
@@ -120,6 +124,7 @@ model Professional {
   specialization    String?
   profilePhotoUrl   String?  @map("profile_photo_url")
   userType          UserType @default(PROFESSIONAL) @map("user_type")
+  notificationPreference NotificationChannel? @default(NONE) @map("notification_preference")
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
@@ -236,4 +241,11 @@ enum DiscoverySource {
   WHATSAPP
   WALK_IN      
   OTHER
+}
+
+enum NotificationChannel {
+  NONE
+  IN_APP
+  EMAIL
+  BOTH
 }
