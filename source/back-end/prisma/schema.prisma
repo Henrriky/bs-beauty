@@ -78,15 +78,24 @@ model Notification {
   @@map("notification")
 }
 
+enum ServiceStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Service {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   description String?
   category    String
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  status      ServiceStatus @default(PENDING)
+  createdBy   String?       @map("created_by")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
 
-  offers Offer[]
+  createdByProfessional Professional? @relation(fields: [createdBy], references: [id])
+  offers                Offer[]
 
   @@map("service")
 }
@@ -126,6 +135,7 @@ model Professional {
   shifts           Shift[]
   offers           Offer[]
   professionalRole ProfessionalRole[]
+  Service          Service[]
 
   @@map("professional")
 }
