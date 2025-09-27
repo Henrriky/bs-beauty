@@ -36,6 +36,15 @@ class PrismaAppointmentRepository implements AppointmentRepository {
             },
             professional: true
           }
+        },
+        customer: true,
+        notifications: {
+          select: {
+            id: true,
+            message: true,
+            createdAt: true,
+            readAt: true,
+          }
         }
       }
     })

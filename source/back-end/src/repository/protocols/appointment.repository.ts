@@ -28,6 +28,22 @@ export type FindByIdAppointments = Prisma.AppointmentGetPayload<{
         }
         professional: true
       }
+    },
+    customer: {
+      select: {
+        id: true
+        name: true
+        email: true
+        notificationPreference: true
+      }
+    }
+    notifications: {
+      select: {
+        id: true
+        message: true
+        createdAt: true
+        readAt: true
+      }
     }
   }
 }>

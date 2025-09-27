@@ -1,9 +1,10 @@
-import { type Prisma, type Appointment } from '@prisma/client'
+import { type Prisma, type Appointment, Status, UserType } from '@prisma/client'
 import { type FindByIdAppointments, type AppointmentRepository } from '../repository/protocols/appointment.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { type CustomerRepository } from '../repository/protocols/customer.repository'
 import { type ProfessionalRepository } from '../repository/protocols/professional.repository'
 import { CustomError } from '../utils/errors/custom.error.util'
+import { NotificationsUseCase } from './notifications.use-case'
 
 export const MINIMUM_SCHEDULLING_TIME_MINUTES = 30
 export const MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS = MINIMUM_SCHEDULLING_TIME_MINUTES * 60 * 1000
@@ -20,7 +21,8 @@ class AppointmentsUseCase {
   constructor (
     private readonly appointmentRepository: AppointmentRepository,
     private readonly customerServiceRepository: CustomerRepository,
-    private readonly professionalServiceRepository: ProfessionalRepository
+    private readonly professionalServiceRepository: ProfessionalRepository,
+    private readonly notificationsUseCase: NotificationsUseCase
   ) { }
 
   public async executeFindAll (): Promise<AppointmentOutput> {
@@ -88,19 +90,62 @@ class AppointmentsUseCase {
 
     const newAppointment = await this.appointmentRepository.create(appointmentToCreate)
 
+    if (newAppointment) {
+      this.notificationsUseCase
+        .executeSendOnAppointmentCreated(newAppointment.id)
+        .catch(error => {
+          console.error(
+            'Error while sending appointment created notifications:',
+            error?.message || error
+          )
+        })
+    }
+
     return newAppointment
   }
 
-  public async executeUpdate (userId: string, appointmentId: string, appointmentToUpdate: Prisma.AppointmentUpdateInput) {
+  public async executeUpdate(
+    userDetails: {
+      userId: string,
+      userType: UserType
+    },
+    appointmentId: string,
+    appointmentToUpdate:
+      Prisma.AppointmentUpdateInput
+  ) {
+    const { userId, userType } = userDetails
     const appointmentById = await this.executeFindById(appointmentId)
 
     if (appointmentById?.customerId !== userId && appointmentById?.offer.professionalId !== userId) {
       throw new CustomError('You are not allowed to update this appointment', 403)
     }
 
-    const updatedCustomer = await this.appointmentRepository.update(appointmentId, appointmentToUpdate)
+    const updatedAppointment = await this.appointmentRepository.update(appointmentId, appointmentToUpdate)
 
-    return updatedCustomer
+    if (updatedAppointment.status === Status.CONFIRMED) {
+      this.notificationsUseCase
+        .executeSendOnAppointmentConfirmed(updatedAppointment.id)
+        .catch(error => {
+          console.error(
+            'Error while sending appointment confirmed notification to customer:',
+            error?.message || error
+          )
+        })
+    }
+
+    if (updatedAppointment.status === Status.CANCELLED) {
+      if (userType === 'CUSTOMER') {
+        this.notificationsUseCase
+          .executeSendOnAppointmentCancelled(updatedAppointment.id, { notifyCustomer: false, notifyProfessional: true })
+          .catch(err => console.error('Erro ao enviar notificação de cancelamento para profissional:', err))
+      } else {
+        this.notificationsUseCase
+          .executeSendOnAppointmentCancelled(updatedAppointment.id, { notifyCustomer: true, notifyProfessional: false })
+          .catch(err => console.error('Erro ao enviar notificação de cancelamento para cliente:', err))
+      }
+    }
+
+    return updatedAppointment
   }
 
   public async executeDelete (userId: string, appointmentId: string) {

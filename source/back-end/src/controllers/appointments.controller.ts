@@ -64,13 +64,14 @@ class AppointmentController {
     }
   }
 
-  public static async handleUpdate (req: Request, res: Response, next: NextFunction) {
+  public static async handleUpdate(req: Request, res: Response, next: NextFunction) {
     try {
       const appointmentToUpdate: Prisma.AppointmentUpdateInput = req.body
       const appointmentId = req.params.id
       const userId = req.user.id
+      const userType = req.user.userType
       const useCase = makeAppointmentsUseCaseFactory()
-      const updatedAppointment = await useCase.executeUpdate(userId, appointmentId, appointmentToUpdate)
+      const updatedAppointment = await useCase.executeUpdate({ userId, userType }, appointmentId, appointmentToUpdate)
 
       res.send(updatedAppointment)
     } catch (error) {
