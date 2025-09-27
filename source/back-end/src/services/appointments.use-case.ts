@@ -5,6 +5,8 @@ import { type CustomerRepository } from '../repository/protocols/customer.reposi
 import { type ProfessionalRepository } from '../repository/protocols/professional.repository'
 import { CustomError } from '../utils/errors/custom.error.util'
 import { NotificationsUseCase } from './notifications.use-case'
+import { ENV } from '@/config/env'
+import { notificationBus } from '@/events/notification-bus'
 
 export const MINIMUM_SCHEDULLING_TIME_MINUTES = 30
 export const MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS = MINIMUM_SCHEDULLING_TIME_MINUTES * 60 * 1000
@@ -22,7 +24,6 @@ class AppointmentsUseCase {
     private readonly appointmentRepository: AppointmentRepository,
     private readonly customerServiceRepository: CustomerRepository,
     private readonly professionalServiceRepository: ProfessionalRepository,
-    private readonly notificationsUseCase: NotificationsUseCase
   ) { }
 
   public async executeFindAll (): Promise<AppointmentOutput> {
@@ -91,14 +92,9 @@ class AppointmentsUseCase {
     const newAppointment = await this.appointmentRepository.create(appointmentToCreate)
 
     if (newAppointment) {
-      this.notificationsUseCase
-        .executeSendOnAppointmentCreated(newAppointment.id)
-        .catch(error => {
-          console.error(
-            'Error while sending appointment created notifications:',
-            error?.message || error
-          )
-        })
+      if (ENV.NOTIFY_ASYNC_ENABLED) {
+        notificationBus.emit('appointment.created', { appointmentId: newAppointment.id })
+      }
     }
 
     return newAppointment
@@ -123,27 +119,20 @@ class AppointmentsUseCase {
     const updatedAppointment = await this.appointmentRepository.update(appointmentId, appointmentToUpdate)
 
     if (updatedAppointment.status === Status.CONFIRMED) {
-      this.notificationsUseCase
-        .executeSendOnAppointmentConfirmed(updatedAppointment.id)
-        .catch(error => {
-          console.error(
-            'Error while sending appointment confirmed notification to customer:',
-            error?.message || error
-          )
-        })
+      if (ENV.NOTIFY_ASYNC_ENABLED) {
+        notificationBus.emit('appointment.confirmed', { appointmentId: updatedAppointment.id })
+      }
     }
 
     if (updatedAppointment.status === Status.CANCELLED) {
-      if (userType === 'CUSTOMER') {
-        this.notificationsUseCase
-          .executeSendOnAppointmentCancelled(updatedAppointment.id, { notifyCustomer: false, notifyProfessional: true })
-          .catch(err => console.error('Erro ao enviar notificação de cancelamento para profissional:', err))
-      } else {
-        this.notificationsUseCase
-          .executeSendOnAppointmentCancelled(updatedAppointment.id, { notifyCustomer: true, notifyProfessional: false })
-          .catch(err => console.error('Erro ao enviar notificação de cancelamento para cliente:', err))
+      if (ENV.NOTIFY_ASYNC_ENABLED) {
+        notificationBus.emit('appointment.cancelled', {
+          appointmentId: updatedAppointment.id,
+          cancelledBy: userType
+        })
       }
     }
+
 
     return updatedAppointment
   }
