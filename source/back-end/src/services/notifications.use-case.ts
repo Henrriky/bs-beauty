@@ -40,27 +40,45 @@ class NotificationsUseCase {
 
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
 
+    const professionalEmail = appointment.offer.professional.email
+    const professionalName = appointment.offer.professional.name ?? 'Profissional'
+
     const serviceName = appointment.offer.service.name
-    const customerName = appointment.customer.name
+    const customerName = appointment.customer.name ?? 'Cliente'
     const recipientId = appointment.offer.professionalId
     const marker = `appointment:${appointment.id}:created:recipient:${recipientId}`
-
     const professionalMarker = `[Agendamento Criado - PROFISSIONAL - ${appointmentDateISO}]`
 
     const professionalPreference = appointment.offer.professional.notificationPreference ?? 'NONE'
     const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'BOTH'
+    const shouldNotifyEmail = professionalPreference === 'EMAIL' || professionalPreference === 'BOTH'
 
-    if (shouldNotifyProfessionalInApp) {
-      const alreadyExists = await this.notificationRepository.findByMarker(marker)
-      if (!alreadyExists) {
-        await this.notificationRepository.create({
-          appointment: { connect: { id: appointment.id } },
-          message: `${professionalMarker} | Novo atendimento de ${serviceName} para ${customerName} em ${appointmentDateISO}.`,
-          marker,
-          recipientId
+    const alreadyExists = await this.notificationRepository.findByMarker(marker)
+    if (!alreadyExists) {
+
+      if (shouldNotifyProfessionalInApp) {
+        if (!alreadyExists) {
+          await this.notificationRepository.create({
+            appointment: { connect: { id: appointment.id } },
+            message: `${professionalMarker} | Novo atendimento de ${serviceName} para ${customerName} em ${appointmentDateISO}.`,
+            marker,
+            recipientId
+          })
+        }
+      }
+
+      if (shouldNotifyEmail) {
+        const emailService = new EmailService()
+        await emailService.sendAppointmentCreated({
+          to: professionalEmail,
+          professionalName,
+          customerName,
+          serviceName,
+          appointmentDateISO
         })
       }
     }
+
   }
 
   public async executeSendOnAppointmentConfirmed(appointmentId: string): Promise<void> {
@@ -119,8 +137,10 @@ class NotificationsUseCase {
 
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
     const serviceName = appointment.offer.service.name
-    const customerName = appointment.customer.name
-    const professionalName = appointment.offer.professional.name
+    const customerName = appointment.customer.name ?? 'Cliente'
+    const customerEmail = appointment.customer.email
+    const professionalName = appointment.offer.professional.name ?? 'Profissional'
+    const professionalEmail = appointment.offer.professional.email
 
     const customerMarker = `[Agendamento Cancelado - CLIENTE - ${appointmentDateISO}]`
     const professionalMarker = `[Agendamento Cancelado - PROFISSIONAL - ${appointmentDateISO}]`
@@ -131,10 +151,11 @@ class NotificationsUseCase {
 
       const customerPreference = appointment.customer.notificationPreference ?? 'NONE'
       const shouldNotifyCustomerInApp = customerPreference === 'IN_APP' || customerPreference === 'BOTH'
+      const shouldNotifyEmail = customerPreference === 'EMAIL' || customerPreference === 'BOTH'
 
-      if (shouldNotifyCustomerInApp) {
-        const alreadyExists = await this.notificationRepository.findByMarker(marker)
-        if (!alreadyExists) {
+      const alreadyExists = await this.notificationRepository.findByMarker(marker)
+      if (!alreadyExists) {
+        if (shouldNotifyCustomerInApp) {
           await this.notificationRepository.create({
             appointment: { connect: { id: appointment.id } },
             message: `${customerMarker} | Seu agendamento de ${serviceName} com ${professionalName} foi cancelado (data original: ${appointmentDateISO}).`,
@@ -142,7 +163,22 @@ class NotificationsUseCase {
             recipientId
           })
         }
+
+        if (shouldNotifyEmail) {
+          const emailService = new EmailService()
+          emailService
+            .sendAppointmentCancelled({
+              to: customerEmail,
+              customerName,
+              professionalName,
+              serviceName,
+              appointmentDateISO,
+              cancelledBy: 'professional'
+            })
+            .catch(err => console.error('Erro ao enviar e-mail de confirmação:', err?.message || err))
+        }
       }
+
     }
 
     if (options.notifyProfessional) {
@@ -150,11 +186,13 @@ class NotificationsUseCase {
       const marker = `appointment:${appointment.id}:cancelled:recipient:${recipientId}`
 
       const professionalPreference = appointment.offer.professional.notificationPreference ?? 'NONE'
-      const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'BOTH'
 
-      if (shouldNotifyProfessionalInApp) {
-        const alreadyExists = await this.notificationRepository.findByMarker(marker)
-        if (!alreadyExists) {
+      const alreadyExists = await this.notificationRepository.findByMarker(marker)
+      if (!alreadyExists) {
+        const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'BOTH'
+        const shouldNotifyEmail = professionalPreference === 'EMAIL' || professionalPreference === 'BOTH'
+
+        if (shouldNotifyProfessionalInApp) {
           await this.notificationRepository.create({
             appointment: { connect: { id: appointment.id } },
             message: `${professionalMarker} | Atendimento de ${serviceName} para ${customerName} foi cancelado (data original: ${appointmentDateISO}).`,
@@ -162,6 +200,21 @@ class NotificationsUseCase {
             recipientId
           })
         }
+
+        if (shouldNotifyEmail) {
+          const emailService = new EmailService()
+          emailService
+            .sendAppointmentCancelled({
+              to: professionalEmail,
+              customerName,
+              professionalName,
+              serviceName,
+              appointmentDateISO,
+              cancelledBy: 'customer'
+            })
+            .catch(err => console.error('Erro ao enviar e-mail de confirmação:', err?.message || err))
+        }
+
       }
     }
   }
