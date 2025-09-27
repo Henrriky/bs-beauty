@@ -14,11 +14,19 @@ import { useState } from 'react'
 import Subtitle from '../../../components/texts/Subtitle'
 import ExclamationMarkIcon from '../../../../src/assets/exclamation-mark.svg'
 import { useNavigate } from 'react-router'
+import { Select } from '../../../components/inputs/Select'
 
 interface CustomerProfileProps {
   userInfo: Customer
   onProfileUpdate: () => void
 }
+
+const NOTIFICATION_OPTIONS = [
+  { value: 'NONE', label: 'Não receber' },
+  { value: 'IN_APP', label: 'Receber pela plataforma' },
+  { value: 'EMAIL', label: 'Receber por email' },
+  { value: 'BOTH', label: 'Receber pela plataforma e por email' }
+]
 
 function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
   const [updateProfile, { isLoading }] = userAPI.useUpdateProfileMutation()
@@ -44,6 +52,7 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
       name: userInfo.name || undefined,
       email: userInfo.email || undefined,
       alwaysAllowImageUse: userInfo.alwaysAllowImageUse ?? undefined,
+      notificationPreference: userInfo.notificationPreference ?? undefined
     },
   })
 
@@ -116,6 +125,15 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
         type="email"
         value={userInfo.email}
         disabled
+      />
+      <Select
+        registration={{ ...register('notificationPreference') }}
+        id="notificationPreference"
+        label="Deseja receber notificações?"
+        options={NOTIFICATION_OPTIONS}
+        error={errors?.name?.message?.toString()}
+        variant="outline"
+        wrapperClassName="w-full"
       />
       <Checkbox
         registration={{

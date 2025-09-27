@@ -10,11 +10,19 @@ import { Formatter } from '../../../utils/formatter/formatter.util'
 import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { ProfessionalUpdateProfileFormData } from '../types'
 import PaymentMethodsInput from '../../../components/inputs/payment-methods-input/PaymentMethodsContainerInput'
+import { Select } from '../../../components/inputs/Select'
 
 interface ProfessionalProfileProps {
   userInfo: Professional
   onProfileUpdate: () => void
 }
+
+const NOTIFICATION_OPTIONS = [
+  { value: 'NONE', label: 'Não receber' },
+  { value: 'IN_APP', label: 'Receber pela plataforma' },
+  { value: 'EMAIL', label: 'Receber por email' },
+  { value: 'BOTH', label: 'Receber pela plataforma e por email' }
+]
 
 // TODO: Separate Social Media to a Component
 
@@ -38,6 +46,7 @@ function ProfessionalProfile({
       socialMedia: userInfo.socialMedia || undefined,
       specialization: userInfo.specialization || undefined,
       paymentMethods: userInfo.paymentMethods || undefined,
+      notificationPreference: userInfo.notificationPreference || undefined
     },
   })
   const {
@@ -108,6 +117,15 @@ function ProfessionalProfile({
         id="email"
         type="email"
         disabled
+      />
+      <Select
+        registration={{ ...register('notificationPreference') }}
+        id="notificationPreference"
+        label="Deseja receber notificações?"
+        options={NOTIFICATION_OPTIONS}
+        error={errors?.name?.message?.toString()}
+        variant="outline"
+        wrapperClassName="w-full"
       />
       <Input
         label="Função"
