@@ -49,7 +49,6 @@ model Appointment {
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
-  notifications Notification[]
   rating        Rating?
   customer      Customer       @relation(fields: [customerId], references: [id])
   offer         Offer          @relation(fields: [serviceOfferedId], references: [id])
@@ -70,13 +69,13 @@ model Rating {
 model Notification {
   id            String    @id @default(uuid())
   marker        String    @unique
-  message       String
+  title         String 
+  message       String    @db.Text
+  type          NotificationType     @default(SYSTEM)
   createdAt     DateTime  @default(now()) @map("created_at")
   readAt        DateTime? @map("read_at")
   recipientId   String    @map("recipient_id")
-  appointmentId String    @map("appointment_id")
-
-  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  recipientType UserType
 
   @@index([recipientId, readAt, createdAt])
   @@map("notification")
@@ -248,4 +247,11 @@ enum NotificationChannel {
   IN_APP
   EMAIL
   BOTH
+}
+
+enum NotificationType {
+  SYSTEM
+  APPOINTMENT
+  SERVICE
+  PROMO
 }

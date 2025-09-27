@@ -1,12 +1,12 @@
-import { type Prisma, type Appointment, Status, UserType } from '@prisma/client'
-import { type FindByIdAppointments, type AppointmentRepository } from '../repository/protocols/appointment.repository'
-import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { ENV } from '@/config/env'
+import { notificationBus } from '@/events/notification-bus'
+import { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { type Appointment, type Prisma, Status } from '@prisma/client'
+import { type AppointmentRepository, type FindByIdAppointments } from '../repository/protocols/appointment.repository'
 import { type CustomerRepository } from '../repository/protocols/customer.repository'
 import { type ProfessionalRepository } from '../repository/protocols/professional.repository'
 import { CustomError } from '../utils/errors/custom.error.util'
-import { NotificationsUseCase } from './notifications.use-case'
-import { ENV } from '@/config/env'
-import { notificationBus } from '@/events/notification-bus'
+import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 
 export const MINIMUM_SCHEDULLING_TIME_MINUTES = 30
 export const MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS = MINIMUM_SCHEDULLING_TIME_MINUTES * 60 * 1000
@@ -57,7 +57,10 @@ class AppointmentsUseCase {
     return { appointments }
   }
 
-  public async executeCreate (appointmentToCreate: Prisma.AppointmentCreateInput, customerId: string) {
+  public async executeCreate(
+    appointmentToCreate: Prisma.AppointmentCreateInput,
+    userDetails: TokenPayload,
+  ) {
     const { appointmentDate } = appointmentToCreate
 
     const currentTimestamp = new Date()
@@ -79,7 +82,7 @@ class AppointmentsUseCase {
       )
     }
 
-    const appointmentsCount = await this.appointmentRepository.countCustomerAppointmentsPerDay(customerId)
+    const appointmentsCount = await this.appointmentRepository.countCustomerAppointmentsPerDay(userDetails.id)
     const maxAppointmentPerDayReached = appointmentsCount >= MAXIMUM_APPOINTMENTS_PER_DAY
 
     if (maxAppointmentPerDayReached) {
@@ -93,7 +96,7 @@ class AppointmentsUseCase {
 
     if (newAppointment) {
       if (ENV.NOTIFY_ASYNC_ENABLED) {
-        notificationBus.emit('appointment.created', { appointmentId: newAppointment.id })
+        notificationBus.emit('appointment.created', { appointment: newAppointment, userDetails })
       }
     }
 
@@ -101,13 +104,9 @@ class AppointmentsUseCase {
   }
 
   public async executeUpdate(
-    userDetails: {
-      userId: string,
-      userType: UserType
-    },
     appointmentId: string,
-    appointmentToUpdate:
-      Prisma.AppointmentUpdateInput
+    appointmentToUpdate: Prisma.AppointmentUpdateInput,
+    userDetails: TokenPayload
   ) {
     const { userId, userType } = userDetails
     const appointmentById = await this.executeFindById(appointmentId)
@@ -120,14 +119,15 @@ class AppointmentsUseCase {
 
     if (updatedAppointment.status === Status.CONFIRMED) {
       if (ENV.NOTIFY_ASYNC_ENABLED) {
-        notificationBus.emit('appointment.confirmed', { appointmentId: updatedAppointment.id })
+        notificationBus.emit('appointment.confirmed', { appointment: updatedAppointment, userDetails })
       }
     }
 
     if (updatedAppointment.status === Status.CANCELLED) {
       if (ENV.NOTIFY_ASYNC_ENABLED) {
         notificationBus.emit('appointment.cancelled', {
-          appointmentId: updatedAppointment.id,
+          appointment: updatedAppointment,
+          userDetails,
           cancelledBy: userType
         })
       }

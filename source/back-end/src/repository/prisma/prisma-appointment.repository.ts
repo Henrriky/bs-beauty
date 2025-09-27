@@ -37,15 +37,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
             professional: true
           }
         },
-        customer: true,
-        notifications: {
-          select: {
-            id: true,
-            message: true,
-            createdAt: true,
-            readAt: true,
-          }
-        }
+        customer: true
       }
     })
 
@@ -178,18 +170,45 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     })
   }
 
-  public async create (appointmentToCreate: Prisma.AppointmentCreateInput) {
+  public async create(appointmentToCreate: Prisma.AppointmentCreateInput) {
     const newAppointment = await prismaClient.appointment.create({
-      data: { ...appointmentToCreate }
+      data: { ...appointmentToCreate },
+      include: {
+        offer: {
+          select: {
+            id: true,
+            estimatedTime: true,
+            price: true,
+            professionalId: true,
+            service: { select: { name: true } },
+            professional: true
+          }
+        },
+        customer: true
+      }
     })
 
     return newAppointment
   }
 
+
   public async update (id: string, appointmentToUpdate: Prisma.AppointmentUpdateInput) {
     const updatedAppointment = await prismaClient.appointment.update({
       where: { id },
-      data: { ...appointmentToUpdate }
+      data: { ...appointmentToUpdate },
+      include: {
+        offer: {
+          select: {
+            id: true,
+            estimatedTime: true,
+            price: true,
+            professionalId: true,
+            service: { select: { name: true } },
+            professional: true
+          }
+        },
+        customer: true
+      }
     })
 
     return updatedAppointment

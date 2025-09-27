@@ -2,10 +2,11 @@ import { makeAppointmentsUseCaseFactory } from '@/factory/make-appointments-use-
 import { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
 import { NotificationFilters } from '@/types/notifications/notification-filters'
 import { PaginatedRequest } from '@/types/pagination'
-import { type Notification } from '@prisma/client'
+import { Appointment, NotificationType, UserType, type Notification } from '@prisma/client'
 import { type NotificationRepository } from '../repository/protocols/notification.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { EmailService } from './email/email.service'
+import { FindByIdAppointments } from '@/repository/protocols/appointment.repository'
 
 class NotificationsUseCase {
   constructor (private readonly notificationRepository: NotificationRepository) { }
@@ -33,11 +34,7 @@ class NotificationsUseCase {
     return deletedNotification
   }
 
-  public async executeSendOnAppointmentCreated(appointmentId: string): Promise<void> {
-    const appointmentsUseCase = makeAppointmentsUseCaseFactory()
-    const appointment = await appointmentsUseCase.executeFindById(appointmentId)
-    if (!appointment) return
-
+  public async executeSendOnAppointmentCreated(appointment: FindByIdAppointments, userDetails: TokenPayload): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
 
     const professionalEmail = appointment.offer.professional.email
@@ -59,10 +56,12 @@ class NotificationsUseCase {
       if (shouldNotifyProfessionalInApp) {
         if (!alreadyExists) {
           await this.notificationRepository.create({
-            appointment: { connect: { id: appointment.id } },
-            message: `${professionalMarker} | Novo atendimento de ${serviceName} para ${customerName} em ${appointmentDateISO}.`,
+            recipientId,
             marker,
-            recipientId
+            title: 'Agendamento Criado',
+            message: `${professionalMarker} | Novo atendimento de ${serviceName} para ${customerName} em ${appointmentDateISO}.`,
+            recipientType: userDetails.userType,
+            type: NotificationType.APPOINTMENT
           })
         }
       }
@@ -81,11 +80,7 @@ class NotificationsUseCase {
 
   }
 
-  public async executeSendOnAppointmentConfirmed(appointmentId: string): Promise<void> {
-    const appointmentsUseCase = makeAppointmentsUseCaseFactory()
-    const appointment = await appointmentsUseCase.executeFindById(appointmentId)
-    if (!appointment) return
-
+  public async executeSendOnAppointmentConfirmed(appointment: FindByIdAppointments, userDetails: TokenPayload): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
     const serviceName = appointment.offer.service.name
     const professionalName = appointment.offer.professional.name ?? 'Profissional'
@@ -105,10 +100,12 @@ class NotificationsUseCase {
     if (!alreadyExists) {
       if (shouldNotifyInApp) {
         await this.notificationRepository.create({
-          appointment: { connect: { id: appointment.id } },
           message: `${customerMarker} | Seu agendamento de ${serviceName} com ${professionalName} foi confirmado para ${appointmentDateISO}.`,
           marker,
           recipientId,
+          title: 'Agendamento confirmado',
+          recipientType: userDetails.userType,
+          type: NotificationType.APPOINTMENT
         })
       }
 
@@ -128,13 +125,10 @@ class NotificationsUseCase {
   }
 
   public async executeSendOnAppointmentCancelled(
-    appointmentId: string,
+    appointment: FindByIdAppointments,
+    userDetails: TokenPayload,
     options: { notifyCustomer: boolean; notifyProfessional: boolean }
   ): Promise<void> {
-    const appointmentsUseCase = makeAppointmentsUseCaseFactory()
-    const appointment = await appointmentsUseCase.executeFindById(appointmentId)
-    if (!appointment) return
-
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
     const serviceName = appointment.offer.service.name
     const customerName = appointment.customer.name ?? 'Cliente'
@@ -157,10 +151,12 @@ class NotificationsUseCase {
       if (!alreadyExists) {
         if (shouldNotifyCustomerInApp) {
           await this.notificationRepository.create({
-            appointment: { connect: { id: appointment.id } },
-            message: `${customerMarker} | Seu agendamento de ${serviceName} com ${professionalName} foi cancelado (data original: ${appointmentDateISO}).`,
+            recipientId,
             marker,
-            recipientId
+            title: 'Agendamento cancelado',
+            message: `${customerMarker} | Seu agendamento de ${serviceName} com ${professionalName} foi cancelado (data original: ${appointmentDateISO}).`,
+            recipientType: userDetails.userType,
+            type: NotificationType.APPOINTMENT
           })
         }
 
@@ -194,10 +190,12 @@ class NotificationsUseCase {
 
         if (shouldNotifyProfessionalInApp) {
           await this.notificationRepository.create({
-            appointment: { connect: { id: appointment.id } },
-            message: `${professionalMarker} | Atendimento de ${serviceName} para ${customerName} foi cancelado (data original: ${appointmentDateISO}).`,
+            recipientId,
             marker,
-            recipientId
+            title: 'Agendamento cancelado',
+            message: `${professionalMarker} | Atendimento de ${serviceName} para ${customerName} foi cancelado (data original: ${appointmentDateISO}).`,
+            recipientType: userDetails.userType,
+            type: NotificationType.APPOINTMENT
           })
         }
 

@@ -55,8 +55,11 @@ class AppointmentController {
     try {
       const appointmentToCreate: Prisma.AppointmentCreateInput = req.body
       const useCase = makeAppointmentsUseCaseFactory()
-      const userId = req.user.id
-      const newAppointment = await useCase.executeCreate(appointmentToCreate, userId)
+
+      const newAppointment = await useCase.executeCreate(
+        appointmentToCreate,
+        req.user,
+      )
       res.status(201)
       res.send(newAppointment)
     } catch (error) {
@@ -68,10 +71,8 @@ class AppointmentController {
     try {
       const appointmentToUpdate: Prisma.AppointmentUpdateInput = req.body
       const appointmentId = req.params.id
-      const userId = req.user.id
-      const userType = req.user.userType
       const useCase = makeAppointmentsUseCaseFactory()
-      const updatedAppointment = await useCase.executeUpdate({ userId, userType }, appointmentId, appointmentToUpdate)
+      const updatedAppointment = await useCase.executeUpdate(appointmentId, appointmentToUpdate, req.user)
 
       res.send(updatedAppointment)
     } catch (error) {

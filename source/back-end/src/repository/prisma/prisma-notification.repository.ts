@@ -69,12 +69,6 @@ class PrismaNotificationRepository implements NotificationRepository {
     return deletedNotification
   }
 
-  public async findFirstByAppointmentAndMarker(appointmentId: string, marker: string) {
-    return await prismaClient.notification.findFirst({
-      where: { appointmentId, message: { contains: marker } }
-    })
-  }
-
   public async findByMarker(marker: string) {
     return await prismaClient.notification.findUnique({ where: { marker } })
   }

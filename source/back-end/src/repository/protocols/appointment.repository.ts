@@ -37,14 +37,6 @@ export type FindByIdAppointments = Prisma.AppointmentGetPayload<{
         notificationPreference: true
       }
     }
-    notifications: {
-      select: {
-        id: true
-        message: true
-        createdAt: true
-        readAt: true
-      }
-    }
   }
 }>
 
