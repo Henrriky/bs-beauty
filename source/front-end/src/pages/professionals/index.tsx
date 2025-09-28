@@ -24,7 +24,7 @@ function Professionals() {
   const { data, isLoading, isError, error, refetch } =
     professionalAPI.useFetchProfessionalsQuery({
       page,
-      limit: 2,
+      limit: 10,
       email: debouncedSearch,
     })
 
@@ -63,6 +63,9 @@ function Professionals() {
       try {
         await deleteProfessional(professionalToDelete.id).unwrap()
         toast.success('Funcionário excluído com sucesso!')
+        setAllProfessionals((prev) =>
+          prev.filter((p) => p.id !== professionalToDelete.id)
+        )
         refetch()
       } catch (error) {
         console.error('Erro ao excluir funcionário:', error)
