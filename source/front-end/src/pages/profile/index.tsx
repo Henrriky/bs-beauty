@@ -26,38 +26,29 @@ function Profile() {
   const user = useAppSelector((state) => state.auth.user!)
   const tokens = useAppSelector((state) => state.auth.token)
 
-  const { data, isLoading, isError, error } = authAPI.useFetchUserInfoQuery()
+  const { data, isLoading, isError, error, refetch } = authAPI.useFetchUserInfoQuery()
 
-  async function handleUpdateProfileToken() {
-    if (!tokens?.googleAccessToken) {
-      toast.error('Token de acesso inválido')
-      return
-    }
-
+  async function refreshTokenIfGoogle() {
+    if (!tokens?.googleAccessToken) return
     try {
-      const { accessToken } = await AuthAPI.loginWithGoogleAccessToken(
-        tokens.googleAccessToken,
-      )
-
+      const { accessToken } = await AuthAPI.loginWithGoogleAccessToken(tokens.googleAccessToken)
       const decodedToken = decodeUserToken(accessToken)
 
-      dispatchRedux(
-        setToken({
-          user: {
-            id: decodedToken.id,
-            userType: decodedToken.userType,
-            email: decodedToken.email,
-            name: decodedToken.name,
-            registerCompleted: decodedToken.registerCompleted,
-            profilePhotoUrl: decodedToken.profilePhotoUrl,
-          },
-          token: {
-            googleAccessToken: tokens.googleAccessToken,
-            accessToken,
-            expiresAt: decodedToken.exp!,
-          },
-        }),
-      )
+      dispatchRedux(setToken({
+        user: {
+          id: decodedToken.id,
+          userType: decodedToken.userType,
+          email: decodedToken.email,
+          name: decodedToken.name,
+          registerCompleted: decodedToken.registerCompleted,
+          profilePhotoUrl: decodedToken.profilePhotoUrl,
+        },
+        token: {
+          googleAccessToken: tokens.googleAccessToken,
+          accessToken,
+          expiresAt: decodedToken.exp!,
+        },
+      }))
 
       localStorage.setItem('token', accessToken)
       dispatchRedux(authAPI.util.invalidateTags(['User']))
@@ -65,6 +56,11 @@ function Profile() {
       console.error('Erro ao atualizar token:', err)
       toast.error('Erro ao atualizar token')
     }
+  }
+
+  const handlePostProfileUpdate = async () => {
+    await refreshTokenIfGoogle()
+    await refetch()
   }
 
   if (isLoading) {
@@ -102,7 +98,7 @@ function Profile() {
           <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} />
           <ProfileContainer
             userInfo={userInfo}
-            onProfileUpdate={handleUpdateProfileToken}
+            onProfileUpdate={handlePostProfileUpdate}
           />
         </div>
       </div>

@@ -109,6 +109,7 @@ describe('CustomerController', () => {
         id: 'random-uuid',
         name: 'John Doe',
         email: 'johndoe@example.com',
+        passwordHash: null,
         registerCompleted: true,
         googleId: 'google-id-1',
         birthdate: null,

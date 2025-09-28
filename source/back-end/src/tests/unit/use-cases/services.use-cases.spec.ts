@@ -1,7 +1,7 @@
 import { ServicesUseCase } from '@/services/services.use-case'
 import { MockProfessionalRepository, MockServiceRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { Prisma, type Service, ServiceStatus, UserType } from '@prisma/client'
+import { Customer, Prisma, Professional, type Service, ServiceStatus, UserType } from '@prisma/client'
 import { type ProfessionalsOfferingService } from '@/repository/types/service-repository.types'
 
 describe('ServicesUseCase (Unit Tests)', () => {
@@ -87,7 +87,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
   describe('executeCreate', () => {
     it('should create a service as MANAGER with APPROVED status', async () => {
       const professionalId = faker.string.uuid()
-      const professional = {
+      const professional: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -99,6 +99,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         profilePhotoUrl: faker.internet.url(),
         googleId: null,
         paymentMethods: [],
+        passwordHash: faker.internet.password(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -136,7 +137,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
 
     it('should create a service as PROFESSIONAL with PENDING status', async () => {
       const professionalId = faker.string.uuid()
-      const professional = {
+      const professional: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -148,6 +149,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         profilePhotoUrl: faker.internet.url(),
         googleId: null,
         paymentMethods: [],
+        passwordHash: faker.internet.password(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -252,7 +254,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past()
       }
 
-      const manager = {
+      const manager: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -264,6 +266,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         profilePhotoUrl: faker.internet.url(),
         googleId: null,
         paymentMethods: [],
+        passwordHash: faker.internet.password(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -302,7 +305,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past()
       }
 
-      const professional = {
+      const professional: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -314,6 +317,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         profilePhotoUrl: faker.internet.url(),
         googleId: null,
         paymentMethods: [],
+        passwordHash: faker.internet.password(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -343,7 +347,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past()
       }
 
-      const manager = {
+      const manager: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -355,6 +359,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         profilePhotoUrl: faker.internet.url(),
         googleId: null,
         paymentMethods: [],
+        passwordHash: faker.internet.password(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -510,7 +515,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past()
       }
 
-      const manager = {
+      const manager: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -522,6 +527,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         profilePhotoUrl: faker.internet.url(),
         googleId: null,
         paymentMethods: [],
+        passwordHash: faker.internet.password(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -558,7 +564,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past()
       }
 
-      const manager = {
+      const manager: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -570,6 +576,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         profilePhotoUrl: faker.internet.url(),
         googleId: null,
         paymentMethods: [],
+        passwordHash: faker.internet.password(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -606,7 +613,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past()
       }
 
-      const manager = {
+      const manager: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -618,6 +625,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         profilePhotoUrl: faker.internet.url(),
         googleId: null,
         paymentMethods: [],
+        passwordHash: faker.internet.password(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -633,18 +641,19 @@ describe('ServicesUseCase (Unit Tests)', () => {
   describe('Permission Validation', () => {
     it('should allow CUSTOMER to create service with PENDING status', async () => {
       const professionalId = faker.string.uuid()
-      const customer = {
+      const professional: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
         userType: UserType.CUSTOMER,
         registerCompleted: true,
-        socialMedia: null,
-        contact: faker.phone.number(),
-        specialization: null,
         profilePhotoUrl: faker.internet.url(),
         googleId: null,
+        contact: faker.phone.number(),
         paymentMethods: [],
+        socialMedia: [],
+        specialization: null,
+        passwordHash: faker.internet.password(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -666,7 +675,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past()
       }
 
-      MockProfessionalRepository.findById.mockResolvedValue(customer)
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
       MockServiceRepository.create.mockResolvedValue(createdService)
 
       const result = await servicesUseCase.executeCreate(serviceToCreate, professionalId)
@@ -696,7 +705,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past()
       }
 
-      const customer = {
+      const professional: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -708,12 +717,13 @@ describe('ServicesUseCase (Unit Tests)', () => {
         profilePhotoUrl: faker.internet.url(),
         googleId: null,
         paymentMethods: [],
+        passwordHash: faker.internet.password(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
 
       MockServiceRepository.findById.mockResolvedValue(existingService)
-      MockProfessionalRepository.findById.mockResolvedValue(customer)
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
 
       const promise = servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)
       await expect(promise).rejects.toThrow('Forbidden')

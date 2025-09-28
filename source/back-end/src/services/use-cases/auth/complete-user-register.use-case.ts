@@ -29,26 +29,42 @@ class CompleteUserRegisterUseCase {
     }
 
     if (userType === UserType.CUSTOMER) {
-      const userByPhone = await this.customerRepository.findByEmailOrPhone('', (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone)
-      if (userByPhone != null) {
-        throw new ResourceWithAttributAlreadyExists(
-          'user',
-          'phone',
-          (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone
-        )
-      }
+      const existingCustomer = await this.customerRepository.findByEmail(userEmail)
 
-      await this.customerRepository.updateByEmailAndGoogleId(
-        userId,
-        userEmail,
-        data
-      )
+      if (existingCustomer != null) {
+        const userByPhone = await this.customerRepository.findByEmailOrPhone('', (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone)
+
+        if (userByPhone != null) {
+          throw new ResourceWithAttributAlreadyExists(
+            'user',
+            'phone',
+            (data as z.infer<typeof CustomerSchemas.customerCompleteRegisterBodySchema>).phone
+          )
+        }
+
+        if ((existingCustomer.googleId != null) && (existingCustomer.passwordHash == null)) {
+          await this.customerRepository.updateByEmailAndGoogleId(
+            userId,
+            userEmail,
+            data
+          )
+        } else {
+          await this.customerRepository.updateByEmail(userEmail, data)
+        }
+      }
     } else if (userType === UserType.PROFESSIONAL || userType === UserType.MANAGER) {
-      await this.professionalRepository.updateByEmailAndGoogleId(
-        userId,
-        userEmail,
-        data
-      )
+      const existingProfessional = await this.professionalRepository.findByEmail(userEmail)
+      if (existingProfessional != null) {
+        if ((existingProfessional.googleId != null) && (existingProfessional.passwordHash == null)) {
+          await this.professionalRepository.updateByEmailAndGoogleId(
+            userId,
+            userEmail,
+            data
+          )
+        } else {
+          await this.professionalRepository.updateProfessionalByEmail(userEmail, data)
+        }
+      }
     } else {
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw new InvalidUserTypeUseCaseError(`Invalid user type provided ${userType}`)

@@ -94,6 +94,8 @@ class ProfessionalSchemas {
       specialization: SharedSchemas.specializationSchema,
     })
     .strict()
+
+  public static registerProfessionalBodySchema = SharedSchemas.registerBodySchema
 }
 
 export { ProfessionalSchemas }

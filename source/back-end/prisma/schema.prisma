@@ -19,6 +19,7 @@ model Customer {
   registerCompleted   Boolean   @default(false) @map("register_completed")
   birthdate           DateTime?
   email               String    @unique
+  passwordHash      String?   @map("password_hash")
   googleId            String?   @unique @map("google_id")
   phone               String?   @unique
   profilePhotoUrl     String?
@@ -121,6 +122,7 @@ model Professional {
   id                String   @id @default(uuid())
   name              String?  @default("Usuário")
   email             String   @unique
+  passwordHash      String?  @map("password_hash")
   googleId          String?  @unique @map("google_id")
   registerCompleted Boolean  @default(false) @map("register_completed")
   paymentMethods    Json?    @map("payment_methods")

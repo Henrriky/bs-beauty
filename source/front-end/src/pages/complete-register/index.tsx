@@ -35,7 +35,6 @@ function CompleteRegister() {
 
   async function handleUpdateProfileToken() {
     if (!tokens?.googleAccessToken) {
-      toast.error('Token de acesso inválido')
       return
     }
 

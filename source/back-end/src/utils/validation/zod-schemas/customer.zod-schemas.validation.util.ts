@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { SharedSchemas } from './shared-zod-schemas.validations.utils'
 import { DiscoverySource } from '@prisma/client'
 
 const discoverySourceSchema = z.preprocess(
@@ -34,6 +35,8 @@ class CustomerSchemas {
     alwaysAllowImageUse: z.boolean().optional(),
     phone: z.string().refine((value) => RegexPatterns.phone.test(value))
   }).strict()
+
+  public static registerCustomerBodySchema = SharedSchemas.registerBodySchema
 }
 
 export { CustomerSchemas }
