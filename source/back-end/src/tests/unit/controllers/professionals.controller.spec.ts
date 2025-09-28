@@ -26,7 +26,10 @@ describe('ProfessionalsController', () => {
       executeFindById: vi.fn(),
       executeCreate: vi.fn(),
       executeUpdate: vi.fn(),
-      executeDelete: vi.fn()
+      executeDelete: vi.fn(),
+      fetchServicesOfferedByProfessional: vi.fn(),
+      executeAddRole: vi.fn(),
+      executeRemoveRole: vi.fn()
     }
 
     vi.mocked(makeProfessionalsUseCaseFactory).mockReturnValue(useCaseMock)
@@ -263,6 +266,90 @@ describe('ProfessionalsController', () => {
       // assert
       expect(useCaseMock.executeDelete).toHaveBeenCalledTimes(1)
       expect(useCaseMock.executeDelete).toHaveBeenCalledWith(professionalId)
+      expect(res.status).not.toHaveBeenCalled()
+      expect(res.send).not.toHaveBeenCalled()
+      expect(next).toHaveBeenCalledTimes(1)
+      expect(next).toHaveBeenCalledWith(error)
+    })
+  })
+
+  describe('handleAddRole', () => {
+    it('should add role to professional successfully', async () => {
+      // arrange
+      const professionalId = 'professional-123'
+      const roleId = 'role-456'
+      req.params.id = professionalId
+      req.body = { roleId }
+      useCaseMock.executeAddRole.mockResolvedValueOnce(undefined)
+
+      // act
+      await ProfessionalsController.handleAddRole(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeAddRole).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeAddRole).toHaveBeenCalledWith(professionalId, roleId)
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK)
+      expect(res.send).toHaveBeenCalledWith({ message: 'Role added to professional successfully' })
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should call next with an error if executeAddRole fails', async () => {
+      // arrange
+      const error = new Error('Role association failed')
+      const professionalId = 'professional-123'
+      const roleId = 'role-456'
+      req.params.id = professionalId
+      req.body = { roleId }
+      useCaseMock.executeAddRole.mockRejectedValueOnce(error)
+
+      // act
+      await ProfessionalsController.handleAddRole(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeAddRole).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeAddRole).toHaveBeenCalledWith(professionalId, roleId)
+      expect(res.status).not.toHaveBeenCalled()
+      expect(res.send).not.toHaveBeenCalled()
+      expect(next).toHaveBeenCalledTimes(1)
+      expect(next).toHaveBeenCalledWith(error)
+    })
+  })
+
+  describe('handleRemoveRole', () => {
+    it('should remove role from professional successfully', async () => {
+      // arrange
+      const professionalId = 'professional-123'
+      const roleId = 'role-456'
+      req.params.id = professionalId
+      req.body = { roleId }
+      useCaseMock.executeRemoveRole.mockResolvedValueOnce(undefined)
+
+      // act
+      await ProfessionalsController.handleRemoveRole(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeRemoveRole).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeRemoveRole).toHaveBeenCalledWith(professionalId, roleId)
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK)
+      expect(res.send).toHaveBeenCalledWith({ message: 'Role removed from professional successfully' })
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should call next with an error if executeRemoveRole fails', async () => {
+      // arrange
+      const error = new Error('Role removal failed')
+      const professionalId = 'professional-123'
+      const roleId = 'role-456'
+      req.params.id = professionalId
+      req.body = { roleId }
+      useCaseMock.executeRemoveRole.mockRejectedValueOnce(error)
+
+      // act
+      await ProfessionalsController.handleRemoveRole(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeRemoveRole).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeRemoveRole).toHaveBeenCalledWith(professionalId, roleId)
       expect(res.status).not.toHaveBeenCalled()
       expect(res.send).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalledTimes(1)

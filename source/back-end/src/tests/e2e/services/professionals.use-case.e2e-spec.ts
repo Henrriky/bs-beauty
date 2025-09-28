@@ -1,12 +1,16 @@
 import { prismaClient } from '@/lib/prisma'
 import { PrismaProfessionalRepository } from '@/repository/prisma/prisma-professional.repository'
+import { PrismaRoleRepository } from '@/repository/prisma/prisma-role.repository'
 import { ProfessionalsUseCase } from '@/services/professionals.use-case'
 
 describe('ProfessionalsUseCase', () => {
   let professionalsUseCase: ProfessionalsUseCase
 
   beforeAll(async () => {
-    professionalsUseCase = new ProfessionalsUseCase(new PrismaProfessionalRepository())
+    professionalsUseCase = new ProfessionalsUseCase(
+      new PrismaProfessionalRepository(),
+      new PrismaRoleRepository()
+    )
   })
 
   beforeEach(async () => {
