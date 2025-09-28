@@ -45,7 +45,6 @@ const actionToOperations = {
 
 function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
-  const [rating, setRating] = useState(0)
 
   const ratingId = props.appointment.rating?.id
 
@@ -60,11 +59,8 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
     if (isSuccess) {
       const ratingScore = ratingData?.score
 
-      if (ratingScore === null || ratingScore === undefined) {
+      if (ratingScore === null || ratingScore === undefined)
         setModalIsOpen(true)
-      } else if (ratingScore > 0 && ratingScore < 6) {
-        setRating(ratingScore)
-      }
     }
   }, [isSuccess, ratingData])
 
