@@ -67,4 +67,13 @@ export const API_VARIABLES = {
     FETCH_ANALYTICS_BY_PROFESSIONAL: (professionalId: string) =>
       `/analytics/${professionalId}`,
   },
+  ROLES_ENDPOINTS: {
+    ENDPOINT: '/roles',
+    FIND_BY_ID: (id: string) => `/roles/${id}`,
+    UPDATE_ROLE: (id: string) => `/roles/${id}`,
+    DELETE_ROLE: (id: string) => `/roles/${id}`,
+    ASSOCIATIONS: (id: string) => `/roles/${id}/associations`,
+    ADD_PERMISSION: (id: string) => `/roles/${id}/permissions`,
+    REMOVE_PERMISSION: (id: string) => `/roles/${id}/permissions`,
+  },
 } as const
