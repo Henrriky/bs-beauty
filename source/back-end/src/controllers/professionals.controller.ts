@@ -90,6 +90,32 @@ class ProfessionalsController {
       next(error)
     }
   }
+
+  public static async handleAddRole (req: Request, res: Response, next: NextFunction) {
+    try {
+      const professionalId = req.params.id
+      const { roleId } = req.body
+      const useCase = makeProfessionalsUseCaseFactory()
+      await useCase.executeAddRole(professionalId, roleId)
+
+      res.status(StatusCodes.OK).send({ message: 'Role added to professional successfully' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleRemoveRole (req: Request, res: Response, next: NextFunction) {
+    try {
+      const professionalId = req.params.id
+      const { roleId } = req.body
+      const useCase = makeProfessionalsUseCaseFactory()
+      await useCase.executeRemoveRole(professionalId, roleId)
+
+      res.status(StatusCodes.OK).send({ message: 'Role removed from professional successfully' })
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { ProfessionalsController }
