@@ -5,6 +5,7 @@ import {
   ClipboardDocumentCheckIcon,
   ClockIcon,
   HomeIcon,
+  ShieldCheckIcon,
   UserIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
@@ -55,6 +56,11 @@ const sideBarItems: SideBarOptions = {
   ],
   [UserType.MANAGER]: [
     {
+      name: 'Funções',
+      icon: <ShieldCheckIcon className="size-6" />,
+      navigateTo: '/manager/roles',
+    },
+    {
       name: 'Clientes',
       icon: <UsersIcon className="size-6" />,
       navigateTo: '/manager/customers',
@@ -65,7 +71,7 @@ const sideBarItems: SideBarOptions = {
       navigateTo: '/manager/professionals',
     },
     {
-      name: 'Serviços',
+      name: 'Serviços',
       icon: <BriefcaseIcon className="size-6" />,
       navigateTo: '/services',
     },
@@ -82,7 +88,7 @@ const sideBarItems: SideBarOptions = {
   ],
   [UserType.PROFESSIONAL]: [
     {
-      name: 'Serviços',
+      name: 'Serviços',
       icon: <BriefcaseIcon className="size-6" />,
       navigateTo: 'services',
     },

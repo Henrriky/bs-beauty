@@ -20,6 +20,7 @@ import AppointmentDetails from '../pages/appointments/components/AppointmentsDet
 import UserRegistration from '../pages/user-registration'
 import PasswordReset from '../pages/password-reset'
 import PasswordResetCompleted from '../pages/password-reset/components/PasswordResetCompleted'
+import Roles from '../pages/roles'
 
 function BSBeautyRouter() {
   return (
@@ -82,6 +83,7 @@ function BSBeautyRouter() {
                   path="/manager/professionals"
                   element={<Professionals />}
                 />
+                <Route path="/manager/roles" element={<Roles />} />
               </Route>
 
               {/* PROFESSIONAL/MANAGER ROUTES */}
