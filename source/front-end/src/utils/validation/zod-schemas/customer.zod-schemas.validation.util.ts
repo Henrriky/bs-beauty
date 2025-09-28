@@ -52,6 +52,8 @@ class CustomerSchemas {
       alwaysAllowImageUse: z.boolean().optional(),
     })
     .strict()
+
+  public static registerCustomerBodySchema = SharedSchemas.registerBodySchema
 }
 
 export { CustomerSchemas }

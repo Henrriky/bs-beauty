@@ -100,6 +100,7 @@ describe('ProfessionalsController', () => {
         id: 'user-123',
         name: 'John Doe',
         email: 'rikolas@example.com',
+        passwordHash: null,
         registerCompleted: true,
         googleId: 'google-id-123',
         socialMedia: null,

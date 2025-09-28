@@ -2,7 +2,7 @@ import { type Professional, type Prisma } from '@prisma/client'
 import { type PaginatedRequest, type PaginatedResult } from '../../types/pagination'
 import { type ServicesOfferedByProfessional } from '../types/professional-repository.types'
 import { type PartialHandleFetchServicesOfferedByProfessionalQuerySchema } from '@/utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
-import { type ProfessionalsFilters } from '@/types/employees/employees-filters'
+import { type ProfessionalsFilters } from '@/types/professionals/professionals-filters'
 
 interface ProfessionalRepository {
   findAll: () => Promise<Professional[]>

@@ -7,7 +7,8 @@ const envSchema = z.object({
   GOOGLE_REDIRECT_URI: z.string(),
   GOOGLE_SCOPES: z.string(),
   JWT_SECRET: z.string(),
-  JWT_EXPIRES_IN: z.string()
+  JWT_EXPIRES_IN: z.string(),
+  JWT_REFRESH_EXPIRES_IN: z.string()
 })
 
 const _env = envSchema.safeParse(process.env)

@@ -2,7 +2,7 @@ import { type Professional, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type PaginatedRequest } from '../../types/pagination'
 import { type ProfessionalRepository } from '../protocols/professional.repository'
-import { type ProfessionalsFilters } from '@/types/employees/employees-filters'
+import { type ProfessionalsFilters } from '@/types/professionals/professionals-filters'
 import { type PartialHandleFetchServicesOfferedByProfessionalQuerySchema } from '@/utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
 
 class PrismaProfessionalRepository implements ProfessionalRepository {

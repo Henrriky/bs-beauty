@@ -3,6 +3,7 @@ import { MockProfessionalRepository, MockRoleRepository } from '../utils/mocks/r
 import { faker } from '@faker-js/faker'
 import { Prisma, type Professional, UserType } from '@prisma/client'
 import { type ServicesOfferedByProfessional } from '@/repository/types/professional-repository.types'
+import bcrypt from 'bcrypt'
 import { CustomError } from '@/utils/errors/custom.error.util'
 
 describe('ProfessionalsUseCase (Unit Tests)', () => {
@@ -22,11 +23,15 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
 
   describe('executeFindAll', () => {
     it('should return all professionals', async () => {
+      const plainPassword = faker.internet.password()
+      const passwordHash = await bcrypt.hash(plainPassword, 10)
+
       const professionals: Professional[] = [
         {
           id: faker.string.uuid(),
           name: faker.person.fullName(),
           email: faker.internet.email(),
+          passwordHash,
           userType: UserType.PROFESSIONAL,
           googleId: null,
           registerCompleted: true,
@@ -57,10 +62,14 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
 
   describe('executeFindById', () => {
     it('should return a professional by id', async () => {
+      const plainPassword = faker.internet.password()
+      const passwordHash = await bcrypt.hash(plainPassword, 10)
+
       const professional: Professional = {
         id: faker.string.uuid(),
         name: faker.person.fullName(),
         email: faker.internet.email(),
+        passwordHash,
         userType: UserType.PROFESSIONAL,
         googleId: null,
         registerCompleted: true,
@@ -106,6 +115,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         name: professionalToCreate.name ?? null,
         id: faker.string.uuid(),
         email: professionalToCreate.email,
+        passwordHash: professionalToCreate.passwordHash ?? null,
         userType: UserType.PROFESSIONAL,
         googleId: null,
         registerCompleted: true,
@@ -142,6 +152,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         id: faker.string.uuid(),
         name: professionalToCreate.name ?? null,
         email: professionalToCreate.email,
+        passwordHash: professionalToCreate.passwordHash ?? null,
         userType: UserType.PROFESSIONAL,
         googleId: null,
         registerCompleted: true,
@@ -169,10 +180,14 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.person.jobType()
       }
 
+      const plainPassword = faker.internet.password()
+      const passwordHash = await bcrypt.hash(plainPassword, 10)
+
       const updatedProfessional: Professional = {
         id: professionalId,
         name: professionalToUpdate.name as string,
         email: faker.internet.email(),
+        passwordHash,
         userType: UserType.PROFESSIONAL,
         googleId: null,
         registerCompleted: true,
@@ -209,10 +224,13 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
   describe('executeDelete', () => {
     it('should delete a professional', async () => {
       const professionalId = faker.string.uuid()
+      const plainPassword = faker.internet.password()
+      const passwordHash = await bcrypt.hash(plainPassword, 10)
       const professional: Professional = {
         id: professionalId,
         name: faker.person.fullName(),
         email: faker.internet.email(),
+        passwordHash,
         userType: UserType.PROFESSIONAL,
         googleId: null,
         registerCompleted: true,
@@ -253,10 +271,14 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         }
       }
 
+      const plainPassword = faker.internet.password()
+      const passwordHash = await bcrypt.hash(plainPassword, 10)
+
       const professional: Professional = {
         id: faker.string.uuid(),
         name: params.filters.name,
         email: faker.internet.email(),
+        passwordHash,
         userType: UserType.PROFESSIONAL,
         googleId: null,
         registerCompleted: true,
