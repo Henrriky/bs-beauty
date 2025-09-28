@@ -15,9 +15,9 @@ type AuthState = {
 
 const initialState = (): AuthState => {
   const accessToken = localStorage.getItem('token')
-  const googleAccessToken = localStorage.getItem('googleAccessToken')
+  const googleAccessToken = localStorage.getItem('googleAccessToken') || undefined
 
-  if (!accessToken || !googleAccessToken) {
+  if (!accessToken) {
     console.warn(
       'Access token or Google Access Token from localStorage not found',
     )
@@ -68,6 +68,8 @@ const authSlice = createSlice({
       localStorage.setItem('token', action.payload.token.accessToken)
       if (action.payload.token.googleAccessToken) {
         localStorage.setItem('googleAccessToken', action.payload.token.googleAccessToken)
+      } else {
+        localStorage.removeItem('googleAccessToken')
       }
       return {
         ...state,
