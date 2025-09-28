@@ -27,6 +27,7 @@ model Customer {
   referrerId          String?   @map("referrer_id")
   referralCount       Int       @default(0) @map("referral_count")
   alwaysAllowImageUse Boolean   @default(false) @map("always_allow_image_use")
+  discoverySource     DiscoverySource? @map("discovery_source")
   createdAt           DateTime  @default(now()) @map("created_at")
   updatedAt           DateTime  @updatedAt @map("updated_at")
 
@@ -78,15 +79,24 @@ model Notification {
   @@map("notification")
 }
 
+enum ServiceStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Service {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   description String?
   category    String
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  status      ServiceStatus @default(PENDING)
+  createdBy   String?       @map("created_by")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
 
-  offers Offer[]
+  createdByProfessional Professional? @relation(fields: [createdBy], references: [id])
+  offers                Offer[]
 
   @@map("service")
 }
@@ -127,6 +137,7 @@ model Professional {
   shifts           Shift[]
   offers           Offer[]
   professionalRole ProfessionalRole[]
+  Service          Service[]
 
   @@map("professional")
 }
@@ -226,4 +237,15 @@ enum Action {
   READ
   UPDATE
   DELETE
+}
+
+enum DiscoverySource {
+  REFERRAL    
+  INSTAGRAM
+  FACEBOOK
+  TIKTOK
+  GOOGLE
+  WHATSAPP
+  WALK_IN      
+  OTHER
 }

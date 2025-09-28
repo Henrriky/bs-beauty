@@ -24,7 +24,7 @@ function ServiceDashboard() {
   const [openUpdateServiceModal, setOpenUpdateServiceModal] = useState(false)
 
   const [expandedDiv, setExpandedDiv] = useState(null)
-  const [service, setService] = useState<Service>()
+  const [service, setService] = useState<Service | null>()
   const [offer, setOffer] = useState<Offer>()
   const { data } = authAPI.useFetchUserInfoQuery()
   const user = useAppSelector((state) => state.auth.user!)
@@ -38,7 +38,6 @@ function ServiceDashboard() {
     }
     setExpandedDiv(div as SetStateAction<null>)
   }
-
   return (
     <>
       <div className="w-full">
@@ -47,7 +46,7 @@ function ServiceDashboard() {
           <p className="text-[#979797] text-sm mt-2">
             {isManager
               ? 'Selecione algum serviço já criado para ofertar ou crie um caso não exista.'
-              : 'Selecione algum serviço já criado para ofertar.'}
+              : 'Selecione algum serviço já criado para ofertar ou crie um caso não exista, mediante aprovação de um gerente.'}
           </p>
         </div>
         <div className="w-full">
@@ -56,10 +55,11 @@ function ServiceDashboard() {
             node={
               <ListServices
                 openModal={() => setOpenCreateOfferModal(true)}
-                selectService={(service) => setService(service)}
-                isManager={isManager}
                 openDeleteModal={() => setOpenDeleteServiceModal(true)}
                 openUpdateModal={() => setOpenUpdateServiceModal(true)}
+                serviceSelected={service}
+                selectService={(service) => setService(service)}
+                isManager={isManager}
               />
             }
             div="div1"
@@ -80,7 +80,7 @@ function ServiceDashboard() {
             expandedDiv={expandedDiv}
             toggleDiv={() => toggleDiv('div2')}
           />
-          {isManager && (
+          {
             <ExpansiveItem
               text="Criar serviço"
               node={<CreateServiceForm />}
@@ -88,7 +88,7 @@ function ServiceDashboard() {
               expandedDiv={expandedDiv}
               toggleDiv={() => toggleDiv('div3')}
             />
-          )}
+          }
         </div>
       </div>
       <div className="absolute top-[0px]">
