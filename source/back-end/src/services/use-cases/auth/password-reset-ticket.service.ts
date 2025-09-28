@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import { Cache } from '@/services/protocols/cache.protocol'
 
-type TicketPayload = { email: string; customerId: string }
+type TicketPayload = { email: string; userId: string }
 const keyTicket = (id: string) => `passwordReset:ticket:${id}`
 
 export class PasswordResetTicketService {

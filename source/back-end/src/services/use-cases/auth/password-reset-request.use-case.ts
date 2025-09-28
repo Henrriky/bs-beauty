@@ -3,19 +3,23 @@ import { EmailService } from '@/services/email/email.service'
 import { CustomError } from '@/utils/errors/custom.error.util'
 import crypto from 'crypto'
 import { CodeValidationService } from './code-validation.service'
+import { ProfessionalRepository } from '@/repository/protocols/professional.repository'
 
 const RESEND_COOLDOWN_SECONDS = 60
 const RESET_TTL_SECONDS = 600
 
 export class PasswordResetRequestUseCase {
   constructor(
-    private readonly customers: CustomerRepository,
+    private readonly customerRepository: CustomerRepository,
+    private readonly professionalRepository: ProfessionalRepository,
     private readonly codeValidationService: CodeValidationService,
     private readonly emailService: EmailService,
   ) { }
 
   async execute(email: string) {
-    const customer = await this.customers.findByEmail(email)
+    const customer = await this.customerRepository.findByEmail(email)
+    const professional = await this.professionalRepository.findByEmail(email)
+    const user = customer ?? professional
 
     const resendAllowed = await this.codeValidationService.allowResendAndStartCooldown({
       purpose: 'passwordReset',
@@ -27,7 +31,7 @@ export class PasswordResetRequestUseCase {
       throw new CustomError('Too Many Requests', 429, 'Please wait before requesting another code')
     }
 
-    if (!customer || !customer.passwordHash) return
+    if (!user || !user.passwordHash) return
 
     const code = crypto.randomInt(0, 1_000_000).toString().padStart(6, '0')
 
@@ -35,7 +39,7 @@ export class PasswordResetRequestUseCase {
       purpose: 'passwordReset',
       recipientId: email,
       code,
-      payload: { customerId: customer.id },
+      payload: { userId: user.id },
       timeToLiveSeconds: RESET_TTL_SECONDS,
     })
 
@@ -45,6 +49,7 @@ export class PasswordResetRequestUseCase {
       expirationCodeTime: RESET_TTL_SECONDS,
       purpose: 'passwordReset'
     })
+
   }
 
 }

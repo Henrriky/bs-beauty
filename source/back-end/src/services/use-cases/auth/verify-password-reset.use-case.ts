@@ -2,6 +2,7 @@ import { CustomerRepository } from '@/repository/protocols/customer.repository'
 import { CodeValidationService } from './code-validation.service'
 import { CustomError } from '@/utils/errors/custom.error.util'
 import { PasswordResetTicketService } from './password-reset-ticket.service'
+import { ProfessionalRepository } from '@/repository/protocols/professional.repository'
 
 type Input = { email: string; code: string }
 type Output = { ticket: string }
@@ -9,6 +10,7 @@ type Output = { ticket: string }
 export class VerifyPasswordResetUseCase {
   constructor(
     private readonly customerRepository: CustomerRepository,
+    private readonly professionalRepository: ProfessionalRepository,
     private readonly codeService: CodeValidationService,
     private readonly ticketService: PasswordResetTicketService,
   ) { }
@@ -28,15 +30,18 @@ export class VerifyPasswordResetUseCase {
       )
     }
 
-    const payload = result.payload as { customerId: string }
-    const byId = payload?.customerId
+    const payload = result.payload as { userId: string }
+    const byId = payload?.userId
     const customer = await this.customerRepository.findById(byId)
+    const professional = await this.professionalRepository.findById(byId)
 
-    if (!customer) {
+    const user = customer ?? professional
+
+    if (!user) {
       throw new CustomError('Bad Request', 400, 'Code expired or not found')
     }
 
-    const ticket = await this.ticketService.create({ email, customerId: customer.id }, 15 * 60)
+    const ticket = await this.ticketService.create({ email, userId: user.id }, 15 * 60)
     return { ticket }
   }
 }

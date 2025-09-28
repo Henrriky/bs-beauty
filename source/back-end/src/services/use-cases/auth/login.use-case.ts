@@ -79,7 +79,7 @@ class LoginUseCase {
 
       let isPasswordValid: boolean = false;
 
-      if (user) {
+      if (user && user.passwordHash) {
         isPasswordValid = await bcrypt.compare(password, user!.passwordHash!)
       }
 
