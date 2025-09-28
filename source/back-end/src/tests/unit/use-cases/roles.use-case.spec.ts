@@ -459,6 +459,7 @@ describe('RoleUseCase (Unit Tests)', () => {
           registerCompleted: true,
           paymentMethods: null,
           socialMedia: null,
+          passwordHash: null,
           contact: faker.phone.number(),
           specialization: null,
           profilePhotoUrl: null,
