@@ -8,6 +8,10 @@ interface ProfessionalRepository {
   findAll: () => Promise<Professional[]>
   findById: (customerId: string) => Promise<Professional | null>
   findByEmail: (email: string) => Promise<Professional | null>
+  countByRoleId: (roleId: string) => Promise<number>
+  addRoleToProfessional: (professionalId: string, roleId: string) => Promise<void>
+  removeRoleFromProfessional: (professionalId: string, roleId: string) => Promise<void>
+  findProfessionalRoleAssociation: (professionalId: string, roleId: string) => Promise<boolean>
   create: (newCustomer: Prisma.ProfessionalCreateInput) => Promise<Professional>
   update: (id: string, customerUpdated: Prisma.ProfessionalUpdateInput) => Promise<Professional>
   updateByEmailAndGoogleId: (googleId: string, email: string, customerUpdated: Prisma.ProfessionalUpdateInput) => Promise<Professional>

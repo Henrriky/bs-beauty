@@ -29,6 +29,43 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professional
   }
 
+  public async countByRoleId (roleId: string): Promise<number> {
+    const associationsCount = await prismaClient.professionalRole.count({
+      where: { roleId }
+    })
+
+    return associationsCount
+  }
+
+  public async addRoleToProfessional (professionalId: string, roleId: string): Promise<void> {
+    await prismaClient.professionalRole.create({
+      data: {
+        professionalId,
+        roleId
+      }
+    })
+  }
+
+  public async removeRoleFromProfessional (professionalId: string, roleId: string): Promise<void> {
+    await prismaClient.professionalRole.deleteMany({
+      where: {
+        professionalId,
+        roleId
+      }
+    })
+  }
+
+  public async findProfessionalRoleAssociation (professionalId: string, roleId: string): Promise<boolean> {
+    const association = await prismaClient.professionalRole.findFirst({
+      where: {
+        professionalId,
+        roleId
+      }
+    })
+
+    return association !== null
+  }
+
   public async create (newProfessional: Prisma.ProfessionalCreateInput) {
     const professional = await prismaClient.professional.create({
       data: { ...newProfessional }
