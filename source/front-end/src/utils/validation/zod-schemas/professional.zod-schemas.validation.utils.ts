@@ -95,7 +95,8 @@ class ProfessionalSchemas {
     })
     .strict()
 
-  public static registerProfessionalBodySchema = SharedSchemas.registerBodySchema
+  public static registerProfessionalBodySchema =
+    SharedSchemas.registerBodySchema
 }
 
 export { ProfessionalSchemas }

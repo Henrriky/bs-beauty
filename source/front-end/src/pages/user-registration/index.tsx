@@ -32,7 +32,9 @@ function UserRegistration() {
   const [registerCustomer, customerState] =
     authAPI.useRegisterCustomerMutation()
 
-  const register = isProfessionalEmail?.data ? registerProfessional : registerCustomer
+  const register = isProfessionalEmail?.data
+    ? registerProfessional
+    : registerCustomer
 
   const isLoading = professionalState.isLoading || customerState.isLoading
 
