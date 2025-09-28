@@ -24,7 +24,8 @@ function SideBar() {
   const userInfoQuery = useAppSelector(selectUserInfo)
 
   const displayName = userInfoQuery?.data?.user.name ?? user.name
-  const photoUrl = userInfoQuery?.data?.user.profilePhotoUrl ?? user.profilePhotoUrl
+  const photoUrl =
+    userInfoQuery?.data?.user.profilePhotoUrl ?? user.profilePhotoUrl
   const userType = userInfoQuery?.data?.user.userType ?? user.userType
 
   const toggleSideBar = () => {
@@ -52,10 +53,7 @@ function SideBar() {
               className={'hover:cursor-pointer'}
               onClick={() => navigate('/profile')}
             >
-              <ProfilePicture
-                profilePhotoUrl={photoUrl ?? ''}
-                size="sm"
-              />
+              <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" />
             </div>
           </div>
         </nav>

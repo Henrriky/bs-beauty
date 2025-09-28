@@ -30,7 +30,7 @@ function ProfessionalProfile({
     handleSubmit,
     control,
     formState: { errors },
-    reset
+    reset,
   } = useForm<ProfessionalUpdateProfileFormData>({
     resolver: zodResolver(ProfessionalSchemas.professionalUpdateSchema),
     defaultValues: {
@@ -63,8 +63,9 @@ function ProfessionalProfile({
     name: 'socialMedia',
   })
 
-
-  const handleSubmitConcrete = async (data: ProfessionalUpdateProfileFormData) => {
+  const handleSubmitConcrete = async (
+    data: ProfessionalUpdateProfileFormData,
+  ) => {
     try {
       await updateProfile({ userId: userInfo.id, profileData: data }).unwrap()
       toast.success('Perfil atualizado com sucesso!')

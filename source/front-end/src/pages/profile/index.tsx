@@ -26,29 +26,34 @@ function Profile() {
   const user = useAppSelector((state) => state.auth.user!)
   const tokens = useAppSelector((state) => state.auth.token)
 
-  const { data, isLoading, isError, error, refetch } = authAPI.useFetchUserInfoQuery()
+  const { data, isLoading, isError, error, refetch } =
+    authAPI.useFetchUserInfoQuery()
 
   async function refreshTokenIfGoogle() {
     if (!tokens?.googleAccessToken) return
     try {
-      const { accessToken } = await AuthAPI.loginWithGoogleAccessToken(tokens.googleAccessToken)
+      const { accessToken } = await AuthAPI.loginWithGoogleAccessToken(
+        tokens.googleAccessToken,
+      )
       const decodedToken = decodeUserToken(accessToken)
 
-      dispatchRedux(setToken({
-        user: {
-          id: decodedToken.id,
-          userType: decodedToken.userType,
-          email: decodedToken.email,
-          name: decodedToken.name,
-          registerCompleted: decodedToken.registerCompleted,
-          profilePhotoUrl: decodedToken.profilePhotoUrl,
-        },
-        token: {
-          googleAccessToken: tokens.googleAccessToken,
-          accessToken,
-          expiresAt: decodedToken.exp!,
-        },
-      }))
+      dispatchRedux(
+        setToken({
+          user: {
+            id: decodedToken.id,
+            userType: decodedToken.userType,
+            email: decodedToken.email,
+            name: decodedToken.name,
+            registerCompleted: decodedToken.registerCompleted,
+            profilePhotoUrl: decodedToken.profilePhotoUrl,
+          },
+          token: {
+            googleAccessToken: tokens.googleAccessToken,
+            accessToken,
+            expiresAt: decodedToken.exp!,
+          },
+        }),
+      )
 
       localStorage.setItem('token', accessToken)
       dispatchRedux(authAPI.util.invalidateTags(['User']))
