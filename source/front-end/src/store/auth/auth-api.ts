@@ -25,6 +25,7 @@ export const authAPI = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['User'],
     }),
     fetchUserInfo: builder.query<{ user: Professional | Customer }, void>({
       query: () => ({
