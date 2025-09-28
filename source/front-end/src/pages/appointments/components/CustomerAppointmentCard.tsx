@@ -13,7 +13,6 @@ import { Formatter } from '../../../utils/formatter/formatter.util'
 import { Button } from '../../../components/button/Button'
 import { ListAppointmentsButtonStatus } from '../types'
 import { Link } from 'react-router-dom'
-import { ratingAPI } from '../../../store/rating/rating-api'
 
 interface CustomerAppointmentCardProps {
   appointment: FindAppointmentByCustomerId
@@ -22,9 +21,6 @@ interface CustomerAppointmentCardProps {
 
 function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
   const isSchedulled = props.switchButtonStatus === 'schedulled'
-
-  const { data } = ratingAPI.useGetRatingByIdQuery(props.appointment.id)
-  console.log(data)
   const hasPendingRating =
     props.appointment.rating !== null &&
     props.appointment.rating?.score === null

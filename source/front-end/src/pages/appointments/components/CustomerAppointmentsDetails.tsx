@@ -22,10 +22,9 @@ import {
   XCircleIcon,
 } from '@heroicons/react/24/outline'
 import RatingModal from './RatingModal'
-import Subtitle from '../../../components/texts/Subtitle'
 import { ratingAPI } from '../../../store/rating/rating-api'
-import { useState } from 'react'
-import { Textarea } from '../../../components/inputs/Textarea'
+import { useEffect, useState } from 'react'
+import { RatingUI } from './RatingUI'
 
 const actionToOperations = {
   edit: {
@@ -45,9 +44,29 @@ const actionToOperations = {
 }
 
 function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(true)
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
   const [rating, setRating] = useState(0)
-  const [hover, setHover] = useState(0)
+
+  const ratingId = props.appointment.rating?.id
+
+  const { data: ratingData, isSuccess } = ratingAPI.useGetRatingByIdQuery(
+    ratingId!,
+    {
+      skip: !ratingId,
+    },
+  )
+
+  useEffect(() => {
+    if (isSuccess) {
+      const ratingScore = ratingData?.score
+
+      if (ratingScore === null || ratingScore === undefined) {
+        setModalIsOpen(true)
+      } else if (ratingScore > 0 && ratingScore < 6) {
+        setRating(ratingScore)
+      }
+    }
+  }, [isSuccess, ratingData])
 
   const operationInformations = actionToOperations[props.action]
   const {
@@ -216,6 +235,15 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
             )
           })}
         </div>
+        {ratingData?.score && (
+          <RatingUI
+            score={ratingData?.score}
+            hover={ratingData?.score}
+            isInteractive={false}
+            commentValue={ratingData.comment}
+            userType={'customer'}
+          />
+        )}
         {props.action !== 'view' && (
           <Button
             type="submit"
@@ -233,77 +261,16 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
           />
         )}
       </form>
-      <RatingModal
-        className="bg-primary-900 font-normal relative"
-        isOpen={modalIsOpen}
-        onClose={() => {
-          setModalIsOpen(false)
-          setRating(0)
-        }}
-      >
-        <div className="flex flex-col items-center justify-between h-full pt-8 pb-4">
-          <div className="flex-grow flex flex-col items-center justify-center gap-4">
-            <Title align="center">
-              O atendimento atendeu às suas expectativas? Avalie!
-            </Title>
-            <Subtitle className="text-primary-100 text-sm" align="center">
-              Seu feedback nos ajuda a melhorar cada vez mais.
-            </Subtitle>
-            <div className="flex items-center">
-              {[...Array(5)].map((star, index) => {
-                const ratingValue = index + 1
-                return (
-                  <label key={index}>
-                    <input
-                      type="radio"
-                      name="rating"
-                      className="hidden"
-                      value={ratingValue}
-                      onClick={() => setRating(ratingValue)}
-                    />
-                    <svg
-                      className="w-8 h-8 cursor-pointer transition-colors"
-                      fill={
-                        ratingValue <= (hover || rating) ? '#ffc107' : '#e4e5e9'
-                      }
-                      onMouseEnter={() => setHover(ratingValue)}
-                      onMouseLeave={() => setHover(0)}
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
-                  </label>
-                )
-              })}
-            </div>
-            <Textarea
-              registration={{ ...register('observation') }}
-              label={
-                <p className="flex gap-1 items-center">
-                  <ChatBubbleOvalLeftIcon className="size-5" />
-                  Poderia dizer algo?
-                </p>
-              }
-              id="comentary"
-              placeholder={'Adoraríamos ouvir mais!'}
-              wrapperClassName="w-full"
-            />
-          </div>
-          <div className="flex justify-center w-full mt-4">
-            <Button
-              className="transition-all bg-[#A4978A] text-[#54493F] font-medium hover:bg-[#4e483f] hover:text-white disabled:bg-zinc-700 disabled:cursor-not-allowed"
-              label={'Enviar Avaliação'}
-              id={'submitRating'}
-              onClick={() => {
-                console.log('Avaliação enviada:', rating) // Send to backend
-                setModalIsOpen(false)
-                setRating(0)
-              }}
-              disabled={rating === 0}
-            />
-          </div>
-        </div>
-      </RatingModal>
+      {ratingId && (
+        <RatingModal
+          isOpen={modalIsOpen}
+          onClose={() => {
+            setModalIsOpen(false)
+          }}
+          ratingId={ratingId}
+          appointmentId={props.appointment.id}
+        />
+      )}
     </>
   )
 }

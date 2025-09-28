@@ -4,3 +4,8 @@ export interface Rating {
   comment?: string | null
   appointmentId: string
 }
+
+export interface UpdateRating {
+  score?: number | null
+  comment?: string | null
+}

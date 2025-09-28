@@ -52,8 +52,6 @@ function AppointmentDetails() {
       appointmentId: appointmentId!,
     })
 
-    console.log(data)
-
   const [updateAppointment, { isLoading: isLoadingUpdateAppontmentService }] =
     appointmentAPI.useUpdateAppointmentServiceMutation()
 

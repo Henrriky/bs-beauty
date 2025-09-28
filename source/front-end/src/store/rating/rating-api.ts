@@ -1,7 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { API_VARIABLES } from '../../api/config'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
-import { Rating } from './types'
+import { Rating, UpdateRating } from './types'
+import { appointmentAPI } from '../appointment/appointment-api'
 
 export const ratingAPI = createApi({
   reducerPath: 'ratings',
@@ -17,7 +18,7 @@ export const ratingAPI = createApi({
     }),
     updateRating: builder.mutation<
       { success: boolean },
-      { data: Rating; id: string }
+      { data: UpdateRating; id: string; appointmentId: string }
     >({
       query: ({ id, data }) => ({
         url: `${API_VARIABLES.RATINGS_ENDPOINTS.UPDATE_RATING(id)}`,
@@ -28,6 +29,20 @@ export const ratingAPI = createApi({
         { type: 'Ratings', id },
         { type: 'Ratings' },
       ],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+
+          dispatch(
+            appointmentAPI.endpoints.findAppointmentsByCustomerOrProfessionalId.initiate(
+              undefined,
+              { forceRefetch: true, subscribe: false },
+            ),
+          )
+        } catch (error) {
+          console.log(error)
+        }
+      },
     }),
   }),
 })
