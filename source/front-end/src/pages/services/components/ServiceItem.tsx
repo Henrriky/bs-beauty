@@ -29,7 +29,7 @@ const getStatusBadge = (status: ServiceStatus) => {
     case 'APPROVED':
       return <StatusBadge text={'Aprovado'} color={'green'} />
     case 'REJECTED':
-      return <StatusBadge text={'Aprovado'} color={'red'} />
+      return <StatusBadge text={'Rejeitado'} color={'red'} />
     default:
       return null
   }

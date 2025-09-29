@@ -50,7 +50,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
         </div>
       </div>
       <div
-        className={`flex justify-between py-4 px-6 rounded-2xl mt-5 bg-[#262626]
+        className={`flex justify-between py-4 ${hasPendingRating ? 'pb-6' : ''} px-6 rounded-2xl mt-5 bg-[#262626]
               transition-all duration-300 ease-in-out flex-grow flex-col sm:flex-row sm:items-center border-secondary-300`}
       >
         <div className="flex items gap-4 align-middle">
@@ -67,7 +67,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
               <StatusBadge
                 text={'Avaliação Pendente'}
                 color={'amber'}
-                className="fixed"
+                className="absolute mt-2 w-max"
               />
             )}
           </div>
@@ -81,7 +81,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
             <h3 className="text-[#D9D9D9] text-xs text-opacity-55">
               {firstLetterOfWordToUpperCase(
                 props.appointment.offer?.professional?.name ||
-                'Profissional não definido',
+                  'Profissional não definido',
               )}
             </h3>
           </div>
