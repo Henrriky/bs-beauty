@@ -15,16 +15,14 @@ class PrismaPermissionRepository implements PermissionRepository {
     // Filtro por resource
     if (filters.resource != null && filters.resource.length > 0) {
       where.resource = {
-        contains: filters.resource,
-        mode: 'insensitive'
+        contains: filters.resource
       }
     }
 
     // Filtro por action
     if (filters.action != null && filters.action.length > 0) {
       where.action = {
-        contains: filters.action,
-        mode: 'insensitive'
+        contains: filters.action
       }
     }
 
@@ -33,22 +31,19 @@ class PrismaPermissionRepository implements PermissionRepository {
       where.OR = [
         {
           description: {
-            contains: filters.search,
-            mode: 'insensitive'
+            contains: filters.search
           }
         },
         {
           // Busca na concatenação resource.action usando raw SQL
           // Prisma não suporta concatenação diretamente no where, então fazemos por description e resource/action
           resource: {
-            contains: filters.search,
-            mode: 'insensitive'
+            contains: filters.search
           }
         },
         {
           action: {
-            contains: filters.search,
-            mode: 'insensitive'
+            contains: filters.search
           }
         }
       ]
