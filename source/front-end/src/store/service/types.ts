@@ -1,10 +1,14 @@
 import { PaginatedRequest, PaginatedResponse } from '../types'
 
+export type ServiceStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
+
 export type Service = {
   id: string
   name: string
   description: string | null
   category: string
+  status: ServiceStatus
+  createdBy: null | string
   createdAt: Date
   updatedAt: Date
 }

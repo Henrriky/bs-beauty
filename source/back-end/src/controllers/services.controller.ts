@@ -39,7 +39,8 @@ class ServicesController {
     try {
       const useCase = makeServiceUseCaseFactory()
       const newService: Prisma.ServiceCreateInput = req.body
-      const service = await useCase.executeCreate(newService)
+      const userId = req.user.id
+      const service = await useCase.executeCreate(newService, userId)
       res.send(service)
     } catch (error) {
       next(error)
@@ -51,7 +52,8 @@ class ServicesController {
       const useCase = makeServiceUseCaseFactory()
       const updatedService: Prisma.ServiceUpdateInput = req.body
       const serviceId = req.params.id
-      const service = await useCase.executeUpdate(serviceId, updatedService)
+      const userId = req.user.id
+      const service = await useCase.executeUpdate(serviceId, updatedService, userId)
       res.send(service)
     } catch (error) {
       next(error)

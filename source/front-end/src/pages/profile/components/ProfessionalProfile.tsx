@@ -10,10 +10,11 @@ import { Formatter } from '../../../utils/formatter/formatter.util'
 import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { ProfessionalUpdateProfileFormData } from '../types'
 import PaymentMethodsInput from '../../../components/inputs/payment-methods-input/PaymentMethodsContainerInput'
+import { useEffect } from 'react'
 
 interface ProfessionalProfileProps {
   userInfo: Professional
-  onProfileUpdate: () => void
+  onProfileUpdate: () => Promise<void> | void
 }
 
 // TODO: Separate Social Media to a Component
@@ -29,6 +30,7 @@ function ProfessionalProfile({
     handleSubmit,
     control,
     formState: { errors },
+    reset
   } = useForm<ProfessionalUpdateProfileFormData>({
     resolver: zodResolver(ProfessionalSchemas.professionalUpdateSchema),
     defaultValues: {
@@ -40,6 +42,18 @@ function ProfessionalProfile({
       paymentMethods: userInfo.paymentMethods || undefined,
     },
   })
+
+  useEffect(() => {
+    reset({
+      name: userInfo.name ?? undefined,
+      contact: userInfo.contact ?? undefined,
+      email: userInfo.email ?? undefined,
+      socialMedia: userInfo.socialMedia ?? undefined,
+      specialization: userInfo.specialization ?? undefined,
+      paymentMethods: userInfo.paymentMethods ?? undefined,
+    })
+  }, [userInfo, reset])
+
   const {
     fields: socialMediaFields,
     append: appendNewSocialMedia,
@@ -49,22 +63,16 @@ function ProfessionalProfile({
     name: 'socialMedia',
   })
 
-  const handleSubmitConcrete = async (
-    data: ProfessionalUpdateProfileFormData,
-  ) => {
-    await updateProfile({
-      userId: userInfo.id,
-      profileData: data,
-    })
-      .unwrap()
-      .then(() => {
-        toast.success('Perfil atualizado com sucesso!')
-        onProfileUpdate()
-      })
-      .catch((error: unknown) => {
-        console.error('Error trying to complete register', error)
-        toast.error('Ocorreu um erro ao atualizar o perfil')
-      })
+
+  const handleSubmitConcrete = async (data: ProfessionalUpdateProfileFormData) => {
+    try {
+      await updateProfile({ userId: userInfo.id, profileData: data }).unwrap()
+      toast.success('Perfil atualizado com sucesso!')
+      await onProfileUpdate?.()
+    } catch (error) {
+      console.error('Error trying to complete register', error)
+      toast.error('Ocorreu um erro ao atualizar o perfil')
+    }
   }
 
   return (

@@ -22,7 +22,7 @@ function CreateOfferForm({
   onClose,
 }: CreateOfferFormInputProps) {
   const [createOffer, { isLoading }] = offerAPI.useCreateOfferMutation()
-
+  console.log('service in CreateOfferForm', service)
   const handleSubmitCreateOffer: OnSubmitCreateOfferForm = async (
     offerData,
   ) => {
