@@ -30,7 +30,6 @@ function Appointments() {
 
   const { data, isLoading, isError, error } =
     appointmentAPI.useFindAppointmentsByCustomerOrProfessionalIdQuery()
-
   if (isError) {
     toast.error('Erro ao carregar os agendamentos')
     console.error(error)

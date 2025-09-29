@@ -24,6 +24,8 @@ import {
   XCircleIcon,
 } from '@heroicons/react/24/outline'
 import { customerAPI } from '../../../store/customer/customer-api'
+import { RatingUI } from './RatingUI'
+import { ratingAPI } from '../../../store/rating/rating-api'
 
 const actionToOperations = {
   edit: {
@@ -70,6 +72,15 @@ const actionToOperations = {
 function ProfessionalAppointmentDetails(
   props: AppointmentDetailsComponentProps,
 ) {
+  const ratingId = props.appointment.rating?.id
+
+  const { data: ratingData, isSuccess } = ratingAPI.useGetRatingByIdQuery(
+    ratingId!,
+    {
+      skip: !ratingId,
+    },
+  )
+
   const { data: customerData } = customerAPI.useGetCustomerByIdQuery(
     props.appointment.customerId,
   )
@@ -200,6 +211,15 @@ function ProfessionalAppointmentDetails(
           }
           disabled
         />
+        {ratingData?.score != null && isSuccess && (
+          <RatingUI
+            score={ratingData?.score}
+            hover={ratingData?.score}
+            isInteractive={false}
+            commentValue={ratingData.comment}
+            userType={'professional'}
+          />
+        )}
         <div className="gap-2 mb-4 grid-cols-2 grid">
           {operationInformations.operations.map((operation, index) => {
             return (

@@ -1,3 +1,4 @@
+import { PrismaRatingRepository } from '@/repository/prisma/prisma-rating.repository'
 import { PrismaAppointmentRepository } from '../repository/prisma/prisma-appointment.repository'
 import { PrismaCustomerRepository } from '../repository/prisma/prisma-customer.repository'
 import { PrismaProfessionalRepository } from '../repository/prisma/prisma-professional.repository'
@@ -7,7 +8,8 @@ function makeAppointmentsUseCaseFactory () {
   const appointmentRepository = new PrismaAppointmentRepository()
   const customerRepository = new PrismaCustomerRepository()
   const professionalRepository = new PrismaProfessionalRepository()
-  const useCase = new AppointmentsUseCase(appointmentRepository, customerRepository, professionalRepository)
+  const ratingRepository = new PrismaRatingRepository()
+  const useCase = new AppointmentsUseCase(appointmentRepository, customerRepository, professionalRepository, ratingRepository)
 
   return useCase
 }

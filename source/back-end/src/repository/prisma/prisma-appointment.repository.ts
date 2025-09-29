@@ -36,7 +36,8 @@ class PrismaAppointmentRepository implements AppointmentRepository {
             },
             professional: true
           }
-        }
+        },
+        rating: true
       }
     })
 
@@ -79,7 +80,8 @@ class PrismaAppointmentRepository implements AppointmentRepository {
             },
             professional: true
           }
-        }
+        },
+        rating: true  // TODO: select only used attributes
       }
     })
 
