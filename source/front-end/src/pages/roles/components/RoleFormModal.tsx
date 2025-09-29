@@ -65,7 +65,7 @@ export function RoleFormModal({
           <Textarea
             {...register('description')}
             id="description"
-            placeholder="Descreva as responsabilidades desta role..."
+            placeholder="Descreva as responsabilidades desta função..."
             rows={3}
             error={errors.description?.message}
           />
@@ -74,11 +74,9 @@ export function RoleFormModal({
         {/* Status Ativo */}
         <div className="pt-2">
           <Checkbox
-            registration={{
-              ...register('isActive'),
-            }}
+            registration={{ ...register('isActive') }}
             id="isActive"
-            label="Role ativa"
+            label="Função Ativa"
           />
         </div>
 

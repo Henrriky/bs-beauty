@@ -1,67 +1,97 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
+import {
+  CogIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline'
 import { Role } from '../types'
+import {
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+} from '@heroicons/react/16/solid'
 
 interface RoleCardProps {
   role: Role
   onEdit: (role: Role) => void
   onDelete: (role: Role) => void
+  onManagePermissions: (role: Role) => void
 }
 
-export function RoleCard({ role, onEdit, onDelete }: RoleCardProps) {
-  return (
-    <div className="bg-primary-800 rounded-2xl p-6 space-y-4 hover:bg-primary-700 transition-colors duration-200 w-full">
-      {/* Header */}
-      <div className="flex justify-between items-start gap-3">
-        <div className="flex-1 min-w-0">
-          <h3 className="text-primary-0 font-medium text-base mb-2 truncate">
-            {role.name}
-          </h3>
-          {role.description && (
-            <p className="text-primary-100 text-sm leading-relaxed line-clamp-3">
-              {role.description}
-            </p>
-          )}
-        </div>
+const getIsActiveBadge = (isActive: boolean) => {
+  switch (isActive) {
+    case true:
+      return (
+        <span
+          className="mt-4 inline-flex items-center gap-1 py-0.5 text-sm text-green-600 font-light
+        "
+        >
+          <CheckCircleIcon className="size-4 text-green-600" />
+          Ativo
+        </span>
+      )
+    case false:
+      return (
+        <span
+          className="mt-4 inline-flex items-center gap-1 py-0.5 text-sm text-red-500 font-light
+        "
+        >
+          <ExclamationCircleIcon className="size-4 text-red-500" />
+          Inativo
+        </span>
+      )
+  }
+}
 
-        {/* Status Badge */}
-        <div className="shrink-0">
-          <span
-            className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${
-              role.isActive
-                ? 'bg-green-900 text-green-300 border border-green-800'
-                : 'bg-red-900 text-red-300 border border-red-800'
-            }`}
-          >
-            {role.isActive ? 'Ativo' : 'Inativo'}
-          </span>
+function RoleCard({
+  role,
+  onEdit,
+  onDelete,
+  onManagePermissions,
+}: RoleCardProps) {
+  return (
+    <div className="flex items-start justify-between gap-3 bg-[#222222] w-full text-left px-6 py-6 rounded-2xl">
+      {/* Informations - Left Side */}
+      <div className="flex-1 min-w-0">
+        {/* Informations - Title */}
+        <h3 className="text-base font-medium text-white truncate group-hover:text-[#B19B86] transition-colors">
+          {role.name}
+        </h3>
+
+        {/* Informations - Description */}
+        <p className="mt-1 text-xs text-gray-400 line-clamp-2">
+          {role.description || 'Sem descrição'}
+        </p>
+
+        {/* Informations - Status Badge */}
+        <div className="flex items-center gap-2 mt-2">
+          {getIsActiveBadge(role.isActive)}
         </div>
       </div>
-
-      {/* Footer */}
-      <div className="flex justify-between items-center pt-4 border-t border-primary-600">
-        <div className="text-sm text-primary-200">
-          {/* TODO: Implementar contagem */}
-          Usuários: - | Permissões: -
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-2 shrink-0">
-          <button
-            onClick={() => onEdit(role)}
-            className="p-2.5 text-secondary-200 hover:text-secondary-100 hover:bg-primary-600 rounded-lg transition-colors duration-200"
-            title="Editar role"
-          >
-            <PencilIcon className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => onDelete(role)}
-            className="p-2.5 text-red-400 hover:text-red-300 hover:bg-red-900 hover:bg-opacity-20 rounded-lg transition-colors duration-200"
-            title="Excluir role"
-          >
-            <TrashIcon className="w-5 h-5" />
-          </button>
-        </div>
+      {/* Actions - Right Side */}
+      <div className="flex gap-2 shrink-0">
+        <button
+          onClick={() => onManagePermissions(role)}
+          className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-400/10 rounded transition-all"
+          title="Gerenciar permissões"
+        >
+          <CogIcon className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => onEdit(role)}
+          className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
+          title="Editar serviço"
+        >
+          <PencilSquareIcon className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => onDelete(role)}
+          className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
+          title="Excluir serviço"
+        >
+          <TrashIcon className="w-4 h-4" />
+        </button>
       </div>
     </div>
   )
 }
+
+export { RoleCard }

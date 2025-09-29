@@ -37,11 +37,11 @@ export default function Modal({
       />
 
       {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4">
+      <div className="flex items-center justify-center min-h-full p-4">
         <div
           onClick={(e) => e.stopPropagation()}
           className={clsx(
-            'bg-primary-900 rounded-2xl shadow-xl w-full relative',
+            'bg-primary-900 rounded-2xl shadow-xl w-full relative overflow-y-auto',
             sizeClasses[size],
             className,
           )}

@@ -4,6 +4,7 @@ import { useRolesLogic } from './hooks/useRolesLogic'
 import { RolesList } from './components/RolesList'
 import { RoleFormModal } from './components/RoleFormModal'
 import { DeleteRoleModal } from './components/DeleteRoleModal'
+import { RolePermissionsModal } from './components/RolePermissionsModal'
 import { Button } from '../../components/button/Button'
 import SearchInput from '../../components/inputs/SearchInput'
 import Title from '../../components/texts/Title'
@@ -20,12 +21,14 @@ export default function Roles() {
     filters,
     selectedRole,
     roleToDelete,
+    roleToManagePermissions,
     isLoadingRoles,
     isCreating,
     isUpdating,
     isDeleting,
     isFormModalOpen,
     isDeleteModalOpen,
+    isPermissionsModalOpen,
     handlePageChange,
     handleFiltersChange,
     clearFilters,
@@ -34,6 +37,8 @@ export default function Roles() {
     closeFormModal,
     openDeleteModal,
     closeDeleteModal,
+    openPermissionsModal,
+    closePermissionsModal,
     handleCreateRole,
     handleUpdateRole,
     handleDeleteRole,
@@ -142,6 +147,7 @@ export default function Roles() {
         isLoading={isLoadingRoles}
         onEdit={openEditModal}
         onDelete={openDeleteModal}
+        onManagePermissions={openPermissionsModal}
       />
       {/* Pagination */}
       {pagination && pagination.totalPages > 1 && (
@@ -193,12 +199,20 @@ export default function Roles() {
         onSubmit={selectedRole ? handleUpdateRole : handleCreateRole}
       />
 
+      {/* Delete Modal */}
       <DeleteRoleModal
         isOpen={isDeleteModalOpen}
         role={roleToDelete}
         isLoading={isDeleting}
         onClose={closeDeleteModal}
         onConfirm={handleDeleteRole}
+      />
+
+      {/* Permissions Modal */}
+      <RolePermissionsModal
+        isOpen={isPermissionsModalOpen}
+        role={roleToManagePermissions}
+        onClose={closePermissionsModal}
       />
     </div>
   )

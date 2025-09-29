@@ -106,3 +106,13 @@ export type RemovePermissionFromRoleRequest = {
   data: { permissionId: string }
 }
 export type RemovePermissionFromRoleResponse = { message: string }
+
+/* Get All Permissions */
+export type GetPermissionsRequestFilters = {
+  resource?: string
+  action?: string
+  search?: string
+}
+export type GetPermissionsRequest =
+  PaginatedRequest<GetPermissionsRequestFilters>
+export type GetPermissionsResponse = PaginatedResponse<Permission>

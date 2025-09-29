@@ -76,4 +76,7 @@ export const API_VARIABLES = {
     ADD_PERMISSION: (id: string) => `/roles/${id}/permissions`,
     REMOVE_PERMISSION: (id: string) => `/roles/${id}/permissions`,
   },
+  PERMISSIONS_ENDPOINTS: {
+    ENDPOINT: '/permissions',
+  },
 } as const

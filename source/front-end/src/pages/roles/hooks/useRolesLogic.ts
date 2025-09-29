@@ -24,7 +24,10 @@ export function useRolesLogic({
   const [selectedRole, setSelectedRole] = useState<Role | null>(null)
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isPermissionsModalOpen, setIsPermissionsModalOpen] = useState(false)
   const [roleToDelete, setRoleToDelete] = useState<Role | null>(null)
+  const [roleToManagePermissions, setRoleToManagePermissions] =
+    useState<Role | null>(null)
 
   // RTK Query hooks
   const {
@@ -93,12 +96,23 @@ export function useRolesLogic({
     setRoleToDelete(null)
   }, [])
 
+  // Handlers para modal de permissões
+  const openPermissionsModal = useCallback((role: Role) => {
+    setRoleToManagePermissions(role)
+    setIsPermissionsModalOpen(true)
+  }, [])
+
+  const closePermissionsModal = useCallback(() => {
+    setIsPermissionsModalOpen(false)
+    setRoleToManagePermissions(null)
+  }, [])
+
   // Handler para criar role
   const handleCreateRole = useCallback(
     async (data: CreateRoleFormData) => {
       try {
         await createRole(data).unwrap()
-        toast.success('Role criada com sucesso!')
+        toast.success('Função criada com sucesso!')
         closeFormModal()
         refetchRoles()
       } catch (error: unknown) {
@@ -139,7 +153,7 @@ export function useRolesLogic({
 
     try {
       await deleteRole(roleToDelete.id).unwrap()
-      toast.success('Role excluída com sucesso!')
+      toast.success('Função excluída com sucesso!')
       closeDeleteModal()
       refetchRoles()
     } catch (error: unknown) {
@@ -164,6 +178,7 @@ export function useRolesLogic({
     filters,
     selectedRole,
     roleToDelete,
+    roleToManagePermissions,
 
     // Estados de loading
     isLoadingRoles,
@@ -174,6 +189,7 @@ export function useRolesLogic({
     // Estados de modals
     isFormModalOpen,
     isDeleteModalOpen,
+    isPermissionsModalOpen,
 
     // Errors
     rolesError,
@@ -192,6 +208,8 @@ export function useRolesLogic({
     closeFormModal,
     openDeleteModal,
     closeDeleteModal,
+    openPermissionsModal,
+    closePermissionsModal,
 
     // Handlers de CRUD
     handleCreateRole,
