@@ -39,7 +39,6 @@ class AnalyticsController {
 
       if (appointmentsList !== undefined) {
         analytics.totalAppointments = appointmentsList.length
-
         let newAppointmentsCount = 0
         appointmentsList.forEach(appointment => {
           if (appointment.status === 'PENDING') {

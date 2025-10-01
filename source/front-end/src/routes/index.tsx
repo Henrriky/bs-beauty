@@ -20,13 +20,15 @@ import AppointmentDetails from '../pages/appointments/components/AppointmentsDet
 import UserRegistration from '../pages/user-registration'
 import PasswordReset from '../pages/password-reset'
 import PasswordResetCompleted from '../pages/password-reset/components/PasswordResetCompleted'
+import LandingPage from '../pages/landing-page'
+
 
 function BSBeautyRouter() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Login />} />
+          <Route index element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth/google/callback" element={<Callback />} />
           <Route path="/register" element={<UserRegistration />} />
