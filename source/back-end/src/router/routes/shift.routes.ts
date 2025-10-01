@@ -7,11 +7,11 @@ import { validateUpdateShift } from '../../middlewares/data-validation/shift/upd
 
 const shiftRoutes = Router()
 
-shiftRoutes.get('/', ShiftController.handleFindAllByEmployeeId)
-shiftRoutes.get('/employee/:id', ShiftController.handleFindByEmployeeId)
+shiftRoutes.get('/', ShiftController.handleFindAllByProfessionalId)
+shiftRoutes.get('/professional/:id', ShiftController.handleFindByProfessionalId)
 shiftRoutes.get('/:id', ShiftController.handleFindById)
-shiftRoutes.post('/', routeAuthMiddleware([UserType.EMPLOYEE, UserType.MANAGER]), validateCreateShift, ShiftController.handleCreate)
-shiftRoutes.put('/:id', routeAuthMiddleware([UserType.EMPLOYEE, UserType.MANAGER]), validateUpdateShift, ShiftController.handleUpdateByIdAndEmployeeId)
-shiftRoutes.delete('/:id', routeAuthMiddleware([UserType.EMPLOYEE, UserType.MANAGER]), ShiftController.handleDelete)
+shiftRoutes.post('/', routeAuthMiddleware([UserType.PROFESSIONAL, UserType.MANAGER]), validateCreateShift, ShiftController.handleCreate)
+shiftRoutes.put('/:id', routeAuthMiddleware([UserType.PROFESSIONAL, UserType.MANAGER]), validateUpdateShift, ShiftController.handleUpdateByIdAndProfessionalId)
+shiftRoutes.delete('/:id', routeAuthMiddleware([UserType.PROFESSIONAL, UserType.MANAGER]), ShiftController.handleDelete)
 
 export { shiftRoutes }

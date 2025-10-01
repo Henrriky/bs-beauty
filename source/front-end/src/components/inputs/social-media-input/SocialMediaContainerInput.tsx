@@ -7,21 +7,21 @@ import {
 } from 'react-hook-form'
 import SocialMediaInputs from './SocialMediaInputs'
 import SocialMediaHeader from './SocialMediaHeader'
-import { EmployeeUpdateProfileFormData } from '../../../pages/profile/types'
+import { ProfessionalUpdateProfileFormData } from '../../../pages/profile/types'
 
 interface SocialMediaContainerInputProps {
-  register: UseFormRegister<EmployeeUpdateProfileFormData>
+  register: UseFormRegister<ProfessionalUpdateProfileFormData>
   socialMediaFields: FieldArrayWithId<
-    EmployeeUpdateProfileFormData,
+    ProfessionalUpdateProfileFormData,
     'socialMedia',
     'id'
   >[]
   appendNewSocialMedia: UseFieldArrayAppend<
-    EmployeeUpdateProfileFormData,
+    ProfessionalUpdateProfileFormData,
     'socialMedia'
   >
   removeSocialMedia: UseFieldArrayRemove
-  errors: FieldErrors<EmployeeUpdateProfileFormData>
+  errors: FieldErrors<ProfessionalUpdateProfileFormData>
 }
 
 function SocialMediaContainerInput({

@@ -6,14 +6,25 @@ import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.
 import { Button } from '../../../components/button/Button'
 import {
   CustomerCompleteRegisterFormData,
-  OnSubmitEmployeeOrCustomerForm,
+  OnSubmitProfessionalOrCustomerForm,
 } from '../types'
 import { Formatter } from '../../../utils/formatter/formatter.util'
+import { Select } from '../../../components/inputs/Select'
 
 interface CustomerInputContainerProps {
   isLoading: boolean
-  handleSubmit: OnSubmitEmployeeOrCustomerForm
+  handleSubmit: OnSubmitProfessionalOrCustomerForm
 }
+
+const DISCOVERY_OPTIONS = [
+  { value: 'INSTAGRAM', label: 'Instagram' },
+  { value: 'FACEBOOK', label: 'Facebook' },
+  { value: 'TIKTOK', label: 'TikTok' },
+  { value: 'GOOGLE', label: 'Google' },
+  { value: 'WHATSAPP', label: 'WhatsApp' },
+  { value: 'WALK_IN', label: 'Passou na frente / balcão' },
+  { value: 'OTHER', label: 'Outro' },
+]
 
 // TODO: Separate Social Media to a Component
 
@@ -70,6 +81,15 @@ function CustomerInputContainer(props: CustomerInputContainerProps) {
         type="text"
         placeholder="Digite seu telefone"
         error={errors?.phone?.message?.toString()}
+      />
+      <Select
+        registration={{ ...register('discoverySource') }}
+        id="discoverySource"
+        label="Como você conheceu o salão?"
+        options={DISCOVERY_OPTIONS}
+        error={errors?.discoverySource?.message?.toString()}
+        variant="outline"
+        wrapperClassName="w-full"
       />
       <Input
         label="Email"

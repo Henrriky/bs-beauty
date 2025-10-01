@@ -34,7 +34,7 @@ class AppointmentSchemas {
       customerId: z.string().uuid(),
       appointmentDayPicked: z.string().optional(),
       serviceId: z.string().optional(),
-      employeeId: z.string().optional(),
+      professionalId: z.string().optional(),
     })
     .strict()
 
@@ -49,7 +49,7 @@ class AppointmentSchemas {
     })
     .strict()
 
-  public static employeeUpdateSchema = z.object({
+  public static professionalUpdateSchema = z.object({
     status: z.nativeEnum(Status).optional(),
   })
 }

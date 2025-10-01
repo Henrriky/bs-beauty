@@ -1,16 +1,38 @@
-import { type Service, type Prisma } from '@prisma/client'
+import { type Service, type Prisma, ServiceStatus, type UserType } from '@prisma/client'
 import { type ServiceRepository } from '../repository/protocols/service.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
-import { type EmployeesOfferingService } from '../repository/types/service-repository.types'
+import { type ProfessionalsOfferingService } from '../repository/types/service-repository.types'
 import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
-import { type ServiceFilters } from '../types/services/service-filters'
+import { type PartialServiceQuerySchema } from '@/utils/validation/zod-schemas/pagination/services/services-query.schema'
+import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
+import { CustomError } from '@/utils/errors/custom.error.util'
 
 interface ServicesOutput {
   services: Service[]
 }
 
+const PERMISSIONS = {
+  CREATE_SERVICE: ['MANAGER', 'PROFESSIONAL'] as UserType[],
+  UPDATE_SERVICE_STATUS: ['MANAGER'] as UserType[]
+} as const
+
+const STATUS_TRANSITIONS: Record<ServiceStatus, ServiceStatus[]> = {
+  PENDING: [ServiceStatus.APPROVED, ServiceStatus.REJECTED],
+  APPROVED: [],
+  REJECTED: []
+} as const
+
+const CREATE_SERVICE_DEFAULT_STATUS_BY_ROLE: Record<UserType, ServiceStatus> = {
+  MANAGER: ServiceStatus.APPROVED,
+  PROFESSIONAL: ServiceStatus.PENDING,
+  CUSTOMER: ServiceStatus.PENDING
+} as const
+
 class ServicesUseCase {
-  constructor (private readonly serviceRepository: ServiceRepository) { }
+  constructor (
+    private readonly serviceRepository: ServiceRepository,
+    private readonly professionalRepository: ProfessionalRepository
+  ) { }
 
   public async executeFindAll (): Promise<ServicesOutput> {
     const services = await this.serviceRepository.findAll()
@@ -19,32 +41,47 @@ class ServicesUseCase {
     return { services }
   }
 
-  public async executeFindById (serviceId: string): Promise<Service | null> {
+  public async executeFindById (serviceId: string): Promise<Service> {
     const service = await this.serviceRepository.findById(serviceId)
     RecordExistence.validateRecordExistence(service, 'Service')
 
-    return service
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return service!
   }
 
-  public async fetchEmployeesOfferingService (serviceId: string): Promise<{ employeesOfferingService: EmployeesOfferingService }> {
-    const { employeesOfferingService } = await this.serviceRepository.fetchEmployeesOfferingService(serviceId)
-    RecordExistence.validateRecordExistence(employeesOfferingService, 'Service')
+  public async fetchProfessionalsOfferingService (serviceId: string): Promise<{ professionalsOfferingService: ProfessionalsOfferingService }> {
+    const { professionalsOfferingService } = await this.serviceRepository.fetchProfessionalsOfferingService(serviceId)
+    RecordExistence.validateRecordExistence(professionalsOfferingService, 'Service')
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return { employeesOfferingService: employeesOfferingService! }
+    return { professionalsOfferingService: professionalsOfferingService! }
   }
 
-  public async executeCreate (newService: Prisma.ServiceCreateInput) {
+  public async executeCreate (newService: Prisma.ServiceCreateInput, professionalId: string) {
+    const professional = await this.validateAndGetProfessional(professionalId)
+
+    newService.status = this.getServiceStatusByRole(professional.userType)
+    newService.createdByProfessional = { connect: { id: professionalId } }
+
     const service = await this.serviceRepository.create(newService)
 
+    // TODO: Call notification use case to notify managers about new service creation and approval request
     return service
   }
 
-  public async executeUpdate (serviceId: string, updatedService: Prisma.ServiceUpdateInput) {
-    await this.executeFindById(serviceId)
-    const service = await this.serviceRepository.update(serviceId, updatedService)
+  public async executeUpdate (serviceId: string, updatedService: Prisma.ServiceUpdateInput, professionalId: string) {
+    const service = await this.executeFindById(serviceId)
 
-    return service
+    if (this.isStatusBeingUpdated(updatedService)) {
+      const professional = await this.validateAndGetProfessional(professionalId)
+      this.validatePermission(professional.userType, PERMISSIONS.UPDATE_SERVICE_STATUS)
+      this.validateStatusTransition(service.status, updatedService.status as ServiceStatus)
+    }
+
+    const updatedServiceResult = await this.serviceRepository.update(serviceId, updatedService)
+
+    // TODO: Call notification use case to notify professionals about service status change
+    return updatedServiceResult
   }
 
   public async executeDelete (serviceId: string) {
@@ -54,11 +91,47 @@ class ServicesUseCase {
   }
 
   public async executeFindAllPaginated (
-    params: PaginatedRequest<ServiceFilters>
+    params: PaginatedRequest<PartialServiceQuerySchema>
   ): Promise<PaginatedResult<Service>> {
     const result = await this.serviceRepository.findAllPaginated(params)
 
     return result
+  }
+
+  private getServiceStatusByRole (userType: UserType): ServiceStatus {
+    const status = CREATE_SERVICE_DEFAULT_STATUS_BY_ROLE[userType]
+    if (status === undefined) {
+      throw new CustomError('Bad Request', 400, 'Invalid user type for setting service status.')
+    }
+    return status
+  }
+
+  private isValidStatusTransition (oldStatus: ServiceStatus, newStatus: ServiceStatus): boolean {
+    const validTransitions = STATUS_TRANSITIONS[oldStatus]
+    return validTransitions.includes(newStatus)
+  }
+
+  private async validateAndGetProfessional (professionalId: string) {
+    const professional = await this.professionalRepository.findById(professionalId)
+    RecordExistence.validateRecordExistence(professional, 'Professional')
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return professional!
+  }
+
+  private validatePermission (userType: UserType, allowedRoles: UserType[]): void {
+    if (!allowedRoles.includes(userType)) {
+      throw new CustomError('Forbidden', 403, 'You do not have permission to perform this action.')
+    }
+  }
+
+  private validateStatusTransition (currentStatus: ServiceStatus, newStatus: ServiceStatus): void {
+    if (!this.isValidStatusTransition(currentStatus, newStatus)) {
+      throw new CustomError('Bad Request', 400, `Invalid status transition from ${currentStatus} to ${newStatus}.`)
+    }
+  }
+
+  private isStatusBeingUpdated (updatedService: Prisma.ServiceUpdateInput): boolean {
+    return updatedService.status != null && updatedService.status !== undefined
   }
 }
 
