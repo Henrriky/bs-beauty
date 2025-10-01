@@ -21,6 +21,10 @@ import {
   UserIcon,
   XCircleIcon,
 } from '@heroicons/react/24/outline'
+import RatingModal from './RatingModal'
+import { ratingAPI } from '../../../store/rating/rating-api'
+import { useEffect, useState } from 'react'
+import { RatingUI } from './RatingUI'
 
 const actionToOperations = {
   edit: {
@@ -40,6 +44,26 @@ const actionToOperations = {
 }
 
 function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
+
+  const ratingId = props.appointment.rating?.id
+
+  const { data: ratingData, isSuccess } = ratingAPI.useGetRatingByIdQuery(
+    ratingId!,
+    {
+      skip: !ratingId,
+    },
+  )
+
+  useEffect(() => {
+    if (isSuccess) {
+      const ratingScore = ratingData?.score
+
+      if (ratingScore === null || ratingScore === undefined)
+        setModalIsOpen(true)
+    }
+  }, [isSuccess, ratingData])
+
   const operationInformations = actionToOperations[props.action]
   const {
     register,
@@ -207,6 +231,15 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
             )
           })}
         </div>
+        {ratingData?.score && (
+          <RatingUI
+            score={ratingData?.score}
+            hover={ratingData?.score}
+            isInteractive={false}
+            commentValue={ratingData.comment}
+            userType={'customer'}
+          />
+        )}
         {props.action !== 'view' && (
           <Button
             type="submit"
@@ -224,6 +257,16 @@ function CustomerAppointmentDetails(props: AppointmentDetailsComponentProps) {
           />
         )}
       </form>
+      {ratingId && (
+        <RatingModal
+          isOpen={modalIsOpen}
+          onClose={() => {
+            setModalIsOpen(false)
+          }}
+          ratingId={ratingId}
+          appointmentId={props.appointment.id}
+        />
+      )}
     </>
   )
 }

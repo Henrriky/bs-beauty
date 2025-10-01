@@ -97,13 +97,11 @@ describe('ServicesController', () => {
   describe('handleFindById', () => {
     it('should return a service', async () => {
       // arrange
-      const service: Service = {
+      const service: Prisma.ServiceCreateInput = {
         id: 'random-uuid',
         name: 'Service 1',
         description: 'Description 1',
-        category: 'Category 1',
-        createdAt: new Date('2025-01-01T09:00:00'),
-        updatedAt: new Date('2025-01-01T09:00:00')
+        category: 'Category 1'
       }
       req.params.id = 'random-uuid'
       useCaseMock.executeFindById.mockResolvedValueOnce(service)
@@ -199,6 +197,7 @@ describe('ServicesController', () => {
         category: 'Category 1'
       }
       req.body = newService
+      req.user = { id: 'user-123' } as any
       useCaseMock.executeCreate.mockResolvedValueOnce(newService)
 
       // act
@@ -208,6 +207,7 @@ describe('ServicesController', () => {
       expect(req.body).toEqual(newService)
       expect(res.send).toHaveBeenCalledWith(newService)
       expect(useCaseMock.executeCreate).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeCreate).toHaveBeenCalledWith(newService, req.user.id)
       expect(next).not.toHaveBeenCalled()
     })
 
@@ -215,12 +215,14 @@ describe('ServicesController', () => {
       // arrange
       const error = new Error('Database connection failed')
       useCaseMock.executeCreate.mockRejectedValueOnce(error)
+      req.user = { id: 'user-123' } as any
 
       // act
       await ServicesController.handleCreate(req, res, next)
 
       // assert
       expect(useCaseMock.executeCreate).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeCreate).toHaveBeenCalledWith({}, req.user.id)
       expect(res.status).not.toHaveBeenCalled()
       expect(res.send).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalledTimes(1)
@@ -239,6 +241,7 @@ describe('ServicesController', () => {
       const serviceId = 'random-uuid'
       req.body = serviceToUpdate
       req.params.id = serviceId
+      req.user = { id: 'user-123' } as any
       useCaseMock.executeUpdate.mockResolvedValueOnce(serviceToUpdate)
 
       // act
@@ -249,6 +252,7 @@ describe('ServicesController', () => {
       expect(req.params.id).toBe(serviceId)
       expect(res.send).toHaveBeenCalledWith(serviceToUpdate)
       expect(useCaseMock.executeUpdate).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(serviceId, serviceToUpdate, req.user.id)
       expect(next).not.toHaveBeenCalled()
     })
 
@@ -262,6 +266,7 @@ describe('ServicesController', () => {
       const serviceId = 'random-uuid'
       req.body = serviceToUpdate
       req.params.id = serviceId
+      req.user = { id: 'user-123' } as any
 
       const error = new Error('Database connection failed')
       useCaseMock.executeUpdate.mockRejectedValueOnce(error)
@@ -271,7 +276,7 @@ describe('ServicesController', () => {
 
       // assert
       expect(useCaseMock.executeUpdate).toHaveBeenCalledTimes(1)
-      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(serviceId, serviceToUpdate)
+      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(serviceId, serviceToUpdate, req.user.id)
       expect(res.status).not.toHaveBeenCalled()
       expect(res.send).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalledTimes(1)

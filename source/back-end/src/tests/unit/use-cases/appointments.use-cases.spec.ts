@@ -1,5 +1,5 @@
 import { AppointmentsUseCase, MAXIMUM_APPOINTMENTS_PER_DAY, MINIMUM_SCHEDULLING_TIME_MINUTES } from '@/services/appointments.use-case'
-import { MockAppointmentRepository, MockCustomerRepository, MockProfessionalRepository } from '../utils/mocks/repository'
+import { MockAppointmentRepository, MockCustomerRepository, MockProfessionalRepository, MockRatingRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
 import { type Prisma, type Appointment } from '@prisma/client'
 
@@ -10,7 +10,8 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
     appointmentsUseCase = new AppointmentsUseCase(
       MockAppointmentRepository,
       MockCustomerRepository,
-      MockProfessionalRepository
+      MockProfessionalRepository,
+      MockRatingRepository
     )
   })
 

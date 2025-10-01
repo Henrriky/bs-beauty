@@ -131,6 +131,7 @@ function CustomerHomeReviewStep() {
         isOpen={modalIsOpen}
         onClose={() => {
           setModalIsOpen(false)
+          setValue('allowImageUse', false)
         }}
       >
         <img
