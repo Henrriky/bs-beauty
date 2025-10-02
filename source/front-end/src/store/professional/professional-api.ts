@@ -1,12 +1,16 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { API_VARIABLES } from '../../api/config'
-import { Professional } from '../auth/types'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import {
-  PaginatedProfessionalsResponse,
   ServicesOfferedByProfessionalParams,
   ServicesOfferedByProfessionalResponse,
 } from './types'
+import {
+  CreateProfessionalRequest,
+  CreateProfessionalResponse,
+  GetProfessionalsRequest,
+  GetProfessionalsResponse,
+} from '../../pages/professionals/types'
 
 export const professionalAPI = createApi({
   reducerPath: 'professional-api',
@@ -14,19 +18,22 @@ export const professionalAPI = createApi({
   tagTypes: ['Professionals'],
   endpoints: (builder) => ({
     fetchProfessionals: builder.query<
-      PaginatedProfessionalsResponse,
-      {
-        page?: number
-        limit?: number
-        name?: string
-        email?: string
-      }
+      GetProfessionalsResponse,
+      GetProfessionalsRequest
     >({
-      query: (params) => ({
-        url: API_VARIABLES.PROFESSIONALS_ENDPOINTS.FETCH_PROFESSIONALS,
-        method: 'GET',
-        params,
-      }),
+      query: ({ page, limit, filters = {} }) => {
+        const params = new URLSearchParams()
+        params.append('page', String(page))
+        params.append('limit', String(limit))
+
+        if (filters.email) params.append('email', filters.email)
+
+        return {
+          url: API_VARIABLES.PROFESSIONALS_ENDPOINTS.FETCH_PROFESSIONALS,
+          method: 'GET',
+          params,
+        }
+      },
       providesTags: (result) =>
         result
           ? [
@@ -38,7 +45,10 @@ export const professionalAPI = createApi({
             ]
           : [{ type: 'Professionals', id: 'LIST' }],
     }),
-    insertProfessional: builder.mutation<Professional, { email: string }>({
+    insertProfessional: builder.mutation<
+      CreateProfessionalResponse,
+      CreateProfessionalRequest
+    >({
       query: (data) => ({
         url: API_VARIABLES.PROFESSIONALS_ENDPOINTS.CREATE_PROFESSIONAL,
         method: 'POST',
@@ -70,3 +80,10 @@ export const professionalAPI = createApi({
     }),
   }),
 })
+
+export const {
+  useFetchProfessionalsQuery,
+  useInsertProfessionalMutation,
+  useDeleteProfessionalMutation,
+  useFetchServicesOfferedByProfessionalQuery,
+} = professionalAPI

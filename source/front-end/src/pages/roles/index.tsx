@@ -10,6 +10,7 @@ import SearchInput from '../../components/inputs/SearchInput'
 import Title from '../../components/texts/Title'
 import useAppSelector from '../../hooks/use-app-selector'
 import { UserType } from '../../store/auth/types'
+import { Pagination } from '../../components/select/Pagination'
 
 export default function Roles() {
   const { user } = useAppSelector((state) => state.auth)
@@ -55,7 +56,11 @@ export default function Roles() {
     setSearchTerm(value)
   }
 
-  // Verificar permissões
+  const handleClearSearch = () => {
+    setSearchTerm('')
+    clearFilters()
+  }
+
   const canManageRoles = user?.userType === UserType.MANAGER
 
   if (!canManageRoles) {
@@ -86,11 +91,6 @@ export default function Roles() {
         </div>
       </div>
     )
-  }
-
-  const handleClearSearch = () => {
-    setSearchTerm('')
-    clearFilters()
   }
 
   return (
@@ -149,34 +149,15 @@ export default function Roles() {
         onDelete={openDeleteModal}
         onManagePermissions={openPermissionsModal}
       />
+
       {/* Pagination */}
-      {pagination && pagination.totalPages > 1 && (
-        <div className="bg-primary-800 rounded-2xl p-4">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-primary-200">
-              Página {pagination.currentPage} de {pagination.totalPages} •{' '}
-              {pagination.totalItems}{' '}
-              {pagination.totalItems === 1 ? 'role' : 'roles'}
-            </div>
-            <div className="flex gap-2">
-              <Button
-                onClick={() => handlePageChange(pagination.currentPage - 1)}
-                disabled={pagination.currentPage <= 1}
-                variant="outline"
-                label="Anterior"
-                className="text-sm px-3 py-2"
-              />
-              <Button
-                onClick={() => handlePageChange(pagination.currentPage + 1)}
-                disabled={pagination.currentPage >= pagination.totalPages}
-                variant="outline"
-                label="Próxima"
-                className="text-sm px-3 py-2"
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <Pagination
+        totalItems={pagination.totalItems}
+        totalPages={pagination.totalPages}
+        currentPage={pagination.currentPage}
+        pageLimit={pagination.pageLimit}
+        onPageChange={handlePageChange}
+      />
 
       <Button
         onClick={openCreateModal}

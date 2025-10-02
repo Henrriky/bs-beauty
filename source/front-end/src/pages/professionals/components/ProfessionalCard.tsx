@@ -1,44 +1,60 @@
-import { Professional, UserType } from '../../../store/auth/types'
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { Professional } from '../../../store/auth/types'
+import { CogIcon, TrashIcon, UserGroupIcon } from '@heroicons/react/24/outline'
+import { firstLetterOfWordToUpperCase } from '../../../utils/formatter/first-letter-of-word-to-upper-case.util'
 
 interface ProfessionalCardProps {
   professional: Professional
   onDelete: (professional: Professional) => void
+  onManageProfessionalRoles: (professional: Professional) => void
 }
 
 export function ProfessionalCard({
   professional,
   onDelete,
+  onManageProfessionalRoles,
 }: ProfessionalCardProps) {
   return (
-    <div className="p-4 mb-4 bg-[#222222] text-primary-0 rounded-lg shadow-md relative">
-      <p className="text-sm font-bold ">Nome:</p>
-      <p className="text-xs">
-        {professional.name === 'Usuário'
-          ? 'Profissional com cadastro não finalizado'
-          : professional.name}
-      </p>
-      <p className="text-sm font-bold mt-2">E-mail:</p>
-      <p className="text-xs">{professional.email}</p>
-      <p className="text-sm font-bold mt-2">Cargo:</p>
-      <p className="text-xs">
-        {professional.userType === UserType.MANAGER
-          ? 'Gerente'
-          : 'Profissional'}
-      </p>
+    <div className="flex items-start justify-between gap-3 bg-[#222222] w-full text-left px-6 py-6 rounded-2xl">
+      {/* Informations - Left Side */}
+      <div className="flex-1 min-w-0">
+        {/* Informations - Title */}
+        <h3 className="text-base font-medium text-white truncate group-hover:text-[#B19B86] transition-colors">
+          {firstLetterOfWordToUpperCase(professional.name || 'Sem nome')}
+        </h3>
 
-      {professional.userType !== UserType.MANAGER && (
+        {/* Informations - Description */}
+        <p className="mt-1 text-xs text-gray-400 line-clamp-2">
+          {professional.email || 'Sem descrição'}
+        </p>
+
+        {/* Informations - Status Badge */}
+        <div className="flex items-center gap-2 mt-2">
+          <span
+            className="mt-4 inline-flex items-center gap-1 py-0.5 text-sm text-secondary-200 font-light
+        "
+          >
+            <UserGroupIcon className="size-4 " />
+            {professional.userType === 'MANAGER' ? 'Gerente' : 'Profissional'}
+          </span>
+        </div>
+      </div>
+      {/* Actions - Right Side */}
+      <div className="flex gap-2 shrink-0">
         <button
-          className="absolute top-2 right-2"
-          onClick={() => onDelete(professional)}
+          onClick={() => onManageProfessionalRoles(professional)}
+          className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-400/10 rounded transition-all"
+          title="Gerenciar permissões"
         >
-          <TrashIcon
-            className="size-5 transition-all"
-            onClick={() => onDelete(professional)}
-            title="Excluir"
-          />
+          <CogIcon className="w-4 h-4" />
         </button>
-      )}
+        <button
+          onClick={() => onDelete(professional)}
+          className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
+          title="Excluir serviço"
+        >
+          <TrashIcon className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   )
 }

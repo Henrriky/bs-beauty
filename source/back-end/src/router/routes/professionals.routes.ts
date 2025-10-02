@@ -8,7 +8,7 @@ import { professionalQuerySchema } from '../../utils/validation/zod-schemas/pagi
 
 const professionalRoutes = Router()
 
-professionalRoutes.get('/', routeAuthMiddleware(['MANAGER', 'CUSTOMER']), validateQuery(professionalQuerySchema), ProfessionalsController.handleFindAll)
+professionalRoutes.get('/', routeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateQuery(professionalQuerySchema), ProfessionalsController.handleFindAll)
 professionalRoutes.get('/:id', routeAuthMiddleware(['MANAGER']), ProfessionalsController.handleFindById)
 professionalRoutes.post('/', routeAuthMiddleware(['MANAGER']), validateCreateProfessional, ProfessionalsController.handleCreate)
 professionalRoutes.put('/:id', routeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateUpdateProfessional, ProfessionalsController.handleUpdate)
