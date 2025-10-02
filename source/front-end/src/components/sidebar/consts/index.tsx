@@ -1,5 +1,6 @@
 import {
   ArrowLeftStartOnRectangleIcon,
+  BanknotesIcon,
   BriefcaseIcon,
   CalendarDaysIcon,
   ClipboardDocumentCheckIcon,
@@ -54,6 +55,11 @@ const sideBarItems: SideBarOptions = {
     },
   ],
   [UserType.MANAGER]: [
+    {
+      name: 'Pagamentos',
+      icon: <BanknotesIcon className="size-6" />,
+      navigateTo: '/payments',
+    },
     {
       name: 'Clientes',
       icon: <UsersIcon className="size-6" />,
