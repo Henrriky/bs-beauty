@@ -1,12 +1,8 @@
 import { type CustomerRepository } from '@/repository/protocols/customer.repository'
-import { type PaymentRecordRepository } from '@/repository/protocols/payment-record.repository'
+import { type UpdatePaymentRecordInput, type CreatePaymentRecordInput, type PaymentRecordRepository } from '@/repository/protocols/payment-record.repository'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 import { RecordExistence } from '@/utils/validation/record-existence.validation.util'
-import { type Prisma, type PaymentRecord } from '@prisma/client'
-
-interface PaymentRecordOutput {
-  paymentRecords: PaymentRecord[]
-}
+import { type PaymentRecord } from '@prisma/client'
 
 class PaymentRecordsUseCase {
   constructor (
@@ -22,14 +18,14 @@ class PaymentRecordsUseCase {
     return paymentRecord
   }
 
-  public async executeFindByProfessionalId (id: string): Promise<PaymentRecordOutput> {
+  public async executeFindByProfessionalId (id: string): Promise<PaymentRecord[]> {
     const paymentRecords = await this.paymentRecordRepository.findByProfessionalId(id)
     RecordExistence.validateManyRecordsExistence(paymentRecords, 'payment records')
 
-    return { paymentRecords }
+    return paymentRecords
   }
 
-  public async executeCreate (data: Prisma.PaymentRecordCreateInput) {
+  public async executeCreate (data: CreatePaymentRecordInput) {
     const paymentRecord = data as unknown as PaymentRecord
 
     const professionalId = paymentRecord.professionalId
@@ -45,11 +41,18 @@ class PaymentRecordsUseCase {
     return newPaymentRecord
   }
 
-  public async executeUpdate (id: string, data: Prisma.PaymentRecordUpdateInput) {
+  public async executeUpdate (id: string, data: UpdatePaymentRecordInput) {
     await this.executeFindById(id)
 
     const updatedPaymentRecord = await this.paymentRecordRepository.update(id, data)
     return updatedPaymentRecord
+  }
+
+  public async executeDelete (id: string) {
+    await this.executeFindById(id)
+
+    const deletedPaymentRecord = await this.paymentRecordRepository.delete(id)
+    return deletedPaymentRecord
   }
 }
 

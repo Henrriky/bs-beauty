@@ -1,5 +1,5 @@
 import { makePaymentRecordUseCaseFactory } from '@/factory/make-payment-record-use-case.factory'
-import { type Prisma } from '@prisma/client'
+import { type CreatePaymentRecordInput, type UpdatePaymentRecordInput } from '@/repository/protocols/payment-record.repository'
 import { type NextFunction, type Request, type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -22,7 +22,7 @@ class PaymentRecordsController {
       const professionalId = req.params.professionalId
       const paymentRecords = await useCase.executeFindByProfessionalId(professionalId)
 
-      res.status(StatusCodes.OK).send({ paymentRecords })
+      res.status(StatusCodes.OK).send(paymentRecords)
     } catch (error) {
       next(error)
     }
@@ -31,7 +31,7 @@ class PaymentRecordsController {
   public static async handleCreate (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makePaymentRecordUseCaseFactory()
-      const data: Prisma.PaymentRecordCreateInput = req.body
+      const data: CreatePaymentRecordInput = req.body
       const newPaymentRecord = await useCase.executeCreate(data)
 
       res.status(StatusCodes.CREATED).send(newPaymentRecord)
@@ -44,10 +44,22 @@ class PaymentRecordsController {
     try {
       const useCase = makePaymentRecordUseCaseFactory()
       const paymentRecordId = req.params.id
-      const data: Prisma.PaymentRecordUpdateInput = req.body
+      const data: UpdatePaymentRecordInput = req.body
       const updatedPaymentRecord = await useCase.executeUpdate(paymentRecordId, data)
 
       res.status(StatusCodes.OK).send(updatedPaymentRecord)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleDelete (req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makePaymentRecordUseCaseFactory()
+      const paymentRecordId = req.params.id
+      const deletedPaymentRecord = await useCase.executeDelete(paymentRecordId)
+
+      res.status(StatusCodes.OK).send(deletedPaymentRecord)
     } catch (error) {
       next(error)
     }

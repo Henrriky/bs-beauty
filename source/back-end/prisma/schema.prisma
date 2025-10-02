@@ -218,12 +218,14 @@ model PaymentRecord {
 }
 
 model PaymentItem {
-  id              String  @id @default(uuid())
-  quantity        Int     @default(1)
-  discount        Decimal @db.Decimal(4, 3)
-  price           Decimal @db.Decimal(10, 2)
-  paymentRecordId String  @map("payment_record_id")
-  offerId         String  @map("offer_id")
+  id              String   @id @default(uuid())
+  quantity        Int      @default(1)
+  discount        Decimal  @db.Decimal(4, 3)
+  price           Decimal  @db.Decimal(10, 2)
+  paymentRecordId String   @map("payment_record_id")
+  offerId         String   @map("offer_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
   paymentRecord PaymentRecord @relation(fields: [paymentRecordId], references: [id])
   offer         Offer         @relation(fields: [offerId], references: [id])
