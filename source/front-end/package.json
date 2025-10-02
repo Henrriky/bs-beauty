@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^3.9.1",
     "@reduxjs/toolkit": "^2.3.0",
@@ -31,9 +32,9 @@
     "react-router-dom": "^6.28.0",
     "react-toastify": "^10.0.6",
     "redux": "^5.0.1",
-    "zod": "^3.23.8",
     "typescript": "^5.5.3",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
