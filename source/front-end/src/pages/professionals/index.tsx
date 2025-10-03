@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify'
 import { Button } from '../../components/button/Button'
 import { ProfessionalList } from './components/ProfessionalList'
 import { PlusIcon } from '@heroicons/react/24/outline'
@@ -9,6 +8,7 @@ import { Pagination } from '../../components/select/Pagination'
 import { useState } from 'react'
 import { DeleteProfessionalModal } from './components/DeleteProfessionalModal'
 import { ProfessionalFormModal } from './components/ProfessionalFormModal'
+import { ProfessionalRolesModal } from './components/ProfessionalRolesModal'
 import SearchInput from '../../components/inputs/SearchInput'
 import Title from '../../components/texts/Title'
 
@@ -24,11 +24,13 @@ function Professionals() {
     filters,
     selectedProfessional,
     professionalToDelete,
+    professionalToManageRoles,
     isLoadingProfessionals,
     isCreating,
     isDeleting,
     isFormModalOpen,
     isDeleteModalOpen,
+    isRolesModalOpen,
     handlePageChange,
     handleFiltersChange,
     clearFilters,
@@ -36,6 +38,8 @@ function Professionals() {
     closeFormModal,
     openDeleteModal,
     closeDeleteModal,
+    openRolesModal,
+    closeRolesModal,
     handleCreateProfessional,
     handleDeleteProfessional,
   } = useProfessionalsLogic()
@@ -123,9 +127,7 @@ function Professionals() {
         professionals={professionals}
         isLoading={isLoadingProfessionals}
         onDelete={openDeleteModal}
-        onManageProfessionalRoles={() => {
-          toast.info('Em desenvolvimento')
-        }}
+        onManageProfessionalRoles={openRolesModal}
       />
 
       {/* Pagination */}
@@ -166,6 +168,13 @@ function Professionals() {
         isLoading={isDeleting}
         onClose={closeDeleteModal}
         onConfirm={handleDeleteProfessional}
+      />
+
+      {/* User Roles Modal */}
+      <ProfessionalRolesModal
+        isOpen={isRolesModalOpen}
+        professional={professionalToManageRoles}
+        onClose={closeRolesModal}
       />
     </div>
   )
