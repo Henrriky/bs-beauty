@@ -10,6 +10,12 @@ import {
   CreateProfessionalResponse,
   GetProfessionalsRequest,
   GetProfessionalsResponse,
+  GetProfessionalRolesRequest,
+  GetProfessionalRolesResponse,
+  AddRoleToProfessionalRequest,
+  AddRoleToProfessionalResponse,
+  RemoveRoleFromProfessionalRequest,
+  RemoveRoleFromProfessionalResponse,
 } from '../../pages/professionals/types'
 
 export const professionalAPI = createApi({
@@ -78,6 +84,56 @@ export const professionalAPI = createApi({
         },
       }),
     }),
+
+    // Professional Roles Management
+    fetchProfessionalRoles: builder.query<
+      GetProfessionalRolesResponse,
+      GetProfessionalRolesRequest
+    >({
+      query: ({ professionalId }) => ({
+        url: API_VARIABLES.PROFESSIONALS_ENDPOINTS.FETCH_PROFESSIONAL_ROLES(
+          professionalId,
+        ),
+        method: 'GET',
+      }),
+      providesTags: (_result, _error, { professionalId }) => [
+        { type: 'Professionals', id: professionalId },
+      ],
+    }),
+
+    addRoleToProfessional: builder.mutation<
+      AddRoleToProfessionalResponse,
+      AddRoleToProfessionalRequest
+    >({
+      query: ({ professionalId, data }) => ({
+        url: API_VARIABLES.PROFESSIONALS_ENDPOINTS.ADD_ROLE_TO_PROFESSIONAL(
+          professionalId,
+        ),
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { professionalId }) => [
+        { type: 'Professionals', id: professionalId },
+        { type: 'Professionals', id: 'LIST' },
+      ],
+    }),
+
+    removeRoleFromProfessional: builder.mutation<
+      RemoveRoleFromProfessionalResponse,
+      RemoveRoleFromProfessionalRequest
+    >({
+      query: ({ professionalId, data }) => ({
+        url: API_VARIABLES.PROFESSIONALS_ENDPOINTS.REMOVE_ROLE_FROM_PROFESSIONAL(
+          professionalId,
+        ),
+        body: data,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, { professionalId }) => [
+        { type: 'Professionals', id: professionalId },
+        { type: 'Professionals', id: 'LIST' },
+      ],
+    }),
   }),
 })
 
@@ -86,4 +142,7 @@ export const {
   useInsertProfessionalMutation,
   useDeleteProfessionalMutation,
   useFetchServicesOfferedByProfessionalQuery,
+  useFetchProfessionalRolesQuery,
+  useAddRoleToProfessionalMutation,
+  useRemoveRoleFromProfessionalMutation,
 } = professionalAPI
