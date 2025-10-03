@@ -199,6 +199,21 @@ model RolePermission {
   @@map("role_permission")
 }
 
+model NotificationTemplate {
+  id        String   @id @default(uuid())
+  key       String   @unique @map("key")
+  title     String   @map("title")
+  body      String   @db.Text @map("body")
+  isActive  Boolean  @map("is_active") @default(true)
+  variables Json?    @map("variables")
+
+  createdAt DateTime @default(now())  @map("created_at")
+  updatedAt DateTime @updatedAt       @map("updated_at")
+
+  @@map("notification_template")
+}
+
+
 enum WeekDays {
   SUNDAY
   MONDAY
