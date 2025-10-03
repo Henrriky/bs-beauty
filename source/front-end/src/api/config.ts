@@ -50,6 +50,12 @@ export const API_VARIABLES = {
       `/professionals/${professionalId}`,
     FETCH_SERVICES_OFFERED_BY_PROFESSIONAL: (professionalId: string) =>
       `/professionals/${professionalId}/offers/service`,
+    FETCH_PROFESSIONAL_ROLES: (professionalId: string) =>
+      `/professionals/${professionalId}/roles`,
+    ADD_ROLE_TO_PROFESSIONAL: (professionalId: string) =>
+      `/professionals/${professionalId}/roles`,
+    REMOVE_ROLE_FROM_PROFESSIONAL: (professionalId: string) =>
+      `/professionals/${professionalId}/roles`,
   },
   APPOINTMENTS_ENDPOINTS: {
     CREATE_APPOINTMENT: '/appointments',
