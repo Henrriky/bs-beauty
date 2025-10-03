@@ -43,6 +43,7 @@ const MockProfessionalRepository: Mocked<ProfessionalRepository> = {
   addRoleToProfessional: vi.fn(),
   removeRoleFromProfessional: vi.fn(),
   findProfessionalRoleAssociation: vi.fn(),
+  findRolesByProfessionalId: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   updateByEmailAndGoogleId: vi.fn(),

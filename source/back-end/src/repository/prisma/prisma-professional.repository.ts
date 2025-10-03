@@ -66,6 +66,18 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return association !== null
   }
 
+  public async findRolesByProfessionalId (professionalId: string) {
+    const professionalRoles = await prismaClient.professionalRole.findMany({
+      where: { professionalId },
+      select: {
+        id: true,
+        role: true
+      }
+    })
+
+    return professionalRoles
+  }
+
   public async create (newProfessional: Prisma.ProfessionalCreateInput) {
     const professional = await prismaClient.professional.create({
       data: { ...newProfessional }

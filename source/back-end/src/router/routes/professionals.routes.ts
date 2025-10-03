@@ -14,6 +14,7 @@ professionalRoutes.post('/', routeAuthMiddleware(['MANAGER']), validateCreatePro
 professionalRoutes.put('/:id', routeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateUpdateProfessional, ProfessionalsController.handleUpdate)
 professionalRoutes.delete('/:id', routeAuthMiddleware(['MANAGER']), ProfessionalsController.handleDelete)
 professionalRoutes.get('/:id/offers/service', ProfessionalsController.handleFetchServicesOfferedByProfessional)
+professionalRoutes.get('/:id/roles', routeAuthMiddleware(['MANAGER']), ProfessionalsController.handleGetRoles)
 professionalRoutes.post('/:id/roles', routeAuthMiddleware(['MANAGER']), ProfessionalsController.handleAddRole)
 professionalRoutes.delete('/:id/roles', routeAuthMiddleware(['MANAGER']), ProfessionalsController.handleRemoveRole)
 

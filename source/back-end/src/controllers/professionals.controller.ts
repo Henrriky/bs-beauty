@@ -116,6 +116,18 @@ class ProfessionalsController {
       next(error)
     }
   }
+
+  public static async handleGetRoles (req: Request, res: Response, next: NextFunction) {
+    try {
+      const professionalId = req.params.id
+      const useCase = makeProfessionalsUseCaseFactory()
+      const roles = await useCase.executeFindRolesByProfessionalId(professionalId)
+
+      res.status(StatusCodes.OK).send({ roles })
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { ProfessionalsController }

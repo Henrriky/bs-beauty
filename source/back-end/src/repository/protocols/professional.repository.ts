@@ -4,6 +4,10 @@ import { type ServicesOfferedByProfessional } from '../types/professional-reposi
 import { type PartialHandleFetchServicesOfferedByProfessionalQuerySchema } from '@/utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
 import { type ProfessionalsFilters } from '@/types/professionals/professionals-filters'
 
+export type FindRolesByProfessionalId = Prisma.ProfessionalRoleGetPayload<{
+  select: { id: true, role: true }
+}>
+
 interface ProfessionalRepository {
   findAll: () => Promise<Professional[]>
   findById: (customerId: string) => Promise<Professional | null>
@@ -12,6 +16,7 @@ interface ProfessionalRepository {
   addRoleToProfessional: (professionalId: string, roleId: string) => Promise<void>
   removeRoleFromProfessional: (professionalId: string, roleId: string) => Promise<void>
   findProfessionalRoleAssociation: (professionalId: string, roleId: string) => Promise<boolean>
+  findRolesByProfessionalId: (professionalId: string) => Promise<FindRolesByProfessionalId[]>
   create: (newCustomer: Prisma.ProfessionalCreateInput) => Promise<Professional>
   update: (id: string, customerUpdated: Prisma.ProfessionalUpdateInput) => Promise<Professional>
   updateByEmailAndGoogleId: (googleId: string, email: string, customerUpdated: Prisma.ProfessionalUpdateInput) => Promise<Professional>

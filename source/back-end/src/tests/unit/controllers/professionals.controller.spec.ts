@@ -29,7 +29,8 @@ describe('ProfessionalsController', () => {
       executeDelete: vi.fn(),
       fetchServicesOfferedByProfessional: vi.fn(),
       executeAddRole: vi.fn(),
-      executeRemoveRole: vi.fn()
+      executeRemoveRole: vi.fn(),
+      executeFindRolesByProfessionalId: vi.fn()
     }
 
     vi.mocked(makeProfessionalsUseCaseFactory).mockReturnValue(useCaseMock)
@@ -351,6 +352,54 @@ describe('ProfessionalsController', () => {
       // assert
       expect(useCaseMock.executeRemoveRole).toHaveBeenCalledTimes(1)
       expect(useCaseMock.executeRemoveRole).toHaveBeenCalledWith(professionalId, roleId)
+      expect(res.status).not.toHaveBeenCalled()
+      expect(res.send).not.toHaveBeenCalled()
+      expect(next).toHaveBeenCalledTimes(1)
+      expect(next).toHaveBeenCalledWith(error)
+    })
+  })
+
+  describe('handleGetRoles', () => {
+    it('should return roles for a professional successfully', async () => {
+      // arrange
+      const professionalId = 'professional-123'
+      const mockProfessionalRoles = [
+        {
+          id: 'prof-role-1',
+          role: { id: 'role-1', name: 'MANAGER', description: 'Manager role' }
+        },
+        {
+          id: 'prof-role-2',
+          role: { id: 'role-2', name: 'PROFESSIONAL', description: 'Professional role' }
+        }
+      ]
+      req.params.id = professionalId
+      useCaseMock.executeFindRolesByProfessionalId.mockResolvedValueOnce(mockProfessionalRoles)
+
+      // act
+      await ProfessionalsController.handleGetRoles(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeFindRolesByProfessionalId).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeFindRolesByProfessionalId).toHaveBeenCalledWith(professionalId)
+      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK)
+      expect(res.send).toHaveBeenCalledWith({ roles: mockProfessionalRoles })
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should call next with an error if executeFindRolesByProfessionalId fails', async () => {
+      // arrange
+      const error = new Error('Failed to get roles')
+      const professionalId = 'professional-123'
+      req.params.id = professionalId
+      useCaseMock.executeFindRolesByProfessionalId.mockRejectedValueOnce(error)
+
+      // act
+      await ProfessionalsController.handleGetRoles(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeFindRolesByProfessionalId).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeFindRolesByProfessionalId).toHaveBeenCalledWith(professionalId)
       expect(res.status).not.toHaveBeenCalled()
       expect(res.send).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalledTimes(1)

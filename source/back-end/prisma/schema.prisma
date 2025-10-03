@@ -161,8 +161,8 @@ model ProfessionalRole {
   roleId         String   @map("role_id")
   createdAt      DateTime @default(now()) @map("created_at")
 
-  professional Professional @relation(fields: [professionalId], references: [id])
-  role         Role         @relation(fields: [roleId], references: [id])
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  role         Role         @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
   @@map("professional_role")
 }

@@ -20,21 +20,21 @@ class ProfessionalsUseCase {
     private readonly roleRepository: RoleRepository
   ) { }
 
-  public async executeFindAll(): Promise<ProfessionalsOutput> {
+  public async executeFindAll (): Promise<ProfessionalsOutput> {
     const professionals = await this.professionalRepository.findAll()
     RecordExistence.validateManyRecordsExistence(professionals, 'professionals')
 
     return { professionals }
   }
 
-  public async executeFindById(professionalId: string): Promise<Professional | null> {
+  public async executeFindById (professionalId: string): Promise<Professional | null> {
     const professional = await this.professionalRepository.findById(professionalId)
     RecordExistence.validateRecordExistence(professional, this.entityName)
 
     return professional
   }
 
-  public async executeCreate(professionalToCreate: Prisma.ProfessionalCreateInput) {
+  public async executeCreate (professionalToCreate: Prisma.ProfessionalCreateInput) {
     const professional = await this.professionalRepository.findByEmail(professionalToCreate.email)
     RecordExistence.validateRecordNonExistence(professional, this.entityName)
     const newProfessional = await this.professionalRepository.create(professionalToCreate)
@@ -42,21 +42,21 @@ class ProfessionalsUseCase {
     return newProfessional
   }
 
-  public async executeUpdate(professionalId: string, professionalToUpdate: Prisma.ProfessionalUpdateInput) {
+  public async executeUpdate (professionalId: string, professionalToUpdate: Prisma.ProfessionalUpdateInput) {
     await this.executeFindById(professionalId)
     const updatedProfessional = await this.professionalRepository.update(professionalId, professionalToUpdate)
 
     return updatedProfessional
   }
 
-  public async executeDelete(professionalId: string) {
+  public async executeDelete (professionalId: string) {
     await this.executeFindById(professionalId)
     const deletedProfessional = await this.professionalRepository.delete(professionalId)
 
     return deletedProfessional
   }
 
-  public async fetchServicesOfferedByProfessional(
+  public async fetchServicesOfferedByProfessional (
     professionalId: string,
     params: PaginatedRequest<PartialHandleFetchServicesOfferedByProfessionalQuerySchema>
   ): Promise<{ professional: ServicesOfferedByProfessional }> {
@@ -66,7 +66,7 @@ class ProfessionalsUseCase {
     return { professional }
   }
 
-  public async executeFindAllPaginated(
+  public async executeFindAllPaginated (
     params: PaginatedRequest<ProfessionalsFilters>
   ): Promise<PaginatedResult<Professional>> {
     const result = await this.professionalRepository.findAllPaginated(params)
@@ -104,6 +104,13 @@ class ProfessionalsUseCase {
     }
 
     await this.professionalRepository.removeRoleFromProfessional(professionalId, roleId)
+  }
+
+  public async executeFindRolesByProfessionalId (professionalId: string) {
+    await this.executeFindById(professionalId)
+    const roles = await this.professionalRepository.findRolesByProfessionalId(professionalId)
+
+    return roles
   }
 }
 
