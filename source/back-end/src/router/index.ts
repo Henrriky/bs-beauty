@@ -10,6 +10,7 @@ import { errorHandlerMiddleware } from '../middlewares/error-handler.middleware'
 import { authRoutes } from './routes/auth.routes'
 import { verifyJwtTokenMiddleware } from '../middlewares/auth/verify-jwt-token.middleware'
 import { analyticsServiceRoutes } from './routes/analytics.routes'
+import { notificationTemplatesRoutes } from './routes/notification-templates.routes'
 
 const appRoutes = Router()
 
@@ -18,6 +19,7 @@ appRoutes.use('/professionals', verifyJwtTokenMiddleware, professionalRoutes)
 appRoutes.use('/services', verifyJwtTokenMiddleware, serviceRoutes)
 appRoutes.use('/customers', verifyJwtTokenMiddleware, customerRoutes)
 appRoutes.use('/notifications', verifyJwtTokenMiddleware, notificationRoutes)
+appRoutes.use('/notification-templates', verifyJwtTokenMiddleware, notificationTemplatesRoutes)
 appRoutes.use('/appointments', verifyJwtTokenMiddleware, appointmentRoutes)
 appRoutes.use('/shifts', verifyJwtTokenMiddleware, shiftRoutes)
 appRoutes.use('/offers', verifyJwtTokenMiddleware, offerRoutes)

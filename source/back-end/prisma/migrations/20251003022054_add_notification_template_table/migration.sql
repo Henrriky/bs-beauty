@@ -30,7 +30,7 @@ VALUES
         'nome',
         'idade',
         'empresa',
-        'data_aniversario'
+        'data_aniversário'
     ),
     NOW(3),
     NOW(3)
