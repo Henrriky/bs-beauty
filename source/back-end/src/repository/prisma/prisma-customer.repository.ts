@@ -1,10 +1,12 @@
-import { type Customer, type Prisma } from '@prisma/client'
+import { Prisma, type Customer } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type UpdateOrCreateParams, type CustomerRepository } from '../protocols/customer.repository'
 import { type CustomersFilters } from '../../types/customers/customers-filters'
 import { type PaginatedRequest } from '../../types/pagination'
+import { DateTime } from 'luxon'
 
 class PrismaCustomerRepository implements CustomerRepository {
+
   public async findAll () {
     const customers = await prismaClient.customer.findMany()
 
@@ -115,6 +117,35 @@ class PrismaCustomerRepository implements CustomerRepository {
       totalPages: Math.ceil(total / limit),
       limit
     }
+  }
+
+  public async findBirthdayCustomersOn(date: Date, timezone: string): Promise<Customer[]> {
+    const dt = DateTime.fromJSDate(date).setZone(timezone)
+    const mm = dt.toFormat('MM')
+    const dd = dt.toFormat('dd')
+    const isLeapYear = dt.isInLeapYear
+
+    const mmdd = `${mm}-${dd}`
+    const mmddList = (!isLeapYear && mm === '02' && dd === '28')
+      ? ['02-28', '02-29']
+      : [mmdd]
+
+    const rows = await prismaClient.$queryRaw<{ id: string }[]>`
+    SELECT id
+    FROM customer
+    WHERE birthdate IS NOT NULL
+      AND DATE_FORMAT(birthdate, '%m-%d') IN (${Prisma.join(mmddList)})
+  `
+
+    const ids = rows.map(r => r.id)
+    if (ids.length === 0) return []
+
+    const customers = await prismaClient.customer.findMany({
+      where: { id: { in: ids } },
+      orderBy: { name: 'asc' }
+    })
+
+    return customers
   }
 }
 

@@ -8,7 +8,7 @@ class PrismaNotificationTemplateRepository implements NotificationTemplateReposi
 
   public async findAll(params: PaginatedRequest<NotificationTemplateFilters>): Promise<PaginatedResult<NotificationTemplate>> {
     const { page, limit, filters } = params
-    console.log(filters)
+
     const skip = (page - 1) * limit
 
     const where = {

@@ -18,6 +18,7 @@ interface CustomerRepository {
   updateOrCreate: (identifiers: UpdateOrCreateParams, data: Prisma.CustomerCreateInput) => Promise<Customer>
   delete: (id: string) => Promise<Customer>
   findAllPaginated: (params: PaginatedRequest<CustomersFilters>) => Promise<PaginatedResult<Customer>>
+  findBirthdayCustomersOn(date: Date, timezone: string): Promise<Customer[]>
 }
 
 export type { CustomerRepository, UpdateOrCreateParams }
