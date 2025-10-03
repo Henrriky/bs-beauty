@@ -1,6 +1,7 @@
 import { ENV } from '@/config/env'
 import { notificationBus } from '@/events/notification-bus'
 import { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { RatingRepository } from '@/repository/protocols/rating.repository'
 import { type Appointment, type Prisma, Status } from '@prisma/client'
 import { type AppointmentRepository, type FindByIdAppointments } from '../repository/protocols/appointment.repository'
 import { type CustomerRepository } from '../repository/protocols/customer.repository'
@@ -20,26 +21,27 @@ interface AppointmentOutput {
 class AppointmentsUseCase {
   private readonly entityName = 'Appointment'
 
-  constructor (
+  constructor(
     private readonly appointmentRepository: AppointmentRepository,
     private readonly customerServiceRepository: CustomerRepository,
     private readonly professionalServiceRepository: ProfessionalRepository,
+    private readonly ratingRepository: RatingRepository
   ) { }
 
-  public async executeFindAll (): Promise<AppointmentOutput> {
+  public async executeFindAll(): Promise<AppointmentOutput> {
     const appointments = await this.appointmentRepository.findAll()
 
     return { appointments }
   }
 
-  public async executeFindById (appointmentId: string): Promise<FindByIdAppointments | null> {
+  public async executeFindById(appointmentId: string): Promise<FindByIdAppointments | null> {
     const appointment = await this.appointmentRepository.findById(appointmentId)
     RecordExistence.validateRecordExistence(appointment, this.entityName)
 
     return appointment
   }
 
-  public async executeFindByCustomerOrProfessionalId (customerOrProfessionalId: string): Promise<AppointmentOutput> {
+  public async executeFindByCustomerOrProfessionalId(customerOrProfessionalId: string): Promise<AppointmentOutput> {
     const customer = await this.customerServiceRepository.findById(customerOrProfessionalId)
     const professional = await this.professionalServiceRepository.findById(customerOrProfessionalId)
     if (customer === null && professional === null) {
@@ -51,7 +53,7 @@ class AppointmentsUseCase {
     return { appointments }
   }
 
-  public async executeFindByServiceOfferedId (appointmentId: string): Promise<AppointmentOutput> {
+  public async executeFindByServiceOfferedId(appointmentId: string): Promise<AppointmentOutput> {
     const appointments = await this.appointmentRepository.findByServiceOfferedId(appointmentId)
 
     return { appointments }
@@ -132,11 +134,25 @@ class AppointmentsUseCase {
       }
     }
 
+    return updatedAppointment
+  }
+
+  // TODO: make a transaction to guarantee both requests are made
+  public async executeFinishAppointment(userDetails: TokenPayload, appointmentId: string) {
+    const updatedAppointment = await this.executeUpdate(appointmentId, { status: 'FINISHED' }, userDetails)
+
+    const newRating: Prisma.RatingCreateInput = {
+      appointment: {
+        connect: { id: appointmentId }
+      }
+    }
+
+    await this.ratingRepository.create(newRating)
 
     return updatedAppointment
   }
 
-  public async executeDelete (userId: string, appointmentId: string) {
+  public async executeDelete(userId: string, appointmentId: string) {
     const appointment = await this.executeFindById(appointmentId)
     if (appointment?.customerId !== userId && appointment?.offer.professionalId !== userId) {
       throw new CustomError('You are not allowed to delete this appointment', 403)

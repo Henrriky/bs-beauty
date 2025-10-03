@@ -19,6 +19,7 @@ model Customer {
   registerCompleted   Boolean   @default(false) @map("register_completed")
   birthdate           DateTime?
   email               String    @unique
+  passwordHash      String?   @map("password_hash")
   googleId            String?   @unique @map("google_id")
   phone               String?   @unique
   profilePhotoUrl     String?
@@ -58,7 +59,7 @@ model Appointment {
 
 model Rating {
   id            String   @id @default(uuid())
-  score         Int      @default(1)
+  score         Int?
   comment       String?
   createdAt     DateTime @default(now()) @map("created_at")
   appointmentId String   @unique @map("appointment_id")
@@ -81,15 +82,24 @@ model Notification {
   @@map("notification")
 }
 
+enum ServiceStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Service {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   description String?
   category    String
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  status      ServiceStatus @default(PENDING)
+  createdBy   String?       @map("created_by")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
 
-  offers Offer[]
+  createdByProfessional Professional? @relation(fields: [createdBy], references: [id])
+  offers                Offer[]
 
   @@map("service")
 }
@@ -115,6 +125,7 @@ model Professional {
   id                String   @id @default(uuid())
   name              String?  @default("Usuário")
   email             String   @unique
+  passwordHash      String?  @map("password_hash")
   googleId          String?  @unique @map("google_id")
   registerCompleted Boolean  @default(false) @map("register_completed")
   paymentMethods    Json?    @map("payment_methods")
@@ -130,6 +141,7 @@ model Professional {
   shifts           Shift[]
   offers           Offer[]
   professionalRole ProfessionalRole[]
+  Service          Service[]
 
   @@map("professional")
 }

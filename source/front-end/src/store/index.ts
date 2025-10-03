@@ -10,7 +10,6 @@ import { shiftAPI } from './shift/shift-api'
 import { professionalAPI } from './professional/professional-api'
 import { appointmentAPI } from './appointment/appointment-api'
 import { analyticsAPI } from './analytics/analytics-api'
-import { notificationAPI } from './notification/notification-api'
 
 export const store = configureStore({
   reducer: {
@@ -25,7 +24,6 @@ export const store = configureStore({
     [professionalAPI.reducerPath]: professionalAPI.reducer,
     [appointmentAPI.reducerPath]: appointmentAPI.reducer,
     [analyticsAPI.reducerPath]: analyticsAPI.reducer,
-    [notificationAPI.reducerPath]: notificationAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -37,6 +35,5 @@ export const store = configureStore({
       .concat(shiftAPI.middleware)
       .concat(professionalAPI.middleware)
       .concat(appointmentAPI.middleware)
-      .concat(analyticsAPI.middleware)
-      .concat(notificationAPI.middleware),
+      .concat(analyticsAPI.middleware),
 })

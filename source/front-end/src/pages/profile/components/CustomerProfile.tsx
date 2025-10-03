@@ -1,20 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
+import ExclamationMarkIcon from '../../../../src/assets/exclamation-mark.svg'
 import { Button } from '../../../components/button/Button'
+import { Checkbox } from '../../../components/inputs/Checkbox'
 import { Input } from '../../../components/inputs/Input'
+import { Select } from '../../../components/inputs/Select'
+import Subtitle from '../../../components/texts/Subtitle'
 import { Customer } from '../../../store/auth/types'
+import { customerAPI } from '../../../store/customer/customer-api'
 import { userAPI } from '../../../store/user/user-api'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
-import { CustomerUpdateProfileFormData } from './types'
-import { Checkbox } from '../../../components/inputs/Checkbox'
 import Modal from '../../services/components/Modal'
-import { useState } from 'react'
-import Subtitle from '../../../components/texts/Subtitle'
-import ExclamationMarkIcon from '../../../../src/assets/exclamation-mark.svg'
-import { useNavigate } from 'react-router'
-import { Select } from '../../../components/inputs/Select'
+import { CustomerUpdateProfileFormData } from './types'
 
 interface CustomerProfileProps {
   userInfo: Customer
@@ -30,7 +31,7 @@ const NOTIFICATION_OPTIONS = [
 
 function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
   const [updateProfile, { isLoading }] = userAPI.useUpdateProfileMutation()
-  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const {
     register,
@@ -41,12 +42,12 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
     defaultValues: {
       birthdate: userInfo.birthdate
         ? ((() => {
-            const date = new Date(userInfo.birthdate)
-            const day = String(date.getUTCDate()).padStart(2, '0')
-            const month = String(date.getMonth() + 1).padStart(2, '0')
-            const year = date.getFullYear()
-            return `${day}/${month}/${year}`
-          })() as unknown as Date)
+          const date = new Date(userInfo.birthdate)
+          const day = String(date.getUTCDate()).padStart(2, '0')
+          const month = String(date.getMonth() + 1).padStart(2, '0')
+          const year = date.getFullYear()
+          return `${day}/${month}/${year}`
+        })() as unknown as Date)
         : undefined,
       phone: userInfo.phone || undefined,
       name: userInfo.name || undefined,
@@ -65,7 +66,8 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
       .then(() => {
         toast.success('Perfil atualizado com sucesso!')
         onProfileUpdate()
-        navigate(0)
+
+        dispatch(customerAPI.util.invalidateTags(['Customers']))
       })
       .catch((error: unknown) => {
         console.error('Error trying to complete register', error)
