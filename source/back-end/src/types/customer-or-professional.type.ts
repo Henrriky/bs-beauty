@@ -1,3 +1,4 @@
+import { type Permissions } from '@/utils/auth/permissions-map.util'
 import { type UserType } from '@prisma/client'
 
 interface CustomerOrProfessional {
@@ -8,6 +9,7 @@ interface CustomerOrProfessional {
   registerCompleted: boolean
   userId: string
   profilePhotoUrl: string | null
+  permissions: Permissions[]
 }
 
 export type { CustomerOrProfessional }
