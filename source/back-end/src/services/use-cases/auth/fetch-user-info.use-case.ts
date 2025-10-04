@@ -9,8 +9,16 @@ interface FetchUserInfoUseCaseInput {
   email: string
 }
 
+interface FetchCustomerInfo extends Customer {
+
+}
+
+interface FetchProfessionalInfo extends Professional {
+  roles: string[]
+}
+
 interface FetchUserInfoUseCaseOutput {
-  user: Customer | Professional
+  user: FetchCustomerInfo | FetchProfessionalInfo
 }
 
 class FetchUserInfoUseCase {
@@ -31,7 +39,8 @@ class FetchUserInfoUseCase {
       if (professional == null) {
         throw new NotFoundUseCaseError('Professional not found')
       }
-      return { user: professional }
+      const roles = (await this.professionalRepository.findRolesByProfessionalId(professional.id)).map(({ role }) => role.name)
+      return { user: { ...professional, roles } }
     } else {
       throw new InvalidUserTypeUseCaseError('Invalid user type provided ' + userType)
     }

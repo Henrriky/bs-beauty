@@ -23,7 +23,8 @@ class JwtEncrypterService implements Encrypter {
         email: params.email,
         name: params.name,
         registerCompleted: params.registerCompleted,
-        profilePhotoUrl: params.profilePhotoUrl
+        profilePhotoUrl: params.profilePhotoUrl,
+        permissions: params.permissions
       },
       secret,
       {
