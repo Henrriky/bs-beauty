@@ -1,10 +1,17 @@
 import type { UserType } from '@prisma/client'
 import type { NextFunction, Request, Response } from 'express'
-import { AppErrorCodes } from '../utils/errors/app-error-codes'
+import { AppErrorCodes } from '../../utils/errors/app-error-codes'
 
-const routeAuthMiddleware = (userTypes: UserType[]) => (req: Request, res: Response, next: NextFunction) => {
+const userTypeAuthMiddleware = (userTypes: UserType[], delegateIfHavePermission: boolean = false) => (req: Request, res: Response, next: NextFunction) => {
   let isAbleToCallNext = true
   const userType = req.user.userType
+
+  const permissions = req.user.permissions
+
+  if (permissions.length >= 1 && delegateIfHavePermission) {
+    next(); return
+  }
+
   if (userType == null) {
     res.status(401).send({ statusCode: 401, message: 'Unauthorized', details: AppErrorCodes.USER_TYPE_NON_EXISTENT })
     isAbleToCallNext = false
@@ -14,8 +21,8 @@ const routeAuthMiddleware = (userTypes: UserType[]) => (req: Request, res: Respo
     isAbleToCallNext = false
   }
   if (isAbleToCallNext) {
-    next()
+    next(); return
   }
 }
 
-export { routeAuthMiddleware }
+export { userTypeAuthMiddleware }
