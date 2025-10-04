@@ -48,6 +48,14 @@ export type Professional = {
   updatedAt: Date;
 }
 
+export type FetchUserInfoRequest = void
+export type FetchUserInfoCustomer = Customer
+export type FetchUserInfoProfessional = Professional & { roles: string[] }
+export type FetchUserInfoResponse = {
+  user: FetchUserInfoCustomer | FetchUserInfoProfessional
+}
+
+
 export type Shift = {
   id: string;
   weekDay: WeekDays;
