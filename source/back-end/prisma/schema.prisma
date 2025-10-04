@@ -203,6 +203,7 @@ model Permission {
 
   rolePermission RolePermission[]
 
+  @@unique([resource, action])
   @@map("permission")
 }
 
