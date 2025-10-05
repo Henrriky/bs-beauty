@@ -17,9 +17,11 @@ import { UserType } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
+import Notifications from '../pages/notifications'
 import UserRegistration from '../pages/user-registration'
 import PasswordReset from '../pages/password-reset'
 import PasswordResetCompleted from '../pages/password-reset/components/PasswordResetCompleted'
+import LandingPage from '../pages/landing-page'
 import Roles from '../pages/roles'
 
 function BSBeautyRouter() {
@@ -27,7 +29,7 @@ function BSBeautyRouter() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Login />} />
+          <Route index element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth/google/callback" element={<Callback />} />
           <Route path="/register" element={<UserRegistration />} />
@@ -54,7 +56,7 @@ function BSBeautyRouter() {
                 path="/appointments/:appointmentId"
                 element={<AppointmentDetails />}
               />
-
+              <Route path="/notifications" element={<Notifications />} />
               {/* CUSTOMER ROUTES */}
               <Route
                 element={

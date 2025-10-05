@@ -12,6 +12,7 @@ import { errorHandlerMiddleware } from '../middlewares/error-handler.middleware'
 import { authRoutes } from './routes/auth.routes'
 import { verifyJwtTokenMiddleware } from '../middlewares/auth/verify-jwt-token.middleware'
 import { analyticsServiceRoutes } from './routes/analytics.routes'
+import { ratingRoutes } from './routes/ratings.routes'
 
 const appRoutes = Router()
 
@@ -26,6 +27,7 @@ appRoutes.use('/offers', verifyJwtTokenMiddleware, offerRoutes)
 appRoutes.use('/roles', verifyJwtTokenMiddleware, roleRoutes)
 appRoutes.use('/permissions', verifyJwtTokenMiddleware, permissionRoutes)
 appRoutes.use('/analytics', verifyJwtTokenMiddleware, analyticsServiceRoutes)
+appRoutes.use('/ratings', verifyJwtTokenMiddleware, ratingRoutes)
 appRoutes.use(errorHandlerMiddleware)
 
 export { appRoutes }

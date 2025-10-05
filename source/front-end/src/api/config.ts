@@ -67,11 +67,21 @@ export const API_VARIABLES = {
       `/appointments/${appointmentId}`,
     UPDATE_APPOINTMENT: (appointmentId: string) =>
       `/appointments/${appointmentId}`,
+    FINISH_APPOINTMENT: (appointmentId: string) =>
+      `/appointments/${appointmentId}/finish`,
+  },
+  RATINGS_ENDPOINTS: {
+    FIND_BY_RATING_ID: (ratingId: string) => `/ratings/${ratingId}`,
+    UPDATE_RATING: (ratingId: string) => `/ratings/${ratingId}`,
   },
   ANALYTICS_ENDPOINTS: {
     FETCH_ANALYTICS: '/analytics',
     FETCH_ANALYTICS_BY_PROFESSIONAL: (professionalId: string) =>
       `/analytics/${professionalId}`,
+  },
+  NOTIFICATIONS_ENDPOINTS: {
+    FETCH_NOTIFICATIONS: '/notifications',
+    MARK_MANY_AS_READ: '/notifications/read',
   },
   ROLES_ENDPOINTS: {
     ENDPOINT: '/roles',

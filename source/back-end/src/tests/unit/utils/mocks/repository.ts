@@ -2,6 +2,7 @@ import { type AppointmentRepository } from '@/repository/protocols/appointment.r
 import { type CustomerRepository } from '@/repository/protocols/customer.repository'
 import { type OfferRepository } from '@/repository/protocols/offer.repository'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
+import { RatingRepository } from '@/repository/protocols/rating.repository'
 import { type RoleRepository } from '@/repository/protocols/role.repository'
 import { type ServiceRepository } from '@/repository/protocols/service.repository'
 import { type ShiftRepository } from '@/repository/protocols/shift.repository'
@@ -87,6 +88,15 @@ const MockShiftRepository: Mocked<ShiftRepository> = {
   delete: vi.fn()
 }
 
+const MockRatingRepository: Mocked<RatingRepository> = {
+  findAll: vi.fn(),
+  findById: vi.fn(),
+  findByAppointmentId: vi.fn(),
+  create: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn()
+}
+
 const MockRoleRepository: Mocked<RoleRepository> = {
   findAllPaginated: vi.fn(),
   findById: vi.fn(),
@@ -109,5 +119,6 @@ export {
   MockProfessionalRepository,
   MockRoleRepository,
   MockServiceRepository,
-  MockShiftRepository
+  MockShiftRepository,
+  MockRatingRepository
 }

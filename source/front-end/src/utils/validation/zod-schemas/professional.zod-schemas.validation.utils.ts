@@ -78,6 +78,7 @@ class ProfessionalSchemas {
         .optional(),
       userType: z.enum(['MANAGER', 'PROFESSIONAL']).optional(),
       specialization: SharedSchemas.specializationSchema,
+      notificationPreference: SharedSchemas.notificationPreference
     })
     .strict()
 
@@ -92,6 +93,7 @@ class ProfessionalSchemas {
         .refine((value) => RegexPatterns.phone.test(value))
         .optional(),
       specialization: SharedSchemas.specializationSchema,
+      notificationPreference: SharedSchemas.notificationPreference
     })
     .strict()
 

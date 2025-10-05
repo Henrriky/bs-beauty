@@ -1,7 +1,7 @@
 import { CreateRoleFormData, Role } from '../types'
 import { Button } from '../../../components/button/Button'
 import { Input } from '../../../components/inputs/Input'
-import { Textarea } from '../../../components/inputs/Textarea'
+import { Textarea } from '../../../components/inputs/TextareaV2'
 import { Checkbox } from '../../../components/inputs/Checkbox'
 import Modal from '../../../components/modal/Modal'
 import { useRoleForm } from '../hooks/useRoleForm'

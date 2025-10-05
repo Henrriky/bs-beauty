@@ -1,32 +1,47 @@
-import { forwardRef, TextareaHTMLAttributes } from 'react'
+import { TextareaHTMLAttributes, ReactNode } from 'react'
+import { UseFormRegisterReturn } from 'react-hook-form'
+import { ErrorMessage } from '../feedback/ErrorMessage'
 import clsx from 'clsx'
 
 export interface TextareaProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: string | ReactNode
   id: string
-  error?: string
+  error?: string | null
+  registration?: UseFormRegisterReturn
+  wrapperClassName?: string
+  textareaClassName?: string
 }
 
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ id, error, className, ...props }, ref) => {
-    return (
-      <div className="w-full">
-        <textarea
-          {...props}
-          ref={ref}
-          id={id}
-          className={clsx(
-            'w-full px-4 py-3 bg-primary-600 rounded-xl text-primary-0 placeholder-primary-200 focus:outline-none transition-colors duration-200 resize-none text-sm',
-            error
-              ? 'border border-red-400 focus:border-red-400 focus:ring-1 focus:ring-red-400'
-              : 'border border-primary-500 focus:border-secondary-400 focus:ring-1 focus:ring-secondary-400',
-            className,
-          )}
-        />
-        {error && <p className="mt-1 text-sm text-red-400">{error}</p>}
-      </div>
-    )
-  },
-)
+export function Textarea({
+  label,
+  id,
+  error,
+  registration,
+  wrapperClassName,
+  textareaClassName,
+  ...htmlProps
+}: TextareaProps) {
+  const borderColor = error ? 'border-[#CC3636]' : 'border-[#3B3B3B]'
 
-Textarea.displayName = 'Textarea'
+  return (
+    <div className={clsx('flex gap-3 flex-col items-start', wrapperClassName)}>
+      {label && (
+        <label className="text-sm text-[#D9D9D9]" htmlFor={id}>
+          {label}
+        </label>
+      )}
+      <textarea
+        {...registration}
+        {...htmlProps}
+        id={id}
+        className={clsx(
+          `w-full text-sm text-[#A5A5A5] bg-[#1a1a1a] focus:outline-none cursor-text ${borderColor} border-[1px] border-opacity-10 rounded-2xl px-2 py-[10px] focus-within:border-[#B19B86] transition-colors duration-300 disabled:bg-[#272727] h-20 resize-none`,
+          textareaClassName,
+        )}
+      />
+
+      {error && <ErrorMessage message={error} />}
+    </div>
+  )
+}

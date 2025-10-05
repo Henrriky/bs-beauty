@@ -9,6 +9,7 @@ import { Button } from '../../../components/button/Button'
 import React from 'react'
 import BSBeautyLoading from '../../../components/feedback/Loading'
 import { OnSubmitUpdateServiceStatusForm } from './types'
+import StatusBadge from '../../../components/status/StatusBadge'
 import { UserCanAccessContainer } from '../../../components/authorization/UserCanAccessContainer'
 import { UserType } from '../../../store/auth/types'
 
@@ -26,26 +27,11 @@ interface ServiceItemProps
 const getStatusBadge = (status: ServiceStatus) => {
   switch (status) {
     case 'PENDING':
-      return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs text-amber-700 bg-amber-100 rounded border-[1px] border-amber-200 border-opacity-25">
-          <span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
-          Pendente
-        </span>
-      )
+      return <StatusBadge text={'Pendente'} color={'amber'} />
     case 'APPROVED':
-      return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs text-green-700 bg-green-100 rounded border-[1px] border-green-200 border-opacity-25">
-          <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-          Aprovado
-        </span>
-      )
+      return <StatusBadge text={'Aprovado'} color={'green'} />
     case 'REJECTED':
-      return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs text-red-700 bg-red-100 rounded border-[1px] border-red-200 border-opacity-25">
-          <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
-          Rejeitado
-        </span>
-      )
+      return <StatusBadge text={'Rejeitado'} color={'red'} />
     default:
       return null
   }
@@ -66,12 +52,6 @@ function ServiceItem({
   const canEdit =
     isServiceOwner &&
     (service.status === 'PENDING' || service.status === 'REJECTED')
-
-  console.log('Rendering ServiceItem:', service)
-  console.log('service.createdBy', service.createdBy)
-  console.log('loggedUserId', loggedUserId)
-  console.log('isServiceOwner', isServiceOwner)
-  console.log('canEdit', canEdit)
 
   return (
     <Button

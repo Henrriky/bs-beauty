@@ -1,7 +1,7 @@
 import { ServicesUseCase } from '@/services/services.use-case'
 import { MockProfessionalRepository, MockServiceRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { Prisma, type Professional, type Service, ServiceStatus, UserType } from '@prisma/client'
+import { NotificationChannel, Prisma, type Professional, type Service, ServiceStatus, UserType } from '@prisma/client'
 import { type ProfessionalsOfferingService } from '@/repository/types/service-repository.types'
 import { PERMISSIONS_MAP } from '@/utils/auth/permissions-map.util'
 
@@ -101,6 +101,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -151,6 +152,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -279,6 +281,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -348,6 +351,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
