@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ENV } from '@/config/env'
 import { type Cache } from '@/services/protocols/cache.protocol'
 
-type RefreshEntry = {
+interface RefreshEntry {
   userId: string
   status: 'active' | 'revoked'
   ipAddress?: string
@@ -19,10 +19,9 @@ export class RefreshTokenService {
   private readonly secret: Secret = ENV.JWT_SECRET
   private readonly expiresIn: SignOptions['expiresIn'] = (ENV.JWT_REFRESH_EXPIRES_IN as unknown as SignOptions['expiresIn']) ?? '30d'
 
-  constructor(private readonly cache: Cache) { }
+  constructor (private readonly cache: Cache) { }
 
-
-  async issue(userId: string) {
+  async issue (userId: string) {
     const refreshTokenId = uuidv4()
 
     const refreshToken = jwt.sign(
@@ -36,7 +35,7 @@ export class RefreshTokenService {
 
     const entry: RefreshEntry = {
       userId,
-      status: 'active',
+      status: 'active'
     }
 
     await this.cache.set(refreshKey(refreshTokenId), entry, { timeToLiveSeconds: ttlSeconds })
@@ -49,10 +48,10 @@ export class RefreshTokenService {
     return { refreshToken, refreshTokenId }
   }
 
-  async rotate(incomingRefreshJwt: string, meta?: { ipAddress?: string; userAgent?: string }) {
-    let payload: JwtPayload & { sub: string; jti: string }
+  async rotate (incomingRefreshJwt: string, meta?: { ipAddress?: string, userAgent?: string }) {
+    let payload: JwtPayload & { sub: string, jti: string }
     try {
-      payload = jwt.verify(incomingRefreshJwt, this.secret) as JwtPayload & { sub: string; jti: string }
+      payload = jwt.verify(incomingRefreshJwt, this.secret) as JwtPayload & { sub: string, jti: string }
     } catch {
       throw new Error('INVALID_OR_EXPIRED')
     }
@@ -72,8 +71,8 @@ export class RefreshTokenService {
     return { userId, ...next }
   }
 
-  async revokeByJwt(incomingRefreshJwt: string) {
-    let payload: (JwtPayload & { sub?: string; jti?: string }) | null = null
+  async revokeByJwt (incomingRefreshJwt: string) {
+    let payload: (JwtPayload & { sub?: string, jti?: string }) | null = null
 
     try {
       payload = jwt.verify(incomingRefreshJwt, this.secret) as JwtPayload
@@ -87,7 +86,7 @@ export class RefreshTokenService {
     await this.revokeOne(String(jti)).catch(() => { })
   }
 
-  async revokeOne(refreshTokenId: string) {
+  async revokeOne (refreshTokenId: string) {
     const entry = await this.cache.get<RefreshEntry>(refreshKey(refreshTokenId))
     if (!entry) return
     await this.cache.set(refreshKey(refreshTokenId), { ...entry, status: 'revoked' })
@@ -97,7 +96,7 @@ export class RefreshTokenService {
     await this.cache.set(userKey, filtered)
   }
 
-  async revokeAll(userId: string) {
+  async revokeAll (userId: string) {
     const userKey = userRefreshSetKey(userId)
     const list = (await this.cache.get<string[]>(userKey)) ?? []
     await Promise.all(list.map(async id => {
