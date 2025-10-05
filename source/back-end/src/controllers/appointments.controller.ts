@@ -89,7 +89,7 @@ class AppointmentController {
   ) {
     try {
       const appointmentId = req.params.id;
-      const userId = req.user.id
+      const userId = req.user
       const appointmentsUseCase = makeAppointmentsUseCaseFactory();
       const updatedAppointment = await appointmentsUseCase.executeFinishAppointment(
         userId,

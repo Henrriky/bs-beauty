@@ -1,7 +1,7 @@
 import { ServicesUseCase } from '@/services/services.use-case'
 import { MockProfessionalRepository, MockServiceRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { Customer, Prisma, Professional, type Service, ServiceStatus, UserType } from '@prisma/client'
+import { Customer, NotificationChannel, Prisma, Professional, type Service, ServiceStatus, UserType } from '@prisma/client'
 import { type ProfessionalsOfferingService } from '@/repository/types/service-repository.types'
 
 describe('ServicesUseCase (Unit Tests)', () => {
@@ -100,6 +100,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -150,6 +151,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -267,6 +269,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -318,6 +321,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -360,6 +364,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -528,6 +533,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -577,6 +583,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -626,6 +633,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -654,6 +662,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         socialMedia: [],
         specialization: null,
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -718,6 +727,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }

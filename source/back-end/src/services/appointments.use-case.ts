@@ -140,8 +140,8 @@ class AppointmentsUseCase {
   }
 
   // TODO: make a transaction to guarantee both requests are made
-  public async executeFinishAppointment(userId: string, appointmentId: string) {
-    const updatedAppointment = await this.executeUpdate(userId, appointmentId, { status: 'FINISHED' })
+  public async executeFinishAppointment(userDetails: TokenPayload, appointmentId: string) {
+    const updatedAppointment = await this.executeUpdate(appointmentId, { status: 'FINISHED' }, userDetails)
 
     const newRating: Prisma.RatingCreateInput = {
       appointment: {
