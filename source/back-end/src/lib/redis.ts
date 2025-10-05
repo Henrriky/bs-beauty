@@ -1,6 +1,6 @@
 import Redis, { type RedisOptions } from 'ioredis'
 
-function buildRedisOptions(): string | RedisOptions {
+function buildRedisOptions (): string | RedisOptions {
   const url = process.env.REDIS_URL
   if (url && url.length > 0) {
     return url
@@ -16,16 +16,16 @@ function buildRedisOptions(): string | RedisOptions {
     password: process.env.REDIS_PASSWORD || undefined,
     tls: useTls ? {} : undefined,
 
-    retryStrategy(times) {
+    retryStrategy (times) {
       const delay = Math.min(times * 200, 2000)
       return delay
     },
 
-    reconnectOnError(err) {
+    reconnectOnError (err) {
       const msg = err?.message ?? ''
       if (/READONLY|MOVED|CLUSTERDOWN|CONNECTION_BROKEN/i.test(msg)) return true
       return false
-    },
+    }
   }
 
   return options
@@ -33,12 +33,12 @@ function buildRedisOptions(): string | RedisOptions {
 
 export const redis = new Redis(buildRedisOptions() as any)
 
-redis.on('connect', () => console.log('[redis] connecting...'))
-redis.on('ready', () => console.log('[redis] ready'))
-redis.on('error', (err) => console.error('[redis] error:', err?.message ?? err))
-redis.on('end', () => console.warn('[redis] connection closed'))
+redis.on('connect', () => { console.log('[redis] connecting...') })
+redis.on('ready', () => { console.log('[redis] ready') })
+redis.on('error', (err) => { console.error('[redis] error:', err?.message ?? err) })
+redis.on('end', () => { console.warn('[redis] connection closed') })
 
-export async function closeRedis(): Promise<void> {
+export async function closeRedis (): Promise<void> {
   try {
     await redis.quit()
   } catch {
