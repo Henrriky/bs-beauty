@@ -1,4 +1,4 @@
-import { Cache } from '@/services/protocols/cache.protocol'
+import { type Cache } from '@/services/protocols/cache.protocol'
 import crypto from 'crypto'
 
 const sha256 = (s: string) => crypto.createHash('sha256').update(s).digest('hex')
@@ -8,7 +8,7 @@ const keyLock = (p: VerificationPurpose, id: string) => `lock:code:${p}:${id.tri
 
 type PendingPayload = Record<string, unknown>
 
-type PendingEntry = {
+interface PendingEntry {
   payload: PendingPayload
   verificationCodeHash: string
   createdAtMillis: number
@@ -19,11 +19,11 @@ export type VerificationPurpose =
   | 'passwordReset'
 
 export class CodeValidationService {
-  constructor(
+  constructor (
     private readonly cache: Cache
   ) { }
 
-  async savePendingCode(params: {
+  async savePendingCode (params: {
     purpose: VerificationPurpose
     recipientId: string
     code: string
@@ -34,12 +34,12 @@ export class CodeValidationService {
     const entry: PendingEntry = {
       payload,
       verificationCodeHash: sha256(code),
-      createdAtMillis: Date.now(),
+      createdAtMillis: Date.now()
     }
     await this.cache.set(keyPending(purpose, recipientId), entry, { timeToLiveSeconds })
   }
 
-  async allowResendAndStartCooldown(params: {
+  async allowResendAndStartCooldown (params: {
     purpose: VerificationPurpose
     recipientId: string
     cooldownSeconds?: number
@@ -52,14 +52,14 @@ export class CodeValidationService {
     )
   }
 
-  async verifyCodeAndConsume(params: {
+  async verifyCodeAndConsume (params: {
     purpose: VerificationPurpose
     recipientId: string
     code: string
   }): Promise<
-    | { ok: true; payload: PendingPayload }
-    | { ok: false; reason: 'INVALID_CODE' | 'EXPIRED_OR_NOT_FOUND' }
-  > {
+    | { ok: true, payload: PendingPayload }
+    | { ok: false, reason: 'INVALID_CODE' | 'EXPIRED_OR_NOT_FOUND' }
+    > {
     const { purpose, recipientId, code } = params
     return await this.cache.withLock(keyLock(purpose, recipientId), 5, async () => {
       const pendingKey = keyPending(purpose, recipientId)
