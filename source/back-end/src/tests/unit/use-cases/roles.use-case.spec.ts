@@ -1,7 +1,7 @@
 import { RoleUseCase } from '@/services/roles.use-case'
 import { MockRoleRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { type Role, type Prisma, type Permission, type Professional } from '@prisma/client'
+import { type Role, type Prisma, type Permission, type Professional, NotificationChannel } from '@prisma/client'
 import { CustomError } from '@/utils/errors/custom.error.util'
 
 describe('RoleUseCase (Unit Tests)', () => {
@@ -464,6 +464,7 @@ describe('RoleUseCase (Unit Tests)', () => {
           specialization: null,
           profilePhotoUrl: null,
           userType: 'PROFESSIONAL',
+          notificationPreference: NotificationChannel.BOTH,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }

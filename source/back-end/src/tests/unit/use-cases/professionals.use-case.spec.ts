@@ -1,7 +1,7 @@
 import { ProfessionalsUseCase } from '@/services/professionals.use-case'
 import { MockProfessionalRepository, MockRoleRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { Prisma, type Professional, UserType } from '@prisma/client'
+import { NotificationChannel, Prisma, type Professional, UserType } from '@prisma/client'
 import { type ServicesOfferedByProfessional } from '@/repository/types/professional-repository.types'
 import bcrypt from 'bcrypt'
 import { CustomError } from '@/utils/errors/custom.error.util'
@@ -42,7 +42,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
           updatedAt: faker.date.past(),
           profilePhotoUrl: faker.internet.url(),
           paymentMethods: null,
-          notificationPreference: 'BOTH',
+          notificationPreference: 'BOTH'
         }
       ]
 
@@ -81,7 +81,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
         paymentMethods: null,
-        notificationPreference: 'BOTH',
+        notificationPreference: 'BOTH'
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(professional)
@@ -128,7 +128,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         paymentMethods: null,
-        notificationPreference: 'BOTH',
+        notificationPreference: 'BOTH'
       }
 
       MockProfessionalRepository.findByEmail.mockResolvedValue(null)
@@ -166,7 +166,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         paymentMethods: null,
-        notificationPreference: 'BOTH',
+        notificationPreference: 'BOTH'
       }
 
       MockProfessionalRepository.findByEmail.mockResolvedValue(existingProfessional)
@@ -202,7 +202,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
         paymentMethods: null,
-        notificationPreference: 'BOTH',
+        notificationPreference: 'BOTH'
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(updatedProfessional)
@@ -397,6 +397,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -432,6 +433,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
         createdAt: faker.date.past(),
+        notificationPreference: NotificationChannel.BOTH,
         updatedAt: faker.date.past()
       }
 
@@ -486,6 +488,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         passwordHash: null,
         userType: 'PROFESSIONAL' as const,
         createdAt: faker.date.past(),
+        notificationPreference: NotificationChannel.BOTH,
         updatedAt: faker.date.past()
       }
 
@@ -531,6 +534,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
         createdAt: faker.date.past(),
+        notificationPreference: NotificationChannel.BOTH,
         updatedAt: faker.date.past()
       }
 
@@ -565,6 +569,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
         createdAt: faker.date.past(),
+        notificationPreference: NotificationChannel.BOTH,
         updatedAt: faker.date.past()
       }
 
@@ -618,6 +623,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -677,6 +683,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -720,6 +727,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
+        notificationPreference: NotificationChannel.BOTH,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }

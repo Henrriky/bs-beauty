@@ -49,11 +49,7 @@ function UserRegistration() {
       dispatchRedux(
         setToken({
           user: {
-            id: decodedToken.id,
-            userType: decodedToken.userType,
-            email: decodedToken.email,
-            name: decodedToken.name,
-            registerCompleted: decodedToken.registerCompleted,
+            ...decodedToken,
           },
           token: {
             accessToken,
