@@ -12,6 +12,7 @@ import Loading from '../../../components/feedback/Loading'
 import { ErrorMessage } from '../../../components/feedback/ErrorMessage'
 import Tooltip from '../../../components/tooltip/Tooltip'
 import { useRolePermissionsManager } from '../hooks/useRolePermissionsManager'
+import { getPermissionTranslationByCompositeKey } from '../utils'
 
 interface RolePermissionsManagerProps {
   roleId: string
@@ -111,6 +112,13 @@ export function RolePermissionsManager({
           <div className="bg-primary-800 rounded-xl p-4 max-h-52 overflow-y-auto">
             <div className="space-y-3">
               {resourceNames.map((resource) => {
+                const resourcePermission =
+                  permissionsByResource[resource][0]?.action || ''
+                const { resource: resourceTranslation } =
+                  getPermissionTranslationByCompositeKey(
+                    `${resource.toLowerCase()}.${resourcePermission.toLowerCase()}`,
+                  )
+
                 const permissions = permissionsByResource[resource]
                 const stats = getResourceStats(resource)
                 const isExpanded = expandedResources.has(resource)
@@ -144,7 +152,7 @@ export function RolePermissionsManager({
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium text-primary-0">
-                            {resource}
+                            {resourceTranslation}
                           </span>
                           <span className="text-xs px-2 py-1 bg-secondary-600 text-secondary-200 rounded-full">
                             {stats.selectedCount}/{stats.totalCount}
@@ -156,34 +164,41 @@ export function RolePermissionsManager({
                     {/* Resource Permissions */}
                     {isExpanded && (
                       <div className="ml-1 p-3 space-y-2 bg-primary-800">
-                        {permissions.map((permission) => (
-                          <div
-                            key={permission.id}
-                            className="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-700 transition-colors ml-6"
-                          >
-                            <Checkbox
-                              id={`permission-${permission.id}`}
-                              checked={tempPermissions.has(permission.id)}
-                              onChange={() =>
-                                handlePermissionToggle(permission.id)
-                              }
-                              className="flex-shrink-0"
-                            />
+                        {permissions.map((permission) => {
+                          const { action: actionTranslation } =
+                            getPermissionTranslationByCompositeKey(
+                              `${permission.resource.toLowerCase()}.${permission.action.toLowerCase()}`,
+                            )
 
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm text-primary-0">
-                                  {permission.action}
-                                </span>
-                                {permission.description && (
-                                  <Tooltip content={permission.description}>
-                                    <InformationCircleIcon className="w-4 h-4 text-primary-200 hover:text-primary-100 cursor-help transition-colors" />
-                                  </Tooltip>
-                                )}
+                          return (
+                            <div
+                              key={permission.id}
+                              className="flex items-center gap-3 p-2 rounded-lg hover:bg-primary-700 transition-colors ml-6"
+                            >
+                              <Checkbox
+                                id={`permission-${permission.id}`}
+                                checked={tempPermissions.has(permission.id)}
+                                onChange={() =>
+                                  handlePermissionToggle(permission.id)
+                                }
+                                className="flex-shrink-0"
+                              />
+
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm text-primary-0">
+                                    {actionTranslation}
+                                  </span>
+                                  {permission.description && (
+                                    <Tooltip content={permission.description}>
+                                      <InformationCircleIcon className="w-4 h-4 text-primary-200 hover:text-primary-100 cursor-help transition-colors" />
+                                    </Tooltip>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          )
+                        })}
                       </div>
                     )}
                   </div>

@@ -8,6 +8,8 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/16/solid'
+import { UserType } from '../../../store/auth/types'
+import { UserCanAccessContainer } from '../../../components/authorization/UserCanAccessContainer'
 
 interface RoleCardProps {
   role: Role
@@ -68,27 +70,43 @@ function RoleCard({
       </div>
       {/* Actions - Right Side */}
       <div className="flex gap-2 shrink-0">
-        <button
-          onClick={() => onManagePermissions(role)}
-          className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-400/10 rounded transition-all"
-          title="Gerenciar permissões"
+        <UserCanAccessContainer
+          allowedPermissions={['roles.change_permissions']}
+          allowedUserTypes={[UserType.MANAGER]}
         >
-          <CogIcon className="w-4 h-4" />
-        </button>
-        <button
-          onClick={() => onEdit(role)}
-          className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
-          title="Editar serviço"
+          <button
+            onClick={() => onManagePermissions(role)}
+            className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-400/10 rounded transition-all"
+            title="Gerenciar permissões"
+          >
+            <CogIcon className="w-4 h-4" />
+          </button>
+        </UserCanAccessContainer>
+        <UserCanAccessContainer
+          allowedPermissions={['roles.edit']}
+          allowedUserTypes={[UserType.MANAGER]}
         >
-          <PencilSquareIcon className="w-4 h-4" />
-        </button>
-        <button
-          onClick={() => onDelete(role)}
-          className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
-          title="Excluir serviço"
+          <button
+            onClick={() => onEdit(role)}
+            className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
+            title="Editar serviço"
+          >
+            <PencilSquareIcon className="w-4 h-4" />
+          </button>
+        </UserCanAccessContainer>
+
+        <UserCanAccessContainer
+          allowedPermissions={['roles.delete']}
+          allowedUserTypes={[UserType.MANAGER]}
         >
-          <TrashIcon className="w-4 h-4" />
-        </button>
+          <button
+            onClick={() => onDelete(role)}
+            className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
+            title="Excluir serviço"
+          >
+            <TrashIcon className="w-4 h-4" />
+          </button>
+        </UserCanAccessContainer>
       </div>
     </div>
   )
