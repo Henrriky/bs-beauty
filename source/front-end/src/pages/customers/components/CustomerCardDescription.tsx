@@ -1,13 +1,13 @@
 import { ReactNode } from 'react'
 
-interface UserCardDescriptionProps {
+interface CustomerCardDescriptionProps {
   children: ReactNode
 }
 
-function UserCardDescription(props: UserCardDescriptionProps) {
+function CustomerCardDescription(props: CustomerCardDescriptionProps) {
   return (
     <h2 className="text-[#696969] text-xs font-medium">{props.children}</h2>
   )
 }
 
-export default UserCardDescription
+export default CustomerCardDescription
