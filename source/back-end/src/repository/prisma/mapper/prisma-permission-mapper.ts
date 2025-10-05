@@ -3,6 +3,6 @@ import { type Permission } from '@prisma/client'
 
 export class PrismaPermissionMapper {
   static toDomain (prismaPermission: Permission): Permissions {
-    return `${prismaPermission.resource}.${prismaPermission.action}` as Permissions
+    return `${prismaPermission.resource.toLowerCase()}.${prismaPermission.action.toLowerCase()}` as Permissions
   }
 }
