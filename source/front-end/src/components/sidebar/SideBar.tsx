@@ -6,7 +6,8 @@ import ProfilePicture from '../../pages/profile/components/ProfilePicture'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
 import sideBarItems from './consts'
 import { useDispatch } from 'react-redux'
-import { logout } from '../../store/auth/auth-slice'
+import { serverLogout } from '../../store/auth/server-logout'
+import { authAPI } from '../../store/auth/auth-api'
 
 interface SideBarItemProps {
   path: string
@@ -18,6 +19,13 @@ interface SideBarItemProps {
 function SideBar() {
   const user = useAppSelector((state) => state.auth.user!)
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
+
+  const selectUserInfo = authAPI.endpoints.fetchUserInfo.select()
+  const userInfoQuery = useAppSelector(selectUserInfo)
+
+  const displayName = userInfoQuery?.data?.user.name ?? user.name
+  const photoUrl = userInfoQuery?.data?.user.profilePhotoUrl ?? user.profilePhotoUrl
+  const userType = userInfoQuery?.data?.user.userType ?? user.userType
 
   const toggleSideBar = () => {
     setIsSideBarOpen(!isSideBarOpen)
@@ -45,7 +53,7 @@ function SideBar() {
               onClick={() => navigate('/profile')}
             >
               <ProfilePicture
-                profilePhotoUrl={user.profilePhotoUrl}
+                profilePhotoUrl={photoUrl ?? ''}
                 size="sm"
               />
             </div>
@@ -77,18 +85,18 @@ function SideBar() {
                 onClick={() => navigate('/profile')}
               >
                 <ProfilePicture
-                  profilePhotoUrl={user.profilePhotoUrl}
+                  profilePhotoUrl={user.profilePhotoUrl ?? ''}
                   size="sm"
                 />
               </div>
               <h2 className="text-primary-0 mb-9 text-sm capitalize">
-                {user.name ? firstLetterOfWordToUpperCase(user.name) : ''}
+                {displayName ? firstLetterOfWordToUpperCase(displayName) : ''}
               </h2>
             </div>
             <div className="">
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
               <ul className="text-primary-200 mt-8 text-[12px]">
-                {sideBarItems.COMMON.concat(sideBarItems[user.userType!])
+                {sideBarItems.COMMON.concat(sideBarItems[userType!])
                   .map((sideBarItem) => {
                     return (
                       <SideBarItem
@@ -119,12 +127,10 @@ function SideBarItem(props: SideBarItemProps) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (props.children === 'Sair') {
-      dispatch(logout())
-      localStorage.removeItem('token')
-      localStorage.removeItem('googleAccessToken')
-      navigate('/')
+      await dispatch<any>(serverLogout())
+      navigate('/', { replace: true })
     } else {
       navigate(`${props.path}`)
     }

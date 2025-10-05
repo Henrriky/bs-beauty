@@ -19,7 +19,7 @@ export interface CustomerOrProfessional {
   registerCompleted: boolean
   email: string
   userType: UserType
-  profilePhotoUrl: string
+  profilePhotoUrl?: string
 }
 
 export type Customer = {

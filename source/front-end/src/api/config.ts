@@ -9,6 +9,12 @@ export const API_VARIABLES = {
     EXCHANGE_CODE_FOR_TOKEN: '/auth/google/exchange-code',
     LOGIN_WITH_GOOGLE_ACCESS_TOKEN: '/auth/login',
     FETCH_USER_INFO: '/auth/user',
+    REGISTER_USER: '/auth/register',
+    NEW_TOKENS: '/auth/new-tokens',
+    CODE_VALIDATION: '/auth/code-validation',
+    REQUEST_PASSWORD_RESET: '/auth/password-reset/request',
+    SET_NEW_PASSWORD: '/auth/password-reset/set-password',
+    LOGOUT: '/auth/logout',
   },
   USER_ENDPOINTS: {
     UPDATE_CUSTOMER_PROFILE: '/customers',
@@ -55,6 +61,12 @@ export const API_VARIABLES = {
       `/appointments/${appointmentId}`,
     UPDATE_APPOINTMENT: (appointmentId: string) =>
       `/appointments/${appointmentId}`,
+    FINISH_APPOINTMENT: (appointmentId: string) =>
+      `/appointments/${appointmentId}/finish`,
+  },
+  RATINGS_ENDPOINTS: {
+    FIND_BY_RATING_ID: (ratingId: string) => `/ratings/${ratingId}`,
+    UPDATE_RATING: (ratingId: string) => `/ratings/${ratingId}`,
   },
   ANALYTICS_ENDPOINTS: {
     FETCH_ANALYTICS: '/analytics',

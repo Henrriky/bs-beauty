@@ -53,6 +53,8 @@ class CustomerSchemas {
       notificationPreference: SharedSchemas.notificationPreference
     })
     .strict()
+
+  public static registerCustomerBodySchema = SharedSchemas.registerBodySchema
 }
 
 export { CustomerSchemas }
