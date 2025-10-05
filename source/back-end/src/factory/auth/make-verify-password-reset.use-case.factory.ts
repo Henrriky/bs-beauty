@@ -5,7 +5,7 @@ import { CodeValidationService } from '@/services/use-cases/auth/code-validation
 import { PasswordResetTicketService } from '@/services/use-cases/auth/password-reset-ticket.service'
 import { VerifyPasswordResetUseCase } from '@/services/use-cases/auth/verify-password-reset.use-case'
 
-export function makeVerifyPasswordResetUseCase() {
+export function makeVerifyPasswordResetUseCase () {
   const customerRepository = new PrismaCustomerRepository()
   const professionalRepository = new PrismaProfessionalRepository()
   const cache = new RedisCacheProvider()

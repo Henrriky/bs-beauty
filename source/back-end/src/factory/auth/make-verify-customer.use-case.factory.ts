@@ -3,7 +3,7 @@ import { RedisCacheProvider } from '@/services/cache/redis-cache-provider.servic
 import { VerifyUserUseCase } from '@/services/use-cases/auth/verify-user.use-case'
 import { CodeValidationService } from '../../services/use-cases/auth/code-validation.service'
 
-export function makeVerifyCustomerUseCase() {
+export function makeVerifyCustomerUseCase () {
   const customerRepository = new PrismaCustomerRepository()
   const cache = new RedisCacheProvider()
   const codeValidation = new CodeValidationService(cache)

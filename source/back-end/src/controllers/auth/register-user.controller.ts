@@ -1,4 +1,4 @@
-import { NextFunction, type Request, type Response } from 'express'
+import { type NextFunction, type Request, type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { makeRegisterUserUseCase } from '../../factory/auth/make-register-user.use-case.factory'
 import { CustomerSchemas } from '../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { ProfessionalSchemas } from '../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 
 class RegisterUserController {
-  public static async handleRegisterCustomer(req: Request, res: Response, next: NextFunction) {
+  public static async handleRegisterCustomer (req: Request, res: Response, next: NextFunction) {
     try {
       const body = CustomerSchemas.registerCustomerBodySchema.parse(req.body)
 
@@ -28,7 +28,7 @@ class RegisterUserController {
     }
   }
 
-  public static async handleRegisterProfessional(req: Request, res: Response, next: NextFunction) {
+  public static async handleRegisterProfessional (req: Request, res: Response, next: NextFunction) {
     try {
       const body = ProfessionalSchemas.registerProfessionalBodySchema.parse(req.body)
 
@@ -49,13 +49,13 @@ class RegisterUserController {
     }
   }
 
-  public static async handleFindProfessionalByEmail(req: Request, res: Response, next: NextFunction) {
+  public static async handleFindProfessionalByEmail (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeRegisterUserUseCase()
       const professional = await useCase.executeFindProfessionalByEmail(req.params.email)
 
       res.status(StatusCodes.OK).send({
-        professional,
+        professional
       })
     } catch (error: any) {
       console.error(`Error trying to fetch professional.\nReason: ${error?.message}`)
