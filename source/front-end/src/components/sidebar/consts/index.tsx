@@ -11,98 +11,158 @@ import {
 } from '@heroicons/react/24/outline'
 import React from 'react'
 import { UserType } from '../../../store/auth/types'
+import { UserCanAccessProps } from '../../../utils/authorization/authorization.utils'
 
 type SideBarItem = {
   name: string
   navigateTo: string
   icon: React.ReactNode
   order?: number
+  authorization: Omit<UserCanAccessProps, 'user'>
 }
 
-type SideBarOptions = {
-  COMMON: SideBarItem[]
-  [UserType.MANAGER]: SideBarItem[]
-  [UserType.PROFESSIONAL]: SideBarItem[]
-  [UserType.CUSTOMER]: SideBarItem[]
-}
+const onlyCustomerSideBarItems: SideBarItem[] = [
+  {
+    name: 'Home',
+    icon: <HomeIcon className="size-6" />,
+    navigateTo: '/customer/home',
+    order: 1,
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [UserType.CUSTOMER],
+    },
+  },
+]
 
-const sideBarItems: SideBarOptions = {
-  COMMON: [
-    {
-      name: 'Sair',
-      icon: <ArrowLeftStartOnRectangleIcon className="size-6" />,
-      navigateTo: '/',
-      order: 99,
+const onlyManagerSideBarItems: SideBarItem[] = [
+  {
+    name: 'Home',
+    icon: <HomeIcon className="size-6" />,
+    navigateTo: '/manager/home',
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [UserType.MANAGER],
     },
-    {
-      name: 'Perfil',
-      icon: <UserIcon className="size-6" />,
-      navigateTo: '/profile',
-      order: 98,
+  },
+]
+
+const onlyProfessionalSideBarItems: SideBarItem[] = [
+  {
+    name: 'Home',
+    icon: <HomeIcon className="size-6" />,
+    navigateTo: '/professional/home',
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [UserType.PROFESSIONAL],
     },
-    {
-      name: 'Agendamentos',
-      icon: <CalendarDaysIcon className="size-6" />,
-      navigateTo: '/appointments',
+  },
+]
+
+const sideBarItems: SideBarItem[] = [
+  {
+    name: 'Sair',
+    icon: <ArrowLeftStartOnRectangleIcon className="size-6" />,
+    navigateTo: '/',
+    order: 99,
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [
+        UserType.MANAGER,
+        UserType.PROFESSIONAL,
+        UserType.CUSTOMER,
+      ],
     },
-  ],
-  [UserType.CUSTOMER]: [
-    {
-      name: 'Home',
-      icon: <HomeIcon className="size-6" />,
-      navigateTo: '/customer/home',
-      order: 1,
+  },
+  {
+    name: 'Perfil',
+    icon: <UserIcon className="size-6" />,
+    navigateTo: '/profile',
+    order: 98,
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [
+        UserType.MANAGER,
+        UserType.PROFESSIONAL,
+        UserType.CUSTOMER,
+      ],
     },
-  ],
-  [UserType.MANAGER]: [
-    {
-      name: 'Funções',
-      icon: <ShieldCheckIcon className="size-6" />,
-      navigateTo: '/manager/roles',
+  },
+  {
+    name: 'Turnos',
+    icon: <ClockIcon className="size-6" />,
+    navigateTo: '/shifts',
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
     },
-    {
-      name: 'Clientes',
-      icon: <UsersIcon className="size-6" />,
-      navigateTo: '/manager/customers',
+  },
+  {
+    name: 'Funções',
+    icon: <ShieldCheckIcon className="size-6" />,
+    navigateTo: '/manager/roles',
+    authorization: {
+      strategy: 'ANY',
+      allowedPermissions: [
+        'roles.read',
+        'roles.create',
+        'roles.edit',
+        'roles.delete',
+        'roles.change_permissions',
+      ],
+      allowedUserTypes: [UserType.MANAGER],
     },
-    {
-      name: 'Profissionais',
-      icon: <ClipboardDocumentCheckIcon className="size-6" />,
-      navigateTo: '/manager/professionals',
+  },
+  {
+    name: 'Profissionais',
+    icon: <ClipboardDocumentCheckIcon className="size-6" />,
+    navigateTo: '/manager/professionals',
+    authorization: {
+      strategy: 'ANY',
+      allowedPermissions: [
+        'professional.read',
+        'professional.create',
+        'professional.delete',
+        'professional.edit',
+        'professional.manage_roles',
+      ],
+      allowedUserTypes: [UserType.MANAGER],
     },
-    {
-      name: 'Serviços',
-      icon: <BriefcaseIcon className="size-6" />,
-      navigateTo: '/services',
+  },
+  {
+    name: 'Clientes',
+    icon: <UsersIcon className="size-6" />,
+    navigateTo: '/manager/customers',
+    authorization: {
+      strategy: 'ANY',
+      allowedPermissions: ['customer.read', 'customer.delete'],
+      allowedUserTypes: [UserType.MANAGER],
     },
-    {
-      name: 'Turnos',
-      icon: <ClockIcon className="size-6" />,
-      navigateTo: '/shifts',
+  },
+  {
+    name: 'Serviços',
+    icon: <BriefcaseIcon className="size-6" />,
+    navigateTo: 'services',
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
     },
-    {
-      name: 'Home',
-      icon: <HomeIcon className="size-6" />,
-      navigateTo: '/manager/home',
+  },
+  {
+    name: 'Agendamentos',
+    icon: <CalendarDaysIcon className="size-6" />,
+    navigateTo: '/appointments',
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [
+        UserType.MANAGER,
+        UserType.PROFESSIONAL,
+        UserType.CUSTOMER,
+      ],
     },
-  ],
-  [UserType.PROFESSIONAL]: [
-    {
-      name: 'Serviços',
-      icon: <BriefcaseIcon className="size-6" />,
-      navigateTo: 'services',
-    },
-    {
-      name: 'Turnos',
-      icon: <ClockIcon className="size-6" />,
-      navigateTo: '/shifts',
-    },
-    {
-      name: 'Home',
-      icon: <HomeIcon className="size-6" />,
-      navigateTo: '/professional/home',
-    },
-  ],
-}
+  },
+  ...onlyCustomerSideBarItems,
+  ...onlyManagerSideBarItems,
+  ...onlyProfessionalSideBarItems,
+]
 
 export default sideBarItems

@@ -5,9 +5,10 @@ import useAppSelector from '../../hooks/use-app-selector'
 import ProfilePicture from '../../pages/profile/components/ProfilePicture'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
 import sideBarItems from './consts'
-import { useDispatch } from 'react-redux'
 import { serverLogout } from '../../store/auth/server-logout'
 import { authAPI } from '../../store/auth/auth-api'
+import { userCanAccess } from '../../utils/authorization/authorization.utils'
+import useAppDispatch from '../../hooks/use-app-dispatch'
 
 interface SideBarItemProps {
   path: string
@@ -26,7 +27,6 @@ function SideBar() {
   const displayName = userInfoQuery?.data?.user.name ?? user.name
   const photoUrl =
     userInfoQuery?.data?.user.profilePhotoUrl ?? user.profilePhotoUrl
-  const userType = userInfoQuery?.data?.user.userType ?? user.userType
 
   const toggleSideBar = () => {
     setIsSideBarOpen(!isSideBarOpen)
@@ -94,7 +94,10 @@ function SideBar() {
             <div className="">
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
               <ul className="text-primary-200 mt-8 text-[12px]">
-                {sideBarItems.COMMON.concat(sideBarItems[userType!])
+                {sideBarItems
+                  .filter((item) =>
+                    userCanAccess({ user, ...item.authorization }),
+                  )
                   .map((sideBarItem) => {
                     return (
                       <SideBarItem
@@ -123,11 +126,11 @@ function SideBar() {
 
 function SideBarItem(props: SideBarItemProps) {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const handleClick = async () => {
     if (props.children === 'Sair') {
-      await dispatch<any>(serverLogout())
+      await dispatch(serverLogout())
       navigate('/', { replace: true })
     } else {
       navigate(`${props.path}`)

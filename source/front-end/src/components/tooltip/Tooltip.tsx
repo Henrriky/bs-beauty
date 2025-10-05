@@ -5,7 +5,6 @@ interface TooltipProps {
   children: ReactNode
   position?: 'top' | 'bottom' | 'left' | 'right'
   delay?: number
-  maxWidth?: string
 }
 
 export function Tooltip({
@@ -13,7 +12,6 @@ export function Tooltip({
   children,
   position = 'top',
   delay = 0,
-  maxWidth = 'max-w-xs',
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
@@ -87,7 +85,7 @@ export function Tooltip({
       </div>
       {isVisible && (
         <div
-          className={`absolute z-50 px-3 py-2 text-sm text-white bg-gray-900 rounded-lg shadow-lg whitespace-nowrap ${maxWidth} ${tooltipClasses}`}
+          className={`absolute z-50 px-3 py-2 text-sm text-white bg-gray-900 rounded-lg shadow-lg min-w-60 ${tooltipClasses}`}
           role="tooltip"
         >
           {content}
