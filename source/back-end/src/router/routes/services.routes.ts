@@ -12,7 +12,7 @@ serviceRoutes.get('/:id/offer/professionals', ServicesController.handleFetchProf
 serviceRoutes.get('/:id', ServicesController.handleFindById)
 
 /* Protected routes */
-serviceRoutes.post('/', combinedAuthMiddleware(['MANAGER'], ['service.create']), validateCreateService, ServicesController.handleCreate)
+serviceRoutes.post('/', combinedAuthMiddleware(['MANAGER', 'PROFESSIONAL'], ['service.create']), validateCreateService, ServicesController.handleCreate)
 serviceRoutes.put('/:id', combinedAuthMiddleware(['MANAGER', 'PROFESSIONAL'], ['service.edit']), validateUpdateService, ServicesController.handleUpdate)
 serviceRoutes.delete('/:id', combinedAuthMiddleware(['MANAGER', 'PROFESSIONAL'], ['service.delete']), ServicesController.handleDelete)
 

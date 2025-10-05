@@ -62,7 +62,7 @@ class ServicesUseCase {
 
     const service = await this.serviceRepository.create(newService)
 
-    // TODO: Call notification use case to notify managers about new service creation and approval request
+    // TODO: Call notification use case to notify managers or users with service.approve about new service creation and approval request
     return service
   }
 
@@ -133,13 +133,12 @@ class ServicesUseCase {
     allowedUserTypes: UserType[]
     allowedPermissions: Permissions[]
   }): void {
-    if (allowedPermissions.length > 0 && permissions.length >= 0) {
+    if (allowedPermissions.length > 0 && permissions.length > 0) {
       const hasPermission = allowedPermissions.every(requiredPermission =>
         PermissionChecker.hasPermission(permissions, requiredPermission)
       )
-      if (!hasPermission) {
-        throw new CustomError('Forbidden', 403, 'You do not have permission to perform this action.')
-      }
+      if (hasPermission) return
+      throw new CustomError('Forbidden', 403, 'You do not have permission to perform this action.')
     }
 
     if (!allowedUserTypes.includes(userType)) {
