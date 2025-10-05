@@ -26,7 +26,8 @@ describe('ShiftController', () => {
         registerCompleted: true,
         googleId: '',
         profilePhotoUrl: '',
-        userId: 'user-123'
+        userId: 'user-123',
+        permissions: []
       }
     })
 

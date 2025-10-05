@@ -4,7 +4,7 @@ import { RedisCacheProvider } from '@/services/cache/redis-cache-provider.servic
 import { PasswordResetSetPasswordUseCase } from '@/services/use-cases/auth/password-reset-set-password.use-case'
 import { PasswordResetTicketService } from '@/services/use-cases/auth/password-reset-ticket.service'
 
-function makePasswordResetSetPasswordUseCase() {
+function makePasswordResetSetPasswordUseCase () {
   const customerRepository = new PrismaCustomerRepository()
   const professionalRepository = new PrismaProfessionalRepository()
   const cache = new RedisCacheProvider()

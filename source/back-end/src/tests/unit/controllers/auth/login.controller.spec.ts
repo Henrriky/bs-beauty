@@ -13,7 +13,7 @@ vi.mock('@/factory/make-login-use-case.factory', () => ({
 }))
 
 vi.mock('@/utils/cookies/refresh-cookie', () => ({
-  setRefreshCookie: vi.fn(),
+  setRefreshCookie: vi.fn()
 }))
 
 describe('LoginController', () => {
@@ -59,7 +59,7 @@ describe('LoginController', () => {
       req = mockRequest({ headers: { authorization: 'Bearer valid_token' } })
       executeMock.mockResolvedValueOnce({
         accessToken: 'fake_access_token',
-        refreshToken: 'fake_refresh_token',
+        refreshToken: 'fake_refresh_token'
       })
 
       // act
@@ -69,7 +69,7 @@ describe('LoginController', () => {
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK)
       expect(res.send).toHaveBeenCalledWith({
         accessToken: 'fake_access_token',
-        refreshToken: 'fake_refresh_token',
+        refreshToken: 'fake_refresh_token'
       })
       expect(usecaseMock.execute).toHaveBeenCalledWith({ token: 'valid_token' })
       expect(setRefreshCookie).toHaveBeenCalledWith(res, 'fake_refresh_token', expect.any(Number))
@@ -78,11 +78,11 @@ describe('LoginController', () => {
     it('should return 200 with tokens when email/password login succeeds', async () => {
       // arrange
       req = mockRequest({
-        body: { email: 'user@example.com', password: 'secret' },
+        body: { email: 'user@example.com', password: 'secret' }
       })
       executeMock.mockResolvedValueOnce({
         accessToken: 'email_access_token',
-        refreshToken: 'email_refresh_token',
+        refreshToken: 'email_refresh_token'
       })
 
       // act
@@ -92,11 +92,11 @@ describe('LoginController', () => {
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK)
       expect(res.send).toHaveBeenCalledWith({
         accessToken: 'email_access_token',
-        refreshToken: 'email_refresh_token',
+        refreshToken: 'email_refresh_token'
       })
       expect(usecaseMock.execute).toHaveBeenCalledWith({
         email: 'user@example.com',
-        password: 'secret',
+        password: 'secret'
       })
       expect(setRefreshCookie).toHaveBeenCalledWith(res, 'email_refresh_token', expect.any(Number))
     })

@@ -32,7 +32,9 @@ function UserRegistration() {
   const [registerCustomer, customerState] =
     authAPI.useRegisterCustomerMutation()
 
-  const register = isProfessionalEmail?.data ? registerProfessional : registerCustomer
+  const register = isProfessionalEmail?.data
+    ? registerProfessional
+    : registerCustomer
 
   const isLoading = professionalState.isLoading || customerState.isLoading
 
@@ -47,11 +49,7 @@ function UserRegistration() {
       dispatchRedux(
         setToken({
           user: {
-            id: decodedToken.id,
-            userType: decodedToken.userType,
-            email: decodedToken.email,
-            name: decodedToken.name,
-            registerCompleted: decodedToken.registerCompleted,
+            ...decodedToken,
           },
           token: {
             accessToken,

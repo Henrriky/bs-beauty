@@ -50,6 +50,12 @@ export const API_VARIABLES = {
       `/professionals/${professionalId}`,
     FETCH_SERVICES_OFFERED_BY_PROFESSIONAL: (professionalId: string) =>
       `/professionals/${professionalId}/offers/service`,
+    FETCH_PROFESSIONAL_ROLES: (professionalId: string) =>
+      `/professionals/${professionalId}/roles`,
+    ADD_ROLE_TO_PROFESSIONAL: (professionalId: string) =>
+      `/professionals/${professionalId}/roles`,
+    REMOVE_ROLE_FROM_PROFESSIONAL: (professionalId: string) =>
+      `/professionals/${professionalId}/roles`,
   },
   APPOINTMENTS_ENDPOINTS: {
     CREATE_APPOINTMENT: '/appointments',
@@ -76,5 +82,17 @@ export const API_VARIABLES = {
   NOTIFICATIONS_ENDPOINTS: {
     FETCH_NOTIFICATIONS: '/notifications',
     MARK_MANY_AS_READ: '/notifications/read',
-  }
+  },
+  ROLES_ENDPOINTS: {
+    ENDPOINT: '/roles',
+    FIND_BY_ID: (id: string) => `/roles/${id}`,
+    UPDATE_ROLE: (id: string) => `/roles/${id}`,
+    DELETE_ROLE: (id: string) => `/roles/${id}`,
+    ASSOCIATIONS: (id: string) => `/roles/${id}/associations`,
+    ADD_PERMISSION: (id: string) => `/roles/${id}/permissions`,
+    REMOVE_PERMISSION: (id: string) => `/roles/${id}/permissions`,
+  },
+  PERMISSIONS_ENDPOINTS: {
+    ENDPOINT: '/permissions',
+  },
 } as const

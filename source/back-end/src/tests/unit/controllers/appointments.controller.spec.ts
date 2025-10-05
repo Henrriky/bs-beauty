@@ -29,7 +29,8 @@ describe('AppointmentsController', () => {
         email: faker.internet.email(),
         name: faker.person.firstName(),
         registerCompleted: true,
-        profilePhotoUrl: faker.image.url()
+        profilePhotoUrl: faker.image.url(),
+        permissions: []
       }
     })
     res = mockResponse()

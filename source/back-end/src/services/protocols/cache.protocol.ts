@@ -1,21 +1,21 @@
 export interface Cache {
-  get<T = unknown>(key: string): Promise<T | null>
+  get: <T = unknown>(key: string) => Promise<T | null>
 
-  set<T = unknown>(
+  set: <T = unknown>(
     key: string,
     value: T,
-    options?: { timeToLiveSeconds?: number; onlyIfNotExists?: boolean }
-  ): Promise<boolean>
+    options?: { timeToLiveSeconds?: number, onlyIfNotExists?: boolean }
+  ) => Promise<boolean>
 
-  delete(key: string): Promise<void>
+  delete: (key: string) => Promise<void>
 
-  incr(key: string): Promise<number>
+  incr: (key: string) => Promise<number>
 
-  ttl(key: string): Promise<number | null>
+  ttl: (key: string) => Promise<number | null>
 
-  withLock<T>(
+  withLock: <T>(
     lockKey: string,
     lockTimeToLiveSeconds: number,
     task: () => Promise<T>
-  ): Promise<T>
+  ) => Promise<T>
 }

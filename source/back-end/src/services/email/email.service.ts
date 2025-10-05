@@ -1,24 +1,24 @@
 import nodemailer from 'nodemailer'
-import { VerificationPurpose } from '../use-cases/auth/code-validation.service'
+import { type VerificationPurpose } from '../use-cases/auth/code-validation.service'
 
 const transporter = nodemailer.createTransport({
   service: process.env.EMAIL_PROVIDER,
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
+    pass: process.env.EMAIL_PASSWORD
+  }
 })
 
 class EmailService {
-  async sendVerificationCode({
+  async sendVerificationCode ({
     to,
     code,
     expirationCodeTime,
     purpose
   }: {
-    to: string,
-    code: string,
-    expirationCodeTime: number,
+    to: string
+    code: string
+    expirationCodeTime: number
     purpose: VerificationPurpose
   }) {
     const subject = SUBJECTS[purpose]
@@ -31,13 +31,13 @@ class EmailService {
       to,
       subject,
       text,
-      html,
+      html
     })
 
     return { messageId: info.messageId }
   }
 
-  async sendAppointmentConfirmed(params: {
+  async sendAppointmentConfirmed (params: {
     to: string
     customerName: string
     professionalName: string
@@ -73,13 +73,13 @@ class EmailService {
       to,
       subject,
       text,
-      html,
+      html
     })
 
     return { messageId: info.messageId }
   }
 
-  async sendAppointmentCreated(params: {
+  async sendAppointmentCreated (params: {
     to: string
     professionalName: string
     customerName: string
@@ -108,13 +108,13 @@ class EmailService {
       to,
       subject,
       text,
-      html,
+      html
     })
 
     return { messageId: info.messageId }
   }
 
-  async sendAppointmentCancelled(params: {
+  async sendAppointmentCancelled (params: {
     to: string
     customerName: string
     professionalName: string
@@ -146,7 +146,7 @@ class EmailService {
       to,
       subject,
       text,
-      html,
+      html
     })
 
     return { messageId: info.messageId }
@@ -155,13 +155,12 @@ class EmailService {
 
 export { EmailService }
 
-
 const SUBJECTS: Record<VerificationPurpose, string> = {
   register: 'Confirme seu cadastro',
-  passwordReset: 'Redefinição de senha — seu código',
+  passwordReset: 'Redefinição de senha — seu código'
 }
 
-function renderText(purpose: VerificationPurpose, code: string, expMin: number) {
+function renderText (purpose: VerificationPurpose, code: string, expMin: number) {
   switch (purpose) {
     case 'register':
       return `Olá! Seu código para concluir o cadastro é: ${code}. Ele expira em ${expMin} minutos.`
@@ -170,11 +169,11 @@ function renderText(purpose: VerificationPurpose, code: string, expMin: number) 
   }
 }
 
-function renderHtml(purpose: VerificationPurpose, code: string, expMin: number) {
+function renderHtml (purpose: VerificationPurpose, code: string, expMin: number) {
   const titleMap = {
     register: 'Confirme seu cadastro',
     passwordReset: 'Redefinição de senha',
-    emailChange: 'Confirmar alteração de e-mail',
+    emailChange: 'Confirmar alteração de e-mail'
   } as const
 
   return `

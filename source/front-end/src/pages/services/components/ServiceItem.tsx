@@ -10,6 +10,8 @@ import React from 'react'
 import BSBeautyLoading from '../../../components/feedback/Loading'
 import { OnSubmitUpdateServiceStatusForm } from './types'
 import StatusBadge from '../../../components/status/StatusBadge'
+import { UserCanAccessContainer } from '../../../components/authorization/UserCanAccessContainer'
+import { UserType } from '../../../store/auth/types'
 
 interface ServiceItemProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -17,9 +19,9 @@ interface ServiceItemProps
   openDeleteModal: () => void
   onStatusChange: OnSubmitUpdateServiceStatusForm
   service: Service
-  isManager: boolean
   isSelected?: boolean
   isChangingStatus?: boolean
+  loggedUserId: string
 }
 
 const getStatusBadge = (status: ServiceStatus) => {
@@ -40,15 +42,22 @@ function ServiceItem({
   openDeleteModal,
   onStatusChange,
   service,
-  isManager,
   isSelected = false,
   isChangingStatus = false,
+  loggedUserId,
   ...props
 }: ServiceItemProps) {
+  const isStatusPending = service.status === 'PENDING'
+  const isServiceOwner = service.createdBy === loggedUserId
+  const canEdit =
+    isServiceOwner &&
+    (service.status === 'PENDING' || service.status === 'REJECTED')
+
   return (
     <Button
       label={
         <div className="flex items-start justify-between gap-3">
+          {/* Service Informations */}
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-medium text-white truncate group-hover:text-[#B19B86] transition-colors">
               {service.name}
@@ -69,64 +78,86 @@ function ServiceItem({
               )}
             </div>
           </div>
+          {/* Actions (Approve/Reject/Edit/Delete) */}
           <div className="flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
-            {isManager && service.status === 'PENDING' && (
+            {isStatusPending && (
               <>
-                <button
-                  disabled={isChangingStatus}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onStatusChange({ status: 'APPROVED' })
-                  }}
-                  className="p-1.5 text-gray-400 hover:text-green-400 hover:bg-green-400/10 rounded transition-all"
-                  title="Aprovar serviço"
+                <UserCanAccessContainer allowedUserTypes={[UserType.MANAGER]}>
+                  <button
+                    disabled={isChangingStatus}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onStatusChange({ status: 'APPROVED' })
+                    }}
+                    className="p-1.5 text-gray-400 hover:text-green-400 hover:bg-green-400/10 rounded transition-all"
+                    title="Aprovar serviço"
+                  >
+                    {isChangingStatus ? (
+                      <BSBeautyLoading />
+                    ) : (
+                      <CheckIcon className="w-4 h-4" />
+                    )}
+                  </button>
+                  <button
+                    disabled={isChangingStatus}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onStatusChange({ status: 'REJECTED' })
+                    }}
+                    className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
+                    title="Rejeitar serviço"
+                  >
+                    {isChangingStatus ? (
+                      <BSBeautyLoading />
+                    ) : (
+                      <XMarkIcon className="w-4 h-4" />
+                    )}
+                  </button>
+                  <div className="w-px h-4 bg-gray-600"></div>
+                </UserCanAccessContainer>
+                {canEdit ? (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      openUpdateModal()
+                    }}
+                    className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
+                    title="Editar serviço"
+                  >
+                    <PencilSquareIcon className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <UserCanAccessContainer
+                    allowedPermissions={['service.edit']}
+                    allowedUserTypes={[UserType.MANAGER]}
+                  >
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        openUpdateModal()
+                      }}
+                      className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
+                      title="Editar serviço"
+                    >
+                      <PencilSquareIcon className="w-4 h-4" />
+                    </button>
+                  </UserCanAccessContainer>
+                )}
+                <UserCanAccessContainer
+                  allowedPermissions={['service.delete']}
+                  allowedUserTypes={[UserType.MANAGER]}
                 >
-                  {isChangingStatus ? (
-                    <BSBeautyLoading />
-                  ) : (
-                    <CheckIcon className="w-4 h-4" />
-                  )}
-                </button>
-                <button
-                  disabled={isChangingStatus}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onStatusChange({ status: 'REJECTED' })
-                  }}
-                  className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
-                  title="Rejeitar serviço"
-                >
-                  {isChangingStatus ? (
-                    <BSBeautyLoading />
-                  ) : (
-                    <XMarkIcon className="w-4 h-4" />
-                  )}
-                </button>
-                <div className="w-px h-4 bg-gray-600"></div>
-              </>
-            )}
-            {(isManager || service.status === 'PENDING') && (
-              <>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    openUpdateModal()
-                  }}
-                  className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
-                  title="Editar serviço"
-                >
-                  <PencilSquareIcon className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    openDeleteModal()
-                  }}
-                  className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
-                  title="Excluir serviço"
-                >
-                  <TrashIcon className="w-4 h-4" />
-                </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      openDeleteModal()
+                    }}
+                    className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
+                    title="Excluir serviço"
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                  </button>
+                </UserCanAccessContainer>
               </>
             )}
           </div>

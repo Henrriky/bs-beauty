@@ -1,17 +1,16 @@
-import { makePasswordResetRequestUseCase } from "@/factory/auth/make-password-reset-request-use-case.factory";
-import { formatValidationErrors } from "@/utils/formatting/zod-validation-errors.formatting.util";
-import { NextFunction, Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
-import z from "zod";
+import { makePasswordResetRequestUseCase } from '@/factory/auth/make-password-reset-request-use-case.factory'
+import { formatValidationErrors } from '@/utils/formatting/zod-validation-errors.formatting.util'
+import { type NextFunction, type Request, type Response } from 'express'
+import { StatusCodes } from 'http-status-codes'
+import z from 'zod'
 
 const PasswordResetRequestSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email()
 }).strict()
 
 class PasswordResetRequestController {
-  public static async handle(req: Request, res: Response, next: NextFunction) {
+  public static async handle (req: Request, res: Response, next: NextFunction) {
     try {
-
       const { email } = PasswordResetRequestSchema.parse(req.body)
       const usecase = makePasswordResetRequestUseCase()
       await usecase.execute(email)
@@ -31,4 +30,4 @@ class PasswordResetRequestController {
   }
 }
 
-export { PasswordResetRequestController };
+export { PasswordResetRequestController }

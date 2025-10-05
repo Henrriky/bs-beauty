@@ -13,9 +13,9 @@ import { Customer } from '../../../store/auth/types'
 import { customerAPI } from '../../../store/customer/customer-api'
 import { userAPI } from '../../../store/user/user-api'
 import { Formatter } from '../../../utils/formatter/formatter.util'
+import { CustomerUpdateProfileFormData } from '../types'
 import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
 import Modal from '../../services/components/Modal'
-import { CustomerUpdateProfileFormData } from './types'
 
 interface CustomerProfileProps {
   userInfo: Customer
@@ -26,7 +26,7 @@ const NOTIFICATION_OPTIONS = [
   { value: 'NONE', label: 'Não receber' },
   { value: 'IN_APP', label: 'Receber pela plataforma' },
   { value: 'EMAIL', label: 'Receber por email' },
-  { value: 'BOTH', label: 'Receber pela plataforma e por email' }
+  { value: 'BOTH', label: 'Receber pela plataforma e por email' },
 ]
 
 function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
@@ -42,18 +42,18 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
     defaultValues: {
       birthdate: userInfo.birthdate
         ? ((() => {
-          const date = new Date(userInfo.birthdate)
-          const day = String(date.getUTCDate()).padStart(2, '0')
-          const month = String(date.getMonth() + 1).padStart(2, '0')
-          const year = date.getFullYear()
-          return `${day}/${month}/${year}`
-        })() as unknown as Date)
+            const date = new Date(userInfo.birthdate)
+            const day = String(date.getUTCDate()).padStart(2, '0')
+            const month = String(date.getMonth() + 1).padStart(2, '0')
+            const year = date.getFullYear()
+            return `${day}/${month}/${year}`
+          })() as unknown as Date)
         : undefined,
       phone: userInfo.phone || undefined,
       name: userInfo.name || undefined,
       email: userInfo.email || undefined,
       alwaysAllowImageUse: userInfo.alwaysAllowImageUse ?? undefined,
-      notificationPreference: userInfo.notificationPreference ?? undefined
+      notificationPreference: userInfo.notificationPreference ?? undefined,
     },
   })
 

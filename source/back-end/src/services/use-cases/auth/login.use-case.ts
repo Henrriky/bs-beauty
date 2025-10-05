@@ -5,7 +5,9 @@ import { type CustomerOrProfessional } from '../../../types/customer-or-professi
 import { CustomError } from '../../../utils/errors/custom.error.util'
 import { type Encrypter } from '../../protocols/encrypter.protocol'
 import { type OAuthIdentityProvider } from '../../protocols/oauth-identity-provider.protocol'
-import { RefreshTokenService } from '@/services/encrypter/refresh-token.service'
+import { type RefreshTokenService } from '@/services/encrypter/refresh-token.service'
+import { UserType } from '@prisma/client'
+import { type Permissions } from '@/utils/auth/permissions-map.util'
 
 interface LoginUseCaseInput {
   token?: string
@@ -14,12 +16,12 @@ interface LoginUseCaseInput {
 }
 
 interface LoginUseCaseOutput {
-  accessToken: string,
+  accessToken: string
   refreshToken: string
 }
 
 class LoginUseCase {
-  constructor(
+  constructor (
     private readonly customerRepository: CustomerRepository,
     private readonly professionalRepository: ProfessionalRepository,
     private readonly encrypter: Encrypter,
@@ -27,19 +29,19 @@ class LoginUseCase {
     private readonly refreshTokenService: RefreshTokenService
   ) { }
 
-  async execute(
+  async execute (
     {
       token,
       email,
-      password,
+      password
     }:
-      LoginUseCaseInput &
-      {
-        meta?: {
-          ip?: string;
-          userAgent?: string
-        }
-      }): Promise<LoginUseCaseOutput> {
+    LoginUseCaseInput &
+    {
+      meta?: {
+        ip?: string
+        userAgent?: string
+      }
+    }): Promise<LoginUseCaseOutput> {
     let customerOrProfessional: CustomerOrProfessional | null = null
 
     if (token) {
@@ -57,31 +59,26 @@ class LoginUseCase {
         })
         customerOrProfessional = {
           ...customer,
-          userId
+          userId,
+          permissions: []
         }
       } else {
         const professional = await this.professionalRepository.updateProfessionalByEmail(email, {
           googleId: userId,
           profilePhotoUrl
         })
+        const permissions = await this.professionalRepository.findProfessionalPermissions(professional.id)
         customerOrProfessional = {
           ...professional,
-          userId
+          userId,
+          permissions
         }
       }
 
-      return this.issueTokensForUser(customerOrProfessional)
+      return await this.issueTokensForUser(customerOrProfessional)
     } else if (email && password) {
-      const customer = await this.customerRepository.findByEmail(email)
-      const professional = await this.professionalRepository.findByEmail(email)
-
-      const user = customer ?? professional
-
-      let isPasswordValid: boolean = false;
-
-      if (user && user.passwordHash) {
-        isPasswordValid = await bcrypt.compare(password, user!.passwordHash!)
-      }
+      const user = await this.customerRepository.findByEmail(email) ?? await this.professionalRepository.findByEmail(email)
+      const isPasswordValid = user?.passwordHash && await bcrypt.compare(password, user.passwordHash)
 
       if (!user || !isPasswordValid) {
         throw new CustomError(
@@ -90,16 +87,19 @@ class LoginUseCase {
           'Invalid credentials'
         )
       }
+      const permissions: Permissions[] = [
+        ...(user.userType === UserType.PROFESSIONAL ? await this.professionalRepository.findProfessionalPermissions(user.id) : [])
+      ]
 
-      customerOrProfessional = { ...user, userId: user.id } as CustomerOrProfessional
+      customerOrProfessional = { ...user, userId: user.id, permissions } satisfies CustomerOrProfessional
 
-      return this.issueTokensForUser(customerOrProfessional)
+      return await this.issueTokensForUser(customerOrProfessional)
     }
 
     throw new Error('Invalid credentials')
   }
 
-  private async issueTokensForUser(user: CustomerOrProfessional & { userId?: string }): Promise<LoginUseCaseOutput> {
+  private async issueTokensForUser (user: CustomerOrProfessional & { userId?: string }): Promise<LoginUseCaseOutput> {
     const subjectUserId = user.userId ?? user.id
     const profilePhotoUrl = user.profilePhotoUrl ?? ''
 
@@ -110,7 +110,8 @@ class LoginUseCase {
       email: user.email,
       name: user.name,
       registerCompleted: user.registerCompleted,
-      profilePhotoUrl
+      profilePhotoUrl,
+      permissions: user.permissions
     })
 
     const { refreshToken } = await this.refreshTokenService.issue(user.id)

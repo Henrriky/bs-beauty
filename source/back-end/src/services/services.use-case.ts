@@ -1,4 +1,4 @@
-import { type Service, type Prisma, ServiceStatus, type UserType } from '@prisma/client'
+import { type Service, type Prisma, ServiceStatus, type UserType, type Professional } from '@prisma/client'
 import { type ServiceRepository } from '../repository/protocols/service.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { type ProfessionalsOfferingService } from '../repository/types/service-repository.types'
@@ -6,15 +6,12 @@ import { type PaginatedRequest, type PaginatedResult } from '../types/pagination
 import { type PartialServiceQuerySchema } from '@/utils/validation/zod-schemas/pagination/services/services-query.schema'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 import { CustomError } from '@/utils/errors/custom.error.util'
+import { PermissionChecker } from '@/utils/auth/permission-checker.util'
+import { type Permissions } from '@/utils/auth/permissions-map.util'
 
 interface ServicesOutput {
   services: Service[]
 }
-
-const PERMISSIONS = {
-  CREATE_SERVICE: ['MANAGER', 'PROFESSIONAL'] as UserType[],
-  UPDATE_SERVICE_STATUS: ['MANAGER'] as UserType[]
-} as const
 
 const STATUS_TRANSITIONS: Record<ServiceStatus, ServiceStatus[]> = {
   PENDING: [ServiceStatus.APPROVED, ServiceStatus.REJECTED],
@@ -65,7 +62,7 @@ class ServicesUseCase {
 
     const service = await this.serviceRepository.create(newService)
 
-    // TODO: Call notification use case to notify managers about new service creation and approval request
+    // TODO: Call notification use case to notify managers or users with service.approve about new service creation and approval request
     return service
   }
 
@@ -74,7 +71,11 @@ class ServicesUseCase {
 
     if (this.isStatusBeingUpdated(updatedService)) {
       const professional = await this.validateAndGetProfessional(professionalId)
-      this.validatePermission(professional.userType, PERMISSIONS.UPDATE_SERVICE_STATUS)
+      this.validatePermission({
+        userToVerify: professional,
+        allowedUserTypes: ['MANAGER'],
+        allowedPermissions: ['service.approve']
+      })
       this.validateStatusTransition(service.status, updatedService.status as ServiceStatus)
     }
 
@@ -114,12 +115,33 @@ class ServicesUseCase {
   private async validateAndGetProfessional (professionalId: string) {
     const professional = await this.professionalRepository.findById(professionalId)
     RecordExistence.validateRecordExistence(professional, 'Professional')
+
+    const permissions = await this.professionalRepository.findProfessionalPermissions(professionalId)
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return professional!
+    return { ...professional!, permissions }
   }
 
-  private validatePermission (userType: UserType, allowedRoles: UserType[]): void {
-    if (!allowedRoles.includes(userType)) {
+  private validatePermission ({
+    userToVerify: {
+      permissions,
+      userType
+    },
+    allowedPermissions,
+    allowedUserTypes
+  }: {
+    userToVerify: Professional & { permissions: Permissions[] }
+    allowedUserTypes: UserType[]
+    allowedPermissions: Permissions[]
+  }): void {
+    if (allowedPermissions.length > 0 && permissions.length > 0) {
+      const hasPermission = allowedPermissions.every(requiredPermission =>
+        PermissionChecker.hasPermission(permissions, requiredPermission)
+      )
+      if (hasPermission) return
+      throw new CustomError('Forbidden', 403, 'You do not have permission to perform this action.')
+    }
+
+    if (!allowedUserTypes.includes(userType)) {
       throw new CustomError('Forbidden', 403, 'You do not have permission to perform this action.')
     }
   }

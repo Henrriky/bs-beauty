@@ -1,12 +1,12 @@
 // controllers/auth/logout.controller.ts
-import { Request, Response, NextFunction } from 'express'
+import { type Request, type Response, type NextFunction } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { REFRESH_COOKIE_NAME, getRefreshCookieOptions } from '@/utils/cookies/refresh-cookie'
 import { RedisCacheProvider } from '@/services/cache/redis-cache-provider.service'
 import { RefreshTokenService } from '@/services/encrypter/refresh-token.service'
 
 export class LogoutController {
-  static async handle(req: Request, res: Response, next: NextFunction) {
+  static async handle (req: Request, res: Response, next: NextFunction) {
     try {
       const refreshJwt = req.cookies?.[REFRESH_COOKIE_NAME]
       const cache = new RedisCacheProvider()

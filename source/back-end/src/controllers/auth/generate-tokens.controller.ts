@@ -3,14 +3,14 @@ import { REFRESH_COOKIE_NAME, setRefreshCookie } from '@/utils/cookies/refresh-c
 import { type NextFunction, type Request, type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-const REFRESH_TOKEN_MAX_AGE = 30 * 24 * 60 * 60 * 1000 
+const REFRESH_TOKEN_MAX_AGE = 30 * 24 * 60 * 60 * 1000
 
 class GenerateTokensController {
-  static async handle(req: Request, res: Response, next: NextFunction) {
+  static async handle (req: Request, res: Response, next: NextFunction) {
     try {
-      const incomingRefreshJwt = req.cookies && req.cookies[REFRESH_COOKIE_NAME]
+      const incomingRefreshJwt = req.cookies?.[REFRESH_COOKIE_NAME]
 
-      if (!incomingRefreshJwt) {
+      if (!(incomingRefreshJwt)) {
         return res
           .status(StatusCodes.UNAUTHORIZED)
           .send({ message: 'Missing refresh token' })

@@ -48,12 +48,7 @@ function CompleteRegister() {
       dispatchRedux(
         setToken({
           user: {
-            id: decodedToken.id,
-            userType: decodedToken.userType,
-            email: decodedToken.email,
-            name: decodedToken.name,
-            registerCompleted: decodedToken.registerCompleted,
-            profilePhotoUrl: decodedToken.profilePhotoUrl,
+            ...decodedToken,
           },
           token: {
             googleAccessToken: tokens.googleAccessToken,

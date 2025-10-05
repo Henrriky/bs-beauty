@@ -1,17 +1,20 @@
 import { ProfessionalsUseCase } from '@/services/professionals.use-case'
-import { MockProfessionalRepository } from '../utils/mocks/repository'
+import { MockProfessionalRepository, MockRoleRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { Prisma, type Professional, UserType } from '@prisma/client'
+import { NotificationChannel, Prisma, type Professional, UserType } from '@prisma/client'
 import { type ServicesOfferedByProfessional } from '@/repository/types/professional-repository.types'
 import bcrypt from 'bcrypt'
+import { CustomError } from '@/utils/errors/custom.error.util'
 
 describe('ProfessionalsUseCase (Unit Tests)', () => {
   let professionalsUseCase: ProfessionalsUseCase
 
   beforeEach(() => {
     professionalsUseCase = new ProfessionalsUseCase(
-      MockProfessionalRepository
+      MockProfessionalRepository,
+      MockRoleRepository
     )
+    vi.clearAllMocks()
   })
 
   it('should be defined', () => {
@@ -39,7 +42,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
           updatedAt: faker.date.past(),
           profilePhotoUrl: faker.internet.url(),
           paymentMethods: null,
-          notificationPreference: 'BOTH',
+          notificationPreference: 'BOTH'
         }
       ]
 
@@ -78,7 +81,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
         paymentMethods: null,
-        notificationPreference: 'BOTH',
+        notificationPreference: 'BOTH'
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(professional)
@@ -125,7 +128,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         paymentMethods: null,
-        notificationPreference: 'BOTH',
+        notificationPreference: 'BOTH'
       }
 
       MockProfessionalRepository.findByEmail.mockResolvedValue(null)
@@ -163,7 +166,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         paymentMethods: null,
-        notificationPreference: 'BOTH',
+        notificationPreference: 'BOTH'
       }
 
       MockProfessionalRepository.findByEmail.mockResolvedValue(existingProfessional)
@@ -199,7 +202,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
         paymentMethods: null,
-        notificationPreference: 'BOTH',
+        notificationPreference: 'BOTH'
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(updatedProfessional)
@@ -364,6 +367,380 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
 
       const promise = professionalsUseCase.fetchServicesOfferedByProfessional(professionalId, params)
       await expect(promise).rejects.toThrow('Not Found')
+    })
+  })
+
+  describe('executeAddRole', () => {
+    it('should add role to professional successfully', async () => {
+      const roleId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+
+      const role = {
+        id: roleId,
+        name: 'Admin',
+        description: faker.lorem.sentence(),
+        isActive: true,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      const professional = {
+        id: professionalId,
+        name: faker.person.firstName(),
+        email: faker.internet.email(),
+        googleId: null,
+        registerCompleted: true,
+        paymentMethods: null,
+        socialMedia: null,
+        passwordHash: null,
+        contact: faker.phone.number(),
+        specialization: faker.lorem.word(),
+        profilePhotoUrl: null,
+        userType: 'PROFESSIONAL' as const,
+        notificationPreference: NotificationChannel.BOTH,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      MockRoleRepository.findById.mockResolvedValue(role)
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockProfessionalRepository.findProfessionalRoleAssociation.mockResolvedValue(false)
+      MockProfessionalRepository.addRoleToProfessional.mockResolvedValue()
+
+      await professionalsUseCase.executeAddRole(professionalId, roleId)
+
+      expect(MockRoleRepository.findById).toHaveBeenCalledWith(roleId)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockProfessionalRepository.findProfessionalRoleAssociation).toHaveBeenCalledWith(professionalId, roleId)
+      expect(MockProfessionalRepository.addRoleToProfessional).toHaveBeenCalledWith(professionalId, roleId)
+    })
+
+    it('should throw error when role is not found', async () => {
+      const roleId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+
+      const professional = {
+        id: professionalId,
+        name: faker.person.firstName(),
+        email: faker.internet.email(),
+        googleId: null,
+        registerCompleted: true,
+        paymentMethods: null,
+        socialMedia: null,
+        passwordHash: null,
+        contact: faker.phone.number(),
+        specialization: faker.lorem.word(),
+        profilePhotoUrl: null,
+        userType: 'PROFESSIONAL' as const,
+        createdAt: faker.date.past(),
+        notificationPreference: NotificationChannel.BOTH,
+        updatedAt: faker.date.past()
+      }
+
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockRoleRepository.findById.mockResolvedValue(null)
+
+      const promise = professionalsUseCase.executeAddRole(professionalId, roleId)
+
+      await expect(promise).rejects.toBeInstanceOf(CustomError)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockRoleRepository.findById).toHaveBeenCalledWith(roleId)
+      expect(MockProfessionalRepository.findProfessionalRoleAssociation).not.toHaveBeenCalled()
+    })
+
+    it('should throw error when professional is not found', async () => {
+      const roleId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+
+      MockProfessionalRepository.findById.mockResolvedValue(null)
+
+      const promise = professionalsUseCase.executeAddRole(professionalId, roleId)
+
+      await expect(promise).rejects.toBeInstanceOf(CustomError)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockRoleRepository.findById).not.toHaveBeenCalled()
+    })
+
+    it('should throw error when professional already has the role', async () => {
+      const roleId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+
+      const role = {
+        id: roleId,
+        name: 'Admin',
+        description: faker.lorem.sentence(),
+        isActive: true,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      const professional = {
+        id: professionalId,
+        name: faker.person.firstName(),
+        email: faker.internet.email(),
+        googleId: null,
+        registerCompleted: true,
+        paymentMethods: null,
+        socialMedia: null,
+        contact: faker.phone.number(),
+        specialization: faker.lorem.word(),
+        profilePhotoUrl: null,
+        passwordHash: null,
+        userType: 'PROFESSIONAL' as const,
+        createdAt: faker.date.past(),
+        notificationPreference: NotificationChannel.BOTH,
+        updatedAt: faker.date.past()
+      }
+
+      MockRoleRepository.findById.mockResolvedValue(role)
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockProfessionalRepository.findProfessionalRoleAssociation.mockResolvedValue(true)
+
+      const promise = professionalsUseCase.executeAddRole(professionalId, roleId)
+
+      await expect(promise).rejects.toBeInstanceOf(CustomError)
+      expect(MockRoleRepository.findById).toHaveBeenCalledWith(roleId)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockProfessionalRepository.findProfessionalRoleAssociation).toHaveBeenCalledWith(professionalId, roleId)
+      expect(MockProfessionalRepository.addRoleToProfessional).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('executeRemoveRole', () => {
+    it('should remove role from professional successfully', async () => {
+      const roleId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+
+      const role = {
+        id: roleId,
+        name: 'Editor',
+        description: faker.lorem.sentence(),
+        isActive: true,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      const professional = {
+        id: professionalId,
+        name: faker.person.firstName(),
+        email: faker.internet.email(),
+        googleId: null,
+        registerCompleted: true,
+        paymentMethods: null,
+        socialMedia: null,
+        passwordHash: null,
+        contact: faker.phone.number(),
+        specialization: faker.lorem.word(),
+        profilePhotoUrl: null,
+        userType: 'PROFESSIONAL' as const,
+        createdAt: faker.date.past(),
+        notificationPreference: NotificationChannel.BOTH,
+        updatedAt: faker.date.past()
+      }
+
+      MockRoleRepository.findById.mockResolvedValue(role)
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockProfessionalRepository.findProfessionalRoleAssociation.mockResolvedValue(true)
+      MockProfessionalRepository.removeRoleFromProfessional.mockResolvedValue()
+
+      await professionalsUseCase.executeRemoveRole(professionalId, roleId)
+
+      expect(MockRoleRepository.findById).toHaveBeenCalledWith(roleId)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockProfessionalRepository.findProfessionalRoleAssociation).toHaveBeenCalledWith(professionalId, roleId)
+      expect(MockProfessionalRepository.removeRoleFromProfessional).toHaveBeenCalledWith(professionalId, roleId)
+    })
+
+    it('should throw error when role is not found', async () => {
+      const roleId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+
+      const professional = {
+        id: professionalId,
+        name: faker.person.firstName(),
+        email: faker.internet.email(),
+        googleId: null,
+        registerCompleted: true,
+        paymentMethods: null,
+        socialMedia: null,
+        passwordHash: null,
+        contact: faker.phone.number(),
+        specialization: faker.lorem.word(),
+        profilePhotoUrl: null,
+        userType: 'PROFESSIONAL' as const,
+        createdAt: faker.date.past(),
+        notificationPreference: NotificationChannel.BOTH,
+        updatedAt: faker.date.past()
+      }
+
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockRoleRepository.findById.mockResolvedValue(null)
+
+      const promise = professionalsUseCase.executeRemoveRole(professionalId, roleId)
+
+      await expect(promise).rejects.toBeInstanceOf(CustomError)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockRoleRepository.findById).toHaveBeenCalledWith(roleId)
+      expect(MockProfessionalRepository.findProfessionalRoleAssociation).not.toHaveBeenCalled()
+    })
+
+    it('should throw error when professional is not found', async () => {
+      const roleId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+
+      MockProfessionalRepository.findById.mockResolvedValue(null)
+
+      const promise = professionalsUseCase.executeRemoveRole(professionalId, roleId)
+
+      await expect(promise).rejects.toBeInstanceOf(CustomError)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockRoleRepository.findById).not.toHaveBeenCalled()
+    })
+
+    it('should throw error when professional does not have the specified role', async () => {
+      const roleId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+
+      const role = {
+        id: roleId,
+        name: 'Editor',
+        description: faker.lorem.sentence(),
+        isActive: true,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      const professional = {
+        id: professionalId,
+        name: faker.person.firstName(),
+        email: faker.internet.email(),
+        googleId: null,
+        registerCompleted: true,
+        paymentMethods: null,
+        socialMedia: null,
+        passwordHash: null,
+        contact: faker.phone.number(),
+        specialization: faker.lorem.word(),
+        profilePhotoUrl: null,
+        userType: 'PROFESSIONAL' as const,
+        notificationPreference: NotificationChannel.BOTH,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      MockRoleRepository.findById.mockResolvedValue(role)
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockProfessionalRepository.findProfessionalRoleAssociation.mockResolvedValue(false)
+
+      const promise = professionalsUseCase.executeRemoveRole(professionalId, roleId)
+
+      await expect(promise).rejects.toBeInstanceOf(CustomError)
+      expect(MockRoleRepository.findById).toHaveBeenCalledWith(roleId)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockProfessionalRepository.findProfessionalRoleAssociation).toHaveBeenCalledWith(professionalId, roleId)
+      expect(MockProfessionalRepository.removeRoleFromProfessional).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('executeFindRolesByProfessionalId', () => {
+    it('should return roles for a professional successfully', async () => {
+      const professionalId = faker.string.uuid()
+      const mockProfessionalRoles = [
+        {
+          id: faker.string.uuid(),
+          role: {
+            id: faker.string.uuid(),
+            name: 'MANAGER',
+            description: 'Manager role',
+            isActive: true,
+            createdAt: faker.date.past(),
+            updatedAt: faker.date.past()
+          }
+        },
+        {
+          id: faker.string.uuid(),
+          role: {
+            id: faker.string.uuid(),
+            name: 'PROFESSIONAL',
+            description: 'Professional role',
+            isActive: true,
+            createdAt: faker.date.past(),
+            updatedAt: faker.date.past()
+          }
+        }
+      ]
+
+      const professional = {
+        id: professionalId,
+        name: faker.person.firstName(),
+        email: faker.internet.email(),
+        googleId: null,
+        registerCompleted: true,
+        paymentMethods: null,
+        socialMedia: null,
+        passwordHash: null,
+        contact: faker.phone.number(),
+        specialization: faker.lorem.word(),
+        profilePhotoUrl: null,
+        userType: 'PROFESSIONAL' as const,
+        notificationPreference: NotificationChannel.BOTH,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockProfessionalRepository.findRolesByProfessionalId.mockResolvedValue(mockProfessionalRoles)
+
+      const result = await professionalsUseCase.executeFindRolesByProfessionalId(professionalId)
+
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockProfessionalRepository.findRolesByProfessionalId).toHaveBeenCalledWith(professionalId)
+      expect(result).toEqual(mockProfessionalRoles)
+    })
+
+    it('should throw error if professional does not exist', async () => {
+      const professionalId = faker.string.uuid()
+
+      MockProfessionalRepository.findById.mockResolvedValue(null)
+
+      const promise = professionalsUseCase.executeFindRolesByProfessionalId(professionalId)
+
+      await expect(promise).rejects.toBeInstanceOf(CustomError)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockProfessionalRepository.findRolesByProfessionalId).not.toHaveBeenCalled()
+    })
+
+    it('should return empty array when professional has no roles', async () => {
+      const professionalId = faker.string.uuid()
+      const mockProfessionalRoles: any[] = []
+
+      const professional = {
+        id: professionalId,
+        name: faker.person.firstName(),
+        email: faker.internet.email(),
+        googleId: null,
+        registerCompleted: true,
+        paymentMethods: null,
+        socialMedia: null,
+        passwordHash: null,
+        contact: faker.phone.number(),
+        specialization: faker.lorem.word(),
+        profilePhotoUrl: null,
+        userType: 'PROFESSIONAL' as const,
+        notificationPreference: NotificationChannel.BOTH,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockProfessionalRepository.findRolesByProfessionalId.mockResolvedValue(mockProfessionalRoles)
+
+      const result = await professionalsUseCase.executeFindRolesByProfessionalId(professionalId)
+
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockProfessionalRepository.findRolesByProfessionalId).toHaveBeenCalledWith(professionalId)
+      expect(result).toEqual([])
+      expect(result).toHaveLength(0)
     })
   })
 })

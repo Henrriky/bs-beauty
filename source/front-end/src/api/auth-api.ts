@@ -59,7 +59,7 @@ const loginWithEmailAndPassword = async (
       { email, password },
       {
         withCredentials: true,
-      }
+      },
     )
   return { accessToken: response.data.accessToken }
 }

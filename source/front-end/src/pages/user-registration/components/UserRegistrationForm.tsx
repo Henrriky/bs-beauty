@@ -14,8 +14,8 @@ import { useState } from 'react'
 interface UserRegistrationProps {
   isLoading: boolean
   handleSubmit:
-  | OnSubmitCustomerRegistrationFormData
-  | OnSubmitProfessionalRegistrationFormData
+    | OnSubmitCustomerRegistrationFormData
+    | OnSubmitProfessionalRegistrationFormData
   setEmail: React.Dispatch<React.SetStateAction<string>>
   setPassword: React.Dispatch<React.SetStateAction<string>>
   isOpen: boolean
