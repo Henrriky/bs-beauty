@@ -106,6 +106,7 @@ describe('ProfessionalsController', () => {
         specialization: null,
         profilePhotoUrl: null,
         userType: 'MANAGER',
+        notificationPreference: 'BOTH',
         createdAt: new Date(),
         updatedAt: new Date()
       }

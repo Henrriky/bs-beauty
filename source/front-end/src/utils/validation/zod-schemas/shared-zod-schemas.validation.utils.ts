@@ -1,5 +1,11 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { NotificationPreference } from '../../../store/auth/types'
+
+export const NotificationChannelEnum = z.enum(['NONE', 'IN_APP', 'EMAIL', 'BOTH'], {
+  required_error: 'Por favor, selecione um canal de notificação',
+  invalid_type_error: 'Opção inválida',
+})
 
 class SharedSchemas {
   public static nameSchema = z
@@ -69,6 +75,8 @@ class SharedSchemas {
     .string()
     .max(50, 'A especialização deve ter no máximo 50 caracteres')
     .optional()
+
+  public static notificationPreference = z.nativeEnum(NotificationPreference).optional()
 
   public static registerBodySchema = z
     .object({

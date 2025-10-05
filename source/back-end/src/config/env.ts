@@ -8,6 +8,9 @@ const envSchema = z.object({
   GOOGLE_SCOPES: z.string(),
   JWT_SECRET: z.string(),
   JWT_EXPIRES_IN: z.string(),
+  NOTIFY_ASYNC_ENABLED: z.coerce.boolean().default(true),
+  NOTIFY_CONCURRENCY: z.coerce.number().int().min(1).max(50).default(3),
+  NOTIFY_RETRY_DELAY_MS: z.coerce.number().int().min(100).default(2000),
   JWT_REFRESH_EXPIRES_IN: z.string()
 })
 

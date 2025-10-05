@@ -73,4 +73,8 @@ export const API_VARIABLES = {
     FETCH_ANALYTICS_BY_PROFESSIONAL: (professionalId: string) =>
       `/analytics/${professionalId}`,
   },
+  NOTIFICATIONS_ENDPOINTS: {
+    FETCH_NOTIFICATIONS: '/notifications',
+    MARK_MANY_AS_READ: '/notifications/read',
+  }
 } as const

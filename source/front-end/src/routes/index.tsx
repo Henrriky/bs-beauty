@@ -17,6 +17,7 @@ import { UserType } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
+import Notifications from '../pages/notifications'
 import UserRegistration from '../pages/user-registration'
 import PasswordReset from '../pages/password-reset'
 import PasswordResetCompleted from '../pages/password-reset/components/PasswordResetCompleted'
@@ -55,7 +56,7 @@ function BSBeautyRouter() {
                 path="/appointments/:appointmentId"
                 element={<AppointmentDetails />}
               />
-
+              <Route path="/notifications" element={<Notifications />} />
               {/* CUSTOMER ROUTES */}
               <Route
                 element={

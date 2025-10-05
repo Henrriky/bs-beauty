@@ -121,6 +121,7 @@ describe('CustomerController', () => {
         createdAt: new Date(),
         alwaysAllowImageUse: false,
         discoverySource: DiscoverySource.INSTAGRAM,
+        notificationPreference: 'BOTH',
         updatedAt: new Date()
       }
       usecaseMock.executeFindById.mockResolvedValueOnce(customer)

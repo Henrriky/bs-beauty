@@ -6,6 +6,13 @@ export enum UserType {
   PROFESSIONAL = "PROFESSIONAL"
 }
 
+export enum NotificationPreference {
+  NONE = "NONE",
+  IN_APP = 'IN_APP',
+  EMAIL = 'EMAIL',
+  BOTH = 'BOTH'
+}
+
 export interface CustomerOrProfessional {
   id: string
   name: string | null
@@ -28,6 +35,7 @@ export type Customer = {
   userType: UserType;
   referrerId: string;
   referralCount: number;
+  notificationPreference: NotificationPreference
   createdAt: Date;
   updatedAt: Date;
 }
@@ -44,6 +52,7 @@ export type Professional = {
   specialization: string | null;
   profilePhotoUrl: string;
   userType: UserType;
+  notificationPreference: NotificationPreference
   createdAt: Date;
   updatedAt: Date;
 }

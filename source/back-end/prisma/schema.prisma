@@ -28,6 +28,7 @@ model Customer {
   referralCount       Int       @default(0) @map("referral_count")
   alwaysAllowImageUse Boolean   @default(false) @map("always_allow_image_use")
   discoverySource     DiscoverySource? @map("discovery_source")
+  notificationPreference NotificationChannel? @default(NONE) @map("notification_preference")
   createdAt           DateTime  @default(now()) @map("created_at")
   updatedAt           DateTime  @updatedAt @map("updated_at")
 
@@ -49,7 +50,6 @@ model Appointment {
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
-  notifications Notification[]
   rating        Rating?
   customer      Customer       @relation(fields: [customerId], references: [id])
   offer         Offer          @relation(fields: [serviceOfferedId], references: [id])
@@ -69,13 +69,16 @@ model Rating {
 
 model Notification {
   id            String    @id @default(uuid())
-  message       String
+  marker        String    @unique
+  title         String 
+  message       String    @db.Text
+  type          NotificationType     @default(SYSTEM)
   createdAt     DateTime  @default(now()) @map("created_at")
   readAt        DateTime? @map("read_at")
-  appointmentId String    @map("appointment_id")
+  recipientId   String    @map("recipient_id")
+  recipientType UserType
 
-  appointment Appointment @relation(fields: [appointmentId], references: [id])
-
+  @@index([recipientId, readAt, createdAt])
   @@map("notification")
 }
 
@@ -131,6 +134,7 @@ model Professional {
   specialization    String?
   profilePhotoUrl   String?  @map("profile_photo_url")
   userType          UserType @default(PROFESSIONAL) @map("user_type")
+  notificationPreference NotificationChannel? @default(NONE) @map("notification_preference")
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
@@ -248,4 +252,18 @@ enum DiscoverySource {
   WHATSAPP
   WALK_IN      
   OTHER
+}
+
+enum NotificationChannel {
+  NONE
+  IN_APP
+  EMAIL
+  BOTH
+}
+
+enum NotificationType {
+  SYSTEM
+  APPOINTMENT
+  SERVICE
+  PROMO
 }

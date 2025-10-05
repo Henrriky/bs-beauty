@@ -1,12 +1,13 @@
 import {
   ArrowLeftStartOnRectangleIcon,
+  BellAlertIcon,
   BriefcaseIcon,
   CalendarDaysIcon,
   ClipboardDocumentCheckIcon,
   ClockIcon,
   HomeIcon,
   UserIcon,
-  UsersIcon,
+  UsersIcon
 } from '@heroicons/react/24/outline'
 import React from 'react'
 import { UserType } from '../../../store/auth/types'
@@ -38,6 +39,11 @@ const sideBarItems: SideBarOptions = {
       icon: <UserIcon className="size-6" />,
       navigateTo: '/profile',
       order: 98,
+    },
+    {
+      name: 'Notificações',
+      icon: <BellAlertIcon className="size-6" />,
+      navigateTo: '/notifications',
     },
     {
       name: 'Agendamentos',

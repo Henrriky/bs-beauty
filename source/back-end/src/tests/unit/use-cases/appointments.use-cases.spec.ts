@@ -1,7 +1,7 @@
 import { AppointmentsUseCase, MAXIMUM_APPOINTMENTS_PER_DAY, MINIMUM_SCHEDULLING_TIME_MINUTES } from '@/services/appointments.use-case'
 import { MockAppointmentRepository, MockCustomerRepository, MockProfessionalRepository, MockRatingRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { type Prisma, type Appointment } from '@prisma/client'
+import { type Prisma, type Appointment, UserType } from '@prisma/client'
 
 describe('AppointmentsUseCase (Unit Tests)', () => {
   let appointmentsUseCase: AppointmentsUseCase
@@ -29,8 +29,18 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
       }
       MockAppointmentRepository.create.mockResolvedValue(appointmentToCreate as Appointment)
       MockAppointmentRepository.countCustomerAppointmentsPerDay.mockResolvedValueOnce(MAXIMUM_APPOINTMENTS_PER_DAY - 1)
+      const tokenPayload = {
+        id: faker.string.uuid(),
+        email: faker.internet.email(),
+        name: faker.person.firstName(),
+        profilePhotoUrl: '',
+        registerCompleted: true,
+        userId: faker.string.uuid(),
+        userType: UserType.CUSTOMER,
+      }
 
-      const appointmentCreated = await appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, faker.string.uuid())
+
+      const appointmentCreated = await appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, tokenPayload)
       expect(MockAppointmentRepository.create).toHaveBeenCalledWith(appointmentToCreate)
       expect(MockAppointmentRepository.create).toHaveBeenCalledTimes(1)
       expect(appointmentCreated).toEqual(appointmentToCreate)
@@ -40,10 +50,27 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
       const appointmentToCreate: Partial<Appointment> = {
         appointmentDate: 'invalid-date' as any,
         customerId: faker.string.uuid(),
-        serviceOfferedId: faker.string.uuid()
+        serviceOfferedId: faker.string.uuid(),
       }
-      const promise = appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, faker.string.uuid())
-      await expect(promise).rejects.toThrowError(`Invalid appointment date provided: ${String(appointmentToCreate.appointmentDate)}`)
+
+      const tokenPayload = {
+        id: faker.string.uuid(),
+        email: faker.internet.email(),
+        name: faker.person.firstName(),
+        profilePhotoUrl: '',
+        registerCompleted: true,
+        userId: faker.string.uuid(),
+        userType: UserType.CUSTOMER,
+      }
+
+      const promise = appointmentsUseCase.executeCreate(
+        appointmentToCreate as Prisma.AppointmentCreateInput,
+        tokenPayload
+      )
+
+      await expect(promise).rejects.toThrowError(
+        `Invalid appointment date provided: ${String(appointmentToCreate.appointmentDate)}`
+      )
     })
 
     it('should throw an error if try to create an appointment with date in the past', async () => {
@@ -54,7 +81,17 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
         serviceOfferedId: faker.string.uuid()
       }
 
-      const promise = appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, faker.string.uuid())
+      const tokenPayload = {
+        id: faker.string.uuid(),
+        email: faker.internet.email(),
+        name: faker.person.firstName(),
+        profilePhotoUrl: '',
+        registerCompleted: true,
+        userId: faker.string.uuid(),
+        userType: UserType.CUSTOMER,
+      }
+
+      const promise = appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, tokenPayload)
 
       await expect(promise).rejects.toThrowError('The selected time is in the past.')
     })
@@ -68,8 +105,18 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
         serviceOfferedId: faker.string.uuid()
       }
 
+      const tokenPayload = {
+        id: faker.string.uuid(),
+        email: faker.internet.email(),
+        name: faker.person.firstName(),
+        profilePhotoUrl: '',
+        registerCompleted: true,
+        userId: faker.string.uuid(),
+        userType: UserType.CUSTOMER,
+      }
+
       MockAppointmentRepository.create.mockResolvedValue(appointmentToCreate as Appointment)
-      const promise = appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, faker.string.uuid())
+      const promise = appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, tokenPayload)
 
       await expect(promise).rejects.toThrowError(`The selected time must be at least ${MINIMUM_SCHEDULLING_TIME_MINUTES} minutes in the future.`)
     })
@@ -82,9 +129,19 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
         serviceOfferedId: faker.string.uuid()
       }
 
+      const tokenPayload = {
+        id: faker.string.uuid(),
+        email: faker.internet.email(),
+        name: faker.person.firstName(),
+        profilePhotoUrl: '',
+        registerCompleted: true,
+        userId: faker.string.uuid(),
+        userType: UserType.CUSTOMER,
+      }
+
       MockAppointmentRepository.countCustomerAppointmentsPerDay.mockResolvedValueOnce(MAXIMUM_APPOINTMENTS_PER_DAY)
 
-      const promise = appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, faker.string.uuid())
+      const promise = appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, tokenPayload)
 
       await expect(promise).rejects.toThrowError('You have reached the maximum number of appointments for today, please try again tomorrow.')
     })

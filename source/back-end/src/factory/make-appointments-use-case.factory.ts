@@ -4,7 +4,7 @@ import { PrismaCustomerRepository } from '../repository/prisma/prisma-customer.r
 import { PrismaProfessionalRepository } from '../repository/prisma/prisma-professional.repository'
 import { AppointmentsUseCase } from '../services/appointments.use-case'
 
-function makeAppointmentsUseCaseFactory () {
+function makeAppointmentsUseCaseFactory() {
   const appointmentRepository = new PrismaAppointmentRepository()
   const customerRepository = new PrismaCustomerRepository()
   const professionalRepository = new PrismaProfessionalRepository()

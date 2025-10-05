@@ -1,13 +1,23 @@
 import { Router } from 'express'
 import { NotificationsController } from '../../controllers/notifications.controller'
+import { routeAuthMiddleware } from '@/middlewares/route-auth.middleware'
+import { UserType } from '@prisma/client'
+import { notificationQuerySchema } from '@/utils/validation/zod-schemas/pagination/notifications/notifications-query.schema'
+import { validateQuery } from '@/middlewares/pagination/zod-request-validation.middleware'
 
 const notificationRoutes = Router()
 
-notificationRoutes.get('/', NotificationsController.handleFindAll)
-notificationRoutes.get('/user/:userId', NotificationsController.handleFindByUserId)
+notificationRoutes.get(
+  '/',
+  routeAuthMiddleware([UserType.CUSTOMER, UserType.PROFESSIONAL, UserType.MANAGER]),
+  validateQuery(notificationQuerySchema),
+  NotificationsController.handleFindAll
+)
 notificationRoutes.get('/:id', NotificationsController.handleFindById)
-notificationRoutes.put('/:id/read', NotificationsController.handleMarkAsRead)
 notificationRoutes.delete('/:id', NotificationsController.handleDelete)
-notificationRoutes.post('/appointment/:appointmentId', NotificationsController.handleSendAppointmentNotification)
-
+notificationRoutes.put(
+  '/read',
+  routeAuthMiddleware([UserType.CUSTOMER, UserType.PROFESSIONAL, UserType.MANAGER]),
+  NotificationsController.handleMarkManyAsRead
+)
 export { notificationRoutes }
