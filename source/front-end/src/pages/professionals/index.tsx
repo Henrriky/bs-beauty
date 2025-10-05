@@ -11,11 +11,10 @@ import { ProfessionalFormModal } from './components/ProfessionalFormModal'
 import { ProfessionalRolesModal } from './components/ProfessionalRolesModal'
 import SearchInput from '../../components/inputs/SearchInput'
 import Title from '../../components/texts/Title'
+import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
 
 function Professionals() {
-  const { name: username, userType } = useAppSelector(
-    (state) => state.auth!.user!,
-  )
+  const { name: username } = useAppSelector((state) => state.auth!.user!)
   const [searchTerm, setSearchTerm] = useState('')
 
   const {
@@ -60,38 +59,6 @@ function Professionals() {
     clearFilters()
   }
 
-  const canManageRoles = userType === UserType.MANAGER
-
-  if (!canManageRoles) {
-    return (
-      <div className="p-6">
-        <div className="bg-primary-800 rounded-2xl p-12 text-center">
-          <div className="mb-4">
-            <svg
-              className="w-16 h-16 text-red-400 mx-auto"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-              />
-            </svg>
-          </div>
-          <h2 className="text-xl font-medium text-primary-0 mb-2">
-            Acesso Negado
-          </h2>
-          <p className="text-primary-200">
-            Você não tem permissão para acessar esta funcionalidade.
-          </p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -104,53 +71,63 @@ function Professionals() {
         </span>
       </div>
 
-      {/* Filters */}
-      <div className="bg-primary-800 rounded-2xl p-6">
-        <div>
-          <label className="block text-sm font-medium text-primary-0 mb-2">
-            Buscar por nome
-          </label>
-          <SearchInput
-            value={searchTerm}
-            onChange={handleSearchChange}
-            onClear={handleClearSearch}
-            onSearch={handleSearch}
-            enableDebouncing={false}
-            placeholder="Digite o e-mail do funcionário..."
-            aria-label="Pesquisar por e-mail do funcionário"
-          />
-        </div>
-      </div>
-
-      {/* Professional List */}
-      <ProfessionalList
-        professionals={professionals}
-        isLoading={isLoadingProfessionals}
-        onDelete={openDeleteModal}
-        onManageProfessionalRoles={openRolesModal}
-      />
-
-      {/* Pagination */}
-      <Pagination
-        totalItems={pagination.totalItems}
-        totalPages={pagination.totalPages}
-        currentPage={pagination.currentPage}
-        pageLimit={pagination.pageLimit}
-        onPageChange={handlePageChange}
-      />
-
-      {/* Create Button */}
-      <Button
-        onClick={openCreateModal}
-        variant="solid"
-        label={
-          <div className="flex items-center justify-center gap-2">
-            <PlusIcon className="h-4 w-4" />
-            Criar funcionário
+      <UserCanAccessContainer
+        allowedPermissions={['professional.read']}
+        allowedUserTypes={[UserType.MANAGER]}
+      >
+        {/* Filters */}
+        <div className="bg-primary-800 rounded-2xl p-6">
+          <div>
+            <label className="block text-sm font-medium text-primary-0 mb-2">
+              Buscar por nome
+            </label>
+            <SearchInput
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onClear={handleClearSearch}
+              onSearch={handleSearch}
+              enableDebouncing={false}
+              placeholder="Digite o e-mail do funcionário..."
+              aria-label="Pesquisar por e-mail do funcionário"
+            />
           </div>
-        }
-        className="w-full"
-      />
+        </div>
+
+        {/* Professional List */}
+        <ProfessionalList
+          professionals={professionals}
+          isLoading={isLoadingProfessionals}
+          onDelete={openDeleteModal}
+          onManageProfessionalRoles={openRolesModal}
+        />
+
+        {/* Pagination */}
+        <Pagination
+          totalItems={pagination.totalItems}
+          totalPages={pagination.totalPages}
+          currentPage={pagination.currentPage}
+          pageLimit={pagination.pageLimit}
+          onPageChange={handlePageChange}
+        />
+      </UserCanAccessContainer>
+
+      <UserCanAccessContainer
+        allowedPermissions={['professional.create']}
+        allowedUserTypes={[UserType.MANAGER]}
+      >
+        {/* Create Button */}
+        <Button
+          onClick={openCreateModal}
+          variant="solid"
+          label={
+            <div className="flex items-center justify-center gap-2">
+              <PlusIcon className="h-4 w-4" />
+              Criar funcionário
+            </div>
+          }
+          className="w-full"
+        />
+      </UserCanAccessContainer>
 
       {/* Create Modal */}
       <ProfessionalFormModal

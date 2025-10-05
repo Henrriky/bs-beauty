@@ -1,6 +1,36 @@
 import { Professional } from '../../../store/auth/types'
 import { ProfessionalCard } from './ProfessionalCard'
 
+interface ProfessionalListProps {
+  professionals: Professional[]
+  isLoading: boolean
+  onDelete: (professional: Professional) => void
+  onManageProfessionalRoles: (professional: Professional) => void
+}
+
+function ProfessionalList({
+  professionals,
+  isLoading,
+  onDelete,
+  onManageProfessionalRoles,
+}: ProfessionalListProps) {
+  if (isLoading) return <ProfessionalListSkeleton />
+  if (professionals.length === 0) return <ProfessionalListEmpty />
+
+  return (
+    <div className="flex items-center flex-col gap-6 px-2 max-h-[50vh] overflow-y-auto">
+      {professionals.map((professional) => (
+        <ProfessionalCard
+          key={professional.id}
+          professional={professional}
+          onDelete={onDelete}
+          onManageProfessionalRoles={onManageProfessionalRoles}
+        />
+      ))}
+    </div>
+  )
+}
+
 function ProfessionalListSkeleton() {
   return (
     <div className="space-y-4">
@@ -46,32 +76,4 @@ function ProfessionalListEmpty() {
   )
 }
 
-interface RolesListProps {
-  professionals: Professional[]
-  isLoading: boolean
-  onDelete: (professional: Professional) => void
-  onManageProfessionalRoles: (professional: Professional) => void
-}
-
-export function ProfessionalList({
-  professionals,
-  isLoading,
-  onDelete,
-  onManageProfessionalRoles,
-}: RolesListProps) {
-  if (isLoading) return <ProfessionalListSkeleton />
-  if (professionals.length === 0) return <ProfessionalListEmpty />
-
-  return (
-    <div className="flex items-center flex-col gap-6 px-2 max-h-[50vh] overflow-y-auto">
-      {professionals.map((professional) => (
-        <ProfessionalCard
-          key={professional.id}
-          professional={professional}
-          onDelete={onDelete}
-          onManageProfessionalRoles={onManageProfessionalRoles}
-        />
-      ))}
-    </div>
-  )
-}
+export { ProfessionalList }

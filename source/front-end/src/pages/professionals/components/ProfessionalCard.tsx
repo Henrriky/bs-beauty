@@ -1,6 +1,7 @@
-import { Professional } from '../../../store/auth/types'
+import { Professional, UserType } from '../../../store/auth/types'
 import { CogIcon, TrashIcon, UserGroupIcon } from '@heroicons/react/24/outline'
 import { firstLetterOfWordToUpperCase } from '../../../utils/formatter/first-letter-of-word-to-upper-case.util'
+import { UserCanAccessContainer } from '../../../components/authorization/UserCanAccessContainer'
 
 interface ProfessionalCardProps {
   professional: Professional
@@ -40,20 +41,30 @@ export function ProfessionalCard({
       </div>
       {/* Actions - Right Side */}
       <div className="flex gap-2 shrink-0">
-        <button
-          onClick={() => onManageProfessionalRoles(professional)}
-          className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-400/10 rounded transition-all"
-          title="Gerenciar permissões"
+        <UserCanAccessContainer
+          allowedPermissions={['professional.manage_roles']}
+          allowedUserTypes={[UserType.MANAGER]}
         >
-          <CogIcon className="w-4 h-4" />
-        </button>
-        <button
-          onClick={() => onDelete(professional)}
-          className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
-          title="Excluir serviço"
+          <button
+            onClick={() => onManageProfessionalRoles(professional)}
+            className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-400/10 rounded transition-all"
+            title="Gerenciar permissões"
+          >
+            <CogIcon className="w-4 h-4" />
+          </button>
+        </UserCanAccessContainer>
+        <UserCanAccessContainer
+          allowedPermissions={['professional.delete']}
+          allowedUserTypes={[UserType.MANAGER]}
         >
-          <TrashIcon className="w-4 h-4" />
-        </button>
+          <button
+            onClick={() => onDelete(professional)}
+            className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
+            title="Excluir serviço"
+          >
+            <TrashIcon className="w-4 h-4" />
+          </button>
+        </UserCanAccessContainer>
       </div>
     </div>
   )
