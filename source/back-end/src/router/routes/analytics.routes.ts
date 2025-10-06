@@ -7,4 +7,6 @@ const analyticsServiceRoutes = Router()
 
 analyticsServiceRoutes.get('/', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleFindAll)
 analyticsServiceRoutes.get('/:id', routeAuthMiddleware([UserType.PROFESSIONAL, UserType.MANAGER]), AnalyticsController.handleFindByProfessionalId)
+analyticsServiceRoutes.get('/customers/ratings', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetCustomerAmountPerRatingScore)
+analyticsServiceRoutes.get('/services/rating', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetMeanRatingByService)
 export { analyticsServiceRoutes }

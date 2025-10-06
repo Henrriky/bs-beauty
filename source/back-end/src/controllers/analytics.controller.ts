@@ -8,6 +8,7 @@ import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use
 import { type Appointment } from '@prisma/client'
 import { makeRatingsUseCaseFactory } from '@/factory/make-ratings-use-case.factory'
 import { prismaClient } from '../lib/prisma'
+import { makeAnalyticsUseCaseFactory } from '@/factory/make-analytics-use-case.factory'
 
 const schema = z.object({
   totalAppointments: z.number(),
@@ -318,6 +319,30 @@ class AnalyticsController {
       next(error);
     }
   }
+
+  public static async handleGetCustomerAmountPerRatingScore(req: Request, res: Response, next: NextFunction) {
+    try {
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const customerCountPerRating = await analyticsUseCase.executeGetCustomerAmountPerRatingScore()
+      res.send(customerCountPerRating)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleGetMeanRatingByService(req: Request, res: Response, next: NextFunction) {
+    try {
+      const amountParam = req.body.amount as string | undefined
+      const amount = amountParam ? parseInt(amountParam, 10) : 5
+
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const meanRatingByService = await analyticsUseCase.executeGetMeanRatingByService(amount)
+      res.send(meanRatingByService)
+    } catch (error) {
+      next(error)
+    }
+  }
+
 }
 
 export { AnalyticsController }

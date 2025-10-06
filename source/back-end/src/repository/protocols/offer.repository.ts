@@ -5,7 +5,7 @@ import { type OffersFilters } from '../../types/offers/offers-filters'
 interface OfferRepository {
   findAll: () => Promise<Offer[]>
   findById: (id: string) => Promise<Offer | null>
-  findByServiceId: (serviceId: string) => Promise<Offer | null>
+  findByServiceId: (serviceId: string) => Promise<Offer[] | null>
   findByProfessionalId: (professionalId: string) => Promise<Offer[]>
   findByProfessionalAndServiceId: (serviceId: string, professionalId: string) => Promise<Offer | null>
   create: (offerToCreate: Prisma.OfferCreateInput) => Promise<Offer>

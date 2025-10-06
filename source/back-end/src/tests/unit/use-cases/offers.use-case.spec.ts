@@ -95,27 +95,39 @@ describe('OffersUseCase (Unit Tests)', () => {
   })
 
   describe('executeFindByServiceId', () => {
-    it('should return an offer by service id', async () => {
+    it('should return offers by service id', async () => {
       const serviceId = faker.string.uuid()
-      const offer: Offer = {
-        id: faker.string.uuid(),
-        estimatedTime: 60,
-        price: new Prisma.Decimal(100),
-        isOffering: true,
-        serviceId,
-        professionalId: faker.string.uuid(),
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past()
-      }
+      const offers: Offer[] = [
+        {
+          id: faker.string.uuid(),
+          estimatedTime: 60,
+          price: new Prisma.Decimal(100),
+          isOffering: true,
+          serviceId,
+          professionalId: faker.string.uuid(),
+          createdAt: faker.date.past(),
+          updatedAt: faker.date.past()
+        },
+        {
+          id: faker.string.uuid(),
+          estimatedTime: 90,
+          price: new Prisma.Decimal(150),
+          isOffering: true,
+          serviceId,
+          professionalId: faker.string.uuid(),
+          createdAt: faker.date.past(),
+          updatedAt: faker.date.past()
+        }
+      ]
 
-      MockOfferRepository.findByServiceId.mockResolvedValue(offer)
+      MockOfferRepository.findByServiceId.mockResolvedValue(offers)
 
       const result = await offersUseCase.executeFindByServiceId(serviceId)
-      expect(result).toEqual(offer)
+      expect(result).toEqual({ offers })
       expect(MockOfferRepository.findByServiceId).toHaveBeenCalledWith(serviceId)
     })
 
-    it('should throw an error if offer is not found by service id', async () => {
+    it('should throw an error if offers are not found by service id', async () => {
       const serviceId = faker.string.uuid()
       MockOfferRepository.findByServiceId.mockResolvedValue(null)
 
