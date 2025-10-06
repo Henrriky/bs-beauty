@@ -343,6 +343,19 @@ class AnalyticsController {
     }
   }
 
+  public static async handleGetMeanRatingOfProfessionals(req: Request, res: Response, next: NextFunction) {
+    try {
+      const professionalId = req.body.amount as string | undefined
+      const amount = professionalId ? parseInt(professionalId, 10) : 5
+
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const meanRatingByProfessional = await analyticsUseCase.executeGetMeanRatingOfProfessionals(amount)
+      res.send(meanRatingByProfessional)
+    } catch (error) {
+      next(error)
+    }
+  }
+
 }
 
 export { AnalyticsController }

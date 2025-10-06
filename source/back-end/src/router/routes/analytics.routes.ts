@@ -9,4 +9,5 @@ analyticsServiceRoutes.get('/', routeAuthMiddleware([UserType.MANAGER]), Analyti
 analyticsServiceRoutes.get('/:id', routeAuthMiddleware([UserType.PROFESSIONAL, UserType.MANAGER]), AnalyticsController.handleFindByProfessionalId)
 analyticsServiceRoutes.get('/customers/ratings', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetCustomerAmountPerRatingScore)
 analyticsServiceRoutes.get('/services/rating', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetMeanRatingByService)
+analyticsServiceRoutes.get('/professionals/rating', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetMeanRatingOfProfessionals)
 export { analyticsServiceRoutes }
