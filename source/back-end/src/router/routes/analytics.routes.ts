@@ -10,4 +10,5 @@ analyticsServiceRoutes.get('/:id', routeAuthMiddleware([UserType.PROFESSIONAL, U
 analyticsServiceRoutes.get('/customers/ratings', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetCustomerAmountPerRatingScore)
 analyticsServiceRoutes.get('/services/rating', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetMeanRatingByService)
 analyticsServiceRoutes.get('/professionals/rating', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetMeanRatingOfProfessionals)
+analyticsServiceRoutes.get('/appointments/amount', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetAppointmentAmountInDateRange)
 export { analyticsServiceRoutes }

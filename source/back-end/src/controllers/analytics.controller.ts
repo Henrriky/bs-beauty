@@ -356,6 +356,28 @@ class AnalyticsController {
     }
   }
 
+  public static async handleGetAppointmentAmountInDateRange(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { startDate, endDate } = req.body as { startDate: string, endDate: string }
+
+      if (!startDate || !endDate) {
+        return res.status(400).json({ message: 'startDate and endDate are required in the request body.' })
+      }
+      
+      const parsedStartDate = new Date(startDate)
+      const parsedEndDate = new Date(endDate)
+      if (isNaN(parsedStartDate.getTime()) || isNaN(parsedEndDate.getTime())) {
+        return res.status(400).json({ message: 'Invalid date format. Please use a valid date string.' })
+      }
+
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRange(parsedStartDate, parsedEndDate)
+      res.json({ appointmentCount })
+    } catch (error) {
+      next(error)
+    }
+  }
+
 }
 
 export { AnalyticsController }

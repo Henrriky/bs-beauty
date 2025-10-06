@@ -96,6 +96,19 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
+  public async findByDateRange (startDate: Date, endDate: Date) {
+    const appointments = await prismaClient.appointment.findMany({
+      where: {
+        appointmentDate: {
+          gte: startDate,
+          lte: endDate
+        }
+      }
+    })
+
+    return appointments
+  }
+
   public async findNonFinishedByUserAndDay (userId: string, dayToFetchAvailableSchedulling: Date) {
     const startOfDay = new Date(dayToFetchAvailableSchedulling)
     startOfDay.setHours(0, 0, 0, 0)

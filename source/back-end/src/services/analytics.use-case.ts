@@ -102,6 +102,10 @@ class AnalyticsUseCase {
     return bestRated
   }
 
+  public async executeGetAppointmentNumberOnDateRange(startDate: Date, endDate: Date) {
+    const appointments = await this.appointmentRepository.findByDateRange(startDate, endDate)
+    return appointments.length
+  }
 }
 
 export { AnalyticsUseCase }
