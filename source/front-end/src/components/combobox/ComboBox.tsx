@@ -5,19 +5,24 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from '@headlessui/react'
-import { InputProps } from '../inputs/Input'
 import clsx from 'clsx'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
+import { UseFormRegisterReturn } from 'react-hook-form'
 
-interface ComboBoxProps<T> extends InputProps {
+interface ComboBoxProps<T> {
+  label?: string
+  id?: string
+  registration?: UseFormRegisterReturn
+  wrapperClassName?: string
+  inputClassName?: string
   options: T[]
   notFoundMessage: string
   placeholder?: string
+  value: T | null
+  displayValue: (option: T) => string
   setQuery: (query: string) => void
-  getOptionLabel: (option: T) => string | null
-  getOptionValue?: (option: T) => T
   getOptionIcon?: (option: T) => React.ReactNode
+  onChange?: (option: T | null) => void
 }
 
 function ComboBox<T>({
@@ -29,20 +34,19 @@ function ComboBox<T>({
   options,
   notFoundMessage,
   placeholder,
+  value,
   setQuery,
-  getOptionLabel,
-  getOptionValue,
   getOptionIcon,
+  displayValue,
+  onChange,
 }: ComboBoxProps<T>) {
-  const [selected, setSelected] = useState<T | null>(null)
-
   return (
     <div className={clsx('flex gap-3 flex-col items-start', wrapperClassName)}>
       <Combobox
         name={id}
         onClose={() => setQuery('')}
-        value={selected}
-        onChange={(value) => setSelected(value)}
+        value={value}
+        onChange={onChange}
       >
         {label && (
           <label className="text-sm text-[#D9D9D9]" htmlFor={id}>
@@ -58,23 +62,23 @@ function ComboBox<T>({
               inputClassName,
             )}
             onChange={(e) => setQuery(e.target.value)}
-            value={getOptionLabel(selected as T) || ''}
             placeholder={placeholder}
+            displayValue={(option: T | null) =>
+              option ? displayValue(option) : ''
+            }
           />
           <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
             <ChevronDownIcon className="size-4 fill-white/60 group-data-hover:fill-white" />
           </ComboboxButton>
         </div>
-        {options && options.length > 0 ? (
-          <ComboboxOptions className="bg-[#181818] text-primary-0 rounded-lg shadow-lg w-full max-h-20 overflow-y-auto">
-            {options.map((option, index) => (
+        <ComboboxOptions className="bg-[#181818] text-primary-0 rounded-lg shadow-lg w-full max-h-20 overflow-y-auto">
+          {options.length === 0 ? (
+            <div className="px-4 py-2 text-center">{notFoundMessage}</div>
+          ) : (
+            options.map((option, index) => (
               <ComboboxOption
                 key={'option-' + index}
-                value={
-                  getOptionValue
-                    ? getOptionValue(option)
-                    : getOptionLabel(option)
-                }
+                value={option}
                 className={({ active, selected }) =>
                   clsx(
                     'px-4 py-2 cursor-pointer text-sm',
@@ -89,16 +93,12 @@ function ComboBox<T>({
                       {getOptionIcon(option)}
                     </span>
                   )}
-                  {getOptionLabel(option)}
+                  {displayValue(option)}
                 </div>
               </ComboboxOption>
-            ))}
-          </ComboboxOptions>
-        ) : (
-          <div className="w-full bg-[#181818] text-primary-0 rounded-lg shadow-lg px-4 py-2 text-center">
-            {notFoundMessage}
-          </div>
-        )}
+            ))
+          )}
+        </ComboboxOptions>
       </Combobox>
     </div>
   )

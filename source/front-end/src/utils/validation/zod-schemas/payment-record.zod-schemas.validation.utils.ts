@@ -16,8 +16,10 @@ class PaymentRecordSchemas {
   public static readonly createSchema = z
     .object({
       totalValue: z.number().multipleOf(0.01),
-      paymentMethod: z.string(),
-      customerId: z.string().uuid(),
+      paymentMethod: z.string({
+        required_error: 'Selecione um método de pagamento',
+      }),
+      customerId: z.string({ required_error: 'Selecione um cliente' }).uuid(),
       professionalId: z.string().uuid(),
       items: this.paymentItemsSchema,
     })

@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { PaymentRecord } from '../../../store/payment-record/types'
 import { customerAPI } from '../../../store/customer/customer-api'
 import { BanknotesIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { paymentLabels } from '../types/types'
 
 interface PaymentRecordCardProps {
   paymentRecord: PaymentRecord
@@ -36,7 +37,8 @@ function PaymentRecordCard({ paymentRecord, index }: PaymentRecordCardProps) {
         <p className="text-sm">
           Método de Pagamento: {''}
           <span className="text-primary-200">
-            {paymentRecord.paymentMethod}
+            {paymentLabels[paymentRecord.paymentMethod] ||
+              paymentRecord.paymentMethod}
           </span>
         </p>
         <p className="text-sm">

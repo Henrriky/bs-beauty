@@ -19,7 +19,7 @@ function PaymentRecordModal({ isOpen, setIsOpen }: PaymentRecordModalProps) {
             onClick={(e) => e.stopPropagation()}
           >
             <Title align="center">Registrar Novo Pagamento</Title>
-            <CreatePaymentRecordForm cancelAction={setIsOpen} />
+            <CreatePaymentRecordForm closeModal={setIsOpen} />
           </div>
         </div>
       )}
