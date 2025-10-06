@@ -2,7 +2,6 @@ import { type NextFunction, type Request, type Response } from 'express'
 import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use-case.factory'
 import { type Prisma } from '@prisma/client'
 import { StatusCodes } from 'http-status-codes'
-import { makeRatingsUseCaseFactory } from '@/factory/make-ratings-use-case.factory'
 
 class AppointmentController {
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {

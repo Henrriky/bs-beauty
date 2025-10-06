@@ -11,6 +11,7 @@ import { authRoutes } from './routes/auth.routes'
 import { verifyJwtTokenMiddleware } from '../middlewares/auth/verify-jwt-token.middleware'
 import { analyticsServiceRoutes } from './routes/analytics.routes'
 import { ratingRoutes } from './routes/ratings.routes'
+import { publicAnalyticsRoutes } from './routes/public-analytics.routes'
 
 const appRoutes = Router()
 
@@ -24,6 +25,7 @@ appRoutes.use('/shifts', verifyJwtTokenMiddleware, shiftRoutes)
 appRoutes.use('/offers', verifyJwtTokenMiddleware, offerRoutes)
 appRoutes.use('/analytics', verifyJwtTokenMiddleware, analyticsServiceRoutes)
 appRoutes.use('/ratings', verifyJwtTokenMiddleware, ratingRoutes)
+appRoutes.use('/public-analytics', publicAnalyticsRoutes)
 appRoutes.use(errorHandlerMiddleware)
 
 export { appRoutes }

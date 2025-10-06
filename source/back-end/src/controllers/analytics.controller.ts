@@ -6,6 +6,8 @@ import { makeProfessionalsUseCaseFactory } from '../factory/make-professionals-u
 import { makeOffersUseCaseFactory } from '../factory/make-offers-use-case.factory'
 import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use-case.factory'
 import { type Appointment } from '@prisma/client'
+import { makeRatingsUseCaseFactory } from '@/factory/make-ratings-use-case.factory'
+import { prismaClient } from '../lib/prisma'
 
 const schema = z.object({
   totalAppointments: z.number(),
@@ -17,10 +19,17 @@ const schema = z.object({
   totalRevenue: z.number()
 })
 
+const ratingsSchema = z.object({
+  meanRatingScore: z.number()
+})
+
 type Analytics = z.infer<typeof schema>
+type RatingsAnalytics = z.infer<typeof ratingsSchema>
+
+// TODO: Extract logic/calculations to an use case
 
 class AnalyticsController {
-  public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindAll(req: Request, res: Response, next: NextFunction) {
     try {
       const analytics: Partial<Analytics> = {}
 
@@ -120,7 +129,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleFindByProfessionalId (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByProfessionalId(req: Request, res: Response, next: NextFunction) {
     try {
       const analytics: Partial<Analytics> = {}
 
@@ -218,6 +227,95 @@ class AnalyticsController {
       res.send(analytics)
     } catch (error) {
       next(error)
+    }
+  }
+  public static async handleGetRatingsAnalytics(req: Request, res: Response, next: NextFunction) {
+    try {
+      const professionalsUseCase = makeProfessionalsUseCaseFactory();
+      const offerUseCase = makeOffersUseCaseFactory();
+      const appointmentUseCase = makeAppointmentsUseCaseFactory();
+      const ratingsUseCase = makeRatingsUseCaseFactory();
+      const professionals = await professionalsUseCase.executeFindAll();
+      const selectedProfessionals = professionals.professionals.slice(0, 5);
+
+      const professionalsWithMeanRating = await Promise.all(selectedProfessionals.map(async (prof) => {
+        let offers: import('@prisma/client').Offer[] = [];
+        try {
+          const result = await offerUseCase.executeFindByProfessionalId(prof.id);
+          offers = result.offers as import('@prisma/client').Offer[];
+        } catch (error: any) {
+          if (error.statusCode === 404) {
+            offers = [];
+          } else {
+            throw error;
+          }
+        }
+        const offerIds = offers.map((o) => o.id);
+
+        let appointments: { id: string }[] = [];
+        if (offerIds.length > 0) {
+          for (const offerId of offerIds) {
+            try {
+              const result = await appointmentUseCase.executeFindByServiceOfferedId(offerId);
+              appointments.push(...result.appointments.map(a => ({ id: a.id })));
+            } catch (error: any) {
+              if (error.statusCode === 404) {
+              } else {
+                throw error;
+              }
+            }
+          }
+        }
+        const appointmentIds = appointments.map((a) => a.id);
+
+        let ratings: { score: number | null }[] = [];
+        if (appointmentIds.length > 0) {
+          try {
+            let ratingsArr: { score: number | null }[] = [];
+            for (const appointmentId of appointmentIds) {
+              try {
+                const currentRating = await ratingsUseCase.executeFindByAppointmentId(appointmentId);
+                if (Array.isArray(currentRating)) {
+                  ratingsArr.push(...currentRating.filter(r => r && typeof r.score === 'number'));
+                } else if (currentRating !== null && typeof currentRating.score === 'number') {
+                  ratingsArr.push(currentRating);
+                }
+              } catch (error: any) {
+                if (error?.statusCode === 404) {
+                } else {
+                  throw error;
+                }
+              }
+            }
+            ratings = ratingsArr ?? [];
+          } catch (error: any) {
+            if (error.statusCode === 404) {
+              ratings = [];
+            } else {
+              throw error;
+            }
+          }
+        }
+        const scores = ratings
+          .map((r) => r.score)
+          .filter((s): s is number => typeof s === 'number' && s !== null);
+        const meanRating = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+        return {
+          id: prof.id,
+          name: prof.name,
+          email: prof.email,
+          profilePhotoUrl: prof.profilePhotoUrl,
+          meanRating
+        };
+      }));
+
+      const salonRating = await ratingsUseCase.executeGetMeanScore();
+
+      res.send({ professionals: professionalsWithMeanRating,
+        salonRating
+       });
+    } catch (error) {
+      next(error);
     }
   }
 }

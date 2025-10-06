@@ -27,6 +27,18 @@ class RatingsController {
         }
     }
 
+  public static async handleFindByAppointmentId(req: Request, res: Response, next: NextFunction) {
+    try {
+      const appointmentId = req.params.appointmentId
+      const useCase = makeRatingsUseCaseFactory()
+      const rating = await useCase.executeFindByAppointmentId(appointmentId)
+
+      res.status(StatusCodes.OK).send(rating)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   public static async handleCreate (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeRatingsUseCaseFactory()
