@@ -1,7 +1,9 @@
 import { type CustomerRepository } from '@/repository/protocols/customer.repository'
 import { type UpdatePaymentRecordInput, type CreatePaymentRecordInput, type PaymentRecordRepository } from '@/repository/protocols/payment-record.repository'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
+import { type PaginatedRequest, type PaginatedResult } from '@/types/pagination'
 import { RecordExistence } from '@/utils/validation/record-existence.validation.util'
+import { type PartialPaymentRecordQuerySchema } from '@/utils/validation/zod-schemas/pagination/payment-records/payment-records-query.schema'
 import { type PaymentRecord } from '@prisma/client'
 
 class PaymentRecordsUseCase {
@@ -23,6 +25,12 @@ class PaymentRecordsUseCase {
     RecordExistence.validateManyRecordsExistence(paymentRecords, 'payment records')
 
     return paymentRecords
+  }
+
+  public async executefindByProfessionalIdPaginated (id: string, params: PaginatedRequest<PartialPaymentRecordQuerySchema>): Promise<PaginatedResult<PaymentRecord>> {
+    const result = await this.paymentRecordRepository.findByProfessionalIdPaginated(id, params)
+
+    return result
   }
 
   public async executeCreate (data: CreatePaymentRecordInput) {

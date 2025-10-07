@@ -1,5 +1,7 @@
+import { type PaginatedRequest } from '@/types/pagination'
 import { type PaymentRecordRepository, type CreatePaymentRecordInput, type UpdatePaymentRecordInput } from '../protocols/payment-record.repository'
 import { prismaClient } from '@/lib/prisma'
+import { type PartialPaymentRecordQuerySchema } from '@/utils/validation/zod-schemas/pagination/payment-records/payment-records-query.schema'
 
 class PrismaPaymentRecordRepository implements PaymentRecordRepository {
   public async findById (id: string) {
@@ -16,6 +18,31 @@ class PrismaPaymentRecordRepository implements PaymentRecordRepository {
     })
 
     return paymentsRecords
+  }
+
+  public async findByProfessionalIdPaginated (professionalId: string, params: PaginatedRequest<PartialPaymentRecordQuerySchema>) {
+    const { page, limit } = params
+    const skip = (page - 1) * limit
+
+    const [data, total] = await Promise.all([
+      prismaClient.paymentRecord.findMany({
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'asc' },
+        where: { professionalId }
+      }),
+      prismaClient.paymentRecord.count({
+        where: { professionalId }
+      })
+    ])
+
+    return {
+      data,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      limit
+    }
   }
 
   public async create (data: CreatePaymentRecordInput) {

@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
-import { PaymentRecord } from './types'
+import { PaginatedPaymentRecordResponse } from './types'
 import { API_VARIABLES } from '../../api/config'
 import { CreatePaymentRecordFormData } from '../../pages/payments/types/types'
 
@@ -10,19 +10,27 @@ export const paymentRecordAPI = createApi({
   tagTypes: ['PaymentRecords'],
   endpoints: (builder) => ({
     getPaymentRecordsByProfessionalId: builder.query<
-      PaymentRecord[],
-      { professionalId: string }
+      PaginatedPaymentRecordResponse,
+      {
+        professionalId: string
+        page?: number
+        limit?: number
+      }
     >({
-      query: ({ professionalId }) => ({
+      query: ({ professionalId, page, limit }) => ({
         url: API_VARIABLES.PAYMENT_RECORDS_ENDPONTS.FIND_BY_PROFESSIONAL_ID(
           professionalId,
         ),
         method: 'GET',
+        params: {
+          page,
+          limit,
+        },
       }),
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({
+              ...result.data.map(({ id }) => ({
                 type: 'PaymentRecords' as const,
                 id,
               })),

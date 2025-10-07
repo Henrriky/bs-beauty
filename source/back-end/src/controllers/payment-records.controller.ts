@@ -1,5 +1,6 @@
 import { makePaymentRecordUseCaseFactory } from '@/factory/make-payment-record-use-case.factory'
 import { type CreatePaymentRecordInput, type UpdatePaymentRecordInput } from '@/repository/protocols/payment-record.repository'
+import { paymentRecordQuerySchema } from '@/utils/validation/zod-schemas/pagination/payment-records/payment-records-query.schema'
 import { type NextFunction, type Request, type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -23,6 +24,27 @@ class PaymentRecordsController {
       const paymentRecords = await useCase.executeFindByProfessionalId(professionalId)
 
       res.status(StatusCodes.OK).send(paymentRecords)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleFindByProfessionalIdPaginated (req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makePaymentRecordUseCaseFactory()
+      const parsed = paymentRecordQuerySchema.parse(req.query)
+      const { page, limit, ...filters } = parsed
+      const professionalId = req.params.professionalId
+
+      const result = await useCase.executefindByProfessionalIdPaginated(
+        professionalId,
+        {
+          page,
+          limit,
+          filters
+        }
+      )
+      res.send(result)
     } catch (error) {
       next(error)
     }

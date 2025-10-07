@@ -7,3 +7,11 @@ export type PaymentRecord = {
   createdAt: string
   updatedAt: string
 }
+
+export interface PaginatedPaymentRecordResponse {
+  data: PaymentRecord[]
+  total: number
+  page: number
+  totalPages: number
+  limit: number
+}

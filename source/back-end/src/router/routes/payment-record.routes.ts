@@ -8,7 +8,7 @@ import { Router } from 'express'
 const paymentRecordRoutes = Router()
 
 paymentRecordRoutes.get('/:id', PaymentRecordsController.handleFindById)
-paymentRecordRoutes.get('/professional/:professionalId', PaymentRecordsController.handleFindByProfessionalId)
+paymentRecordRoutes.get('/professional/:professionalId', PaymentRecordsController.handleFindByProfessionalIdPaginated)
 paymentRecordRoutes.post('/', routeAuthMiddleware([UserType.MANAGER, UserType.PROFESSIONAL]), validateCreatePaymentRecord, PaymentRecordsController.handleCreate)
 paymentRecordRoutes.put('/:id', routeAuthMiddleware([UserType.MANAGER, UserType.PROFESSIONAL]), validateUpdatePaymentRecord, PaymentRecordsController.handleUpdate)
 paymentRecordRoutes.delete('/:id', routeAuthMiddleware([UserType.MANAGER, UserType.PROFESSIONAL]), PaymentRecordsController.handleDelete)
