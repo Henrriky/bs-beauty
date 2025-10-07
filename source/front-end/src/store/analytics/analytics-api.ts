@@ -25,11 +25,5 @@ export const analyticsAPI = createApi({
         method: 'GET',
       }),
     }),
-    fetchRatingsAnalytics: builder.query<Analytics, void>({
-      query: () => ({
-        url: API_VARIABLES.ANALYTICS_ENDPOINTS.FETCH_RATINGS_ANALYTICS,
-        method: 'GET',
-      }),
-    }),
   }),
 })

@@ -8,11 +8,14 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import useAppSelector from '../../hooks/use-app-selector'
 import { Button } from '../../components/button/Button'
+import ProfilePicture from '../profile/components/ProfilePicture'
+import { publicAnalyticsApi } from '../../store/analytics/public-analytics-api'
 
 
 function LandingPage() {
   const navigate = useNavigate()
   const authInformations = useAppSelector((state) => state.auth)
+  const analytics = publicAnalyticsApi.useFetchRatingsAnalyticsQuery();
 
   useEffect(() => {
       if (authInformations.token?.accessToken) {
@@ -25,6 +28,7 @@ function LandingPage() {
           navigate('/a')
         }
       }
+      
     }, [
       authInformations,
       authInformations.token?.accessToken,
@@ -46,7 +50,17 @@ function LandingPage() {
       <p className="w-[377px] text-center text-[#D9D9D9] font-kumbh text-[16px] font-bold leading-normal">
         Reconhecidas por entregar a experiência que você merece! Especialistas em:
       </p>
-
+      <div className="flex justify-center">
+        <div className='flex items-center flex-col'>
+          <ProfilePicture profilePhotoUrl={''} />
+          <span>Nome</span>
+          <span>Especialidade</span>
+        </div>
+        <div className='flex items-center gap-1'>
+          <span>Star</span>
+          <span>N avaliações</span>
+        </div>
+      </div>
       <ul className="list-disc pl-6 text-[#A4978A] text-[16px] font-normal font-[Fredoka]">
         <li>Remoção a Laser de Micro e Tatto</li>
         <li>Nanopigmentação</li>
