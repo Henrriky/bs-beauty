@@ -17,7 +17,7 @@ import { UserType } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
-import PaymentRecords from '../pages/payments/PaymentRecords'
+import PaymentRecords from '../pages/payments'
 
 function BSBeautyRouter() {
   return (
