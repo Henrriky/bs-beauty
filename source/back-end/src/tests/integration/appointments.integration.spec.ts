@@ -9,6 +9,7 @@ import { CustomerFactory } from './factories/customer.factory'
 import { ProfessionalFactory } from './factories/professional.factory'
 import { MAXIMUM_APPOINTMENTS_PER_DAY, MINIMUM_SCHEDULLING_TIME_MINUTES } from '@/services/appointments.use-case'
 
+
 describe('Appointments API (Integration Test)', () => {
   let customer: Customer
   let defaultAuthorizationHeader = {}
@@ -542,4 +543,84 @@ describe('Appointments API (Integration Test)', () => {
       expect(response.status).toBe(401)
     })
   })
+
+
+describe('Appointment Rating Integration', () => {
+  let customer: Customer
+  let professional: Professional
+  let defaultAuthorizationHeader = {}
+
+  beforeEach(async () => {
+    vi.restoreAllMocks()
+    const customerAuth = await getCustomerToken()
+    customer = customerAuth.customer
+    defaultAuthorizationHeader = {
+      Authorization: `Bearer ${customerAuth.token}`
+    }
+    const professionalAuth = await getProfessionalToken()
+    professional = professionalAuth.professional
+  })
+
+  it('should create a rating when an appointment is finished', async () => {
+    // Arrange: cria um appointment PENDING
+    const offer = await OfferFactory.makeOffer({ professional: { connect: { id: professional.id } } })
+    const appointment = await AppointmentsFactory.makeAppointments({
+      customer: { connect: { id: customer.id } },
+      offer: { connect: { id: offer.id } },
+      status: $Enums.Status.PENDING
+    })
+
+    // Act: finaliza o appointment
+    const response = await request(app)
+      .put(`/api/appointments/${appointment.id}/finish`)
+      .set(defaultAuthorizationHeader)
+      .send({})
+
+    // Assert: resposta OK e appointment finalizado
+    expect(response.status).toBe(200)
+    expect(response.body.status).toBe($Enums.Status.FINISHED)
+
+    // Assert: rating criado no banco
+    const rating = await prismaClient.rating.findFirst({
+      where: { appointmentId: appointment.id }
+    })
+    expect(rating).toBeDefined()
+    expect(rating?.appointmentId).toBe(appointment.id)
+  })
+
+  it('should not create duplicate ratings if finish is called twice', async () => {
+    // Arrange
+    const offer = await OfferFactory.makeOffer({ professional: { connect: { id: professional.id } } })
+    const appointment = await AppointmentsFactory.makeAppointments({
+      customer: { connect: { id: customer.id } },
+      offer: { connect: { id: offer.id } },
+      status: $Enums.Status.PENDING
+    })
+
+    // Act: finaliza o appointment duas vezes
+    await request(app)
+      .put(`/api/appointments/${appointment.id}/finish`)
+      .set(defaultAuthorizationHeader)
+      .send({})
+    await request(app)
+      .put(`/api/appointments/${appointment.id}/finish`)
+      .set(defaultAuthorizationHeader)
+      .send({})
+
+    // Assert: apenas um rating criado
+    const ratings = await prismaClient.rating.findMany({
+      where: { appointmentId: appointment.id }
+    })
+    expect(ratings.length).toBe(1)
+  })
+
+  it('should return 404 if trying to finish a non-existent appointment', async () => {
+    const response = await request(app)
+      .put('/api/appointments/non-existent-id/finish')
+      .set(defaultAuthorizationHeader)
+      .send({})
+
+    expect(response.status).toBe(404)
+  })
+})
 })
