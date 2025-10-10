@@ -56,9 +56,13 @@ class PrismaRatingRepository implements RatingRepository {
 
   public async getMeanScore() {
     const result = await prismaClient.rating.aggregate({
-      _avg: { score: true }
+      _avg: { score: true },
+      _count: { score: true }
     });
-    return result._avg.score ?? 0;
+    return {
+      meanScore: result._avg.score ?? 0,
+      ratingCount: result._count.score ?? 0
+    };
   }
 }
 

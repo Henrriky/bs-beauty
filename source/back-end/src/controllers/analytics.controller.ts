@@ -304,9 +304,10 @@ class AnalyticsController {
         return {
           id: prof.id,
           name: prof.name,
-          email: prof.email,
+          specialization: prof.specialization,
           profilePhotoUrl: prof.profilePhotoUrl,
-          meanRating
+          meanRating,
+          ratingCount: scores.length
         };
       }));
 
