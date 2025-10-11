@@ -76,6 +76,20 @@ const sideBarItems: SideBarItem[] = [
     },
   },
   {
+    name: 'Perfil',
+    icon: <UserIcon className="size-6" />,
+    navigateTo: '/profile',
+    order: 98,
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [
+        UserType.MANAGER,
+        UserType.PROFESSIONAL,
+        UserType.CUSTOMER,
+      ],
+    },
+  },
+  {
     name: 'Notificações',
     icon: <BellAlertIcon className="size-6" />,
     navigateTo: '/notifications',
@@ -96,20 +110,6 @@ const sideBarItems: SideBarItem[] = [
       allowedPermissions: [],
       allowedUserTypes: [UserType.MANAGER],
     }
-  },
-  {
-    name: 'Perfil',
-    icon: <UserIcon className="size-6" />,
-    navigateTo: '/profile',
-    order: 98,
-    authorization: {
-      allowedPermissions: [],
-      allowedUserTypes: [
-        UserType.MANAGER,
-        UserType.PROFESSIONAL,
-        UserType.CUSTOMER,
-      ],
-    },
   },
   {
     name: 'Turnos',
