@@ -1,7 +1,6 @@
 import { type Rating, type Prisma } from '@prisma/client'
 import { type RatingRepository } from '../repository/protocols/rating.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
-import { CustomError } from '@/utils/errors/custom.error.util'
 
 interface RatingsOutput {
   ratings: Rating[]
@@ -56,8 +55,9 @@ class RatingsUseCase {
 
     return deletedRating
   }
+
   public async executeGetMeanScore(): Promise<{ meanScore: number, ratingCount: number }> {
-    return await this.ratingRepository.getMeanScore();
+    return await this.ratingRepository.getMeanScore()
   }
 }
 

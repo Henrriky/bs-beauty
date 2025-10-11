@@ -5,9 +5,8 @@ import { makeServiceUseCaseFactory } from '../factory/make-service-use-case.fact
 import { makeProfessionalsUseCaseFactory } from '../factory/make-professionals-use-case.factory'
 import { makeOffersUseCaseFactory } from '../factory/make-offers-use-case.factory'
 import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use-case.factory'
-import { type Appointment } from '@prisma/client'
+import { type Appointment, type Offer } from '@prisma/client'
 import { makeRatingsUseCaseFactory } from '@/factory/make-ratings-use-case.factory'
-import { prismaClient } from '../lib/prisma'
 import { makeAnalyticsUseCaseFactory } from '@/factory/make-analytics-use-case.factory'
 
 const schema = z.object({
@@ -20,12 +19,7 @@ const schema = z.object({
   totalRevenue: z.number()
 })
 
-const ratingsSchema = z.object({
-  meanRatingScore: z.number()
-})
-
 type Analytics = z.infer<typeof schema>
-type RatingsAnalytics = z.infer<typeof ratingsSchema>
 
 // TODO: Extract logic/calculations to an use case
 
@@ -230,77 +224,84 @@ class AnalyticsController {
       next(error)
     }
   }
+
   public static async handleGetRatingsAnalytics(req: Request, res: Response, next: NextFunction) {
     try {
-      const professionalsUseCase = makeProfessionalsUseCaseFactory();
-      const offerUseCase = makeOffersUseCaseFactory();
-      const appointmentUseCase = makeAppointmentsUseCaseFactory();
-      const ratingsUseCase = makeRatingsUseCaseFactory();
-      const professionals = await professionalsUseCase.executeFindAll();
-      const selectedProfessionals = professionals.professionals.slice(0, 5);
+      const professionalsUseCase = makeProfessionalsUseCaseFactory()
+      const offerUseCase = makeOffersUseCaseFactory()
+      const appointmentUseCase = makeAppointmentsUseCaseFactory()
+      const ratingsUseCase = makeRatingsUseCaseFactory()
+      const professionals = await professionalsUseCase.executeFindAll()
+      const selectedProfessionals = professionals.professionals.slice(0, 5)
 
       const professionalsWithMeanRating = await Promise.all(selectedProfessionals.map(async (prof) => {
-        let offers: import('@prisma/client').Offer[] = [];
+        let offers: Offer[] = []
         try {
-          const result = await offerUseCase.executeFindByProfessionalId(prof.id);
-          offers = result.offers as import('@prisma/client').Offer[];
+          const result = await offerUseCase.executeFindByProfessionalId(prof.id)
+          offers = result.offers
         } catch (error: any) {
           if (error.statusCode === 404) {
-            offers = [];
+            offers = []
           } else {
-            throw error;
+            throw error
           }
         }
-        const offerIds = offers.map((o) => o.id);
+        const offerIds = offers.map((o) => o.id)
 
-        let appointments: { id: string }[] = [];
+        const appointments: Array<{ id: string }> = []
         if (offerIds.length > 0) {
           for (const offerId of offerIds) {
             try {
-              const result = await appointmentUseCase.executeFindByServiceOfferedId(offerId);
-              appointments.push(...result.appointments.map(a => ({ id: a.id })));
+              const result = await appointmentUseCase.executeFindByServiceOfferedId(offerId)
+              appointments.push(...result.appointments.map(a => ({ id: a.id })))
             } catch (error: any) {
-              if (error.statusCode === 404) {
-              } else {
-                throw error;
-              }
+              if (error.statusCode === 404) throw error
             }
           }
         }
-        const appointmentIds = appointments.map((a) => a.id);
+        const appointmentIds = appointments.map((a) => a.id)
 
-        let ratings: { score: number | null }[] = [];
+        let ratings: Array<{ score: number | null }> = []
         if (appointmentIds.length > 0) {
           try {
-            let ratingsArr: { score: number | null }[] = [];
+            const ratingsArr: Array<{ score: number | null }> = []
             for (const appointmentId of appointmentIds) {
               try {
-                const currentRating = await ratingsUseCase.executeFindByAppointmentId(appointmentId);
+                const currentRating = await ratingsUseCase.executeFindByAppointmentId(appointmentId)
                 if (Array.isArray(currentRating)) {
-                  ratingsArr.push(...currentRating.filter(r => r && typeof r.score === 'number'));
-                } else if (currentRating !== null && typeof currentRating.score === 'number') {
-                  ratingsArr.push(currentRating);
+                  ratingsArr.push(
+                    ...currentRating.filter((r: unknown): r is { score: number | null } =>
+                      typeof r === 'object' &&
+                      r !== null &&
+                      'score' in r &&
+                      typeof (r as { score: unknown }).score === 'number'
+                    )
+                  )
+                } else if (
+                  currentRating !== null &&
+                  typeof currentRating === 'object' &&
+                  'score' in currentRating &&
+                  typeof (currentRating as { score: unknown }).score === 'number'
+                ) {
+                  ratingsArr.push(currentRating as { score: number | null })
                 }
               } catch (error: any) {
-                if (error?.statusCode === 404) {
-                } else {
-                  throw error;
-                }
+                if (error?.statusCode === 404) throw error
               }
             }
-            ratings = ratingsArr ?? [];
+            ratings = ratingsArr ?? []
           } catch (error: any) {
             if (error.statusCode === 404) {
-              ratings = [];
+              ratings = []
             } else {
-              throw error;
+              throw error
             }
           }
         }
         const scores = ratings
           .map((r) => r.score)
-          .filter((s): s is number => typeof s === 'number' && s !== null);
-        const meanRating = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+          .filter((s): s is number => typeof s === 'number' && s !== null)
+        const meanRating = (scores.length > 0) ? (scores.reduce((a, b) => a + b, 0) / scores.length) : null
         return {
           id: prof.id,
           name: prof.name,
@@ -308,16 +309,17 @@ class AnalyticsController {
           profilePhotoUrl: prof.profilePhotoUrl,
           meanRating,
           ratingCount: scores.length
-        };
-      }));
+        }
+      }))
 
-      const salonRating = await ratingsUseCase.executeGetMeanScore();
+      const salonRating = await ratingsUseCase.executeGetMeanScore()
 
-      res.send({ professionals: professionalsWithMeanRating,
+      res.send({
+        professionals: professionalsWithMeanRating,
         salonRating
-       });
+      })
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 
@@ -334,7 +336,9 @@ class AnalyticsController {
   public static async handleGetMeanRatingByService(req: Request, res: Response, next: NextFunction) {
     try {
       const amountParam = req.body.amount as string | undefined
-      const amount = amountParam ? parseInt(amountParam, 10) : 5
+      const amount = (amountParam !== undefined && amountParam !== null && amountParam !== '')
+        ? parseInt(amountParam, 10)
+        : 5
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
       const meanRatingByService = await analyticsUseCase.executeGetMeanRatingByService(amount)
@@ -347,7 +351,9 @@ class AnalyticsController {
   public static async handleGetMeanRatingOfProfessionals(req: Request, res: Response, next: NextFunction) {
     try {
       const professionalId = req.body.amount as string | undefined
-      const amount = professionalId ? parseInt(professionalId, 10) : 5
+      const amount = (professionalId !== undefined && professionalId !== null && professionalId !== '')
+        ? parseInt(professionalId, 10)
+        : 5
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
       const meanRatingByProfessional = await analyticsUseCase.executeGetMeanRatingOfProfessionals(amount)
@@ -361,10 +367,10 @@ class AnalyticsController {
     try {
       const { startDate, endDate } = req.body as { startDate: string, endDate: string }
 
-      if (!startDate || !endDate) {
+      if (startDate === '' || startDate === undefined || endDate === '' || endDate === undefined) {
         return res.status(400).json({ message: 'startDate and endDate are required in the request body.' })
       }
-      
+
       const parsedStartDate = new Date(startDate)
       const parsedEndDate = new Date(endDate)
       if (isNaN(parsedStartDate.getTime()) || isNaN(parsedEndDate.getTime())) {
@@ -378,7 +384,6 @@ class AnalyticsController {
       next(error)
     }
   }
-
 }
 
 export { AnalyticsController }
