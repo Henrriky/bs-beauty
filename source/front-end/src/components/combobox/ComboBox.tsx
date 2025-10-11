@@ -8,9 +8,10 @@ import {
 import clsx from 'clsx'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { UseFormRegisterReturn } from 'react-hook-form'
+import React from 'react'
 
 interface ComboBoxProps<T> {
-  label?: string
+  label?: React.ReactNode
   id?: string
   registration?: UseFormRegisterReturn
   wrapperClassName?: string

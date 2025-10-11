@@ -7,8 +7,10 @@ class PaymentRecordSchemas {
         id: z.string().uuid().optional(),
         quantity: z.number().min(1).default(1),
         discount: z.number().multipleOf(0.01).default(0),
-        price: z.number().multipleOf(0.01),
-        offerId: z.string().uuid(),
+        price: z.number().multipleOf(0.01).default(0),
+        offerId: z.string().uuid({
+          message: 'Selecione um serviço',
+        }),
       })
       .strict(),
   )

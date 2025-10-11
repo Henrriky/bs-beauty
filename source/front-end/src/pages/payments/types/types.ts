@@ -16,12 +16,22 @@ type CreatePaymentRecordFormData = z.infer<
   typeof PaymentRecordSchemas.createSchema
 >
 
+type UpdatePaymentRecordFormData = z.infer<
+  typeof PaymentRecordSchemas.updateSchema
+>
+
 type OnSubmitCreatePaymentRecordForm = (
   data: CreatePaymentRecordFormData,
 ) => Promise<void>
 
+type OnSubmitUpdatePaymentRecordForm = (
+  data: UpdatePaymentRecordFormData,
+) => Promise<void>
+
 export type {
   CreatePaymentRecordFormData,
+  UpdatePaymentRecordFormData,
   OnSubmitCreatePaymentRecordForm,
+  OnSubmitUpdatePaymentRecordForm,
   PaymentItem,
 }

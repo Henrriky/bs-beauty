@@ -1,29 +1,36 @@
-import { CreatePaymentRecordFormData, PaymentItem } from '../types/types'
+import {
+  CreatePaymentRecordFormData,
+  PaymentItem,
+  UpdatePaymentRecordFormData,
+} from '../types/types'
 import { Input } from '../../../components/inputs/Input'
 import ComboBox from '../../../components/combobox/ComboBox'
 import { Button } from '../../../components/button/Button'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import useAppSelector from '../../../hooks/use-app-selector'
 import { professionalAPI } from '../../../store/professional/professional-api'
-import { useState } from 'react'
-import { Control, Controller, UseFormSetValue } from 'react-hook-form'
+import { useEffect, useState } from 'react'
+import { Controller, FieldArrayWithId, useFormContext } from 'react-hook-form'
+import { ErrorMessage } from '../../../components/feedback/ErrorMessage'
 
 interface SelectServicesFieldProps {
+  comboboxInputWidth?: string
   totalAmount: number
-  paymentItems: PaymentItem
-  control: Control<CreatePaymentRecordFormData>
+  paymentItems: FieldArrayWithId<
+    CreatePaymentRecordFormData | UpdatePaymentRecordFormData,
+    'items',
+    'id'
+  >[]
   appendItems: (item: PaymentItem) => void
   removeItems: (index: number) => void
-  setValue: UseFormSetValue<CreatePaymentRecordFormData>
 }
 
 function SelectServicesField({
+  comboboxInputWidth = 'w-42',
   totalAmount,
   paymentItems,
-  control,
   appendItems,
   removeItems,
-  setValue,
 }: SelectServicesFieldProps) {
   const { data: professional } =
     professionalAPI.useFetchServicesOfferedByProfessionalQuery({
@@ -38,6 +45,14 @@ function SelectServicesField({
           offer.service.name.toLowerCase().includes(serviceQuery.toLowerCase()),
         )
 
+  const { control, setValue } = useFormContext()
+
+  useEffect(() => {
+    paymentItems.forEach((item, index) => {
+      setValue(`items.${index}.price`, Number(item.price))
+    })
+  }, [paymentItems, setValue])
+
   return (
     <div className="flex flex-col gap-3 animate-fadeIn text-primary-0">
       <p className="text-sm w-">Serviços prestados</p>
@@ -45,7 +60,7 @@ function SelectServicesField({
         <div key={item.id} className="flex gap-3 items-start">
           <div className="flex gap-2 items-start">
             <Controller
-              name={`items.${index}.quantity`}
+              name={`items.${index}.quantity` as const}
               control={control}
               render={({ field }) => (
                 <Input
@@ -64,56 +79,67 @@ function SelectServicesField({
             <Controller
               name={`items.${index}.offerId`}
               control={control}
-              render={({ field: { value, onChange } }) => {
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => {
                 const selectedOffer =
                   filteredServices.find((offer) => offer.id === value) || null
 
                 return (
-                  <ComboBox
-                    id={'item-' + index + 'service'}
-                    value={selectedOffer}
-                    onChange={(serviceOffered) => {
-                      onChange(serviceOffered?.id ?? '')
-                      setValue(
-                        `items.${index}.price`,
-                        Number(serviceOffered?.price) ?? 0,
-                      )
-                    }}
-                    options={filteredServices}
-                    notFoundMessage="Serviço não encontrado"
-                    setQuery={setServiceQuery}
-                    displayValue={(option) => option?.service?.name ?? ''}
-                    inputClassName="w-42"
-                    label={index === 0 ? 'Serviço' : ''}
-                    placeholder="Buscar serviço..."
-                  />
+                  <div>
+                    <ComboBox
+                      id={'item-' + index + 'service'}
+                      value={selectedOffer}
+                      onChange={(serviceOffered) => {
+                        onChange(serviceOffered?.id)
+                        setValue(
+                          `items.${index}.price`,
+                          Number(serviceOffered?.price) ?? 0,
+                        )
+                      }}
+                      options={filteredServices}
+                      notFoundMessage="Serviço não encontrado"
+                      setQuery={setServiceQuery}
+                      displayValue={(option) => option?.service?.name ?? ''}
+                      inputClassName={comboboxInputWidth}
+                      wrapperClassName="mb-1"
+                      label={index === 0 ? 'Serviço' : ''}
+                      placeholder="Buscar serviço..."
+                    />
+                    {error && <ErrorMessage message={error.message} />}
+                  </div>
                 )
               }}
             />
             <Controller
               name={`items.${index}.price`}
               control={control}
-              render={({ field: { value, onChange } }) => (
-                <Input
-                  id={'item-' + index + 'price'}
-                  type="text"
-                  variant="solid"
-                  wrapperClassName="w-[82px]"
-                  inputClassName="rounded-lg w-[82px] text-primary-0"
-                  label={index === 0 ? 'Valor' : ''}
-                  placeholder="R$"
-                  value={new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  }).format(value)}
-                  onChange={(e) => {
-                    const rawValue = e.target.value
-                      .replace(/[^0-9,]/g, '')
-                      .replace(',', '.')
-                    onChange(Number(rawValue))
-                  }}
-                />
-              )}
+              render={({ field: { value, onChange } }) => {
+                const formattedValue = new Intl.NumberFormat('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                }).format(Number(value) || 0)
+
+                return (
+                  <Input
+                    id={'item-' + index + 'price'}
+                    type="text"
+                    variant="solid"
+                    wrapperClassName="w-[82px]"
+                    inputClassName="rounded-lg w-[82px] text-primary-0"
+                    label={index === 0 ? 'Valor' : ''}
+                    placeholder="R$"
+                    value={formattedValue}
+                    onChange={(e) => {
+                      const rawValue = e.target.value
+                        .replace(/[^\d,]/g, '')
+                        .replace(',', '.')
+                      onChange(Number(rawValue))
+                    }}
+                  />
+                )
+              }}
             />
             <Controller
               name={`items.${index}.discount`}

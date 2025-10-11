@@ -46,7 +46,6 @@ model Appointment {
   allowImageUse    Boolean  @default(false) @map("allows_image_use")
   customerId       String   @map("customer_id")
   serviceOfferedId String   @map("service_id")
-  paymentRecordId  String?  @map("payment_record_id")
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
@@ -54,7 +53,6 @@ model Appointment {
   rating        Rating?
   customer      Customer       @relation(fields: [customerId], references: [id])
   offer         Offer          @relation(fields: [serviceOfferedId], references: [id])
-  payment       PaymentRecord? @relation(fields: [paymentRecordId], references: [id])
 
   @@map("appointment")
 }
@@ -212,7 +210,6 @@ model PaymentRecord {
   professional Professional  @relation(fields: [professionalId], references: [id])
   customer     Customer      @relation(fields: [customerId], references: [id])
   items        PaymentItem[]
-  appointments Appointment[]
 
   @@map("payment_record")
 }
@@ -220,14 +217,14 @@ model PaymentRecord {
 model PaymentItem {
   id              String   @id @default(uuid())
   quantity        Int      @default(1)
-  discount        Decimal  @db.Decimal(4, 3)
+  discount        Int      @default(0)
   price           Decimal  @db.Decimal(10, 2)
   paymentRecordId String   @map("payment_record_id")
   offerId         String   @map("offer_id")
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
-  paymentRecord PaymentRecord @relation(fields: [paymentRecordId], references: [id])
+  paymentRecord PaymentRecord @relation(fields: [paymentRecordId], references: [id], onDelete: Cascade)
   offer         Offer         @relation(fields: [offerId], references: [id])
 
   @@map("payment_item")

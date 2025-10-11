@@ -3,6 +3,7 @@ import { PaymentRecord } from '../../../store/payment-record/types'
 import { customerAPI } from '../../../store/customer/customer-api'
 import { BanknotesIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { paymentLabels } from '../types/types'
+import { Link } from 'react-router-dom'
 
 interface PaymentRecordCardProps {
   paymentRecord: PaymentRecord
@@ -50,10 +51,12 @@ function PaymentRecordCard({ paymentRecord, index }: PaymentRecordCardProps) {
           </span>
         </p>
       </div>
-      <MagnifyingGlassIcon
-        className="size-5 text-primary-100 absolute right-4 hover:size-6 hover:text-primary-0 hover:cursor-pointer transition-all"
-        title="Visualizar"
-      />
+      <Link to={`/payments/${paymentRecord.id}`} className="absolute right-4">
+        <MagnifyingGlassIcon
+          className="size-5 text-primary-100 hover:size-6 hover:text-primary-0 hover:cursor-pointer transition-all"
+          title="Visualizar"
+        />
+      </Link>
     </div>
   )
 }

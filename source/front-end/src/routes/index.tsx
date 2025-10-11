@@ -18,6 +18,7 @@ import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
 import PaymentRecords from '../pages/payments'
+import PaymentRecordDetails from '../pages/payments/components/PaymentRecordDetails'
 
 function BSBeautyRouter() {
   return (
@@ -87,6 +88,10 @@ function BSBeautyRouter() {
                 <Route path="/services" element={<ServiceDashboard />} />
                 <Route path="/shifts" element={<Shifts />} />
                 <Route path="/payments" element={<PaymentRecords />} />
+                <Route
+                  path="/payments/:paymentRecordId"
+                  element={<PaymentRecordDetails />}
+                />
               </Route>
 
               <Route path="/profile" element={<Profile />} />

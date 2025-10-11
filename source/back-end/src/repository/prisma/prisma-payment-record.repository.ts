@@ -6,7 +6,10 @@ import { type PartialPaymentRecordQuerySchema } from '@/utils/validation/zod-sch
 class PrismaPaymentRecordRepository implements PaymentRecordRepository {
   public async findById (id: string) {
     const paymentRecord = await prismaClient.paymentRecord.findUnique({
-      where: { id }
+      where: { id },
+      include: {
+        items: true
+      }
     })
 
     return paymentRecord
@@ -47,7 +50,8 @@ class PrismaPaymentRecordRepository implements PaymentRecordRepository {
 
   public async create (data: CreatePaymentRecordInput) {
     const totalValue = data.items.reduce((sum, item) => {
-      const itemTotal = item.price * item.quantity * (1 - item.discount)
+      console.log('Item Discount: ', item.discount)
+      const itemTotal = item.price * item.quantity * (1 - item.discount / 100)
       return sum + itemTotal
     }, 0)
 
@@ -76,7 +80,7 @@ class PrismaPaymentRecordRepository implements PaymentRecordRepository {
 
   public async update (id: string, data: UpdatePaymentRecordInput) {
     const totalValue = data.items?.reduce((sum, item) => {
-      const itemTotal = item.price * item.quantity * (1 - item.discount)
+      const itemTotal = item.price * item.quantity * (1 - item.discount / 100)
       return sum + itemTotal
     }, 0)
 
@@ -84,21 +88,40 @@ class PrismaPaymentRecordRepository implements PaymentRecordRepository {
       where: { id },
       data: {
         totalValue,
-        ...data,
+        paymentMethod: data.paymentMethod,
+        customerId: data.customerId,
         items: {
-          update: data.items?.map(item => ({
-            where: {
-              id: item.id
-            },
-            data: {
+          deleteMany: {
+            id: {
+              notIn: (data.items ?? [])
+                .map(item => item.id)
+                .filter((id): id is string => id !== undefined && id !== null)
+            }
+          },
+
+          update: data.items
+            ?.filter(item => item.id !== undefined && item.id !== null)
+            .map(item => ({
+              where: { id: item.id },
+              data: {
+                quantity: item.quantity,
+                discount: item.discount,
+                price: item.price,
+                offerId: item.offerId
+              }
+            })),
+
+          create: data.items
+            ?.filter(item => item.id === undefined || item.id === null)
+            .map(item => ({
               quantity: item.quantity,
               discount: item.discount,
               price: item.price,
               offerId: item.offerId
-            }
-          }))
+            }))
         }
-      }
+      },
+      include: { items: true }
     })
 
     return updatedPaymentRecord

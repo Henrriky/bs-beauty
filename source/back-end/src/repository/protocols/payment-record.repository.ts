@@ -15,12 +15,14 @@ interface CreatePaymentRecordInput {
   customerId: string
   professionalId: string
   items: PaymentItemInput[]
+  totalValue: number
 }
 
 interface UpdatePaymentRecordInput {
   paymentMethod?: string
   customerId?: string
   items?: PaymentItemInput[]
+  totalValue: number
 }
 
 interface PaymentRecordRepository {

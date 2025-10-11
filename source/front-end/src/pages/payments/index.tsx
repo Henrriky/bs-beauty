@@ -30,14 +30,18 @@ function PaymentRecords() {
 
   useEffect(() => {
     if (data?.data) {
-      setAllPaymentRecords((prev) => {
-        const newUsers = data.data.filter(
-          (emp) => !prev.some((e) => e.id === emp.id),
-        )
-        return [...prev, ...newUsers]
-      })
+      if (page === 1) {
+        setAllPaymentRecords(data.data)
+      } else {
+        setAllPaymentRecords((prev) => {
+          const newPaymentRecords = data.data.filter(
+            (emp) => !prev.some((e) => e.id === emp.id),
+          )
+          return [...prev, ...newPaymentRecords]
+        })
+      }
     }
-  }, [data])
+  }, [data, page])
 
   if (isError) {
     toast.error('Erro ao carregar a lista de clientes')
@@ -78,13 +82,15 @@ function PaymentRecords() {
             )
           })
         )}
-        <Button
-          label={isLoading ? 'Carregando...' : 'Carregar mais'}
-          variant="text-only"
-          className="text-[18px] self-center"
-          onClick={() => setPage((prev) => prev + 1)}
-          disabled={isLoading}
-        />
+        {data && data.page < data.totalPages && (
+          <Button
+            label={isLoading ? 'Carregando...' : 'Carregar mais'}
+            variant="text-only"
+            className="text-[18px] self-center"
+            onClick={() => setPage((prev) => prev + 1)}
+            disabled={isLoading}
+          />
+        )}
       </div>
       <PlusCircleIcon
         className="size-12 stroke-primary-100 self-center hover:stroke-primary-0 hover:cursor-pointer hover:size-14 transition-all"
