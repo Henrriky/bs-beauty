@@ -69,7 +69,7 @@ export class RunBirthdayJobUseCase {
     const runDateISO: string =
       runDateLocal.toISO() ?? runDateLocal.toFormat("yyyy-LL-dd'T'HH:mm:ssZZ");
 
-    const customers = await this.customerRepo.findBirthdayCustomersOn(runDateLocal.toJSDate(), tz);
+    const customers = await this.customerRepo.findBirthdayCustomersOnCurrentDate(runDateLocal.toJSDate(), tz);
 
     const birthdayTemplate = (await this.templateRepo.findActiveByKey('BIRTHDAY')) ?? FALLBACK_TEMPLATE;
 

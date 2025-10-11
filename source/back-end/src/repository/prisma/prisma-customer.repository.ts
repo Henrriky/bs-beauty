@@ -139,7 +139,7 @@ class PrismaCustomerRepository implements CustomerRepository {
     }
   }
 
-  public async findBirthdayCustomersOn(date: Date, timezone: string): Promise<Customer[]> {
+  public async findBirthdayCustomersOnCurrentDate(date: Date, timezone: string): Promise<Customer[]> {
     const dt = DateTime.fromJSDate(date).setZone(timezone)
     const mm = dt.toFormat('MM')
     const dd = dt.toFormat('dd')

@@ -33,7 +33,8 @@ const MockCustomerRepository: Mocked<CustomerRepository> = {
   updateByEmail: vi.fn(),
   updateOrCreate: vi.fn(),
   delete: vi.fn(),
-  findAllPaginated: vi.fn()
+  findAllPaginated: vi.fn(),
+  findBirthdayCustomersOnCurrentDate: vi.fn()
 }
 
 const MockProfessionalRepository: Mocked<ProfessionalRepository> = {
