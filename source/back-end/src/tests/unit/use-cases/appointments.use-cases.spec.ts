@@ -1,5 +1,5 @@
 import { AppointmentsUseCase, MAXIMUM_APPOINTMENTS_PER_DAY, MINIMUM_SCHEDULLING_TIME_MINUTES } from '@/services/appointments.use-case'
-import { MockAppointmentRepository, MockCustomerRepository, MockProfessionalRepository } from '../utils/mocks/repository'
+import { MockAppointmentRepository, MockCustomerRepository, MockProfessionalRepository, MockRatingRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
 import { type Prisma, type Appointment, UserType } from '@prisma/client'
 
@@ -10,7 +10,8 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
     appointmentsUseCase = new AppointmentsUseCase(
       MockAppointmentRepository,
       MockCustomerRepository,
-      MockProfessionalRepository
+      MockProfessionalRepository,
+      MockRatingRepository
     )
   })
 
@@ -35,9 +36,9 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
         profilePhotoUrl: '',
         registerCompleted: true,
         userId: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
+        permissions: [],
+        userType: UserType.CUSTOMER
       }
-
 
       const appointmentCreated = await appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, tokenPayload)
       expect(MockAppointmentRepository.create).toHaveBeenCalledWith(appointmentToCreate)
@@ -49,7 +50,7 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
       const appointmentToCreate: Partial<Appointment> = {
         appointmentDate: 'invalid-date' as any,
         customerId: faker.string.uuid(),
-        serviceOfferedId: faker.string.uuid(),
+        serviceOfferedId: faker.string.uuid()
       }
 
       const tokenPayload = {
@@ -59,7 +60,8 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
         profilePhotoUrl: '',
         registerCompleted: true,
         userId: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
+        permissions: [],
+        userType: UserType.CUSTOMER
       }
 
       const promise = appointmentsUseCase.executeCreate(
@@ -87,7 +89,8 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
         profilePhotoUrl: '',
         registerCompleted: true,
         userId: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
+        permissions: [],
+        userType: UserType.CUSTOMER
       }
 
       const promise = appointmentsUseCase.executeCreate((appointmentToCreate) as Prisma.AppointmentCreateInput, tokenPayload)
@@ -111,7 +114,8 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
         profilePhotoUrl: '',
         registerCompleted: true,
         userId: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
+        permissions: [],
+        userType: UserType.CUSTOMER
       }
 
       MockAppointmentRepository.create.mockResolvedValue(appointmentToCreate as Appointment)
@@ -134,8 +138,9 @@ describe('AppointmentsUseCase (Unit Tests)', () => {
         name: faker.person.firstName(),
         profilePhotoUrl: '',
         registerCompleted: true,
+        permissions: [],
         userId: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
+        userType: UserType.CUSTOMER
       }
 
       MockAppointmentRepository.countCustomerAppointmentsPerDay.mockResolvedValueOnce(MAXIMUM_APPOINTMENTS_PER_DAY)

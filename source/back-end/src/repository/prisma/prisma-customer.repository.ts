@@ -6,14 +6,13 @@ import { type PaginatedRequest } from '../../types/pagination'
 import { DateTime } from 'luxon'
 
 class PrismaCustomerRepository implements CustomerRepository {
-
-  public async findAll () {
+  public async findAll() {
     const customers = await prismaClient.customer.findMany()
 
     return customers
   }
 
-  public async findById (customerId: string) {
+  public async findById(customerId: string) {
     const customer = await prismaClient.customer.findUnique({
       where: { id: customerId }
     })
@@ -21,7 +20,7 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
-  public async findByEmailOrPhone (email: string, phone: string) {
+  public async findByEmailOrPhone(email: string, phone: string) {
     const customer = await prismaClient.customer.findFirst({
       where: { OR: [{ email }, { phone }] }
     })
@@ -29,7 +28,15 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
-  public async create (newCustomer: Prisma.CustomerCreateInput) {
+  public async findByEmail(email: string) {
+    const customer = await prismaClient.customer.findUnique({
+      where: { email }
+    })
+
+    return customer
+  }
+
+  public async create(newCustomer: Prisma.CustomerCreateInput) {
     const customer = await prismaClient.customer.create({
       data: { ...newCustomer }
     })
@@ -37,7 +44,7 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
-  public async update (customerId: string, customerToUpdate: Prisma.CustomerUpdateInput) {
+  public async update(customerId: string, customerToUpdate: Prisma.CustomerUpdateInput) {
     const customerUpdated = await prismaClient.customer.update({
       where: { id: customerId },
       data: { ...customerToUpdate }
@@ -46,7 +53,7 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customerUpdated
   }
 
-  async updateByEmailAndGoogleId (
+  async updateByEmailAndGoogleId(
     googleId: string,
     email: string,
     customerData: Prisma.CustomerUpdateInput
@@ -65,7 +72,19 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
-  public async updateOrCreate (identifiers: UpdateOrCreateParams, data: Prisma.CustomerCreateInput): Promise<Customer> {
+  public async updateByEmail(email: string, customerData: Prisma.CustomerUpdateInput) {
+    const customer = await prismaClient.customer.update({
+      where: { email },
+      data: {
+        ...customerData,
+        registerCompleted: true
+      }
+    })
+
+    return customer
+  }
+
+  public async updateOrCreate(identifiers: UpdateOrCreateParams, data: Prisma.CustomerCreateInput): Promise<Customer> {
     const customerUpdated = await prismaClient.customer.upsert({
       where: {
         email: identifiers.email,
@@ -73,7 +92,8 @@ class PrismaCustomerRepository implements CustomerRepository {
         id: identifiers.id
       },
       update: {
-        profilePhotoUrl: data.profilePhotoUrl
+        profilePhotoUrl: data.profilePhotoUrl,
+        googleId: data.googleId
       },
       create: {
         ...data
@@ -83,7 +103,7 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customerUpdated
   }
 
-  public async delete (customerId: string) {
+  public async delete(customerId: string) {
     const customerDeleted = await prismaClient.customer.delete({
       where: { id: customerId }
     })
@@ -91,7 +111,7 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customerDeleted
   }
 
-  public async findAllPaginated (params: PaginatedRequest<CustomersFilters>) {
+  public async findAllPaginated(params: PaginatedRequest<CustomersFilters>) {
     const { page, limit, filters } = params
     const skip = (page - 1) * limit
 

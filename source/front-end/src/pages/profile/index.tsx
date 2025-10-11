@@ -26,19 +26,15 @@ function Profile() {
   const user = useAppSelector((state) => state.auth.user!)
   const tokens = useAppSelector((state) => state.auth.token)
 
-  const { data, isLoading, isError, error } = authAPI.useFetchUserInfoQuery()
+  const { data, isLoading, isError, error, refetch } =
+    authAPI.useFetchUserInfoQuery()
 
-  async function handleUpdateProfileToken() {
-    if (!tokens?.googleAccessToken) {
-      toast.error('Token de acesso inválido')
-      return
-    }
-
+  async function refreshTokenIfGoogle() {
+    if (!tokens?.googleAccessToken) return
     try {
       const { accessToken } = await AuthAPI.loginWithGoogleAccessToken(
         tokens.googleAccessToken,
       )
-
       const decodedToken = decodeUserToken(accessToken)
 
       dispatchRedux(
@@ -65,6 +61,11 @@ function Profile() {
       console.error('Erro ao atualizar token:', err)
       toast.error('Erro ao atualizar token')
     }
+  }
+
+  const handlePostProfileUpdate = async () => {
+    await refreshTokenIfGoogle()
+    await refetch()
   }
 
   if (isLoading) {
@@ -102,7 +103,7 @@ function Profile() {
           <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} />
           <ProfileContainer
             userInfo={userInfo}
-            onProfileUpdate={handleUpdateProfileToken}
+            onProfileUpdate={handlePostProfileUpdate}
           />
         </div>
       </div>

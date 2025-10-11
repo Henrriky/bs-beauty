@@ -35,7 +35,6 @@ function CompleteRegister() {
 
   async function handleUpdateProfileToken() {
     if (!tokens?.googleAccessToken) {
-      toast.error('Token de acesso inválido')
       return
     }
 
@@ -49,12 +48,7 @@ function CompleteRegister() {
       dispatchRedux(
         setToken({
           user: {
-            id: decodedToken.id,
-            userType: decodedToken.userType,
-            email: decodedToken.email,
-            name: decodedToken.name,
-            registerCompleted: decodedToken.registerCompleted,
-            profilePhotoUrl: decodedToken.profilePhotoUrl,
+            ...decodedToken,
           },
           token: {
             googleAccessToken: tokens.googleAccessToken,

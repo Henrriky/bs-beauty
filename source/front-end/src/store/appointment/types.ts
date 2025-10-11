@@ -57,6 +57,12 @@ export interface FindAppointmentByCustomerId {
       name: string
     }
   }
+  rating: {
+    id: string
+    score: number | null
+    comment: string | null
+
+  } | undefined
 }
 export interface FindAppointmentById {
   id: string
@@ -75,6 +81,12 @@ export interface FindAppointmentById {
       name: string
     }
   }
+  rating: {
+    id: string
+    score: number | null
+    comment: string | null
+    
+  } | undefined
 }
 
 export type CreateAppointmentAPIData = z.infer<typeof AppointmentSchemas.createSchemaForm>

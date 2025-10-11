@@ -1,10 +1,12 @@
 import { type Professional, type Prisma } from '@prisma/client'
 import { type ProfessionalRepository } from '../repository/protocols/professional.repository'
+import { type RoleRepository } from '../repository/protocols/role.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { CustomError } from '../utils/errors/custom.error.util'
 import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
 import { type ServicesOfferedByProfessional } from '../repository/types/professional-repository.types'
 import { type PartialHandleFetchServicesOfferedByProfessionalQuerySchema } from '@/utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
-import { type ProfessionalsFilters } from '@/types/employees/employees-filters'
+import { type ProfessionalsFilters } from '@/types/professionals/professionals-filters'
 
 interface ProfessionalsOutput {
   professionals: Professional[]
@@ -13,7 +15,10 @@ interface ProfessionalsOutput {
 class ProfessionalsUseCase {
   private readonly entityName = 'Professional'
 
-  constructor (private readonly professionalRepository: ProfessionalRepository) { }
+  constructor (
+    private readonly professionalRepository: ProfessionalRepository,
+    private readonly roleRepository: RoleRepository
+  ) { }
 
   public async executeFindAll (): Promise<ProfessionalsOutput> {
     const professionals = await this.professionalRepository.findAll()
@@ -67,6 +72,45 @@ class ProfessionalsUseCase {
     const result = await this.professionalRepository.findAllPaginated(params)
 
     return result
+  }
+
+  public async executeAddRole (professionalId: string, roleId: string): Promise<void> {
+    await this.executeFindById(professionalId)
+
+    const role = await this.roleRepository.findById(roleId)
+    if (role === null) {
+      throw new CustomError('Role not found', 404)
+    }
+
+    const alreadyAssociated = await this.professionalRepository.findProfessionalRoleAssociation(professionalId, roleId)
+    if (alreadyAssociated) {
+      throw new CustomError('Professional already has this Role', 409)
+    }
+
+    await this.professionalRepository.addRoleToProfessional(professionalId, roleId)
+  }
+
+  public async executeRemoveRole (professionalId: string, roleId: string): Promise<void> {
+    await this.executeFindById(professionalId)
+
+    const role = await this.roleRepository.findById(roleId)
+    if (role === null) {
+      throw new CustomError('Role not found', 404)
+    }
+
+    const isAssociated = await this.professionalRepository.findProfessionalRoleAssociation(professionalId, roleId)
+    if (!isAssociated) {
+      throw new CustomError('Professional does not have this Role', 409)
+    }
+
+    await this.professionalRepository.removeRoleFromProfessional(professionalId, roleId)
+  }
+
+  public async executeFindRolesByProfessionalId (professionalId: string) {
+    await this.executeFindById(professionalId)
+    const roles = await this.professionalRepository.findRolesByProfessionalId(professionalId)
+
+    return roles
   }
 }
 

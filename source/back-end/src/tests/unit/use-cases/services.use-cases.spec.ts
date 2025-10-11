@@ -1,14 +1,15 @@
 import { ServicesUseCase } from '@/services/services.use-case'
-import { MockServiceRepository } from '../utils/mocks/repository'
+import { MockProfessionalRepository, MockServiceRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { Prisma, type Service } from '@prisma/client'
+import { NotificationChannel, Prisma, type Professional, type Service, ServiceStatus, UserType } from '@prisma/client'
 import { type ProfessionalsOfferingService } from '@/repository/types/service-repository.types'
+import { PERMISSIONS_MAP } from '@/utils/auth/permissions-map.util'
 
 describe('ServicesUseCase (Unit Tests)', () => {
   let servicesUseCase: ServicesUseCase
 
   beforeEach(() => {
-    servicesUseCase = new ServicesUseCase(MockServiceRepository)
+    servicesUseCase = new ServicesUseCase(MockServiceRepository, MockProfessionalRepository)
   })
 
   it('should be defined', () => {
@@ -23,6 +24,8 @@ describe('ServicesUseCase (Unit Tests)', () => {
           name: faker.commerce.productName(),
           description: faker.commerce.productDescription(),
           category: faker.commerce.department(),
+          status: ServiceStatus.PENDING,
+          createdBy: null,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         },
@@ -31,6 +34,8 @@ describe('ServicesUseCase (Unit Tests)', () => {
           name: faker.commerce.productName(),
           description: faker.commerce.productDescription(),
           category: faker.commerce.department(),
+          status: ServiceStatus.PENDING,
+          createdBy: null,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }
@@ -58,6 +63,8 @@ describe('ServicesUseCase (Unit Tests)', () => {
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         category: faker.commerce.department(),
+        status: ServiceStatus.PENDING,
+        createdBy: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -79,7 +86,26 @@ describe('ServicesUseCase (Unit Tests)', () => {
   })
 
   describe('executeCreate', () => {
-    it('should create a service', async () => {
+    it('should create a service as MANAGER with APPROVED status', async () => {
+      const professionalId = faker.string.uuid()
+      const professional: Professional = {
+        id: professionalId,
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        userType: UserType.MANAGER,
+        registerCompleted: true,
+        socialMedia: null,
+        contact: faker.phone.number(),
+        specialization: faker.person.jobType(),
+        profilePhotoUrl: faker.internet.url(),
+        googleId: null,
+        paymentMethods: [],
+        passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
       const serviceToCreate: Prisma.ServiceCreateInput = {
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
@@ -91,21 +117,96 @@ describe('ServicesUseCase (Unit Tests)', () => {
         name: serviceToCreate.name,
         description: serviceToCreate.description ?? null,
         category: serviceToCreate.category,
+        status: ServiceStatus.APPROVED,
+        createdBy: professionalId,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
 
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
       MockServiceRepository.create.mockResolvedValue(createdService)
 
-      const result = await servicesUseCase.executeCreate(serviceToCreate)
+      const result = await servicesUseCase.executeCreate(serviceToCreate, professionalId)
+
       expect(result).toEqual(createdService)
-      expect(MockServiceRepository.create).toHaveBeenCalledWith(serviceToCreate)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockServiceRepository.create).toHaveBeenCalledWith({
+        ...serviceToCreate,
+        status: ServiceStatus.APPROVED,
+        createdByProfessional: { connect: { id: professionalId } }
+      })
+    })
+
+    it('should create a service as PROFESSIONAL with PENDING status', async () => {
+      const professionalId = faker.string.uuid()
+      const professional: Professional = {
+        id: professionalId,
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        userType: UserType.PROFESSIONAL,
+        registerCompleted: true,
+        socialMedia: null,
+        contact: faker.phone.number(),
+        specialization: faker.person.jobType(),
+        profilePhotoUrl: faker.internet.url(),
+        googleId: null,
+        paymentMethods: [],
+        passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      const serviceToCreate: Prisma.ServiceCreateInput = {
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department()
+      }
+
+      const createdService: Service = {
+        id: faker.string.uuid(),
+        name: serviceToCreate.name,
+        description: serviceToCreate.description ?? null,
+        category: serviceToCreate.category,
+        status: ServiceStatus.PENDING,
+        createdBy: professionalId,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockServiceRepository.create.mockResolvedValue(createdService)
+
+      const result = await servicesUseCase.executeCreate(serviceToCreate, professionalId)
+
+      expect(result).toEqual(createdService)
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockServiceRepository.create).toHaveBeenCalledWith({
+        ...serviceToCreate,
+        status: ServiceStatus.PENDING,
+        createdByProfessional: { connect: { id: professionalId } }
+      })
+    })
+
+    it('should throw an error if professional is not found', async () => {
+      const professionalId = faker.string.uuid()
+      const serviceToCreate: Prisma.ServiceCreateInput = {
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department()
+      }
+
+      MockProfessionalRepository.findById.mockResolvedValue(null)
+
+      const promise = servicesUseCase.executeCreate(serviceToCreate, professionalId)
+      await expect(promise).rejects.toThrow('Not Found')
     })
   })
 
   describe('executeUpdate', () => {
-    it('should update a service', async () => {
+    it('should update a service without status change', async () => {
       const serviceId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
       const serviceToUpdate: Prisma.ServiceUpdateInput = {
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription()
@@ -116,6 +217,8 @@ describe('ServicesUseCase (Unit Tests)', () => {
         name: 'Old name',
         description: 'Old description',
         category: faker.commerce.department(),
+        status: ServiceStatus.PENDING,
+        createdBy: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -130,22 +233,300 @@ describe('ServicesUseCase (Unit Tests)', () => {
       MockServiceRepository.findById.mockResolvedValue(existingService)
       MockServiceRepository.update.mockResolvedValue(updatedService)
 
-      const result = await servicesUseCase.executeUpdate(serviceId, serviceToUpdate)
+      const result = await servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)
       expect(result).toEqual(updatedService)
       expect(MockServiceRepository.findById).toHaveBeenCalledWith(serviceId)
       expect(MockServiceRepository.update).toHaveBeenCalledWith(serviceId, serviceToUpdate)
     })
 
-    it('should throw an error if service to update is not found', async () => {
+    it('should throw an error if service to update does not exist', async () => {
       const serviceId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
       const serviceToUpdate: Prisma.ServiceUpdateInput = {
         name: faker.commerce.productName()
       }
 
       MockServiceRepository.findById.mockResolvedValue(null)
 
-      const promise = servicesUseCase.executeUpdate(serviceId, serviceToUpdate)
+      const promise = servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)
       await expect(promise).rejects.toThrow('Not Found')
+    })
+
+    describe('Manager Scenarios for Status Update', () => {
+      const serviceId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+      const serviceToUpdate: Prisma.ServiceUpdateInput = {
+        status: ServiceStatus.APPROVED
+      }
+      const existingService: Service = {
+        id: serviceId,
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+        status: ServiceStatus.PENDING,
+        createdBy: null,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+      const manager: Professional = {
+        id: professionalId,
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        userType: UserType.MANAGER,
+        registerCompleted: true,
+        socialMedia: null,
+        contact: faker.phone.number(),
+        specialization: faker.person.jobType(),
+        profilePhotoUrl: faker.internet.url(),
+        googleId: null,
+        paymentMethods: [],
+        passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+      const updatedService: Service = {
+        ...existingService,
+        status: serviceToUpdate.status as ServiceStatus,
+        updatedAt: faker.date.recent()
+      }
+
+      beforeEach(() => {
+        MockServiceRepository.findById.mockResolvedValue(existingService)
+        MockProfessionalRepository.findById.mockResolvedValue(manager)
+        MockServiceRepository.update.mockResolvedValue(updatedService)
+      })
+
+      it('should update service status when manager without permissions override tries to update status', async () => {
+        MockProfessionalRepository.findProfessionalPermissions.mockResolvedValue([])
+
+        const result = await servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)
+        expect(result).toEqual(updatedService)
+        expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+        expect(MockServiceRepository.update).toHaveBeenCalledWith(serviceId, serviceToUpdate)
+      })
+
+      it('should update service status when manager with permissions override that contains service.approve tries to change status', async () => {
+        MockProfessionalRepository.findProfessionalPermissions.mockResolvedValue([PERMISSIONS_MAP.SERVICE.APPROVE.permissionName])
+
+        const result = await servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)
+        expect(result).toEqual(updatedService)
+        expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+        expect(MockServiceRepository.update).toHaveBeenCalledWith(serviceId, serviceToUpdate)
+      })
+
+      it('should throw forbidden error when manager with permissions override that does not contain service.approvetries to change status', async () => {
+        MockProfessionalRepository.findProfessionalPermissions.mockResolvedValue([PERMISSIONS_MAP.DASHBOARD.TOTAL_EMPLOYEES.permissionName])
+
+        await expect(servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)).rejects.toThrow('Forbidden')
+      })
+    })
+
+    describe('Non-Manager Scenarios for Status Update', () => {
+      const serviceId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+      const serviceToUpdate: Prisma.ServiceUpdateInput = {
+        status: ServiceStatus.APPROVED
+      }
+      const existingService: Service = {
+        id: serviceId,
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+        status: ServiceStatus.PENDING,
+        createdBy: null,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+      const manager: Professional = {
+        id: professionalId,
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        userType: UserType.PROFESSIONAL,
+        registerCompleted: true,
+        socialMedia: null,
+        contact: faker.phone.number(),
+        specialization: faker.person.jobType(),
+        profilePhotoUrl: faker.internet.url(),
+        googleId: null,
+        paymentMethods: [],
+        passwordHash: faker.internet.password(),
+        notificationPreference: NotificationChannel.BOTH,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+      const updatedService: Service = {
+        ...existingService,
+        status: ServiceStatus.APPROVED,
+        updatedAt: faker.date.recent()
+      }
+
+      beforeEach(() => {
+        MockServiceRepository.findById.mockResolvedValue(existingService)
+        MockProfessionalRepository.findById.mockResolvedValue(manager)
+        MockServiceRepository.update.mockResolvedValue(updatedService)
+      })
+
+      it('should update service status when non-manager with service.approve permission tries to update status', async () => {
+        MockProfessionalRepository.findProfessionalPermissions.mockResolvedValue([PERMISSIONS_MAP.SERVICE.APPROVE.permissionName])
+
+        const result = await servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)
+        expect(result).toEqual(updatedService)
+        expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+        expect(MockServiceRepository.update).toHaveBeenCalledWith(serviceId, serviceToUpdate)
+      })
+
+      it('should throw forbidden error when non-manager without service.approve permission tries to update status', async () => {
+        MockProfessionalRepository.findProfessionalPermissions.mockResolvedValue([])
+
+        const promise = servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)
+        await expect(promise).rejects.toThrow('Forbidden')
+      })
+    })
+
+    describe('Status Transition Validation', () => {
+      it('should allow PENDING to APPROVED transition', async () => {
+        const serviceId = faker.string.uuid()
+        const professionalId = faker.string.uuid()
+        const serviceToUpdate: Prisma.ServiceUpdateInput = {
+          status: ServiceStatus.APPROVED
+        }
+
+        const existingService: Service = {
+          id: serviceId,
+          name: faker.commerce.productName(),
+          description: faker.commerce.productDescription(),
+          category: faker.commerce.department(),
+          status: ServiceStatus.PENDING,
+          createdBy: null,
+          createdAt: faker.date.past(),
+          updatedAt: faker.date.past()
+        }
+
+        const manager: Professional = {
+          id: professionalId,
+          name: faker.person.fullName(),
+          email: faker.internet.email(),
+          userType: UserType.MANAGER,
+          registerCompleted: true,
+          socialMedia: null,
+          contact: faker.phone.number(),
+          specialization: faker.person.jobType(),
+          profilePhotoUrl: faker.internet.url(),
+          googleId: null,
+          paymentMethods: [],
+          passwordHash: faker.internet.password(),
+          createdAt: faker.date.past(),
+          notificationPreference: NotificationChannel.BOTH,
+          updatedAt: faker.date.past()
+        }
+
+        const updatedService: Service = {
+          ...existingService,
+          status: ServiceStatus.APPROVED,
+          updatedAt: faker.date.recent()
+        }
+
+        MockServiceRepository.findById.mockResolvedValue(existingService)
+        MockProfessionalRepository.findById.mockResolvedValue(manager)
+        MockServiceRepository.update.mockResolvedValue(updatedService)
+
+        const result = await servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)
+        expect(result.status).toBe(ServiceStatus.APPROVED)
+      })
+
+      it('should allow PENDING to REJECTED transition', async () => {
+        const serviceId = faker.string.uuid()
+        const professionalId = faker.string.uuid()
+        const serviceToUpdate: Prisma.ServiceUpdateInput = {
+          status: ServiceStatus.REJECTED
+        }
+
+        const existingService: Service = {
+          id: serviceId,
+          name: faker.commerce.productName(),
+          description: faker.commerce.productDescription(),
+          category: faker.commerce.department(),
+          status: ServiceStatus.PENDING,
+          createdBy: null,
+          createdAt: faker.date.past(),
+          updatedAt: faker.date.past()
+        }
+
+        const manager: Professional = {
+          id: professionalId,
+          name: faker.person.fullName(),
+          email: faker.internet.email(),
+          userType: UserType.MANAGER,
+          registerCompleted: true,
+          socialMedia: null,
+          contact: faker.phone.number(),
+          specialization: faker.person.jobType(),
+          profilePhotoUrl: faker.internet.url(),
+          googleId: null,
+          paymentMethods: [],
+          passwordHash: faker.internet.password(),
+          notificationPreference: NotificationChannel.BOTH,
+          createdAt: faker.date.past(),
+          updatedAt: faker.date.past()
+        }
+
+        const updatedService: Service = {
+          ...existingService,
+          status: ServiceStatus.REJECTED,
+          updatedAt: faker.date.recent()
+        }
+
+        MockServiceRepository.findById.mockResolvedValue(existingService)
+        MockProfessionalRepository.findById.mockResolvedValue(manager)
+        MockServiceRepository.update.mockResolvedValue(updatedService)
+
+        const result = await servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)
+        expect(result.status).toBe(ServiceStatus.REJECTED)
+      })
+
+      it('should not allow APPROVED to REJECTED transition', async () => {
+        const serviceId = faker.string.uuid()
+        const professionalId = faker.string.uuid()
+        const serviceToUpdate: Prisma.ServiceUpdateInput = {
+          status: ServiceStatus.REJECTED
+        }
+
+        const existingService: Service = {
+          id: serviceId,
+          name: faker.commerce.productName(),
+          description: faker.commerce.productDescription(),
+          category: faker.commerce.department(),
+          status: ServiceStatus.APPROVED,
+          createdBy: null,
+          createdAt: faker.date.past(),
+          updatedAt: faker.date.past()
+        }
+
+        const manager: Professional = {
+          id: professionalId,
+          name: faker.person.fullName(),
+          email: faker.internet.email(),
+          userType: UserType.MANAGER,
+          registerCompleted: true,
+          socialMedia: null,
+          contact: faker.phone.number(),
+          specialization: faker.person.jobType(),
+          profilePhotoUrl: faker.internet.url(),
+          googleId: null,
+          paymentMethods: [],
+          passwordHash: faker.internet.password(),
+          notificationPreference: NotificationChannel.BOTH,
+          createdAt: faker.date.past(),
+          updatedAt: faker.date.past()
+        }
+
+        MockServiceRepository.findById.mockResolvedValue(existingService)
+        MockProfessionalRepository.findById.mockResolvedValue(manager)
+
+        const promise = servicesUseCase.executeUpdate(serviceId, serviceToUpdate, professionalId)
+        await expect(promise).rejects.toThrow('Bad Request')
+      })
     })
   })
 
@@ -157,6 +538,8 @@ describe('ServicesUseCase (Unit Tests)', () => {
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         category: faker.commerce.department(),
+        status: ServiceStatus.PENDING,
+        createdBy: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -195,6 +578,8 @@ describe('ServicesUseCase (Unit Tests)', () => {
         name: params.filters.name,
         description: faker.commerce.productDescription(),
         category: params.filters.category,
+        status: ServiceStatus.PENDING,
+        createdBy: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }

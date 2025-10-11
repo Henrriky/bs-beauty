@@ -96,6 +96,9 @@ class ProfessionalSchemas {
       notificationPreference: SharedSchemas.notificationPreference
     })
     .strict()
+
+  public static registerProfessionalBodySchema =
+    SharedSchemas.registerBodySchema
 }
 
 export { ProfessionalSchemas }

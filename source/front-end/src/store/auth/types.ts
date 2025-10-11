@@ -1,4 +1,5 @@
 import { WeekDays } from "../../enums/enums"
+import { Permissions } from "../../types/authorization"
 
 export enum UserType {
   MANAGER = "MANAGER",
@@ -19,7 +20,8 @@ export interface CustomerOrProfessional {
   registerCompleted: boolean
   email: string
   userType: UserType
-  profilePhotoUrl: string
+  profilePhotoUrl?: string
+  permissions: Permissions[]
 }
 
 export type Customer = {
@@ -56,6 +58,14 @@ export type Professional = {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type FetchUserInfoRequest = void
+export type FetchUserInfoCustomer = Customer
+export type FetchUserInfoProfessional = Professional & { roles: string[] }
+export type FetchUserInfoResponse = {
+  user: FetchUserInfoCustomer | FetchUserInfoProfessional
+}
+
 
 export type Shift = {
   id: string;
