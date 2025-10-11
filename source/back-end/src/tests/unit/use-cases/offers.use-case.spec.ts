@@ -123,7 +123,7 @@ describe('OffersUseCase (Unit Tests)', () => {
       MockOfferRepository.findByServiceId.mockResolvedValue(offers)
 
       const result = await offersUseCase.executeFindByServiceId(serviceId)
-      expect(result).toEqual({ offers })
+      expect(result).toEqual(offers)
       expect(MockOfferRepository.findByServiceId).toHaveBeenCalledWith(serviceId)
     })
 
