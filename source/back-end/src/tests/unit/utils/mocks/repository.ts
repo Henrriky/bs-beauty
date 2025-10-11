@@ -1,5 +1,7 @@
 import { type AppointmentRepository } from '@/repository/protocols/appointment.repository'
 import { type CustomerRepository } from '@/repository/protocols/customer.repository'
+import { type NotificationRepository } from '@/repository/protocols/notification.repository'
+import { type NotificationTemplateRepository } from '@/repository/protocols/notification-template.repository'
 import { type OfferRepository } from '@/repository/protocols/offer.repository'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 import { RatingRepository } from '@/repository/protocols/rating.repository'
@@ -113,9 +115,26 @@ const MockRoleRepository: Mocked<RoleRepository> = {
   delete: vi.fn()
 }
 
+const MockNotificationRepository: Mocked<NotificationRepository> = {
+  findAll: vi.fn(),
+  findById: vi.fn(),
+  create: vi.fn(),
+  delete: vi.fn(),
+  findByMarker: vi.fn(),
+  markManyAsReadForUser: vi.fn()
+}
+
+const MockNotificationTemplateRepository: Mocked<NotificationTemplateRepository> = {
+  findAll: vi.fn(),
+  findActiveByKey: vi.fn(),
+  updateByKey: vi.fn()
+}
+
 export {
   MockAppointmentRepository,
   MockCustomerRepository,
+  MockNotificationRepository,
+  MockNotificationTemplateRepository,
   MockOfferRepository,
   MockProfessionalRepository,
   MockRoleRepository,
