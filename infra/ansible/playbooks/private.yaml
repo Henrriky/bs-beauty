@@ -65,7 +65,7 @@
         dest: "{{ app_path }}/source/back-end/.env"
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
-        mode: 0644
+        mode: 0600
 
     - name: Baixar a última imagem do Docker
       command: docker compose -f docker-compose.prod.yaml pull
