@@ -4,7 +4,7 @@ import arrowDown from '../../assets/keyboard_arrow_down.svg'
 import stars from '../../assets/five-stars.svg'
 import location from '../../assets/location_on.svg'
 import calendar from '../../assets/calendar.svg'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import useAppSelector from '../../hooks/use-app-selector'
 import { Button } from '../../components/button/Button'
@@ -12,10 +12,27 @@ import { publicAnalyticsApi } from '../../store/analytics/public-analytics-api'
 import RatingCardsContainer from './components/RatingCardsContainer'
 import SalonRatingCard from './components/SalonRatingCard'
 
+const services = [
+  'Remoção a Laser de Micro e Tatto',
+  'Nanopigmentação',
+  'Brow Lamination',
+  'Reconstrução de Sobrancelhas',
+  'Depilação a Cera',
+  'Depilação a Laser',
+  'Alongamento de Unhas',
+  'Banho de Gel',
+  'Manicure',
+  'Estética Facial e Corporal',
+  'Emagrecimento',
+  'Terapia Capilar',
+  'Botox',
+]
+
 function LandingPage() {
   const navigate = useNavigate()
   const authInformations = useAppSelector((state) => state.auth)
   const { data } = publicAnalyticsApi.useFetchRatingsAnalyticsQuery()
+  const [currentServiceIndex, setCurrentServiceIndex] = useState(0)
   console.log(data)
 
   useEffect(() => {
@@ -26,7 +43,7 @@ function LandingPage() {
           `/${authInformations.user.userType.toString().toLowerCase()}/home`,
         )
       } else {
-        navigate('/a')
+        navigate('/')
       }
     }
   }, [
@@ -37,37 +54,36 @@ function LandingPage() {
     navigate,
   ])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentServiceIndex((prevIndex) => (prevIndex + 1) % services.length)
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   return (
-    <div className="flex flex-col items-center justify-start overflow-auto">
+    <div className="flex flex-col items-center justify-start px-4">
       {/* Logo */}
       <img src={logo} alt="Logo" className="my-[72px] mx-auto" />
 
       {/* Texto + Lista de Serviços */}
-      <div className="space-y-[16px]">
-        <p className="w-[377px] text-center text-[#D9D9D9] font-kumbh text-[16px] font-bold leading-normal">
-          Reconhecidas por entregar a experiência que você merece! Especialistas
+      <div className="space-y-[16px] mb-8 w-full">
+        <p className="text-center text-[#D9D9D9] text-[16px] leading-normal">
+          Entregamos a experiência que você merece e somos
+          <span className="text-[#A4978A] font-semibold "> especialistas </span>
           em:
         </p>
-        <ul className="list-disc pl-6 text-[#A4978A] text-[16px] font-normal font-[Fredoka]">
-          <li>Remoção a Laser de Micro e Tatto</li>
-          <li>Nanopigmentação</li>
-          <li>Brow Lamination</li>
-          <li>Reconstrução de Sobrancelhas</li>
-          <li>Depilação a Cera</li>
-          <li>Depilação a Laser</li>
-          <li>Alongamento de Unhas</li>
-          <li>Banho de Gel</li>
-          <li>Manicure</li>
-          <li>Estética Facial e Corporal</li>
-          <li>Emagrecimento</li>
-          <li>Terapia Capilar</li>
-          <li>Botox</li>
-        </ul>
+        <div className="h-[40px] flex flex-col items-center justify-center text-[#A4978A]">
+          <p
+            key={currentServiceIndex}
+            className="text-[16px] font-normal font-[Fredoka] animate-fadeIn"
+          >
+            {services[currentServiceIndex]}
+          </p>
+        </div>
       </div>
-      <div className="w-[350px]">
-        <p className="w-fill my-6 text-center text-[#D9D9D9] font-kumbh text-[15.92px] leading-normal">
-          Confira o que outros acharam do salão e nossas profissionais!
-        </p>
+      <div className="w-full">
         <SalonRatingCard
           image={logo}
           name="BS Beauty"
@@ -81,17 +97,17 @@ function LandingPage() {
         <RatingCardsContainer professionals={data?.professionals || []} />
       </div>
       {/* Frase + Estrelas + Botão + Seta */}
-      <div className="flex flex-col items-center space-y-[24px] my-[42px]">
-        <p className="w-[377px] text-center text-[#D9D9D9] font-kumbh text-[15.92px] leading-normal">
+      <div className="flex flex-col items-center gap-6 my-[42px]">
+        <p className="text-center text-[#D9D9D9] font-kumbh text-[15.92px] leading-normal">
           Venha nos conhecer e se permitir viver essa experiência com você
           mesma!
         </p>
 
-        <img src={stars} alt="Cinco Estrelas" />
+        <img className="pb-2" src={stars} alt="Cinco Estrelas" />
 
         <Button
           onClick={() => navigate('/login')}
-          className="w-[280px] justify-center items-center"
+          className="w-5/6 justify-center items-center"
           label="Entrar"
           type="submit"
           variant="outline"
@@ -106,38 +122,38 @@ function LandingPage() {
       </div>
 
       {/* Divisória */}
-      <div className="w-full h-[6px] bg-[#595149] shadow-[0px_6px_4px_6px_rgba(0,0,0,0.20)] shrink-0" />
+      <div className="w-full h-1 bg-[#595149] shrink-0" />
 
       {/* Foto + Endereço */}
-      <div className="max-w-5xl mx-auto my-[34px]">
+      <div className="w-full my-[34px]">
         <img
           src={insidePhoto}
           alt="Salão"
           className="mb-8 w-full rounded-3xl object-cover"
         />
 
-        <div className="mb-2 flex items-center">
-          <img src={location} alt="Localização" className="mr-2 h-8 w-8" />
-          <p className="text-2xl font-kumbh text-[#D9D9D9]">Nosso endereço:</p>
+        <div className="mb-4 flex items-center">
+          <img src={location} alt="Localização" className="mr-2 size-6" />
+          <p className="text-lg font-kumbh text-[#D9D9D9]">Nosso endereço:</p>
         </div>
 
-        <p className="pl-4 text-base font-kumbh font-semibold text-[#D9D9D9]">
+        <p className="font-kumbh font-semibold text-[#D9D9D9] justify-center">
           Rua Luís Pitta, 206 – Cidade São Mateus, São Paulo – SP
         </p>
 
         {/* Divisória */}
-        <div className="my-[24px] h-[3px] w-full bg-[#595149] shrink-0" />
+        <div className="my-[24px] h-1 w-full bg-[#595149] shrink-0" />
 
         {/* Horários */}
-        <div className="my-8 mb-2 flex items-center">
-          <img src={calendar} alt="Calendário" className="mr-2 h-6 w-8" />
-          <p className="text-2xl font-kumbh text-[#D9D9D9]">
+        <div className=" flex items-center">
+          <img src={calendar} alt="Calendário" className="mr-2 h-6 w-6" />
+          <p className="text-lg font-kumbh text-[#D9D9D9]">
             Horários de Funcionamento:
           </p>
         </div>
 
         <div className="flex justify-center">
-          <div className="w-full max-w-md p-6 text-[16px] font-kumbh font-semibold text-[#D9D9D9]">
+          <div className="w-full max-w-md py-6 text-[16px] font-kumbh font-semibold text-[#D9D9D9]">
             {[
               { day: 'Segunda-Feira', time: '08:00 - 19:00' },
               { day: 'Terça-Feira', time: '08:00 - 19:00' },
@@ -164,7 +180,7 @@ function LandingPage() {
 
       <Button
         onClick={() => navigate('/login')}
-        className="my-8 w-[280px] justify-center items-center"
+        className="my-8 w-4/6 justify-center items-center"
         label="Entrar"
         type="submit"
         variant="outline"

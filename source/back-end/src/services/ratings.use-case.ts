@@ -56,7 +56,7 @@ class RatingsUseCase {
 
     return deletedRating
   }
-  public async executeGetMeanScore(): Promise<number> {
+  public async executeGetMeanScore(): Promise<{ meanScore: number, ratingCount: number }> {
     return await this.ratingRepository.getMeanScore();
   }
 }

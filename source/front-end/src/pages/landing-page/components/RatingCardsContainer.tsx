@@ -10,9 +10,8 @@ function RatingCardsContainer({
   const containerRef = useRef<HTMLDivElement | null>(null)
   const scrollIntervalRef = useRef<number | null>(null)
   const [isPaused, setIsPaused] = useState(false)
-  const [cardWidth, setCardWidth] = useState('40%') // Default for ~2.5 cards
-  const [gapClass, setGapClass] = useState('gap-4') // Default gap
-  console.log(isPaused)
+  const [cardWidth, setCardWidth] = useState('40%')
+  const [gapClass, setGapClass] = useState('gap-4')
   useEffect(() => {
     const updateCardWidth = () => {
       const width = window.innerWidth
