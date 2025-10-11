@@ -8,7 +8,7 @@ const port = process.env.PORT ?? 3000
 
 registerNotificationListeners()
 
-Scheduler.register('birthday-job', '*/5 * * * * *', 'America/Sao_Paulo', async () => {
+Scheduler.register('birthday-job', process.env.BIRTHDAY_CRON_SCHEDULE || '*/30 * * * * *', 'America/Sao_Paulo', async () => {
   const usecase = makeRunBirthdayJobUseCase()
   await usecase.execute({
     timezone: 'America/Sao_Paulo',
