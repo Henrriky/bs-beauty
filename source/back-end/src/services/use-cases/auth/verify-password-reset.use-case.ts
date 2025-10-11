@@ -1,25 +1,25 @@
-import { CustomerRepository } from '@/repository/protocols/customer.repository'
-import { CodeValidationService } from './code-validation.service'
+import { type CustomerRepository } from '@/repository/protocols/customer.repository'
+import { type CodeValidationService } from './code-validation.service'
 import { CustomError } from '@/utils/errors/custom.error.util'
-import { PasswordResetTicketService } from './password-reset-ticket.service'
-import { ProfessionalRepository } from '@/repository/protocols/professional.repository'
+import { type PasswordResetTicketService } from './password-reset-ticket.service'
+import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 
-type Input = { email: string; code: string }
-type Output = { ticket: string }
+interface Input { email: string, code: string }
+interface Output { ticket: string }
 
 export class VerifyPasswordResetUseCase {
-  constructor(
+  constructor (
     private readonly customerRepository: CustomerRepository,
     private readonly professionalRepository: ProfessionalRepository,
     private readonly codeService: CodeValidationService,
-    private readonly ticketService: PasswordResetTicketService,
+    private readonly ticketService: PasswordResetTicketService
   ) { }
 
-  async execute({ email, code }: Input): Promise<Output> {
+  async execute ({ email, code }: Input): Promise<Output> {
     const result = await this.codeService.verifyCodeAndConsume({
       purpose: 'passwordReset',
       recipientId: email,
-      code,
+      code
     })
 
     if (!result.ok) {

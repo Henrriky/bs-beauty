@@ -1,6 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { type Cache } from '../protocols/cache.protocol'
-import { redis } from '@/lib/redis';
+import { redis } from '@/lib/redis'
 
 export class RedisCacheProvider implements Cache {
   async get<T = unknown>(key: string): Promise<T | null> {
@@ -11,7 +11,7 @@ export class RedisCacheProvider implements Cache {
   async set<T = unknown>(
     key: string,
     value: T,
-    options?: { timeToLiveSeconds?: number; onlyIfNotExists?: boolean }
+    options?: { timeToLiveSeconds?: number, onlyIfNotExists?: boolean }
   ): Promise<boolean> {
     const serializedValue = JSON.stringify(value)
     const expiryArgs = options?.timeToLiveSeconds ? ['EX', options.timeToLiveSeconds] as const : []
@@ -25,15 +25,15 @@ export class RedisCacheProvider implements Cache {
     return true
   }
 
-  async delete(key: string): Promise<void> {
+  async delete (key: string): Promise<void> {
     await redis.del(key)
   }
 
-  async incr(key: string): Promise<number> {
+  async incr (key: string): Promise<number> {
     return await redis.incr(key)
   }
 
-  async ttl(key: string): Promise<number | null> {
+  async ttl (key: string): Promise<number | null> {
     const secondsToLive = await redis.ttl(key)
     return secondsToLive >= 0 ? secondsToLive : null
   }

@@ -1,12 +1,13 @@
-import { type Professional, type Prisma } from '@prisma/client'
+import { type Prisma, type Professional } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type PaginatedRequest } from '../../types/pagination'
 import { type ProfessionalRepository } from '../protocols/professional.repository'
 import { type ProfessionalsFilters } from '@/types/professionals/professionals-filters'
 import { type PartialHandleFetchServicesOfferedByProfessionalQuerySchema } from '@/utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
+import { PrismaPermissionMapper } from './mapper/prisma-permission-mapper'
 
 class PrismaProfessionalRepository implements ProfessionalRepository {
-  public async findAll() {
+  public async findAll () {
     const professionals = await prismaClient.professional.findMany({
       orderBy: { createdAt: 'asc' }
     })
@@ -14,7 +15,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professionals
   }
 
-  public async findById(professionalId: string) {
+  public async findById (professionalId: string) {
     const professional = await prismaClient.professional.findUnique({
       where: { id: professionalId }
     })
@@ -22,14 +23,92 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professional
   }
 
-  public async findByEmail(email: string) {
+  public async findByEmail (email: string) {
     const professional = await prismaClient.professional.findUnique({
       where: { email }
     })
     return professional
   }
 
-  public async create(newProfessional: Prisma.ProfessionalCreateInput) {
+  public async countByRoleId (roleId: string): Promise<number> {
+    const associationsCount = await prismaClient.professionalRole.count({
+      where: { roleId }
+    })
+
+    return associationsCount
+  }
+
+  public async addRoleToProfessional (professionalId: string, roleId: string): Promise<void> {
+    await prismaClient.professionalRole.create({
+      data: {
+        professionalId,
+        roleId
+      }
+    })
+  }
+
+  public async removeRoleFromProfessional (professionalId: string, roleId: string): Promise<void> {
+    await prismaClient.professionalRole.deleteMany({
+      where: {
+        professionalId,
+        roleId
+      }
+    })
+  }
+
+  public async findProfessionalRoleAssociation (professionalId: string, roleId: string): Promise<boolean> {
+    const association = await prismaClient.professionalRole.findFirst({
+      where: {
+        professionalId,
+        roleId
+      }
+    })
+
+    return association !== null
+  }
+
+  public async findRolesByProfessionalId (professionalId: string) {
+    const professionalRoles = await prismaClient.professionalRole.findMany({
+      where: { professionalId },
+      select: {
+        id: true,
+        role: true
+      }
+    })
+
+    return professionalRoles
+  }
+
+  public async findProfessionalPermissions (professionalId: string) {
+    const professionalPermissions = await prismaClient.professional.findUnique({
+      where: {
+        id: professionalId
+      },
+      select: {
+        professionalRole: {
+          select: {
+            role: {
+              select: {
+                rolePermission: {
+                  select: {
+                    permission: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+
+    const permissions = professionalPermissions?.professionalRole.flatMap(pr => pr.role.rolePermission.map(rp => rp.permission))
+
+    const uniquePermissions = Array.from(new Set(permissions?.map(PrismaPermissionMapper.toDomain)))
+
+    return uniquePermissions
+  }
+
+  public async create (newProfessional: Prisma.ProfessionalCreateInput) {
     const professional = await prismaClient.professional.create({
       data: { ...newProfessional }
     })
@@ -37,7 +116,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professional
   }
 
-  public async update(professionalId: string, professionalToUpdate: Prisma.ProfessionalUpdateInput) {
+  public async update (professionalId: string, professionalToUpdate: Prisma.ProfessionalUpdateInput) {
     const professionalUpdated = await prismaClient.professional.update({
       where: { id: professionalId },
       data: { ...professionalToUpdate }
@@ -46,7 +125,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professionalUpdated
   }
 
-  async updateByEmailAndGoogleId(
+  async updateByEmailAndGoogleId (
     googleId: string,
     email: string,
     professionalData: Prisma.ProfessionalUpdateInput
@@ -65,7 +144,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professional
   }
 
-  public async updateProfessionalByEmail(email: string, professionalToUpdate: Prisma.ProfessionalUpdateInput) {
+  public async updateProfessionalByEmail (email: string, professionalToUpdate: Prisma.ProfessionalUpdateInput) {
     const professionalUpdated = await prismaClient.professional.update({
       where: { email },
       data: { ...professionalToUpdate }
@@ -74,7 +153,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professionalUpdated
   }
 
-  public async delete(professionalId: string) {
+  public async delete (professionalId: string) {
     const professionalDeleted = await prismaClient.professional.delete({
       where: { id: professionalId }
     })
@@ -82,7 +161,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professionalDeleted
   }
 
-  public async fetchServicesOfferedByProfessional(professionalId: string, { page, limit, filters }: PaginatedRequest<PartialHandleFetchServicesOfferedByProfessionalQuerySchema>) {
+  public async fetchServicesOfferedByProfessional (professionalId: string, { page, limit, filters }: PaginatedRequest<PartialHandleFetchServicesOfferedByProfessionalQuerySchema>) {
     const skip = (page - 1) * limit
 
     const professionalWhere: Prisma.ProfessionalWhereUniqueInput = {
@@ -96,23 +175,23 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
         : undefined,
       ...(filters.q != null && filters.q !== '')
         ? {
-          OR: [
-            {
-              service: {
-                name: {
-                  contains: filters.q
+            OR: [
+              {
+                service: {
+                  name: {
+                    contains: filters.q
+                  }
+                }
+              },
+              {
+                service: {
+                  description: {
+                    contains: filters.q
+                  }
                 }
               }
-            },
-            {
-              service: {
-                description: {
-                  contains: filters.q
-                }
-              }
-            }
-          ]
-        }
+            ]
+          }
         : undefined
     }
 
@@ -158,7 +237,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return { professional: mappedProfessional }
   }
 
-  public async findAllPaginated(
+  public async findAllPaginated (
     params: PaginatedRequest<ProfessionalsFilters>
   ) {
     const { page, limit, filters } = params

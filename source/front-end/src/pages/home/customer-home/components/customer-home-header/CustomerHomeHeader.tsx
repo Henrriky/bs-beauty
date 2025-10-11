@@ -1,4 +1,4 @@
-import { authAPI } from "../../../../../store/auth/auth-api"
+import { authAPI } from '../../../../../store/auth/auth-api'
 
 function CustomerHomeHeader() {
   const { data, isFetching } = authAPI.useFetchUserInfoQuery()

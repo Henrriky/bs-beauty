@@ -5,7 +5,6 @@ import { type CustomersFilters } from '../../types/customers/customers-filters'
 import { type PaginatedRequest } from '../../types/pagination'
 
 class PrismaCustomerRepository implements CustomerRepository {
-
   public async findAll () {
     const customers = await prismaClient.customer.findMany()
 
@@ -28,14 +27,13 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
-  public async findByEmail(email: string) {
+  public async findByEmail (email: string) {
     const customer = await prismaClient.customer.findUnique({
       where: { email }
     })
 
     return customer
   }
-
 
   public async create (newCustomer: Prisma.CustomerCreateInput) {
     const customer = await prismaClient.customer.create({
@@ -73,7 +71,7 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
-  public async updateByEmail(email: string, customerData: Prisma.CustomerUpdateInput) {
+  public async updateByEmail (email: string, customerData: Prisma.CustomerUpdateInput) {
     const customer = await prismaClient.customer.update({
       where: { email },
       data: {

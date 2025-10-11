@@ -5,7 +5,7 @@ import { EmailService } from '@/services/email/email.service'
 import { RedisCacheProvider } from '@/services/cache/redis-cache-provider.service'
 import { PrismaProfessionalRepository } from '@/repository/prisma/prisma-professional.repository'
 
-function makePasswordResetRequestUseCase() {
+function makePasswordResetRequestUseCase () {
   const customerRepository = new PrismaCustomerRepository()
   const professionalRepository = new PrismaProfessionalRepository()
   const cache = new RedisCacheProvider()

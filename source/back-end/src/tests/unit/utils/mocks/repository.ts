@@ -3,6 +3,7 @@ import { type CustomerRepository } from '@/repository/protocols/customer.reposit
 import { type OfferRepository } from '@/repository/protocols/offer.repository'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 import { RatingRepository } from '@/repository/protocols/rating.repository'
+import { type RoleRepository } from '@/repository/protocols/role.repository'
 import { type ServiceRepository } from '@/repository/protocols/service.repository'
 import { type ShiftRepository } from '@/repository/protocols/shift.repository'
 import { type Mocked } from 'vitest'
@@ -39,13 +40,19 @@ const MockProfessionalRepository: Mocked<ProfessionalRepository> = {
   findAll: vi.fn(),
   findById: vi.fn(),
   findByEmail: vi.fn(),
+  countByRoleId: vi.fn(),
+  addRoleToProfessional: vi.fn(),
+  removeRoleFromProfessional: vi.fn(),
+  findProfessionalRoleAssociation: vi.fn(),
+  findRolesByProfessionalId: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   updateByEmailAndGoogleId: vi.fn(),
   updateProfessionalByEmail: vi.fn(),
   delete: vi.fn(),
   fetchServicesOfferedByProfessional: vi.fn(),
-  findAllPaginated: vi.fn()
+  findAllPaginated: vi.fn(),
+  findProfessionalPermissions: vi.fn()
 }
 
 const MockServiceRepository: Mocked<ServiceRepository> = {
@@ -90,11 +97,27 @@ const MockRatingRepository: Mocked<RatingRepository> = {
   delete: vi.fn()
 }
 
+const MockRoleRepository: Mocked<RoleRepository> = {
+  findAllPaginated: vi.fn(),
+  findById: vi.fn(),
+  findByName: vi.fn(),
+  findRoleAssociations: vi.fn(),
+  addPermissionToRole: vi.fn(),
+  removePermissionFromRole: vi.fn(),
+  findPermissionById: vi.fn(),
+  findRolePermissionAssociation: vi.fn(),
+  countProfessionalsWithRole: vi.fn(),
+  create: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn()
+}
+
 export {
   MockAppointmentRepository,
   MockCustomerRepository,
   MockOfferRepository,
   MockProfessionalRepository,
+  MockRoleRepository,
   MockServiceRepository,
   MockShiftRepository,
   MockRatingRepository

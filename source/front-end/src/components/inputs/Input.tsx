@@ -26,7 +26,7 @@ export function Input({
   ...htmlProps
 }: InputProps) {
   const borderColor = error
-    ? 'border-[#CC3636]'
+    ? 'border-red-400'
     : variant === 'outline'
       ? 'border-[#3B3B3B]'
       : 'border-white'

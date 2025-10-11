@@ -14,18 +14,29 @@ import { LogoutController } from '@/controllers/auth/logout.controller'
 
 const authRoutes = Router()
 
+/* OAuth */
 authRoutes.get('/google/redirect-uri', GenerateGoogleRedirectUriController.handle)
 authRoutes.post('/google/exchange-code', ExchangeCodeByTokenController.handle)
+
+/* Login */
 authRoutes.post('/login', LoginController.handle)
+authRoutes.post('/logout', LogoutController.handle)
+authRoutes.post('/new-tokens', GenerateTokensController.handle)
+
+/* Register */
 authRoutes.post('/register/complete', verifyJwtTokenMiddleware, CompleteUserRegisterController.handle)
-authRoutes.get('/user', verifyJwtTokenMiddleware, FetchUserInfoController.handle)
 authRoutes.post('/register', RegisterUserController.handleRegisterCustomer)
 authRoutes.put('/register', RegisterUserController.handleRegisterProfessional)
 authRoutes.get('/register/:email', RegisterUserController.handleFindProfessionalByEmail)
-authRoutes.post('/code-validation', CodeValidationController.handle)
+
+/* Password Reset */
 authRoutes.post('/password-reset/request', PasswordResetRequestController.handle)
 authRoutes.post('/password-reset/set-password', PasswordResetSetPasswordController.handle)
-authRoutes.post('/new-tokens', GenerateTokensController.handle)
-authRoutes.post('/logout', LogoutController.handle)
+
+/* Code Validation */
+authRoutes.post('/code-validation', CodeValidationController.handle)
+
+/* Profile Informations */
+authRoutes.get('/user', verifyJwtTokenMiddleware, FetchUserInfoController.handle)
 
 export { authRoutes }

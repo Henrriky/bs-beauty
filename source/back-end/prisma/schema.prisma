@@ -14,22 +14,23 @@ datasource db {
 }
 
 model Customer {
-  id                  String    @id @default(uuid())
-  name                String?   @default("Usuário")
-  registerCompleted   Boolean   @default(false) @map("register_completed")
-  birthdate           DateTime?
-  email               String    @unique
-  passwordHash      String?   @map("password_hash")
-  googleId            String?   @unique @map("google_id")
-  phone               String?   @unique
-  profilePhotoUrl     String?
-  userType            UserType  @default(CUSTOMER) @map("user_type")
-  referrerId          String?   @map("referrer_id")
-  referralCount       Int       @default(0) @map("referral_count")
-  alwaysAllowImageUse Boolean   @default(false) @map("always_allow_image_use")
-  discoverySource     DiscoverySource? @map("discovery_source")
-  createdAt           DateTime  @default(now()) @map("created_at")
-  updatedAt           DateTime  @updatedAt @map("updated_at")
+  id                     String               @id @default(uuid())
+  name                   String?              @default("Usuário")
+  registerCompleted      Boolean              @default(false) @map("register_completed")
+  birthdate              DateTime?
+  email                  String               @unique
+  passwordHash           String?              @map("password_hash")
+  googleId               String?              @unique @map("google_id")
+  phone                  String?              @unique
+  profilePhotoUrl        String?
+  userType               UserType             @default(CUSTOMER) @map("user_type")
+  referrerId             String?              @map("referrer_id")
+  referralCount          Int                  @default(0) @map("referral_count")
+  alwaysAllowImageUse    Boolean              @default(false) @map("always_allow_image_use")
+  discoverySource        DiscoverySource?     @map("discovery_source")
+  notificationPreference NotificationChannel? @default(NONE) @map("notification_preference")
+  createdAt              DateTime             @default(now()) @map("created_at")
+  updatedAt              DateTime             @updatedAt @map("updated_at")
 
   appointments Appointment[]
   referrer     Customer?     @relation("refers", fields: [referrerId], references: [id])
@@ -49,10 +50,9 @@ model Appointment {
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
-  notifications Notification[]
-  rating        Rating?
-  customer      Customer       @relation(fields: [customerId], references: [id])
-  offer         Offer          @relation(fields: [serviceOfferedId], references: [id])
+  rating   Rating?
+  customer Customer @relation(fields: [customerId], references: [id])
+  offer    Offer    @relation(fields: [serviceOfferedId], references: [id])
 
   @@map("appointment")
 }
@@ -68,14 +68,17 @@ model Rating {
 }
 
 model Notification {
-  id            String    @id @default(uuid())
-  message       String
-  createdAt     DateTime  @default(now()) @map("created_at")
-  readAt        DateTime? @map("read_at")
-  appointmentId String    @map("appointment_id")
+  id            String           @id @default(uuid())
+  marker        String           @unique
+  title         String
+  message       String           @db.Text
+  type          NotificationType @default(SYSTEM)
+  createdAt     DateTime         @default(now()) @map("created_at")
+  readAt        DateTime?        @map("read_at")
+  recipientId   String           @map("recipient_id")
+  recipientType UserType
 
-  appointment Appointment @relation(fields: [appointmentId], references: [id])
-
+  @@index([recipientId, readAt, createdAt])
   @@map("notification")
 }
 
@@ -119,20 +122,21 @@ model Offer {
 }
 
 model Professional {
-  id                String   @id @default(uuid())
-  name              String?  @default("Usuário")
-  email             String   @unique
-  passwordHash      String?  @map("password_hash")
-  googleId          String?  @unique @map("google_id")
-  registerCompleted Boolean  @default(false) @map("register_completed")
-  paymentMethods    Json?    @map("payment_methods")
-  socialMedia       Json?    @map("social_media")
-  contact           String?  @unique
-  specialization    String?
-  profilePhotoUrl   String?  @map("profile_photo_url")
-  userType          UserType @default(PROFESSIONAL) @map("user_type")
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
+  id                     String               @id @default(uuid())
+  name                   String?              @default("Usuário")
+  email                  String               @unique
+  passwordHash           String?              @map("password_hash")
+  googleId               String?              @unique @map("google_id")
+  registerCompleted      Boolean              @default(false) @map("register_completed")
+  paymentMethods         Json?                @map("payment_methods")
+  socialMedia            Json?                @map("social_media")
+  contact                String?              @unique
+  specialization         String?
+  profilePhotoUrl        String?              @map("profile_photo_url")
+  userType               UserType             @default(PROFESSIONAL) @map("user_type")
+  notificationPreference NotificationChannel? @default(NONE) @map("notification_preference")
+  createdAt              DateTime             @default(now()) @map("created_at")
+  updatedAt              DateTime             @updatedAt @map("updated_at")
 
   shifts           Shift[]
   offers           Offer[]
@@ -155,9 +159,21 @@ model Shift {
   @@map("shift")
 }
 
+model ProfessionalRole {
+  id             String   @id @default(uuid())
+  professionalId String   @map("professional_id")
+  roleId         String   @map("role_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  role         Role         @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@map("professional_role")
+}
+
 model Role {
   id          String   @id @default(uuid())
-  name        String
+  name        String   @unique()
   description String?
   isActive    Boolean  @default(false) @map("is_active")
   createdAt   DateTime @default(now()) @map("created_at")
@@ -169,42 +185,30 @@ model Role {
   @@map("role")
 }
 
-model ProfessionalRole {
-  id             String   @id @default(uuid())
-  professionalId String   @map("professional_id")
-  roleId         String   @map("role_id")
-  createdAt      DateTime @default(now()) @map("created_at")
-
-  professional Professional @relation(fields: [professionalId], references: [id])
-  role         Role         @relation(fields: [roleId], references: [id])
-
-  @@map("professional_role")
-}
-
-model Permission {
-  id          String   @id @default(uuid())
-  screen      String
-  action      Action
-  description String?
-  isActive    Boolean  @default(false) @map("is_active")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  rolePermission RolePermission[]
-
-  @@map("permission")
-}
-
 model RolePermission {
   id           String   @id @default(uuid())
   roleId       String   @map("role_id")
   permissionId String   @map("permission_id")
   createdAt    DateTime @default(now()) @map("created_at")
 
-  role       Role       @relation(fields: [roleId], references: [id])
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
   permission Permission @relation(fields: [permissionId], references: [id])
 
   @@map("role_permission")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  resource    String
+  action      String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  rolePermission RolePermission[]
+
+  @@unique([resource, action])
+  @@map("permission")
 }
 
 enum WeekDays {
@@ -232,20 +236,27 @@ enum Status {
   NO_SHOW
 }
 
-enum Action {
-  CREATE
-  READ
-  UPDATE
-  DELETE
-}
-
 enum DiscoverySource {
-  REFERRAL    
+  REFERRAL
   INSTAGRAM
   FACEBOOK
   TIKTOK
   GOOGLE
   WHATSAPP
-  WALK_IN      
+  WALK_IN
   OTHER
+}
+
+enum NotificationChannel {
+  NONE
+  IN_APP
+  EMAIL
+  BOTH
+}
+
+enum NotificationType {
+  SYSTEM
+  APPOINTMENT
+  SERVICE
+  PROMO
 }

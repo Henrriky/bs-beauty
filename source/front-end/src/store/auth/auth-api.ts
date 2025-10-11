@@ -5,7 +5,11 @@ import {
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import { API_VARIABLES } from '../../api/config'
-import { Customer, Professional } from './types'
+import {
+  FetchUserInfoRequest,
+  FetchUserInfoResponse,
+  Professional,
+} from './types'
 import {
   CustomerRegistrationFormData,
   ProfessionalRegistrationFormData,
@@ -27,7 +31,7 @@ export const authAPI = createApi({
       }),
       invalidatesTags: ['User'],
     }),
-    fetchUserInfo: builder.query<{ user: Professional | Customer }, void>({
+    fetchUserInfo: builder.query<FetchUserInfoResponse, FetchUserInfoRequest>({
       query: () => ({
         url: API_VARIABLES.AUTH_ENDPOINTS.FETCH_USER_INFO,
         method: 'GET',

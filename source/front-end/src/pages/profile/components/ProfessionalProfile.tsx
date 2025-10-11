@@ -4,18 +4,27 @@ import { toast } from 'react-toastify'
 import { Button } from '../../../components/button/Button'
 import { Input } from '../../../components/inputs/Input'
 import SocialMediaContainerInput from '../../../components/inputs/social-media-input/SocialMediaContainerInput'
-import { Professional } from '../../../store/auth/types'
+import { FetchUserInfoProfessional } from '../../../store/auth/types'
 import { userAPI } from '../../../store/user/user-api'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { ProfessionalUpdateProfileFormData } from '../types'
 import PaymentMethodsInput from '../../../components/inputs/payment-methods-input/PaymentMethodsContainerInput'
+import { Select } from '../../../components/inputs/Select'
 import { useEffect } from 'react'
+import { getPrettyRoles } from '../utils/get-pretty-roles'
 
 interface ProfessionalProfileProps {
-  userInfo: Professional
+  userInfo: FetchUserInfoProfessional
   onProfileUpdate: () => Promise<void> | void
 }
+
+const NOTIFICATION_OPTIONS = [
+  { value: 'NONE', label: 'Não receber' },
+  { value: 'IN_APP', label: 'Receber pela plataforma' },
+  { value: 'EMAIL', label: 'Receber por email' },
+  { value: 'BOTH', label: 'Receber pela plataforma e por email' }
+]
 
 // TODO: Separate Social Media to a Component
 
@@ -30,7 +39,7 @@ function ProfessionalProfile({
     handleSubmit,
     control,
     formState: { errors },
-    reset
+    reset,
   } = useForm<ProfessionalUpdateProfileFormData>({
     resolver: zodResolver(ProfessionalSchemas.professionalUpdateSchema),
     defaultValues: {
@@ -40,6 +49,7 @@ function ProfessionalProfile({
       socialMedia: userInfo.socialMedia || undefined,
       specialization: userInfo.specialization || undefined,
       paymentMethods: userInfo.paymentMethods || undefined,
+      notificationPreference: userInfo.notificationPreference || undefined
     },
   })
 
@@ -63,8 +73,9 @@ function ProfessionalProfile({
     name: 'socialMedia',
   })
 
-
-  const handleSubmitConcrete = async (data: ProfessionalUpdateProfileFormData) => {
+  const handleSubmitConcrete = async (
+    data: ProfessionalUpdateProfileFormData,
+  ) => {
     try {
       await updateProfile({ userId: userInfo.id, profileData: data }).unwrap()
       toast.success('Perfil atualizado com sucesso!')
@@ -117,11 +128,20 @@ function ProfessionalProfile({
         type="email"
         disabled
       />
+      <Select
+        registration={{ ...register('notificationPreference') }}
+        id="notificationPreference"
+        label="Deseja receber notificações?"
+        options={NOTIFICATION_OPTIONS}
+        error={errors?.name?.message?.toString()}
+        variant="outline"
+        wrapperClassName="w-full"
+      />
       <Input
         label="Função"
         id="userType"
         type="userType"
-        value={userInfo.userType === 'MANAGER' ? 'Gerente' : 'Funcionario'}
+        value={getPrettyRoles(userInfo.userType, userInfo.roles)}
         disabled
       />
       <SocialMediaContainerInput

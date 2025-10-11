@@ -11,7 +11,10 @@ import { professionalAPI } from './professional/professional-api'
 import { appointmentAPI } from './appointment/appointment-api'
 import { analyticsAPI } from './analytics/analytics-api'
 import { publicAnalyticsApi } from './analytics/public-analytics-api'
+import { notificationAPI } from './notification/notification-api'
 import { ratingAPI } from './rating/rating-api'
+import { roleAPI } from './role/role-api'
+import { permissionAPI } from './permission/permission-api'
 
 export const store = configureStore({
   reducer: {
@@ -27,19 +30,25 @@ export const store = configureStore({
     [appointmentAPI.reducerPath]: appointmentAPI.reducer,
     [analyticsAPI.reducerPath]: analyticsAPI.reducer,
     [publicAnalyticsApi.reducerPath]: publicAnalyticsApi.reducer,
+    [notificationAPI.reducerPath]: notificationAPI.reducer,
     [ratingAPI.reducerPath]: ratingAPI.reducer,
+    [roleAPI.reducerPath]: roleAPI.reducer,
+    [permissionAPI.reducerPath]: permissionAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(authAPI.middleware)
       .concat(userAPI.middleware)
       .concat(serviceAPI.middleware)
-      .concat(customerAPI.middleware)
       .concat(offerAPI.middleware)
+      .concat(customerAPI.middleware)
       .concat(shiftAPI.middleware)
       .concat(professionalAPI.middleware)
       .concat(publicAnalyticsApi.middleware)
       .concat(appointmentAPI.middleware)
       .concat(analyticsAPI.middleware)
-      .concat(ratingAPI.middleware),
+      .concat(notificationAPI.middleware)
+      .concat(ratingAPI.middleware)
+      .concat(roleAPI.middleware)
+      .concat(permissionAPI.middleware),
 })

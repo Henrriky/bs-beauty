@@ -15,7 +15,8 @@ type AuthState = {
 
 const initialState = (): AuthState => {
   const accessToken = localStorage.getItem('token')
-  const googleAccessToken = localStorage.getItem('googleAccessToken') || undefined
+  const googleAccessToken =
+    localStorage.getItem('googleAccessToken') || undefined
 
   if (!accessToken) {
     console.warn(
@@ -67,7 +68,10 @@ const authSlice = createSlice({
     ) => {
       localStorage.setItem('token', action.payload.token.accessToken)
       if (action.payload.token.googleAccessToken) {
-        localStorage.setItem('googleAccessToken', action.payload.token.googleAccessToken)
+        localStorage.setItem(
+          'googleAccessToken',
+          action.payload.token.googleAccessToken,
+        )
       } else {
         localStorage.removeItem('googleAccessToken')
       }

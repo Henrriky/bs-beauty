@@ -1,11 +1,9 @@
 import { Button } from '../../../components/button/Button'
-import { serviceAPI } from '../../../store/service/service-api'
 import { toast } from 'react-toastify'
 import { Service } from '../../../store/service/types'
 import ServiceItem from './ServiceItem'
-import { OnSubmitUpdateServiceStatusForm } from './types'
-import { useMemo } from 'react'
-import useAppSelector from '../../../hooks/use-app-selector'
+import BSBeautyLoading from '../../../components/feedback/Loading'
+import { useServicesLogic } from '../hooks/useServicesLogic'
 
 interface ListServicesProps {
   openModal: () => void
@@ -13,7 +11,6 @@ interface ListServicesProps {
   openDeleteModal: () => void
   serviceSelected: Service | undefined | null
   selectService: (param: Service | null) => void
-  isManager: boolean
 }
 
 function ListServices({
@@ -22,74 +19,21 @@ function ListServices({
   openUpdateModal,
   serviceSelected,
   selectService,
-  isManager,
 }: ListServicesProps) {
   // TODO: CARREGAR MAIS SERVIÇOS QUANDO CHEGA NO LIMITE PADRÃO (10)
   // TODO: POSSÍVEL CRIAÇÃO DE INPUT DE BUSCA PARA BUSCAR PELO NOME (O PARÂMETRO JÁ ESTÁ FEITO NA API)
+  const {
+    services,
+    loggedUserId,
+    isLoadingServices,
+    isErrorLoadingServices,
+    isUpdatingServiceStatus,
+    handleChangeServiceStatus,
+  } = useServicesLogic()
 
-  const loggedUserId = useAppSelector((state) => state.auth.user?.id)
-  const { data, isLoading, isError } = serviceAPI.useGetServicesQuery({
-    page: 1,
-    limit: 50,
-  })
-
-  const [updateService, { isLoading: isUpdatingServiceStatus }] =
-    serviceAPI.useUpdateServiceMutation()
-
-  const handleChangeServiceStatus = (
-    serviceId: string,
-  ): OnSubmitUpdateServiceStatusForm => {
-    return async ({ status }) => {
-      try {
-        await updateService({ data: { status }, id: serviceId }).unwrap()
-        toast.success('Serviço atualizado com sucesso!')
-      } catch (error: unknown) {
-        console.error('Error trying to update offer', error)
-        toast.error('Ocorreu um erro ao atualizar o serviço.')
-      }
-    }
-  }
-
-  const services = useMemo(() => {
-    if (!data) return []
-
-    const filteredService = isManager
-      ? data.data
-      : data.data.filter(
-          (service) =>
-            service.status === 'APPROVED' || service.createdBy === loggedUserId,
-        )
-
-    return [...filteredService].sort((a, b) => {
-      const statusOrder = { APPROVED: 1, PENDING: 2, REJECTED: 3 }
-      return statusOrder[a.status] - statusOrder[b.status]
-    })
-  }, [data, isManager, loggedUserId])
-
-  if (isLoading) {
-    return (
-      <p className="text-[#D9D9D9] animate-fadeIn w-full mb-8 text-sm">
-        Carregando serviços...
-      </p>
-    )
-  }
-
-  if (isError && !data == null) {
-    return (
-      <p className="text-[#CC3636] animate-fadeIn w-full mt-2 text-sm">
-        Não há serviços disponíveis.
-      </p>
-    )
-  }
-
-  if (isError) {
-    console.log(data)
-    return (
-      <p className="text-[#CC3636] animate-fadeIn w-full mt-2 text-sm">
-        Erro ao carregar os serviços.
-      </p>
-    )
-  }
+  if (isLoadingServices) return <ListServicesLoading />
+  if (isErrorLoadingServices) return <ListServicesError />
+  if (services.length === 0) return <ListServicesEmpty />
 
   return (
     <div className="animate-fadeIn w-full max-w-[540px] mb-8 mt-4">
@@ -97,8 +41,8 @@ function ListServices({
         <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
           {services.map((service, index) => (
             <ServiceItem
+              loggedUserId={loggedUserId}
               service={service}
-              isManager={isManager}
               openUpdateModal={() => {
                 selectService(service)
                 openUpdateModal()
@@ -139,6 +83,35 @@ function ListServices({
           }
         />
       </div>
+    </div>
+  )
+}
+
+function ListServicesLoading() {
+  return (
+    <p className="text-[#D9D9D9] animate-fadeIn w-full mb-8 text-sm text-center my-4">
+      <BSBeautyLoading title="Carregando serviços..." />
+    </p>
+  )
+}
+
+function ListServicesError() {
+  return (
+    <p className="text-[#CC3636] animate-fadeIn w-full mt-2 text-sm">
+      Erro ao carregar os serviços.
+    </p>
+  )
+}
+
+function ListServicesEmpty() {
+  return (
+    <div className="animate-fadeIn w-full max-w-[540px] mb-8 mt-4">
+      <p className="text-primary-100 text-lg mb-2 text-center">
+        Nenhum serviço encontrado
+      </p>
+      <p className="text-primary-200 text-sm text-center">
+        Tente ajustar os filtros ou criar um novo serviço
+      </p>
     </div>
   )
 }

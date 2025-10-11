@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { DiscoverySource, NotificationChannel } from '@prisma/client'
 import { SharedSchemas } from './shared-zod-schemas.validations.utils'
-import { DiscoverySource } from '@prisma/client'
 
 const discoverySourceSchema = z.preprocess(
   (v) => (v === '' ? undefined : v),
@@ -18,7 +18,7 @@ class CustomerSchemas {
       return arg
     }, z.date().refine((date) => !isNaN(date.getTime()) && date < new Date())),
     phone: z.string().refine((value) => RegexPatterns.phone.test(value)),
-    discoverySource: discoverySourceSchema,
+    discoverySource: discoverySourceSchema
   }).strict()
 
   public static createSchema = z.object({
@@ -33,7 +33,8 @@ class CustomerSchemas {
     birthdate: z.date().refine((date) => !isNaN(date.getTime()) && date < new Date()).optional(),
     email: z.string().email().optional(),
     alwaysAllowImageUse: z.boolean().optional(),
-    phone: z.string().refine((value) => RegexPatterns.phone.test(value))
+    phone: z.string().refine((value) => RegexPatterns.phone.test(value)),
+    notificationPreference: z.nativeEnum(NotificationChannel).optional()
   }).strict()
 
   public static registerCustomerBodySchema = SharedSchemas.registerBodySchema
