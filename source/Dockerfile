@@ -12,6 +12,8 @@ RUN npm install --omit=dev
 
 RUN npm install -g prisma
 
+RUN npx prisma generate
+
 RUN npm run build
 
 # =============FRONT-END=============
