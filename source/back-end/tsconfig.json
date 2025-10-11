@@ -1,6 +1,9 @@
 {
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "src/tests"
   ],
   "include": ["src", "prisma/seeds/database-seeds.runner.ts", "prisma/seeds/permission-seeder.service.ts"],
   "compilerOptions": {
