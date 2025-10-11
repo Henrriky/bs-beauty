@@ -4,7 +4,7 @@ export default defineConfig({
   entry: ["src/server.ts"],
   outDir: "dist",
   target: "es2020",
-  format: ["cjs"],
+  format: ["esm"],
   clean: true,
   sourcemap: false,
   minify: true,
