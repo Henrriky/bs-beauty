@@ -6,6 +6,7 @@ import {
   ClipboardDocumentCheckIcon,
   ClockIcon,
   HomeIcon,
+  MegaphoneIcon,
   UserIcon,
   UsersIcon
 } from '@heroicons/react/24/outline'
@@ -60,6 +61,11 @@ const sideBarItems: SideBarOptions = {
     },
   ],
   [UserType.MANAGER]: [
+    {
+      name: 'Comunicação',
+      icon: <MegaphoneIcon className="size-6" />,
+      navigateTo: '/manager/notification-templates',
+    },
     {
       name: 'Clientes',
       icon: <UsersIcon className="size-6" />,

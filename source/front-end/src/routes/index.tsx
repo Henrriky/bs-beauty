@@ -18,6 +18,7 @@ import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
 import Notifications from '../pages/notifications'
+import NotificationTemplates from '../pages/notification-templates'
 
 function BSBeautyRouter() {
   return (
@@ -74,6 +75,7 @@ function BSBeautyRouter() {
                   path="/manager/professionals"
                   element={<Professionals />}
                 />
+                <Route path="/manager/notification-templates" element={<NotificationTemplates />} />
               </Route>
 
               {/* PROFESSIONAL/MANAGER ROUTES */}
