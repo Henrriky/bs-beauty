@@ -11,6 +11,7 @@ import { professionalAPI } from './professional/professional-api'
 import { appointmentAPI } from './appointment/appointment-api'
 import { analyticsAPI } from './analytics/analytics-api'
 import { notificationAPI } from './notification/notification-api'
+import { notificationTemplateAPI } from './notification-template/notification-template-api'
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     [appointmentAPI.reducerPath]: appointmentAPI.reducer,
     [analyticsAPI.reducerPath]: analyticsAPI.reducer,
     [notificationAPI.reducerPath]: notificationAPI.reducer,
+    [notificationTemplateAPI.reducerPath]: notificationTemplateAPI.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -38,5 +40,6 @@ export const store = configureStore({
       .concat(professionalAPI.middleware)
       .concat(appointmentAPI.middleware)
       .concat(analyticsAPI.middleware)
-      .concat(notificationAPI.middleware),
+      .concat(notificationAPI.middleware)
+      .concat(notificationTemplateAPI.middleware)
 })
