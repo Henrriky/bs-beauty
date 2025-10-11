@@ -1,24 +1,11 @@
 import { useState } from "react";
-import Title from "../../components/texts/Title";
-import { NotificationTemplate } from "../../store/notification-template/types";
-import { notificationTemplateAPI } from "../../store/notification-template/notification-template-api";
 import { toast } from "react-toastify";
-import NotificationTemplateEditorModal, { VariableExamples } from "./components/NotificationTemplateEditorModal";
+import Title from "../../components/texts/Title";
+import { notificationTemplateAPI } from "../../store/notification-template/notification-template-api";
+import { NotificationTemplate } from "../../store/notification-template/types";
+import NotificationTemplateEditorModal from "./components/NotificationTemplateEditorModal";
 import NotificationTemplateList from "./components/NotificationTemplateList";
-
-const VARIABLE_EXAMPLES: VariableExamples = {
-  nome: "João Silva",
-  idade: "25",
-  empresa: "BS Beauty",
-  data_aniversário: "15/10/2025",
-  customerName: "João Silva",
-  appointmentDate: "15/10/2025",
-  appointmentTime: "14:30",
-  serviceName: "Corte de Cabelo",
-  professionalName: "Maria Santos",
-  businessName: "BS Beauty",
-  businessPhone: "(11) 99999-9999",
-};
+import { buildExampleVariables } from "./utils/variable-examples";
 
 function NotificationTemplates() {
   const [selectedTemplate, setSelectedTemplate] =
@@ -64,6 +51,8 @@ function NotificationTemplates() {
     }
   };
 
+  const exampleVariables = buildExampleVariables(selectedTemplate);
+
   return (
     <>
       <Title align="left">Comunicação</Title>
@@ -86,7 +75,7 @@ function NotificationTemplates() {
         isSaving={isSaving}
         onClose={closeModal}
         onSave={handleSave}
-        variableExamples={VARIABLE_EXAMPLES}
+        variableExamples={exampleVariables}
       />
     </>
   );
