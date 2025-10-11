@@ -1,4 +1,3 @@
-// src/services/notifications-birthday.use-case.ts
 import { notificationBus } from '@/events/notification-bus';
 import type { CustomerRepository } from '@/repository/protocols/customer.repository';
 import type { NotificationTemplateRepository } from '@/repository/protocols/notification-template.repository';

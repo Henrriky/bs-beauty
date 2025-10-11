@@ -50,7 +50,7 @@ class PrismaNotificationTemplateRepository implements NotificationTemplateReposi
   }
 
   public async updateByKey(key: string, data: Prisma.NotificationTemplateUpdateInput): Promise<NotificationTemplate> {
-    return prismaClient.notificationTemplate.update({
+    return await prismaClient.notificationTemplate.update({
       where: { key },
       data
     })

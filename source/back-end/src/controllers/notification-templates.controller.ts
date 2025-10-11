@@ -1,7 +1,6 @@
 import { makeNotificationTemplatesUseCaseFactory } from '@/factory/make-notification-templates-use-case.factory'
 import { formatValidationErrors } from '@/utils/formatting/zod-validation-errors.formatting.util'
 import { notificationTemplateQuerySchema } from '@/utils/validation/zod-schemas/pagination/notification-templates/notification-templates-query.schema'
-import { notificationQuerySchema } from '@/utils/validation/zod-schemas/pagination/notifications/notifications-query.schema'
 import { Prisma } from '@prisma/client'
 import { type NextFunction, type Request, type Response } from 'express'
 import z from 'zod'
