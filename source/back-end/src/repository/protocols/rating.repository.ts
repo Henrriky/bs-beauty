@@ -7,6 +7,7 @@ interface RatingRepository {
   create: (newRating: Prisma.RatingCreateInput) => Promise<Rating>
   update: (id: string, ratingUpdated: Prisma.RatingUpdateInput) => Promise<Rating>
   delete: (id: string) => Promise<Rating>
+  getMeanScore: () => Promise<{ meanScore: number, ratingCount: number }>
 }
 
 export type { RatingRepository }

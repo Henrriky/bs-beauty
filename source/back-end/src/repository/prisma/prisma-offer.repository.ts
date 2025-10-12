@@ -20,11 +20,11 @@ class PrismaOfferRepository implements OfferRepository {
   }
 
   public async findByServiceId (serviceId: string) {
-    const offer = await prismaClient.offer.findFirst({
+    const offers = await prismaClient.offer.findMany({
       where: { serviceId }
     })
 
-    return offer
+    return offers
   }
 
   public async findByProfessionalId (professionalId: string) {

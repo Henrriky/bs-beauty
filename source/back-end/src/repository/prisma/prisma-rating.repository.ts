@@ -21,13 +21,13 @@ class PrismaRatingRepository implements RatingRepository {
   public async findByAppointmentId (appointmentId: string) {
     const rating = await prismaClient.rating.findUnique({
       where: {
-        appointmentId: appointmentId
+        appointmentId
       }
     })
 
     return rating
   }
-  
+
   public async create (newRating: Prisma.RatingCreateInput) {
     const rating = await prismaClient.rating.create({
       data: { ...newRating }
@@ -52,6 +52,17 @@ class PrismaRatingRepository implements RatingRepository {
       }
     })
     return rating
+  }
+
+  public async getMeanScore () {
+    const result = await prismaClient.rating.aggregate({
+      _avg: { score: true },
+      _count: { score: true }
+    })
+    return {
+      meanScore: result._avg.score ?? 0,
+      ratingCount: result._count.score ?? 0
+    }
   }
 }
 

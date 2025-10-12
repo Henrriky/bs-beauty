@@ -12,11 +12,11 @@ const readStatusParam = z
   .default('ALL')
 
 export const partialNotificationQuerySchema = {
-  readStatus: readStatusParam,
+  readStatus: readStatusParam
 }
 
 export const notificationQuerySchema = basePaginationSchema.extend(
-  partialNotificationQuerySchema,
+  partialNotificationQuerySchema
 )
 
 export type NotificationQuerySchema = z.infer<typeof notificationQuerySchema>

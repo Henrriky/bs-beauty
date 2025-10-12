@@ -44,10 +44,10 @@ class OffersUseCase {
   }
 
   public async executeFindByServiceId (serviceId: string) {
-    const offer = await this.offerRepository.findByServiceId(serviceId)
-    RecordExistence.validateRecordExistence(offer, 'Offer')
+    const offers = await this.offerRepository.findByServiceId(serviceId)
+    RecordExistence.validateManyRecordsExistence(offers ?? [], 'offers')
 
-    return offer
+    return offers
   }
 
   public async executeFindByProfessionalId (professionalId: string): Promise<OfferOutput> {

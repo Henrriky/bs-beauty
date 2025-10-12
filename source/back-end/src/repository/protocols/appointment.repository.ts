@@ -28,7 +28,7 @@ export type FindByIdAppointments = Prisma.AppointmentGetPayload<{
         }
         professional: true
       }
-    },
+    }
     customer: {
       select: {
         id: true
@@ -45,6 +45,7 @@ interface AppointmentRepository {
   findById: (id: string) => Promise<FindByIdAppointments | null>
   findByCustomerOrProfessionalId: (customerOrProfessionalId: string) => Promise<Appointment[]>
   findByServiceOfferedId: (id: string) => Promise<Appointment[]>
+  findByDateRange: (startDate: Date, endDate: Date) => Promise<Appointment[]>
   findNonFinishedByUserAndDay: (
     userId: string,
     dayToFetchAvailableSchedulling: Date

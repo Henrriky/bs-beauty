@@ -31,9 +31,9 @@ class OffersController {
     try {
       const useCase = makeOffersUseCaseFactory()
       const serviceId = req.params.serviceId
-      const offer = await useCase.executeFindByServiceId(serviceId)
+      const offers = await useCase.executeFindByServiceId(serviceId)
 
-      res.send(offer)
+      res.send(offers)
     } catch (error) {
       next(error)
     }
