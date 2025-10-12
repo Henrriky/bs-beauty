@@ -14,12 +14,25 @@ services:
       - mysql-data:/var/lib/mysql
     restart: always
   app:
-    build: .
+    image: henrriky1231/bs-beauty:latest
     ports: 
       - "3000:3000"
     depends_on: 
       - db
     restart: always
+    pull_policy: always
+    env_file:
+      - ./back-end/.env
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "127.0.0.1:6379:6379"
+    command: ["redis-server","--appendonly","yes"]
+    volumes:
+      - redis-data:/data
+    restart: always
 
 volumes:
   mysql-data:
+  redis-data:
