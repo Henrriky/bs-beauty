@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import jwt from 'jsonwebtoken'
-import { type CustomerOrEmployee } from '../../types/customer-or-employee.type'
+import { type CustomerOrProfessional } from '../../types/customer-or-professional.type'
 import { type Encrypter } from '../protocols/encrypter.protocol'
 import { ENV } from '../../config/env'
 import type { StringValue } from 'ms'
 
 class JwtEncrypterService implements Encrypter {
-  async encrypt (params: CustomerOrEmployee & { userId: string, profilePhotoUrl: string }): Promise<{ accessToken: string }> {
+  async encrypt (params: CustomerOrProfessional & { userId: string, profilePhotoUrl: string }): Promise<{ accessToken: string }> {
     const secret: string = ENV.JWT_SECRET
     const expiresIn: StringValue = ENV.JWT_EXPIRES_IN as StringValue
 
@@ -23,7 +23,8 @@ class JwtEncrypterService implements Encrypter {
         email: params.email,
         name: params.name,
         registerCompleted: params.registerCompleted,
-        profilePhotoUrl: params.profilePhotoUrl
+        profilePhotoUrl: params.profilePhotoUrl,
+        permissions: params.permissions
       },
       secret,
       {

@@ -24,12 +24,12 @@ class ServicesController {
     }
   }
 
-  public static async handleFetchEmployeesOfferingService (req: Request, res: Response, next: NextFunction) {
+  public static async handleFetchProfessionalsOfferingService (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeServiceUseCaseFactory()
-      const { employeesOfferingService } = await useCase.fetchEmployeesOfferingService(req.params.id)
+      const { professionalsOfferingService } = await useCase.fetchProfessionalsOfferingService(req.params.id)
 
-      res.send({ employeesOfferingService })
+      res.send({ professionalsOfferingService })
     } catch (error) {
       next(error)
     }
@@ -39,7 +39,8 @@ class ServicesController {
     try {
       const useCase = makeServiceUseCaseFactory()
       const newService: Prisma.ServiceCreateInput = req.body
-      const service = await useCase.executeCreate(newService)
+      const userId = req.user.id
+      const service = await useCase.executeCreate(newService, userId)
       res.send(service)
     } catch (error) {
       next(error)
@@ -51,7 +52,8 @@ class ServicesController {
       const useCase = makeServiceUseCaseFactory()
       const updatedService: Prisma.ServiceUpdateInput = req.body
       const serviceId = req.params.id
-      const service = await useCase.executeUpdate(serviceId, updatedService)
+      const userId = req.user.id
+      const service = await useCase.executeUpdate(serviceId, updatedService, userId)
       res.send(service)
     } catch (error) {
       next(error)

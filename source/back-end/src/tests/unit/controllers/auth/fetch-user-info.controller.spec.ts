@@ -25,10 +25,11 @@ describe('FetchUserInfoController', () => {
         id: '12345',
         name: 'John Doe',
         email: 'user@example.com',
-        userType: 'EMPLOYEE',
+        userType: 'PROFESSIONAL',
         profilePhotoUrl: 'http://example.com/photo.jpg',
         registerCompleted: false,
-        userId: '12345'
+        userId: '12345',
+        permissions: []
       }
     })
 
@@ -59,7 +60,7 @@ describe('FetchUserInfoController', () => {
       expect(res.send).toHaveBeenCalledWith({ user: mockUser })
       expect(usecaseMock.execute).toHaveBeenCalledWith({
         email: 'user@example.com',
-        userType: 'EMPLOYEE'
+        userType: 'PROFESSIONAL'
       })
     })
 

@@ -26,7 +26,7 @@ describe('ServicesController', () => {
     useCaseMock = {
       executeFindAll: vi.fn(),
       executeFindById: vi.fn(),
-      fetchEmployeesOfferingService: vi.fn(),
+      fetchProfessionalsOfferingService: vi.fn(),
       executeCreate: vi.fn(),
       executeUpdate: vi.fn(),
       executeDelete: vi.fn()
@@ -97,13 +97,11 @@ describe('ServicesController', () => {
   describe('handleFindById', () => {
     it('should return a service', async () => {
       // arrange
-      const service: Service = {
+      const service: Prisma.ServiceCreateInput = {
         id: 'random-uuid',
         name: 'Service 1',
         description: 'Description 1',
-        category: 'Category 1',
-        createdAt: new Date('2025-01-01T09:00:00'),
-        updatedAt: new Date('2025-01-01T09:00:00')
+        category: 'Category 1'
       }
       req.params.id = 'random-uuid'
       useCaseMock.executeFindById.mockResolvedValueOnce(service)
@@ -135,18 +133,18 @@ describe('ServicesController', () => {
     })
   })
 
-  describe('handleFetchEmployeesOfferingService', () => {
-    it('should return employees offering a service', async () => {
+  describe('handleFetchProfessionalsOfferingService', () => {
+    it('should return professionals offering a service', async () => {
       // arrange
-      const employeesOfferingService = {
+      const professionalsOfferingService = {
         id: 'service-123',
         offers: [
           {
             id: 'offer-1',
             estimatedTime: 60,
             price: 100.0,
-            employee: {
-              id: 'employee-1',
+            professional: {
+              id: 'professional-1',
               name: 'John Doe',
               specialization: 'Hair Stylist',
               profilePhotoUrl: 'https://example.com/john-doe.jpg'
@@ -156,8 +154,8 @@ describe('ServicesController', () => {
             id: 'offer-2',
             estimatedTime: 45,
             price: 75.0,
-            employee: {
-              id: 'employee-2',
+            professional: {
+              id: 'professional-2',
               name: 'Jane Smith',
               specialization: 'Makeup Artist',
               profilePhotoUrl: 'https://example.com/jane-smith.jpg'
@@ -165,24 +163,24 @@ describe('ServicesController', () => {
           }
         ]
       }
-      useCaseMock.fetchEmployeesOfferingService.mockResolvedValue({ employeesOfferingService })
+      useCaseMock.fetchProfessionalsOfferingService.mockResolvedValue({ professionalsOfferingService })
       req.params.id = 'random-uuid-service-1'
 
       // act
-      await ServicesController.handleFetchEmployeesOfferingService(req, res, next)
+      await ServicesController.handleFetchProfessionalsOfferingService(req, res, next)
 
       // assert
-      expect(useCaseMock.fetchEmployeesOfferingService).toHaveBeenCalledWith('random-uuid-service-1')
-      expect(res.send).toHaveBeenCalledWith({ employeesOfferingService })
+      expect(useCaseMock.fetchProfessionalsOfferingService).toHaveBeenCalledWith('random-uuid-service-1')
+      expect(res.send).toHaveBeenCalledWith({ professionalsOfferingService })
       expect(next).not.toHaveBeenCalled()
     })
 
     it('should call next with error if something goes wrong', async () => {
       const mockError = new Error('Something went wrong')
-      useCaseMock.fetchEmployeesOfferingService.mockRejectedValue(mockError)
+      useCaseMock.fetchProfessionalsOfferingService.mockRejectedValue(mockError)
       req.params = { id: '1' }
 
-      await ServicesController.handleFetchEmployeesOfferingService(req, res, next)
+      await ServicesController.handleFetchProfessionalsOfferingService(req, res, next)
 
       expect(res.send).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalledTimes(1)
@@ -199,6 +197,7 @@ describe('ServicesController', () => {
         category: 'Category 1'
       }
       req.body = newService
+      req.user = { id: 'user-123' } as any
       useCaseMock.executeCreate.mockResolvedValueOnce(newService)
 
       // act
@@ -208,6 +207,7 @@ describe('ServicesController', () => {
       expect(req.body).toEqual(newService)
       expect(res.send).toHaveBeenCalledWith(newService)
       expect(useCaseMock.executeCreate).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeCreate).toHaveBeenCalledWith(newService, req.user.id)
       expect(next).not.toHaveBeenCalled()
     })
 
@@ -215,12 +215,14 @@ describe('ServicesController', () => {
       // arrange
       const error = new Error('Database connection failed')
       useCaseMock.executeCreate.mockRejectedValueOnce(error)
+      req.user = { id: 'user-123' } as any
 
       // act
       await ServicesController.handleCreate(req, res, next)
 
       // assert
       expect(useCaseMock.executeCreate).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeCreate).toHaveBeenCalledWith({}, req.user.id)
       expect(res.status).not.toHaveBeenCalled()
       expect(res.send).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalledTimes(1)
@@ -239,6 +241,7 @@ describe('ServicesController', () => {
       const serviceId = 'random-uuid'
       req.body = serviceToUpdate
       req.params.id = serviceId
+      req.user = { id: 'user-123' } as any
       useCaseMock.executeUpdate.mockResolvedValueOnce(serviceToUpdate)
 
       // act
@@ -249,6 +252,7 @@ describe('ServicesController', () => {
       expect(req.params.id).toBe(serviceId)
       expect(res.send).toHaveBeenCalledWith(serviceToUpdate)
       expect(useCaseMock.executeUpdate).toHaveBeenCalledTimes(1)
+      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(serviceId, serviceToUpdate, req.user.id)
       expect(next).not.toHaveBeenCalled()
     })
 
@@ -262,6 +266,7 @@ describe('ServicesController', () => {
       const serviceId = 'random-uuid'
       req.body = serviceToUpdate
       req.params.id = serviceId
+      req.user = { id: 'user-123' } as any
 
       const error = new Error('Database connection failed')
       useCaseMock.executeUpdate.mockRejectedValueOnce(error)
@@ -271,7 +276,7 @@ describe('ServicesController', () => {
 
       // assert
       expect(useCaseMock.executeUpdate).toHaveBeenCalledTimes(1)
-      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(serviceId, serviceToUpdate)
+      expect(useCaseMock.executeUpdate).toHaveBeenCalledWith(serviceId, serviceToUpdate, req.user.id)
       expect(res.status).not.toHaveBeenCalled()
       expect(res.send).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalledTimes(1)

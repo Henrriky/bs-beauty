@@ -9,10 +9,16 @@ export const API_VARIABLES = {
     EXCHANGE_CODE_FOR_TOKEN: '/auth/google/exchange-code',
     LOGIN_WITH_GOOGLE_ACCESS_TOKEN: '/auth/login',
     FETCH_USER_INFO: '/auth/user',
+    REGISTER_USER: '/auth/register',
+    NEW_TOKENS: '/auth/new-tokens',
+    CODE_VALIDATION: '/auth/code-validation',
+    REQUEST_PASSWORD_RESET: '/auth/password-reset/request',
+    SET_NEW_PASSWORD: '/auth/password-reset/set-password',
+    LOGOUT: '/auth/logout',
   },
   USER_ENDPOINTS: {
     UPDATE_CUSTOMER_PROFILE: '/customers',
-    UPDATE_EMPLOYEE_PROFILE: '/employees',
+    UPDATE_PROFESSIONAL_PROFILE: '/professionals',
   },
   CUSTOMERS_ENDPOINTS: {
     FETCH_CUSTOMERS: '/customers',
@@ -20,12 +26,12 @@ export const API_VARIABLES = {
   },
   SERVICES_ENDPOINTS: {
     ENDPOINT: '/services',
-    FETCH_EMPLOYEES_OFFERING_SERVICE: (serviceId: string) =>
-      `/services/${serviceId}/offer/employees`,
+    FETCH_PROFESSIONALS_OFFERING_SERVICE: (serviceId: string) =>
+      `/services/${serviceId}/offer/professionals`,
   },
   OFFERS_ENDPOINTS: {
     ENDPOINT: '/offers',
-    FETCH_FOR_AVAILABLE_SCHEDULES_FROM_EMPLOYEE_OFFER: (
+    FETCH_FOR_AVAILABLE_SCHEDULES_FROM_PROFESSIONAL_OFFER: (
       serviceOfferedId: string,
       dayToFetchAvailableSchedulling: string,
     ) =>
@@ -33,16 +39,23 @@ export const API_VARIABLES = {
   },
   SHIFTS_ENDPOINTS: {
     ENDPOINT: '/shifts',
-    FIND_SHIFTS_BY_EMPLOYEE: (employeeId: string) =>
-      `/shifts/employee/${employeeId}`,
+    FIND_SHIFTS_BY_PROFESSIONAL: (professionalId: string) =>
+      `/shifts/professional/${professionalId}`,
     UPDATE_SHIFT: (shiftId: string) => `/shifts/${shiftId}`,
   },
-  EMPLOYEES_ENDPOINTS: {
-    FETCH_EMPLOYEES: '/employees',
-    CREATE_EMPLOYEE: '/employees',
-    DELETE_EMPLOYEE: (employeeId: string) => `/employees/${employeeId}`,
-    FETCH_SERVICES_OFFERED_BY_EMPLOYEE: (employeeId: string) =>
-      `/employees/${employeeId}/offers/service`,
+  PROFESSIONALS_ENDPOINTS: {
+    FETCH_PROFESSIONALS: '/professionals',
+    CREATE_PROFESSIONAL: '/professionals',
+    DELETE_PROFESSIONAL: (professionalId: string) =>
+      `/professionals/${professionalId}`,
+    FETCH_SERVICES_OFFERED_BY_PROFESSIONAL: (professionalId: string) =>
+      `/professionals/${professionalId}/offers/service`,
+    FETCH_PROFESSIONAL_ROLES: (professionalId: string) =>
+      `/professionals/${professionalId}/roles`,
+    ADD_ROLE_TO_PROFESSIONAL: (professionalId: string) =>
+      `/professionals/${professionalId}/roles`,
+    REMOVE_ROLE_FROM_PROFESSIONAL: (professionalId: string) =>
+      `/professionals/${professionalId}/roles`,
   },
   APPOINTMENTS_ENDPOINTS: {
     CREATE_APPOINTMENT: '/appointments',
@@ -54,10 +67,32 @@ export const API_VARIABLES = {
       `/appointments/${appointmentId}`,
     UPDATE_APPOINTMENT: (appointmentId: string) =>
       `/appointments/${appointmentId}`,
+    FINISH_APPOINTMENT: (appointmentId: string) =>
+      `/appointments/${appointmentId}/finish`,
+  },
+  RATINGS_ENDPOINTS: {
+    FIND_BY_RATING_ID: (ratingId: string) => `/ratings/${ratingId}`,
+    UPDATE_RATING: (ratingId: string) => `/ratings/${ratingId}`,
   },
   ANALYTICS_ENDPOINTS: {
     FETCH_ANALYTICS: '/analytics',
-    FETCH_ANALYTICS_BY_EMPLOYEE: (employeeId: string) =>
-      `/analytics/${employeeId}`,
+    FETCH_ANALYTICS_BY_PROFESSIONAL: (professionalId: string) =>
+      `/analytics/${professionalId}`,
+  },
+  NOTIFICATIONS_ENDPOINTS: {
+    FETCH_NOTIFICATIONS: '/notifications',
+    MARK_MANY_AS_READ: '/notifications/read',
+  },
+  ROLES_ENDPOINTS: {
+    ENDPOINT: '/roles',
+    FIND_BY_ID: (id: string) => `/roles/${id}`,
+    UPDATE_ROLE: (id: string) => `/roles/${id}`,
+    DELETE_ROLE: (id: string) => `/roles/${id}`,
+    ASSOCIATIONS: (id: string) => `/roles/${id}/associations`,
+    ADD_PERMISSION: (id: string) => `/roles/${id}/permissions`,
+    REMOVE_PERMISSION: (id: string) => `/roles/${id}/permissions`,
+  },
+  PERMISSIONS_ENDPOINTS: {
+    ENDPOINT: '/permissions',
   },
 } as const

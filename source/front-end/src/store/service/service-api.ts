@@ -3,13 +3,13 @@ import { API_VARIABLES } from '../../api/config'
 import {
   CreateServiceFormData,
   UpdateServiceFormData,
-  // UpdateServiceFormData,
 } from '../../pages/services/components/types'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import {
-  EmployeesOfferingService,
-  PaginatedServicesResponse,
+  ProfessionalsOfferingService,
   Service,
+  FindAllServicesParams,
+  FindAllServicesResponse,
 } from './types'
 
 export const serviceAPI = createApi({
@@ -17,14 +17,7 @@ export const serviceAPI = createApi({
   baseQuery: baseQueryWithAuth,
   tagTypes: ['Services'],
   endpoints: (builder) => ({
-    getServices: builder.query<
-      PaginatedServicesResponse,
-      {
-        page?: number
-        limit?: number
-        name?: string
-      }
-    >({
+    getServices: builder.query<FindAllServicesResponse, FindAllServicesParams>({
       query: (params) => ({
         url: API_VARIABLES.SERVICES_ENDPOINTS.ENDPOINT,
         method: 'GET',
@@ -41,12 +34,12 @@ export const serviceAPI = createApi({
             ]
           : [{ type: 'Services', id: 'LIST' }],
     }),
-    fetchEmployeesOfferingService: builder.query<
-      { employeesOfferingService: EmployeesOfferingService },
+    fetchProfessionalsOfferingService: builder.query<
+      { professionalsOfferingService: ProfessionalsOfferingService },
       { serviceId: string }
     >({
       query: ({ serviceId }) => ({
-        url: API_VARIABLES.SERVICES_ENDPOINTS.FETCH_EMPLOYEES_OFFERING_SERVICE(
+        url: API_VARIABLES.SERVICES_ENDPOINTS.FETCH_PROFESSIONALS_OFFERING_SERVICE(
           serviceId,
         ),
         method: 'GET',

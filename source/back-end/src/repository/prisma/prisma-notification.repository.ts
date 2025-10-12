@@ -1,12 +1,48 @@
+import { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { NotificationFilters } from '@/types/notifications/notification-filters'
+import { PaginatedRequest } from '@/types/pagination'
 import { type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type NotificationRepository } from '../protocols/notification.repository'
 
 class PrismaNotificationRepository implements NotificationRepository {
-  public async findAll () {
-    const notifications = await prismaClient.notification.findMany()
 
-    return notifications
+  public async findAll(
+    user: TokenPayload,
+    params: PaginatedRequest<NotificationFilters>
+  ) {
+    const { page, limit, filters } = params
+    const skip = (page - 1) * limit
+
+    const andWhere: Prisma.NotificationWhereInput[] = [
+      { recipientId: user.id }
+    ]
+
+    if (filters?.readStatus === 'READ') {
+      andWhere.push({ NOT: { readAt: null } })
+    } else if (filters?.readStatus === 'UNREAD') {
+      andWhere.push({ readAt: null })
+    }
+
+    const where: Prisma.NotificationWhereInput = { AND: andWhere }
+
+    const [data, total] = await Promise.all([
+      prismaClient.notification.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' }
+      }),
+      prismaClient.notification.count({ where })
+    ])
+
+    return {
+      data,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      limit
+    }
   }
 
   public async findById (id: string) {
@@ -15,14 +51,6 @@ class PrismaNotificationRepository implements NotificationRepository {
     })
 
     return notification
-  }
-
-  public async findByUserId (userId: string) {
-    const notifications = await prismaClient.notification.findMany({
-      where: { OR: [{ appointment: { customerId: userId } }, { appointment: { offer: { employeeId: userId } } }] }
-    })
-
-    return notifications
   }
 
   public async create (notificationToCreate: Prisma.NotificationCreateInput) {
@@ -41,14 +69,22 @@ class PrismaNotificationRepository implements NotificationRepository {
     return deletedNotification
   }
 
-  public async markAsRead (id: string) {
-    const readNotification = await prismaClient.notification.update({
-      where: { id },
+  public async findByMarker(marker: string) {
+    return await prismaClient.notification.findUnique({ where: { marker } })
+  }
+
+  public async markManyAsReadForUser(ids: string[], userId: string) {
+    const result = await prismaClient.notification.updateMany({
+      where: {
+        id: { in: ids },
+        recipientId: userId,
+        readAt: null
+      },
       data: { readAt: new Date() }
     })
-
-    return readNotification
+    return result.count
   }
+
 }
 
 export { PrismaNotificationRepository }

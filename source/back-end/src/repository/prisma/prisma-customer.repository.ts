@@ -27,6 +27,14 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
+  public async findByEmail (email: string) {
+    const customer = await prismaClient.customer.findUnique({
+      where: { email }
+    })
+
+    return customer
+  }
+
   public async create (newCustomer: Prisma.CustomerCreateInput) {
     const customer = await prismaClient.customer.create({
       data: { ...newCustomer }
@@ -63,6 +71,18 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
+  public async updateByEmail (email: string, customerData: Prisma.CustomerUpdateInput) {
+    const customer = await prismaClient.customer.update({
+      where: { email },
+      data: {
+        ...customerData,
+        registerCompleted: true
+      }
+    })
+
+    return customer
+  }
+
   public async updateOrCreate (identifiers: UpdateOrCreateParams, data: Prisma.CustomerCreateInput): Promise<Customer> {
     const customerUpdated = await prismaClient.customer.upsert({
       where: {
@@ -71,7 +91,8 @@ class PrismaCustomerRepository implements CustomerRepository {
         id: identifiers.id
       },
       update: {
-        profilePhotoUrl: data.profilePhotoUrl
+        profilePhotoUrl: data.profilePhotoUrl,
+        googleId: data.googleId
       },
       create: {
         ...data

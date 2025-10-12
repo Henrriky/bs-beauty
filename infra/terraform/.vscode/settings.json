@@ -1,0 +1,21 @@
+{
+  "files.exclude": {
+    "**/.terraform": true,
+    "**/.terraform/**": true,
+    "**/.terraform.lock": true,
+    "**/.terraform.lock.hcl": true,
+    "**/terraform.tfstate": true,
+    "**/terraform.tfstate.*": true
+  },
+  "search.exclude": {
+    "**/.terraform": true,
+    "**/.terraform/**": true,
+    "**/.terraform.lock": true,
+    "**/.terraform.lock.hcl": true,
+    "**/terraform.tfstate": true,
+    "**/terraform.tfstate.*": true
+  },
+  "files.watcherExclude": {
+    "**/.terraform/**": true
+  }
+}

@@ -1,0 +1,14 @@
+public:
+  hosts:
+    public_host:
+      ansible_user: "{{ lookup('env','SSH_USER') }}"
+      ansible_host: "{{ lookup('env','PUBLIC_HOST') }}"
+      ansible_ssh_private_key_file: "{{ lookup('env','SSH_KEY_PATH') }}"
+
+private:
+  hosts:
+    private_host:
+      ansible_user: "{{ lookup('env','SSH_USER') }}"
+      ansible_host: "{{ lookup('env','PRIVATE_HOST') }}"
+      ansible_ssh_private_key_file: "{{ lookup('env','SSH_KEY_PATH') }}"
+      ansible_ssh_common_args: "-o ProxyCommand='ssh -i {{ lookup('env','SSH_KEY_PATH') }} -W %h:%p {{ lookup('env','SSH_USER') }}@{{ lookup('env','PUBLIC_HOST') }}'"

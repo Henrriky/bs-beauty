@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import { API_VARIABLES } from '../../api/config'
-import { FindShiftsByEmployeeResponse } from './types'
+import { FindShiftsByProfessionalResponse } from './types'
 import { Shift } from '../auth/types'
 
 export const shiftAPI = createApi({
@@ -9,12 +9,14 @@ export const shiftAPI = createApi({
   baseQuery: baseQueryWithAuth,
   tagTypes: ['Shifts'],
   endpoints: (builder) => ({
-    findShiftsByEmployee: builder.query<
-      { shifts: FindShiftsByEmployeeResponse },
-      { employeeId: string }
+    findShiftsByProfessional: builder.query<
+      { shifts: FindShiftsByProfessionalResponse },
+      { professionalId: string }
     >({
-      query: ({ employeeId }) => ({
-        url: API_VARIABLES.SHIFTS_ENDPOINTS.FIND_SHIFTS_BY_EMPLOYEE(employeeId),
+      query: ({ professionalId }) => ({
+        url: API_VARIABLES.SHIFTS_ENDPOINTS.FIND_SHIFTS_BY_PROFESSIONAL(
+          professionalId,
+        ),
         method: 'GET',
       }),
     }),
