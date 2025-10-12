@@ -1,13 +1,13 @@
 import { notificationBus } from '@/events/notification-bus'
 import { enqueue } from '@/events/notification-runner'
 import { makeNotificationsUseCaseFactory } from '@/factory/make-notifications-use-case.factory'
-import { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
-import { FindByIdAppointments } from '@/repository/protocols/appointment.repository'
+import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { type FindByIdAppointments } from '@/repository/protocols/appointment.repository'
 
 type CancelledBy = 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER'
 
 let registered = false
-export function registerNotificationListeners() {
+export function registerNotificationListeners () {
   if (registered) return
   registered = true
 
@@ -26,7 +26,7 @@ export function registerNotificationListeners() {
   })
 
   notificationBus.on('appointment.cancelled', (
-    { appointment, cancelledBy }: { appointment: FindByIdAppointments; userDetails: TokenPayload, cancelledBy: CancelledBy }
+    { appointment, cancelledBy }: { appointment: FindByIdAppointments, userDetails: TokenPayload, cancelledBy: CancelledBy }
   ) => {
     enqueue(async () => {
       const useCase = makeNotificationsUseCaseFactory()

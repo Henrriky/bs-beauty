@@ -225,7 +225,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetRatingsAnalytics(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetRatingsAnalytics (req: Request, res: Response, next: NextFunction) {
     try {
       const professionalsUseCase = makeProfessionalsUseCaseFactory()
       const offerUseCase = makeOffersUseCaseFactory()
@@ -235,73 +235,49 @@ class AnalyticsController {
       const selectedProfessionals = professionals.professionals.slice(0, 5)
 
       const professionalsWithMeanRating = await Promise.all(selectedProfessionals.map(async (prof) => {
-        let offers: Offer[] = []
+        let offerIds: string[] = []
         try {
           const result = await offerUseCase.executeFindByProfessionalId(prof.id)
-          offers = result.offers
+          offerIds = result.offers.map((offer) => offer.id)
         } catch (error: any) {
-          if (error.statusCode === 404) {
-            offers = []
-          } else {
-            throw error
-          }
+          if (error.statusCode !== 404) throw error
         }
-        const offerIds = offers.map((o) => o.id)
 
-        const appointments: Array<{ id: string }> = []
+        let appointmentIds: string [] = []
         if (offerIds.length > 0) {
           for (const offerId of offerIds) {
             try {
               const result = await appointmentUseCase.executeFindByServiceOfferedId(offerId)
-              appointments.push(...result.appointments.map(a => ({ id: a.id })))
+              appointmentIds.push(...result.appointments.map(appointment => appointment.id))
             } catch (error: any) {
-              if (error.statusCode === 404) throw error
+              if (error.statusCode !== 404) throw error
             }
           }
         }
-        const appointmentIds = appointments.map((a) => a.id)
-
-        let ratings: Array<{ score: number | null }> = []
+        
+        let ratings: { score: number | null }[] = []
         if (appointmentIds.length > 0) {
           try {
-            const ratingsArr: Array<{ score: number | null }> = []
             for (const appointmentId of appointmentIds) {
               try {
                 const currentRating = await ratingsUseCase.executeFindByAppointmentId(appointmentId)
-                if (Array.isArray(currentRating)) {
-                  ratingsArr.push(
-                    ...currentRating.filter((r: unknown): r is { score: number | null } =>
-                      typeof r === 'object' &&
-                      r !== null &&
-                      'score' in r &&
-                      typeof (r as { score: unknown }).score === 'number'
-                    )
-                  )
-                } else if (
-                  currentRating !== null &&
-                  typeof currentRating === 'object' &&
-                  'score' in currentRating &&
-                  typeof (currentRating as { score: unknown }).score === 'number'
-                ) {
-                  ratingsArr.push(currentRating as { score: number | null })
+                if (currentRating !== null && typeof currentRating.score === 'number') {
+                  ratings.push(currentRating)
                 }
               } catch (error: any) {
-                if (error?.statusCode === 404) throw error
+                if (error?.statusCode !== 404) throw error
               }
             }
-            ratings = ratingsArr ?? []
           } catch (error: any) {
-            if (error.statusCode === 404) {
-              ratings = []
-            } else {
-              throw error
-            }
+            if (error.statusCode !== 404) throw error
+            ratings = []
           }
         }
+
         const scores = ratings
-          .map((r) => r.score)
+          .map((rating) => rating.score)
           .filter((s): s is number => typeof s === 'number' && s !== null)
-        const meanRating = (scores.length > 0) ? (scores.reduce((a, b) => a + b, 0) / scores.length) : null
+        const meanRating = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length) : null
         return {
           id: prof.id,
           name: prof.name,
@@ -314,10 +290,10 @@ class AnalyticsController {
 
       const salonRating = await ratingsUseCase.executeGetMeanScore()
 
-      res.send({
+      res.send({ 
         professionals: professionalsWithMeanRating,
         salonRating
-      })
+       })
     } catch (error) {
       next(error)
     }

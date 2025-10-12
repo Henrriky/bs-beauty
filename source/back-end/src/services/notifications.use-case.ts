@@ -1,23 +1,23 @@
 import { makeAppointmentsUseCaseFactory } from '@/factory/make-appointments-use-case.factory'
-import { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
-import { NotificationFilters } from '@/types/notifications/notification-filters'
-import { PaginatedRequest } from '@/types/pagination'
+import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { type NotificationFilters } from '@/types/notifications/notification-filters'
+import { type PaginatedRequest } from '@/types/pagination'
 import { Appointment, NotificationType, UserType, type Notification } from '@prisma/client'
 import { type NotificationRepository } from '../repository/protocols/notification.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { EmailService } from './email/email.service'
-import { FindByIdAppointments } from '@/repository/protocols/appointment.repository'
+import { type FindByIdAppointments } from '@/repository/protocols/appointment.repository'
 
 class NotificationsUseCase {
   constructor (private readonly notificationRepository: NotificationRepository) { }
 
-  public async executeFindAll(
+  public async executeFindAll (
     user: TokenPayload,
     params: PaginatedRequest<NotificationFilters>
   ) {
     const notifications = await this.notificationRepository.findAll(user, params)
 
-    return notifications 
+    return notifications
   }
 
   public async executeFindById (notificationId: string): Promise<Notification | null> {
@@ -34,7 +34,7 @@ class NotificationsUseCase {
     return deletedNotification
   }
 
-  public async executeSendOnAppointmentCreated(appointment: FindByIdAppointments): Promise<void> {
+  public async executeSendOnAppointmentCreated (appointment: FindByIdAppointments): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
 
     const professionalEmail = appointment.offer.professional.email
@@ -52,7 +52,6 @@ class NotificationsUseCase {
 
     const alreadyExists = await this.notificationRepository.findByMarker(marker)
     if (!alreadyExists) {
-
       if (shouldNotifyProfessionalInApp) {
         if (!alreadyExists) {
           await this.notificationRepository.create({
@@ -77,10 +76,9 @@ class NotificationsUseCase {
         })
       }
     }
-
   }
 
-  public async executeSendOnAppointmentConfirmed(appointment: FindByIdAppointments): Promise<void> {
+  public async executeSendOnAppointmentConfirmed (appointment: FindByIdAppointments): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
     const serviceName = appointment.offer.service.name
     const professionalName = appointment.offer.professional.name ?? 'Profissional'
@@ -117,16 +115,16 @@ class NotificationsUseCase {
             customerName,
             professionalName,
             serviceName,
-            appointmentDateISO,
+            appointmentDateISO
           })
-          .catch(err => console.error('Erro ao enviar e-mail de confirmação:', err?.message || err))
+          .catch(err => { console.error('Erro ao enviar e-mail de confirmação:', err?.message || err) })
       }
     }
   }
 
-  public async executeSendOnAppointmentCancelled(
+  public async executeSendOnAppointmentCancelled (
     appointment: FindByIdAppointments,
-    options: { notifyCustomer: boolean; notifyProfessional: boolean }
+    options: { notifyCustomer: boolean, notifyProfessional: boolean }
   ): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
     const serviceName = appointment.offer.service.name
@@ -170,10 +168,9 @@ class NotificationsUseCase {
               appointmentDateISO,
               cancelledBy: 'professional'
             })
-            .catch(err => console.error('Erro ao enviar e-mail de confirmação:', err?.message || err))
+            .catch(err => { console.error('Erro ao enviar e-mail de confirmação:', err?.message || err) })
         }
       }
-
     }
 
     if (options.notifyProfessional) {
@@ -209,20 +206,18 @@ class NotificationsUseCase {
               appointmentDateISO,
               cancelledBy: 'customer'
             })
-            .catch(err => console.error('Erro ao enviar e-mail de confirmação:', err?.message || err))
+            .catch(err => { console.error('Erro ao enviar e-mail de confirmação:', err?.message || err) })
         }
-
       }
     }
   }
 
-  public async executeMarkManyAsRead(ids: string[], currentUserId: string) {
+  public async executeMarkManyAsRead (ids: string[], currentUserId: string) {
     if (ids.length === 0) return { updatedCount: 0 }
     const uniqueIds = [...new Set(ids)]
     const updatedCount = await this.notificationRepository.markManyAsReadForUser(uniqueIds, currentUserId)
     return { updatedCount }
   }
-
 }
 
 export { NotificationsUseCase }

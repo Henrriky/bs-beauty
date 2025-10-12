@@ -33,7 +33,6 @@ function LandingPage() {
   const authInformations = useAppSelector((state) => state.auth)
   const { data } = publicAnalyticsApi.useFetchRatingsAnalyticsQuery()
   const [currentServiceIndex, setCurrentServiceIndex] = useState(0)
-  console.log(data)
 
   useEffect(() => {
     if (authInformations.token?.accessToken) {

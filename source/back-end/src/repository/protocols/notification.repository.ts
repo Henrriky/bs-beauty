@@ -1,6 +1,6 @@
-import { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
-import { NotificationFilters } from '@/types/notifications/notification-filters'
-import { PaginatedRequest, PaginatedResult } from '@/types/pagination'
+import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { type NotificationFilters } from '@/types/notifications/notification-filters'
+import { type PaginatedRequest, type PaginatedResult } from '@/types/pagination'
 import type { Notification, Prisma } from '@prisma/client'
 
 interface NotificationRepository {

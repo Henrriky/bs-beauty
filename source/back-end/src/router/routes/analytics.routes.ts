@@ -1,14 +1,13 @@
 import { Router } from 'express'
 import { AnalyticsController } from '../../controllers/analytics.controller'
-import { UserType } from '@prisma/client'
-import { routeAuthMiddleware } from '@/middlewares/route-auth.middleware'
+import { userTypeAuthMiddleware } from '../../middlewares/auth/user-type-auth.middleware'
 
 const analyticsServiceRoutes = Router()
 
-analyticsServiceRoutes.get('/', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleFindAll)
-analyticsServiceRoutes.get('/:id', routeAuthMiddleware([UserType.PROFESSIONAL, UserType.MANAGER]), AnalyticsController.handleFindByProfessionalId)
-analyticsServiceRoutes.get('/customers/ratings', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetCustomerAmountPerRatingScore)
-analyticsServiceRoutes.get('/services/rating', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetMeanRatingByService)
-analyticsServiceRoutes.get('/professionals/rating', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetMeanRatingOfProfessionals)
-analyticsServiceRoutes.get('/appointments/amount', routeAuthMiddleware([UserType.MANAGER]), AnalyticsController.handleGetAppointmentAmountInDateRange)
+analyticsServiceRoutes.get('/', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleFindAll)
+analyticsServiceRoutes.get('/:id', userTypeAuthMiddleware(['PROFESSIONAL', 'MANAGER']), AnalyticsController.handleFindByProfessionalId)
+analyticsServiceRoutes.get('/customers/ratings', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetCustomerAmountPerRatingScore)
+analyticsServiceRoutes.get('/services/rating', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetMeanRatingByService)
+analyticsServiceRoutes.get('/professionals/rating', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetMeanRatingOfProfessionals)
+analyticsServiceRoutes.get('/appointments/amount', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetAppointmentAmountInDateRange)
 export { analyticsServiceRoutes }

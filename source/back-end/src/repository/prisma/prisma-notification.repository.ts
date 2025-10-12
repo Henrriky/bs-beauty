@@ -1,13 +1,12 @@
-import { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
-import { NotificationFilters } from '@/types/notifications/notification-filters'
-import { PaginatedRequest } from '@/types/pagination'
+import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { type NotificationFilters } from '@/types/notifications/notification-filters'
+import { type PaginatedRequest } from '@/types/pagination'
 import { type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type NotificationRepository } from '../protocols/notification.repository'
 
 class PrismaNotificationRepository implements NotificationRepository {
-
-  public async findAll(
+  public async findAll (
     user: TokenPayload,
     params: PaginatedRequest<NotificationFilters>
   ) {
@@ -69,11 +68,11 @@ class PrismaNotificationRepository implements NotificationRepository {
     return deletedNotification
   }
 
-  public async findByMarker(marker: string) {
+  public async findByMarker (marker: string) {
     return await prismaClient.notification.findUnique({ where: { marker } })
   }
 
-  public async markManyAsReadForUser(ids: string[], userId: string) {
+  public async markManyAsReadForUser (ids: string[], userId: string) {
     const result = await prismaClient.notification.updateMany({
       where: {
         id: { in: ids },
@@ -84,7 +83,6 @@ class PrismaNotificationRepository implements NotificationRepository {
     })
     return result.count
   }
-
 }
 
 export { PrismaNotificationRepository }

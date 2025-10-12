@@ -49,7 +49,7 @@ class AnalyticsUseCase {
       }
 
       const meanRating = (scores.length > 0)
-        ? parseFloat((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2))
+        ? Number.parseFloat((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2))
         : null
       return {
         service,
@@ -90,7 +90,7 @@ class AnalyticsUseCase {
       }
 
       const meanRating = (scores.length > 0)
-        ? parseFloat((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2))
+        ? Number.parseFloat((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2))
         : null
       return {
         professional,

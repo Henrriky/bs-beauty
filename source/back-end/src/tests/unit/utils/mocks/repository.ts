@@ -2,7 +2,7 @@ import { type AppointmentRepository } from '@/repository/protocols/appointment.r
 import { type CustomerRepository } from '@/repository/protocols/customer.repository'
 import { type OfferRepository } from '@/repository/protocols/offer.repository'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
-import { RatingRepository } from '@/repository/protocols/rating.repository'
+import { type RatingRepository } from '@/repository/protocols/rating.repository'
 import { type RoleRepository } from '@/repository/protocols/role.repository'
 import { type ServiceRepository } from '@/repository/protocols/service.repository'
 import { type ShiftRepository } from '@/repository/protocols/shift.repository'
@@ -17,6 +17,7 @@ const MockAppointmentRepository: Mocked<AppointmentRepository> = {
   findByServiceOfferedId: vi.fn(),
   findNonFinishedByUserAndDay: vi.fn(),
   countCustomerAppointmentsPerDay: vi.fn(),
+  findByDateRange: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   delete: vi.fn()
@@ -94,7 +95,8 @@ const MockRatingRepository: Mocked<RatingRepository> = {
   findByAppointmentId: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
-  delete: vi.fn()
+  delete: vi.fn(),
+  getMeanScore: vi.fn()
 }
 
 const MockRoleRepository: Mocked<RoleRepository> = {
