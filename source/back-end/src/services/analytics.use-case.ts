@@ -3,6 +3,7 @@ import { type OfferRepository } from '@/repository/protocols/offer.repository'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 import { type RatingRepository } from '@/repository/protocols/rating.repository'
 import { type ServiceRepository } from '@/repository/protocols/service.repository'
+import { type PublicProfessionalInfo } from '@/types/analytics'
 
 class AnalyticsUseCase {
   constructor (
@@ -26,93 +27,111 @@ class AnalyticsUseCase {
     return customerCountPerRating
   }
 
-  public async executeGetMeanRatingByService (amount: number) {
+  public async executeGetMeanRatingByService (amount?: number) {
     const services = await this.serviceRepository.findAll()
 
     const serviceRatings = await Promise.all(services.map(async (service) => {
-      const offers = await this.offerRepository.findByServiceId(service.id)
-      console.log('offers:', offers, 'isArray:', Array.isArray(offers))
-      const offerIds = Array.isArray(offers) ? offers.map(o => o.id) : []
+      const offerIds = await this.getOfferIdsByServiceId(service.id)
+      const appointmentIds = await this.getAppointmentIdsFromOfferIds(offerIds)
+      const { meanRating } = await this.getRatingsStatsFromAppointmentIds(appointmentIds, { precision: 2 })
 
-      const appointmentIds: string[] = []
-      for (const offerId of offerIds) {
-        const appointments = await this.appointmentRepository.findByServiceOfferedId(offerId)
-        appointmentIds.push(...appointments.map(a => a.id))
-      }
-
-      const scores: number[] = []
-      for (const appointmentId of appointmentIds) {
-        const rating = await this.ratingRepository.findByAppointmentId(appointmentId)
-        if ((rating != null) && typeof rating.score === 'number') {
-          scores.push(rating.score)
-        }
-      }
-
-      const meanRating = (scores.length > 0)
-        ? Number.parseFloat((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2))
-        : null
       return {
         service,
         meanRating
       }
     }))
 
-    const bestRated = serviceRatings
-      .filter(sr => sr.meanRating !== null)
-      .sort((a, b) => {
-        const aRating = a.meanRating ?? 0
-        const bRating = b.meanRating ?? 0
-        return bRating - aRating
-      })
-      .slice(0, amount)
-
-    return bestRated
+    return await this.getBestRated(serviceRatings, amount)
   }
 
-  public async executeGetMeanRatingOfProfessionals (amount: number) {
+  public async executeGetMeanRatingOfProfessionals (amount?: number) {
     const professionals = await this.professionalRepository.findAll()
     const professionalRatings = await Promise.all(professionals.map(async (professional) => {
-      const offers = await this.offerRepository.findByProfessionalId(professional.id)
-      const offerIds = offers.map(o => o.id)
+      const offerIds = await this.getOfferIdsByProfessionalId(professional.id)
+      const appointmentIds = await this.getAppointmentIdsFromOfferIds(offerIds)
+      const { meanRating } = await this.getRatingsStatsFromAppointmentIds(appointmentIds, { precision: 2 })
 
-      const appointmentIds: string[] = []
-      for (const offerId of offerIds) {
-        const appointments = await this.appointmentRepository.findByServiceOfferedId(offerId)
-        appointmentIds.push(...appointments.map(a => a.id))
-      }
-
-      const scores: number[] = []
-      for (const appointmentId of appointmentIds) {
-        const rating = await this.ratingRepository.findByAppointmentId(appointmentId)
-        if ((rating != null) && typeof rating.score === 'number') {
-          scores.push(rating.score)
-        }
-      }
-
-      const meanRating = (scores.length > 0)
-        ? Number.parseFloat((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2))
-        : null
       return {
         professional,
         meanRating
       }
     }))
 
-    const bestRated = professionalRatings
-      .filter(pr => pr.meanRating !== null)
-      .sort((a, b) => {
-        const aRating = a.meanRating ?? 0
-        const bRating = b.meanRating ?? 0
-        return bRating - aRating
-      })
-      .slice(0, amount)
-
-    return bestRated
+    return await this.getBestRated(professionalRatings, amount)
   }
 
   public async executeGetAppointmentNumberOnDateRange (startDate: Date, endDate: Date) {
     const appointments = await this.appointmentRepository.findByDateRange(startDate, endDate)
     return appointments.length
+  }
+
+  public async executeGetTopProfessionalsRatingsAnalytics (limit: number) {
+    const professionals = await this.professionalRepository.findAll()
+    const professionalRatings: PublicProfessionalInfo[] = await Promise.all(professionals.map(async (professional) => {
+      const offerIds = await this.getOfferIdsByProfessionalId(professional.id)
+      const appointmentIds = await this.getAppointmentIdsFromOfferIds(offerIds)
+      const { meanRating, count } = await this.getRatingsStatsFromAppointmentIds(appointmentIds)
+      console.log(professional)
+      return {
+        ...professional,
+        meanRating,
+        ratingCount: count
+      }
+    }))
+    // return professionalRatings
+    return await this.getBestRated(professionalRatings, limit)
+  }
+
+  // Helper methods
+
+  private async getOfferIdsByServiceId (serviceId: string): Promise<string[]> {
+    const offers = await this.offerRepository.findByServiceId(serviceId)
+    return Array.isArray(offers) ? offers.map(o => o.id) : []
+  }
+
+  private async getOfferIdsByProfessionalId (professionalId: string): Promise<string[]> {
+    const offers = await this.offerRepository.findByProfessionalId(professionalId)
+    return Array.isArray(offers) ? offers.map(o => o.id) : []
+  }
+
+  private async getAppointmentIdsFromOfferIds (offerIds: string[]): Promise<string[]> {
+    const appointmentIds: string[] = []
+    for (const offerId of offerIds) {
+      const appointments = await this.appointmentRepository.findByServiceOfferedId(offerId)
+      if (Array.isArray(appointments)) appointmentIds.push(...appointments.map(a => a.id))
+    }
+    return appointmentIds
+  }
+
+  private async getRatingsStatsFromAppointmentIds (appointmentIds: string[], options?: { precision?: number }) {
+    const scores: number[] = []
+    for (const appointmentId of appointmentIds) {
+      const rating = await this.ratingRepository.findByAppointmentId(appointmentId)
+      if ((rating != null) && typeof rating.score === 'number') scores.push(rating.score)
+    }
+
+    if (scores.length === 0) return { meanRating: null, count: 0 }
+
+    const sum = scores.reduce((a, b) => a + b, 0)
+    const rawMean = sum / scores.length
+    const meanRating = (typeof options?.precision === 'number')
+      ? Number.parseFloat(rawMean.toFixed(options.precision))
+      : rawMean
+
+    return { meanRating, count: scores.length }
+  }
+
+  private async getBestRated<T extends { meanRating?: number | null }>(
+    object: T[],
+    limit?: number
+  ): Promise<T[]> {
+    const bestRated = object
+      .filter(o => o.meanRating !== null && typeof o.meanRating === 'number')
+      .sort((a, b) => (b.meanRating ?? 0) - (a.meanRating ?? 0))
+
+    const isLimited = typeof limit === 'number' && limit > 0
+
+    return isLimited ? bestRated.slice(0, limit) : bestRated
   }
 }
 

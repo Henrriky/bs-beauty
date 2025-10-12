@@ -5,7 +5,7 @@ import { makeServiceUseCaseFactory } from '../factory/make-service-use-case.fact
 import { makeProfessionalsUseCaseFactory } from '../factory/make-professionals-use-case.factory'
 import { makeOffersUseCaseFactory } from '../factory/make-offers-use-case.factory'
 import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use-case.factory'
-import { type Appointment, type Offer } from '@prisma/client'
+import { type Appointment } from '@prisma/client'
 import { makeRatingsUseCaseFactory } from '@/factory/make-ratings-use-case.factory'
 import { makeAnalyticsUseCaseFactory } from '@/factory/make-analytics-use-case.factory'
 
@@ -24,7 +24,7 @@ type Analytics = z.infer<typeof schema>
 // TODO: Extract logic/calculations to an use case
 
 class AnalyticsController {
-  public static async handleFindAll(req: Request, res: Response, next: NextFunction) {
+  public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
     try {
       const analytics: Partial<Analytics> = {}
 
@@ -124,7 +124,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleFindByProfessionalId(req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByProfessionalId (req: Request, res: Response, next: NextFunction) {
     try {
       const analytics: Partial<Analytics> = {}
 
@@ -227,79 +227,21 @@ class AnalyticsController {
 
   public static async handleGetRatingsAnalytics (req: Request, res: Response, next: NextFunction) {
     try {
-      const professionalsUseCase = makeProfessionalsUseCaseFactory()
-      const offerUseCase = makeOffersUseCaseFactory()
-      const appointmentUseCase = makeAppointmentsUseCaseFactory()
       const ratingsUseCase = makeRatingsUseCaseFactory()
-      const professionals = await professionalsUseCase.executeFindAll()
-      const selectedProfessionals = professionals.professionals.slice(0, 5)
-
-      const professionalsWithMeanRating = await Promise.all(selectedProfessionals.map(async (prof) => {
-        let offerIds: string[] = []
-        try {
-          const result = await offerUseCase.executeFindByProfessionalId(prof.id)
-          offerIds = result.offers.map((offer) => offer.id)
-        } catch (error: any) {
-          if (error.statusCode !== 404) throw error
-        }
-
-        let appointmentIds: string [] = []
-        if (offerIds.length > 0) {
-          for (const offerId of offerIds) {
-            try {
-              const result = await appointmentUseCase.executeFindByServiceOfferedId(offerId)
-              appointmentIds.push(...result.appointments.map(appointment => appointment.id))
-            } catch (error: any) {
-              if (error.statusCode !== 404) throw error
-            }
-          }
-        }
-        
-        let ratings: { score: number | null }[] = []
-        if (appointmentIds.length > 0) {
-          try {
-            for (const appointmentId of appointmentIds) {
-              try {
-                const currentRating = await ratingsUseCase.executeFindByAppointmentId(appointmentId)
-                if (currentRating !== null && typeof currentRating.score === 'number') {
-                  ratings.push(currentRating)
-                }
-              } catch (error: any) {
-                if (error?.statusCode !== 404) throw error
-              }
-            }
-          } catch (error: any) {
-            if (error.statusCode !== 404) throw error
-            ratings = []
-          }
-        }
-
-        const scores = ratings
-          .map((rating) => rating.score)
-          .filter((s): s is number => typeof s === 'number' && s !== null)
-        const meanRating = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length) : null
-        return {
-          id: prof.id,
-          name: prof.name,
-          specialization: prof.specialization,
-          profilePhotoUrl: prof.profilePhotoUrl,
-          meanRating,
-          ratingCount: scores.length
-        }
-      }))
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const professionals = await analyticsUseCase.executeGetTopProfessionalsRatingsAnalytics(5)
 
       const salonRating = await ratingsUseCase.executeGetMeanScore()
-
-      res.send({ 
-        professionals: professionalsWithMeanRating,
+      res.send({
+        professionals,
         salonRating
-       })
+      })
     } catch (error) {
       next(error)
     }
   }
 
-  public static async handleGetCustomerAmountPerRatingScore(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetCustomerAmountPerRatingScore (req: Request, res: Response, next: NextFunction) {
     try {
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
       const customerCountPerRating = await analyticsUseCase.executeGetCustomerAmountPerRatingScore()
@@ -309,37 +251,31 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetMeanRatingByService(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetMeanRatingByService (req: Request, res: Response, next: NextFunction) {
     try {
-      const amountParam = req.body.amount as string | undefined
-      const amount = (amountParam !== undefined && amountParam !== null && amountParam !== '')
-        ? parseInt(amountParam, 10)
-        : 5
-
+      const amount = req.body.amount as number | undefined
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
       const meanRatingByService = await analyticsUseCase.executeGetMeanRatingByService(amount)
+
       res.send(meanRatingByService)
     } catch (error) {
       next(error)
     }
   }
 
-  public static async handleGetMeanRatingOfProfessionals(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetMeanRatingOfProfessionals (req: Request, res: Response, next: NextFunction) {
     try {
-      const professionalId = req.body.amount as string | undefined
-      const amount = (professionalId !== undefined && professionalId !== null && professionalId !== '')
-        ? parseInt(professionalId, 10)
-        : 5
-
+      const amount = req.body.amount as number | undefined
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
       const meanRatingByProfessional = await analyticsUseCase.executeGetMeanRatingOfProfessionals(amount)
+
       res.send(meanRatingByProfessional)
     } catch (error) {
       next(error)
     }
   }
 
-  public static async handleGetAppointmentAmountInDateRange(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetAppointmentAmountInDateRange (req: Request, res: Response, next: NextFunction) {
     try {
       const { startDate, endDate } = req.body as { startDate: string, endDate: string }
 

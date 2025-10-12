@@ -82,7 +82,7 @@ function LandingPage() {
           </p>
         </div>
       </div>
-      <div className="w-full">
+      <div className="w-11/12 max-w-sm sm:w-5/6">
         <SalonRatingCard
           image={logo}
           name="BS Beauty"
@@ -106,7 +106,7 @@ function LandingPage() {
 
         <Button
           onClick={() => navigate('/login')}
-          className="w-5/6 justify-center items-center"
+          className="w-3/4 justify-center items-center"
           label="Entrar"
           type="submit"
           variant="outline"
@@ -179,7 +179,7 @@ function LandingPage() {
 
       <Button
         onClick={() => navigate('/login')}
-        className="my-8 w-4/6 justify-center items-center"
+        className="my-8 w-3/4 justify-center items-center"
         label="Entrar"
         type="submit"
         variant="outline"

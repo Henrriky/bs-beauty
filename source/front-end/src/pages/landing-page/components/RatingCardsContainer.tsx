@@ -8,6 +8,7 @@ function RatingCardsContainer({
   professionals: Professional[]
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const [isOverflowing, setIsOverflowing] = useState(false)
   const scrollIntervalRef = useRef<number | null>(null)
   const [isPaused, setIsPaused] = useState(false)
   const [cardWidth, setCardWidth] = useState('40%')
@@ -62,6 +63,26 @@ function RatingCardsContainer({
     }
   }, [professionals, isPaused])
 
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const checkOverflow = () => {
+      setIsOverflowing(el.scrollWidth > el.clientWidth + 1)
+    }
+    checkOverflow()
+
+    const ro = new ResizeObserver(() => checkOverflow())
+    ro.observe(el)
+    Array.from(el.children).forEach((child) => ro.observe(child))
+    window.addEventListener('resize', checkOverflow)
+
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', checkOverflow)
+    }
+  }, [professionals])
+
   const handleMouseEnter = () => setIsPaused(true)
   const handleMouseLeave = () => setIsPaused(false)
   const handleTouchStart = () => setIsPaused(true)
@@ -71,7 +92,7 @@ function RatingCardsContainer({
     <div className="w-full mt-8 mb-16">
       <div
         ref={containerRef}
-        className={`flex ${gapClass} items-stretch overflow-x-auto carousel-scrollbar px-2 no-scrollbar`}
+        className={`flex ${gapClass} items-stretch overflow-x-auto carousel-scrollbar no-scrollbar ${isOverflowing ? 'justify-start' : 'justify-between'}`}
         style={{
           WebkitOverflowScrolling: 'touch',
           scrollSnapType: 'x mandatory',
