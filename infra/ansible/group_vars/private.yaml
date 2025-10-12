@@ -1,0 +1,9 @@
+# Caminho da aplicação
+app_path: /home/{{ lookup('env','SSH_USER') }}/bs-beauty
+
+# Repositório e branch
+repo_url: https://github.com/Henrriky/bs-beauty.git
+repo_branch: "{{ lookup('env','REPO_BRANCH') | default('main', true) }}"
+
+# Caminhos dos .env
+backend_env_path: "{{ lookup('env', 'BACK_ENV_PATH') | default('/home/{{ ansible_user }}/bs-beauty/backend/.env') }}"

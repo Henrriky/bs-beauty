@@ -6,6 +6,7 @@ import {
   ClipboardDocumentCheckIcon,
   ClockIcon,
   HomeIcon,
+  MegaphoneIcon,
   ShieldCheckIcon,
   UserIcon,
   UsersIcon
@@ -75,6 +76,20 @@ const sideBarItems: SideBarItem[] = [
     },
   },
   {
+    name: 'Perfil',
+    icon: <UserIcon className="size-6" />,
+    navigateTo: '/profile',
+    order: 98,
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [
+        UserType.MANAGER,
+        UserType.PROFESSIONAL,
+        UserType.CUSTOMER,
+      ],
+    },
+  },
+  {
     name: 'Notificações',
     icon: <BellAlertIcon className="size-6" />,
     navigateTo: '/notifications',
@@ -88,18 +103,13 @@ const sideBarItems: SideBarItem[] = [
     }
   },
   {
-    name: 'Perfil',
-    icon: <UserIcon className="size-6" />,
-    navigateTo: '/profile',
-    order: 98,
+    name: 'Comunicação',
+    icon: <MegaphoneIcon className="size-6" />,
+    navigateTo: '/manager/notification-templates',
     authorization: {
       allowedPermissions: [],
-      allowedUserTypes: [
-        UserType.MANAGER,
-        UserType.PROFESSIONAL,
-        UserType.CUSTOMER,
-      ],
-    },
+      allowedUserTypes: [UserType.MANAGER],
+    }
   },
   {
     name: 'Turnos',

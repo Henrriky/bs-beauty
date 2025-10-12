@@ -3,6 +3,7 @@ import { enqueue } from '@/events/notification-runner'
 import { makeNotificationsUseCaseFactory } from '@/factory/make-notifications-use-case.factory'
 import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
 import { type FindByIdAppointments } from '@/repository/protocols/appointment.repository'
+import { BirthdayNotificationPayload } from '@/services/notifications.use-case'
 
 type CancelledBy = 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER'
 
@@ -35,4 +36,12 @@ export function registerNotificationListeners () {
       await useCase.executeSendOnAppointmentCancelled(appointment, { notifyCustomer, notifyProfessional })
     })
   })
+
+  notificationBus.on('birthday.notify', ({ payload }: { payload: BirthdayNotificationPayload }) => {
+    enqueue(async () => {
+      const useCase = makeNotificationsUseCaseFactory();
+      await useCase.executeSendBirthday(payload);
+    });
+  });
+
 }

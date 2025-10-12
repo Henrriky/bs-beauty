@@ -1,20 +1,12 @@
+import { ENV } from '@/config/env'
 import Redis, { type RedisOptions } from 'ioredis'
 
 function buildRedisOptions (): string | RedisOptions {
-  const url = process.env.REDIS_URL
-  if (url && url.length > 0) {
-    return url
-  }
-
-  const useTls =
-    (process.env.REDIS_TLS ?? '').toLowerCase() === 'true' ||
-    (process.env.REDIS_SSL ?? '').toLowerCase() === 'true'
-
   const options: RedisOptions = {
-    host: process.env.REDIS_HOST ?? '127.0.0.1',
-    port: Number(process.env.REDIS_PORT ?? 6379),
-    password: process.env.REDIS_PASSWORD || undefined,
-    tls: useTls ? {} : undefined,
+    host: ENV.REDIS_HOST,
+    port: ENV.REDIS_PORT,
+    password: ENV.REDIS_PASSWORD,
+    tls: undefined,
 
     retryStrategy (times) {
       const delay = Math.min(times * 200, 2000)
@@ -48,6 +40,7 @@ export async function closeRedis (): Promise<void> {
 
 const shutdownSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM']
 for (const signal of shutdownSignals) {
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   process.on(signal, async () => {
     console.log(`[redis] received ${signal}, closing connection...`)
     await closeRedis()

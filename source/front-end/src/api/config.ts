@@ -84,6 +84,10 @@ export const API_VARIABLES = {
     FETCH_NOTIFICATIONS: '/notifications',
     MARK_MANY_AS_READ: '/notifications/read',
   },
+  NOTIFICATION_TEMPLATES_ENDPOINTS: {
+    FETCH_NOTIFICATION_TEMPLATES: '/notification-templates',
+    UPDATE_NOTIFICATION_TEMPLATE: (key: string) => `/notification-templates/${key}`
+  },
   ROLES_ENDPOINTS: {
     ENDPOINT: '/roles',
     FIND_BY_ID: (id: string) => `/roles/${id}`,

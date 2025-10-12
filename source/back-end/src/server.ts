@@ -1,13 +1,23 @@
 import { app } from './app'
 import { drainAndExit } from './events/notification-runner'
 import { registerNotificationListeners } from './events/notifications.listener'
+import { makeRunBirthdayJobUseCase } from './factory/notifications-birthday.factory'
+import { Scheduler } from './utils/scheduler'
 import { runDatabaseSeeds } from '../prisma/seeds/database-seeds.runner'
 import { AppLoggerInstance } from './utils/logger/logger.util'
 
 const port = process.env.PORT ?? 3000
 registerNotificationListeners()
 
-async function startServer (): Promise<void> {
+Scheduler.register('birthday-job', process.env.BIRTHDAY_CRON_SCHEDULE || '*/30 * * * * *', 'America/Sao_Paulo', async () => {
+  const usecase = makeRunBirthdayJobUseCase()
+  await usecase.execute({
+    timezone: 'America/Sao_Paulo',
+    dryRun: false,
+  })
+})
+
+async function startServer(): Promise<void> {
   try {
     await runDatabaseSeeds()
 

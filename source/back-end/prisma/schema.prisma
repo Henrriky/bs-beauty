@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -195,6 +196,22 @@ model RolePermission {
   permission Permission @relation(fields: [permissionId], references: [id])
 
   @@map("role_permission")
+}
+
+model NotificationTemplate {
+  id        String   @id @default(uuid())
+  key       String   @unique @map("key")
+  name      String   @map("name")
+  description String @map("description")
+  title     String   @map("title")
+  body      String   @db.Text @map("body")
+  isActive  Boolean  @map("is_active") @default(true)
+  variables Json?    @map("variables")
+
+  createdAt DateTime @default(now())  @map("created_at")
+  updatedAt DateTime @updatedAt       @map("updated_at")
+
+  @@map("notification_template")
 }
 
 model Permission {

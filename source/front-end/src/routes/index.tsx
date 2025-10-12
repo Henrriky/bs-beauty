@@ -23,6 +23,7 @@ import PasswordReset from '../pages/password-reset'
 import PasswordResetCompleted from '../pages/password-reset/components/PasswordResetCompleted'
 import LandingPage from '../pages/landing-page'
 import Roles from '../pages/roles'
+import NotificationTemplates from '../pages/notification-templates'
 
 function BSBeautyRouter() {
   return (
@@ -80,6 +81,7 @@ function BSBeautyRouter() {
                 element={<PrivateRoute allowedUserTypes={[UserType.MANAGER]} />}
               >
                 <Route path="/manager/home" element={<ManagerHome />} />
+                <Route path="/manager/notification-templates" element={<NotificationTemplates />} />
               </Route>
 
               {/* PROFESSIONAL/MANAGER ROUTES */}
