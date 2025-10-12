@@ -185,8 +185,8 @@ describe('Professionals API (Integration Test)', () => {
       // arrange
       const { id } = await ProfessionalFactory.makeProfessional()
 
-      const updatedEmail = faker.internet.email()
-      const updatedName = faker.person.fullName()
+      const updatedEmail = "professional-test@gmail.com"
+      const updatedName = `John Doe Foo`
 
       const spies = spyProfessionalsWiring()
 
@@ -195,7 +195,8 @@ describe('Professionals API (Integration Test)', () => {
         .put(`/api/professionals/${id}`)
         .set('Authorization', `Bearer ${token}`)
         .send({ email: updatedEmail, name: updatedName })
-
+      console.log('===========> ', response.body)
+      console.log('===========> ', response.status)
       // assert
       expect(response.status).toBe(200)
       expect(response.body).toMatchObject({ id, email: updatedEmail, name: updatedName })
