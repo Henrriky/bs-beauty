@@ -9,6 +9,40 @@ import { NotificationType, UserType, type Notification } from '@prisma/client'
 
 vi.mock('@/factory/make-notifications-use-case.factory')
 
+// Helper functions to reduce duplication
+const createMockUser = (userType: UserType = UserType.CUSTOMER) => ({
+  id: faker.string.uuid(),
+  userId: faker.string.uuid(),
+  sub: faker.string.uuid(),
+  userType,
+  email: faker.internet.email(),
+  name: faker.person.fullName(),
+  registerCompleted: true,
+  profilePhotoUrl: faker.internet.url(),
+  permissions: []
+})
+
+const createMockNotification = (overrides: Partial<Notification> = {}): Notification => ({
+  id: faker.string.uuid(),
+  recipientId: faker.string.uuid(),
+  recipientType: UserType.CUSTOMER,
+  type: NotificationType.SYSTEM,
+  title: faker.lorem.sentence(),
+  message: faker.lorem.paragraph(),
+  readAt: null,
+  marker: faker.string.uuid(),
+  createdAt: faker.date.past(),
+  ...overrides
+})
+
+const createMockPaginationResult = (data: Notification[], page = 1, limit = 10) => ({
+  data,
+  total: data.length,
+  page,
+  totalPages: Math.ceil(data.length / limit),
+  limit
+})
+
 describe('NotificationsController', () => {
   let req: any
   let res: any
@@ -43,50 +77,16 @@ describe('NotificationsController', () => {
   describe('handleFindAll', () => {
     it('should return a list of notifications with default pagination', async () => {
       // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
-      const mockNotifications: Notification[] = [
-        {
-          id: faker.string.uuid(),
+      const mockUser = createMockUser()
+      const mockNotifications = [
+        createMockNotification({ recipientId: mockUser.id }),
+        createMockNotification({ 
           recipientId: mockUser.id,
-          recipientType: UserType.CUSTOMER,
-          type: NotificationType.SYSTEM,
-          title: faker.lorem.sentence(),
-          message: faker.lorem.paragraph(),
-          readAt: null,
-          marker: faker.string.uuid(),
-          createdAt: faker.date.past()
-        },
-        {
-          id: faker.string.uuid(),
-          recipientId: mockUser.id,
-          recipientType: UserType.CUSTOMER,
           type: NotificationType.APPOINTMENT,
-          title: faker.lorem.sentence(),
-          message: faker.lorem.paragraph(),
-          readAt: faker.date.past(),
-          marker: faker.string.uuid(),
-          createdAt: faker.date.past()
-        }
+          readAt: faker.date.past()
+        })
       ]
-
-      const mockResult = {
-        data: mockNotifications,
-        total: 2,
-        page: 1,
-        totalPages: 1,
-        limit: 10
-      }
+      const mockResult = createMockPaginationResult(mockNotifications)
 
       req.user = mockUser
       req.query = { page: '1', limit: '10' }
@@ -111,39 +111,15 @@ describe('NotificationsController', () => {
 
     it('should return notifications with readStatus filter', async () => {
       // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.PROFESSIONAL,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
-      const mockNotifications: Notification[] = [
-        {
-          id: faker.string.uuid(),
+      const mockUser = createMockUser(UserType.PROFESSIONAL)
+      const mockNotifications = [
+        createMockNotification({
           recipientId: mockUser.id,
           recipientType: UserType.PROFESSIONAL,
-          type: NotificationType.APPOINTMENT,
-          title: faker.lorem.sentence(),
-          message: faker.lorem.paragraph(),
-          readAt: null,
-          marker: faker.string.uuid(),
-          createdAt: faker.date.past()
-        }
+          type: NotificationType.APPOINTMENT
+        })
       ]
-
-      const mockResult = {
-        data: mockNotifications,
-        total: 1,
-        page: 1,
-        totalPages: 1,
-        limit: 20
-      }
+      const mockResult = createMockPaginationResult(mockNotifications, 1, 20)
 
       req.user = mockUser
       req.query = { page: '1', limit: '20', readStatus: 'UNREAD' }
@@ -168,19 +144,9 @@ describe('NotificationsController', () => {
 
     it('should handle errors and call next middleware', async () => {
       // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
+      const mockUser = createMockUser()
       const error = new Error('Database connection failed')
+
       req.user = mockUser
       req.query = { page: '1', limit: '10' }
       useCaseMock.executeFindAll.mockRejectedValue(error)
@@ -197,71 +163,8 @@ describe('NotificationsController', () => {
 
     it('should pass all query filters to use case', async () => {
       // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
-      const mockResult = {
-        data: [],
-        total: 0,
-        page: 2,
-        totalPages: 0,
-        limit: 5
-      }
-
-      req.user = mockUser
-      req.query = {
-        page: '2',
-        limit: '5',
-        readStatus: 'read'
-      }
-      useCaseMock.executeFindAll.mockResolvedValue(mockResult)
-
-      // act
-      await NotificationsController.handleFindAll(req, res, next)
-
-      // assert
-      expect(useCaseMock.executeFindAll).toHaveBeenCalledWith(
-        mockUser,
-        {
-          page: 2,
-          limit: 5,
-          filters: { readStatus: 'READ' }
-        }
-      )
-      expect(res.status).toHaveBeenCalledWith(StatusCodes.OK)
-      expect(res.send).toHaveBeenCalledWith(mockResult)
-    })
-
-    it('should pass all query filters to use case', async () => {
-      // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
-      const mockResult = {
-        data: [],
-        total: 0,
-        page: 2,
-        totalPages: 0,
-        limit: 5
-      }
+      const mockUser = createMockUser()
+      const mockResult = createMockPaginationResult([], 2, 5)
 
       req.user = mockUser
       req.query = {
@@ -292,17 +195,7 @@ describe('NotificationsController', () => {
     it('should return a notification by id', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const mockNotification: Notification = {
-        id: notificationId,
-        recipientId: faker.string.uuid(),
-        recipientType: UserType.CUSTOMER,
-        type: NotificationType.SYSTEM,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: null,
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
+      const mockNotification = createMockNotification({ id: notificationId })
 
       req.params = { id: notificationId }
       useCaseMock.executeFindById.mockResolvedValue(mockNotification)
@@ -319,17 +212,12 @@ describe('NotificationsController', () => {
     it('should return a read notification by id', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const mockNotification: Notification = {
+      const mockNotification = createMockNotification({
         id: notificationId,
-        recipientId: faker.string.uuid(),
         recipientType: UserType.PROFESSIONAL,
         type: NotificationType.APPOINTMENT,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: faker.date.past(),
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
+        readAt: faker.date.past()
+      })
 
       req.params = { id: notificationId }
       useCaseMock.executeFindById.mockResolvedValue(mockNotification)
@@ -381,17 +269,7 @@ describe('NotificationsController', () => {
     it('should delete a notification successfully', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const deletedNotification: Notification = {
-        id: notificationId,
-        recipientId: faker.string.uuid(),
-        recipientType: UserType.CUSTOMER,
-        type: NotificationType.SYSTEM,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: null,
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
+      const deletedNotification = createMockNotification({ id: notificationId })
 
       req.params = { id: notificationId }
       useCaseMock.executeDelete.mockResolvedValue(deletedNotification)
@@ -408,17 +286,12 @@ describe('NotificationsController', () => {
     it('should delete a read notification successfully', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const deletedNotification: Notification = {
+      const deletedNotification = createMockNotification({
         id: notificationId,
-        recipientId: faker.string.uuid(),
         recipientType: UserType.PROFESSIONAL,
         type: NotificationType.APPOINTMENT,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: faker.date.past(),
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
+        readAt: faker.date.past()
+      })
 
       req.params = { id: notificationId }
       useCaseMock.executeDelete.mockResolvedValue(deletedNotification)
@@ -452,17 +325,11 @@ describe('NotificationsController', () => {
     it('should handle deletion of different notification types', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const deletedSystemNotification: Notification = {
+      const deletedSystemNotification = createMockNotification({
         id: notificationId,
-        recipientId: faker.string.uuid(),
         recipientType: UserType.MANAGER,
-        type: NotificationType.SYSTEM,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: faker.date.past(),
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
+        readAt: faker.date.past()
+      })
 
       req.params = { id: notificationId }
       useCaseMock.executeDelete.mockResolvedValue(deletedSystemNotification)
@@ -480,24 +347,12 @@ describe('NotificationsController', () => {
   describe('handleMarkManyAsRead', () => {
     it('should mark multiple notifications as read successfully', async () => {
       // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
+      const mockUser = createMockUser()
       const notificationIds = [
         faker.string.uuid(),
         faker.string.uuid(),
         faker.string.uuid()
       ]
-
       const mockResult = { updatedCount: 3 }
 
       req.user = mockUser
@@ -515,17 +370,7 @@ describe('NotificationsController', () => {
 
     it('should handle validation error for empty array of IDs', async () => {
       // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.PROFESSIONAL,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
+      const mockUser = createMockUser(UserType.PROFESSIONAL)
 
       req.user = mockUser
       req.body = { ids: [] }
@@ -542,18 +387,7 @@ describe('NotificationsController', () => {
 
     it('should handle single notification ID', async () => {
       // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
+      const mockUser = createMockUser()
       const notificationIds = [faker.string.uuid()]
       const mockResult = { updatedCount: 1 }
 
@@ -572,17 +406,7 @@ describe('NotificationsController', () => {
 
     it('should handle validation errors and call next middleware', async () => {
       // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
+      const mockUser = createMockUser()
 
       req.user = mockUser
       req.body = { ids: ['invalid-uuid', 'another-invalid'] }
@@ -599,18 +423,7 @@ describe('NotificationsController', () => {
 
     it('should handle use case errors and call next middleware', async () => {
       // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.PROFESSIONAL,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
+      const mockUser = createMockUser(UserType.PROFESSIONAL)
       const notificationIds = [faker.string.uuid(), faker.string.uuid()]
       const error = new Error('Database update failed')
 
@@ -629,18 +442,7 @@ describe('NotificationsController', () => {
 
     it('should handle maximum limit of IDs', async () => {
       // arrange
-      const mockUser = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.MANAGER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
+      const mockUser = createMockUser(UserType.MANAGER)
       // Generate 1000 valid UUIDs (the maximum allowed)
       const notificationIds = Array.from({ length: 1000 }, () => faker.string.uuid())
       const mockResult = { updatedCount: 1000 }
