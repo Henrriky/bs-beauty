@@ -6,6 +6,33 @@ import type { NotificationTemplate } from '@prisma/client'
 import type { NotificationTemplateRepository } from '../../../repository/protocols/notification-template.repository'
 import { Mocked } from 'vitest'
 
+function createMockNotificationTemplate(overrides: Partial<NotificationTemplate> = {}): NotificationTemplate {
+  return {
+    id: faker.string.uuid(),
+    key: 'BIRTHDAY',
+    name: 'Birthday Template',
+    description: 'Template for birthday notifications',
+    title: 'Happy Birthday {customerName}!',
+    body: 'We wish you a very happy birthday!',
+    variables: ['customerName'],
+    isActive: true,
+    createdAt: faker.date.past(),
+    updatedAt: faker.date.past(),
+    ...overrides
+  }
+}
+
+function createMockPaginationResult<T>(data: T[], overrides: Partial<{ total: number; page: number; totalPages: number; limit: number }> = {}) {
+  return {
+    data,
+    total: data.length,
+    page: 1,
+    totalPages: Math.ceil(data.length / 10),
+    limit: 10,
+    ...overrides
+  }
+}
+
 describe('NotificationTemplateUseCase', () => {
   let useCase: NotificationTemplateUseCase
   let repositoryMock: Mocked<NotificationTemplateRepository>
@@ -37,27 +64,10 @@ describe('NotificationTemplateUseCase', () => {
       }
 
       const mockTemplates: NotificationTemplate[] = [
-        {
-          id: faker.string.uuid(),
-          key: 'BIRTHDAY',
-          name: 'Birthday Template',
-          description: 'Template for birthday notifications',
-          title: 'Happy Birthday {customerName}!',
-          body: 'We wish you a very happy birthday!',
-          variables: ['customerName'],
-          isActive: true,
-          createdAt: faker.date.past(),
-          updatedAt: faker.date.past()
-        }
+        createMockNotificationTemplate()
       ]
 
-      const mockResult = {
-        data: mockTemplates,
-        total: 1,
-        page: 1,
-        totalPages: 1,
-        limit: 10
-      }
+      const mockResult = createMockPaginationResult(mockTemplates, { total: 1 })
 
       repositoryMock.findAll.mockResolvedValue(mockResult)
 
@@ -77,13 +87,7 @@ describe('NotificationTemplateUseCase', () => {
         filters: {}
       }
 
-      const mockResult = {
-        data: [],
-        total: 0,
-        page: 1,
-        totalPages: 0,
-        limit: 10
-      }
+      const mockResult = createMockPaginationResult([], { total: 0, totalPages: 0 })
 
       repositoryMock.findAll.mockResolvedValue(mockResult)
 
@@ -106,13 +110,12 @@ describe('NotificationTemplateUseCase', () => {
         }
       }
 
-      const mockResult = {
-        data: [],
+      const mockResult = createMockPaginationResult([], {
         total: 0,
         page: 2,
         totalPages: 0,
-        limit: 5
-      }
+        limit: 5 
+      })
 
       repositoryMock.findAll.mockResolvedValue(mockResult)
 
@@ -135,18 +138,7 @@ describe('NotificationTemplateUseCase', () => {
     it('should update notification template successfully', async () => {
       // arrange
       const key = 'BIRTHDAY'
-      const existingTemplate: NotificationTemplate = {
-        id: faker.string.uuid(),
-        key: 'BIRTHDAY',
-        name: 'Birthday Template',
-        description: 'Template for birthday notifications',
-        title: 'Happy Birthday {customerName}!',
-        body: 'We wish you a very happy birthday!',
-        variables: ['customerName'],
-        isActive: true,
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past()
-      }
+      const existingTemplate = createMockNotificationTemplate()
 
       const updateData = {
         name: 'Updated Birthday Template',
@@ -155,11 +147,10 @@ describe('NotificationTemplateUseCase', () => {
         body: 'We wish you a very happy birthday {customerName}!'
       }
 
-      const updatedTemplate: NotificationTemplate = {
-        ...existingTemplate,
+      const updatedTemplate = createMockNotificationTemplate({
         ...updateData,
         updatedAt: new Date()
-      }
+      })
 
       repositoryMock.findActiveByKey.mockResolvedValue(existingTemplate)
       repositoryMock.updateByKey.mockResolvedValue(updatedTemplate)
@@ -191,18 +182,7 @@ describe('NotificationTemplateUseCase', () => {
     it('should validate placeholders when updating title', async () => {
       // arrange
       const key = 'BIRTHDAY'
-      const existingTemplate: NotificationTemplate = {
-        id: faker.string.uuid(),
-        key: 'BIRTHDAY',
-        name: 'Birthday Template',
-        description: 'Template for birthday notifications',
-        title: 'Happy Birthday {customerName}!',
-        body: 'We wish you a very happy birthday!',
-        variables: ['customerName'],
-        isActive: true,
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past()
-      }
+      const existingTemplate = createMockNotificationTemplate()
 
       const updateData = {
         title: 'Happy Birthday {customerName} and {invalidPlaceholder}!'
@@ -219,18 +199,7 @@ describe('NotificationTemplateUseCase', () => {
     it('should validate placeholders when updating body', async () => {
       // arrange
       const key = 'BIRTHDAY'
-      const existingTemplate: NotificationTemplate = {
-        id: faker.string.uuid(),
-        key: 'BIRTHDAY',
-        name: 'Birthday Template',
-        description: 'Template for birthday notifications',
-        title: 'Happy Birthday {customerName}!',
-        body: 'We wish you a very happy birthday!',
-        variables: ['customerName'],
-        isActive: true,
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past()
-      }
+      const existingTemplate = createMockNotificationTemplate()
 
       const updateData = {
         body: 'We wish you a very happy birthday {customerName} and {invalidPlaceholder}!'
@@ -247,29 +216,20 @@ describe('NotificationTemplateUseCase', () => {
     it('should allow placeholders that are in variables array', async () => {
       // arrange
       const key = 'BIRTHDAY'
-      const existingTemplate: NotificationTemplate = {
-        id: faker.string.uuid(),
-        key: 'BIRTHDAY',
-        name: 'Birthday Template',
-        description: 'Template for birthday notifications',
-        title: 'Happy Birthday {customerName}!',
-        body: 'We wish you a very happy birthday!',
-        variables: ['customerName', 'businessName'],
-        isActive: true,
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past()
-      }
+      const existingTemplate = createMockNotificationTemplate({
+        variables: ['customerName', 'businessName']
+      })
 
       const updateData = {
         title: 'Happy Birthday {customerName}! From {businessName}',
         body: 'We wish you a very happy birthday {customerName}!'
       }
 
-      const updatedTemplate: NotificationTemplate = {
+      const updatedTemplate = createMockNotificationTemplate({
         ...existingTemplate,
         ...updateData,
         updatedAt: new Date()
-      }
+      })
 
       repositoryMock.findActiveByKey.mockResolvedValue(existingTemplate)
       repositoryMock.updateByKey.mockResolvedValue(updatedTemplate)
@@ -285,28 +245,21 @@ describe('NotificationTemplateUseCase', () => {
     it('should use existing template placeholders as fallback when variables array is empty', async () => {
       // arrange
       const key = 'BIRTHDAY'
-      const existingTemplate: NotificationTemplate = {
-        id: faker.string.uuid(),
-        key: 'BIRTHDAY',
-        name: 'Birthday Template',
-        description: 'Template for birthday notifications',
+      const existingTemplate = createMockNotificationTemplate({
         title: 'Happy Birthday {customerName}!',
         body: 'We wish you a very happy birthday {businessName}!',
-        variables: [], // empty variables array
-        isActive: true,
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past()
-      }
+        variables: [] // empty variables array
+      })
 
       const updateData = {
         title: 'Happy Birthday {customerName}! From {businessName}'
       }
 
-      const updatedTemplate: NotificationTemplate = {
+      const updatedTemplate = createMockNotificationTemplate({
         ...existingTemplate,
         ...updateData,
         updatedAt: new Date()
-      }
+      })
 
       repositoryMock.findActiveByKey.mockResolvedValue(existingTemplate)
       repositoryMock.updateByKey.mockResolvedValue(updatedTemplate)
@@ -322,28 +275,16 @@ describe('NotificationTemplateUseCase', () => {
     it('should handle Prisma StringFieldUpdateOperationsInput', async () => {
       // arrange
       const key = 'BIRTHDAY'
-      const existingTemplate: NotificationTemplate = {
-        id: faker.string.uuid(),
-        key: 'BIRTHDAY',
-        name: 'Birthday Template',
-        description: 'Template for birthday notifications',
-        title: 'Happy Birthday {customerName}!',
-        body: 'We wish you a very happy birthday!',
-        variables: ['customerName'],
-        isActive: true,
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past()
-      }
+      const existingTemplate = createMockNotificationTemplate()
 
       const updateData = {
         title: { set: 'Happy Birthday {customerName}! Have a great day.' }
       }
 
-      const updatedTemplate: NotificationTemplate = {
-        ...existingTemplate,
+      const updatedTemplate = createMockNotificationTemplate({
         title: 'Happy Birthday {customerName}! Have a great day.',
         updatedAt: new Date()
-      }
+      })
 
       repositoryMock.findActiveByKey.mockResolvedValue(existingTemplate)
       repositoryMock.updateByKey.mockResolvedValue(updatedTemplate)
@@ -359,18 +300,7 @@ describe('NotificationTemplateUseCase', () => {
     it('should handle CustomError with proper details for invalid placeholders', async () => {
       // arrange
       const key = 'BIRTHDAY'
-      const existingTemplate: NotificationTemplate = {
-        id: faker.string.uuid(),
-        key: 'BIRTHDAY',
-        name: 'Birthday Template',
-        description: 'Template for birthday notifications',
-        title: 'Happy Birthday {customerName}!',
-        body: 'We wish you a very happy birthday!',
-        variables: ['customerName'],
-        isActive: true,
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past()
-      }
+      const existingTemplate = createMockNotificationTemplate()
 
       const updateData = {
         title: 'Happy Birthday {customerName} and {invalidOne} and {invalidTwo}!'

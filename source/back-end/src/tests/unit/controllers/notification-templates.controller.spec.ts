@@ -1,14 +1,40 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { StatusCodes } from 'http-status-codes'
-import { NotificationTemplatesController } from '../../../controllers/notification-templates.controller'
-import { makeNotificationTemplatesUseCaseFactory } from '../../../factory/make-notification-templates-use-case.factory'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { mockRequest, mockResponse } from '../utils/test-utilts'
 import { faker } from '@faker-js/faker'
 import { type NotificationTemplate } from '@prisma/client'
-import { z } from 'zod'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { NotificationTemplatesController } from '../../../controllers/notification-templates.controller'
+import { makeNotificationTemplatesUseCaseFactory } from '../../../factory/make-notification-templates-use-case.factory'
+import { mockRequest, mockResponse } from '../utils/test-utilts'
 
 vi.mock('@/factory/make-notification-templates-use-case.factory')
+
+// Helper functions
+function createMockNotificationTemplate(overrides: Partial<NotificationTemplate> = {}): NotificationTemplate {
+  return {
+    id: faker.string.uuid(),
+    key: 'BIRTHDAY',
+    name: 'Birthday Template',
+    description: 'Template for birthday notifications',
+    title: 'Happy Birthday {customerName}!',
+    body: 'We wish you a very happy birthday!',
+    variables: ['customerName'],
+    isActive: true,
+    createdAt: faker.date.past(),
+    updatedAt: faker.date.past(),
+    ...overrides
+  }
+}
+
+function createMockPaginationResult<T>(data: T[], overrides: Partial<{ total: number; page: number; totalPages: number; limit: number }> = {}) {
+  return {
+    data,
+    total: data.length,
+    page: 1,
+    totalPages: 1,
+    limit: 10,
+    ...overrides
+  }
+}
 
 describe('NotificationTemplatesController', () => {
   let req: any
@@ -43,39 +69,19 @@ describe('NotificationTemplatesController', () => {
     it('should return a list of notification templates with default pagination', async () => {
       // arrange
       const mockTemplates: NotificationTemplate[] = [
-        {
-          id: faker.string.uuid(),
-          key: 'BIRTHDAY',
-          name: 'Birthday Template',
-          description: 'Template for birthday notifications',
-          title: 'Happy Birthday {customerName}!',
-          body: 'We wish you a very happy birthday!',
-          variables: ['customerName'],
-          isActive: true,
-          createdAt: faker.date.past(),
-          updatedAt: faker.date.past()
-        },
-        {
+        createMockNotificationTemplate(),
+        createMockNotificationTemplate({
           id: faker.string.uuid(),
           key: 'APPOINTMENT_REMINDER',
           name: 'Appointment Reminder',
           description: 'Template for appointment reminders',
           title: 'Appointment Reminder',
           body: 'Your appointment is scheduled for {appointmentDate}',
-          variables: ['appointmentDate'],
-          isActive: true,
-          createdAt: faker.date.past(),
-          updatedAt: faker.date.past()
-        }
+          variables: ['appointmentDate']
+        })
       ]
 
-      const mockResult = {
-        data: mockTemplates,
-        total: 2,
-        page: 1,
-        totalPages: 1,
-        limit: 10
-      }
+      const mockResult = createMockPaginationResult(mockTemplates, { total: 2 })
 
       req.query = { page: '1', limit: '10' }
       useCaseMock.executeFindAll.mockResolvedValue(mockResult)
@@ -96,27 +102,10 @@ describe('NotificationTemplatesController', () => {
     it('should return templates with name filter', async () => {
       // arrange
       const mockTemplates: NotificationTemplate[] = [
-        {
-          id: faker.string.uuid(),
-          key: 'BIRTHDAY',
-          name: 'Birthday Template',
-          description: 'Template for birthday notifications',
-          title: 'Happy Birthday {customerName}!',
-          body: 'We wish you a very happy birthday!',
-          variables: ['customerName'],
-          isActive: true,
-          createdAt: faker.date.past(),
-          updatedAt: faker.date.past()
-        }
+        createMockNotificationTemplate()
       ]
 
-      const mockResult = {
-        data: mockTemplates,
-        total: 1,
-        page: 1,
-        totalPages: 1,
-        limit: 10
-      }
+      const mockResult = createMockPaginationResult(mockTemplates, { total: 1 })
 
       req.query = { page: '1', limit: '10', name: 'Birthday' }
       useCaseMock.executeFindAll.mockResolvedValue(mockResult)
@@ -137,27 +126,10 @@ describe('NotificationTemplatesController', () => {
     it('should return templates with key filter', async () => {
       // arrange
       const mockTemplates: NotificationTemplate[] = [
-        {
-          id: faker.string.uuid(),
-          key: 'BIRTHDAY',
-          name: 'Birthday Template',
-          description: 'Template for birthday notifications',
-          title: 'Happy Birthday {customerName}!',
-          body: 'We wish you a very happy birthday!',
-          variables: ['customerName'],
-          isActive: true,
-          createdAt: faker.date.past(),
-          updatedAt: faker.date.past()
-        }
+        createMockNotificationTemplate()
       ]
 
-      const mockResult = {
-        data: mockTemplates,
-        total: 1,
-        page: 1,
-        totalPages: 1,
-        limit: 20
-      }
+      const mockResult = createMockPaginationResult(mockTemplates, { total: 1, limit: 20 })
 
       req.query = { page: '1', limit: '20', key: 'BIRTHDAY' }
       useCaseMock.executeFindAll.mockResolvedValue(mockResult)
@@ -192,13 +164,7 @@ describe('NotificationTemplatesController', () => {
 
     it('should return empty result when no templates found', async () => {
       // arrange
-      const mockEmptyResult = {
-        data: [],
-        total: 0,
-        page: 1,
-        totalPages: 0,
-        limit: 10
-      }
+      const mockEmptyResult = createMockPaginationResult([], { total: 0, totalPages: 0 })
 
       req.query = { page: '1', limit: '10' }
       useCaseMock.executeFindAll.mockResolvedValue(mockEmptyResult)
@@ -230,8 +196,7 @@ describe('NotificationTemplatesController', () => {
         isActive: false
       }
 
-      const updatedTemplate: NotificationTemplate = {
-        id: faker.string.uuid(),
+      const updatedTemplate = createMockNotificationTemplate({
         key: templateKey.toUpperCase(),
         name: updateData.name,
         description: updateData.description,
@@ -239,9 +204,8 @@ describe('NotificationTemplatesController', () => {
         body: updateData.body,
         variables: updateData.variables,
         isActive: updateData.isActive,
-        createdAt: faker.date.past(),
         updatedAt: new Date()
-      }
+      })
 
       useCaseMock.executeUpdate.mockResolvedValue(updatedTemplate)
 
@@ -298,8 +262,7 @@ describe('NotificationTemplatesController', () => {
         isActive: true
       }
 
-      const updatedTemplate: NotificationTemplate = {
-        id: faker.string.uuid(),
+      const updatedTemplate = createMockNotificationTemplate({
         key: 'BIRTHDAY',
         name: updateData.name,
         description: updateData.description,
@@ -307,9 +270,8 @@ describe('NotificationTemplatesController', () => {
         body: updateData.body,
         variables: updateData.variables,
         isActive: updateData.isActive,
-        createdAt: faker.date.past(),
         updatedAt: new Date()
-      }
+      })
 
       useCaseMock.executeUpdate.mockResolvedValue(updatedTemplate)
 

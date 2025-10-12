@@ -73,6 +73,40 @@ const createMockAppointment = (): FindByIdAppointments => {
   } as unknown as FindByIdAppointments
 }
 
+const createMockAppointmentWithPreference = (
+  customerPreference: NotificationChannel = NotificationChannel.BOTH,
+  professionalPreference: NotificationChannel = NotificationChannel.BOTH
+): FindByIdAppointments => {
+  const appointment = createMockAppointment()
+  appointment.customer.notificationPreference = customerPreference
+  appointment.offer.professional.notificationPreference = professionalPreference
+  return appointment
+}
+
+const createMockAppointmentWithNullNames = (): FindByIdAppointments => {
+  const appointment = createMockAppointment()
+    ; (appointment.customer as any).name = null
+    ; (appointment.offer.professional as any).name = null
+  return appointment
+}
+
+const createMockAppointmentWithNullEmail = (): FindByIdAppointments => {
+  const appointment = createMockAppointment()
+    ; (appointment.customer as any).email = null
+  return appointment
+}
+
+const createMockBirthdayPayload = (overrides: any = {}) => ({
+  recipientId: faker.string.uuid(),
+  recipientType: 'CUSTOMER' as const,
+  notificationPreference: NotificationChannel.BOTH,
+  email: faker.internet.email(),
+  marker: faker.string.uuid(),
+  title: 'Feliz Aniversário!',
+  message: 'Desejamos um feliz aniversário!',
+  ...overrides
+})
+
 describe('NotificationsUseCase (Unit Tests)', () => {
   let notificationsUseCase: NotificationsUseCase
 
@@ -656,9 +690,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send only in-app notification when professional prefers IN_APP', async () => {
       // arrange
-      const appointment = createMockAppointment()
-      appointment.customer.notificationPreference = 'IN_APP'
-      appointment.offer.professional.notificationPreference = 'IN_APP'
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.IN_APP, NotificationChannel.IN_APP)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -673,33 +705,10 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send only email notification when professional prefers EMAIL', async () => {
       // arrange
-      const appointment: FindByIdAppointments = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'EMAIL'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'EMAIL'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          },
-          estimatedTime: 60,
-          price: 150.00
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.EMAIL, NotificationChannel.EMAIL)
+        // Add required fields for EMAIL preference test
+        ; (appointment.offer as any).estimatedTime = 60
+        ; (appointment.offer as any).price = 150.00
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       mockEmailService.sendAppointmentCreated.mockResolvedValue(undefined)
@@ -714,31 +723,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should not send any notification when professional prefers NONE', async () => {
       // arrange
-      const appointment: FindByIdAppointments = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'NONE'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'NONE'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.NONE, NotificationChannel.NONE)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
 
@@ -752,32 +737,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should not send notification if marker already exists', async () => {
       // arrange
-      const appointment: FindByIdAppointments = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'BOTH'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'BOTH'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
-
+      const appointment = createMockAppointment()
       const existingNotification = { id: faker.string.uuid() } as Notification
       MockNotificationRepository.findByMarker.mockResolvedValue(existingNotification)
 
@@ -791,31 +751,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should handle null professional name gracefully', async () => {
       // arrange
-      const appointment: FindByIdAppointments = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: null,
-          email: faker.internet.email(),
-          notificationPreference: 'BOTH'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: null,
-            email: faker.internet.email(),
-            notificationPreference: 'BOTH'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointmentWithNullNames()
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -847,31 +783,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send in-app and email notifications when customer prefers BOTH', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'BOTH'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'BOTH'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointment()
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -903,31 +815,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send only in-app notification when customer prefers IN_APP', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'IN_APP'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'IN_APP'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.IN_APP, NotificationChannel.IN_APP)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -942,31 +830,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send only email notification when customer prefers EMAIL', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'EMAIL'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'EMAIL'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.EMAIL, NotificationChannel.EMAIL)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       mockEmailService.sendAppointmentConfirmed.mockResolvedValue(undefined)
@@ -981,31 +845,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should not send any notification when customer prefers NONE', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'NONE'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'NONE'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.NONE, NotificationChannel.NONE)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
 
@@ -1019,32 +859,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should not send notification if marker already exists', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'BOTH'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'BOTH'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
-
+      const appointment = createMockAppointment()
       const existingNotification = { id: faker.string.uuid() } as Notification
       MockNotificationRepository.findByMarker.mockResolvedValue(existingNotification)
 
@@ -1058,31 +873,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should not send email when customer email is null', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: null,
-          notificationPreference: 'BOTH'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'BOTH'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointmentWithNullEmail()
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -1108,31 +899,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should notify customer when notifyCustomer is true', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'BOTH'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'BOTH'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointment()
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -1168,31 +935,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should notify professional when notifyProfessional is true', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'BOTH'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'BOTH'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointment()
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -1228,31 +971,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should notify both when both flags are true', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'BOTH'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'BOTH'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointment()
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -1271,31 +990,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should not notify anyone when both flags are false', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'BOTH'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'BOTH'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointment()
 
       // act
       await notificationsUseCase.executeSendOnAppointmentCancelled(appointment, {
@@ -1321,17 +1016,10 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send in-app and email notifications when preference is BOTH', async () => {
       // arrange
-      const payload = {
-        recipientId: faker.string.uuid(),
-        recipientType: 'CUSTOMER' as const,
-        notificationPreference: NotificationChannel.BOTH,
-        email: faker.internet.email(),
-        marker: faker.string.uuid(),
-        title: 'Feliz Aniversário!',
-        message: 'Desejamos um feliz aniversário!',
+      const payload = createMockBirthdayPayload({
         templateKey: 'BIRTHDAY' as const,
         year: 2024
-      }
+      })
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -1360,15 +1048,9 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send only in-app notification when preference is IN_APP', async () => {
       // arrange
-      const payload = {
-        recipientId: faker.string.uuid(),
-        recipientType: 'CUSTOMER' as const,
-        notificationPreference: NotificationChannel.IN_APP,
-        email: faker.internet.email(),
-        marker: faker.string.uuid(),
-        title: 'Feliz Aniversário!',
-        message: 'Desejamos um feliz aniversário!'
-      }
+      const payload = createMockBirthdayPayload({
+        notificationPreference: NotificationChannel.IN_APP
+      })
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -1390,15 +1072,9 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send only email notification when preference is EMAIL', async () => {
       // arrange
-      const payload = {
-        recipientId: faker.string.uuid(),
-        recipientType: 'CUSTOMER' as const,
-        notificationPreference: NotificationChannel.EMAIL,
-        email: faker.internet.email(),
-        marker: faker.string.uuid(),
-        title: 'Feliz Aniversário!',
-        message: 'Desejamos um feliz aniversário!'
-      }
+      const payload = createMockBirthdayPayload({
+        notificationPreference: NotificationChannel.EMAIL
+      })
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       mockEmailService.sendBirthday.mockResolvedValue(undefined)
@@ -1418,16 +1094,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should not send notification if marker already exists', async () => {
       // arrange
-      const payload = {
-        recipientId: faker.string.uuid(),
-        recipientType: 'CUSTOMER' as const,
-        notificationPreference: NotificationChannel.BOTH,
-        email: faker.internet.email(),
-        marker: faker.string.uuid(),
-        title: 'Feliz Aniversário!',
-        message: 'Desejamos um feliz aniversário!'
-      }
-
+      const payload = createMockBirthdayPayload()
       const existingNotification = { id: faker.string.uuid() } as Notification
       MockNotificationRepository.findByMarker.mockResolvedValue(existingNotification)
 
@@ -1441,15 +1108,9 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should not send email when email is null', async () => {
       // arrange
-      const payload = {
-        recipientId: faker.string.uuid(),
-        recipientType: 'CUSTOMER' as const,
-        notificationPreference: NotificationChannel.BOTH,
-        email: null,
-        marker: faker.string.uuid(),
-        title: 'Feliz Aniversário!',
-        message: 'Desejamos um feliz aniversário!'
-      }
+      const payload = createMockBirthdayPayload({
+        email: null
+      })
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -1464,15 +1125,9 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should not send any notification when preference is NONE', async () => {
       // arrange
-      const payload = {
-        recipientId: faker.string.uuid(),
-        recipientType: 'CUSTOMER' as const,
-        notificationPreference: NotificationChannel.NONE,
-        email: faker.internet.email(),
-        marker: faker.string.uuid(),
-        title: 'Feliz Aniversário!',
-        message: 'Desejamos um feliz aniversário!'
-      }
+      const payload = createMockBirthdayPayload({
+        notificationPreference: NotificationChannel.NONE
+      })
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
 
