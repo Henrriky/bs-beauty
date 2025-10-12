@@ -1,5 +1,6 @@
 import { WeekDays } from '@prisma/client'
 import { type Request } from 'express'
+import { DateTime } from 'luxon'
 
 class DateFormatter {
   public static formatBirthdate = (req: Request) => {
@@ -8,6 +9,15 @@ class DateFormatter {
     formattedDate.setHours(formattedDate.getHours() - formattedDate.getTimezoneOffset() / 60)
 
     return formattedDate
+  }
+
+  public static formatBirthday(
+    birthdate: Date | null | undefined,
+    pattern = 'dd/LL'
+  ): string {
+    if (!birthdate) return ''
+    const isoDate = DateTime.fromJSDate(birthdate, { zone: 'utc' }).toISODate()
+    return DateTime.fromISO(isoDate!).toFormat(pattern)
   }
 
   public static formatAppointmentDate = (req: Request) => {

@@ -151,6 +151,37 @@ class EmailService {
 
     return { messageId: info.messageId }
   }
+
+  async sendBirthday(params: {
+    to: string
+    title: string
+    message: string
+    customerName?: string
+  }) {
+    const { to, title, message, customerName } = params
+
+    const text = `Olá, ${customerName || 'cliente'}!\n\n${message}\n\n— BS BEAUTY`
+
+    const html = `
+        <div style="font-family:Arial,Helvetica,sans-serif;line-height:1.5;max-width:520px;color:#111">
+          <h2 style="margin:0 0 8px">${title}</h2>
+          <p style="margin:0 0 12px">Olá, <b>${customerName || 'cliente'}</b>!</p>
+          <p style="margin:0 0 12px">${message.replace(/\n/g, '<br/>')}</p>
+          <hr style="border:none;height:1px;background:#eee;margin:16px 0"/>
+          <p style="color:#999;font-size:12px;margin:0">BS BEAUTY • Não responda a este e-mail.</p>
+        </div>
+      `
+
+    const info = await transporter.sendMail({
+      from: `"BS BEAUTY" <${process.env.EMAIL_USER}>`,
+      to,
+      subject: title,
+      text,
+      html,
+    })
+
+    return { messageId: info.messageId }
+  }
 }
 
 export { EmailService }
