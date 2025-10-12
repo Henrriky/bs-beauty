@@ -9,6 +9,70 @@ import { EmailService } from '@/services/email/email.service'
 
 vi.mock('@/services/email/email.service')
 
+const createMockUser = (userType: UserType = UserType.CUSTOMER): TokenPayload => ({
+  id: faker.string.uuid(),
+  userId: faker.string.uuid(),
+  sub: faker.string.uuid(),
+  userType,
+  email: faker.internet.email(),
+  name: faker.person.fullName(),
+  registerCompleted: true,
+  profilePhotoUrl: faker.internet.url(),
+  permissions: []
+})
+
+const createMockNotification = (overrides: Partial<Notification> = {}): Notification => ({
+  id: faker.string.uuid(),
+  recipientId: faker.string.uuid(),
+  recipientType: UserType.CUSTOMER,
+  type: NotificationType.SYSTEM,
+  title: faker.lorem.sentence(),
+  message: faker.lorem.paragraph(),
+  readAt: null,
+  marker: faker.string.uuid(),
+  createdAt: faker.date.past(),
+  ...overrides
+})
+
+const createMockPaginationResult = (data: Notification[], page = 1, limit = 10) => ({
+  data,
+  total: data.length,
+  page,
+  totalPages: Math.ceil(data.length / limit),
+  limit
+})
+
+const createMockAppointment = (): FindByIdAppointments => {
+  const customerId = faker.string.uuid()
+  const professionalId = faker.string.uuid()
+
+  return {
+    id: faker.string.uuid(),
+    appointmentDate: faker.date.future(),
+    customerId,
+    customer: {
+      id: customerId,
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+      notificationPreference: 'BOTH'
+    },
+    offer: {
+      id: faker.string.uuid(),
+      professionalId,
+      professional: {
+        id: professionalId,
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        notificationPreference: 'BOTH'
+      },
+      service: {
+        id: faker.string.uuid(),
+        name: faker.company.name()
+      }
+    }
+  } as unknown as FindByIdAppointments
+}
+
 describe('NotificationsUseCase (Unit Tests)', () => {
   let notificationsUseCase: NotificationsUseCase
 
@@ -24,50 +88,16 @@ describe('NotificationsUseCase (Unit Tests)', () => {
   describe('executeFindAll', () => {
     it('should return paginated notifications for a user', async () => {
       // arrange
-      const mockUser: TokenPayload = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
-      const mockNotifications: Notification[] = [
-        {
-          id: faker.string.uuid(),
+      const mockUser = createMockUser()
+      const mockNotifications = [
+        createMockNotification({ recipientId: mockUser.id }),
+        createMockNotification({
           recipientId: mockUser.id,
-          recipientType: UserType.CUSTOMER,
-          type: NotificationType.SYSTEM,
-          title: faker.lorem.sentence(),
-          message: faker.lorem.paragraph(),
-          readAt: null,
-          marker: faker.string.uuid(),
-          createdAt: faker.date.past()
-        },
-        {
-          id: faker.string.uuid(),
-          recipientId: mockUser.id,
-          recipientType: UserType.CUSTOMER,
           type: NotificationType.APPOINTMENT,
-          title: faker.lorem.sentence(),
-          message: faker.lorem.paragraph(),
-          readAt: faker.date.past(),
-          marker: faker.string.uuid(),
-          createdAt: faker.date.past()
-        }
+          readAt: faker.date.past()
+        })
       ]
-
-      const mockResult = {
-        data: mockNotifications,
-        total: 2,
-        page: 1,
-        totalPages: 1,
-        limit: 10
-      }
+      const mockResult = createMockPaginationResult(mockNotifications)
 
       const params = {
         page: 1,
@@ -87,39 +117,15 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should return paginated notifications with readStatus filter', async () => {
       // arrange
-      const mockUser: TokenPayload = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.PROFESSIONAL,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
-      const mockUnreadNotifications: Notification[] = [
-        {
-          id: faker.string.uuid(),
+      const mockUser = createMockUser(UserType.PROFESSIONAL)
+      const mockUnreadNotifications = [
+        createMockNotification({
           recipientId: mockUser.id,
           recipientType: UserType.PROFESSIONAL,
-          type: NotificationType.APPOINTMENT,
-          title: faker.lorem.sentence(),
-          message: faker.lorem.paragraph(),
-          readAt: null,
-          marker: faker.string.uuid(),
-          createdAt: faker.date.past()
-        }
+          type: NotificationType.APPOINTMENT
+        })
       ]
-
-      const mockResult = {
-        data: mockUnreadNotifications,
-        total: 1,
-        page: 1,
-        totalPages: 1,
-        limit: 20
-      }
+      const mockResult = createMockPaginationResult(mockUnreadNotifications, 1, 20)
 
       const params = {
         page: 1,
@@ -139,39 +145,14 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should return paginated notifications with read status filter', async () => {
       // arrange
-      const mockUser: TokenPayload = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
-      const mockReadNotifications: Notification[] = [
-        {
-          id: faker.string.uuid(),
+      const mockUser = createMockUser()
+      const mockReadNotifications = [
+        createMockNotification({
           recipientId: mockUser.id,
-          recipientType: UserType.CUSTOMER,
-          type: NotificationType.SYSTEM,
-          title: faker.lorem.sentence(),
-          message: faker.lorem.paragraph(),
-          readAt: faker.date.past(),
-          marker: faker.string.uuid(),
-          createdAt: faker.date.past()
-        }
+          readAt: faker.date.past()
+        })
       ]
-
-      const mockResult = {
-        data: mockReadNotifications,
-        total: 1,
-        page: 1,
-        totalPages: 1,
-        limit: 10
-      }
+      const mockResult = createMockPaginationResult(mockReadNotifications)
 
       const params = {
         page: 1,
@@ -191,25 +172,8 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should return empty result when no notifications found', async () => {
       // arrange
-      const mockUser: TokenPayload = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
-      const mockEmptyResult = {
-        data: [],
-        total: 0,
-        page: 1,
-        totalPages: 0,
-        limit: 10
-      }
+      const mockUser = createMockUser()
+      const mockEmptyResult = createMockPaginationResult([])
 
       const params = {
         page: 1,
@@ -229,32 +193,14 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should handle pagination correctly', async () => {
       // arrange
-      const mockUser: TokenPayload = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.PROFESSIONAL,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
-      const mockNotifications: Notification[] = [
-        {
-          id: faker.string.uuid(),
+      const mockUser = createMockUser(UserType.PROFESSIONAL)
+      const mockNotifications = [
+        createMockNotification({
           recipientId: mockUser.id,
           recipientType: UserType.PROFESSIONAL,
-          type: NotificationType.APPOINTMENT,
-          title: faker.lorem.sentence(),
-          message: faker.lorem.paragraph(),
-          readAt: null,
-          marker: faker.string.uuid(),
-          createdAt: faker.date.past()
-        }
+          type: NotificationType.APPOINTMENT
+        })
       ]
-
       const mockResult = {
         data: mockNotifications,
         total: 25,
@@ -281,18 +227,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should throw error when repository throws error', async () => {
       // arrange
-      const mockUser: TokenPayload = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.CUSTOMER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
+      const mockUser = createMockUser()
       const params = {
         page: 1,
         limit: 10,
@@ -312,39 +247,14 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should handle different user types correctly', async () => {
       // arrange
-      const mockManagerUser: TokenPayload = {
-        id: faker.string.uuid(),
-        userId: faker.string.uuid(),
-        sub: faker.string.uuid(),
-        userType: UserType.MANAGER,
-        email: faker.internet.email(),
-        name: faker.person.fullName(),
-        registerCompleted: true,
-        profilePhotoUrl: faker.internet.url(),
-        permissions: []
-      }
-
-      const mockNotifications: Notification[] = [
-        {
-          id: faker.string.uuid(),
+      const mockManagerUser = createMockUser(UserType.MANAGER)
+      const mockNotifications = [
+        createMockNotification({
           recipientId: mockManagerUser.id,
-          recipientType: UserType.MANAGER,
-          type: NotificationType.SYSTEM,
-          title: faker.lorem.sentence(),
-          message: faker.lorem.paragraph(),
-          readAt: null,
-          marker: faker.string.uuid(),
-          createdAt: faker.date.past()
-        }
+          recipientType: UserType.MANAGER
+        })
       ]
-
-      const mockResult = {
-        data: mockNotifications,
-        total: 1,
-        page: 1,
-        totalPages: 1,
-        limit: 10
-      }
+      const mockResult = createMockPaginationResult(mockNotifications)
 
       const params = {
         page: 1,
@@ -367,17 +277,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should return a notification by id', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const mockNotification: Notification = {
-        id: notificationId,
-        recipientId: faker.string.uuid(),
-        recipientType: UserType.CUSTOMER,
-        type: NotificationType.SYSTEM,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: null,
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
+      const mockNotification = createMockNotification({ id: notificationId })
 
       MockNotificationRepository.findById.mockResolvedValue(mockNotification)
 
@@ -392,17 +292,12 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should return a read notification by id', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const mockNotification: Notification = {
+      const mockNotification = createMockNotification({
         id: notificationId,
-        recipientId: faker.string.uuid(),
         recipientType: UserType.PROFESSIONAL,
         type: NotificationType.APPOINTMENT,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: faker.date.past(),
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
+        readAt: faker.date.past()
+      })
 
       MockNotificationRepository.findById.mockResolvedValue(mockNotification)
 
@@ -444,17 +339,11 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should handle different notification types', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const mockSystemNotification: Notification = {
+      const mockSystemNotification = createMockNotification({
         id: notificationId,
-        recipientId: faker.string.uuid(),
         recipientType: UserType.MANAGER,
-        type: NotificationType.SYSTEM,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: faker.date.past(),
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
+        readAt: faker.date.past()
+      })
 
       MockNotificationRepository.findById.mockResolvedValue(mockSystemNotification)
 
@@ -473,19 +362,8 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should delete a notification successfully', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const mockNotification: Notification = {
-        id: notificationId,
-        recipientId: faker.string.uuid(),
-        recipientType: UserType.CUSTOMER,
-        type: NotificationType.SYSTEM,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: null,
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
-
-      const deletedNotification: Notification = { ...mockNotification }
+      const mockNotification = createMockNotification({ id: notificationId })
+      const deletedNotification = { ...mockNotification }
 
       MockNotificationRepository.findById.mockResolvedValue(mockNotification)
       MockNotificationRepository.delete.mockResolvedValue(deletedNotification)
@@ -502,19 +380,13 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should delete a read notification successfully', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const mockNotification: Notification = {
+      const mockNotification = createMockNotification({
         id: notificationId,
-        recipientId: faker.string.uuid(),
         recipientType: UserType.PROFESSIONAL,
         type: NotificationType.APPOINTMENT,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: faker.date.past(),
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
-
-      const deletedNotification: Notification = { ...mockNotification }
+        readAt: faker.date.past()
+      })
+      const deletedNotification = { ...mockNotification }
 
       MockNotificationRepository.findById.mockResolvedValue(mockNotification)
       MockNotificationRepository.delete.mockResolvedValue(deletedNotification)
@@ -545,18 +417,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should handle repository error during deletion', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const mockNotification: Notification = {
-        id: notificationId,
-        recipientId: faker.string.uuid(),
-        recipientType: UserType.CUSTOMER,
-        type: NotificationType.SYSTEM,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: null,
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
-
+      const mockNotification = createMockNotification({ id: notificationId })
       const error = new Error('Database deletion failed')
 
       MockNotificationRepository.findById.mockResolvedValue(mockNotification)
@@ -590,19 +451,12 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should delete different notification types', async () => {
       // arrange
       const notificationId = faker.string.uuid()
-      const mockSystemNotification: Notification = {
+      const mockSystemNotification = createMockNotification({
         id: notificationId,
-        recipientId: faker.string.uuid(),
         recipientType: UserType.MANAGER,
-        type: NotificationType.SYSTEM,
-        title: faker.lorem.sentence(),
-        message: faker.lorem.paragraph(),
-        readAt: faker.date.past(),
-        marker: faker.string.uuid(),
-        createdAt: faker.date.past()
-      }
-
-      const deletedNotification: Notification = { ...mockSystemNotification }
+        readAt: faker.date.past()
+      })
+      const deletedNotification = { ...mockSystemNotification }
 
       MockNotificationRepository.findById.mockResolvedValue(mockSystemNotification)
       MockNotificationRepository.delete.mockResolvedValue(deletedNotification)
@@ -770,31 +624,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send in-app and email notifications when professional prefers BOTH', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'BOTH'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'BOTH'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointment()
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -826,31 +656,9 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send only in-app notification when professional prefers IN_APP', async () => {
       // arrange
-      const appointment = {
-        id: faker.string.uuid(),
-        appointmentDate: faker.date.future(),
-        customerId: faker.string.uuid(),
-        customer: {
-          id: faker.string.uuid(),
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-          notificationPreference: 'IN_APP'
-        },
-        offer: {
-          id: faker.string.uuid(),
-          professionalId: faker.string.uuid(),
-          professional: {
-            id: faker.string.uuid(),
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            notificationPreference: 'IN_APP'
-          },
-          service: {
-            id: faker.string.uuid(),
-            name: faker.company.name()
-          }
-        }
-      } as unknown as FindByIdAppointments
+      const appointment = createMockAppointment()
+      appointment.customer.notificationPreference = 'IN_APP'
+      appointment.offer.professional.notificationPreference = 'IN_APP'
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
