@@ -4,17 +4,14 @@ Será abordado o plano de testes, assim como cada teste que está incluso. Além
 serão detalhados, evidenciando práticas que promovem a manutenibilidade, padronização e confiabilidade do sistema ao longo de sua evolução.
 
 \subsection{Plano de Testes}
-O plano de testes define a estratégia adotada para garantir a qualidade e confiabilidade da aplicação. 
-Ele inclui os tipos de testes aplicados, as ferramentas utilizadas, o escopo das validações, e os critérios de sucesso e falha.
-
 Tendo em vista que a arquitetura do \textit{back-end} é constituída por \textit{controllers}, \textit{services} e \textit{repositories} usando o \emph{framework} \textit{Express}, 
-é necessário garantir um ótimo funcionamento da comunicação entre essas camadas. Portanto, conforme os recursos da \textit{RESTful \gls{api}} são desenvolvidos (agendamentos, serviços de beleza, clientes, profissionais, etc) com as respectivas camadas que foram comentadas, urge-se a demanda de serem testadas em paralelo, cobrindo os cenários possíveis de sucesso/falha. 
+é necessário garantir um ótimo funcionamento da comunicação entre essas camadas. Portanto, conforme os recursos da \textit{RESTful \gls{api}} são desenvolvidos (agendamentos, serviços de beleza, clientes, profissionais etc) com as respectivas camadas que foram comentadas, urge-se a demanda de serem testadas em paralelo, cobrindo os cenários possíveis de sucesso/falha. 
 
-Pretende-se atingir, no mínimo, 70\% de cobertura nos testes unitários, integrados e de componentes aplicados sobre as camadas de \textit{controllers} e \textit{services} da \gls{api}. Essa métrica será obtida por meio de ferramentas integradas ao ambiente de testes, como o \textit{framework} \textbf{\textit{Vitest}}~\cite{vitest-2025} com suporte a geração de relatórios. Embora a cobertura de testes não garanta por si só a ausência de falhas, ela serve como um forte indicador de que a maior parte da lógica de negócio está sendo exercitada e validada durante a execução dos testes. Essa prática contribui diretamente para a robustez do sistema e facilita a detecção precoce de regressões ao longo do desenvolvimento.
+Pretende-se atingir, no mínimo, 70\% de cobertura nos testes unitários aplicados sobre as camadas de \textit{controllers} e \textit{services} da \gls{api}. 
 
-O mesmo propósito de cobertura de testes é válido para o \textit{front-end} desenvolvido em \textit{React}. Como essa tecnologia adota um princípio de componentização de elementos da interface, é interessante que as páginas com cenários lógicos mais críticos (como as telas de agendamento) sejam validadas de forma precisa. Assim, garantindo que os elementos da interface estejam atendendo o comportamento esperado.
+As métricas de testes para o \textit{back-end} são obtidas por meio de ferramentas integradas ao ambiente de testes, como o \textit{framework} \textbf{\textit{Vitest}}~\cite{vitest-2025} com suporte a geração de relatórios. Embora a cobertura de testes não garanta por si só a ausência de falhas, ela serve como um forte indicador de que a maior parte da lógica de negócio está sendo exercitada e validada durante a execução dos testes. Essa prática contribui diretamente para a robustez do sistema e facilita a detecção precoce de regressões ao longo do desenvolvimento.
 
-Quanto à cobertura de testes do \textit{front-end}, é tido como propósito, cobrir cenários que envolvam todos os processos que foram mapeados no escopo do projeto.
+Quanto aos testes do \textit{front-end}, o foco principal do plano é realizar testes de usabilidade tanto em dispositivos de menor resolução (celulares e tablets) quanto dispositivos grandes (desktops e notebooks). 
 
 Ademais, os testes desenvolvidos nas duas divisões do sistema terão foco, inicialmente, nas funcionalidades essenciais para o funcionamento do sistema, tais como autenticação, criação e gerenciamento de agendamentos, relatórios, serviços e ofertas. Essa abordagem inicial permite validar as principais regras de negócio desde as primeiras entregas, contribuindo para uma base de código mais robusta e confiável à medida que novas funcionalidades forem sendo integradas.
 
@@ -35,21 +32,17 @@ Ademais, os testes desenvolvidos nas duas divisões do sistema terão foco, inic
 		\hline
 		Fase 2 – Funcionalidades Essenciais & 
 		Autenticação e Agendamentos & 
-		Testes Unitários, de Integração e de Componentes (back-end e front-end) \\
+		Testes unitários e de integração (back-end e front-end) \\
 		\hline
 		Fase 3 – Monitoramento de qualidade e Medidas de comunicação & 
 		Relatórios, Avaliações e Notificações & 
-		Testes Unitários, de Integração e de Componentes (back-end e front-end) \\
+		Testes unitários e de integração (back-end e front-end) \\
 		\hline
 		Fase 4 – Dados Operacionais & 
 		Gerenciamento de Funcionários, Serviços e Ofertas & 
-		Testes Unitários, de Integração e de Componentes (back-end e front-end) \\
+		Testes unitários e de integração (back-end e front-end) \\
 		\hline
-		Fase 5 – Validação Completa do Sistema & 
-		Fluxos completos: login, agendar serviço, avaliar atendimento, visualizar relatórios & 
-		Testes End-to-End (E2E) \\
-		\hline
-		Fase 6 – Estabilização e Qualidade Final & 
+		Fase 5 – Estabilização e Qualidade Final & 
 		Reexecução dos testes automatizados, análise de cobertura, correções finais & 
 		Todos os tipos de teste relacionados ao projeto \\
 		\hline
@@ -58,48 +51,52 @@ Ademais, os testes desenvolvidos nas duas divisões do sistema terão foco, inic
 \end{quadro}
 
 
-\subsection{Análise Estáticas}
+\subsection{Análise Estática}
 A análise estática de código é realizada utilizando as ferramentas \textbf{\textit{SonarQube}}~\cite{sonarqube-2025} e \textbf{\textit{ESLint}}~\cite{eslint-2025}, 
 que permitem detectar problemas de qualidade, como vulnerabilidades, \textit{bugs} e código duplicado, sem a necessidade de executar a aplicação. Essa etapa ajuda a manter o código limpo, seguro e sustentável ao longo do tempo.
 
 \subsection{Testes funcionais}
-Os testes funcionais baseiam-se nas especificações dos requisitos do sistema. O principal propósito, portanto, é validar se uma determinada funcionalidade solicitada foi desenvolvida com êxito, e está atendendo as expectativas esperadas dentro do sistema. Dessa forma, serão abordados nessa subseção os testes unitários, de integração e \textit{end-to-end}. 
+Os testes funcionais baseiam-se nas especificações dos requisitos do sistema. O principal propósito, portanto, é validar se uma determinada funcionalidade solicitada foi desenvolvida com êxito, e está atendendo as expectativas esperadas dentro do sistema. Dessa forma, serão abordados nessa subseção os testes unitários e de integração.
 
 \subsubsection{Testes Unitários}
-Os testes unitários servem para validar o comportamento de funções e componentes isolados utilizando \textit{mocks} de outras partes que interagem com o que está sendo testado.
-
-Os arquivos de testes unitários são organizados em diretórios específicos com uma nomenclatura padronizada. Um exemplo de nome de arquivo seria \texttt{appointments.\allowbreak controller.\allowbreak spec.\allowbreak unit.ts}, indicando que se trata de um teste unitário do módulo de agendamentos. Essa convenção visa facilitar a identificação, localização e manutenção dos testes ao longo do tempo.
+Os arquivos de testes unitários são organizados em diretórios específicos com uma nomenclatura padronizada. Um exemplo de nome de arquivo seria \texttt{appointments.\allowbreak controller.\allowbreak spec.ts}, indicando que se trata de um teste unitário do módulo de agendamentos. Essa convenção visa facilitar a identificação, localização e manutenção dos testes ao longo do tempo.
 
 \subsubsection{Testes de Componente}
-Os testes de componente têm como objetivo validar o comportamento isolado de componentes funcionais da aplicação, garantindo que cada unidade seja capaz de cumprir sua função específica conforme o esperado. No contexto do projeto, esse tipo de teste está especialmente presente no \textit{front-end}, desenvolvido em \textit{React}, onde a arquitetura baseada em componentes torna natural a aplicação dessa abordagem.
-
-Assim como os demais testes, os arquivos que contêm testes de componentes seguem uma convenção de nomenclatura voltada à organização e fácil localização no projeto. Um exemplo seria \texttt{bookingForm.\allowbreak spec.\allowbreak component.\allowbreak tsx}, indicando que se trata de um teste de componente da interface de agendamento. Essa padronização é importante para manter a coesão do código de testes e permitir sua escalabilidade conforme o sistema cresce.
+Os testes de componente não serão desenvolvidos neste estágio do projeto, 
+tendo em vista a complexidade envolvida na configuração de ambientes de teste para o \textit{front-end} e o tempo reduzido disponível no cronograma de desenvolvimento.
+Além disso, a cobertura pretendida pelos testes unitários e de integração já contempla a maior parte das interações entre os módulos do sistema, 
+tornando desnecessário, neste momento, o esforço adicional de implementação de testes específicos de componente. 
+Esses testes poderão ser incorporados futuramente, conforme o sistema amadureça e novas versões do \textit{front-end} sejam disponibilizadas.
 
 \subsubsection{Testes de Integração}
-Os testes de integração verificam a interação entre módulos e componentes da aplicação de acordo com uma determinada funcionalidade que precisa ser desenvolvida.
-
-Assim como os testes unitários, os testes integrados seguem uma convenção de nomenclatura para manter a organização do projeto. Um exemplo de nome de arquivo seria \texttt{services.\allowbreak controller.\allowbreak spec.\allowbreak integration.ts} que sinaliza tratar-se de um arquivo de testes vinculado ao módulo de serviços. Essa padronização contribui para a clareza estrutural do projeto de testes.
+Assim como os testes unitários, os testes integrados seguem uma convenção de nomenclatura para manter a organização do projeto. Um exemplo de nome de arquivo seria \texttt{services.\allowbreak integration.\allowbreak spec.ts} que sinaliza tratar-se de um arquivo de testes vinculado ao módulo de serviços. Essa padronização contribui para a clareza estrutural do projeto de testes.
 
 
 \subsubsection{Testes \textit{end-to-end}}
-Os testes \textit{end-to-end} representam provações feitas através de cenários que validam o sistema completamente desde a interface gráfica até a lógica interna da \gls{api}.
-
-No atual momento do desenvolvimento, esse tipo de teste será usado para validar, especialmente, os processos levantados nas premissas do projeto, devido à alta complexidade de configuração e lentidão de execução que possui.
-
+Os testes \textit{end-to-end} não serão desenvolvidos no momento inicial do projeto devido ao alto custo de configuração e manutenção dessa categoria de testes, 
+que exige a simulação completa do ambiente e da integração entre todas as camadas do sistema. 
+Dada a fase atual do desenvolvimento, o foco está em garantir a estabilidade das funcionalidades essenciais por meio de testes unitários e de integração, 
+que já permitem validar os principais fluxos do sistema com menor complexidade. 
+A implementação de testes \textit{end-to-end} está prevista para fases futuras, quando o produto atingir maior estabilidade e o ciclo de entregas estiver consolidado.
 
 \subsection{Testes não funcionais}
-Testes não funcionais estão fora do escopo do projeto no atual desenvolvimento.
+
 \subsubsection{Testes de performance}
-Testes de performance estão fora do escopo do projeto no atual desenvolvimento.
+Testes de performance estão fora do escopo do projeto neste momento em razão da ausência de requisitos formais de desempenho e da necessidade de concentrar esforços nas funcionalidades básicas do sistema.
+A configuração de um ambiente adequado para esse tipo de teste demandaria recursos e tempo adicionais não compatíveis com o cronograma atual. 
+Em futuras versões, quando houver maior volume de dados e tráfego de usuários, serão aplicadas medições específicas de latência, throughput e tempo de resposta para assegurar a escalabilidade do sistema.
 \subsubsection{Testes de carga}
-Testes de carga estão fora do escopo do projeto no atual desenvolvimento.
+Os testes de carga não serão realizados na fase atual, pois o sistema ainda se encontra em estágio inicial e não há volume de usuários suficiente para justificar esse tipo de avaliação. 
+Esses testes requerem simulações realistas de uso simultâneo e infraestrutura específica para coleta de métricas de desempenho, o que elevaria significativamente o custo de desenvolvimento. 
+Sua execução será considerada em fases posteriores, após a consolidação da versão estável do sistema.
 \subsubsection{Testes de configuração}
-Testes de configuração estão fora do escopo do projeto no atual desenvolvimento.
+Os testes de configuração não serão desenvolvidos devido à maturidade ainda em evolução dos ambientes de implantação e integração contínua. 
+Como o projeto encontra-se em estágio inicial, com constantes ajustes nas variáveis de ambiente e parâmetros de execução, 
+optou-se por validar essas configurações manualmente durante o processo de integração e entrega contínua (\textit{CI/CD}). 
+Assim que os ambientes estiverem estabilizados, pretende-se automatizar parte dessas verificações para garantir maior consistência entre os diferentes estágios de desenvolvimento.
 
 \subsection{Testes automatizados}
-Os testes automatizados desempenham um papel fundamental na garantia da qualidade do sistema ao longo de seu ciclo de vida. Eles são responsáveis por verificar continuamente o correto funcionamento das funcionalidades implementadas, promovendo confiança no código e permitindo a identificação precoce de regressões.
-
-Os testes automatizados englobam diferentes tipos de testes descritos anteriormente, como os testes unitários, de integração, de componentes e end-to-end, que são executados de forma automática por ferramentas de validação contínua.
+Os testes automatizados agrupam os dois tipos de testes que são usados no desenvolvimento do projeto: unitários e integrados, que são executados de forma automática por ferramentas de validação contínua.
 
 A execução dos testes automatizados está ligada ao fluxo de integração contínua por meio da ferramenta \textbf{\textit{GitHub Actions}}~\cite{githubactions-2025}. Essa integração visa garantir que o código entregue atenda a padrões mínimos de qualidade e estabilidade em todas as etapas do desenvolvimento.  A cada \textit{push} ou \textit{pull request}, fluxos automatizados são executados para validar o código por meio de testes automatizados, análise estática, e verificação de cobertura. Esse processo assegura que apenas alterações estáveis e em conformidade com os padrões de qualidade sejam incorporadas à base de código principal, promovendo entregas seguras e contínuas ao longo do ciclo de desenvolvimento.
 
@@ -131,9 +128,9 @@ As principais práticas adotadas incluem:
 
   \item \textbf{Padrões de Nomenclatura:}
   \begin{itemize}
-    \item Uso de \texttt{camelCase} para variáveis e funções.
-    \item Uso de \texttt{PascalCase} para componentes e classes.
-    \item Uso de \texttt{UPPER\_SNAKE\_CASE} para constantes globais.
+    \item Uso de \textit{\texttt{camelCase}} para variáveis e funções.
+    \item Uso de \textit{\texttt{PascalCase}} para componentes e classes.
+    \item Uso de \textit{\texttt{UPPER\_SNAKE\_CASE}} para constantes globais.
   \end{itemize}
 
   \item \textbf{Organização do Código:}
@@ -153,4 +150,32 @@ As principais práticas adotadas incluem:
     \item Adoção de \textit{pull requests} com as devidas descrições das funcionalidades desenvolvidas.
     \item Documentação e comunicação clara de decisões técnicas relevantes.
   \end{itemize}
+\end{itemize}
+
+\subsection{Cobertura de testes}
+
+A cobertura de testes indica a porcentagem do código-fonte exercitada pela suíte durante a execução. A cobertura é usada como \textbf{indicador de lacunas}, não como garantia de qualidade absoluta.
+
+\subsubsection{Meta institucional (back-end).}
+A equipe deverá atingir \textbf{70\% de cobertura geral no back-end} considerando somente \textbf{testes unitários}. Essa meta é agregada no nível do serviço (projeto inteiro), e \textbf{não} é exigida por módulo.
+
+\subsubsection{Como a cobertura será medida.}
+\begin{itemize}
+	\item \textbf{Métrica oficial:} cobertura de \textbf{instruções/linhas} (statement/line).
+	\item \textbf{Acompanhamento complementar:} cobertura de \textbf{ramos} (branch) será reportada, sem meta numérica. Serve para revelar decisões não exercitadas.
+	\item \textbf{Escopo do cálculo:} entram apenas arquivos de código de produção do back-end.
+	\item \textbf{Exclusões:} arquivos gerados, migrações, \textit{scripts} utilitários e código de teste não entram no denominador.
+\end{itemize}
+
+\subsubsection{Unitários x integrados.}
+\begin{itemize}
+	\item \textbf{Unitários:} base da meta de 70\%. Devem cobrir regras de negócio, validações e tratamentos de erro.
+	\item \textbf{Integrados:} não possuem percentual mínimo. Serão priorizados \textbf{cenários críticos} do domínio.
+\end{itemize}
+
+\paragraph{Boas práticas adotadas.}
+\begin{itemize}
+	\item Escrever testes que verifiquem \textbf{resultados e efeitos colaterais} (asserts úteis), não apenas “executar linhas”.
+	\item Dar atenção a \textbf{ramos e exceções}: caminhos de erro, validações e \textit{edge cases}.
+	\item Para integrações (BD/filas), usar \textbf{\textit{test doubles}} quando possível e poucos testes integrados focados em cenários críticos.
 \end{itemize}
