@@ -10,7 +10,8 @@ on:
   pull_request:
     paths:
       - 'source/front-end/**'
-
+  workflow_dispatch:
+  
 jobs:
 
   run-typescript-type-check:
