@@ -24,7 +24,9 @@ git clone https://github.com/Henrriky/bs-beauty.git
 cd bs-beauty
 ```
 
-## 3. Configuração do ambiente back-end
+## 3. Configuração do ambiente
+
+### Back-end
 
 1 - A partir do diretório ```source```, acesse o diretório ```back-end``` e crie o arquivo de variáveis de ambiente a partir do modelo fornecido:
 
@@ -50,6 +52,20 @@ JWT_REFRESH_EXPIRES_IN="..."
 EMAIL_USER="..."
 EMAIL_PASSWORD="..."
 EMAIL_PROVIDER="..."
+```
+
+### Front-end
+
+1 - A partir do diretório ```source```, acesse o diretório ```front-end``` e crie o arquivo de variáveis de ambiente a partir do modelo fornecido:
+
+```
+cp .env.example .env
+```
+
+2 - Edite o arquivo ```.env``` para incluir as credenciais do banco de dados e outras configurações necessárias
+
+```
+VITE_ENVIRONMENT="dev" # dev or prod
 ```
 
 ## 4. Instalação das dependências
@@ -95,6 +111,8 @@ npm run dev
 # ou
 yarn dev
 ```
+
+3 - Com o back-end e o front-end executados, acesse um navegador de sua preferência e digite ```localhost:5173``` na barra de endereço.
 
 ## 7. Testes do sistema
 
