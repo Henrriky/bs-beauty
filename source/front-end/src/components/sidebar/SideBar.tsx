@@ -98,19 +98,17 @@ function SideBar() {
                   .filter((item) =>
                     userCanAccess({ user, ...item.authorization }),
                   )
-                  .map((sideBarItem) => {
-                    return (
-                      <SideBarItem
-                        toggleSideBar={toggleSideBar}
-                        key={sideBarItem.name}
-                        icon={sideBarItem.icon}
-                        path={sideBarItem.navigateTo}
-                      >
-                        {sideBarItem.name}
-                      </SideBarItem>
-                    )
-                  })
-                  .reverse()}
+                  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+                  .map((sideBarItem) => (
+                    <SideBarItem
+                      toggleSideBar={toggleSideBar}
+                      key={sideBarItem.name}
+                      icon={sideBarItem.icon}
+                      path={sideBarItem.navigateTo}
+                    >
+                      {sideBarItem.name}
+                    </SideBarItem>
+                  ))}
               </ul>
             </div>
           </nav>
