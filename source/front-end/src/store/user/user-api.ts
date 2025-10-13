@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import {
   CustomerUpdateProfileFormData,
-  EmployeeUpdateProfileFormData,
+  ProfessionalUpdateProfileFormData,
   ManagerUpdateProfileFormData,
 } from '../../pages/profile/types'
 import { API_VARIABLES } from '../../api/config'
@@ -17,17 +17,17 @@ export const userAPI = createApi({
         userId: string
         profileData:
           | CustomerUpdateProfileFormData
-          | EmployeeUpdateProfileFormData
+          | ProfessionalUpdateProfileFormData
           | ManagerUpdateProfileFormData
       }
     >({
       query: (data) => {
         let url = ''
-        const isEmployeeProfileUpdate =
+        const isProfessionalProfileUpdate =
           'contact' in data.profileData || !('phone' in data.profileData)
 
-        if (isEmployeeProfileUpdate) {
-          url = `${API_VARIABLES.USER_ENDPOINTS.UPDATE_EMPLOYEE_PROFILE}/${data.userId}`
+        if (isProfessionalProfileUpdate) {
+          url = `${API_VARIABLES.USER_ENDPOINTS.UPDATE_PROFESSIONAL_PROFILE}/${data.userId}`
         } else {
           url = `${API_VARIABLES.USER_ENDPOINTS.UPDATE_CUSTOMER_PROFILE}/${data.userId}`
         }

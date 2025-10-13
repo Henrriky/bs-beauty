@@ -14,19 +14,22 @@ datasource db {
 }
 
 model Customer {
-  id                String    @id @default(uuid())
-  name              String?   @default("Usuário")
-  registerCompleted Boolean   @default(false) @map("register_completed")
-  birthdate         DateTime?
-  email             String    @unique
-  googleId          String?   @unique @map("google_id")
-  phone             String?   @unique
-  profilePhotoUrl   String?
-  userType          UserType  @default(CUSTOMER) @map("user_type")
-  referrerId        String?   @map("referrer_id")
-  referralCount     Int       @default(0) @map("referral_count")
-  createdAt         DateTime  @default(now()) @map("created_at")
-  updatedAt         DateTime  @updatedAt @map("updated_at")
+  id                  String    @id @default(uuid())
+  name                String?   @default("Usuário")
+  registerCompleted   Boolean   @default(false) @map("register_completed")
+  birthdate           DateTime?
+  email               String    @unique
+  passwordHash      String?   @map("password_hash")
+  googleId            String?   @unique @map("google_id")
+  phone               String?   @unique
+  profilePhotoUrl     String?
+  userType            UserType  @default(CUSTOMER) @map("user_type")
+  referrerId          String?   @map("referrer_id")
+  referralCount       Int       @default(0) @map("referral_count")
+  alwaysAllowImageUse Boolean   @default(false) @map("always_allow_image_use")
+  discoverySource     DiscoverySource? @map("discovery_source")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
 
   appointments Appointment[]
   referrer     Customer?     @relation("refers", fields: [referrerId], references: [id])
@@ -40,6 +43,7 @@ model Appointment {
   observation      String?
   status           Status   @default(PENDING)
   appointmentDate  DateTime @map("appointment_date")
+  allowImageUse    Boolean  @default(false) @map("allows_image_use")
   customerId       String   @map("customer_id")
   serviceOfferedId String   @map("service_id")
   createdAt        DateTime @default(now()) @map("created_at")
@@ -55,7 +59,7 @@ model Appointment {
 
 model Rating {
   id            String   @id @default(uuid())
-  score         Int      @default(1)
+  score         Int?
   comment       String?
   createdAt     DateTime @default(now()) @map("created_at")
   appointmentId String   @unique @map("appointment_id")
@@ -75,66 +79,78 @@ model Notification {
   @@map("notification")
 }
 
+enum ServiceStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Service {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   description String?
   category    String
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  status      ServiceStatus @default(PENDING)
+  createdBy   String?       @map("created_by")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
 
-  offers Offer[]
+  createdByProfessional Professional? @relation(fields: [createdBy], references: [id])
+  offers                Offer[]
 
   @@map("service")
 }
 
 model Offer {
-  id            String   @id @default(uuid())
-  estimatedTime Int      @map("estimated_time")
-  price         Decimal  @db.Decimal(10, 2)
-  isOffering    Boolean  @default(false) @map("is_offering")
-  serviceId     String   @map("service_id")
-  employeeId    String   @map("employee_id")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id             String   @id @default(uuid())
+  estimatedTime  Int      @map("estimated_time")
+  price          Decimal  @db.Decimal(10, 2)
+  isOffering     Boolean  @default(false) @map("is_offering")
+  serviceId      String   @map("service_id")
+  professionalId String   @map("professional_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
   appointments Appointment[]
   service      Service       @relation(fields: [serviceId], references: [id])
-  employee     Employee      @relation(fields: [employeeId], references: [id])
+  professional Professional  @relation(fields: [professionalId], references: [id])
 
   @@map("offer")
 }
 
-model Employee {
+model Professional {
   id                String   @id @default(uuid())
   name              String?  @default("Usuário")
   email             String   @unique
+  passwordHash      String?  @map("password_hash")
   googleId          String?  @unique @map("google_id")
   registerCompleted Boolean  @default(false) @map("register_completed")
+  paymentMethods    Json?    @map("payment_methods")
   socialMedia       Json?    @map("social_media")
   contact           String?  @unique
   specialization    String?
   profilePhotoUrl   String?  @map("profile_photo_url")
-  userType          UserType @default(EMPLOYEE) @map("user_type")
+  userType          UserType @default(PROFESSIONAL) @map("user_type")
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
-  shifts       Shift[]
-  offers       Offer[]
-  employeeRole EmployeeRole[]
+  shifts           Shift[]
+  offers           Offer[]
+  professionalRole ProfessionalRole[]
+  Service          Service[]
 
-  @@map("employee")
+  @@map("professional")
 }
 
 model Shift {
-  id         String   @id @default(uuid())
-  weekDay    WeekDays @map("week_day")
-  isBusy     Boolean  @default(false) @map("is_busy")
-  shiftStart DateTime @map("shift_start")
-  shiftEnd   DateTime @map("shift_end")
-  employeeId String   @map("employee_id")
+  id             String   @id @default(uuid())
+  weekDay        WeekDays @map("week_day")
+  isBusy         Boolean  @default(false) @map("is_busy")
+  shiftStart     DateTime @map("shift_start")
+  shiftEnd       DateTime @map("shift_end")
+  professionalId String   @map("professional_id")
 
-  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
 
   @@map("shift")
 }
@@ -147,22 +163,22 @@ model Role {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  employeeRole   EmployeeRole[]
-  rolePermission RolePermission[]
+  professionalRole ProfessionalRole[]
+  rolePermission   RolePermission[]
 
   @@map("role")
 }
 
-model EmployeeRole {
-  id         String   @id @default(uuid())
-  employeeId String   @map("employee_id")
-  roleId     String   @map("role_id")
-  createdAt  DateTime @default(now()) @map("created_at")
+model ProfessionalRole {
+  id             String   @id @default(uuid())
+  professionalId String   @map("professional_id")
+  roleId         String   @map("role_id")
+  createdAt      DateTime @default(now()) @map("created_at")
 
-  employee Employee @relation(fields: [employeeId], references: [id])
-  role     Role     @relation(fields: [roleId], references: [id])
+  professional Professional @relation(fields: [professionalId], references: [id])
+  role         Role         @relation(fields: [roleId], references: [id])
 
-  @@map("employee_role")
+  @@map("professional_role")
 }
 
 model Permission {
@@ -204,7 +220,7 @@ enum WeekDays {
 enum UserType {
   MANAGER
   CUSTOMER
-  EMPLOYEE
+  PROFESSIONAL
 }
 
 enum Status {
@@ -221,4 +237,15 @@ enum Action {
   READ
   UPDATE
   DELETE
+}
+
+enum DiscoverySource {
+  REFERRAL    
+  INSTAGRAM
+  FACEBOOK
+  TIKTOK
+  GOOGLE
+  WHATSAPP
+  WALK_IN      
+  OTHER
 }

@@ -8,7 +8,6 @@ import Title from '../../components/texts/Title'
 import { customerAPI } from '../../store/customer/customer-api'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
 import UserCard from './components/UserCard'
-import { useEffect } from 'react'
 
 function Customers() {
   const { data, isLoading, isError, error } =

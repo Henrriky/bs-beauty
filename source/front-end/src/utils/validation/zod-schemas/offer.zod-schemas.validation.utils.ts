@@ -22,7 +22,7 @@ class OfferSchemas {
         }),
       isOffering: z.boolean(),
       serviceId: z.string().uuid(),
-      employeeId: z.string().uuid(),
+      professionalId: z.string().uuid(),
     })
     .strict()
 

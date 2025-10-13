@@ -5,12 +5,15 @@ import { Flip, ToastContainer } from 'react-toastify'
 import BSBeautyRouter from './routes'
 
 import 'react-toastify/dist/ReactToastify.css'
+import SessionBootstrap from './SessionBootstrap'
 
 function App() {
   return (
     <div className="bg-[#1E1E1E] min-h-[100vh] flex justify-center">
       <Provider store={store}>
-        <BSBeautyRouter />
+        <SessionBootstrap>
+          <BSBeautyRouter />
+        </SessionBootstrap>
         <ToastContainer
           transition={Flip}
           position="top-right"

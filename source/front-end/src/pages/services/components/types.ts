@@ -10,6 +10,10 @@ type UpdateOfferFormData = z.infer<typeof OfferSchemas.updateSchema>
 
 type UpdateServiceFormData = z.infer<typeof ServiceSchemas.updateSchema>
 
+type UpdateServiceStatusFormData = z.infer<
+  typeof ServiceSchemas.updateStatusSchema
+>
+
 type OnSubmitCreateServiceForm = (data: CreateServiceFormData) => Promise<void>
 
 type OnSubmitCreateOfferForm = (data: CreateOfferFormData) => Promise<void>
@@ -17,6 +21,10 @@ type OnSubmitCreateOfferForm = (data: CreateOfferFormData) => Promise<void>
 type OnSubmitUpdateOfferForm = (data: UpdateOfferFormData) => Promise<void>
 
 type OnSubmitUpdateServiceForm = (data: UpdateServiceFormData) => Promise<void>
+
+type OnSubmitUpdateServiceStatusForm = (
+  data: UpdateServiceStatusFormData,
+) => Promise<void>
 
 export type {
   CreateServiceFormData,
@@ -27,4 +35,5 @@ export type {
   OnSubmitUpdateOfferForm,
   UpdateServiceFormData,
   OnSubmitUpdateServiceForm,
+  OnSubmitUpdateServiceStatusForm,
 }

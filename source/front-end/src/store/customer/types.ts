@@ -1,4 +1,4 @@
-import { Customer } from "../auth/types"
+import { Customer } from '../auth/types'
 
 export interface PaginatedCustomersResponse {
   data: Customer[]

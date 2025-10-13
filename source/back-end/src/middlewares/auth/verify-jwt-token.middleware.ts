@@ -2,10 +2,10 @@ import { type NextFunction, type Request, type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
 import { ENV } from '../../config/env'
-import { type CustomerOrEmployee } from '../../types/customer-or-employee.type'
+import { type CustomerOrProfessional } from '../../types/customer-or-professional.type'
 import { AppErrorCodes } from '../../utils/errors/app-error-codes'
 
-interface TokenPayload extends jwt.JwtPayload, CustomerOrEmployee {
+interface TokenPayload extends jwt.JwtPayload, CustomerOrProfessional {
 
 }
 

@@ -24,7 +24,7 @@ function Modal({ isOpen, onClose, children, className }: ModalProps) {
           )}
         >
           <XMarkIcon
-            className="size-7 color-[#D9D9D9] hover:text-primary-0 hover:size-8 transition-all text-primary-100 absolute top-5 right-5"
+            className="size-7 color-[#D9D9D9] hover:cursor-pointer hover:text-primary-0 hover:size-8 transition-all text-primary-100 absolute top-5 right-5"
             onClick={onClose}
           />
           {children}

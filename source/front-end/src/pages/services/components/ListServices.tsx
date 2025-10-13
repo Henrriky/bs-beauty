@@ -1,32 +1,70 @@
-import { SetStateAction, useState } from 'react'
 import { Button } from '../../../components/button/Button'
 import { serviceAPI } from '../../../store/service/service-api'
 import { toast } from 'react-toastify'
 import { Service } from '../../../store/service/types'
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import ServiceItem from './ServiceItem'
+import { OnSubmitUpdateServiceStatusForm } from './types'
+import { useMemo } from 'react'
+import useAppSelector from '../../../hooks/use-app-selector'
 
 interface ListServicesProps {
   openModal: () => void
-  selectService: (param: Service) => void
-  isManager: boolean
   openUpdateModal: () => void
   openDeleteModal: () => void
+  serviceSelected: Service | undefined | null
+  selectService: (param: Service | null) => void
+  isManager: boolean
 }
 
 function ListServices({
   openModal,
-  selectService,
-  isManager,
   openDeleteModal,
   openUpdateModal,
+  serviceSelected,
+  selectService,
+  isManager,
 }: ListServicesProps) {
-  const [selected, setSelected] = useState(null)
-
   // TODO: CARREGAR MAIS SERVIÇOS QUANDO CHEGA NO LIMITE PADRÃO (10)
   // TODO: POSSÍVEL CRIAÇÃO DE INPUT DE BUSCA PARA BUSCAR PELO NOME (O PARÂMETRO JÁ ESTÁ FEITO NA API)
-  const { data, isLoading, isError } = serviceAPI.useGetServicesQuery({})
 
-  const services = data?.data || []
+  const loggedUserId = useAppSelector((state) => state.auth.user?.id)
+  const { data, isLoading, isError } = serviceAPI.useGetServicesQuery({
+    page: 1,
+    limit: 50,
+  })
+
+  const [updateService, { isLoading: isUpdatingServiceStatus }] =
+    serviceAPI.useUpdateServiceMutation()
+
+  const handleChangeServiceStatus = (
+    serviceId: string,
+  ): OnSubmitUpdateServiceStatusForm => {
+    return async ({ status }) => {
+      try {
+        await updateService({ data: { status }, id: serviceId }).unwrap()
+        toast.success('Serviço atualizado com sucesso!')
+      } catch (error: unknown) {
+        console.error('Error trying to update offer', error)
+        toast.error('Ocorreu um erro ao atualizar o serviço.')
+      }
+    }
+  }
+
+  const services = useMemo(() => {
+    if (!data) return []
+
+    const filteredService = isManager
+      ? data.data
+      : data.data.filter(
+          (service) =>
+            service.status === 'APPROVED' || service.createdBy === loggedUserId,
+        )
+
+    return [...filteredService].sort((a, b) => {
+      const statusOrder = { APPROVED: 1, PENDING: 2, REJECTED: 3 }
+      return statusOrder[a.status] - statusOrder[b.status]
+    })
+  }, [data, isManager, loggedUserId])
 
   if (isLoading) {
     return (
@@ -54,40 +92,29 @@ function ListServices({
   }
 
   return (
-    <div
-      onClick={() => setSelected(null)}
-      className="animate-fadeIn w-full max-w-[540px] mb-8 mt-4"
-    >
-      <div className="max-h-[161px] scroll overflow-y-auto w-full">
+    <div className="animate-fadeIn w-full max-w-[540px] mb-8 mt-4">
+      <div className="max-h-[500px] scroll overflow-y-auto w-full">
         <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
           {services.map((service, index) => (
-            <Button
-              label={
-                <div className="flex flex-row items-center">
-                  {service.name}
-                  {isManager && (
-                    <div className="ml-auto flex gap-3 justify-center items-center">
-                      <PencilSquareIcon
-                        className="size-4 hover:text-primary-0 hover:size-5 transition-all"
-                        onClick={() => openUpdateModal()}
-                      />
-                      <TrashIcon
-                        className="size-4 hover:text-primary-0 hover:size-5 transition-all"
-                        onClick={() => openDeleteModal()}
-                      />
-                    </div>
-                  )}
-                </div>
-              }
+            <ServiceItem
+              service={service}
+              isManager={isManager}
+              openUpdateModal={() => {
+                selectService(service)
+                openUpdateModal()
+              }}
+              openDeleteModal={() => {
+                selectService(service)
+                openDeleteModal()
+              }}
+              onStatusChange={handleChangeServiceStatus(service.id)}
               key={index}
-              variant="outline"
-              outlineVariantBorderStyle="dashed"
               onClick={(e) => {
-                setSelected(index as unknown as SetStateAction<null>)
-                selectService(service as unknown as Service)
+                selectService(service)
                 e.stopPropagation()
               }}
-              className={`bg-[#222222] w-full text-left px-4 py-[6px] ${selected !== index ? 'border-none' : ''}`}
+              isSelected={serviceSelected?.id === service.id}
+              isChangingStatus={isUpdatingServiceStatus}
             />
           ))}
         </div>
@@ -97,10 +124,16 @@ function ListServices({
           label="Oferecer serviço"
           className="w-full max-h-[32px] py-[6px]"
           onClick={
-            selected !== null
+            serviceSelected
               ? () => {
+                  if (serviceSelected.status !== 'APPROVED') {
+                    toast.info(
+                      'Atenção: Apenas serviços aprovados podem ser oferecidos.',
+                    )
+                    return
+                  }
+
                   openModal()
-                  setSelected(null)
                 }
               : () => toast.info('Selecione um serviço.')
           }

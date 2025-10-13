@@ -65,6 +65,13 @@ class ServiceSchemas {
           'Por favor, forneça uma categoria válida.',
         )
         .optional(),
+      status: z.enum(['APPROVED', 'REJECTED']).optional(),
+    })
+    .strict()
+
+  public static updateStatusSchema = z
+    .object({
+      status: z.enum(['APPROVED', 'REJECTED']),
     })
     .strict()
 }

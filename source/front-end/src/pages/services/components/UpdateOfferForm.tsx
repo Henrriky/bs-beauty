@@ -13,6 +13,7 @@ import { Button } from '../../../components/button/Button'
 interface UpdateOfferFormInputProps {
   offer: Offer
   onClose: () => void
+  handleSubmitUpdateOffer?: () => void
 }
 
 function UpdateOfferForm({ offer, onClose }: UpdateOfferFormInputProps) {

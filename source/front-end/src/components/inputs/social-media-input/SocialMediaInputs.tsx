@@ -8,17 +8,17 @@ import { Input } from '../Input'
 import { Button } from '../../button/Button'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { getErrorMessageFromErrorsAttr } from '../../../utils/react-hook-form/get-error-message-from-errors-attr'
-import { EmployeeUpdateProfileFormData } from '../../../pages/profile/types'
+import { ProfessionalUpdateProfileFormData } from '../../../pages/profile/types'
 
 interface SocialMediaInputsProps {
-  register: UseFormRegister<EmployeeUpdateProfileFormData>
+  register: UseFormRegister<ProfessionalUpdateProfileFormData>
   socialMediaFields: FieldArrayWithId<
-    EmployeeUpdateProfileFormData,
+    ProfessionalUpdateProfileFormData,
     'socialMedia',
     'id'
   >[]
   removeSocialMedia: UseFieldArrayRemove
-  errors: FieldErrors<EmployeeUpdateProfileFormData>
+  errors: FieldErrors<ProfessionalUpdateProfileFormData>
 }
 
 function SocialMediaInputs({

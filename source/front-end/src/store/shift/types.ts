@@ -9,11 +9,11 @@ export enum WeekDays {
 }
 interface Shift {
   id: string
-  employeeId: string
+  professionalId: string
   weekDay: WeekDays
   isBusy: boolean
   shiftStart: Date
   shiftEnd: Date
 }
 
-export type FindShiftsByEmployeeResponse = Shift[]
+export type FindShiftsByProfessionalResponse = Shift[]

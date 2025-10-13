@@ -21,7 +21,7 @@ type SideBarItem = {
 type SideBarOptions = {
   COMMON: SideBarItem[]
   [UserType.MANAGER]: SideBarItem[]
-  [UserType.EMPLOYEE]: SideBarItem[]
+  [UserType.PROFESSIONAL]: SideBarItem[]
   [UserType.CUSTOMER]: SideBarItem[]
 }
 
@@ -57,22 +57,22 @@ const sideBarItems: SideBarOptions = {
     {
       name: 'Clientes',
       icon: <UsersIcon className="size-6" />,
-      navigateTo: '/customers',
+      navigateTo: '/manager/customers',
     },
     {
-      name: 'Funcionários',
+      name: 'Profissionais',
       icon: <ClipboardDocumentCheckIcon className="size-6" />,
-      navigateTo: '/employees-management',
+      navigateTo: '/manager/professionals',
     },
     {
       name: 'Serviços',
       icon: <BriefcaseIcon className="size-6" />,
-      navigateTo: '/management/services',
+      navigateTo: '/services',
     },
     {
       name: 'Turnos',
       icon: <ClockIcon className="size-6" />,
-      navigateTo: '/employee-shifts',
+      navigateTo: '/shifts',
     },
     {
       name: 'Home',
@@ -80,21 +80,21 @@ const sideBarItems: SideBarOptions = {
       navigateTo: '/manager/home',
     },
   ],
-  [UserType.EMPLOYEE]: [
+  [UserType.PROFESSIONAL]: [
     {
       name: 'Serviços',
       icon: <BriefcaseIcon className="size-6" />,
-      navigateTo: '/management/services',
+      navigateTo: 'services',
     },
     {
       name: 'Turnos',
       icon: <ClockIcon className="size-6" />,
-      navigateTo: '/employee-shifts',
+      navigateTo: '/shifts',
     },
     {
       name: 'Home',
       icon: <HomeIcon className="size-6" />,
-      navigateTo: '/employee/home',
+      navigateTo: '/professional/home',
     },
   ],
 }

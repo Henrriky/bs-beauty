@@ -1,12 +1,12 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { Button } from '../../button/Button'
 import { UseFieldArrayAppend } from 'react-hook-form'
-import { EmployeeUpdateProfileFormData } from '../../../pages/profile/types'
+import { ProfessionalUpdateProfileFormData } from '../../../pages/profile/types'
 
 interface SocialMediaHeaderProps {
   socialMediaFieldsLength: number
   appendNewSocialMedia: UseFieldArrayAppend<
-    EmployeeUpdateProfileFormData,
+    ProfessionalUpdateProfileFormData,
     'socialMedia'
   >
 }

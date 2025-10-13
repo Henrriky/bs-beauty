@@ -12,17 +12,17 @@ import { Service } from '../../../store/service/types'
 
 interface CreateOfferFormInputProps {
   service: Service
-  employeeId: string | undefined
+  professionalId: string | undefined
   onClose: () => void
 }
 
 function CreateOfferForm({
   service,
-  employeeId,
+  professionalId,
   onClose,
 }: CreateOfferFormInputProps) {
   const [createOffer, { isLoading }] = offerAPI.useCreateOfferMutation()
-
+  console.log('service in CreateOfferForm', service)
   const handleSubmitCreateOffer: OnSubmitCreateOfferForm = async (
     offerData,
   ) => {
@@ -110,9 +110,9 @@ function CreateOfferForm({
       </div>
       <Input
         type="hidden"
-        value={employeeId}
-        id="employeeId"
-        registration={{ ...register('employeeId') }}
+        value={professionalId}
+        id="professionalId"
+        registration={{ ...register('professionalId') }}
       />
       <Input
         type="hidden"

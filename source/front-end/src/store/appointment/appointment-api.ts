@@ -5,14 +5,14 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { API_VARIABLES } from '../../api/config'
 import {
   CustomerUpdateAppointmentFormData,
-  EmployeeUpdateAppointmentFormData,
+  ProfessionalUpdateAppointmentFormData,
 } from '../../pages/appointments/types'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import {
   Appointment,
   CreateAppointmentAPIData,
   FindAppointmentByCustomerId,
-  FindAppointmentById
+  FindAppointmentById,
 } from './types'
 
 export const appointmentAPI = createApi({
@@ -31,13 +31,11 @@ export const appointmentAPI = createApi({
       void,
       (
         | CustomerUpdateAppointmentFormData
-        | EmployeeUpdateAppointmentFormData
+        | ProfessionalUpdateAppointmentFormData
       ) & { id: string }
     >({
       query: (data) => ({
-        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.UPDATE_APPOINTMENT(
-          data.id,
-        ),
+        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.UPDATE_APPOINTMENT(data.id),
         method: 'PUT',
         body: {
           ...data,
@@ -45,7 +43,20 @@ export const appointmentAPI = createApi({
         },
       }),
     }),
-    findAppointmentsByCustomerOrEmployeeId: builder.query<
+    finishAppointment: builder.mutation<
+      void,
+      ProfessionalUpdateAppointmentFormData & { id: string }
+    >({
+      query: (data) => ({
+        url: API_VARIABLES.APPOINTMENTS_ENDPOINTS.FINISH_APPOINTMENT(data.id),
+        method: 'PUT',
+        body: {
+          ...data,
+          id: undefined,
+        },
+      }),
+    }),
+    findAppointmentsByCustomerOrProfessionalId: builder.query<
       {
         appointments: FindAppointmentByCustomerId[]
       },
@@ -76,7 +87,7 @@ export const appointmentAPI = createApi({
         method: 'GET',
       }),
     }),
-    fetchEmployeeAppointmentsByAllOffers: builder.query<
+    fetchProfessionalAppointmentsByAllOffers: builder.query<
       { appointments: Appointment[] },
       string
     >({
@@ -85,7 +96,7 @@ export const appointmentAPI = createApi({
       async queryFn(userId, _queryApi, _extraOptions, fetchWithBQ) {
         try {
           const offersResponse = await fetchWithBQ({
-            url: `/offers/employee/${userId}`,
+            url: `/offers/professional/${userId}`,
           })
 
           const serviceOfferedIds =
@@ -105,15 +116,13 @@ export const appointmentAPI = createApi({
           const appointmentResponses = await Promise.all(appointmentPromises)
 
           const allAppointments = appointmentResponses
-            .filter(
-              (response: { data?: { appointments?: Appointment[] } }) =>
-                Array.isArray(response.data?.appointments),
+            .filter((response: { data?: { appointments?: Appointment[] } }) =>
+              Array.isArray(response.data?.appointments),
             )
             .flatMap(
               (response: { data?: { appointments?: Appointment[] } }) =>
                 response.data?.appointments ?? [],
             )
-
 
           return { data: { appointments: allAppointments } }
         } catch (error) {

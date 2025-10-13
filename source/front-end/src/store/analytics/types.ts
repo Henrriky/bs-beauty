@@ -4,6 +4,6 @@ export interface Analytics {
   finishedAppointments: number
   totalCustomers: number
   numberOfServices: number
-  numberOfEmployees?: number
+  numberOfProfessionals?: number
   totalRevenue: number
 }

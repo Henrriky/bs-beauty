@@ -65,7 +65,7 @@ class NotificationsUseCase {
     //   console.log(item)
     //   const service = await servicesUseCase.executeFindById(serviceId)
     //   const offer = await offersUseCase.executeFindByServiceId(serviceId)
-    //   const data = { title: 'Novo agendamento', content: `Cliente: ${customer?.name}, Serviço: ${service?.name}, Dia: ${item.appointmentDate as unknown as string}`, employeeId: `${offer?.employeeId}` }
+    //   const data = { title: 'Novo agendamento', content: `Cliente: ${customer?.name}, Serviço: ${service?.name}, Dia: ${item.appointmentDate as unknown as string}`, professionalId: `${offer?.professionalId}` }
     //   await this.notificationRepository.create(data)
     // }
   }

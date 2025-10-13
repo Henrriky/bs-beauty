@@ -16,7 +16,7 @@ class OfferSchemas {
     price: z.number().multipleOf(0.01),
     isOffering: z.boolean(),
     serviceId: z.string().uuid(),
-    employeeId: z.string().uuid()
+    professionalId: z.string().uuid()
   }).strict()
 
   public static updateSchema = z.object({

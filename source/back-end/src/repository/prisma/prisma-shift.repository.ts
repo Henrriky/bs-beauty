@@ -1,11 +1,11 @@
-import { type WeekDays, type Prisma, Shift } from '@prisma/client'
+import { type WeekDays, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type ShiftRepository } from '../protocols/shift.repository'
 
 class PrismaShiftRepository implements ShiftRepository {
-  public async findAllByEmployeeId (employeeId: string | undefined) {
+  public async findAllByProfessionalId (professionalId: string | undefined) {
     const shifts = await prismaClient.shift.findMany({
-      where: { employeeId }
+      where: { professionalId }
     })
 
     return shifts
@@ -19,24 +19,24 @@ class PrismaShiftRepository implements ShiftRepository {
     return shift
   }
 
-  async findByIdAndEmployeeId (id: string, employeeId: string) {
+  async findByIdAndProfessionalId (id: string, professionalId: string) {
     const shift = await prismaClient.shift.findFirst({
-      where: { id, employeeId }
+      where: { id, professionalId }
     })
     return shift
   }
 
-  public async findByEmployeeId (employeeId: string | undefined) {
+  public async findByProfessionalId (professionalId: string | undefined) {
     const shifts = await prismaClient.shift.findMany({
-      where: { employeeId }
+      where: { professionalId }
     })
 
     return shifts
   }
 
-  public async findByEmployeeAndWeekDay (employeeId: string, weekDay: WeekDays) {
+  public async findByProfessionalAndWeekDay (professionalId: string, weekDay: WeekDays) {
     const shift = await prismaClient.shift.findFirst({
-      where: { employeeId, weekDay }
+      where: { professionalId, weekDay }
     })
 
     return shift

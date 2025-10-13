@@ -48,6 +48,10 @@ class Formatter {
 
     return statusToPretty[status]
   }
+
+  public static formatImageUsageToPrettyRepresentation(allowImageUse: boolean) {
+    return allowImageUse === true ? 'Permitido' : 'Não permitido'
+  }
 }
 
 export { Formatter }

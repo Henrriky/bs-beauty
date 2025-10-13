@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { AppointmentSchemas } from '../../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils'
 import { FindAppointmentById } from '../../../store/appointment/types'
+import { RatingSchemas } from '../../../utils/validation/zod-schemas/rating.zod-schemas.validation.utils'
 
 export type ListAppointmentsButtonStatus = 'finished' | 'schedulled'
 
@@ -10,12 +11,18 @@ export type CustomerUpdateAppointmentFormData = z.infer<
   typeof AppointmentSchemas.customerUpdateSchema
 >
 
-export type EmployeeUpdateAppointmentFormData = z.infer<
-  typeof AppointmentSchemas.employeeUpdateSchema
+export type ProfessionalUpdateAppointmentFormData = z.infer<
+  typeof AppointmentSchemas.professionalUpdateSchema
+>
+
+export type RatingUpdateFormData = z.infer<
+  typeof RatingSchemas.ratingUpdateSchema
 >
 
 export type OnSubmitAppointmentDetailsUpdateForm = (
-  data: EmployeeUpdateAppointmentFormData | CustomerUpdateAppointmentFormData,
+  data:
+    | ProfessionalUpdateAppointmentFormData
+    | CustomerUpdateAppointmentFormData,
 ) => Promise<void>
 
 export interface AppointmentDetailsComponentProps {

@@ -3,16 +3,16 @@ import { WeekDays } from "../../enums/enums"
 export enum UserType {
   MANAGER = "MANAGER",
   CUSTOMER = "CUSTOMER",
-  EMPLOYEE = "EMPLOYEE"
+  PROFESSIONAL = "PROFESSIONAL"
 }
 
-export interface CustomerOrEmployee {
+export interface CustomerOrProfessional {
   id: string
   name: string | null
   registerCompleted: boolean
   email: string
   userType: UserType
-  profilePhotoUrl: string
+  profilePhotoUrl?: string
 }
 
 export type Customer = {
@@ -24,6 +24,7 @@ export type Customer = {
   googleId: string | null;
   phone: string | null;
   profilePhotoUrl: string | null;
+  alwaysAllowImageUse: boolean | null;
   userType: UserType;
   referrerId: string;
   referralCount: number;
@@ -31,13 +32,14 @@ export type Customer = {
   updatedAt: Date;
 }
 
-export type Employee = {
+export type Professional = {
   id: string;
   name: string | null;
   email: string;
   googleId: string | null;
   registerCompleted: boolean;
   socialMedia: { name: string, url: string }[] | null;
+  paymentMethods: { name: string, }[] | null;
   contact: string | null;
   specialization: string | null;
   profilePhotoUrl: string;
@@ -52,7 +54,7 @@ export type Shift = {
   isBusy: boolean;
   shiftStart: string;
   shiftEnd: string;
-  employeeId: string;
+  professionalId: string;
   createdAt: Date;
   updatedAt: Date;
 }

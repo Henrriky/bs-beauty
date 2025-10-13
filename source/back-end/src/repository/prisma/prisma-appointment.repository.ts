@@ -1,6 +1,7 @@
 import { type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
-import { type AppointmentRepository } from '../protocols/appointment.repository'
+import { appointmentNonFinishedStatus, type AppointmentRepository } from '../protocols/appointment.repository'
+import { type FindNonFinishedByUserAndDay } from '../types/appointment-repository.types'
 
 class PrismaAppointmentRepository implements AppointmentRepository {
   public async findAll () {
@@ -17,6 +18,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
         observation: true,
         status: true,
         appointmentDate: true,
+        allowImageUse: true,
         customerId: true,
         serviceOfferedId: true,
         createdAt: true,
@@ -26,31 +28,32 @@ class PrismaAppointmentRepository implements AppointmentRepository {
             id: true,
             estimatedTime: true,
             price: true,
-            employeeId: true,
+            professionalId: true,
             service: {
               select: {
                 name: true
               }
             },
-            employee: true
+            professional: true
           }
-        }
+        },
+        rating: true
       }
     })
 
     return appointment
   }
 
-  public async findByCustomerOrEmployeeId (customerOrEmployeeId: string) {
+  public async findByCustomerOrProfessionalId (customerOrProfessionalId: string) {
     const appointments = await prismaClient.appointment.findMany({
       where: {
         OR: [
           {
-            customerId: customerOrEmployeeId
+            customerId: customerOrProfessionalId
           },
           {
             offer: {
-              employeeId: customerOrEmployeeId
+              professionalId: customerOrProfessionalId
             }
           }
         ]
@@ -62,30 +65,24 @@ class PrismaAppointmentRepository implements AppointmentRepository {
         appointmentDate: true,
         customerId: true,
         serviceOfferedId: true,
+        allowImageUse: true,
         createdAt: true,
         updatedAt: true,
         offer: {
           select: {
             id: true,
             estimatedTime: true,
-            employeeId: true,
+            professionalId: true,
             service: {
               select: {
                 name: true
               }
             },
-            employee: true
+            professional: true
           }
-        }
+        },
+        rating: true  // TODO: select only used attributes
       }
-    })
-
-    return appointments
-  }
-
-  public async findByAppointmentDate (appointmentDate: Date) {
-    const appointments = await prismaClient.appointment.findMany({
-      where: { appointmentDate }
     })
 
     return appointments
@@ -97,6 +94,81 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     })
 
     return appointments
+  }
+
+  public async findNonFinishedByUserAndDay (userId: string, dayToFetchAvailableSchedulling: Date) {
+    const startOfDay = new Date(dayToFetchAvailableSchedulling)
+    startOfDay.setHours(0, 0, 0, 0)
+
+    const endOfDay = new Date(dayToFetchAvailableSchedulling)
+    endOfDay.setHours(23, 59, 59, 999)
+
+    const nonFinishedAppointmentsByUserOnDay = await prismaClient
+      .appointment
+      .findMany({
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  customerId: userId
+                },
+                {
+                  offer: {
+                    professionalId: userId
+                  }
+                }
+              ]
+            },
+            {
+              appointmentDate: {
+                gte: startOfDay,
+                lte: endOfDay
+              }
+            },
+            {
+              status: {
+                in: appointmentNonFinishedStatus
+              }
+            }
+          ]
+        },
+        select: {
+          offer: true,
+          id: true,
+          observation: true,
+          status: true,
+          appointmentDate: true
+        }
+      })
+
+    return {
+      validAppointmentsOnDay: nonFinishedAppointmentsByUserOnDay.map(appointment => ({
+        id: appointment.id,
+        observation: appointment.observation,
+        status: appointment.status,
+        appointmentDate: appointment.appointmentDate,
+        appointmentId: appointment.id,
+        estimatedTime: appointment.offer.estimatedTime
+      }) satisfies FindNonFinishedByUserAndDay[0])
+    }
+  }
+
+  public async countCustomerAppointmentsPerDay (customerId: string, day: Date = new Date()): Promise<number> {
+    const startOfDay = new Date(day)
+    startOfDay.setHours(0, 0, 0, 0)
+    const endOfDay = new Date(day)
+    endOfDay.setHours(23, 59, 59, 59)
+
+    return await prismaClient.appointment.count({
+      where: {
+        customerId,
+        createdAt: {
+          gte: startOfDay,
+          lte: endOfDay
+        }
+      }
+    })
   }
 
   public async create (appointmentToCreate: Prisma.AppointmentCreateInput) {

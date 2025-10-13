@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { ServiceStatus } from '@prisma/client'
 
 class ServiceSchemas {
   public static createSchema = z.object({
@@ -11,7 +12,8 @@ class ServiceSchemas {
   public static updateSchema = z.object({
     name: z.string().min(3).max(50).refine((string) => RegexPatterns.names.test(string)).optional(),
     description: z.string().min(2).max(255).refine((string) => RegexPatterns.content.test(string)).optional(),
-    category: z.string().min(2).max(30).refine((string) => RegexPatterns.names.test(string)).optional()
+    category: z.string().min(2).max(30).refine((string) => RegexPatterns.names.test(string)).optional(),
+    status: z.enum([ServiceStatus.APPROVED, ServiceStatus.REJECTED]).optional()
   }).strict()
 }
 

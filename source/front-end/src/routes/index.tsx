@@ -5,10 +5,10 @@ import Callback from '../pages/callback'
 import CompleteRegister from '../pages/complete-register'
 import RegistrationCompleted from '../pages/complete-register/components/RegistrationCompleted'
 import Customers from '../pages/customers'
-import EmployeeShifts from '../pages/employee-shifts'
-import EmployeesManagement from '../pages/employees-management'
+import Shifts from '../pages/shifts'
+import Professionals from '../pages/professionals'
 import Login from '../pages/login'
-import ManagerHome from '../pages/manager-home'
+import ManagerHome from '../pages/home/manager-professional-home'
 import NotFound from '../pages/not-found'
 import PrivateRoute from '../pages/private-route'
 import Profile from '../pages/profile'
@@ -17,6 +17,9 @@ import { UserType } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
+import UserRegistration from '../pages/user-registration'
+import PasswordReset from '../pages/password-reset'
+import PasswordResetCompleted from '../pages/password-reset/components/PasswordResetCompleted'
 
 function BSBeautyRouter() {
   return (
@@ -26,12 +29,18 @@ function BSBeautyRouter() {
           <Route index element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth/google/callback" element={<Callback />} />
+          <Route path="/register" element={<UserRegistration />} />
+          <Route path="/reset-password" element={<PasswordReset />} />
+          <Route
+            path="/password-reset-completed"
+            element={<PasswordResetCompleted />}
+          />
           <Route
             element={
               <PrivateRoute
                 allowedUserTypes={[
                   UserType.MANAGER,
-                  UserType.EMPLOYEE,
+                  UserType.PROFESSIONAL,
                   UserType.CUSTOMER,
                 ]}
               />
@@ -54,13 +63,13 @@ function BSBeautyRouter() {
                 <Route path="/customer/home" element={<CustomerHome />} />
               </Route>
 
-              {/* EMPLOYEE ROUTES */}
+              {/* PROFESSIONAL ROUTES */}
               <Route
                 element={
-                  <PrivateRoute allowedUserTypes={[UserType.EMPLOYEE]} />
+                  <PrivateRoute allowedUserTypes={[UserType.PROFESSIONAL]} />
                 }
               >
-                <Route path="/employee/home" element={<ManagerHome />} />
+                <Route path="/professional/home" element={<ManagerHome />} />
               </Route>
 
               {/* MANAGER ROUTES */}
@@ -68,26 +77,23 @@ function BSBeautyRouter() {
                 element={<PrivateRoute allowedUserTypes={[UserType.MANAGER]} />}
               >
                 <Route path="/manager/home" element={<ManagerHome />} />
-                <Route path="/customers" element={<Customers />} />
+                <Route path="/manager/customers" element={<Customers />} />
                 <Route
-                  path="/employees-management"
-                  element={<EmployeesManagement />}
+                  path="/manager/professionals"
+                  element={<Professionals />}
                 />
               </Route>
 
-              {/* EMPLOYEE/MANAGER ROUTES */}
+              {/* PROFESSIONAL/MANAGER ROUTES */}
               <Route
                 element={
                   <PrivateRoute
-                    allowedUserTypes={[UserType.MANAGER, UserType.EMPLOYEE]}
+                    allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
                   />
                 }
               >
-                <Route
-                  path="/management/services"
-                  element={<ServiceDashboard />}
-                />
-                <Route path="/employee-shifts" element={<EmployeeShifts />} />
+                <Route path="/services" element={<ServiceDashboard />} />
+                <Route path="/shifts" element={<Shifts />} />
               </Route>
 
               <Route path="/profile" element={<Profile />} />

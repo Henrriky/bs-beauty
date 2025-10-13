@@ -11,7 +11,7 @@
 //         .string()
 //         .refine((string) => RegexPatterns.time.test(string)),
 //       shiftEnd: z.string().refine((string) => RegexPatterns.time.test(string)),
-//       employeeId: z.string().uuid(),
+//       professionalId: z.string().uuid(),
 //     })
 //     .strict()
 

@@ -6,7 +6,8 @@ import ProfilePicture from '../../pages/profile/components/ProfilePicture'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
 import sideBarItems from './consts'
 import { useDispatch } from 'react-redux'
-import { logout } from '../../store/auth/auth-slice'
+import { serverLogout } from '../../store/auth/server-logout'
+import { authAPI } from '../../store/auth/auth-api'
 
 interface SideBarItemProps {
   path: string
@@ -19,6 +20,13 @@ function SideBar() {
   const user = useAppSelector((state) => state.auth.user!)
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
 
+  const selectUserInfo = authAPI.endpoints.fetchUserInfo.select()
+  const userInfoQuery = useAppSelector(selectUserInfo)
+
+  const displayName = userInfoQuery?.data?.user.name ?? user.name
+  const photoUrl = userInfoQuery?.data?.user.profilePhotoUrl ?? user.profilePhotoUrl
+  const userType = userInfoQuery?.data?.user.userType ?? user.userType
+
   const toggleSideBar = () => {
     setIsSideBarOpen(!isSideBarOpen)
   }
@@ -28,16 +36,26 @@ function SideBar() {
   return (
     <>
       <div>
-        <nav className={`transition-opacity ease-in-out bg-primary-900 mb-5 w-full z-0 left-0 top-[0px]`}>
-          <div className={`text-[12px] transition-all flex flex-row gap-2 justify-center pt-5`}>
+        <nav
+          className={`transition-opacity ease-in-out bg-primary-900 mb-5 w-full z-0 left-0 top-[0px]`}
+        >
+          <div
+            className={`text-[12px] transition-all flex flex-row gap-2 justify-center pt-5`}
+          >
             <button
               className={`transition-all w-[25px] text-primary-400 hover:w-[30px] hover:text-primary-200 mr-auto`}
               onClick={toggleSideBar}
             >
               <Bars3Icon className="size-7" />
             </button>
-            <div className={'hover:cursor-pointer'} onClick={() => navigate('/profile')}>
-              <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} size="sm" />
+            <div
+              className={'hover:cursor-pointer'}
+              onClick={() => navigate('/profile')}
+            >
+              <ProfilePicture
+                profilePhotoUrl={photoUrl ?? ''}
+                size="sm"
+              />
             </div>
           </div>
         </nav>
@@ -46,27 +64,39 @@ function SideBar() {
         <Outlet />
       </section>
 
-      {isSideBarOpen &&
-        <div className={'transition-all flex flex-row w-full h-full absolute left-0 top-[0px]'}>
+      {isSideBarOpen && (
+        <div
+          className={
+            'transition-all flex flex-row w-full h-full absolute left-0 top-[0px]'
+          }
+        >
           <nav className={'bg-primary-900 mb-5 h-full w-9/12 z-20'}>
-            <div className={`text-[12px] transition-all pl-4 mt-11 flex flex-col gap-5`}>
+            <div
+              className={`text-[12px] transition-all pl-4 mt-11 flex flex-col gap-5`}
+            >
               <button
                 className={`transition-all w-[25px] text-primary-400 hover:w-[30px] hover:text-primary-200 place-self-end mr-5 absolute `}
                 onClick={toggleSideBar}
               >
                 <XMarkIcon />
               </button>
-              <div className={'hover:cursor-pointer w-9'} onClick={() => navigate('/profile')}>
-                <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} size="sm" />
+              <div
+                className={'hover:cursor-pointer w-9'}
+                onClick={() => navigate('/profile')}
+              >
+                <ProfilePicture
+                  profilePhotoUrl={user.profilePhotoUrl ?? ''}
+                  size="sm"
+                />
               </div>
               <h2 className="text-primary-0 mb-9 text-sm capitalize">
-                {user.name ? firstLetterOfWordToUpperCase(user.name) : ''}
+                {displayName ? firstLetterOfWordToUpperCase(displayName) : ''}
               </h2>
             </div>
             <div className="">
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
               <ul className="text-primary-200 mt-8 text-[12px]">
-                {sideBarItems.COMMON.concat(sideBarItems[user.userType!])
+                {sideBarItems.COMMON.concat(sideBarItems[userType!])
                   .map((sideBarItem) => {
                     return (
                       <SideBarItem
@@ -88,7 +118,7 @@ function SideBar() {
             className={`${isSideBarOpen ? 'w-full h-full backdrop-blur-sm z-10' : 'hidden'}`}
           ></div>
         </div>
-      }
+      )}
     </>
   )
 }
@@ -97,12 +127,10 @@ function SideBarItem(props: SideBarItemProps) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (props.children === 'Sair') {
-      dispatch(logout())
-      localStorage.removeItem('token')
-      localStorage.removeItem('googleAccessToken')
-      navigate('/')
+      await dispatch<any>(serverLogout())
+      navigate('/', { replace: true })
     } else {
       navigate(`${props.path}`)
     }
