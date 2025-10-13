@@ -108,7 +108,7 @@ O diagrama acima é composto pelos seguintes componentes:
 
 O fluxo de execução típico da aplicação baseado no diagrama de implantação acima segue os seguintes passos:
 \begin{enumerate}
-  \item O usuário acessa a aplicação pelo navegador, requisitando os arquivos \gls{html}/\gls{css}/\gls{js} ao servidor \emph{NGINX}.
+  \item O usuário acessa a aplicação pelo navegador, requisitando os arquivos \gls{html}\slash\gls{css}\slash\gls{js} ao servidor \emph{NGINX}.
   \item O \emph{NGINX}, atuando como proxy reverso, redireciona essas requisições para o serviço de \emph{back-end} na instância privada.
   \item A \gls{api} processa a requisição, acessa o banco de dados quando necessário e retorna os dados.
   \item Em caso de autenticação via Google, a \gls{api} redireciona o usuário para o serviço \emph{Google OAuth} \cite{GoogleOAuth}, que retorna um \emph{token} de acesso após o \emph{login}.
