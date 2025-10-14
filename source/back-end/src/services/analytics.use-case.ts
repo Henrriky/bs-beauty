@@ -4,6 +4,7 @@ import { type ProfessionalRepository } from '@/repository/protocols/professional
 import { type RatingRepository } from '@/repository/protocols/rating.repository'
 import { type ServiceRepository } from '@/repository/protocols/service.repository'
 import { type PublicProfessionalInfo } from '@/types/analytics'
+import { Status } from '@prisma/client'
 
 class AnalyticsUseCase {
   constructor (
@@ -60,8 +61,19 @@ class AnalyticsUseCase {
     return await this.getBestRated(professionalRatings, amount)
   }
 
-  public async executeGetAppointmentNumberOnDateRange (startDate: Date, endDate: Date) {
-    const appointments = await this.appointmentRepository.findByDateRange(startDate, endDate)
+  public async executeGetAppointmentNumberOnDateRange (startDate: Date, endDate: Date, statusList?: string[]) {
+    const start = new Date(startDate)
+    start.setUTCHours(0, 0, 0, 0)
+
+    const end = new Date(endDate)
+    end.setUTCHours(23, 59, 59, 999)
+
+    const validStatuses = new Set(Object.values(Status))
+    const filteredStatusList = statusList
+      ?.map(s => String(s).toUpperCase())
+      .filter(s => validStatuses.has(s as Status)) as Status[] | undefined
+
+    const appointments = await this.appointmentRepository.findByDateRange(start, end, filteredStatusList)
     return appointments.length
   }
 

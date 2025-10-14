@@ -277,7 +277,7 @@ class AnalyticsController {
 
   public static async handleGetAppointmentAmountInDateRange (req: Request, res: Response, next: NextFunction) {
     try {
-      const { startDate, endDate } = req.body as { startDate: string, endDate: string }
+      const { startDate, endDate, statusList } = req.body as { startDate: string, endDate: string, statusList: string[] | undefined }
 
       if (startDate === '' || startDate === undefined || endDate === '' || endDate === undefined) {
         return res.status(400).json({ message: 'startDate and endDate are required in the request body.' })
@@ -290,7 +290,7 @@ class AnalyticsController {
       }
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
-      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRange(parsedStartDate, parsedEndDate)
+      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRange(parsedStartDate, parsedEndDate, statusList)
       res.json({ appointmentCount })
     } catch (error) {
       next(error)

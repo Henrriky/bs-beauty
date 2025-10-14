@@ -1,4 +1,4 @@
-import { type Prisma } from '@prisma/client'
+import { Status, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { appointmentNonFinishedStatus, type AppointmentRepository } from '../protocols/appointment.repository'
 import { type FindNonFinishedByUserAndDay } from '../types/appointment-repository.types'
@@ -97,14 +97,20 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async findByDateRange (startDate: Date, endDate: Date) {
-    const appointments = await prismaClient.appointment.findMany({
-      where: {
-        appointmentDate: {
-          gte: startDate,
-          lte: endDate
-        }
+  public async findByDateRange (startDate: Date, endDate: Date, statusList?: Status[]) {
+    const where: Prisma.AppointmentWhereInput = {
+      appointmentDate: {
+        gte: startDate,
+        lte: endDate
       }
+    }
+
+    if (statusList && statusList.length > 0) {
+      where.status = { in: statusList }
+    }
+
+    const appointments = await prismaClient.appointment.findMany({
+      where
     })
 
     return appointments
