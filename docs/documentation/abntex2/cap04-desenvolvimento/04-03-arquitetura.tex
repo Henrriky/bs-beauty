@@ -4,25 +4,30 @@ Nessa seção, apresenta-se a arquitetura da aplicação, que define como os com
 
 \subsection{Definições da arquitetura}
 
-O sistema foi estruturado com base no modelo cliente-servidor, no qual o \emph{front-end} e o \emph{back-end} operam como aplicações independentes que se comunicam por meio de requisições \gls{http}, seguindo a arquitetura RESTful~\cite{RESTArch}.
+O sistema foi estruturado com base no modelo cliente-servidor, no qual o \emph{front-end} e o \emph{back-end} operam como aplicações independentes que se comunicam por meio de requisições \gls{http}, seguindo a arquitetura RESTful~\cite{RESTArch}. Essa característica adota um padrão baseado no \gls{mvc}~\cite{MDNMVC} de forma adaptada, aproximando-se de uma arquitetura em camadas. Essa escolha organiza o código de maneira modular, o que facilita a manutenção, testabilidade e escalabilidade do sistema.
 
-O \emph{back-end} é responsável pelo processamento da lógica de negócios e pela persistência dos dados, enquanto o \emph{front-end} realiza a apresentação e interação com o usuário. Essa separação garante maior modularidade e facilita a manutenção da aplicação, cujo domínio é um ambiente de \textit{coworking} para salões de beleza.
+Historicamente, o padrão \gls{mvc} foi desenvolvido em um contexto em que a lógica de negócio e a interface de visualização eram implementados na mesma base de código, como em aplicações \emph{desktop} ou \emph{server-side} com PHP. Nesse modelo tradicional, o \emph{Controller} recebia a requisição do usuário, interagia com o \emph{Model} para processar os dados e, em seguida, atualizava a \emph{View}, tudo no mesmo ambiente de execução.
 
-A arquitetura do sistema adota um padrão baseado no \gls{mvc}~\cite{MDNMVC} de forma adaptada, aproximando-se de uma arquitetura em camadas. Cada camada possui uma responsabilidade bem definida, conforme descrito a seguir:
+Com a evolução das tecnologias web, houve um crescimento significativo de desacoplamento da camada de visualização, que hoje é frequentemente implementada como uma \emph{Single Page Application} (SPA) utilizando frameworks modernos como \emph{React}, \emph{Angular} ou \emph{Vue.js}. O que antes era considerado \emph{Model} e \emph{Controller} passou a ser visto como o \emph{back-end}, enquanto a \emph{View} tornou-se o \emph{front-end}, que executa diretamente no navegador do usuário.
+
+Por esse motivo, considera-se que o sistema desenvolvido adota uma versão adaptada do padrão \gls{mvc}, onde o \emph{Controller} e o \emph{Model} residem no \emph{back-end}, enquanto a \emph{View} é inteiramente gerenciada pelo \emph{front-end}. Essa abordagem promove uma clara separação de responsabilidades:
 
 \begin{itemize}
+  \item \textbf{\emph{View:}} Implementada no \emph{front-end} com a biblioteca \emph{React}, é responsável por toda a interface do usuário, incluindo a apresentação dos dados e a captura das interações do usuário. Ela consome os dados fornecidos pela \gls{api} do \emph{back-end} para renderizar as telas de forma dinâmica.
   \item \textbf{\emph{Controller:}} Responsável por receber e tratar as requisições provenientes do cliente (\emph{front-end}), encaminhando-as para a camada de serviço correspondente. Esta camada lida diretamente com aspectos de infraestrutura externa,  como servidores de borda ou \emph{gateways} de entrada da aplicação, servindo como ponto inicial de processamento das solicitações.
   \item \textbf{\emph{Service:}} Centraliza a lógica de negócio da aplicação. É responsável por processar as regras do domínio e pode tanto consumir outras funções de serviço quanto interagir com a camada de persistência.
   \item \textbf{\emph{Repository:}} Trata das operações relacionadas à persistência de dados. Atua como uma interface entre os serviços e os mecanismos de armazenamento, como bancos de dados relacionais ou caches, promovendo o desacoplamento da lógica de negócio em relação à camada de dados.
 \end{itemize}
 
+A adaptação do MVC para uma arquitetura em camadas proporciona uma série de vantagens importantes. Primeiramente, há um claro desacoplamento entre a interface do usuário e a lógica de negócio, o que permite que diferentes equipes possam realizar o desenvolvimento do \emph{front-end} e do \emph{back-end} de forma independente, utilizando tecnologias e ferramentas específicas para cada camada. Além disso, cada camada pode ser mantida e evoluída de forma independente, o que facilita a manutenção do sistema ao longo do tempo. Essa separação melhora significativamente a testabilidade, permitindo a criação de testes isolados para cada camada, o que contribui para a qualidade do software. Por fim, o modelo favorece a escalabilidade e o reuso de componentes, uma vez que cada camada pode ser dimensionada conforme a demanda e reutilizada em diferentes contextos, garantindo maior modularidade e flexibilidade na evolução do sistema.
+
 \subsection{Diagrama da arquitetura}
 
-Esta subseção apresenta dois diagramas que representam a arquitetura do sistema desenvolvido: o diagrama de componentes e o diagrama de implantação. Esses diagramas auxiliam na visualização do relacionamento entre as partes da aplicação, bem como a sua distribuição nos ambientes computacionais.
+Esta subseção apresenta dois diagramas que representam a arquitetura do sistema desenvolvido: o diagrama de componentes e o diagrama de implantação. Esses diagramas auxiliam na visualização do relacionamento entre os componentes do sistema, bem como a sua distribuição nos ambientes computacionais.
 
 \subsubsection{Diagrama de componentes}
 
-O diagrama de componentes representa a estrutura modular principais módulos do sistema, evidenciando as dependências e as formas de comunicação entre eles, como comentado em ~\cite{Booch2005}. Ele demonstra como os componentes interagem por meio de interfaces — que definem contratos de uso — e implementações — que oferecem as funcionalidades esperadas.
+O diagrama de componentes representa a estrutura modular dos principais módulos do sistema, evidenciando as dependências e as formas de comunicação entre eles, como comentado em ~\cite{Booch2005}. Ele demonstra como os componentes interagem por meio de interfaces — que definem contratos de uso — e implementações — que oferecem as funcionalidades esperadas.
 
 Esse tipo de diagrama é útil para visualizar a estrutura modular da aplicação, facilitando o entendimento da separação de responsabilidades e da reutilização de código, além de apoiar decisões relacionadas à manutenção e evolução do sistema.
 
@@ -103,7 +108,7 @@ O diagrama acima é composto pelos seguintes componentes:
 
 O fluxo de execução típico da aplicação baseado no diagrama de implantação acima segue os seguintes passos:
 \begin{enumerate}
-  \item O usuário acessa a aplicação pelo navegador, requisitando os arquivos \gls{html}/\gls{css}/\gls{js} ao servidor \emph{NGINX}.
+  \item O usuário acessa a aplicação pelo navegador, requisitando os arquivos \gls{html}\slash\gls{css}\slash\gls{js} ao servidor \emph{NGINX}.
   \item O \emph{NGINX}, atuando como proxy reverso, redireciona essas requisições para o serviço de \emph{back-end} na instância privada.
   \item A \gls{api} processa a requisição, acessa o banco de dados quando necessário e retorna os dados.
   \item Em caso de autenticação via Google, a \gls{api} redireciona o usuário para o serviço \emph{Google OAuth} \cite{GoogleOAuth}, que retorna um \emph{token} de acesso após o \emph{login}.
