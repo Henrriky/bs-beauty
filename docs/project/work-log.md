@@ -257,7 +257,7 @@ As tarefas foram distribuídas da seguinte forma:
 
 *Por Giovanna Carvalho*
 
-## Semana 26 - 15.09.2025 a 21.09.2025
+## Semana 26 - 08.09.2025 a 14.09.2025
 
 Nesta semana, a **Sprint 3** foi voltado para realizar melhorias de **segurança** nos processos de **login e cadastro**, bem como aprimorar a experiência dos clientes na **exibição dos serviços**. Para isso, os serviços foram agrupados por categoria e um filtro de busca foi implementado na tela de agendamento.
 
@@ -265,6 +265,54 @@ Ademais, implementamos algumas funcionalidades extras a pedido da entidade parce
 
 Em paralelo, iniciamos o desenvolvimento do design das telas de **relatórios do sistema**, com foco em dados financeiros e de produtividade.
 
-> Resumo: Melhorias de segurança; filtro de serviços; implementação de captação de clientes e autorização de uso de imagem.
+> Resumo: Sprint 3. Melhorias de segurança; filtro de serviços; implementação de captação de clientes e autorização de uso de imagem.
+
+*Por Giovanna Carvalho*
+
+## Semana 27 - 15.09.2025 a 21.09.2025
+
+O foco principal durante a semana, englobando a **Sprint 4**, foi a implementação de novas **funcionalidades essenciais** para a gestão do salão, como o desenvolvimento do processo de aprovação para novos serviços e a capacidade de registrar os **pagamentos** efetuados pelos clientes. Além disso, foram feitos progressos significativos no desenvolvimento do sistema de **notificações**, que funcionará tanto dentro da plataforma quanto por e-mail, e na implementação de um recurso para que os clientes possam avaliar os serviços prestados.
+
+As tarefas foram distribuídas entre a equipe para garantir a cobertura de todas as frentes de desenvolvimento: 
+- Alyson ficou responsável pela lógica de registro de pagamentos, incluindo a tela para que as profissionais possam criar esses registros. 
+- Bruno realizou ajustes na landing page e se dedicou a testar as novas features de aprovação de serviços e **avaliação de clientes**. 
+- Eliel implementou toda a lógica de avaliação de serviços do lado do cliente, fazendo também as alterações necessárias no front-end para que as avaliações sejam exibidas corretamente.
+
+Para a parte de comunicação e documentação, 
+- Henrique se encarregou do envio de notificações sobre os status dos agendamentos para clientes e profissionais, habilitando os alertas no sistema e por e-mail. 
+- Henrriky implementou o processo completo de aprovação de novos serviços, o que incluiu modificações na modelagem de dados e o desenvolvimento das interfaces necessárias. 
+- Giovanna realizou a atualização do diário de bordo para refletir as atividades mais recentes e fez melhorias na **documentação** do projeto, especificamente nas seções de Introdução e Justificativa.
+
+> Resumo: Sprint 4. Registro de serviços e tipos de pagamento; desenvolvimento de notificações; atualização documentação.
+
+*Por Giovanna Carvalho*
+
+## Semana 28 - 22.09.2025 a 28.09.2025
+
+Na Semana 28, a equipe iniciou a **Sprint 5***, direcionando seus esforços para funcionalidades avançadas de **administração e comunicação**. O foco principal foi o desenvolvimento da gestão de papéis e **permissões** dentro do sistema, um recurso crucial que permite à gerente do salão criar e atribuir grupos de permissões específicas para cada profissional de beleza. Adicionalmente, foi implementada a funcionalidade de **templates de mensagem**, com o objetivo de facilitar a comunicação do salão com seus clientes, como no envio automatizado de mensagens de aniversário e outros comunicados.
+
+Para alcançar esses objetivos, 
+- Henrriky implementou toda a lógica de papéis e permissões, incluindo as telas de gestão, permitindo que a gerente limite o **acesso** das profissionais a diferentes partes do sistema. 
+- Henrique ficou encarregado do envio de **mensagens de aniversário**, adaptando a tarefa para permitir a criação de templates para diversas outras mensagens. 
+
+O suporte a essas novas funcionalidades foi distribuído entre os outros membros: 
+- Bruno ficou responsável pela escrita dos **testes** para o envio de mensagens.
+- Giovanna testou a funcionalidade de papéis e permissões e aprimorou a seção de "Análise da Concorrência" na **documentação**. 
+- Eliel finalizou a implementação das avaliações da sprint anterior e começou a trabalhar na exibição de **métricas**, como a média de avaliação do salão, na landing page. 
+- Alyson, que estava designada para a geração de **relatórios gráficos** sobre a captação de clientes, enfrentou dificuldades com uma tarefa da sprint passado, o que acabou atrasando o início da sua atividade planejada para esta semana.
+
+> Resumo: Sprint 5. Controle de accesso implementado; desenvolvimento e teste de mensagens automáticas; atualização documentação; exibição de métricas relatórios.
+
+*Por Giovanna Carvalho*
+
+## Semana 29 - 29.09.2025 a 01.10.2025
+
+> Resumo: Sprint 6.
+
+*Por Giovanna Carvalho*
+
+## Semana 28 - 02.10.2025 a 08.10.2025
+
+> Resumo: Sprint 7.
 
 *Por Giovanna Carvalho*
