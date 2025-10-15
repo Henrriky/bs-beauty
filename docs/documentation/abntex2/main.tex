@@ -502,38 +502,45 @@ title={LISTA DE SIGLAS }
 	\textual
 	
 % ----------------------------------------------------------
-	\chapter{INTRODUÇÃO}
-		
-%o input do capitulo 1 já contem todas as seções dele		
-\input{cap01-introducao/01-00-introducao}
+	\cleardoublepage
+	\chaptermark{INTRODUÇÃO}
+	\chapter{INTRODUÇÃO}		
+	\input{cap01-introducao/01-00-introducao}
 
-	% --------------------------------------
-	
+	% ------------------------------------------------------
+	\cleardoublepage
+	\chaptermark{REVISÃO DA LITERATURA}
 	\chapter{REVISÃO DA LITERATURA}
-	
-	%o input do capitulo 2 já contem todas as seções dele
-	
 	\input{cap02-revisao/02-00-revisao-literatura}	
-	%  ------------------------------------------
 	
-	\include{cap03-gestao/03-00-gestao-projeto.tex}
+	%  --------------------------------------------------
+	\cleardoublepage
+	\chaptermark{GESTÃO DO PROJETO}
+	\chapter{GESTÃO DO PROJETO}
+	\input{cap03-gestao/03-00-gestao-projeto.tex}
 	
-	%-------------------------------------------
 	
-	\include{cap04-desenvolvimento/04-00-desenvolvimento}
+	%----------------------------------------------------------
+	\stepcounter{chapter}
+	%\cleardoublepage
+	\chaptermark{DESENVOLVIMENTO DO PROJETO}
+	\addtocounter{chapter}{-1}
+	\chapter{DESENVOLVIMENTO DO PROJETO}
+	\input{cap04-desenvolvimento/04-00-desenvolvimento}
 	
 	% ----------------------------------------------------------
-	
-	\include{cap05-viabilidade/05-00-viabilidade-financeira.tex}
+	\cleardoublepage
+	\chaptermark{VIABILIDADE FINANCEIRA}
+	\chapter{VIABILIDADE FINANCEIRA}
+	\input{cap05-viabilidade/05-00-viabilidade-financeira.tex}
 	
 	% ---------------------------------------------------------------
-	
+	\cleardoublepage
+	\chaptermark{CONSIDERAÇÕES FINAIS}
 	\chapter{CONSIDERAÇÕES FINAIS}
-
-\input{cap06-Consideracoes/06-00-consideracoes_finais}
+	\input{cap06-Consideracoes/06-00-consideracoes_finais}
 	% ----------------------------------------------------------
 
-	% ---
 	
 	%Página de referencias
 	\renewcommand{\bibname}{REFERÊNCIAS} %renomeia o título da página de referencias
