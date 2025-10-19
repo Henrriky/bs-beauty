@@ -9,5 +9,5 @@ analyticsServiceRoutes.get('/:id', userTypeAuthMiddleware(['PROFESSIONAL', 'MANA
 analyticsServiceRoutes.get('/customers/ratings', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetCustomerAmountPerRatingScore)
 analyticsServiceRoutes.get('/services/rating', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetMeanRatingByService)
 analyticsServiceRoutes.get('/professionals/rating', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetMeanRatingOfProfessionals)
-analyticsServiceRoutes.get('/appointments/amount', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetAppointmentAmountInDateRange)
+analyticsServiceRoutes.get('/appointments/amount', userTypeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), AnalyticsController.handleGetAppointmentAmountInDateRangeByStatusAndProfessional)
 export { analyticsServiceRoutes }

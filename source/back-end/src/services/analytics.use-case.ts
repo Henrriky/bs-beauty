@@ -4,6 +4,7 @@ import { type ProfessionalRepository } from '@/repository/protocols/professional
 import { type RatingRepository } from '@/repository/protocols/rating.repository'
 import { type ServiceRepository } from '@/repository/protocols/service.repository'
 import { type PublicProfessionalInfo } from '@/types/analytics'
+import { CustomError } from '@/utils/errors/custom.error.util'
 import { Status } from '@prisma/client'
 
 class AnalyticsUseCase {
@@ -61,19 +62,23 @@ class AnalyticsUseCase {
     return await this.getBestRated(professionalRatings, amount)
   }
 
-  public async executeGetAppointmentNumberOnDateRange (startDate: Date, endDate: Date, statusList?: string[]) {
+  public async executeGetAppointmentNumberOnDateRangeByStatusAndProfessional (startDate: Date, endDate: Date, statusList?: string[], professionalId?: string) {
     const start = new Date(startDate)
     start.setUTCHours(0, 0, 0, 0)
 
     const end = new Date(endDate)
     end.setUTCHours(23, 59, 59, 999)
 
+    if (start.getTime() > end.getTime()) {
+      throw new CustomError('startDate must be on or before endDate', 400, 'Please, provide a valid date range')
+    }
+
     const validStatuses = new Set(Object.values(Status))
     const filteredStatusList = statusList
       ?.map(s => String(s).toUpperCase())
       .filter(s => validStatuses.has(s as Status)) as Status[] | undefined
 
-    const appointments = await this.appointmentRepository.findByDateRange(start, end, filteredStatusList)
+    const appointments = await this.appointmentRepository.findByDateRangeStatusAndProfessional(start, end, filteredStatusList, professionalId)
     return appointments.length
   }
 

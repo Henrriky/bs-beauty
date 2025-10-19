@@ -45,7 +45,7 @@ interface AppointmentRepository {
   findById: (id: string) => Promise<FindByIdAppointments | null>
   findByCustomerOrProfessionalId: (customerOrProfessionalId: string) => Promise<Appointment[]>
   findByServiceOfferedId: (id: string) => Promise<Appointment[]>
-  findByDateRange: (startDate: Date, endDate: Date, statusList?: Status[]) => Promise<Appointment[]>
+  findByDateRangeStatusAndProfessional: (startDate: Date, endDate: Date, statusList?: Status[], professionalId?: string) => Promise<Appointment[]>
   findNonFinishedByUserAndDay: (
     userId: string,
     dayToFetchAvailableSchedulling: Date
