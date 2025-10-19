@@ -62,7 +62,24 @@ class AnalyticsUseCase {
     return await this.getBestRated(professionalRatings, amount)
   }
 
-  public async executeGetAppointmentNumberOnDateRangeByStatusAndProfessional (startDate: Date, endDate: Date, statusList?: string[], professionalId?: string) {
+  public async executeGetAppointmentNumberOnDateRangeByStatusAndProfessional (
+    requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' |  'MANAGER' }, 
+    startDate: Date, 
+    endDate: Date, 
+    statusList?: string[], 
+    requestedProfessionalId?: string
+  ) {
+
+    let professionalIdToQuery: string | undefined
+
+    if (requestingUser.userType === 'PROFESSIONAL') {
+      professionalIdToQuery = requestingUser.id
+    } else if (requestingUser.userType === 'MANAGER') {
+      professionalIdToQuery = requestedProfessionalId
+    } else {
+      throw new Error('Not authorized to perform this action.') 
+    }
+
     const start = new Date(startDate)
     start.setUTCHours(0, 0, 0, 0)
 
@@ -78,7 +95,7 @@ class AnalyticsUseCase {
       ?.map(s => String(s).toUpperCase())
       .filter(s => validStatuses.has(s as Status)) as Status[] | undefined
 
-    const appointments = await this.appointmentRepository.findByDateRangeStatusAndProfessional(start, end, filteredStatusList, professionalId)
+    const appointments = await this.appointmentRepository.findByDateRangeStatusAndProfessional(start, end, filteredStatusList, professionalIdToQuery)
     return appointments.length
   }
 

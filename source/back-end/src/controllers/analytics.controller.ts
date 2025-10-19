@@ -277,28 +277,19 @@ class AnalyticsController {
 
   public static async handleGetAppointmentAmountInDateRangeByStatusAndProfessional (req: Request, res: Response, next: NextFunction) {
     try {
-      const { startDate, endDate, statusList, professionalId: requestedProfessionalId } = req.body as { startDate: string, endDate: string, statusList: string[] | undefined, professionalId?: string }
-      const userType = req.user.userType
-      
-      if (startDate === '' || startDate === undefined || endDate === '' || endDate === undefined) {
-        return res.status(400).json({ message: 'startDate and endDate are required in the request body.' })
+      const user = req.user
+      const { startDate, endDate, statusList, professionalId } = req.body as { 
+        startDate: string, 
+        endDate: string, 
+        statusList: string[] | undefined, 
+        professionalId?: string 
       }
 
       const parsedStartDate = new Date(startDate)
       const parsedEndDate = new Date(endDate)
-      if (isNaN(parsedStartDate.getTime()) || isNaN(parsedEndDate.getTime())) {
-        return res.status(400).json({ message: 'Invalid date format. Please use a valid date string.' })
-      }
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
-
-      if (userType === 'PROFESSIONAL') {
-        const professionalId = req.user.id
-        const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRangeByStatusAndProfessional(parsedStartDate, parsedEndDate, statusList, professionalId)
-        return res.json({ appointmentCount })
-      }
-
-      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRangeByStatusAndProfessional(parsedStartDate, parsedEndDate, statusList, requestedProfessionalId)
+      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRangeByStatusAndProfessional(user, parsedStartDate, parsedEndDate, statusList, professionalId)
       res.json({ appointmentCount })
     } catch (error) {
       next(error)
