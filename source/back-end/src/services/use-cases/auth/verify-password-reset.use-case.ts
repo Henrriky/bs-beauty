@@ -1,7 +1,7 @@
 import { type CustomerRepository } from '@/repository/protocols/customer.repository'
-import { type CodeValidationService } from './code-validation.service'
+import { type CodeValidationService } from './services/code-validation.service'
 import { CustomError } from '@/utils/errors/custom.error.util'
-import { type PasswordResetTicketService } from './password-reset-ticket.service'
+import { type PasswordResetTicketService } from './services/password-reset-ticket.service'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 
 interface Input { email: string, code: string }
@@ -38,7 +38,7 @@ export class VerifyPasswordResetUseCase {
     const user = customer ?? professional
 
     if (!user) {
-      throw new CustomError('Bad Request', 400, 'Code expired or not found')
+      throw new CustomError('Bad Request', 400, 'User not found')
     }
 
     const ticket = await this.ticketService.create({ email, userId: user.id }, 15 * 60)
