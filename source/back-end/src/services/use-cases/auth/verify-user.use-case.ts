@@ -1,7 +1,7 @@
 import { type CustomerRepository } from '@/repository/protocols/customer.repository'
 import { CustomError } from '@/utils/errors/custom.error.util'
 import { UserType } from '@prisma/client'
-import { type CodeValidationService } from './code-validation.service'
+import { type CodeValidationService } from './services/code-validation.service'
 
 interface VerifyCustomerInput {
   email: string

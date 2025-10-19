@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import { type CustomerRepository } from '@/repository/protocols/customer.repository'
-import { type PasswordResetTicketService } from './password-reset-ticket.service'
+import { type PasswordResetTicketService } from './services/password-reset-ticket.service'
 import { CustomError } from '@/utils/errors/custom.error.util'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 
