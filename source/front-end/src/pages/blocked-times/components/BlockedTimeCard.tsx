@@ -5,8 +5,8 @@ import {
   ExclamationCircleIcon,
 } from '@heroicons/react/16/solid'
 import { firstLetterOfWordToUpperCase } from '../../../utils/formatter/first-letter-of-word-to-upper-case.util'
-// import { UserType } from '../../../store/auth/types'
-// import { UserCanAccessContainer } from '../../../components/authorization/UserCanAccessContainer'
+import { UserType } from '../../../store/auth/types'
+import { UserCanAccessContainer } from '../../../components/authorization/UserCanAccessContainer'
 
 interface BlockedTimeCardProps {
   blockedtime: BlockedTime
@@ -54,39 +54,49 @@ function BlockedTimeCard({
             blockedtime.reason.toLowerCase().slice(0, 30),
           )}
         </h3>
-
+        <h4 className="mt-0.5 text-gray-400 text-xs">
+          Última atualização às
+          {' ' +
+            new Date(blockedtime.createdAt).toLocaleDateString('pt-BR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+        </h4>
         {/* Informations - Status Badge */}
-        <div className="flex items-center gap-2 mt-2">
+        <div className="flex items-center gap-2 mt-1">
           {getIsActiveBadge(blockedtime.isActive)}
         </div>
       </div>
       {/* Actions - Right Side */}
       <div className="flex gap-2 shrink-0">
-        {/* <UserCanAccessContainer
-          allowedPermissions={['blockedtimes.edit']}
-          allowedUserTypes={[UserType.MANAGER]}
-        > */}
-        <button
-          onClick={() => onEdit(blockedtime)}
-          className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
-          title="Editar serviço"
+        <UserCanAccessContainer
+          // TODO: allowedPermissions={['blockedtimes.edit']}
+          allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
         >
-          <PencilSquareIcon className="w-4 h-4" />
-        </button>
-        {/* </UserCanAccessContainer> */}
+          <button
+            onClick={() => onEdit(blockedtime)}
+            className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
+            title="Editar serviço"
+          >
+            <PencilSquareIcon className="w-4 h-4" />
+          </button>
+        </UserCanAccessContainer>
 
-        {/* <UserCanAccessContainer
-          allowedPermissions={['blockedtimes.delete']}
-          allowedUserTypes={[UserType.MANAGER]}
-        > */}
-        <button
-          onClick={() => onDelete(blockedtime)}
-          className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
-          title="Excluir serviço"
+        <UserCanAccessContainer
+          // TODO: allowedPermissions={['blockedtimes.delete']}
+          allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
         >
-          <TrashIcon className="w-4 h-4" />
-        </button>
-        {/* </UserCanAccessContainer> */}
+          <button
+            onClick={() => onDelete(blockedtime)}
+            className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
+            title="Excluir serviço"
+          >
+            <TrashIcon className="w-4 h-4" />
+          </button>
+        </UserCanAccessContainer>
       </div>
     </div>
   )
