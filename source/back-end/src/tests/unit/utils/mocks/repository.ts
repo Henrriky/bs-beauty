@@ -14,6 +14,7 @@ vi.mock('@/factory/make-appointments-use-case.factory')
 
 const MockAppointmentRepository: Mocked<AppointmentRepository> = {
   findAll: vi.fn(),
+  findAllPaginated: vi.fn(),
   findById: vi.fn(),
   findByCustomerOrProfessionalId: vi.fn(),
   findByServiceOfferedId: vi.fn(),
