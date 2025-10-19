@@ -62,22 +62,23 @@ class AnalyticsUseCase {
     return await this.getBestRated(professionalRatings, amount)
   }
 
-  public async executeGetAppointmentNumberOnDateRangeByStatusAndProfessional (
+  public async executeGetAppointmentNumberOnDateRangeByStatusProfessionalAndServices (
     requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' |  'MANAGER' }, 
     startDate: Date, 
     endDate: Date, 
     statusList?: string[], 
-    requestedProfessionalId?: string
+    requestedProfessionalId?: string,
+    serviceIds?: string[]
   ) {
 
     let professionalIdToQuery: string | undefined
 
-    if (requestingUser.userType === 'PROFESSIONAL') {
+    if (requestingUser.userType === 'PROFESSIONAL' && !requestedProfessionalId) {
       professionalIdToQuery = requestingUser.id
     } else if (requestingUser.userType === 'MANAGER') {
       professionalIdToQuery = requestedProfessionalId
     } else {
-      throw new Error('Not authorized to perform this action.') 
+      throw new CustomError('Not authorized to perform this action.', 403, 'You do not have permission to access this data.')
     }
 
     const start = new Date(startDate)
@@ -95,7 +96,7 @@ class AnalyticsUseCase {
       ?.map(s => String(s).toUpperCase())
       .filter(s => validStatuses.has(s as Status)) as Status[] | undefined
 
-    const appointments = await this.appointmentRepository.findByDateRangeStatusAndProfessional(start, end, filteredStatusList, professionalIdToQuery)
+    const appointments = await this.appointmentRepository.findByDateRangeStatusProfessionalAndServices(start, end, filteredStatusList, professionalIdToQuery, serviceIds)
     return appointments.length
   }
 

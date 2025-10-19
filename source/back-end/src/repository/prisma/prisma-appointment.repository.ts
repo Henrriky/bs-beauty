@@ -97,7 +97,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async findByDateRangeStatusAndProfessional (startDate: Date, endDate: Date, statusList?: Status[], professionalId?: string) {
+  public async findByDateRangeStatusProfessionalAndServices (startDate: Date, endDate: Date, statusList?: Status[], professionalId?: string, serviceIds?: string[]) {
     const where: Prisma.AppointmentWhereInput = {
       appointmentDate: {
         gte: startDate,
@@ -109,8 +109,18 @@ class PrismaAppointmentRepository implements AppointmentRepository {
       where.status = { in: statusList }
     }
 
+    const offerWhere: Prisma.OfferWhereInput = {}
+
     if (professionalId) {
-      where.offer = { professionalId }
+      offerWhere.professionalId = professionalId
+    }
+
+    if (serviceIds?.length) {
+      offerWhere.serviceId = { in: serviceIds }
+    }
+
+    if (professionalId || serviceIds?.length) {
+      where.offer = { is: offerWhere }
     }
 
     const appointments = await prismaClient.appointment.findMany({

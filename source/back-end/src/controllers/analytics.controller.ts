@@ -278,18 +278,19 @@ class AnalyticsController {
   public static async handleGetAppointmentAmountInDateRangeByStatusAndProfessional (req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user
-      const { startDate, endDate, statusList, professionalId } = req.body as { 
+      const { startDate, endDate, statusList, professionalId, serviceIds } = req.body as { 
         startDate: string, 
         endDate: string, 
-        statusList: string[] | undefined, 
-        professionalId?: string 
+        statusList?: string[], 
+        professionalId?: string,
+        serviceIds?: string[],
       }
 
       const parsedStartDate = new Date(startDate)
       const parsedEndDate = new Date(endDate)
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
-      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRangeByStatusAndProfessional(user, parsedStartDate, parsedEndDate, statusList, professionalId)
+      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRangeByStatusProfessionalAndServices(user, parsedStartDate, parsedEndDate, statusList, professionalId, serviceIds)
       res.json({ appointmentCount })
     } catch (error) {
       next(error)

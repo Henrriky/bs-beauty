@@ -8,6 +8,7 @@ const getAnalyticsSchema = z.object({
     endDate: z.string().datetime({ message: 'Invalid endDate. Must be a valid ISO date string.' }),
     statusList: z.array(z.string()).optional(),
     professionalId: z.string().optional(),
+    serviceIds: z.array(z.string()).optional(),
   }),
 })
 
