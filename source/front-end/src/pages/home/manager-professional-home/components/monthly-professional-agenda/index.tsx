@@ -264,31 +264,31 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
             .rcScoped .rc-chip{ padding:2px 6px; font-size:10px; line-height:1; border-radius:6px; white-space:nowrap; pointer-events:auto; }
 
             /* navegação: setas coladas ao label do mês */
-.rcScoped.react-calendar .react-calendar__navigation{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;  /* evita space-between */
-  gap:8px !important;
-}
+            .rcScoped.react-calendar .react-calendar__navigation{
+              display:flex !important;
+              align-items:center !important;
+              justify-content:center !important;  /* evita space-between */
+              gap:8px !important;
+            }
 
-/* o label não “expande” */
-.rcScoped.react-calendar .react-calendar__navigation__label{
-  flex:0 0 auto !important;  /* equivale a flex-grow:0, flex-basis:auto */
-  padding:0 .25rem !important;
-  margin:0 !important;
-}
+            /* o label não “expande” */
+            .rcScoped.react-calendar .react-calendar__navigation__label{
+              flex:0 0 auto !important;  /* equivale a flex-grow:0, flex-basis:auto */
+              padding:0 .25rem !important;
+              margin:0 !important;
+            }
 
-/* setas menores e sem min-width do lib */
-.rcScoped.react-calendar .react-calendar__navigation__arrow{
-  min-width:auto !important;
-  padding:2px 4px !important;
-  flex:0 0 auto !important;
-}
+            /* setas menores e sem min-width do lib */
+            .rcScoped.react-calendar .react-calendar__navigation__arrow{
+              min-width:auto !important;
+              padding:2px 4px !important;
+              flex:0 0 auto !important;
+            }
 
-/* ordem explícita: [prev] [label] [next] */
-.rcScoped.react-calendar .react-calendar__navigation__prev-button{ order:1 !important; }
-.rcScoped.react-calendar .react-calendar__navigation__label{       order:2 !important; }
-.rcScoped.react-calendar .react-calendar__navigation__next-button{ order:3 !important; }
+            /* ordem explícita: [prev] [label] [next] */
+            .rcScoped.react-calendar .react-calendar__navigation__prev-button{ order:1 !important; }
+            .rcScoped.react-calendar .react-calendar__navigation__label{       order:2 !important; }
+            .rcScoped.react-calendar .react-calendar__navigation__next-button{ order:3 !important; }
 
           `}</style>
         </div>
