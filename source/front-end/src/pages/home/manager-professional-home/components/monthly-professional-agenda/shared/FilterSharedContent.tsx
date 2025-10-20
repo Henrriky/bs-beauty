@@ -31,7 +31,7 @@ type ContentProps = {
   }>
 }
 
-export default function FilterContent({
+function FilterSharedContent({
   title = 'Filtros',
   onClose,
   statuses,
@@ -80,3 +80,5 @@ export default function FilterContent({
     </div>
   )
 }
+
+export default FilterSharedContent
