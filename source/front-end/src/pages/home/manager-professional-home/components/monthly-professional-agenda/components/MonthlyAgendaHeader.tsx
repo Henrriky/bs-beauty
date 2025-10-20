@@ -35,7 +35,6 @@ function MonthlyAgendaHeader({
         border-b border-[#595149]
       "
     >
-      {/* ESQUERDA: setas coladas ao mês */}
       <div className="flex items-center gap-1 sm:gap-2 flex-1 min-w-0">
         <button
           className="p-2 rounded hover:bg-black/20 focus:outline-none focus:ring-2 focus:ring-[#A4978A]"
@@ -64,7 +63,6 @@ function MonthlyAgendaHeader({
         </button>
       </div>
 
-      {/* DIREITA: ações (não sobrepõe nada) */}
       <div className="flex items-center gap-1 sm:gap-2 shrink-0">
         <button
           className="px-2 sm:px-3 py-1.5 text-sm rounded bg-[#595149] text-primary-0 hover:opacity-80"

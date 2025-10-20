@@ -1,4 +1,3 @@
-// source/front-end/src/pages/home/manager-professional-home/components/monthly-professional-agenda/MobileTabs.tsx
 type Props = {
   activeTab: 'calendar' | 'day'
   onChange: (tab: 'calendar' | 'day') => void
