@@ -58,6 +58,7 @@ export const API_VARIABLES = {
       `/professionals/${professionalId}/roles`,
   },
   APPOINTMENTS_ENDPOINTS: {
+    FETCH_USER_APPOINTMENTS: '/appointments',
     CREATE_APPOINTMENT: '/appointments',
     ASSOCIATE_APPOINTMENT_WITH_OFFER: '/appointments',
     FETCH_CUSTOMER_APPOINTMENTS: '/appointments/customer',
