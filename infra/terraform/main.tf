@@ -35,20 +35,20 @@ resource "aws_internet_gateway" "igw" {
 
 # NAT Gateway
 
-resource "aws_eip" "nat" {
-  tags = {
-    Name = "bsbeauty-eip"
-  }
-}
+# resource "aws_eip" "nat" {
+#   tags = {
+#     Name = "bsbeauty-eip"
+#   }
+# }
 
-resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat.id
-  subnet_id = aws_subnet.public.id
-  connectivity_type = "public"
-  tags = {
-    Name = "bsbeauty-nat"
-  }
-}
+# resource "aws_nat_gateway" "nat" {
+#   allocation_id = aws_eip.nat.id
+#   subnet_id = aws_subnet.public.id
+#   connectivity_type = "public"
+#   tags = {
+#     Name = "bsbeauty-nat"
+#   }
+# }
 
 # Route Tables
 resource "aws_route_table" "public" {
@@ -69,12 +69,12 @@ resource "aws_route_table_association" "public_association" {
 
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.bsbeauty_vpc.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat.id
-  }
+  # route {
+  #   cidr_block = "0.0.0.0/0"
+  #   nat_gateway_id = aws_nat_gateway.nat.id
+  # }
   tags = {
-    Name = "bsbeauty-public-rt"
+    Name = "bsbeauty-private-rt"
   }
 }
 
