@@ -6,14 +6,35 @@ class BlockedTimeSchemas {
       .string()
       .min(2, { message: 'Motivo deve ter pelo menos 2 caracteres' })
       .max(50, { message: 'Motivo deve ter no máximo 50 caracteres' }),
-    startTime: z.string().refine((value) => !isNaN(Date.parse(value)), {
-      message: 'startTime deve ser uma data válida no formato ISO',
-    }),
-    endTime: z.string().refine((value) => !isNaN(Date.parse(value)), {
-      message: 'endTime deve ser uma data válida no formato ISO',
-    }),
+    startTime: z
+      .string()
+      .transform((value) => {
+        if (value.length === 8) {
+          const [hours, minutes, seconds] = value.split(':').map(Number)
+          const date = new Date(`1970-01-01 ${hours}:${minutes}:${seconds}`)
+          return date.toISOString()
+        }
+        return value
+      })
+      .refine((value) => !isNaN(Date.parse(value)), {
+        message: 'Tempo de início deve ser uma data válida no formato ISO',
+      }),
+    endTime: z
+      .string()
+      .transform((value) => {
+        if (value.length === 8) {
+          const [hours, minutes, seconds] = value.split(':').map(Number)
+          const date = new Date(`1970-01-01 ${hours}:${minutes}:${seconds}`)
+          return date.toISOString()
+        }
+        return value
+      })
+
+      .refine((value) => !isNaN(Date.parse(value)), {
+        message: 'Tempo de fim deve ser uma data válida no formato ISO',
+      }),
     startDate: z.string().refine((value) => !isNaN(Date.parse(value)), {
-      message: 'startDate deve ser uma data válida no formato ISO',
+      message: 'Data de início deve ser uma data válida no formato ISO',
     }),
     endDate: z
       .string()
@@ -24,7 +45,7 @@ class BlockedTimeSchemas {
           return !isNaN(Date.parse(value))
         },
         {
-          message: 'startDate deve ser uma data válida no formato ISO',
+          message: 'Data de Final deve ser uma data válida no formato ISO',
         },
       ),
     sunday: z.boolean().optional(),
@@ -58,10 +79,6 @@ class BlockedTimeSchemas {
       startTime: BlockedTimeSchemas.createUpdateBaseSchema.shape.startTime,
     })
     .strict()
-
-  public static updateSchema = BlockedTimeSchemas.createUpdateBaseSchema.extend(
-    {},
-  )
 }
 
 export { BlockedTimeSchemas }

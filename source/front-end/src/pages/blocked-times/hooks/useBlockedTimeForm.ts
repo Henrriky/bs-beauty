@@ -1,14 +1,27 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
-import { CreateBlockedTimeFormData, BlockedTime } from '../types'
+import { useEffect, useMemo } from 'react'
+import {
+  CreateBlockedTimeFormData,
+  BlockedTime,
+  BlockedTimeSelectPeriodPossibleValues,
+} from '../types'
 import { BlockedTimeSchemas } from '../../../utils/validation/zod-schemas/blocked-times.zod-schemas.validation.utils'
+import {
+  convertBlockedTimeToForm,
+  convertFormToBlockedTime,
+  getEndDateFromPeriodSelectValue,
+  getPeriodSelectValueFromSelectedDate,
+} from '../utils'
 
-const CREATE_BLOCKEDTIME_INITIAL_VALUES: CreateBlockedTimeFormData = {
+const CREATE_BLOCKEDTIME_INITIAL_VALUES: Omit<
+  BlockedTime,
+  'id' | 'createdAt' | 'updatedAt' | 'endDate'
+> = {
   reason: '',
-  startDate: new Date().toISOString(),
-  endTime: new Date('1970-01-01T00:00:00').toISOString(),
-  startTime: new Date('1970-01-01T23:00:00').toISOString(),
+  startDate: new Date().toISOString().split('T')[0],
+  startTime: '00:00:00',
+  endTime: '23:59:59',
   sunday: false,
   monday: false,
   tuesday: false,
@@ -20,7 +33,7 @@ const CREATE_BLOCKEDTIME_INITIAL_VALUES: CreateBlockedTimeFormData = {
 }
 
 export function useBlockedTimeForm(
-  blockedtime: BlockedTime | null,
+  blockedTime: BlockedTime | null,
   onSubmit: (data: CreateBlockedTimeFormData) => void,
 ) {
   const {
@@ -29,36 +42,54 @@ export function useBlockedTimeForm(
     formState: { errors },
     reset,
     setValue,
+    watch,
+    getValues,
   } = useForm<CreateBlockedTimeFormData>({
     resolver: zodResolver(BlockedTimeSchemas.createSchema),
     defaultValues: CREATE_BLOCKEDTIME_INITIAL_VALUES,
   })
 
+  const watchedStartDate = watch('startDate')
+  const watchedEndDate = watch('endDate')
+
   useEffect(() => {
-    if (blockedtime) {
-      setValue('reason', blockedtime.reason)
-      setValue('startDate', blockedtime.startDate.toString())
-      setValue(
-        'endDate',
-        blockedtime.endDate ? blockedtime.endDate.toString() : undefined,
-      )
-      setValue('startTime', blockedtime.startTime.toString())
-      setValue('endTime', blockedtime.endTime.toString())
-      setValue('sunday', blockedtime.sunday || false)
-      setValue('monday', blockedtime.monday || false)
-      setValue('tuesday', blockedtime.tuesday || false)
-      setValue('wednesday', blockedtime.wednesday || false)
-      setValue('thursday', blockedtime.thursday || false)
-      setValue('friday', blockedtime.friday || false)
-      setValue('saturday', blockedtime.saturday || false)
-      setValue('isActive', blockedtime.isActive)
-    } else {
-      reset()
-    }
-  }, [blockedtime, setValue, reset])
+    if (blockedTime === null) return
+    const blockedTimeInFormFormat = convertBlockedTimeToForm(blockedTime)
+    setValue('reason', blockedTime ? blockedTime.reason : '')
+    setValue('startTime', blockedTimeInFormFormat.startTime)
+    setValue('endTime', blockedTimeInFormFormat.endTime)
+    setValue('startDate', blockedTimeInFormFormat.startDate)
+    setValue('endDate', blockedTimeInFormFormat.endDate)
+    setValue('sunday', blockedTime ? blockedTime.sunday : false)
+    setValue('monday', blockedTime ? blockedTime.monday : false)
+    setValue('tuesday', blockedTime ? blockedTime.tuesday : false)
+    setValue('wednesday', blockedTime ? blockedTime.wednesday : false)
+    setValue('thursday', blockedTime ? blockedTime.thursday : false)
+    setValue('friday', blockedTime ? blockedTime.friday : false)
+    setValue('saturday', blockedTime ? blockedTime.saturday : false)
+    setValue('isActive', blockedTime ? blockedTime.isActive : true)
+  }, [blockedTime, setValue])
+
+  const periodSelectValue = useMemo(() => {
+    return getPeriodSelectValueFromSelectedDate(
+      watchedStartDate,
+      watchedEndDate,
+    )
+  }, [watchedStartDate, watchedEndDate])
+
+  const handlePeriodChange = (period: string) => {
+    setValue(
+      'endDate',
+      getEndDateFromPeriodSelectValue(
+        period as BlockedTimeSelectPeriodPossibleValues,
+        getValues('startDate'),
+      ),
+    )
+  }
 
   const handleFormSubmit = (data: CreateBlockedTimeFormData) => {
-    onSubmit(data)
+    const blockedTimeInAPIFormat = convertFormToBlockedTime(data)
+    onSubmit(blockedTimeInAPIFormat)
   }
 
   const resetForm = () => {
@@ -70,5 +101,7 @@ export function useBlockedTimeForm(
     handleSubmit: handleSubmit(handleFormSubmit),
     errors,
     resetForm,
+    periodSelectValue,
+    handlePeriodChange,
   }
 }

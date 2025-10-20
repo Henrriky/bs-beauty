@@ -1,6 +1,17 @@
 import { z } from 'zod'
 import { BlockedTimeSchemas } from '../../../utils/validation/zod-schemas/blocked-times.zod-schemas.validation.utils'
 
+/* Types */
+export type BlockedTimeSelectPeriodPossibleValues =
+  | 'undefined'
+  | 'custom'
+  | 'today'
+  | '1week'
+  | '1month'
+  | '3months'
+  | '6months'
+  | '1year'
+
 /* ============== Common Types ==============  */
 export interface PaginatedRequest<T> {
   page?: number
@@ -21,10 +32,10 @@ export interface BlockedTime {
   id: string
   reason: string
   isActive: boolean
-  startTime: Date
-  endTime: Date
-  startDate: Date
-  endDate: Date
+  startTime: string // ISO Format
+  endTime: string // ISO Format
+  startDate: string // ISO Format
+  endDate: string // ISO Format
   monday: boolean
   tuesday: boolean
   wednesday: boolean
@@ -40,9 +51,7 @@ export interface BlockedTime {
 export type CreateBlockedTimeFormData = z.infer<
   typeof BlockedTimeSchemas.createSchema
 >
-export type UpdateBlockedTimeFormData = z.infer<
-  typeof BlockedTimeSchemas.updateSchema
->
+export type UpdateBlockedTimeFormData = CreateBlockedTimeFormData
 
 /* ============== API Requests ============== */
 

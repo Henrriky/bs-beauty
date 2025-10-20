@@ -157,9 +157,9 @@ model BlockedTime {
   isActive Boolean @default(true) @map("is_active")
 
   startDate DateTime  @map("start_date") @db.Date()
-  endDate   DateTime  @map("end_date") @db.Date()
+  endDate   DateTime? @map("end_date") @db.Date()
   startTime DateTime  @map("start_time") @db.Time()
-  endTime   DateTime? @map("end_time") @db.Time()
+  endTime   DateTime  @map("end_time") @db.Time()
 
   monday    Boolean @default(false)
   tuesday   Boolean @default(false)

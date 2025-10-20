@@ -4,23 +4,23 @@ import {
   PlusIcon,
   SparklesIcon,
   XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { useEffect, useMemo, useState } from "react";
-import { Button } from "../../../components/button/Button";
-import { NotificationTemplate } from "../../../store/notification-template/types";
-import { toast } from "react-toastify";
+} from '@heroicons/react/24/outline'
+import { useEffect, useMemo, useState } from 'react'
+import { Button } from '../../../components/button/Button'
+import { NotificationTemplate } from '../../../store/notification-template/types'
+import { toast } from 'react-toastify'
 
-type ActiveField = "title" | "body" | null;
-export type VariableExamples = Record<string, string>;
+type ActiveField = 'title' | 'body' | null
+export type VariableExamples = Record<string, string>
 
 type Props = {
-  isOpen: boolean;
-  template: NotificationTemplate | null;
-  isSaving?: boolean;
-  onClose: () => void;
-  onSave: (data: { title: string; body: string }) => Promise<void> | void;
-  variableExamples?: VariableExamples;
-};
+  isOpen: boolean
+  template: NotificationTemplate | null
+  isSaving?: boolean
+  onClose: () => void
+  onSave: (data: { title: string; body: string }) => Promise<void> | void
+  variableExamples?: VariableExamples
+}
 
 export default function NotificationTemplateEditorModal({
   isOpen,
@@ -30,81 +30,81 @@ export default function NotificationTemplateEditorModal({
   onSave,
   variableExamples = {},
 }: Props) {
-  const [editTitle, setEditTitle] = useState("");
-  const [editBody, setEditBody] = useState("");
-  const [showPreview, setShowPreview] = useState(false);
-  const [activeField, setActiveField] = useState<ActiveField>(null);
+  const [editTitle, setEditTitle] = useState('')
+  const [editBody, setEditBody] = useState('')
+  const [showPreview, setShowPreview] = useState(false)
+  const [activeField, setActiveField] = useState<ActiveField>(null)
 
   useEffect(() => {
-    if (!isOpen || !template) return;
-    setEditTitle(template.title || "");
-    setEditBody(template.body || "");
-    setShowPreview(false);
-    setActiveField(null);
-  }, [isOpen, template]);
+    if (!isOpen || !template) return
+    setEditTitle(template.title || '')
+    setEditBody(template.body || '')
+    setShowPreview(false)
+    setActiveField(null)
+  }, [isOpen, template])
 
   useEffect(() => {
-    if (!isOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (!isOpen) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !isSaving) onClose();
-    };
-    window.addEventListener("keydown", onKey);
+      if (e.key === 'Escape' && !isSaving) onClose()
+    }
+    window.addEventListener('keydown', onKey)
     return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [isOpen, isSaving, onClose]);
+      document.body.style.overflow = prev
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [isOpen, isSaving, onClose])
 
   const closeSafely = () => {
-    if (!isSaving) onClose();
-  };
+    if (!isSaving) onClose()
+  }
 
   const dirty = useMemo(() => {
-    if (!template) return false;
+    if (!template) return false
     return (
-      editTitle.trim() !== (template.title ?? "") ||
-      editBody.trim() !== (template.body ?? "")
-    );
-  }, [editTitle, editBody, template]);
+      editTitle.trim() !== (template.title ?? '') ||
+      editBody.trim() !== (template.body ?? '')
+    )
+  }, [editTitle, editBody, template])
 
   const insertVariable = (variable: string) => {
-    const variableText = `{${variable}}`;
-    if (activeField === "title") setEditTitle((p) => p + variableText);
-    else if (activeField === "body") setEditBody((p) => p + variableText);
+    const variableText = `{${variable}}`
+    if (activeField === 'title') setEditTitle((p) => p + variableText)
+    else if (activeField === 'body') setEditBody((p) => p + variableText)
     else {
-      setEditBody((p) => p + variableText);
-      setActiveField("body");
+      setEditBody((p) => p + variableText)
+      setActiveField('body')
     }
-  };
+  }
 
   const renderPreview = (text: string) => {
-    if (!template || !text) return text;
-    let preview = text;
+    if (!template || !text) return text
+    let preview = text
     template.variables?.forEach((variable) => {
-      const regex = new RegExp(`{${variable}}`, "g");
-      const example = variableExamples[variable] || `[${variable}]`;
-      preview = preview.replace(regex, example);
-    });
-    return preview;
-  };
+      const regex = new RegExp(`{${variable}}`, 'g')
+      const example = variableExamples[variable] || `[${variable}]`
+      preview = preview.replace(regex, example)
+    })
+    return preview
+  }
 
   const handleSaveClick = async () => {
-    const title = editTitle.trim();
-    const body = editBody.trim();
+    const title = editTitle.trim()
+    const body = editBody.trim()
     if (!title || !body) {
-      toast.warn("Preencha título e mensagem antes de salvar.");
-      return;
+      toast.warn('Preencha título e mensagem antes de salvar.')
+      return
     }
     if (!dirty) {
-      toast.info("Nada para salvar: nenhum campo foi alterado.");
-      return;
+      toast.info('Nada para salvar: nenhum campo foi alterado.')
+      return
     }
-    await onSave({ title, body });
-  };
+    await onSave({ title, body })
+  }
 
-  if (!isOpen || !template) return null;
+  if (!isOpen || !template) return null
 
   return (
     <div
@@ -147,7 +147,7 @@ export default function NotificationTemplateEditorModal({
               ) : (
                 <EyeIcon className="w-3.5 h-3.5" />
               )}
-              {showPreview ? "Ocultar" : "Preview"}
+              {showPreview ? 'Ocultar' : 'Preview'}
             </button>
           </div>
 
@@ -156,7 +156,7 @@ export default function NotificationTemplateEditorModal({
             <textarea
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
-              onFocus={() => setActiveField("title")}
+              onFocus={() => setActiveField('title')}
               placeholder="Digite o título..."
               disabled={isSaving}
               className="w-full text-sm md:text-base text-[#A5A5A5] bg-[#1a1a1a]
@@ -169,7 +169,7 @@ export default function NotificationTemplateEditorModal({
               <div className="p-3 bg-[#272727] border border-[#3B3B3B] rounded-lg">
                 <div className="text-sm text-[#A5A5A5] mb-1">Preview:</div>
                 <div className="text-[#D9D9D9] text-xs md:text-sm">
-                  {renderPreview(editTitle) || "Título vazio"}
+                  {renderPreview(editTitle) || 'Título vazio'}
                 </div>
               </div>
             )}
@@ -180,7 +180,7 @@ export default function NotificationTemplateEditorModal({
             <textarea
               value={editBody}
               onChange={(e) => setEditBody(e.target.value)}
-              onFocus={() => setActiveField("body")}
+              onFocus={() => setActiveField('body')}
               placeholder="Digite a mensagem..."
               disabled={isSaving}
               className="w-full text-sm md:text-base text-[#A5A5A5] bg-[#1a1a1a]
@@ -193,7 +193,7 @@ export default function NotificationTemplateEditorModal({
               <div className="p-3 bg-[#272727] border border-[#3B3B3B] rounded-lg">
                 <div className="text-xs text-[#A5A5A5] mb-1">Preview:</div>
                 <div className="text-[#A5A5A5] text-xs md:text-sm whitespace-pre-wrap">
-                  {renderPreview(editBody) || "Mensagem vazia"}
+                  {renderPreview(editBody) || 'Mensagem vazia'}
                 </div>
               </div>
             )}
@@ -227,8 +227,8 @@ export default function NotificationTemplateEditorModal({
 
               <div className="text-xs text-[#A5A5A5] bg-[#3B3B3B]/30 p-2 rounded-md">
                 {activeField
-                  ? `Inserindo no: ${activeField === "title" ? "Título" : "Mensagem"}`
-                  : "Clique em uma variável para inserir na mensagem"}
+                  ? `Inserindo no: ${activeField === 'title' ? 'Título' : 'Mensagem'}`
+                  : 'Clique em uma variável para inserir na mensagem'}
               </div>
             </div>
           )}
@@ -242,15 +242,17 @@ export default function NotificationTemplateEditorModal({
               disabled={isSaving}
             />
             <Button
-              label={isSaving ? "Salvando..." : "Salvar"}
+              label={isSaving ? 'Salvando...' : 'Salvar'}
               variant="solid"
               onClick={handleSaveClick}
-              disabled={!editTitle.trim() || !editBody.trim() || !dirty || isSaving}
+              disabled={
+                !editTitle.trim() || !editBody.trim() || !dirty || isSaving
+              }
               className="flex-1 py-3"
             />
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
