@@ -93,7 +93,22 @@ function LandingPage() {
           }
           ratingCount={data?.salonRating.ratingCount || 0}
         />
-        <RatingCardsContainer professionals={data?.professionals || []} />
+        {data?.professionals && data.professionals.length === 1 ? (
+          <div className="mt-4">
+            <SalonRatingCard
+              image={data.professionals[0].profilePhotoUrl || logo}
+              name={data.professionals[0].name || 'Profissional'}
+              meanRating={
+                data.professionals[0].meanRating
+                  ? Number(data.professionals[0].meanRating)
+                  : 0
+              }
+              ratingCount={data.professionals[0].ratingCount || 0}
+            />
+          </div>
+        ) : (
+          <RatingCardsContainer professionals={data?.professionals || []} />
+        )}
       </div>
       {/* Frase + Estrelas + Botão + Seta */}
       <div className="flex flex-col items-center gap-6 my-[42px]">
