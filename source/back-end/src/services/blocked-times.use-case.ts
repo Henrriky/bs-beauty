@@ -43,8 +43,8 @@ class BlockedTimesUseCase {
   ): Promise<void> {
     await this.validateProfessionalExistance(params.userId)
 
-    this.validateStartAndEndDates(params.extra.startDate, params.extra.endDate)
-    if (params.extra.endTime) this.validateStartAndEndDates(params.extra.startTime, params.extra.endTime)
+    if (params.extra.endDate) this.validateStartAndEndDates(params.extra.startDate, params.extra.endDate)
+    this.validateStartAndEndDates(params.extra.startTime, params.extra.endTime)
 
     await this.blockedTimesRepository.create(params)
   }
