@@ -2,7 +2,7 @@ import { CalendarDaysIcon, ClockIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import useAppSelector from '../../../hooks/use-app-selector'
 import AnalyticsCards from './components/AnalyticsCards'
-import MonthlyAgendaModal from './components/MonthlyAgendaModal'
+import MonthlyAgendaModal from './components/monthly-professional-agenda'
 import WeekAppointments from './components/WeekAppointments'
 
 function ManagerHome() {
@@ -34,7 +34,7 @@ function ManagerHome() {
             type="button"
             onClick={() => setAgendaOpen(true)}
             className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm
-                       bg-[#3A3027] text-[#A4978A] hover:opacity-90 focus:outline-none
+                       bg-[#595149] text-primary-0 hover:opacity-90 focus:outline-none
                        focus:ring-2 focus:ring-offset-2 focus:ring-[#A4978A]"
             aria-label="Abrir agenda do mês"
             title="Agenda do mês"
