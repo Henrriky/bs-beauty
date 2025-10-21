@@ -20,13 +20,13 @@ export class BlockedTimeFactory {
         endDate: luxon.DateTime.fromJSDate(endDate).toJSDate(),
         startTime: luxon.DateTime.fromMillis(startTime).toJSDate(),
         endTime: luxon.DateTime.fromMillis(endTime).toJSDate(),
-        monday: faker.datatype.boolean(),
-        tuesday: faker.datatype.boolean(),
-        wednesday: faker.datatype.boolean(),
-        thursday: faker.datatype.boolean(),
-        friday: faker.datatype.boolean(),
-        saturday: faker.datatype.boolean(),
-        sunday: faker.datatype.boolean(),
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
         professional: data.professional ?? {
           connect: {
             id: (await ProfessionalFactory.makeProfessional()).id

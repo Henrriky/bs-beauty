@@ -11,4 +11,10 @@ blockedTimesRoutes.post('/', validateCreateBlockedTime, BlockedTimesController.h
 blockedTimesRoutes.put('/:id', validateUpdateBlockedTime, BlockedTimesController.handleUpdate)
 blockedTimesRoutes.delete('/:id', BlockedTimesController.handleDelete)
 
+const blockedTimeRelatedWithProfessionalRoutes = Router({
+  mergeParams: true
+})
+
+blockedTimeRelatedWithProfessionalRoutes.get('/', BlockedTimesController.findByProfessional)
+
 export { blockedTimesRoutes }
