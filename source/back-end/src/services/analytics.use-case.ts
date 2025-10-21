@@ -5,10 +5,10 @@ import { type RatingRepository } from '@/repository/protocols/rating.repository'
 import { type ServiceRepository } from '@/repository/protocols/service.repository'
 import { type PublicProfessionalInfo } from '@/types/analytics'
 import { CustomError } from '@/utils/errors/custom.error.util'
-import { Status } from '@prisma/client'
+import { Offer, Status } from '@prisma/client'
 
 class AnalyticsUseCase {
-  constructor (
+  constructor(
     private readonly ratingRepository: RatingRepository,
     private readonly serviceRepository: ServiceRepository,
     private readonly offerRepository: OfferRepository,
@@ -16,7 +16,7 @@ class AnalyticsUseCase {
     private readonly professionalRepository: ProfessionalRepository
   ) { }
 
-  public async executeGetCustomerAmountPerRatingScore () {
+  public async executeGetCustomerAmountPerRatingScore() {
     const ratings = await this.ratingRepository.findAll()
     const customerCountPerRating: Record<number, number> = {}
 
@@ -29,7 +29,7 @@ class AnalyticsUseCase {
     return customerCountPerRating
   }
 
-  public async executeGetMeanRatingByService (amount?: number) {
+  public async executeGetMeanRatingByService(amount?: number) {
     const services = await this.serviceRepository.findAll()
 
     const serviceRatings = await Promise.all(services.map(async (service) => {
@@ -46,7 +46,7 @@ class AnalyticsUseCase {
     return await this.getBestRated(serviceRatings, amount)
   }
 
-  public async executeGetMeanRatingOfProfessionals (amount?: number) {
+  public async executeGetMeanRatingOfProfessionals(amount?: number) {
     const professionals = await this.professionalRepository.findAll()
     const professionalRatings = await Promise.all(professionals.map(async (professional) => {
       const offerIds = await this.getOfferIdsByProfessionalId(professional.id)
@@ -62,24 +62,16 @@ class AnalyticsUseCase {
     return await this.getBestRated(professionalRatings, amount)
   }
 
-  public async executeGetAppointmentNumberOnDateRangeByStatusProfessionalAndServices (
-    requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' |  'MANAGER' }, 
-    startDate: Date, 
-    endDate: Date, 
-    statusList?: string[], 
+  public async executeGetAppointmentNumberOnDateRangeByStatusProfessionalAndServices(
+    requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER' },
+    startDate: Date,
+    endDate: Date,
+    statusList?: string[],
     requestedProfessionalId?: string,
     serviceIds?: string[]
   ) {
 
-    let professionalIdToQuery: string | undefined
-
-    if (requestingUser.userType === 'PROFESSIONAL' && !requestedProfessionalId) {
-      professionalIdToQuery = requestingUser.id
-    } else if (requestingUser.userType === 'MANAGER') {
-      professionalIdToQuery = requestedProfessionalId
-    } else {
-      throw new CustomError('Not authorized to perform this action.', 403, 'You do not have permission to access this data.')
-    }
+    const professionalIdToQuery = await this.defineRequestedProfessionalIdByRequesterUserType(requestingUser.userType, requestedProfessionalId, requestingUser.id)
 
     const start = new Date(startDate)
     start.setUTCHours(0, 0, 0, 0)
@@ -100,7 +92,42 @@ class AnalyticsUseCase {
     return appointments.length
   }
 
-  public async executeGetTopProfessionalsRatingsAnalytics (limit: number) {
+  public async executeGetEstimatedAppointmentTimeInDateRangeByProfessionalAndServices(
+    requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER' },
+    startDate: Date,
+    endDate: Date,
+    requestedProfessionalId?: string,
+    serviceIds?: string[]
+  ) {
+    const professionalIdToQuery = this.defineRequestedProfessionalIdByRequesterUserType(requestingUser.userType, requestedProfessionalId, requestingUser.id)
+
+    const start = new Date(startDate)
+    start.setUTCHours(0, 0, 0, 0)
+
+    const end = new Date(endDate)
+    end.setUTCHours(23, 59, 59, 999)
+
+    if (start.getTime() > end.getTime()) {
+      throw new CustomError('startDate must be on or before endDate', 400, 'Please, provide a valid date range')
+    }
+
+    const serviceOfferedIds = (await this.appointmentRepository.findByDateRangeStatusProfessionalAndServices(start, end, undefined, professionalIdToQuery, serviceIds))
+      ?.map(a => a.serviceOfferedId) ?? []
+
+
+    let offers: Offer[] = []
+
+    for (const serviceOfferedId of serviceOfferedIds) {
+      const offer = await this.offerRepository.findById(serviceOfferedId)
+      if (offer) offers.push(offer)
+    }
+
+    const estimatedTime = offers.reduce((total, offer) => total + (offer.estimatedTime ?? 0), 0)
+
+    return estimatedTime
+  }
+
+  public async executeGetTopProfessionalsRatingsAnalytics(limit: number) {
     const professionals = await this.professionalRepository.findAll()
     const professionalRatings: PublicProfessionalInfo[] = await Promise.all(professionals.map(async (professional) => {
       const offerIds = await this.getOfferIdsByProfessionalId(professional.id)
@@ -117,17 +144,17 @@ class AnalyticsUseCase {
 
   // Helper methods
 
-  private async getOfferIdsByServiceId (serviceId: string): Promise<string[]> {
+  private async getOfferIdsByServiceId(serviceId: string): Promise<string[]> {
     const offers = await this.offerRepository.findByServiceId(serviceId)
     return Array.isArray(offers) ? offers.map(o => o.id) : []
   }
 
-  private async getOfferIdsByProfessionalId (professionalId: string): Promise<string[]> {
+  private async getOfferIdsByProfessionalId(professionalId: string): Promise<string[]> {
     const offers = await this.offerRepository.findByProfessionalId(professionalId)
     return Array.isArray(offers) ? offers.map(o => o.id) : []
   }
 
-  private async getAppointmentIdsFromOfferIds (offerIds: string[]): Promise<string[]> {
+  private async getAppointmentIdsFromOfferIds(offerIds: string[]): Promise<string[]> {
     const appointmentIds: string[] = []
     for (const offerId of offerIds) {
       const appointments = await this.appointmentRepository.findByServiceOfferedId(offerId)
@@ -136,7 +163,7 @@ class AnalyticsUseCase {
     return appointmentIds
   }
 
-  private async getRatingsStatsFromAppointmentIds (appointmentIds: string[], options?: { precision?: number }) {
+  private async getRatingsStatsFromAppointmentIds(appointmentIds: string[], options?: { precision?: number }) {
     const scores: number[] = []
     for (const appointmentId of appointmentIds) {
       const rating = await this.ratingRepository.findByAppointmentId(appointmentId)
@@ -165,6 +192,16 @@ class AnalyticsUseCase {
     const isLimited = typeof limit === 'number' && limit > 0
 
     return isLimited ? bestRated.slice(0, limit) : bestRated
+  }
+
+  private defineRequestedProfessionalIdByRequesterUserType(userType: string, requestedProfessionalId?: string, requestingUserId?: string) {
+    if (userType === 'PROFESSIONAL' && !requestedProfessionalId) {
+      return requestingUserId
+    } else if (userType === 'MANAGER') {
+      return requestedProfessionalId
+    } else {
+      throw new CustomError('Not authorized to perform this action.', 403, 'You do not have permission to access this data.')
+    }
   }
 }
 

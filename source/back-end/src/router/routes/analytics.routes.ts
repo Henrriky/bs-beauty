@@ -11,4 +11,5 @@ analyticsServiceRoutes.get('/customers/ratings', userTypeAuthMiddleware(['MANAGE
 analyticsServiceRoutes.get('/services/rating', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetMeanRatingByService)
 analyticsServiceRoutes.get('/professionals/rating', userTypeAuthMiddleware(['MANAGER']), validateFetchAppointmentsCount,AnalyticsController.handleGetMeanRatingOfProfessionals)
 analyticsServiceRoutes.get('/appointments/count', userTypeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateFetchAppointmentsCount, AnalyticsController.handleGetAppointmentAmountInDateRangeByStatusAndProfessional)
+analyticsServiceRoutes.get('/appointments/estimated-time', userTypeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateFetchAppointmentsCount, AnalyticsController.handleGetEstimatedAppointmentTimeInDateRangeByProfessional)
 export { analyticsServiceRoutes }

@@ -19,12 +19,20 @@ const schema = z.object({
   totalRevenue: z.number()
 })
 
+const appointmentsFilterSchema = z.object({
+  startDate: z.string().datetime({ message: 'Invalid startDate. Must be a valid ISO date string.' }),
+  endDate: z.string().datetime({ message: 'Invalid endDate. Must be a valid ISO date string.' }),
+  statusList: z.array(z.string()).optional(),
+  professionalId: z.string().uuid().optional(),
+  serviceIds: z.array(z.string().uuid()).optional()
+})
+
 type Analytics = z.infer<typeof schema>
 
 // TODO: Extract logic/calculations to an use case
 
 class AnalyticsController {
-  public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindAll(req: Request, res: Response, next: NextFunction) {
     try {
       const analytics: Partial<Analytics> = {}
 
@@ -124,7 +132,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleFindByProfessionalId (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByProfessionalId(req: Request, res: Response, next: NextFunction) {
     try {
       const analytics: Partial<Analytics> = {}
 
@@ -225,7 +233,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetRatingsAnalytics (req: Request, res: Response, next: NextFunction) {
+  public static async handleGetRatingsAnalytics(req: Request, res: Response, next: NextFunction) {
     try {
       const ratingsUseCase = makeRatingsUseCaseFactory()
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
@@ -241,7 +249,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetCustomerAmountPerRatingScore (req: Request, res: Response, next: NextFunction) {
+  public static async handleGetCustomerAmountPerRatingScore(req: Request, res: Response, next: NextFunction) {
     try {
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
       const customerCountPerRating = await analyticsUseCase.executeGetCustomerAmountPerRatingScore()
@@ -251,7 +259,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetMeanRatingByService (req: Request, res: Response, next: NextFunction) {
+  public static async handleGetMeanRatingByService(req: Request, res: Response, next: NextFunction) {
     try {
       const amount = req.body.amount as number | undefined
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
@@ -263,7 +271,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetMeanRatingOfProfessionals (req: Request, res: Response, next: NextFunction) {
+  public static async handleGetMeanRatingOfProfessionals(req: Request, res: Response, next: NextFunction) {
     try {
       const amount = req.body.amount as number | undefined
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
@@ -275,27 +283,36 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetAppointmentAmountInDateRangeByStatusAndProfessional (req: Request, res: Response, next: NextFunction) {
+  public static async handleGetAppointmentAmountInDateRangeByStatusAndProfessional(req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user
-      const { startDate, endDate, statusList, professionalId, serviceIds } = req.body as { 
-        startDate: string, 
-        endDate: string, 
-        statusList?: string[], 
-        professionalId?: string,
-        serviceIds?: string[],
-      }
+      const data = appointmentsFilterSchema.parse(req.body)
 
-      const parsedStartDate = new Date(startDate)
-      const parsedEndDate = new Date(endDate)
+      const parsedStartDate = new Date(data.startDate)
+      const parsedEndDate = new Date(data.endDate)
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
-      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRangeByStatusProfessionalAndServices(user, parsedStartDate, parsedEndDate, statusList, professionalId, serviceIds)
+      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRangeByStatusProfessionalAndServices(user, parsedStartDate, parsedEndDate, data.statusList, data.professionalId, data.serviceIds)
       res.json({ appointmentCount })
     } catch (error) {
       next(error)
     }
   }
-}
+
+  public static async handleGetEstimatedAppointmentTimeInDateRangeByProfessional(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user
+      const data = appointmentsFilterSchema.omit({statusList: true}).parse(req.body)
+
+      const parsedStartDate = new Date(data.startDate)
+      const parsedEndDate = new Date(data.endDate)
+
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const estimatedTimeInMinutes = await analyticsUseCase.executeGetEstimatedAppointmentTimeInDateRangeByProfessionalAndServices(user, parsedStartDate, parsedEndDate, data.professionalId, data.serviceIds)
+      res.json({ estimatedTimeInMinutes })
+    } catch (error) {
+      next(error)
+    }
+  }
 
 export { AnalyticsController }
