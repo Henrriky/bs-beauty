@@ -72,16 +72,10 @@ class AnalyticsUseCase {
   ) {
 
     const professionalIdToQuery = await this.defineRequestedProfessionalIdByRequesterUserType(requestingUser.userType, requestedProfessionalId, requestingUser.id)
+    const start = this.normalizeDateToStart(startDate)
+    const end = this.normalizeDateToEnd(endDate)
 
-    const start = new Date(startDate)
-    start.setUTCHours(0, 0, 0, 0)
-
-    const end = new Date(endDate)
-    end.setUTCHours(23, 59, 59, 999)
-
-    if (start.getTime() > end.getTime()) {
-      throw new CustomError('startDate must be on or before endDate', 400, 'Please, provide a valid date range')
-    }
+    this.validateDateRange(start, end)
 
     const validStatuses = new Set(Object.values(Status))
     const filteredStatusList = statusList
@@ -92,7 +86,7 @@ class AnalyticsUseCase {
     return appointments.length
   }
 
-  public async executeGetEstimatedAppointmentTimeInDateRangeByProfessionalAndServices(
+  public async executeGetEstimatedAppointmentTimeByProfessionalAndServices(
     requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER' },
     startDate: Date,
     endDate: Date,
@@ -101,15 +95,10 @@ class AnalyticsUseCase {
   ) {
     const professionalIdToQuery = this.defineRequestedProfessionalIdByRequesterUserType(requestingUser.userType, requestedProfessionalId, requestingUser.id)
 
-    const start = new Date(startDate)
-    start.setUTCHours(0, 0, 0, 0)
+    const start = this.normalizeDateToStart(startDate)
+    const end = this.normalizeDateToEnd(endDate)
 
-    const end = new Date(endDate)
-    end.setUTCHours(23, 59, 59, 999)
-
-    if (start.getTime() > end.getTime()) {
-      throw new CustomError('startDate must be on or before endDate', 400, 'Please, provide a valid date range')
-    }
+    this.validateDateRange(start, end)
 
     const serviceOfferedIds = (await this.appointmentRepository.findByDateRangeStatusProfessionalAndServices(start, end, undefined, professionalIdToQuery, serviceIds))
       ?.map(a => a.serviceOfferedId) ?? []
@@ -142,7 +131,47 @@ class AnalyticsUseCase {
     return await this.getBestRated(professionalRatings, limit)
   }
 
+  public async executeGetAppointmentCancelationRateByProfessional(
+    requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER' },
+    startDate: Date,
+    endDate: Date,
+    requestedProfessionalId?: string,
+    serviceIds?: string[]
+  ) {
+    const professionalIdToQuery = this.defineRequestedProfessionalIdByRequesterUserType(requestingUser.userType, requestedProfessionalId, requestingUser.id)
+    const start = this.normalizeDateToStart(startDate)
+    const end = this.normalizeDateToEnd(endDate)
+
+    this.validateDateRange(start, end)
+
+    const allAppointments = await this.appointmentRepository.findByDateRangeStatusProfessionalAndServices(start, end, undefined, professionalIdToQuery, serviceIds)
+    const canceledAppointments = allAppointments.filter(appointment => appointment.status === Status.CANCELLED)
+
+    return {
+      totalAppointments: allAppointments.length,
+      canceledAppointments: canceledAppointments.length,
+    }
+  }
+
   // Helper methods
+
+  private normalizeDateToStart(date: Date): Date {
+    const start = new Date(date);
+    start.setUTCHours(0, 0, 0, 0);
+    return start;
+  }
+
+  private normalizeDateToEnd(date: Date): Date {
+    const end = new Date(date);
+    end.setUTCHours(23, 59, 59, 999);
+    return end;
+  }
+
+  private validateDateRange(startDate: Date, endDate: Date): void {
+    if (startDate.getTime() > endDate.getTime()) {
+      throw new CustomError('startDate must be on or before endDate', 400, 'Please, provide a valid date range');
+    }
+  }
 
   private async getOfferIdsByServiceId(serviceId: string): Promise<string[]> {
     const offers = await this.offerRepository.findByServiceId(serviceId)
@@ -195,12 +224,12 @@ class AnalyticsUseCase {
   }
 
   private defineRequestedProfessionalIdByRequesterUserType(userType: string, requestedProfessionalId?: string, requestingUserId?: string) {
-    if (userType === 'PROFESSIONAL' && !requestedProfessionalId) {
+    if (!requestedProfessionalId) {
       return requestingUserId
+    } else if (userType === 'PROFESSIONAL') {
+      throw new CustomError('Not authorized to perform this action.', 403, 'You do not have permission to access this data.')
     } else if (userType === 'MANAGER') {
       return requestedProfessionalId
-    } else {
-      throw new CustomError('Not authorized to perform this action.', 403, 'You do not have permission to access this data.')
     }
   }
 }

@@ -308,11 +308,28 @@ class AnalyticsController {
       const parsedEndDate = new Date(data.endDate)
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
-      const estimatedTimeInMinutes = await analyticsUseCase.executeGetEstimatedAppointmentTimeInDateRangeByProfessionalAndServices(user, parsedStartDate, parsedEndDate, data.professionalId, data.serviceIds)
+      const estimatedTimeInMinutes = await analyticsUseCase.executeGetEstimatedAppointmentTimeByProfessionalAndServices(user, parsedStartDate, parsedEndDate, data.professionalId, data.serviceIds)
       res.json({ estimatedTimeInMinutes })
     } catch (error) {
       next(error)
     }
   }
+
+  public static async handleGetAppointmentCancelationRateByProfessional (req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user
+      const data = appointmentsFilterSchema.omit({statusList: true}).parse(req.body)
+     
+      const parsedStartDate = new Date(data.startDate)
+      const parsedEndDate = new Date(data.endDate)
+
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const cancelationRate = await analyticsUseCase.executeGetAppointmentCancelationRateByProfessional(user, parsedStartDate, parsedEndDate, data.professionalId, data.serviceIds)
+      res.json({ cancelationRate })
+    } catch (error) {
+      next(error)
+    }
+  }
+}
 
 export { AnalyticsController }
