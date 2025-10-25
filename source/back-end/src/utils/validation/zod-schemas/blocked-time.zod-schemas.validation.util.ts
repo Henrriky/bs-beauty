@@ -54,6 +54,15 @@ class BlockedTimeSchemas {
     startTime: BlockedTimeSchemas.createUpdateBaseSchema.shape.startTime
   }).strict()
 
+  public static findByProfessionalAndPeriodParamsSchema = z.object({
+    startDate: z.string().refine((value) => !isNaN(Date.parse(value)), {
+      message: 'startDate deve ser uma data válida no formato ISO'
+    }),
+    endDate: z.string().refine((value) => !isNaN(Date.parse(value)), {
+      message: 'endDate deve ser uma data válida no formato ISO'
+    })
+  })
+
   public static updateParamsSchema = z.object({
     id: z.string().uuid({ message: 'ID inválido' })
   }).strict()

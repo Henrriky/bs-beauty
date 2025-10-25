@@ -6,6 +6,7 @@ import { type BlockedTimesRepositoryFilters } from '@/types/blocked-times/blocke
 interface BlockedTimeRepository {
   findAllPaginated: (data: AuthContext<PaginatedRequest<BlockedTimesRepositoryFilters>>) => Promise<PaginatedResult<BlockedTime>>
   findById: (id: string) => Promise<BlockedTime | null>
+  findByProfessionalAndPeriod: (data: { professionalId: string, startDate: Date, endDate: Date }) => Promise<BlockedTime[]>
   update: (id: string, data: Prisma.BlockedTimeUpdateInput) => Promise<BlockedTime>
   create: (data: AuthContext<Prisma.BlockedTimeCreateInput>) => Promise<BlockedTime>
   delete: (id: string) => Promise<void>

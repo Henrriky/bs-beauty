@@ -4,6 +4,7 @@ import { prismaClient } from '../../lib/prisma'
 import { type PaginatedRequest } from '../../types/pagination'
 import { type BlockedTimesRepositoryFilters } from '@/types/blocked-times/blocked-times'
 import { type BlockedTimeRepository } from '../protocols/blocked-times.repository'
+import * as luxon from 'luxon'
 
 class PrismaBlockedTimeRepository implements BlockedTimeRepository {
   public async findAllPaginated ({ extra }: AuthContext<PaginatedRequest<BlockedTimesRepositoryFilters>>) {
@@ -46,6 +47,63 @@ class PrismaBlockedTimeRepository implements BlockedTimeRepository {
     })
 
     return blockedTime
+  }
+
+  public async findByProfessionalAndPeriod (data: { professionalId: string, startDate: Date, endDate: Date }) {
+    const weekDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const
+    const differenceInDays = luxon.DateTime.fromJSDate(data.endDate).diff(luxon.DateTime.fromJSDate(data.startDate), 'days').days
+
+    const weekDayConditions = weekDays.map(day => {
+      if (differenceInDays >= 7) {
+        return { [day]: true }
+      } else {
+        const startDateLuxon = luxon.DateTime.fromJSDate(data.startDate)
+        const endDateLuxon = luxon.DateTime.fromJSDate(data.endDate)
+
+        for (let dt = startDateLuxon; dt <= endDateLuxon; dt = dt.plus({ days: 1 })) {
+          if (dt.weekday === weekDays.indexOf(day) + 1) {
+            return { [day]: true }
+          }
+        }
+
+        return { [day]: false }
+      }
+    })
+
+    const blockedTimes = await prismaClient.blockedTime.findMany({
+      where: {
+        AND: [
+          {
+            isActive: true,
+            professionalId: data.professionalId,
+            OR: weekDayConditions
+          },
+          {
+            OR: [
+              {
+                endDate: null,
+                startDate: {
+                  lte: data.endDate
+                }
+              },
+              {
+                startDate: {
+                  lte: data.endDate
+                },
+                endDate: {
+                  gte: data.startDate
+                }
+              }
+            ]
+          }
+        ]
+      },
+      orderBy: {
+        startDate: 'desc'
+      }
+    })
+
+    return blockedTimes
   }
 
   public async delete (id: string) {

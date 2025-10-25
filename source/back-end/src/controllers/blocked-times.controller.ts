@@ -1,4 +1,5 @@
 import { makeBlockedTimesUseCaseFactory } from '@/factory/make-blocked-times-use-case.factory'
+import { BlockedTimeSchemas } from '@/utils/validation/zod-schemas/blocked-time.zod-schemas.validation.util'
 import { blockedtimesQuerySchema } from '@/utils/validation/zod-schemas/pagination/blocked-times/blocked-times-query.schema'
 import { type Prisma } from '@prisma/client'
 import { type Request, type Response, type NextFunction } from 'express'
@@ -97,6 +98,26 @@ class BlockedTimesController {
       )
 
       res.status(200).send()
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async findByProfessionalAndPeriod (req: Request, res: Response, next: NextFunction) {
+    try {
+      const { professionalId } = req.params
+      const params = BlockedTimeSchemas.findByProfessionalAndPeriodParamsSchema.parse(req.query)
+
+      const blockedTimes = await BlockedTimesController.useCase.executeFindByProfessionalAndPeriod(
+        {
+          professionalId,
+          ...params
+        }
+      )
+
+      res.status(200).send({
+        data: blockedTimes
+      })
     } catch (error) {
       next(error)
     }

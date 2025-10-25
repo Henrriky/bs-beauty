@@ -7,6 +7,7 @@ import { type AuthInformations, type AuthContext } from '@/types/shared'
 import { CustomError } from '@/utils/errors/custom.error.util'
 import { RecordExistence } from '@/utils/validation/record-existence.validation.util'
 import { type Prisma, UserType, type BlockedTime } from '@prisma/client'
+import * as luxon from 'luxon'
 
 class BlockedTimesUseCase {
   constructor (
@@ -90,6 +91,27 @@ class BlockedTimesUseCase {
     await this.blockedTimesRepository.delete(params.extra.blockedTimeId)
 
     return blockedTimeById!
+  }
+
+  public async executeFindByProfessionalAndPeriod ({
+    professionalId,
+    startDate,
+    endDate
+  }: { professionalId: string, startDate: string, endDate: string }) {
+    const differenceInDays = luxon.DateTime.fromISO(endDate).diff(luxon.DateTime.fromISO(startDate), 'days').days
+
+    if (differenceInDays > 31) {
+      throw new CustomError('Bad Request', 400, 'The maximum allowed period is 31 days.')
+    }
+      
+    await this.validateProfessionalExistance(professionalId)
+    const blockedTimes = await this.blockedTimesRepository.findByProfessionalAndPeriod({
+      professionalId,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate)
+    })
+    
+    return blockedTimes
   }
 
   private async validateProfessionalExistance (professionalId: string) {

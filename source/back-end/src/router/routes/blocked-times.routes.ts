@@ -15,6 +15,6 @@ const blockedTimeRelatedWithProfessionalRoutes = Router({
   mergeParams: true
 })
 
-blockedTimeRelatedWithProfessionalRoutes.get('/', BlockedTimesController.findByProfessional)
+blockedTimeRelatedWithProfessionalRoutes.get('/', BlockedTimesController.findByProfessionalAndPeriod)
 
-export { blockedTimesRoutes }
+export { blockedTimesRoutes, blockedTimeRelatedWithProfessionalRoutes }
