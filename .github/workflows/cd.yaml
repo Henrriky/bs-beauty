@@ -47,8 +47,6 @@ jobs:
             key="${var#FRONTEND_}"
             echo "$key=${!var}" >> source/front-end/.env
           done
-        env:
-          ${{ toJSON(secrets) }}
 
       - name: Build & Push Docker image via Makefile
         run: |
