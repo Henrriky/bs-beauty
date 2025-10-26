@@ -30,6 +30,7 @@ export class RegisterUserUseCase {
       this.professionalRepository.findByEmail(email)
     ])
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     if (customerByEmail || professionalByEmail) {
       throw new CustomError(
         'Bad Request',

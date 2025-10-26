@@ -7,7 +7,6 @@ import { type CustomerRepository } from '../repository/protocols/customer.reposi
 import { type ProfessionalRepository } from '../repository/protocols/professional.repository'
 import { CustomError } from '../utils/errors/custom.error.util'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
-import { prismaClient } from '@/lib/prisma'
 import { type RatingRepository } from '@/repository/protocols/rating.repository'
 
 export const MINIMUM_SCHEDULLING_TIME_MINUTES = 30

@@ -8,7 +8,7 @@ import { type PaginatedRequest, type PaginatedResult } from '../types/pagination
 import { type OffersFilters } from '../types/offers/offers-filters'
 import { type AppointmentRepository } from '../repository/protocols/appointment.repository'
 import { type ServiceRepository } from '@/repository/protocols/service.repository'
-import { BlockedTimesUseCase } from './blocked-times.use-case'
+import { type BlockedTimesUseCase } from './blocked-times.use-case'
 
 interface OfferOutput {
   offers: Offer[]
@@ -23,7 +23,7 @@ interface AvailablesSchedulling {
 const VALID_STATUS_OF_SERVICE_TO_OFFER = ServiceStatus.APPROVED
 
 class OffersUseCase {
-  constructor(
+  constructor (
     private readonly offerRepository: OfferRepository,
     private readonly shiftRepository: ShiftRepository,
     private readonly appointmentRepository: AppointmentRepository,
@@ -31,35 +31,35 @@ class OffersUseCase {
     private readonly blockedTimesUseCase: BlockedTimesUseCase
   ) { }
 
-  public async executeFindAll(): Promise<OfferOutput> {
+  public async executeFindAll (): Promise<OfferOutput> {
     const offers = await this.offerRepository.findAll()
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
   }
 
-  public async executeFindById(offerId: string) {
+  public async executeFindById (offerId: string) {
     const offer = await this.offerRepository.findById(offerId)
     RecordExistence.validateRecordExistence(offer, 'Offer')
 
     return offer
   }
 
-  public async executeFindByServiceId(serviceId: string) {
+  public async executeFindByServiceId (serviceId: string) {
     const offers = await this.offerRepository.findByServiceId(serviceId)
     RecordExistence.validateManyRecordsExistence(offers ?? [], 'offers')
 
     return offers
   }
 
-  public async executeFindByProfessionalId(professionalId: string): Promise<OfferOutput> {
+  public async executeFindByProfessionalId (professionalId: string): Promise<OfferOutput> {
     const offers = await this.offerRepository.findByProfessionalId(professionalId)
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
   }
 
-  public async executeCreate(offerToCreate: Prisma.OfferCreateInput) {
+  public async executeCreate (offerToCreate: Prisma.OfferCreateInput) {
     const offer = offerToCreate as unknown as Offer
     const serviceId = offer.serviceId
     const professionalId = offer.professionalId
@@ -78,21 +78,21 @@ class OffersUseCase {
     return newOffer
   }
 
-  public async executeUpdate(offerId: string, offerToUpdate: Prisma.OfferUpdateInput) {
+  public async executeUpdate (offerId: string, offerToUpdate: Prisma.OfferUpdateInput) {
     await this.executeFindById(offerId)
     const updatedOffer = await this.offerRepository.update(offerId, offerToUpdate)
 
     return updatedOffer
   }
 
-  public async executeDelete(offerId: string) {
+  public async executeDelete (offerId: string) {
     await this.executeFindById(offerId)
     const deletedOffer = await this.offerRepository.delete(offerId)
 
     return deletedOffer
   }
 
-  public async executeFetchAvailableSchedulingToOfferByDay(
+  public async executeFetchAvailableSchedulingToOfferByDay (
     {
       customerId,
       serviceOfferingId,
@@ -117,7 +117,6 @@ class OffersUseCase {
       throw new CustomError('Unable to fetch available scheduling because professional does not work on this day or not exists', 400, '')
     }
 
-
     const { shiftEnd, shiftStart } = professionalShiftByDay
 
     // Determine start and end cut-off date based on the professional shift
@@ -132,7 +131,6 @@ class OffersUseCase {
     })
     // Determine estimated time in seconds
     const estimatedTimeMs = serviceOffering.estimatedTime * 60_000
-
 
     // Search non finished appointments by professional and customer on day
     const [
@@ -195,7 +193,6 @@ class OffersUseCase {
       }
 
       if (hasBlockedTimes) {
-
         const overlappingBlockedTime = blockedTimesValidForDay.find(blockedTime => {
           const blockedTimeStartHourAsDate = new Date(dayToFetchAvailableSchedulling)
           blockedTimeStartHourAsDate.setHours(
@@ -228,7 +225,6 @@ class OffersUseCase {
         }
       }
 
-
       availableSchedulling.push({
         startTimestamp,
         endTimestamp,
@@ -241,7 +237,7 @@ class OffersUseCase {
     return { availableSchedulling }
   }
 
-  public async executeFindByProfessionalIdPaginated(
+  public async executeFindByProfessionalIdPaginated (
     professionalId: string,
     params: PaginatedRequest<OffersFilters>
   ): Promise<PaginatedResult<Offer>> {
@@ -250,8 +246,7 @@ class OffersUseCase {
     return result
   }
 
-
-  private getDateForCombinedDays(
+  private getDateForCombinedDays (
     {
       dayToExtractTime,
       dayToExtractDate

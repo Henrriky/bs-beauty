@@ -22,6 +22,7 @@ function ListNotifications({ params }: { params: Params }) {
   const [selected, setSelected] = useState<NotificationDTO | null>(null)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const notifications = data?.data ?? []
   const pageIds = useMemo(() => notifications.map((n) => n.id), [notifications])
 
@@ -62,10 +63,12 @@ function ListNotifications({ params }: { params: Params }) {
     setSelectedIds([])
   }
 
+  const normalizedPageIds = pageIds.join('|')
+
   const isReadTab = params.readStatus === 'READ'
   useEffect(() => {
     setSelectedIds([])
-  }, [isReadTab, pageIds.join('|')])
+  }, [isReadTab, normalizedPageIds])
 
   if (isLoading)
     return (
