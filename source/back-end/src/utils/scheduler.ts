@@ -12,7 +12,6 @@ export class Scheduler {
     const task = cron.schedule(
       spec,
       async () => {
-        const startedAt = new Date().toISOString();
         try {
           await handler();
         } catch (err) {
