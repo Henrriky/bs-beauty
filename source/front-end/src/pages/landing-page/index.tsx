@@ -106,7 +106,7 @@ function LandingPage() {
 
         <Button
           onClick={() => navigate('/login')}
-          className="w-3/4 justify-center items-center"
+          className="my-8 max-w-80 justify-center items-center"
           label="Entrar"
           type="submit"
           variant="outline"
@@ -128,7 +128,7 @@ function LandingPage() {
         <img
           src={insidePhoto}
           alt="Salão"
-          className="mb-8 w-full rounded-3xl object-cover"
+          className="mb-8 w-full rounded-3xl object-cover max-w-[520px] mx-auto"
         />
 
         <div className="mb-4 flex items-center">
@@ -179,7 +179,7 @@ function LandingPage() {
 
       <Button
         onClick={() => navigate('/login')}
-        className="my-8 w-3/4 justify-center items-center"
+        className="my-8 max-w-80 justify-center items-center"
         label="Entrar"
         type="submit"
         variant="outline"

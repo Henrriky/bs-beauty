@@ -82,24 +82,27 @@ function LoginWithEmailAndPasswordForm() {
               showPasswordFunction={() => setShowPassword(!showPassword)}
             />
           </div>
-          <Button label="Entrar" type="submit" variant="outline"></Button>
+          <Button type="submit"
+            label="Entrar"
+            variant="outline"
+          />
         </form>
         <div className="flex flex-col items-center">
-          <p className="text-[#DBDBDB] text-xs">
+          <p className="text-[#DBDBDB] text-sm mt-2">
             Não possui conta? {''}
             <Button
               variant="text-only"
               label="Crie uma agora!"
-              className="text-xs"
+              className="text-sm"
               onClick={() => navigate('/register')}
             />
           </p>
-          <p className="text-[#DBDBDB] text-xs">
+          <p className="text-[#DBDBDB] text-sm mt-2">
             Esqueceu sua senha? {''}
             <Button
               variant="text-only"
               label="Redefinir senha"
-              className="text-xs"
+              className="text-sm"
               onClick={() => navigate('/reset-password')}
             />
           </p>

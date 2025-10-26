@@ -8,15 +8,15 @@ interface PasswordEyeIconProps {
 function PasswordEyeIcon(props: PasswordEyeIconProps) {
   return props.showPassword ? (
     <EyeIcon
-      className="size-5 stroke-[#D9D9D9] absolute inset-y-[10px] right-2 hover:stroke-[#A4978A] transition-all"
+      className="size-5 stroke-[#D9D9D9] absolute inset-y-[10px] right-2 hover:stroke-[#A4978A] transition-all cursor-pointer"
       onMouseDown={(e) => e.preventDefault()}
       onClick={() => props.showPasswordFunction()}
     />
   ) : (
     <EyeSlashIcon
-      className="size-5 stroke-[#D9D9D9] absolute inset-y-[10px] right-2 hover:stroke-[#A4978A] transition-all"
-      onMouseDown={(e) => e.preventDefault()}
-      onClick={() => props.showPasswordFunction()}
+        className="size-5 stroke-[#D9D9D9] absolute inset-y-[10px] right-2 hover:stroke-[#A4978A] transition-all cursor-pointer"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => props.showPasswordFunction()}
     />
   )
 }
