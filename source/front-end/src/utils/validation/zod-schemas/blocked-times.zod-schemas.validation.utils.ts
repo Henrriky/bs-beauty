@@ -60,8 +60,9 @@ class BlockedTimeSchemas {
 
   public static createSchema = BlockedTimeSchemas.createUpdateBaseSchema
     .extend({
-      endDate:
-        BlockedTimeSchemas.createUpdateBaseSchema.shape.endDate.optional(),
+      endDate: BlockedTimeSchemas.createUpdateBaseSchema.shape.endDate
+        .optional()
+        .nullable(),
       sunday: BlockedTimeSchemas.createUpdateBaseSchema.shape.sunday.optional(),
       monday: BlockedTimeSchemas.createUpdateBaseSchema.shape.monday.optional(),
       tuesday:

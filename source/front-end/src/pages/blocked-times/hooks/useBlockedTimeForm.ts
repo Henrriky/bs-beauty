@@ -1,3 +1,7 @@
+import {
+  daysOfWeek,
+  getHumanDayOfWeekFromDate,
+} from './../../../utils/date/get-human-day-of-week-from-date'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useMemo } from 'react'
@@ -71,11 +75,34 @@ export function useBlockedTimeForm(
   }, [blockedTime, setValue])
 
   const periodSelectValue = useMemo(() => {
-    return getPeriodSelectValueFromSelectedDate(
+    const nextPeriodValue = getPeriodSelectValueFromSelectedDate(
       watchedStartDate,
       watchedEndDate,
     )
-  }, [watchedStartDate, watchedEndDate])
+
+    if (nextPeriodValue === 'today') {
+      const todayDayOfWeek = getHumanDayOfWeekFromDate(
+        new Date(`${watchedStartDate} 10:00:00`),
+      )
+
+      daysOfWeek.forEach((day) => {
+        setValue(
+          day as keyof Omit<
+            CreateBlockedTimeFormData,
+            | 'reason'
+            | 'startDate'
+            | 'endDate'
+            | 'startTime'
+            | 'endTime'
+            | 'isActive'
+          >,
+          todayDayOfWeek === day,
+        )
+      })
+    }
+
+    return nextPeriodValue
+  }, [watchedStartDate, watchedEndDate, setValue])
 
   const handlePeriodChange = (period: string) => {
     setValue(
