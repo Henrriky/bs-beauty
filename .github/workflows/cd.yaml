@@ -117,11 +117,11 @@ jobs:
       - name: Run Deploy Nginx Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
-          playbook: ansible/playbooks/public.yaml
-          inventory: ansible/inventories/dynamic.yaml
+          playbook: infra/ansible/playbooks/public.yaml
+          inventory: infra/ansible/inventories/dynamic.yaml
           
       - name: Run Deploy Application Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
-          playbook: ansible/playbooks/private.yaml
-          inventory: ansible/inventories/dynamic.yaml
+          playbook: infra/ansible/playbooks/private.yaml
+          inventory: infra/ansible/inventories/dynamic.yaml
