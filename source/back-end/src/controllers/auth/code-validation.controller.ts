@@ -34,10 +34,10 @@ class CodeValidationController {
             message: 'Code verified. You may now set a new password.'
           })
         }
-
         default:
           return res.status(StatusCodes.NOT_IMPLEMENTED).json({
             success: false,
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             message: `Purpose '${purpose}' not implemented`
           })
       }

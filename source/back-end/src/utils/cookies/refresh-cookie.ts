@@ -1,6 +1,5 @@
 // utils/cookies/refresh-cookie.ts
-import { type Response } from 'express'
-import type { CookieOptions } from 'express'
+import type { CookieOptions, Response } from 'express'
 
 export const REFRESH_COOKIE_NAME = 'refresh_token'
 

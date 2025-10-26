@@ -2,7 +2,7 @@ import { PrismaCustomerRepository } from '@/repository/prisma/prisma-customer.re
 import { PrismaProfessionalRepository } from '@/repository/prisma/prisma-professional.repository'
 import { RedisCacheProvider } from '@/services/cache/redis-cache-provider.service'
 import { PasswordResetSetPasswordUseCase } from '@/services/use-cases/auth/password-reset-set-password.use-case'
-import { PasswordResetTicketService } from '@/services/use-cases/auth/password-reset-ticket.service'
+import { PasswordResetTicketService } from '@/services/use-cases/auth/services/password-reset-ticket.service'
 
 function makePasswordResetSetPasswordUseCase () {
   const customerRepository = new PrismaCustomerRepository()

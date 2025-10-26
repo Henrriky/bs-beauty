@@ -1,5 +1,5 @@
-import { NotificationDTO } from "../../../store/notification/types"
-import { buildDate, buildTitle } from "../utils/format"
+import { NotificationDTO } from '../../../store/notification/types'
+import { buildDate, buildTitle } from '../utils/format'
 
 interface NotificationItemProps {
   notification: NotificationDTO
@@ -28,7 +28,7 @@ export default function NotificationItem({
   onOpenDetails,
   checked,
   onToggle,
-  enableSelection = true
+  enableSelection = true,
 }: NotificationItemProps) {
   const isUnread = !notification.readAt
   const title = buildTitle(notification.message)
@@ -37,7 +37,6 @@ export default function NotificationItem({
   return (
     <div className="w-full max-w-[640px] bg-[#222222] rounded-2xl border-none px-4 py-3">
       <div className="flex items-center gap-3">
-
         {enableSelection && (
           <input
             type="checkbox"
@@ -59,8 +58,19 @@ export default function NotificationItem({
           className="shrink-0 p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
           title="Ver detalhes"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z"
+            />
           </svg>
         </button>
       </div>

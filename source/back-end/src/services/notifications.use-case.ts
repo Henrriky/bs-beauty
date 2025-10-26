@@ -1,37 +1,37 @@
-import { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
-import { FindByIdAppointments } from '@/repository/protocols/appointment.repository'
-import { NotificationFilters } from '@/types/notifications/notification-filters'
-import { PaginatedRequest } from '@/types/pagination'
+import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { type FindByIdAppointments } from '@/repository/protocols/appointment.repository'
+import { type NotificationFilters } from '@/types/notifications/notification-filters'
+import { type PaginatedRequest } from '@/types/pagination'
 import { NotificationChannel, NotificationType, UserType, type Notification } from '@prisma/client'
 import { type NotificationRepository } from '../repository/protocols/notification.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { EmailService } from './email/email.service'
 
-export type BirthdayNotificationPayload = {
-  recipientId: string;
-  recipientType: 'CUSTOMER';
-  notificationPreference: NotificationChannel;
-  email?: string | null;
+export interface BirthdayNotificationPayload {
+  recipientId: string
+  recipientType: 'CUSTOMER'
+  notificationPreference: NotificationChannel
+  email?: string | null
 
-  marker: string;
+  marker: string
 
-  title: string;
-  message: string;
+  title: string
+  message: string
 
-  templateKey?: 'BIRTHDAY';
-  year?: number;
-};
+  templateKey?: 'BIRTHDAY'
+  year?: number
+}
 
 class NotificationsUseCase {
   constructor (private readonly notificationRepository: NotificationRepository) { }
 
-  public async executeFindAll(
+  public async executeFindAll (
     user: TokenPayload,
     params: PaginatedRequest<NotificationFilters>
   ) {
     const notifications = await this.notificationRepository.findAll(user, params)
 
-    return notifications 
+    return notifications
   }
 
   public async executeFindById (notificationId: string): Promise<Notification | null> {
@@ -48,7 +48,7 @@ class NotificationsUseCase {
     return deletedNotification
   }
 
-  public async executeSendOnAppointmentCreated(appointment: FindByIdAppointments): Promise<void> {
+  public async executeSendOnAppointmentCreated (appointment: FindByIdAppointments): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
 
     const professionalEmail = appointment.offer.professional.email
@@ -66,7 +66,6 @@ class NotificationsUseCase {
 
     const alreadyExists = await this.notificationRepository.findByMarker(marker)
     if (!alreadyExists) {
-
       if (shouldNotifyProfessionalInApp) {
         if (!alreadyExists) {
           await this.notificationRepository.create({
@@ -91,10 +90,9 @@ class NotificationsUseCase {
         })
       }
     }
-
   }
 
-  public async executeSendOnAppointmentConfirmed(appointment: FindByIdAppointments): Promise<void> {
+  public async executeSendOnAppointmentConfirmed (appointment: FindByIdAppointments): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
     const serviceName = appointment.offer.service.name
     const professionalName = appointment.offer.professional.name ?? 'Profissional'
@@ -131,16 +129,16 @@ class NotificationsUseCase {
             customerName,
             professionalName,
             serviceName,
-            appointmentDateISO,
+            appointmentDateISO
           })
-          .catch(err => console.error('Erro ao enviar e-mail de confirmação:', err?.message || err))
+          .catch(err => { console.error('Erro ao enviar e-mail de confirmação:', err?.message || err) })
       }
     }
   }
 
-  public async executeSendOnAppointmentCancelled(
+  public async executeSendOnAppointmentCancelled (
     appointment: FindByIdAppointments,
-    options: { notifyCustomer: boolean; notifyProfessional: boolean }
+    options: { notifyCustomer: boolean, notifyProfessional: boolean }
   ): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
     const serviceName = appointment.offer.service.name
@@ -184,10 +182,9 @@ class NotificationsUseCase {
               appointmentDateISO,
               cancelledBy: 'professional'
             })
-            .catch(err => console.error('Erro ao enviar e-mail de confirmação:', err?.message || err))
+            .catch(err => { console.error('Erro ao enviar e-mail de confirmação:', err?.message || err) })
         }
       }
-
     }
 
     if (options.notifyProfessional) {
@@ -223,33 +220,32 @@ class NotificationsUseCase {
               appointmentDateISO,
               cancelledBy: 'customer'
             })
-            .catch(err => console.error('Erro ao enviar e-mail de confirmação:', err?.message || err))
+            .catch(err => { console.error('Erro ao enviar e-mail de confirmação:', err?.message || err) })
         }
-
       }
     }
   }
 
-  public async executeSendBirthday(payload: BirthdayNotificationPayload): Promise<void> {
+  public async executeSendBirthday (payload: BirthdayNotificationPayload): Promise<void> {
     const {
       recipientId,
       notificationPreference,
       email,
       marker,
       title,
-      message,
-    } = payload;
+      message
+    } = payload
 
-    const alreadyExists = await this.notificationRepository.findByMarker(marker);
-    if (alreadyExists) return;
+    const alreadyExists = await this.notificationRepository.findByMarker(marker)
+    if (alreadyExists) return
 
     const shouldNotifyInApp =
       notificationPreference === NotificationChannel.IN_APP ||
-      notificationPreference === NotificationChannel.BOTH;
+      notificationPreference === NotificationChannel.BOTH
 
     const shouldNotifyEmail =
       notificationPreference === NotificationChannel.EMAIL ||
-      notificationPreference === NotificationChannel.BOTH;
+      notificationPreference === NotificationChannel.BOTH
 
     if (shouldNotifyInApp) {
       await this.notificationRepository.create({
@@ -259,11 +255,11 @@ class NotificationsUseCase {
         message,
         recipientType: UserType.CUSTOMER,
         type: NotificationType.SYSTEM
-      });
+      })
     }
 
     if (shouldNotifyEmail && email) {
-      const emailService = new EmailService();
+      const emailService = new EmailService()
       await emailService.sendBirthday({
         to: email,
         title,
@@ -273,13 +269,12 @@ class NotificationsUseCase {
     }
   }
 
-  public async executeMarkManyAsRead(ids: string[], currentUserId: string) {
+  public async executeMarkManyAsRead (ids: string[], currentUserId: string) {
     if (ids.length === 0) return { updatedCount: 0 }
     const uniqueIds = [...new Set(ids)]
     const updatedCount = await this.notificationRepository.markManyAsReadForUser(uniqueIds, currentUserId)
     return { updatedCount }
   }
-
 }
 
 export { NotificationsUseCase }

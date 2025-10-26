@@ -55,7 +55,7 @@ class NotificationsController {
     }
   }
 
-  public static async handleMarkManyAsRead(req: Request, res: Response, next: NextFunction) {
+  public static async handleMarkManyAsRead (req: Request, res: Response, next: NextFunction) {
     try {
       const { ids } = markManySchema.parse(req.body)
       const userId = req.user.id
@@ -63,11 +63,10 @@ class NotificationsController {
       const result = await useCase.executeMarkManyAsRead(ids, userId)
 
       return res.send(result)
-    } catch (error) { 
+    } catch (error) {
       next(error)
     }
   }
-
 }
 
 export { NotificationsController }

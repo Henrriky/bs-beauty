@@ -7,3 +7,20 @@ export interface Analytics {
   numberOfProfessionals?: number
   totalRevenue: number
 }
+
+export type Professional = {
+  id: string
+  name: string
+  specialization: string
+  profilePhotoUrl?: string
+  meanRating: number
+  ratingCount: number
+}
+
+export type RatingAnalytics = {
+  professionals: Professional[]
+  salonRating: {
+    meanScore: string
+    ratingCount: number
+  }
+}

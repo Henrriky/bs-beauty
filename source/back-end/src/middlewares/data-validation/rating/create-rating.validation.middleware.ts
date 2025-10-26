@@ -16,5 +16,4 @@ const validateCreateRating = async (req: Request, res: Response, next: NextFunct
   }
 }
 
-
 export { validateCreateRating }

@@ -10,7 +10,6 @@ class GenerateOAuthRedirectUriUseCase {
 
   execute (): GenerateOAuthRedirectUriUseCaseOutput {
     const authorizationUrl = this.identityProvider.generateRedirectUri()
-
     return { authorizationUrl }
   }
 }

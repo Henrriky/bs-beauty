@@ -185,8 +185,8 @@ describe('Professionals API (Integration Test)', () => {
       // arrange
       const { id } = await ProfessionalFactory.makeProfessional()
 
-      const updatedEmail = "professional-test@gmail.com"
-      const updatedName = `John Doe Foo`
+      const updatedEmail = 'professional-test@gmail.com'
+      const updatedName = 'John Doe Foo'
 
       const spies = spyProfessionalsWiring()
 

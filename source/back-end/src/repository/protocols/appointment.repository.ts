@@ -1,5 +1,7 @@
 import { Status, type Appointment, type Prisma } from '@prisma/client'
 import { type FindNonFinishedByUserAndDay } from '../types/appointment-repository.types'
+import { PaginatedRequest, PaginatedResult } from '@/types/pagination'
+import { AppointmentFilters } from '@/types/appointments/appointment-filters'
 
 const appointmentNonFinishedStatus = [Status.PENDING, Status.RESCHEDULED, Status.CONFIRMED, Status.FINISHED]
 
@@ -28,7 +30,7 @@ export type FindByIdAppointments = Prisma.AppointmentGetPayload<{
         }
         professional: true
       }
-    },
+    }
     customer: {
       select: {
         id: true
@@ -42,9 +44,11 @@ export type FindByIdAppointments = Prisma.AppointmentGetPayload<{
 
 interface AppointmentRepository {
   findAll: () => Promise<Appointment[]>
+  findAllPaginated: (params: PaginatedRequest<AppointmentFilters>, scope: { userId: string; viewAll: boolean }) => Promise<PaginatedResult<Appointment>>
   findById: (id: string) => Promise<FindByIdAppointments | null>
   findByCustomerOrProfessionalId: (customerOrProfessionalId: string) => Promise<Appointment[]>
   findByServiceOfferedId: (id: string) => Promise<Appointment[]>
+  findByDateRange: (startDate: Date, endDate: Date) => Promise<Appointment[]>
   findNonFinishedByUserAndDay: (
     userId: string,
     dayToFetchAvailableSchedulling: Date

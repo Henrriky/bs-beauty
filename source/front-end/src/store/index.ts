@@ -10,11 +10,13 @@ import { shiftAPI } from './shift/shift-api'
 import { professionalAPI } from './professional/professional-api'
 import { appointmentAPI } from './appointment/appointment-api'
 import { analyticsAPI } from './analytics/analytics-api'
+import { publicAnalyticsApi } from './analytics/public-analytics-api'
 import { notificationAPI } from './notification/notification-api'
 import { notificationTemplateAPI } from './notification-template/notification-template-api'
 import { ratingAPI } from './rating/rating-api'
 import { roleAPI } from './role/role-api'
 import { permissionAPI } from './permission/permission-api'
+import { blockedtimesAPI } from './blocked-times/blocked-times-api'
 
 export const store = configureStore({
   reducer: {
@@ -29,11 +31,13 @@ export const store = configureStore({
     [professionalAPI.reducerPath]: professionalAPI.reducer,
     [appointmentAPI.reducerPath]: appointmentAPI.reducer,
     [analyticsAPI.reducerPath]: analyticsAPI.reducer,
+    [publicAnalyticsApi.reducerPath]: publicAnalyticsApi.reducer,
     [notificationAPI.reducerPath]: notificationAPI.reducer,
     [notificationTemplateAPI.reducerPath]: notificationTemplateAPI.reducer,
     [ratingAPI.reducerPath]: ratingAPI.reducer,
     [roleAPI.reducerPath]: roleAPI.reducer,
     [permissionAPI.reducerPath]: permissionAPI.reducer,
+    [blockedtimesAPI.reducerPath]: blockedtimesAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -44,6 +48,7 @@ export const store = configureStore({
       .concat(customerAPI.middleware)
       .concat(shiftAPI.middleware)
       .concat(professionalAPI.middleware)
+      .concat(publicAnalyticsApi.middleware)
       .concat(appointmentAPI.middleware)
       .concat(analyticsAPI.middleware)
       .concat(notificationAPI.middleware)
@@ -51,4 +56,5 @@ export const store = configureStore({
       .concat(ratingAPI.middleware)
       .concat(roleAPI.middleware)
       .concat(permissionAPI.middleware)
+      .concat(blockedtimesAPI.middleware),
 })

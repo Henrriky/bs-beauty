@@ -1,17 +1,18 @@
-import { NotificationTemplateRepository } from '@/repository/protocols/notification-template.repository'
-import { NotificationTemplateFilters } from '@/types/notification-templates/notification-template'
-import { PaginatedRequest } from '@/types/pagination'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { type NotificationTemplateRepository } from '@/repository/protocols/notification-template.repository'
+import { type NotificationTemplateFilters } from '@/types/notification-templates/notification-template'
+import { type PaginatedRequest } from '@/types/pagination'
 import { CustomError } from '@/utils/errors/custom.error.util'
 import { PLACEHOLDER_REGEX } from '@/utils/formatting/placeholder.util'
 import { RecordExistence } from '@/utils/validation/record-existence.validation.util'
-import { Prisma } from '@prisma/client'
+import { type Prisma } from '@prisma/client'
 
 class NotificationTemplateUseCase {
   private readonly entityName = 'NotificationTemplate'
 
-  constructor(private readonly notificationTemplateRepository: NotificationTemplateRepository) { }
+  constructor (private readonly notificationTemplateRepository: NotificationTemplateRepository) { }
 
-  public async executeFindAll(
+  public async executeFindAll (
     params: PaginatedRequest<NotificationTemplateFilters>
   ) {
     const result = await this.notificationTemplateRepository.findAll(params)
@@ -19,7 +20,7 @@ class NotificationTemplateUseCase {
     return result
   }
 
-  public async executeUpdate(key: string, data: Prisma.NotificationTemplateUpdateInput) {
+  public async executeUpdate (key: string, data: Prisma.NotificationTemplateUpdateInput) {
     const notificationTemplate = await this.notificationTemplateRepository.findActiveByKey(key)
 
     RecordExistence.validateRecordExistence(notificationTemplate, this.entityName)
@@ -29,14 +30,14 @@ class NotificationTemplateUseCase {
 
     const nextPlaceholdersArr: string[] = [
       ...extractPlaceholders(nextTitle),
-      ...extractPlaceholders(nextBody),
+      ...extractPlaceholders(nextBody)
     ]
     const nextPlaceholders = new Set<string>(nextPlaceholdersArr)
 
     const currentAllowedFromColumn = asStringArray(notificationTemplate!.variables as unknown)
     const fallbackAllowedFromText: string[] = [
       ...extractPlaceholders(notificationTemplate!.title),
-      ...extractPlaceholders(notificationTemplate!.body),
+      ...extractPlaceholders(notificationTemplate!.body)
     ]
     const allowedList: string[] = currentAllowedFromColumn.length > 0
       ? currentAllowedFromColumn
@@ -57,15 +58,14 @@ class NotificationTemplateUseCase {
       )
     }
 
-    return this.notificationTemplateRepository.updateByKey(key, data)
+    return await this.notificationTemplateRepository.updateByKey(key, data)
   }
-
 }
 
 export const extractPlaceholders = (text: string) =>
   Array.from(text.matchAll(PLACEHOLDER_REGEX), m => m[1])
 
-function nextStringField(
+function nextStringField (
   current: string,
   input?: string | Prisma.StringFieldUpdateOperationsInput | null
 ): string {
@@ -76,9 +76,9 @@ function nextStringField(
   return current
 }
 
-function asStringArray(json: unknown): string[] {
+function asStringArray (json: unknown): string[] {
   if (Array.isArray(json) && json.every(v => typeof v === 'string')) {
-    return json as string[]
+    return json
   }
   return []
 }
