@@ -129,7 +129,8 @@ jobs:
           SSL_KEY_PATH: ${{ github.workspace }}/infra/ansible/key.pem
         with:
           playbook: ${{ github.workspace }}/infra/ansible/playbooks/public.yaml
-          inventory: ${{ github.workspace }}/infra/ansible/inventories/dynamic.yaml
+          options: |
+            --inventory ${{ github.workspace }}/infra/ansible/inventories/dynamic.yaml
           
       - name: Run Deploy Application Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
@@ -142,4 +143,5 @@ jobs:
           REPO_BRANCH: ${{ github.ref_name }}
         with:
           playbook: ${{ github.workspace }}/infra/ansible/playbooks/private.yaml
-          inventory: ${{ github.workspace }}/infra/ansible/inventories/dynamic.yaml
+          options: |
+            --inventory ${{ github.workspace }}/infra/ansible/inventories/dynamic.yaml
