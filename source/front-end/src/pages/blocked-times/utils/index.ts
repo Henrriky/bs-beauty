@@ -40,7 +40,7 @@ export const convertFormToBlockedTime = (
   const startDate = new Date(`${formData.startDate} 00:00:00`).toISOString()
   const endDate = formData.endDate
     ? new Date(`${formData.endDate} 00:00:00`).toISOString()
-    : undefined
+    : null
 
   return {
     ...formData,
@@ -83,7 +83,7 @@ export const getEndDateFromPeriodSelectValue = (
 
 export const getPeriodSelectValueFromSelectedDate = (
   startDate: string,
-  endDate: string | undefined,
+  endDate: string | undefined | null,
 ): BlockedTimeSelectPeriodPossibleValues => {
   if (!endDate) return 'undefined'
 
