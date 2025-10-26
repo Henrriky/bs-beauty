@@ -80,6 +80,10 @@ jobs:
       SSL_CERT_CONTENT: ${{ secrets.SSL_CERT_CONTENT }}
       SSL_KEY_CONTENT: ${{ secrets.SSL_KEY_CONTENT }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
       - name: Set REPO_BRANCH
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
@@ -108,10 +112,10 @@ jobs:
 
       - name: Setup Ansible Secrets (keys & certs)
         run: |
-          mkdir -p source/infra/ansible
-          echo "$SSH_KEY_CONTENT" > source/infra/ansible/id_rsa
-          echo "$SSL_CERT_CONTENT" > source/infra/ansible/cert.pem
-          echo "$SSL_KEY_CONTENT" > source/infra/ansible/key.pem
+          mkdir -p infra/ansible
+          echo "$SSH_KEY_CONTENT" > infra/ansible/id_rsa
+          echo "$SSL_CERT_CONTENT" > infra/ansible/cert.pem
+          echo "$SSL_KEY_CONTENT" > infra/ansible/key.pem
           chmod 600 $SSH_KEY_PATH $SSL_CERT_PATH $SSL_KEY_PATH
 
       - name: Run Deploy Nginx Ansible Playbook
