@@ -40,16 +40,18 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Generate .env for front-end
+        env:
+          FRONTEND_VITE_ENVIRONMENT: ${{ vars.FRONTEND_VITE_ENVIRONMENT }}
         run: |
           echo "Creating .env file for front-end"
-          rm -f source/front-end/.env
+          rm -f ${{ github.workspace }}/source/front-end/.env
           for var in $(printenv | grep ^FRONTEND_ | awk -F= '{print $1}'); do
             key="${var#FRONTEND_}"
-            echo "$key=${!var}" >> source/front-end/.env
+            echo "$key=${!var}" >> ${{ github.workspace }}/source/front-end/.env
           done
 
       - name: Build & Push Docker image via Makefile
-        working-directory: source/
+        working-directory: ${{ github.workspace }}/source/
         run: |
           make push TAG=${{ steps.version.outputs.version }} LATEST=true
     
@@ -61,9 +63,9 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     env:
       # Hosts and SSH details
-      PRIVATE_HOST: ${{ secrets.PRIVATE_HOST }}
-      PUBLIC_HOST: ${{ secrets.PUBLIC_HOST }}
-      SSH_USER: ${{ secrets.SSH_USER }}
+      PRIVATE_HOST: ${{ vars.PRIVATE_HOST }}
+      PUBLIC_HOST: ${{ vars.PUBLIC_HOST }}
+      SSH_USER: ${{ vars.SSH_USER }}
       SSH_KEY_PATH: ${{ github.workspace }}/infra/ansible/id_rsa
       SSL_CERT_PATH: ${{ github.workspace }}/infra/ansible/cert.pem
       SSL_KEY_PATH: ${{ github.workspace }}/infra/ansible/key.pem
@@ -93,21 +95,41 @@ jobs:
           fi
 
       - name: Generate .env for back-end
+        env:
+          BACKEND_COOKIE_DOMAIN: ${{ vars.BACKEND_COOKIE_DOMAIN }}
+          BACKEND_DATABASE_URL: ${{ vars.BACKEND_DATABASE_URL }}
+          BACKEND_EMAIL_PASSWORD: ${{ vars.BACKEND_EMAIL_PASSWORD }}
+          BACKEND_EMAIL_PROVIDER: ${{ vars.BACKEND_EMAIL_PROVIDER }}
+          BACKEND_EMAIL_USER: ${{ vars.BACKEND_EMAIL_USER }}
+          BACKEND_GOOGLE_CLIENT_ID: ${{ vars.BACKEND_GOOGLE_CLIENT_ID }}
+          BACKEND_GOOGLE_CLIENT_SECRET: ${{ vars.BACKEND_GOOGLE_CLIENT_SECRET }}
+          BACKEND_GOOGLE_REDIRECT_URI: ${{ vars.BACKEND_GOOGLE_REDIRECT_URI }}
+          BACKEND_GOOGLE_SCOPES: ${{ vars.BACKEND_GOOGLE_SCOPES }}
+          BACKEND_JWT_EXPIRES_IN: ${{ vars.BACKEND_JWT_EXPIRES_IN }}
+          BACKEND_JWT_REFRESH_EXPIRES_IN: ${{ vars.BACKEND_JWT_REFRESH_EXPIRES_IN }}
+          BACKEND_JWT_SECRET: ${{ vars.BACKEND_JWT_SECRET }}
+          BACKEND_NOTIFY_ASYNC_ENABLED: ${{ vars.BACKEND_NOTIFY_ASYNC_ENABLED }}
+          BACKEND_NOTIFY_CONCURRENCY: ${{ vars.BACKEND_NOTIFY_CONCURRENCY }}
+          BACKEND_NOTIFY_RETRY_DELAY_MS: ${{ vars.BACKEND_NOTIFY_RETRY_DELAY_MS }}
+          BACKEND_REDIS_HOST: ${{ vars.BACKEND_REDIS_HOST }}
+          BACKEND_REDIS_PORT: ${{ vars.BACKEND_REDIS_PORT }}
         run: |
           echo "Creating .env file for back-end"
-          rm -f source/back-end/.env
+          rm -f ${{ github.workspace }}/source/back-end/.env
           for var in $(printenv | grep ^BACKEND_ | awk -F= '{print $1}'); do
             key="${var#BACKEND_}"
-            echo "$key=${!var}" >> source/back-end/.env
+            echo "$key=${!var}" >> ${{ github.workspace }}/source/back-end/.env
           done
 
       - name: Generate .env for front-end
+        env:
+          FRONTEND_VITE_ENVIRONMENT: ${{ vars.FRONTEND_VITE_ENVIRONMENT }}
         run: |
           echo "Creating .env file for front-end"
-          rm -f source/front-end/.env
+          rm -f ${{ github.workspace }}/source/front-end/.env
           for var in $(printenv | grep ^FRONTEND_ | awk -F= '{print $1}'); do
             key="${var#FRONTEND_}"
-            echo "$key=${!var}" >> source/front-end/.env
+            echo "$key=${!var}" >> ${{ github.workspace }}/source/front-end/.env
           done
 
       - name: Setup Ansible Secrets (keys & certs)
@@ -121,9 +143,9 @@ jobs:
       - name: Run Deploy Nginx Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
         env:
-          PRIVATE_HOST: ${{ secrets.PRIVATE_HOST }}
-          PUBLIC_HOST: ${{ secrets.PUBLIC_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
+          PRIVATE_HOST: ${{ vars.PRIVATE_HOST }}
+          PUBLIC_HOST: ${{ vars.PUBLIC_HOST }}
+          SSH_USER: ${{ vars.SSH_USER }}
           SSH_KEY_PATH: ${{ github.workspace }}/infra/ansible/id_rsa
           SSL_CERT_PATH: ${{ github.workspace }}/infra/ansible/cert.pem
           SSL_KEY_PATH: ${{ github.workspace }}/infra/ansible/key.pem
@@ -135,9 +157,9 @@ jobs:
       - name: Run Deploy Application Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
         env:
-          PRIVATE_HOST: ${{ secrets.PRIVATE_HOST }}
-          PUBLIC_HOST: ${{ secrets.PUBLIC_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
+          PRIVATE_HOST: ${{ vars.PRIVATE_HOST }}
+          PUBLIC_HOST: ${{ vars.PUBLIC_HOST }}
+          SSH_USER: ${{ vars.SSH_USER }}
           SSH_KEY_PATH: ${{ github.workspace }}/infra/ansible/id_rsa
           BACK_ENV_PATH: ${{ github.workspace }}/source/back-end/.env
           REPO_BRANCH: ${{ github.ref_name }}
