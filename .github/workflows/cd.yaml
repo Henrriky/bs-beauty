@@ -49,6 +49,7 @@ jobs:
           done
 
       - name: Build & Push Docker image via Makefile
+        working-directory: source/
         run: |
           make push TAG=${{ steps.version.outputs.version }} LATEST=true
     
