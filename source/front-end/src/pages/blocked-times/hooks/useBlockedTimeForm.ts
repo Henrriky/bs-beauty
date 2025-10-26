@@ -20,7 +20,7 @@ import {
 
 const CREATE_BLOCKEDTIME_INITIAL_VALUES: Omit<
   BlockedTime,
-  'id' | 'createdAt' | 'updatedAt' | 'endDate'
+  'id' | 'createdAt' | 'updatedAt' | 'endDate' | 'professional'
 > = {
   reason: '',
   startDate: new Date().toISOString().split('T')[0],
