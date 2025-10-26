@@ -11,6 +11,7 @@ function NotFound() {
       <Title align="center">Ops, parece que essa rota não existe</Title>
       <Button
         label="Ir para o menu principal"
+        className='max-w-screen-sm'
         onClick={() => {
           navigate('/')
         }}
