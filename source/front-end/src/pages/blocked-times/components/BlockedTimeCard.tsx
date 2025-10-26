@@ -1,4 +1,8 @@
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import {
+  PencilSquareIcon,
+  TrashIcon,
+  UserIcon,
+} from '@heroicons/react/24/outline'
 import { BlockedTime } from '../types'
 import {
   CheckCircleIcon,
@@ -65,15 +69,31 @@ function BlockedTimeCard({
               minute: '2-digit',
             })}
         </h4>
-        {/* Informations - Status Badge */}
-        <div className="flex items-center gap-2 mt-1">
-          {getIsActiveBadge(blockedtime.isActive)}
+        <div>
+          {/* Informations - Status Badge */}
+          <div className="flex items-center gap-2 mt-1">
+            {getIsActiveBadge(blockedtime.isActive)}
+          </div>
+          {/* Informations - Owner Badge */}
+          <div className="flex items-center gap-2 mt">
+            <span
+              className="inline-flex items-center gap-1 py-0.5 text-sm text-secondary-200 font-light
+        "
+            >
+              <UserIcon className="size-4 " />
+              {firstLetterOfWordToUpperCase(blockedtime.professional.name)}
+            </span>
+          </div>
         </div>
       </div>
       {/* Actions - Right Side */}
       <div className="flex gap-2 shrink-0">
         <UserCanAccessContainer
-          // TODO: allowedPermissions={['blockedtimes.edit']}
+          strategy="ANY"
+          allowedPermissions={[
+            'blocked_time.edit_all',
+            'blocked_time.edit_own',
+          ]}
           allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
         >
           <button
@@ -86,7 +106,11 @@ function BlockedTimeCard({
         </UserCanAccessContainer>
 
         <UserCanAccessContainer
-          // TODO: allowedPermissions={['blockedtimes.delete']}
+          strategy="ANY"
+          allowedPermissions={[
+            'blocked_time.delete_all',
+            'blocked_time.delete_own',
+          ]}
           allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
         >
           <button

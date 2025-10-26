@@ -117,7 +117,16 @@ const sideBarItems: SideBarItem[] = [
     icon: <NoSymbolIcon className="size-6" />,
     navigateTo: '/blocked-times',
     authorization: {
-      allowedPermissions: [],
+      strategy: 'ANY',
+      allowedPermissions: [
+        'blocked_time.delete_all',
+        'blocked_time.delete_own',
+        'blocked_time.read_all',
+        'blocked_time.read_own',
+        'blocked_time.edit_all',
+        'blocked_time.edit_own',
+        'blocked_time.create_own',
+      ],
       allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
     },
   },

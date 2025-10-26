@@ -63,7 +63,8 @@ export default function BlockedTimes() {
       </div>
       {/* Filters and BlockedTimes List */}
       <UserCanAccessContainer
-        // TODO: allowedPermissions={['blockedtimes.read']}
+        strategy="ANY"
+        allowedPermissions={['blocked_time.read_all', 'blocked_time.read_own']}
         allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
       >
         {/* Filters */}
@@ -128,7 +129,7 @@ export default function BlockedTimes() {
 
       {/* Create BlockedTime */}
       <UserCanAccessContainer
-        // TODO: allowedPermissions={['blockedtimes.create']}
+        allowedPermissions={['blocked_time.create_own']}
         allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
       >
         <Button
