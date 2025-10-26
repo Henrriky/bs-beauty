@@ -64,9 +64,9 @@ jobs:
       PRIVATE_HOST: ${{ secrets.PRIVATE_HOST }}
       PUBLIC_HOST: ${{ secrets.PUBLIC_HOST }}
       SSH_USER: ${{ secrets.SSH_USER }}
-      SSH_KEY_PATH: source/infra/ansible/id_rsa
-      SSL_CERT_PATH: source/infra/ansible/cert.pem
-      SSL_KEY_PATH: source/infra/ansible/key.pem
+      SSH_KEY_PATH: infra/ansible/id_rsa
+      SSL_CERT_PATH: infra/ansible/cert.pem
+      SSL_KEY_PATH: infra/ansible/key.pem
 
       # Paths to .env files on the server
       BACK_ENV_PATH: /home/ubuntu/bs-beauty/backend/.env
