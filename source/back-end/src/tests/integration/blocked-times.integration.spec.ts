@@ -1,12 +1,11 @@
-import request from "supertest";
-import { getProfessionalToken } from "./utils/auth";
-import { app } from "@/app";
-import { BlockedTimeFactory } from "./factories/blocked-time.factory";
-import { UserType, type Professional, type Prisma, BlockedTime } from "@prisma/client";
-import { prismaClient } from "@/lib/prisma";
-import { faker } from "@faker-js/faker";
-import * as luxon from "luxon";
-import { nullable } from "zod/v4";
+import request from 'supertest'
+import { getProfessionalToken } from './utils/auth'
+import { app } from '@/app'
+import { BlockedTimeFactory } from './factories/blocked-time.factory'
+import { UserType, type Professional, type Prisma, type BlockedTime } from '@prisma/client'
+import { prismaClient } from '@/lib/prisma'
+import { faker } from '@faker-js/faker'
+import * as luxon from 'luxon'
 
 const convertBlockedTimeToResponseFormat = (blockedTime: BlockedTime) => {
   return {
@@ -16,20 +15,20 @@ const convertBlockedTimeToResponseFormat = (blockedTime: BlockedTime) => {
     startTime: blockedTime.startTime.toISOString(),
     endTime: blockedTime?.endTime?.toISOString(),
     startDate: blockedTime.startDate.toISOString(),
-    endDate: blockedTime?.endDate?.toISOString() ?? null,
-  };
-};
+    endDate: blockedTime?.endDate?.toISOString() ?? null
+  }
+}
 
-describe("Blocked Times API (Integration Tests)", () => {
-  let token: string;
-  let authenticatedProfessional: Professional;
+describe('Blocked Times API (Integration Tests)', () => {
+  let token: string
+  let authenticatedProfessional: Professional
 
   beforeEach(async () => {
     const { token: tokenGenerated, professional: professionalGenerated } =
-      await getProfessionalToken(UserType.PROFESSIONAL);
-    token = tokenGenerated;
-    authenticatedProfessional = professionalGenerated;
-  });
+      await getProfessionalToken(UserType.PROFESSIONAL)
+    token = tokenGenerated
+    authenticatedProfessional = professionalGenerated
+  })
 
   describe('GET /blocked-times', () => {
     it('should return an error when professional is not authenticated', async () => {
@@ -259,16 +258,16 @@ describe("Blocked Times API (Integration Tests)", () => {
     })
   })
 
-  describe("GET /professionals/:professionalId/blocked-times", () => {
-    it("should return filtered blocked times when exists blocked times with end date null and start date is before end date provided", async () => {
-      const now = new Date();
-      const startDate = luxon.DateTime.fromJSDate(now);
-      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 31 });
+  describe('GET /professionals/:professionalId/blocked-times', () => {
+    it('should return filtered blocked times when exists blocked times with end date null and start date is before end date provided', async () => {
+      const now = new Date()
+      const startDate = luxon.DateTime.fromJSDate(now)
+      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 31 })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: null,
-        isActive: false,
-      });
+        isActive: false
+      })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: null,
@@ -278,36 +277,36 @@ describe("Blocked Times API (Integration Tests)", () => {
         wednesday: false,
         thursday: false,
         friday: false,
-        saturday: false,
-      });
+        saturday: false
+      })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: startDate.plus({ days: 10 }).toJSDate(),
-        isActive: false,
-      });
+        isActive: false
+      })
 
       const blockedTimes = await Promise.all([
         await BlockedTimeFactory.makeBlockedTime({
           startDate: startDate.toJSDate(),
           professional: { connect: { id: authenticatedProfessional.id } },
-          endDate: null,
+          endDate: null
         }),
         await BlockedTimeFactory.makeBlockedTime({
           startDate: startDate.plus({ days: 15 }).toJSDate(),
           professional: { connect: { id: authenticatedProfessional.id } },
-          endDate: null,
-        }),
-      ]);
+          endDate: null
+        })
+      ])
 
       const response = await request(app)
         .get(`/api/professionals/${authenticatedProfessional.id}/blocked-times`)
-        .set("Authorization", `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .query({
           startDate: startDate.toISO(),
-          endDate: endDate.toISO(),
-        });
-      expect(response.status).toBe(200);
-      expect(response.body.data.length).toBe(blockedTimes.length);
+          endDate: endDate.toISO()
+        })
+      expect(response.status).toBe(200)
+      expect(response.body.data.length).toBe(blockedTimes.length)
       expect(response.body.data).toEqual(
         expect.arrayContaining(
           blockedTimes.map((blockedTime) => {
@@ -315,17 +314,17 @@ describe("Blocked Times API (Integration Tests)", () => {
           })
         )
       )
-    });
+    })
 
-    it("should return filtered blocked times when exists blocked times with end date is after start date and before end date provided", async () => {
-      const now = new Date();
-      const startDate = luxon.DateTime.fromJSDate(now);
-      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 25 });
+    it('should return filtered blocked times when exists blocked times with end date is after start date and before end date provided', async () => {
+      const now = new Date()
+      const startDate = luxon.DateTime.fromJSDate(now)
+      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 25 })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: null,
-        isActive: false,
-      });
+        isActive: false
+      })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: null,
@@ -335,13 +334,13 @@ describe("Blocked Times API (Integration Tests)", () => {
         wednesday: false,
         thursday: false,
         friday: false,
-        saturday: false,
-      });
+        saturday: false
+      })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: startDate.plus({ days: 10 }).toJSDate(),
-        isActive: false,
-      });
+        isActive: false
+      })
 
       const blockedTimes = await Promise.all([
         await BlockedTimeFactory.makeBlockedTime({
@@ -353,18 +352,18 @@ describe("Blocked Times API (Integration Tests)", () => {
           startDate: startDate.plus({ days: 5 }).toJSDate(),
           endDate: startDate.plus({ days: 15 }).toJSDate(),
           professional: { connect: { id: authenticatedProfessional.id } }
-        }),
-      ]);
+        })
+      ])
 
       const response = await request(app)
         .get(`/api/professionals/${authenticatedProfessional.id}/blocked-times`)
-        .set("Authorization", `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .query({
           startDate: startDate.toISO(),
-          endDate: endDate.toISO(),
+          endDate: endDate.toISO()
         })
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(200)
       expect(response.body.data.length).toBe(blockedTimes.length)
       expect(response.body.data).toEqual(
         expect.arrayContaining(
@@ -375,15 +374,15 @@ describe("Blocked Times API (Integration Tests)", () => {
       )
     })
 
-    it("should return filtered blocked times when exists blocked times with least one weekday active and match with filter", async () => {
-      const now = new Date();
-      const startDate = luxon.DateTime.fromJSDate(now);
-      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 15 });
+    it('should return filtered blocked times when exists blocked times with least one weekday active and match with filter', async () => {
+      const now = new Date()
+      const startDate = luxon.DateTime.fromJSDate(now)
+      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 15 })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: null,
-        isActive: false,
-      });
+        isActive: false
+      })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: null,
@@ -393,13 +392,13 @@ describe("Blocked Times API (Integration Tests)", () => {
         wednesday: false,
         thursday: false,
         friday: false,
-        saturday: false,
-      });
+        saturday: false
+      })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: startDate.plus({ days: 10 }).toJSDate(),
-        isActive: false,
-      });
+        isActive: false
+      })
 
       const blockedTimes = await Promise.all([
         await BlockedTimeFactory.makeBlockedTime({
@@ -413,18 +412,18 @@ describe("Blocked Times API (Integration Tests)", () => {
           saturday: false,
           sunday: false,
           professional: { connect: { id: authenticatedProfessional.id } }
-        }),
-      ]);
+        })
+      ])
 
       const response = await request(app)
         .get(`/api/professionals/${authenticatedProfessional.id}/blocked-times`)
-        .set("Authorization", `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .query({
           startDate: startDate.toISO(),
-          endDate: endDate.toISO(),
-        });
+          endDate: endDate.toISO()
+        })
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(200)
       expect(response.body.data.length).toBe(blockedTimes.length)
       expect(response.body.data).toEqual(
         expect.arrayContaining(
@@ -433,67 +432,67 @@ describe("Blocked Times API (Integration Tests)", () => {
           })
         )
       )
-    });
+    })
 
-    it("should not return blocked times when has blocked times with isActive false", async () => {
-      const now = new Date();
-      const startDate = luxon.DateTime.fromJSDate(now);
-      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 31 });
+    it('should not return blocked times when has blocked times with isActive false', async () => {
+      const now = new Date()
+      const startDate = luxon.DateTime.fromJSDate(now)
+      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 31 })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: null,
-        isActive: false,
-      });
+        isActive: false
+      })
       await BlockedTimeFactory.makeBlockedTime({
         startDate: startDate.toJSDate(),
         endDate: startDate.plus({ days: 10 }).toJSDate(),
-        isActive: false,
-      });
+        isActive: false
+      })
 
       const response = await request(app)
         .get(`/api/professionals/${authenticatedProfessional.id}/blocked-times`)
-        .set("Authorization", `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .query({
           startDate: startDate.toISO(),
-          endDate: endDate.toISO(),
+          endDate: endDate.toISO()
         })
 
-      expect(response.status).toBe(200);
-      expect(response.body.data).toHaveLength(0);
-    });
+      expect(response.status).toBe(200)
+      expect(response.body.data).toHaveLength(0)
+    })
 
-    it("should return 400 when trying to filter by a period greather than 31 days", async () => {
-      const now = new Date();
-      const startDate = luxon.DateTime.fromJSDate(now).toISO();
-      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 32 }).toISO();
+    it('should return 400 when trying to filter by a period greather than 31 days', async () => {
+      const now = new Date()
+      const startDate = luxon.DateTime.fromJSDate(now).toISO()
+      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 32 }).toISO()
 
       const response = await request(app)
         .get(`/api/professionals/${authenticatedProfessional.id}/blocked-times`)
-        .set("Authorization", `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .query({
           startDate,
-          endDate,
-        });
+          endDate
+        })
 
-      expect(response.status).toBe(400);
-    });
+      expect(response.status).toBe(400)
+    })
 
-    it("should return 404 when trying to get blocked times from a professional that does not exists", async () => {
-      const now = new Date();
-      const startDate = luxon.DateTime.fromJSDate(now).toISO();
-      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 29 }).toISO();
+    it('should return 404 when trying to get blocked times from a professional that does not exists', async () => {
+      const now = new Date()
+      const startDate = luxon.DateTime.fromJSDate(now).toISO()
+      const endDate = luxon.DateTime.fromJSDate(now).plus({ days: 29 }).toISO()
 
       const response = await request(app)
         .get(`/api/professionals/${faker.string.uuid()}/blocked-times`)
-        .set("Authorization", `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`)
         .query({
           startDate,
-          endDate,
-        });
+          endDate
+        })
 
-      expect(response.status).toBe(404);
-    });
-  });
+      expect(response.status).toBe(404)
+    })
+  })
 
   describe('POST /blocked-times', () => {
     it('should return an 401 when trying to create a blocked time without authentication', async () => {
@@ -817,4 +816,4 @@ describe("Blocked Times API (Integration Tests)", () => {
       })
     })
   })
-});
+})

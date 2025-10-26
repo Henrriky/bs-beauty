@@ -7,7 +7,7 @@ import { type BlockedTimeRepository } from '../protocols/blocked-times.repositor
 import * as luxon from 'luxon'
 
 class PrismaBlockedTimeRepository implements BlockedTimeRepository {
-  public async findAllPaginated({ extra }: AuthContext<PaginatedRequest<BlockedTimesRepositoryFilters>>) {
+  public async findAllPaginated ({ extra }: AuthContext<PaginatedRequest<BlockedTimesRepositoryFilters>>) {
     const { page, limit, filters } = extra
     const skip = (page - 1) * limit
 
@@ -27,7 +27,14 @@ class PrismaBlockedTimeRepository implements BlockedTimeRepository {
         where,
         skip,
         take: limit,
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
+        include: {
+          professional: {
+            select: {
+              name: true
+            }
+          }
+        }
       }),
       prismaClient.blockedTime.count({ where })
     ])
@@ -41,7 +48,7 @@ class PrismaBlockedTimeRepository implements BlockedTimeRepository {
     }
   }
 
-  public async findById(id: string) {
+  public async findById (id: string) {
     const blockedTime = await prismaClient.blockedTime.findUnique({
       where: { id }
     })
@@ -49,7 +56,7 @@ class PrismaBlockedTimeRepository implements BlockedTimeRepository {
     return blockedTime
   }
 
-  public async findByProfessionalAndPeriod(data: { professionalId: string, startDate: Date, endDate: Date }) {
+  public async findByProfessionalAndPeriod (data: { professionalId: string, startDate: Date, endDate: Date }) {
     const weekDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const
     const differenceInDays = luxon.DateTime.fromJSDate(data.endDate).diff(luxon.DateTime.fromJSDate(data.startDate), 'days').days
 
@@ -106,13 +113,13 @@ class PrismaBlockedTimeRepository implements BlockedTimeRepository {
     return blockedTimes
   }
 
-  public async delete(id: string) {
+  public async delete (id: string) {
     await prismaClient.blockedTime.delete({
       where: { id }
     })
   }
 
-  public async create(
+  public async create (
     { extra: data, userId }: AuthContext<Prisma.BlockedTimeCreateInput>
   ) {
     const blockedTimeCreated = await prismaClient.blockedTime.create({
@@ -129,7 +136,7 @@ class PrismaBlockedTimeRepository implements BlockedTimeRepository {
     return blockedTimeCreated
   }
 
-  public async update(
+  public async update (
     id: string,
     data: Prisma.BlockedTimeUpdateInput
   ) {

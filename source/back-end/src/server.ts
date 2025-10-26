@@ -7,7 +7,7 @@ import { registerCronJobs } from './jobs/register-cron-jobs'
 
 const port = process.env.PORT ?? 3000
 
-async function startServer(): Promise<void> {
+async function startServer (): Promise<void> {
   try {
     await runDatabaseSeeds()
     registerNotificationListeners()
@@ -16,10 +16,16 @@ async function startServer(): Promise<void> {
     app.listen(port, () => {
       AppLoggerInstance.info(`HTTP Server listening on port ${port}`)
     })
-    process.on('SIGTERM', async () => {
-      AppLoggerInstance.info(`HTTP Server Shutting down, draining notification queue...`)
-      await drainAndExit()
-      process.exit(0)
+    process.on('SIGTERM', () => {
+      AppLoggerInstance.info('HTTP Server Shutting down, draining notification queue...')
+      drainAndExit()
+        .then(() => {
+          process.exit(0)
+        })
+        .catch((error) => {
+          AppLoggerInstance.error('Error while draining notification queue during shutdown', error as Error)
+          process.exit(1)
+        })
     })
   } catch (error) {
     AppLoggerInstance.error('Failed to start server:', error as Error)
@@ -28,4 +34,4 @@ async function startServer(): Promise<void> {
 }
 
 startServer()
-  .catch((error) => AppLoggerInstance.error('Error trying to starting http server', error))
+  .catch((error) => { AppLoggerInstance.error('Error trying to starting http server', error) })

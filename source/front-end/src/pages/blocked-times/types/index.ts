@@ -45,6 +45,9 @@ export interface BlockedTime {
   sunday: boolean
   createdAt: string
   updatedAt: string
+  professional: {
+    name: string
+  }
 }
 
 /* ============== Forms ============== */
