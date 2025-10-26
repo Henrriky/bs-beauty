@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
 import { type ProfessionalRepository } from '../../../repository/protocols/professional.repository'
 import { CustomError } from '../../../utils/errors/custom.error.util'
-import { type CodeValidationService } from './code-validation.service'
+import { type CodeValidationService } from './services/code-validation.service'
 
 interface RegisterUserInput {
   email: string

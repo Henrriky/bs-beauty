@@ -2,7 +2,7 @@ import { type CustomerRepository } from '@/repository/protocols/customer.reposit
 import { type EmailService } from '@/services/email/email.service'
 import { CustomError } from '@/utils/errors/custom.error.util'
 import crypto from 'crypto'
-import { type CodeValidationService } from './code-validation.service'
+import { type CodeValidationService } from './services/code-validation.service'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 
 const RESEND_COOLDOWN_SECONDS = 60

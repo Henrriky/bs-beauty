@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { type VerificationPurpose } from '../use-cases/auth/code-validation.service'
+import { type VerificationPurpose } from '../use-cases/auth/services/code-validation.service'
 
 const transporter = nodemailer.createTransport({
   service: process.env.EMAIL_PROVIDER,
