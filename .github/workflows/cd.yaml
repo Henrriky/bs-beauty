@@ -120,12 +120,26 @@ jobs:
 
       - name: Run Deploy Nginx Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
+        env:
+          PRIVATE_HOST: ${{ secrets.PRIVATE_HOST }}
+          PUBLIC_HOST: ${{ secrets.PUBLIC_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY_PATH: ${{ github.workspace }}/infra/ansible/id_rsa
+          SSL_CERT_PATH: ${{ github.workspace }}/infra/ansible/cert.pem
+          SSL_KEY_PATH: ${{ github.workspace }}/infra/ansible/key.pem
         with:
           playbook: ${{ github.workspace }}/infra/ansible/playbooks/public.yaml
           inventory: ${{ github.workspace }}/infra/ansible/inventories/dynamic.yaml
           
       - name: Run Deploy Application Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
+        env:
+          PRIVATE_HOST: ${{ secrets.PRIVATE_HOST }}
+          PUBLIC_HOST: ${{ secrets.PUBLIC_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY_PATH: ${{ github.workspace }}/infra/ansible/id_rsa
+          BACK_ENV_PATH: ${{ github.workspace }}/source/back-end/.env
+          REPO_BRANCH: ${{ github.ref_name }}
         with:
           playbook: ${{ github.workspace }}/infra/ansible/playbooks/private.yaml
           inventory: ${{ github.workspace }}/infra/ansible/inventories/dynamic.yaml
