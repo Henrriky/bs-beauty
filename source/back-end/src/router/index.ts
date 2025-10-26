@@ -14,6 +14,8 @@ import { verifyJwtTokenMiddleware } from '../middlewares/auth/verify-jwt-token.m
 import { analyticsServiceRoutes } from './routes/analytics.routes'
 import { notificationTemplatesRoutes } from './routes/notification-templates.routes'
 import { ratingRoutes } from './routes/ratings.routes'
+import { publicAnalyticsRoutes } from './routes/public-analytics.routes'
+import { blockedTimesRoutes } from './routes/blocked-times.routes'
 
 const appRoutes = Router()
 
@@ -30,6 +32,8 @@ appRoutes.use('/roles', verifyJwtTokenMiddleware, roleRoutes)
 appRoutes.use('/permissions', verifyJwtTokenMiddleware, permissionRoutes)
 appRoutes.use('/analytics', verifyJwtTokenMiddleware, analyticsServiceRoutes)
 appRoutes.use('/ratings', verifyJwtTokenMiddleware, ratingRoutes)
+appRoutes.use('/public-analytics', publicAnalyticsRoutes)
+appRoutes.use('/blocked-times', verifyJwtTokenMiddleware, blockedTimesRoutes)
 appRoutes.use(errorHandlerMiddleware)
 
 export { appRoutes }

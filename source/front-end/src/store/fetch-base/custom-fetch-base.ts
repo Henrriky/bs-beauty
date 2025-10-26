@@ -26,6 +26,14 @@ const baseQuery = fetchBaseQuery({
   },
 })
 
+const publicFetchBase = fetchBaseQuery({
+  baseUrl: API_VARIABLES.BASE_URL,
+  credentials: 'include',
+  prepareHeaders(headers) {
+    return headers
+  },
+})
+
 async function refreshAccessToken(api: any, extraOptions: any): Promise<string | null> {
   console.log('[AUTH] Chamando endpoint de refresh...')
   const response = await baseQuery(
@@ -139,6 +147,21 @@ const baseQueryWithAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQuery
   return result
 }
 
+const baseQueryNoAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
+  try {
+    const result = await publicFetchBase(args, api, extraOptions)
+    return result
+  } catch (err) {
+    try {
+      const safeArgs = typeof args === 'string' ? args : { url: (args as FetchArgs).url, method: (args as FetchArgs).method }
+      console.error('[baseQueryNoAuth] error calling publicFetchBase', { args: safeArgs, error: err })
+    } catch (e) {
+      console.error('[baseQueryNoAuth] error preparing debug info', e)
+    }
+    throw err
+  }
+}
+
 function dispatchNewTokens(api: any, accessToken: string) {
   const payload = decodeUserToken(accessToken)
   const currentState = api.getState() as RootState
@@ -170,4 +193,4 @@ function isTokenMissingOrExpiring(token: RootState['auth']['token']): boolean {
 }
 
 
-export { baseQueryWithAuth }
+export { baseQueryWithAuth, baseQueryNoAuth }

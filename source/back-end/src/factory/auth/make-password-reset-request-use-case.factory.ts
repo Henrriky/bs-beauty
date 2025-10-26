@@ -1,4 +1,4 @@
-import { CodeValidationService } from '@/services/use-cases/auth/code-validation.service'
+import { CodeValidationService } from '@/services/use-cases/auth/services/code-validation.service'
 import { PasswordResetRequestUseCase } from '@/services/use-cases/auth/password-reset-request.use-case'
 import { PrismaCustomerRepository } from '../../repository/prisma/prisma-customer.repository'
 import { EmailService } from '@/services/email/email.service'

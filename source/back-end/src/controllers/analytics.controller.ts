@@ -6,6 +6,8 @@ import { makeProfessionalsUseCaseFactory } from '../factory/make-professionals-u
 import { makeOffersUseCaseFactory } from '../factory/make-offers-use-case.factory'
 import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use-case.factory'
 import { type Appointment } from '@prisma/client'
+import { makeRatingsUseCaseFactory } from '@/factory/make-ratings-use-case.factory'
+import { makeAnalyticsUseCaseFactory } from '@/factory/make-analytics-use-case.factory'
 
 const schema = z.object({
   totalAppointments: z.number(),
@@ -18,6 +20,8 @@ const schema = z.object({
 })
 
 type Analytics = z.infer<typeof schema>
+
+// TODO: Extract logic/calculations to an use case
 
 class AnalyticsController {
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
@@ -216,6 +220,78 @@ class AnalyticsController {
       }
 
       res.send(analytics)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleGetRatingsAnalytics (req: Request, res: Response, next: NextFunction) {
+    try {
+      const ratingsUseCase = makeRatingsUseCaseFactory()
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const professionals = await analyticsUseCase.executeGetTopProfessionalsRatingsAnalytics(5)
+
+      const salonRating = await ratingsUseCase.executeGetMeanScore()
+      res.send({
+        professionals,
+        salonRating
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleGetCustomerAmountPerRatingScore (req: Request, res: Response, next: NextFunction) {
+    try {
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const customerCountPerRating = await analyticsUseCase.executeGetCustomerAmountPerRatingScore()
+      res.send(customerCountPerRating)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleGetMeanRatingByService (req: Request, res: Response, next: NextFunction) {
+    try {
+      const amount = req.body.amount as number | undefined
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const meanRatingByService = await analyticsUseCase.executeGetMeanRatingByService(amount)
+
+      res.send(meanRatingByService)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleGetMeanRatingOfProfessionals (req: Request, res: Response, next: NextFunction) {
+    try {
+      const amount = req.body.amount as number | undefined
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const meanRatingByProfessional = await analyticsUseCase.executeGetMeanRatingOfProfessionals(amount)
+
+      res.send(meanRatingByProfessional)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleGetAppointmentAmountInDateRange (req: Request, res: Response, next: NextFunction) {
+    try {
+      const { startDate, endDate } = req.body as { startDate: string, endDate: string }
+
+      if (startDate === '' || startDate === undefined || endDate === '' || endDate === undefined) {
+        return res.status(400).json({ message: 'startDate and endDate are required in the request body.' })
+      }
+
+      const parsedStartDate = new Date(startDate)
+      const parsedEndDate = new Date(endDate)
+      if (isNaN(parsedStartDate.getTime()) || isNaN(parsedEndDate.getTime())) {
+        return res.status(400).json({ message: 'Invalid date format. Please use a valid date string.' })
+      }
+
+      const analyticsUseCase = makeAnalyticsUseCaseFactory()
+      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRange(parsedStartDate, parsedEndDate)
+      res.json({ appointmentCount })
     } catch (error) {
       next(error)
     }

@@ -2,7 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+.carousel-scrollbar::-webkit-scrollbar {
+  height: 12px;
+  background: transparent;
+}
 
+.carousel-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #8b7a6a;
+  border-radius: 4px;
+  border: none;
+  background-clip: content-box;
+}
+
+.carousel-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 6px;
+}
+
+/* Firefox */
+.carousel-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #8b7a6a transparent;
+}
 
 *::-webkit-scrollbar {
   width: 8px;
@@ -34,6 +55,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   -webkit-appearance: none;
 
 }
+
 .react-calendar__navigation {
   display: flex;
 }
@@ -57,12 +79,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .react-calendar__navigation__prev2-button:disabled {
   visibility: hidden;
 }
+
 .react-calendar__navigation__prev-button:disabled {
   visibility: hidden;
 }
+
 .react-calendar__navigation__next2-button:disabled {
   visibility: hidden;
 }
+
 .react-calendar__navigation__next-button:disabled {
   visibility: hidden;
 }

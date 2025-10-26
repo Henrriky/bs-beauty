@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
-import { NotificationChannel } from '@prisma/client'
+import { UserType, NotificationChannel } from '@prisma/client'
 import { SharedSchemas } from './shared-zod-schemas.validations.utils'
-import { UserType } from '@prisma/client'
 
 class ProfessionalSchemas {
   public static readonly socialMediaSchema = z.array(z.object({

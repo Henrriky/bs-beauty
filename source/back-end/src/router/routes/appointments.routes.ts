@@ -4,10 +4,17 @@ import { userTypeAuthMiddleware } from '../../middlewares/auth/user-type-auth.mi
 import { UserType } from '@prisma/client'
 import { validateCreateAppointment } from '../../middlewares/data-validation/appointment/create-appointment.validation.middleware'
 import { validateUpdateAppointment } from '../../middlewares/data-validation/appointment/update-appointment.validation.middleware'
+import { appointmentsQuerySchema } from '@/utils/validation/zod-schemas/pagination/appointments/appointments-query.schema'
+import { validateQuery } from '@/middlewares/pagination/zod-request-validation.middleware'
 
 const appointmentRoutes = Router()
 
-appointmentRoutes.get('/', AppointmentController.handleFindAll)
+appointmentRoutes.get(
+  '/',
+  userTypeAuthMiddleware([UserType.CUSTOMER, UserType.PROFESSIONAL, UserType.MANAGER]),
+  validateQuery(appointmentsQuerySchema),
+  AppointmentController.handleFindAll
+)
 appointmentRoutes.get('/customer', userTypeAuthMiddleware([UserType.CUSTOMER, UserType.PROFESSIONAL, UserType.MANAGER]), AppointmentController.handleFindByCustomerOrProfessionalId)
 appointmentRoutes.get('/offer/:serviceOfferedId', AppointmentController.handleFindByServiceOfferedId)
 appointmentRoutes.get('/:id', AppointmentController.handleFindById)

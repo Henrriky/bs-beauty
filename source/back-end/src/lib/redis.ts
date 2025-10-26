@@ -1,4 +1,5 @@
 import { ENV } from '@/config/env'
+import { AppLoggerInstance } from '@/utils/logger/logger.util'
 import Redis, { type RedisOptions } from 'ioredis'
 
 function buildRedisOptions (): string | RedisOptions {
@@ -25,10 +26,10 @@ function buildRedisOptions (): string | RedisOptions {
 
 export const redis = new Redis(buildRedisOptions() as any)
 
-redis.on('connect', () => { console.log('[redis] connecting...') })
-redis.on('ready', () => { console.log('[redis] ready') })
-redis.on('error', (err) => { console.error('[redis] error:', err?.message ?? err) })
-redis.on('end', () => { console.warn('[redis] connection closed') })
+redis.on('connect', () => { AppLoggerInstance.info('[Redis] Connected') })
+redis.on('ready', () => { AppLoggerInstance.info('[Redis] Ready to use') })
+redis.on('error', (err) => { AppLoggerInstance.error('[Redis] Error occurred', err) })
+redis.on('end', () => { AppLoggerInstance.info('[Redis] Connection closed') })
 
 export async function closeRedis (): Promise<void> {
   try {
@@ -42,7 +43,7 @@ const shutdownSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM']
 for (const signal of shutdownSignals) {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   process.on(signal, async () => {
-    console.log(`[redis] received ${signal}, closing connection...`)
+    AppLoggerInstance.info(`[Redis] received shutdown signal: ${signal}`)
     await closeRedis()
     process.exit(0)
   })
