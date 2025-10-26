@@ -20,7 +20,7 @@ function Notifications() {
         <div className="flex flex-col gap-2">
           <Title align="left">Notificações</Title>
           <p className="text-primary-200 text-sm">
-            Confira suas notificações sobre os agendamentos realizados
+            Confira suas notificações sobre os agendamentos realizados.
           </p>
         </div>
 

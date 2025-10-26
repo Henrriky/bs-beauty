@@ -11,6 +11,7 @@ import { professionalAPI } from './professional/professional-api'
 import { appointmentAPI } from './appointment/appointment-api'
 import { analyticsAPI } from './analytics/analytics-api'
 import { notificationAPI } from './notification/notification-api'
+import { notificationTemplateAPI } from './notification-template/notification-template-api'
 import { ratingAPI } from './rating/rating-api'
 import { roleAPI } from './role/role-api'
 import { permissionAPI } from './permission/permission-api'
@@ -29,6 +30,7 @@ export const store = configureStore({
     [appointmentAPI.reducerPath]: appointmentAPI.reducer,
     [analyticsAPI.reducerPath]: analyticsAPI.reducer,
     [notificationAPI.reducerPath]: notificationAPI.reducer,
+    [notificationTemplateAPI.reducerPath]: notificationTemplateAPI.reducer,
     [ratingAPI.reducerPath]: ratingAPI.reducer,
     [roleAPI.reducerPath]: roleAPI.reducer,
     [permissionAPI.reducerPath]: permissionAPI.reducer,
@@ -45,7 +47,8 @@ export const store = configureStore({
       .concat(appointmentAPI.middleware)
       .concat(analyticsAPI.middleware)
       .concat(notificationAPI.middleware)
+      .concat(notificationTemplateAPI.middleware)
       .concat(ratingAPI.middleware)
       .concat(roleAPI.middleware)
-      .concat(permissionAPI.middleware),
+      .concat(permissionAPI.middleware)
 })

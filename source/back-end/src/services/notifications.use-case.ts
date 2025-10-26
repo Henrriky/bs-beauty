@@ -1,12 +1,26 @@
-import { makeAppointmentsUseCaseFactory } from '@/factory/make-appointments-use-case.factory'
 import { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { FindByIdAppointments } from '@/repository/protocols/appointment.repository'
 import { NotificationFilters } from '@/types/notifications/notification-filters'
 import { PaginatedRequest } from '@/types/pagination'
-import { Appointment, NotificationType, UserType, type Notification } from '@prisma/client'
+import { NotificationChannel, NotificationType, UserType, type Notification } from '@prisma/client'
 import { type NotificationRepository } from '../repository/protocols/notification.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { EmailService } from './email/email.service'
-import { FindByIdAppointments } from '@/repository/protocols/appointment.repository'
+
+export type BirthdayNotificationPayload = {
+  recipientId: string;
+  recipientType: 'CUSTOMER';
+  notificationPreference: NotificationChannel;
+  email?: string | null;
+
+  marker: string;
+
+  title: string;
+  message: string;
+
+  templateKey?: 'BIRTHDAY';
+  year?: number;
+};
 
 class NotificationsUseCase {
   constructor (private readonly notificationRepository: NotificationRepository) { }
@@ -213,6 +227,49 @@ class NotificationsUseCase {
         }
 
       }
+    }
+  }
+
+  public async executeSendBirthday(payload: BirthdayNotificationPayload): Promise<void> {
+    const {
+      recipientId,
+      notificationPreference,
+      email,
+      marker,
+      title,
+      message,
+    } = payload;
+
+    const alreadyExists = await this.notificationRepository.findByMarker(marker);
+    if (alreadyExists) return;
+
+    const shouldNotifyInApp =
+      notificationPreference === NotificationChannel.IN_APP ||
+      notificationPreference === NotificationChannel.BOTH;
+
+    const shouldNotifyEmail =
+      notificationPreference === NotificationChannel.EMAIL ||
+      notificationPreference === NotificationChannel.BOTH;
+
+    if (shouldNotifyInApp) {
+      await this.notificationRepository.create({
+        recipientId,
+        marker,
+        title,
+        message,
+        recipientType: UserType.CUSTOMER,
+        type: NotificationType.SYSTEM
+      });
+    }
+
+    if (shouldNotifyEmail && email) {
+      const emailService = new EmailService();
+      await emailService.sendBirthday({
+        to: email,
+        title,
+        message,
+        customerName: undefined
+      })
     }
   }
 

@@ -198,6 +198,22 @@ model RolePermission {
   @@map("role_permission")
 }
 
+model NotificationTemplate {
+  id        String   @id @default(uuid())
+  key       String   @unique @map("key")
+  name      String   @map("name")
+  description String @map("description")
+  title     String   @map("title")
+  body      String   @db.Text @map("body")
+  isActive  Boolean  @map("is_active") @default(true)
+  variables Json?    @map("variables")
+
+  createdAt DateTime @default(now())  @map("created_at")
+  updatedAt DateTime @updatedAt       @map("updated_at")
+
+  @@map("notification_template")
+}
+
 model Permission {
   id          String   @id @default(uuid())
   resource    String
