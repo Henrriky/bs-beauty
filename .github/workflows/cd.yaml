@@ -145,7 +145,7 @@ jobs:
         env:
           PRIVATE_HOST: ${{ secrets.PRIVATE_HOST }}
           PUBLIC_HOST: ${{ secrets.PUBLIC_HOST }}
-          SSH_USER: ${{ vars.SSH_USER }}
+          SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY_PATH: ${{ github.workspace }}/infra/ansible/id_rsa
           SSL_CERT_PATH: ${{ github.workspace }}/infra/ansible/cert.pem
           SSL_KEY_PATH: ${{ github.workspace }}/infra/ansible/key.pem
