@@ -81,3 +81,11 @@ export type GetBlockedTimesResponse = PaginatedResponse<BlockedTime>
 /* Get By ID */
 export type GetBlockedTimeByIdRequest = string
 export type GetBlockedTimeByIdResponse = BlockedTime
+
+/* Get By Professional ID And Period */
+export type FindByProfessionalAndPeriodResponse = { data: BlockedTime[] }
+export type FindByprofessionalAndPeriodRequest = {
+  professionalId: string
+  startDate: string // ISO Format
+  endDate: string // ISO Format
+}

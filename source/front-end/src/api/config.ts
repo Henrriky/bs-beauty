@@ -106,5 +106,7 @@ export const API_VARIABLES = {
     FIND_BY_ID: (id: string) => `/blocked-times/${id}`,
     UPDATE_BLOCKED_TIME: (id: string) => `/blocked-times/${id}`,
     DELETE_BLOCKED_TIME: (id: string) => `/blocked-times/${id}`,
+    FIND_BY_PROFESSIONAL_AND_PERIOD: (professionalId: string) =>
+      `/professionals/${professionalId}/blocked-times`,
   },
 } as const

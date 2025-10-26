@@ -12,6 +12,8 @@ import {
   GetBlockedTimesRequest,
   GetBlockedTimeByIdResponse,
   GetBlockedTimeByIdRequest,
+  FindByProfessionalAndPeriodResponse,
+  FindByprofessionalAndPeriodRequest,
 } from '../../pages/blocked-times/types'
 
 export const blockedtimesAPI = createApi({
@@ -82,6 +84,23 @@ export const blockedtimesAPI = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: ['BlockedTime'],
+    }),
+    findByProfessionalAndPeriod: builder.query<
+      FindByProfessionalAndPeriodResponse,
+      FindByprofessionalAndPeriodRequest
+    >({
+      query: ({ professionalId, startDate, endDate }) => {
+        const params = new URLSearchParams()
+        params.append('startDate', startDate)
+        params.append('endDate', endDate)
+        return {
+          url: `${API_VARIABLES.BLOCKED_TIMES_ENDPOINTS.FIND_BY_PROFESSIONAL_AND_PERIOD(
+            professionalId,
+          )}?${params.toString()}`,
+          method: 'GET',
+        }
+      },
+      providesTags: ['BlockedTime'],
     }),
   }),
 })
