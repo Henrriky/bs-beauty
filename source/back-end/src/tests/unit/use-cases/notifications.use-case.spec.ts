@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NotificationsUseCase } from '@/services/notifications.use-case'
 import { MockNotificationRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
@@ -86,7 +87,7 @@ const createMockAppointmentWithPreference = (
 const createMockAppointmentWithNullNames = (): FindByIdAppointments => {
   const appointment = createMockAppointment()
     ; (appointment.customer as any).name = null
-    ; (appointment.offer.professional as any).name = null
+  ; (appointment.offer.professional as any).name = null
   return appointment
 }
 
@@ -708,7 +709,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       const appointment = createMockAppointmentWithPreference(NotificationChannel.EMAIL, NotificationChannel.EMAIL)
         // Add required fields for EMAIL preference test
         ; (appointment.offer as any).estimatedTime = 60
-        ; (appointment.offer as any).price = 150.00
+      ; (appointment.offer as any).price = 150.00
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       mockEmailService.sendAppointmentCreated.mockResolvedValue(undefined)

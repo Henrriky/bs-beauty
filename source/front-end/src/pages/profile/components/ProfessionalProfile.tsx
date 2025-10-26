@@ -23,7 +23,7 @@ const NOTIFICATION_OPTIONS = [
   { value: 'NONE', label: 'Não receber' },
   { value: 'IN_APP', label: 'Receber pela plataforma' },
   { value: 'EMAIL', label: 'Receber por email' },
-  { value: 'BOTH', label: 'Receber pela plataforma e por email' }
+  { value: 'BOTH', label: 'Receber pela plataforma e por email' },
 ]
 
 // TODO: Separate Social Media to a Component
@@ -49,7 +49,7 @@ function ProfessionalProfile({
       socialMedia: userInfo.socialMedia || undefined,
       specialization: userInfo.specialization || undefined,
       paymentMethods: userInfo.paymentMethods || undefined,
-      notificationPreference: userInfo.notificationPreference || undefined
+      notificationPreference: userInfo.notificationPreference || undefined,
     },
   })
 

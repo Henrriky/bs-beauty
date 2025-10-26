@@ -7,9 +7,10 @@ import {
   ClockIcon,
   HomeIcon,
   MegaphoneIcon,
+  NoSymbolIcon,
   ShieldCheckIcon,
   UserIcon,
-  UsersIcon
+  UsersIcon,
 } from '@heroicons/react/24/outline'
 import React from 'react'
 import { UserType } from '../../../store/auth/types'
@@ -100,7 +101,7 @@ const sideBarItems: SideBarItem[] = [
         UserType.PROFESSIONAL,
         UserType.CUSTOMER,
       ],
-    }
+    },
   },
   {
     name: 'Comunicação',
@@ -109,7 +110,25 @@ const sideBarItems: SideBarItem[] = [
     authorization: {
       allowedPermissions: [],
       allowedUserTypes: [UserType.MANAGER],
-    }
+    },
+  },
+  {
+    name: 'Horários Bloqueados',
+    icon: <NoSymbolIcon className="size-6" />,
+    navigateTo: '/blocked-times',
+    authorization: {
+      strategy: 'ANY',
+      allowedPermissions: [
+        'blocked_time.delete_all',
+        'blocked_time.delete_own',
+        'blocked_time.read_all',
+        'blocked_time.read_own',
+        'blocked_time.edit_all',
+        'blocked_time.edit_own',
+        'blocked_time.create_own',
+      ],
+      allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
+    },
   },
   {
     name: 'Turnos',

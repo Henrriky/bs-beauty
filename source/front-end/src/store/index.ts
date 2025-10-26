@@ -16,6 +16,7 @@ import { notificationTemplateAPI } from './notification-template/notification-te
 import { ratingAPI } from './rating/rating-api'
 import { roleAPI } from './role/role-api'
 import { permissionAPI } from './permission/permission-api'
+import { blockedtimesAPI } from './blocked-times/blocked-times-api'
 
 export const store = configureStore({
   reducer: {
@@ -36,6 +37,7 @@ export const store = configureStore({
     [ratingAPI.reducerPath]: ratingAPI.reducer,
     [roleAPI.reducerPath]: roleAPI.reducer,
     [permissionAPI.reducerPath]: permissionAPI.reducer,
+    [blockedtimesAPI.reducerPath]: blockedtimesAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -54,4 +56,5 @@ export const store = configureStore({
       .concat(ratingAPI.middleware)
       .concat(roleAPI.middleware)
       .concat(permissionAPI.middleware)
+      .concat(blockedtimesAPI.middleware),
 })

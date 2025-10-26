@@ -11,12 +11,13 @@ class DateFormatter {
     return formattedDate
   }
 
-  public static formatBirthday(
+  public static formatBirthday (
     birthdate: Date | null | undefined,
     pattern = 'dd/LL'
   ): string {
     if (!birthdate) return ''
     const isoDate = DateTime.fromJSDate(birthdate, { zone: 'utc' }).toISODate()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return DateTime.fromISO(isoDate!).toFormat(pattern)
   }
 
