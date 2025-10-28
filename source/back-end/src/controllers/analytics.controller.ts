@@ -292,8 +292,8 @@ class AnalyticsController {
       const parsedEndDate = new Date(data.endDate)
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
-      const appointmentCount = await analyticsUseCase.executeGetAppointmentNumberOnDateRangeByStatusProfessionalAndServices(user, parsedStartDate, parsedEndDate, data.statusList, data.professionalId, data.serviceIds)
-      res.json({ appointmentCount })
+      const result = await analyticsUseCase.executeGetAppointmentNumberOnDateRangeByStatusProfessionalAndServices(user, parsedStartDate, parsedEndDate, data.statusList, data.professionalId, data.serviceIds)
+      res.json(result)
     } catch (error) {
       next(error)
     }
@@ -302,30 +302,30 @@ class AnalyticsController {
   public static async handleGetEstimatedAppointmentTimeInDateRangeByProfessional(req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user
-      const data = appointmentsFilterSchema.omit({statusList: true}).parse(req.body)
+      const data = appointmentsFilterSchema.omit({ statusList: true }).parse(req.body)
 
       const parsedStartDate = new Date(data.startDate)
       const parsedEndDate = new Date(data.endDate)
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
-      const estimatedTimeInMinutes = await analyticsUseCase.executeGetEstimatedAppointmentTimeByProfessionalAndServices(user, parsedStartDate, parsedEndDate, data.professionalId, data.serviceIds)
-      res.json({ estimatedTimeInMinutes })
+      const result = await analyticsUseCase.executeGetEstimatedAppointmentTimeByProfessionalAndServices(user, parsedStartDate, parsedEndDate, data.professionalId, data.serviceIds)
+      res.json(result)
     } catch (error) {
       next(error)
     }
   }
 
-  public static async handleGetAppointmentCancelationRateByProfessional (req: Request, res: Response, next: NextFunction) {
+  public static async handleGetAppointmentCancelationRateByProfessional(req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user
-      const data = appointmentsFilterSchema.omit({statusList: true}).parse(req.body)
-     
+      const data = appointmentsFilterSchema.omit({ statusList: true }).parse(req.body)
+
       const parsedStartDate = new Date(data.startDate)
       const parsedEndDate = new Date(data.endDate)
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
       const cancelationRate = await analyticsUseCase.executeGetAppointmentCancelationRateByProfessional(user, parsedStartDate, parsedEndDate, data.professionalId, data.serviceIds)
-      res.json({ cancelationRate })
+      res.json(cancelationRate)
     } catch (error) {
       next(error)
     }

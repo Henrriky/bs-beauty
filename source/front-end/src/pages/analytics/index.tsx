@@ -1,19 +1,338 @@
+import { useState } from 'react'
+import { BarChart } from '@mui/x-charts/BarChart'
 import { PieChart } from '@mui/x-charts/PieChart'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+import Title from '../../components/texts/Title'
+import Subtitle from '../../components/texts/Subtitle'
 import { analyticsAPI } from '../../store/analytics/analytics-api'
+import { authAPI } from '../../store/auth/auth-api'
+import { professionalAPI } from '../../store/professional/professional-api'
+import StatusFilterInput from '../../components/inputs/status-filter-input/StatusFilterInput'
+import ProfessionalSelector from '../../components/inputs/professional-selector/ProfessionalSelector'
+import { UserType, Professional } from '../../store/auth/types'
+import expandArrow from '../../assets/expand-arrow.svg'
+import { useDateRange } from './hooks/useDateRange'
+import {
+  useChartData,
+  useTotalWorkTime,
+  useCancellationData,
+} from './hooks/useChartData'
+import { commonChartStyles } from './utils/chartStyles'
+
+const darkChartTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      paper: '#262626',
+      default: '#1E1E1E',
+    },
+    text: {
+      primary: '#D9D9D9',
+      secondary: '#979797',
+    },
+  },
+  components: {
+    MuiPopper: {
+      styleOverrides: {
+        root: {
+          '& .MuiPaper-root': {
+            backgroundColor: '#262626',
+            border: '1px solid #535353',
+            color: '#D9D9D9',
+          },
+        },
+      },
+    },
+  },
+})
 
 function ProductivityReport() {
+  const { defaultDates, toISO } = useDateRange()
+
+  const [startDate, setStartDate] = useState<string>(defaultDates.startDate)
+  const [endDate, setEndDate] = useState<string>(defaultDates.endDate)
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
+  const [selectedProfessional, setSelectedProfessional] =
+    useState<Professional | null>(null)
+  const [filtersOpen, setFiltersOpen] = useState(false)
+
+  const { data: userData } = authAPI.useFetchUserInfoQuery()
+  const id = userData?.user?.id
+  const userType = userData?.user?.userType
+
+  const { data: professionalsData } =
+    professionalAPI.useFetchProfessionalsQuery(
+      { page: 1, limit: 50 },
+      { skip: userType !== UserType.MANAGER },
+    )
+
+  const activeProfessionalId = selectedProfessional?.id || id
+
+  const hasActiveFilters =
+    selectedStatuses.length > 0 || selectedProfessional !== null
+
+  const activeFiltersCount =
+    (selectedStatuses.length > 0 ? 1 : 0) +
+    (selectedProfessional !== null ? 1 : 0)
+
+  const shouldShowFilters = filtersOpen || hasActiveFilters
+
+  const queryParams = {
+    professionalId: activeProfessionalId!,
+    startDate: toISO(startDate),
+    endDate: toISO(endDate, true),
+  }
+
+  const { data: appointmentsCountData } =
+    analyticsAPI.useFetchAppointmentsCountQuery(
+      {
+        ...queryParams,
+        statusList: selectedStatuses.length > 0 ? selectedStatuses : undefined,
+      },
+      {
+        skip: !activeProfessionalId || !startDate || !endDate,
+      },
+    )
+
+  const { data: estimatedTimeData } = analyticsAPI.useFetchEstimatedTimeQuery(
+    queryParams,
+    {
+      skip: !activeProfessionalId || !startDate || !endDate,
+    },
+  )
+
+  const { data: cancelationData } = analyticsAPI.useFetchCancelationRateQuery(
+    queryParams,
+    {
+      skip: !activeProfessionalId || !startDate || !endDate,
+    },
+  )
+
+  const appointmentsChartData = useChartData(appointmentsCountData, 'count')
+  const estimatedTimeChartData = useChartData(estimatedTimeData, 'time')
+  const workTimeInHours = useTotalWorkTime(estimatedTimeData)
+  const {
+    chartData: cancellationChartData,
+    cancellationPercentage,
+    completionPercentage,
+  } = useCancellationData(cancelationData)
+
   return (
-    <PieChart
-      series={[
-        {
-          data: [
-            { id: 0, value: 10, label: 'series A' },
-            { id: 1, value: 15, label: 'series B' },
-            { id: 2, value: 20, label: 'series C' },
-          ],
-        },
-      ]}
-    />
+    <ThemeProvider theme={darkChartTheme}>
+      <div className="h-full flex flex-col">
+        <header>
+          <Title align="left">Relatórios de Produtividade</Title>
+          <div className="flex flex-col mt-3 mb-6 max-w-[50%]">
+            <Subtitle align="left">
+              <b className="text-[#A4978A]">
+                Visualize os dados de agendamentos e desempenho
+              </b>
+            </Subtitle>
+            <div className="bg-[#595149] w-1/2 h-0.5 mt-2"></div>
+          </div>
+        </header>
+
+        <div className="bg-[#262626] rounded-lg p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-4 text-[#D9D9D9]">
+            Período de Análise
+          </h2>
+          <div className="flex flex-col gap-4">
+            <div className="flex">
+              <div className="flex-1">
+                <label className="block text-sm text-[#979797] mb-2">
+                  Data Inicial
+                </label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full bg-[#1E1E1E] border border-[#535353] rounded-l-lg px-4 py-3 text-[#D9D9D9] focus:outline-none focus:border-[#A4978A] transition-colors"
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-sm text-[#979797] mb-2">
+                  Data Final
+                </label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full bg-[#1E1E1E] border border-[#535353] rounded-r-lg px-4 py-3 text-[#D9D9D9] focus:outline-none focus:border-[#A4978A] transition-colors"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full my-6">
+          <button
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            className="flex justify-center items-center"
+          >
+            <img
+              src={expandArrow}
+              alt="Ícone de seta"
+              className={`transition-transform duration-500 ${
+                shouldShowFilters ? 'rotate-180' : 'rotate-0'
+              }`}
+            />
+            <span className="text-[#B19B86] text-sm ml-[13px]">
+              Filtrar resultados
+              {hasActiveFilters && (
+                <span className="bg-[#A4978A] text-[#1E1E1E] text-xs font-medium px-2 py-1 rounded-full ml-2">
+                  {activeFiltersCount} ativo{activeFiltersCount > 1 ? 's' : ''}
+                </span>
+              )}
+            </span>
+          </button>
+
+          {shouldShowFilters && (
+            <div className="mt-6 space-y-4">
+              {userType === UserType.MANAGER && (
+                <div>
+                  <ProfessionalSelector
+                    professionals={professionalsData?.data || []}
+                    selectedProfessional={selectedProfessional}
+                    onSelect={setSelectedProfessional}
+                  />
+                </div>
+              )}
+
+              <div>
+                <StatusFilterInput
+                  value={selectedStatuses}
+                  onChange={setSelectedStatuses}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-6">
+          <div className="bg-[#262626] rounded-lg p-6">
+            <h2 className="text-lg font-semibold mb-4 text-[#D9D9D9]">
+              Visão Geral de Agendamentos
+            </h2>
+            <div className="w-full h-[400px]">
+              <BarChart
+                xAxis={[
+                  {
+                    scaleType: 'band',
+                    data: appointmentsChartData.dates,
+                    colorMap: {
+                      type: 'ordinal',
+                      colors: ['#A4978A'],
+                    },
+                  },
+                ]}
+                series={[
+                  {
+                    data: appointmentsChartData.values,
+                    label: 'Agendamentos',
+                    color: '#A4978A',
+                  },
+                ]}
+                height={350}
+                sx={commonChartStyles}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-6">
+            <div className="bg-[#262626] rounded-lg p-6 flex-1">
+              <h2 className="text-lg font-semibold mb-4 text-[#D9D9D9]">
+                Tempo Estimado de Trabalho
+              </h2>
+              <div className="w-full h-[400px]">
+                {estimatedTimeData ? (
+                  <>
+                    <div className="text-center mb-4">
+                      <div className="text-3xl font-bold text-[#A4978A]">
+                        {workTimeInHours} horas
+                      </div>
+                      <div className="text-sm text-[#979797]">
+                        Total no período selecionado
+                      </div>
+                    </div>
+                    <BarChart
+                      xAxis={[
+                        {
+                          scaleType: 'band',
+                          data: estimatedTimeChartData.dates,
+                          colorMap: {
+                            type: 'ordinal',
+                            colors: ['#926941'],
+                          },
+                        },
+                      ]}
+                      series={[
+                        {
+                          data: estimatedTimeChartData.values,
+                          label: 'Horas Estimadas',
+                          color: '#926941',
+                        },
+                      ]}
+                      height={300}
+                      sx={commonChartStyles}
+                    />
+                  </>
+                ) : (
+                  <div className="h-full flex items-center justify-center text-[#979797]">
+                    Carregando...
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="bg-[#262626] rounded-lg p-6 flex-1">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-lg font-semibold text-[#D9D9D9]">
+                  Taxa de Cancelamento
+                </h2>
+                <div className="text-center mr-8">
+                  <div className="text-base text-[#979797] mb-3">
+                    Percentuais
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-4 h-4 rounded-full bg-[#A4978A]"></div>
+                      <span className="text-base font-medium text-[#D9D9D9]">
+                        Concluídos: {completionPercentage}%
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-4 h-4 rounded-full bg-[#CC3636]"></div>
+                      <span className="text-base font-medium text-[#D9D9D9]">
+                        Cancelados: {cancellationPercentage}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="w-full h-[400px] flex justify-center items-center">
+                <PieChart
+                  series={[
+                    {
+                      data: cancellationChartData,
+                      highlightScope: { fade: 'global', highlight: 'item' },
+                    },
+                  ]}
+                  height={350}
+                  sx={{
+                    '& .MuiChartsLegend-root': {
+                      display: 'none !important',
+                    },
+                    '& text': {
+                      fill: '#D9D9D9 !important',
+                    },
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ThemeProvider>
   )
 }
 

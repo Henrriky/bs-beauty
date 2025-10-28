@@ -9,8 +9,8 @@ analyticsServiceRoutes.get('/', userTypeAuthMiddleware(['MANAGER']), AnalyticsCo
 analyticsServiceRoutes.get('/:id', userTypeAuthMiddleware(['PROFESSIONAL', 'MANAGER']), AnalyticsController.handleFindByProfessionalId)
 analyticsServiceRoutes.get('/customers/ratings', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetCustomerAmountPerRatingScore)
 analyticsServiceRoutes.get('/services/rating', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetMeanRatingByService)
-analyticsServiceRoutes.get('/professionals/rating', userTypeAuthMiddleware(['MANAGER']), validateFetchAppointmentsCount,AnalyticsController.handleGetMeanRatingOfProfessionals)
-analyticsServiceRoutes.get('/appointments/count', userTypeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateFetchAppointmentsCount, AnalyticsController.handleGetAppointmentAmountInDateRangeByStatusAndProfessional)
-analyticsServiceRoutes.get('/appointments/estimated-time', userTypeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateFetchAppointmentsCount, AnalyticsController.handleGetEstimatedAppointmentTimeInDateRangeByProfessional)
-analyticsServiceRoutes.get('/appointments/cancelation-rate', userTypeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateFetchAppointmentsCount, AnalyticsController.handleGetAppointmentCancelationRateByProfessional)
+analyticsServiceRoutes.get('/professionals/rating', userTypeAuthMiddleware(['MANAGER']), validateFetchAppointmentsCount, AnalyticsController.handleGetMeanRatingOfProfessionals)
+analyticsServiceRoutes.post('/appointments/count', userTypeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateFetchAppointmentsCount, AnalyticsController.handleGetAppointmentAmountInDateRangeByStatusAndProfessional)
+analyticsServiceRoutes.post('/appointments/estimated-time', userTypeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateFetchAppointmentsCount, AnalyticsController.handleGetEstimatedAppointmentTimeInDateRangeByProfessional)
+analyticsServiceRoutes.post('/appointments/cancelation-rate', userTypeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateFetchAppointmentsCount, AnalyticsController.handleGetAppointmentCancelationRateByProfessional)
 export { analyticsServiceRoutes }

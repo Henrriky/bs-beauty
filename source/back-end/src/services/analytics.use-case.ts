@@ -6,6 +6,7 @@ import { type ServiceRepository } from '@/repository/protocols/service.repositor
 import { type PublicProfessionalInfo } from '@/types/analytics'
 import { CustomError } from '@/utils/errors/custom.error.util'
 import { Offer, Status } from '@prisma/client'
+import { type GroupingPeriod } from '@/repository/protocols/appointment.repository'
 
 class AnalyticsUseCase {
   constructor(
@@ -82,8 +83,21 @@ class AnalyticsUseCase {
       ?.map(s => String(s).toUpperCase())
       .filter(s => validStatuses.has(s as Status)) as Status[] | undefined
 
-    const appointments = await this.appointmentRepository.findByDateRangeStatusProfessionalAndServices(start, end, filteredStatusList, professionalIdToQuery, serviceIds)
-    return appointments.length
+    const groupBy = this.determineGroupingPeriod(start, end)
+
+    const groupedCounts = await this.appointmentRepository.countByDateRangeGrouped(
+      start,
+      end,
+      groupBy,
+      filteredStatusList,
+      professionalIdToQuery,
+      serviceIds
+    )
+
+    return {
+      groupBy,
+      data: groupedCounts
+    }
   }
 
   public async executeGetEstimatedAppointmentTimeByProfessionalAndServices(
@@ -100,20 +114,21 @@ class AnalyticsUseCase {
 
     this.validateDateRange(start, end)
 
-    const serviceOfferedIds = (await this.appointmentRepository.findByDateRangeStatusProfessionalAndServices(start, end, undefined, professionalIdToQuery, serviceIds))
-      ?.map(a => a.serviceOfferedId) ?? []
+    const groupBy = this.determineGroupingPeriod(start, end)
 
+    const groupedEstimatedTime = await this.appointmentRepository.sumEstimatedTimeByDateRangeGrouped(
+      start,
+      end,
+      groupBy,
+      ["FINISHED"],
+      professionalIdToQuery,
+      serviceIds
+    )
 
-    let offers: Offer[] = []
-
-    for (const serviceOfferedId of serviceOfferedIds) {
-      const offer = await this.offerRepository.findById(serviceOfferedId)
-      if (offer) offers.push(offer)
+    return {
+      groupBy,
+      data: groupedEstimatedTime
     }
-
-    const estimatedTime = offers.reduce((total, offer) => total + (offer.estimatedTime ?? 0), 0)
-
-    return estimatedTime
   }
 
   public async executeGetTopProfessionalsRatingsAnalytics(limit: number) {
@@ -154,6 +169,21 @@ class AnalyticsUseCase {
   }
 
   // Helper methods
+
+  private determineGroupingPeriod(startDate: Date, endDate: Date): GroupingPeriod {
+    const diffInMs = endDate.getTime() - startDate.getTime()
+    const diffInDays = diffInMs / (1000 * 60 * 60 * 24)
+
+    if (diffInDays <= 14) {
+      return 'day'
+    }
+    else if (diffInDays <= 60) {
+      return 'week'
+    }
+    else {
+      return 'month'
+    }
+  }
 
   private normalizeDateToStart(date: Date): Date {
     const start = new Date(date);

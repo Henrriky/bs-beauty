@@ -24,3 +24,50 @@ export type RatingAnalytics = {
     ratingCount: number
   }
 }
+
+export type FetchAppointmentsCountParams = {
+  startDate: string
+  endDate: string
+  statusList?: string[]
+  professionalId?: string
+  serviceIds?: string[]
+}
+
+export type GroupedAppointmentCount = {
+  period: string
+  count: number
+}
+
+export type FetchAppointmentsCountResponse = {
+  groupBy: 'day' | 'week' | 'month'
+  data: GroupedAppointmentCount[]
+}
+
+export type FetchEstimatedTimeParams = {
+  startDate: string
+  endDate: string
+  professionalId?: string
+  serviceIds?: string[]
+}
+
+export type GroupedEstimatedTime = {
+  period: string
+  estimatedTimeInMinutes: number
+}
+
+export type FetchEstimatedTimeResponse = {
+  groupBy: 'day' | 'week' | 'month'
+  data: GroupedEstimatedTime[]
+}
+
+export type FetchCancelationRateParams = {
+  startDate: string
+  endDate: string
+  professionalId?: string
+  serviceIds?: string[]
+}
+
+export type FetchCancelationRateResponse = {
+  totalAppointments: number
+  canceledAppointments: number
+}
