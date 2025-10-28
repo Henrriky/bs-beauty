@@ -68,7 +68,6 @@ const ShiftsRow = ({
                   className="peer absolute inset-0 h-5 w-5 opacity-0 cursor-pointer"
                   checked={checked}
                   onChange={(e) => toggleIsBusy(day, e.target.checked)}
-                  onClick={() => console.log('teste')}
                 />
                 <label
                   htmlFor={id}
