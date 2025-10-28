@@ -1,7 +1,6 @@
 import logo from '../../assets/logo.svg'
 import insidePhoto from '../../assets/inside-photo.png'
 import arrowDown from '../../assets/keyboard_arrow_down.svg'
-import stars from '../../assets/five-stars.svg'
 import location from '../../assets/location_on.svg'
 import calendar from '../../assets/Calendar.svg'
 import { useEffect, useState } from 'react'
@@ -62,26 +61,29 @@ function LandingPage() {
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-start px-4">
-      {/* Logo */}
-      <img src={logo} alt="Logo" className="my-[72px] mx-auto" />
+    <div className="flex flex-col items-center justify-start px-4 sm:px-8 lg:px-16">
+      <img
+        src={logo}
+        alt="Logo"
+        className="my-16 mx-auto w-32 sm:w-40 lg:w-48"
+      />
 
-      {/* Texto + Lista de Serviços */}
-      <div className="space-y-[16px] mb-8 w-full">
-        <p className="text-center text-[#D9D9D9] text-[16px] leading-normal">
+      <div className="space-y-4 mb-8 w-full max-w-2xl">
+        <p className="text-center text-[#D9D9D9] text-base sm:text-lg leading-normal">
           Entregamos a experiência que você merece e somos
-          <span className="text-[#A4978A] font-semibold "> especialistas </span>
+          <span className="text-[#A4978A] font-semibold"> especialistas </span>
           em:
         </p>
-        <div className="h-[40px] flex flex-col items-center justify-center text-[#A4978A]">
+        <div className="h-10 flex flex-col items-center justify-center text-[#A4978A]">
           <p
             key={currentServiceIndex}
-            className="text-[16px] font-normal font-[Fredoka] animate-fadeIn"
+            className="text-base sm:text-lg font-normal font-[Fredoka] animate-fadeIn"
           >
             {services[currentServiceIndex]}
           </p>
         </div>
       </div>
+
       <div className="w-11/12 max-w-sm sm:w-5/6">
         <SalonRatingCard
           image={logo}
@@ -93,16 +95,15 @@ function LandingPage() {
           }
           ratingCount={data?.salonRating.ratingCount || 0}
         />
-        <RatingCardsContainer professionals={data?.professionals || []} />
+        {data?.professionals && (
+          <RatingCardsContainer professionals={data?.professionals || []} />
+        )}
       </div>
-      {/* Frase + Estrelas + Botão + Seta */}
-      <div className="flex flex-col items-center gap-6 my-[42px]">
-        <p className="text-center text-[#D9D9D9] font-kumbh text-[15.92px] leading-normal">
-          Venha nos conhecer e se permitir viver essa experiência com você
-          mesma!
-        </p>
 
-        <img className="pb-2" src={stars} alt="Cinco Estrelas" />
+      <div className="flex flex-col items-center gap-6 my-10 text-center">
+        <p className="text-[#D9D9D9] font-kumbh text-base sm:text-lg leading-normal max-w-xl">
+          Venha nos conhecer e se permitir viver essa experiência com você mesma!
+        </p>
 
         <Button
           onClick={() => navigate('/login')}
@@ -115,16 +116,14 @@ function LandingPage() {
         <img
           src={arrowDown}
           alt="Seta Para Baixo"
-          className="cursor-pointer"
+          className="cursor-pointer w-6 sm:w-8"
           onClick={() => window.scrollBy({ top: 760, behavior: 'smooth' })}
         />
       </div>
 
-      {/* Divisória */}
-      <div className="w-full h-1 bg-[#595149] shrink-0" />
+      <div className="w-full h-1 bg-[#595149]" />
 
-      {/* Foto + Endereço */}
-      <div className="w-full my-[34px]">
+      <div className="w-full my-8 max-w-3xl">
         <img
           src={insidePhoto}
           alt="Salão"
@@ -132,19 +131,17 @@ function LandingPage() {
         />
 
         <div className="mb-4 flex items-center">
-          <img src={location} alt="Localização" className="mr-2 size-6" />
+          <img src={location} alt="Localização" className="mr-2 size-8" />
           <p className="text-lg font-kumbh text-[#D9D9D9]">Nosso endereço:</p>
         </div>
 
-        <p className="font-kumbh font-semibold text-[#D9D9D9] justify-center">
+        <p className="font-kumbh font-semibold text-[#D9D9D9]">
           Rua Luís Pitta, 206 – Cidade São Mateus, São Paulo – SP
         </p>
 
-        {/* Divisória */}
-        <div className="my-[24px] h-1 w-full bg-[#595149] shrink-0" />
+        <div className="my-8 h-1 w-full bg-[#595149]" />
 
-        {/* Horários */}
-        <div className=" flex items-center">
+        <div className="flex items-center mb-2">
           <img src={calendar} alt="Calendário" className="mr-2 h-6 w-6" />
           <p className="text-lg font-kumbh text-[#D9D9D9]">
             Horários de Funcionamento:
@@ -152,7 +149,7 @@ function LandingPage() {
         </div>
 
         <div className="flex justify-center">
-          <div className="w-full max-w-md py-6 text-[16px] font-kumbh font-semibold text-[#D9D9D9]">
+          <div className="w-full max-w-md py-6 text-base sm:text-lg font-kumbh font-semibold text-[#D9D9D9]">
             {[
               { day: 'Segunda-Feira', time: '08:00 - 19:00' },
               { day: 'Terça-Feira', time: '08:00 - 19:00' },
@@ -172,8 +169,7 @@ function LandingPage() {
         </div>
       </div>
 
-      {/* Login final */}
-      <div className="w-4/5 text-center font-['Fredoka'] font-normal text-[#A4978A]">
+      <div className="w-4/5 text-center font-[Fredoka] font-normal text-[#A4978A] text-base sm:text-lg">
         Faça seu login e venha aproveitar os nossos serviços!
       </div>
 
