@@ -35,7 +35,7 @@ export default function NotificationItem({
   const date = buildDate(notification.message)
 
   return (
-    <div className="w-full max-w-[640px] bg-[#222222] rounded-2xl border-none px-4 py-3">
+    <div className="w-full bg-[#222222] rounded-2xl border-none px-4 py-3">
       <div className="flex items-center gap-3">
         {enableSelection && (
           <input

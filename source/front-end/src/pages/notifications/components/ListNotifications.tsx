@@ -114,7 +114,7 @@ function ListNotifications({ params }: { params: Params }) {
         </div>
       )}
 
-      <div className="animate-fadeIn w-full max-w-[540px] mb-8 mt-4">
+      <div className="w-full mb-8 mt-4">
         <div className="max-h-[500px] overflow-y-auto w-full">
           <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
             {notifications.map((n) => (

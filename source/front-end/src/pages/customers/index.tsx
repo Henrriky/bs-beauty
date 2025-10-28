@@ -39,7 +39,7 @@ function Customers() {
   }
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full flex flex-col">
       <Title align="left">Listagem de clientes</Title>
       <UserCanAccessContainer
         allowedPermissions={['customer.read']}

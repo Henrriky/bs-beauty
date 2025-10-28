@@ -60,17 +60,17 @@ function Appointments() {
   }, [data, switchButtonStatus])
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full flex flex-col">
       <header>
         <Title align="left">Agendamentos</Title>
-        <div className="flex flex-col mt-3 mb-6 max-w-[50%]">
+        <div className="flex flex-col mt-3 mb-6 w-3/4 lg:w-full">
           <Subtitle align="left">
             Olá {displayName},{' '}
             <b className="text-[#A4978A]">
               aqui você pode visualizar seus agendamentos
             </b>
           </Subtitle>
-          <div className="bg-[#595149] w-1/2 h-0.5 mt-2"></div>
+          <div className="bg-[#595149] w-3/4 h-0.5 mt-2"></div>
         </div>
       </header>
       {/* SWITCH BUTTONS */}

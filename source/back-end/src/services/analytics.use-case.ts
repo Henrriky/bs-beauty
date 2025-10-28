@@ -71,7 +71,7 @@ class AnalyticsUseCase {
       const offerIds = await this.getOfferIdsByProfessionalId(professional.id)
       const appointmentIds = await this.getAppointmentIdsFromOfferIds(offerIds)
       const { meanRating, count } = await this.getRatingsStatsFromAppointmentIds(appointmentIds)
-      console.log(professional)
+
       return {
         ...professional,
         meanRating,
