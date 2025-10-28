@@ -87,7 +87,8 @@ export const API_VARIABLES = {
   },
   NOTIFICATION_TEMPLATES_ENDPOINTS: {
     FETCH_NOTIFICATION_TEMPLATES: '/notification-templates',
-    UPDATE_NOTIFICATION_TEMPLATE: (key: string) => `/notification-templates/${key}`
+    UPDATE_NOTIFICATION_TEMPLATE: (key: string) =>
+      `/notification-templates/${key}`,
   },
   ROLES_ENDPOINTS: {
     ENDPOINT: '/roles',
@@ -100,5 +101,13 @@ export const API_VARIABLES = {
   },
   PERMISSIONS_ENDPOINTS: {
     ENDPOINT: '/permissions',
+  },
+  BLOCKED_TIMES_ENDPOINTS: {
+    ENDPOINT: '/blocked-times',
+    FIND_BY_ID: (id: string) => `/blocked-times/${id}`,
+    UPDATE_BLOCKED_TIME: (id: string) => `/blocked-times/${id}`,
+    DELETE_BLOCKED_TIME: (id: string) => `/blocked-times/${id}`,
+    FIND_BY_PROFESSIONAL_AND_PERIOD: (professionalId: string) =>
+      `/professionals/${professionalId}/blocked-times`,
   },
 } as const

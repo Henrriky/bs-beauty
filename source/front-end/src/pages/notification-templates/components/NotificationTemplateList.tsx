@@ -1,13 +1,13 @@
-import { NotificationTemplate } from "../../../store/notification-template/types";
-import { NotificationTemplateCard } from "./NotificationTemplateCard";
+import { NotificationTemplate } from '../../../store/notification-template/types'
+import { NotificationTemplateCard } from './NotificationTemplateCard'
 
 type Props = {
-  templates: NotificationTemplate[];
-  isLoading?: boolean;
-  isError?: boolean;
-  onRetry?: () => void;
-  onEdit: (tpl: NotificationTemplate) => void;
-};
+  templates: NotificationTemplate[]
+  isLoading?: boolean
+  isError?: boolean
+  onRetry?: () => void
+  onEdit: (tpl: NotificationTemplate) => void
+}
 
 export default function NotificationTemplateList({
   templates,
@@ -26,7 +26,7 @@ export default function NotificationTemplateList({
           />
         ))}
       </div>
-    );
+    )
   }
 
   if (isError) {
@@ -39,7 +39,7 @@ export default function NotificationTemplateList({
           </button>
         )}
       </div>
-    );
+    )
   }
 
   return (
@@ -48,9 +48,13 @@ export default function NotificationTemplateList({
         <div className="text-sm text-gray-400">Nenhum template encontrado.</div>
       ) : (
         templates.map((tpl) => (
-          <NotificationTemplateCard key={tpl.id} template={tpl} onEdit={onEdit} />
+          <NotificationTemplateCard
+            key={tpl.id}
+            template={tpl}
+            onEdit={onEdit}
+          />
         ))
       )}
     </div>
-  );
+  )
 }

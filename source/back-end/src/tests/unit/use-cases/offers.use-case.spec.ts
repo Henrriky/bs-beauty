@@ -5,6 +5,7 @@ import {
   MockServiceRepository,
   MockShiftRepository
 } from '../utils/mocks/repository'
+import { MockBlockedTimesUseCase } from '../utils/mocks/use-case'
 import { faker } from '@faker-js/faker'
 import { Prisma, type Offer, type Service, ServiceStatus, type Shift } from '@prisma/client'
 import { DateFormatter } from '@/utils/formatting/date.formatting.util'
@@ -17,7 +18,8 @@ describe('OffersUseCase (Unit Tests)', () => {
       MockOfferRepository,
       MockShiftRepository,
       MockAppointmentRepository,
-      MockServiceRepository
+      MockServiceRepository,
+      MockBlockedTimesUseCase
     )
   })
 
@@ -450,6 +452,7 @@ describe('OffersUseCase (Unit Tests)', () => {
       MockAppointmentRepository.findNonFinishedByUserAndDay.mockResolvedValue({
         validAppointmentsOnDay: []
       })
+      MockBlockedTimesUseCase.executeFindByProfessionalAndPeriod.mockResolvedValue([])
 
       const result = await offersUseCase.executeFetchAvailableSchedulingToOfferByDay({
         customerId,

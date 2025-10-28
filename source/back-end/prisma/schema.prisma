@@ -66,6 +66,8 @@ model Rating {
   appointmentId String   @unique @map("appointment_id")
 
   appointment Appointment @relation(fields: [appointmentId], references: [id])
+
+  @@map("rating")
 }
 
 model Notification {
@@ -139,12 +141,41 @@ model Professional {
   createdAt              DateTime             @default(now()) @map("created_at")
   updatedAt              DateTime             @updatedAt @map("updated_at")
 
+  blockedTimes BlockedTime[]
+
   shifts           Shift[]
   offers           Offer[]
   professionalRole ProfessionalRole[]
   Service          Service[]
 
   @@map("professional")
+}
+
+model BlockedTime {
+  id       String  @id @default(uuid())
+  reason   String
+  isActive Boolean @default(true) @map("is_active")
+
+  startDate DateTime  @map("start_date") @db.Date()
+  endDate   DateTime? @map("end_date") @db.Date()
+  startTime DateTime  @map("start_time") @db.Time()
+  endTime   DateTime  @map("end_time") @db.Time()
+
+  monday    Boolean @default(false)
+  tuesday   Boolean @default(false)
+  wednesday Boolean @default(false)
+  thursday  Boolean @default(false)
+  friday    Boolean @default(false)
+  saturday  Boolean @default(false)
+  sunday    Boolean @default(false)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  professional   Professional? @relation(fields: [professionalId], references: [id])
+  professionalId String?       @map("professional_id")
+
+  @@map("blocked_time")
 }
 
 model Shift {
@@ -199,17 +230,17 @@ model RolePermission {
 }
 
 model NotificationTemplate {
-  id        String   @id @default(uuid())
-  key       String   @unique @map("key")
-  name      String   @map("name")
-  description String @map("description")
-  title     String   @map("title")
-  body      String   @db.Text @map("body")
-  isActive  Boolean  @map("is_active") @default(true)
-  variables Json?    @map("variables")
+  id          String  @id @default(uuid())
+  key         String  @unique @map("key")
+  name        String  @map("name")
+  description String  @map("description")
+  title       String  @map("title")
+  body        String  @map("body") @db.Text
+  isActive    Boolean @default(true) @map("is_active")
+  variables   Json?   @map("variables")
 
-  createdAt DateTime @default(now())  @map("created_at")
-  updatedAt DateTime @updatedAt       @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("notification_template")
 }

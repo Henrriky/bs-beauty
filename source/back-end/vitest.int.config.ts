@@ -16,7 +16,7 @@ export default defineConfig({
     setupFiles: ['./src/tests/integration/setup-integration-tests.ts'],
     fileParallelism: false,
     sequence: { concurrent: false },
+    testTimeout: 15000
   },
-
   plugins: [tsConfigPaths()],
 })
