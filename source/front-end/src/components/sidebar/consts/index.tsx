@@ -48,16 +48,6 @@ const onlyManagerSideBarItems: SideBarItem[] = [
     },
     order: 0,
   },
-  {
-    name: 'Relatórios',
-    icon: <ChartBarIcon className="size-6" />,
-    navigateTo: '/analytics/reports',
-    authorization: {
-      allowedPermissions: [],
-      allowedUserTypes: [UserType.MANAGER],
-    },
-    order: 7,
-  },
 ]
 
 const onlyProfessionalSideBarItems: SideBarItem[] = [
@@ -148,6 +138,16 @@ const sideBarItems: SideBarItem[] = [
       allowedUserTypes: [UserType.MANAGER],
     },
     order: 6,
+  },
+  {
+    name: 'Relatórios',
+    icon: <ChartBarIcon className="size-6" />,
+    navigateTo: '/analytics/reports',
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [UserType.MANAGER, UserType.PROFESSIONAL],
+    },
+    order: 7,
   },
   {
     name: 'Profissionais',

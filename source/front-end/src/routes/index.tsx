@@ -86,10 +86,6 @@ function BSBeautyRouter() {
                   path="/manager/notification-templates"
                   element={<NotificationTemplates />}
                 />
-                <Route
-                  path="/analytics/reports"
-                  element={<ProductivityReport />}
-                />
               </Route>
 
               {/* PROFESSIONAL/MANAGER ROUTES */}
@@ -102,6 +98,10 @@ function BSBeautyRouter() {
               >
                 <Route path="/services" element={<ServiceDashboard />} />
                 <Route path="/shifts" element={<Shifts />} />
+                <Route
+                  path="/analytics/reports"
+                  element={<ProductivityReport />}
+                />
               </Route>
 
               {/* PERMISSIONS BASED ROUTES */}

@@ -287,6 +287,7 @@ class AnalyticsUseCase {
     if (!requestedProfessionalId) {
       return requestingUserId
     } else if (userType === 'PROFESSIONAL') {
+      if (requestedProfessionalId == requestingUserId) return requestingUserId
       throw new CustomError('Not authorized to perform this action.', 403, 'You do not have permission to access this data.')
     } else if (userType === 'MANAGER') {
       return requestedProfessionalId
