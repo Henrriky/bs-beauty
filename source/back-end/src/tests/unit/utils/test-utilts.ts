@@ -12,12 +12,14 @@ export function mockRequest (options?: {
   params?: any
   query?: any
   user?: TokenPayload
+  cookies?: Record<string, any>
 }): MockRequest {
   return {
     headers: options?.headers ?? {},
     body: options?.body ?? {},
     params: options?.params ?? {},
     query: options?.query ?? {},
+    cookies: options?.cookies ?? {},
     get: vi.fn((header: string) => {
       return options?.headers?.[header.toLowerCase()] ?? undefined
     }),
@@ -30,7 +32,9 @@ export function mockResponse (): Response {
     status: vi.fn().mockReturnThis(),
     send: vi.fn(),
     json: vi.fn().mockReturnThis(),
-    end: vi.fn()
+    end: vi.fn(),
+    clearCookie: vi.fn(),
+    cookie: vi.fn()
   }
   return res as unknown as Response
 }

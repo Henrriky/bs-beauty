@@ -1,7 +1,9 @@
-import { Status, type Prisma } from '@prisma/client'
+import { Appointment, Status, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { appointmentNonFinishedStatus, type AppointmentRepository, type GroupedAppointmentCount, type GroupedEstimatedTime, type GroupingPeriod } from '../protocols/appointment.repository'
 import { type FindNonFinishedByUserAndDay } from '../types/appointment-repository.types'
+import { PaginatedRequest, PaginatedResult } from '@/types/pagination'
+import { AppointmentFilters } from '@/types/appointments/appointment-filters'
 
 class PrismaAppointmentRepository implements AppointmentRepository {
   public async findAll() {
@@ -10,7 +12,79 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async findById(id: string) {
+  public async findAllPaginated(
+    params: PaginatedRequest<AppointmentFilters>,
+    scope: { userId: string; viewAll: boolean }
+  ): Promise<PaginatedResult<Appointment>> {
+    const { page, limit, filters } = params
+
+    const scopeWhere: Prisma.AppointmentWhereInput | undefined = scope.viewAll
+      ? undefined
+      : {
+        OR: [
+          { customerId: scope.userId },
+          { offer: { professionalId: scope.userId } }
+        ]
+      }
+
+    const filtersWhere: Prisma.AppointmentWhereInput = {
+      ...(filters?.status?.length ? { status: { in: filters.status } } : {}),
+      ...(filters?.from || filters?.to ? {
+        appointmentDate: {
+          ...(filters.from ? { gte: filters.from } : {}),
+          ...(filters.to ? { lte: filters.to } : {})
+        }
+      } : {})
+    }
+
+    const where: Prisma.AppointmentWhereInput =
+      scopeWhere ? { AND: [scopeWhere, filtersWhere] } : filtersWhere
+
+    const [appointments, total] = await prismaClient.$transaction([
+      prismaClient.appointment.findMany({
+        include: {
+          offer: {
+            select: {
+              id: true,
+              service: {
+                select: {
+                  id: true,
+                  name: true,
+                  description: true
+                }
+              },
+              price: true,
+              isOffering: true,
+              estimatedTime: true,
+              professional: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true
+                }
+              }
+            },
+          },
+          customer: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            }
+          }
+        },
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { appointmentDate: 'asc' }
+      }),
+      prismaClient.appointment.count({ where })
+    ])
+
+    return { data: appointments, total, page, limit, totalPages: Math.ceil(total / limit) }
+  }
+
+  public async findById (id: string) {
     const appointment = await prismaClient.appointment.findUnique({
       where: { id },
       select: {

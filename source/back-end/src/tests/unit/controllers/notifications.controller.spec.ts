@@ -80,7 +80,7 @@ describe('NotificationsController', () => {
       const mockUser = createMockUser()
       const mockNotifications = [
         createMockNotification({ recipientId: mockUser.id }),
-        createMockNotification({ 
+        createMockNotification({
           recipientId: mockUser.id,
           type: NotificationType.APPOINTMENT,
           readAt: faker.date.past()

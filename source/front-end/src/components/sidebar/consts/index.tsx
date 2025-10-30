@@ -7,6 +7,7 @@ import {
   ClockIcon,
   HomeIcon,
   MegaphoneIcon,
+  NoSymbolIcon,
   ShieldCheckIcon,
   UserIcon,
   UsersIcon,
@@ -93,6 +94,25 @@ const sideBarItems: SideBarItem[] = [
     order: 2,
   },
   {
+    name: 'Horários Bloqueados',
+    icon: <NoSymbolIcon className="size-6" />,
+    navigateTo: '/blocked-times',
+    authorization: {
+      strategy: 'ANY',
+      allowedPermissions: [
+        'blocked_time.delete_all',
+        'blocked_time.delete_own',
+        'blocked_time.read_all',
+        'blocked_time.read_own',
+        'blocked_time.edit_all',
+        'blocked_time.edit_own',
+        'blocked_time.create_own',
+      ],
+      allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
+    },
+    order: 3,
+  },
+  {
     name: 'Turnos',
     icon: <ClockIcon className="size-6" />,
     navigateTo: '/shifts',
@@ -100,7 +120,7 @@ const sideBarItems: SideBarItem[] = [
       allowedPermissions: [],
       allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
     },
-    order: 3,
+    order: 4,
   },
   {
     name: 'Serviços',
@@ -110,7 +130,7 @@ const sideBarItems: SideBarItem[] = [
       allowedPermissions: [],
       allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
     },
-    order: 4,
+    order: 5,
   },
   {
     name: 'Comunicação',
@@ -120,7 +140,7 @@ const sideBarItems: SideBarItem[] = [
       allowedPermissions: [],
       allowedUserTypes: [UserType.MANAGER],
     },
-    order: 5,
+    order: 6,
   },
   {
     name: 'Funções',
@@ -137,7 +157,7 @@ const sideBarItems: SideBarItem[] = [
       ],
       allowedUserTypes: [UserType.MANAGER],
     },
-    order: 6,
+    order: 7,
   },
   {
     name: 'Relatórios',
@@ -147,7 +167,7 @@ const sideBarItems: SideBarItem[] = [
       allowedPermissions: [],
       allowedUserTypes: [UserType.MANAGER, UserType.PROFESSIONAL],
     },
-    order: 7,
+    order: 8,
   },
   {
     name: 'Profissionais',
@@ -164,7 +184,7 @@ const sideBarItems: SideBarItem[] = [
       ],
       allowedUserTypes: [UserType.MANAGER],
     },
-    order: 8,
+    order: 9,
   },
   {
     name: 'Clientes',
@@ -175,7 +195,7 @@ const sideBarItems: SideBarItem[] = [
       allowedPermissions: ['customer.read', 'customer.delete'],
       allowedUserTypes: [UserType.MANAGER],
     },
-    order: 9,
+    order: 10,
   },
   {
     name: 'Perfil',

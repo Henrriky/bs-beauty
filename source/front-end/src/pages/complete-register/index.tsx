@@ -95,7 +95,7 @@ function CompleteRegister() {
   }, [])
 
   return (
-    <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn">
+    <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn max-w-[500px] mx-auto">
       <Title align="center">Quase lá, finalize seu cadastro</Title>
       <InputContainer handleSubmit={handleSubmit} isLoading={isLoading} />
     </div>

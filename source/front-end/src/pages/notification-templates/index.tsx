@@ -1,57 +1,57 @@
-import { useState } from "react";
-import { toast } from "react-toastify";
-import Title from "../../components/texts/Title";
-import { notificationTemplateAPI } from "../../store/notification-template/notification-template-api";
-import { NotificationTemplate } from "../../store/notification-template/types";
-import NotificationTemplateEditorModal from "./components/NotificationTemplateEditorModal";
-import NotificationTemplateList from "./components/NotificationTemplateList";
-import { buildExampleVariables } from "./utils/variable-examples";
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import Title from '../../components/texts/Title'
+import { notificationTemplateAPI } from '../../store/notification-template/notification-template-api'
+import { NotificationTemplate } from '../../store/notification-template/types'
+import NotificationTemplateEditorModal from './components/NotificationTemplateEditorModal'
+import NotificationTemplateList from './components/NotificationTemplateList'
+import { buildExampleVariables } from './utils/variable-examples'
 
 function NotificationTemplates() {
   const [selectedTemplate, setSelectedTemplate] =
-    useState<NotificationTemplate | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+    useState<NotificationTemplate | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { data, isLoading, isError, refetch } =
     notificationTemplateAPI.useFetchNotificationTemplatesQuery({
       page: 1,
       limit: 10,
-    });
+    })
 
   const [updateNotificationTemplate, { isLoading: isSaving }] =
-    notificationTemplateAPI.useUpdateNotificationTemplateMutation();
+    notificationTemplateAPI.useUpdateNotificationTemplateMutation()
 
-  const templates = data?.data ?? [];
+  const templates = data?.data ?? []
 
   const openModal = (tpl: NotificationTemplate) => {
-    setSelectedTemplate(tpl);
-    setIsModalOpen(true);
-  };
+    setSelectedTemplate(tpl)
+    setIsModalOpen(true)
+  }
 
   const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedTemplate(null);
-  };
+    setIsModalOpen(false)
+    setSelectedTemplate(null)
+  }
 
   const handleSave = async (payload: { title: string; body: string }) => {
-    if (!selectedTemplate) return;
+    if (!selectedTemplate) return
 
     try {
       await updateNotificationTemplate({
         key: selectedTemplate.key,
         title: payload.title,
         body: payload.body,
-      }).unwrap();
+      }).unwrap()
 
-      toast.success("Modelo atualizado com sucesso!");
-      closeModal();
+      toast.success('Modelo atualizado com sucesso!')
+      closeModal()
     } catch (e) {
-      console.error(e);
-      toast.error("Não foi possível atualizar o modelo.");
+      console.error(e)
+      toast.error('Não foi possível atualizar o modelo.')
     }
-  };
+  }
 
-  const exampleVariables = buildExampleVariables(selectedTemplate);
+  const exampleVariables = buildExampleVariables(selectedTemplate)
 
   return (
     <>
@@ -78,7 +78,7 @@ function NotificationTemplates() {
         variableExamples={exampleVariables}
       />
     </>
-  );
+  )
 }
 
-export default NotificationTemplates;
+export default NotificationTemplates

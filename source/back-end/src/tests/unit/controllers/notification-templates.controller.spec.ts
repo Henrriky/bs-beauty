@@ -9,7 +9,7 @@ import { mockRequest, mockResponse } from '../utils/test-utilts'
 vi.mock('@/factory/make-notification-templates-use-case.factory')
 
 // Helper functions
-function createMockNotificationTemplate(overrides: Partial<NotificationTemplate> = {}): NotificationTemplate {
+function createMockNotificationTemplate (overrides: Partial<NotificationTemplate> = {}): NotificationTemplate {
   return {
     id: faker.string.uuid(),
     key: 'BIRTHDAY',
@@ -25,7 +25,7 @@ function createMockNotificationTemplate(overrides: Partial<NotificationTemplate>
   }
 }
 
-function createMockPaginationResult<T>(data: T[], overrides: Partial<{ total: number; page: number; totalPages: number; limit: number }> = {}) {
+function createMockPaginationResult<T> (data: T[], overrides: Partial<{ total: number, page: number, totalPages: number, limit: number }> = {}) {
   return {
     data,
     total: data.length,

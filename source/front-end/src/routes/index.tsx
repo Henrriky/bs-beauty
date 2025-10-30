@@ -25,6 +25,7 @@ import LandingPage from '../pages/landing-page'
 import Roles from '../pages/roles'
 import NotificationTemplates from '../pages/notification-templates'
 import ProductivityReport from '../pages/analytics'
+import BlockedTimes from '../pages/blocked-times'
 
 function BSBeautyRouter() {
   return (
@@ -102,6 +103,7 @@ function BSBeautyRouter() {
                   path="/analytics/reports"
                   element={<ProductivityReport />}
                 />
+                <Route path="/blocked-times" element={<BlockedTimes />} />
               </Route>
 
               {/* PERMISSIONS BASED ROUTES */}

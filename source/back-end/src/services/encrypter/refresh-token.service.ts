@@ -1,4 +1,3 @@
-// src/services/auth/refresh-token-jwt.service.ts
 import jwt from 'jsonwebtoken'
 import type { Secret, SignOptions, JwtPayload } from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'

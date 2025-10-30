@@ -7,8 +7,9 @@ import { type CustomerRepository } from '../repository/protocols/customer.reposi
 import { type ProfessionalRepository } from '../repository/protocols/professional.repository'
 import { CustomError } from '../utils/errors/custom.error.util'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
-import { prismaClient } from '@/lib/prisma'
 import { type RatingRepository } from '@/repository/protocols/rating.repository'
+import { PaginatedRequest, PaginatedResult } from '@/types/pagination'
+import { AppointmentFilters } from '@/types/appointments/appointment-filters'
 
 export const MINIMUM_SCHEDULLING_TIME_MINUTES = 30
 export const MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS = MINIMUM_SCHEDULLING_TIME_MINUTES * 60 * 1000
@@ -35,7 +36,16 @@ class AppointmentsUseCase {
     return { appointments }
   }
 
-  public async executeFindById (appointmentId: string): Promise<FindByIdAppointments | null> {
+  public async executeFindAllPaginated(
+    params: PaginatedRequest<AppointmentFilters>,
+    scope: { userId: string; viewAll: boolean }
+  ): Promise<PaginatedResult<Appointment>> {
+    const result = await this.appointmentRepository.findAllPaginated(params, scope)
+
+    return result
+  }
+
+  public async executeFindById(appointmentId: string): Promise<FindByIdAppointments | null> {
     const appointment = await this.appointmentRepository.findById(appointmentId)
     RecordExistence.validateRecordExistence(appointment, this.entityName)
 

@@ -1,18 +1,21 @@
-import { useState, useMemo } from "react"
-import { Button } from "../../components/button/Button"
-import Title from "../../components/texts/Title"
-import ListNotifications from "./components/ListNotifications"
+import { useState, useMemo } from 'react'
+import { Button } from '../../components/button/Button'
+import Title from '../../components/texts/Title'
+import ListNotifications from './components/ListNotifications'
 
 type ReadSwitch = 'UNREAD' | 'READ' | 'ALL'
 
 function Notifications() {
   const [readSwitch, setReadSwitch] = useState<ReadSwitch>('UNREAD')
 
-  const params = useMemo(() => ({
-    page: 1,
-    limit: 10,
-    readStatus: readSwitch,
-  }), [readSwitch])
+  const params = useMemo(
+    () => ({
+      page: 1,
+      limit: 10,
+      readStatus: readSwitch,
+    }),
+    [readSwitch],
+  )
 
   return (
     <>

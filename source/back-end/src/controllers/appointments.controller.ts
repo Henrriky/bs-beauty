@@ -2,14 +2,20 @@ import { type NextFunction, type Request, type Response } from 'express'
 import { makeAppointmentsUseCaseFactory } from '../factory/make-appointments-use-case.factory'
 import { type Prisma } from '@prisma/client'
 import { StatusCodes } from 'http-status-codes'
+import { appointmentsQuerySchema } from '@/utils/validation/zod-schemas/pagination/appointments/appointments-query.schema'
 
 class AppointmentController {
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeAppointmentsUseCaseFactory()
-      const { appointments } = await useCase.executeFindAll()
+      const parsed = appointmentsQuerySchema.parse(req.query)
+      const isManager = req.user.userType === 'MANAGER'
+      const viewAll = isManager ? parsed.viewAll : false
+      const scope = { userId: req.user.id, viewAll } as const
+      const { page, limit, ...filters } = parsed
+      const result = await useCase.executeFindAllPaginated({ page, limit, filters }, scope)
 
-      res.send({ appointments })
+      res.send(result)
     } catch (error) {
       next(error)
     }

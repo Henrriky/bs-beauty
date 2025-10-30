@@ -1,12 +1,12 @@
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
+import * as AuthAPI from '../../api/auth-api'
 import googleIcon from '../../assets/google.svg'
 import loginBackgroundBottom from '../../assets/login-background-bottom.svg'
 import loginBackgroundTop from '../../assets/login-background-top.svg'
-import * as AuthAPI from '../../api/auth-api'
-import { toast } from 'react-toastify'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router'
-import useAppSelector from '../../hooks/use-app-selector'
 import Title from '../../components/texts/Title'
+import useAppSelector from '../../hooks/use-app-selector'
 import LoginWithEmailAndPasswordForm from './components/LoginWithEmailAndPasswordForm'
 
 function Login() {
@@ -43,34 +43,50 @@ function Login() {
 
   return (
     <>
-      <div className="flex justify-center items-center h-screen flex-col gap-16">
+      <div className="flex justify-center items-center h-screen flex-col gap-8">
+
         <img
           src={loginBackgroundTop}
-          alt="Plano de fundo"
-          className={`absolute top-0 right-0`}
-          // className={`absolute right-[-${(LAYOUT_CONFIG.MAIN_HORIZONTAL_PADDING * 4).toString()}px] top-0`}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="
+              pointer-events-none select-none absolute top-0 right-0 -z-10 lg:hidden
+              [@media(orientation:landscape)]:hidden [@media(max-height:480px)]:hidden
+            "
         />
-        <Title align={'center'}>Bem-vindo(a) ao BS Beauty Academy!</Title>
 
-        <LoginWithEmailAndPasswordForm />
+        <Title align="center">Bem-vindo(a) ao BS Beauty Academy!</Title>
 
-        <div className="flex justify-center items-center flex-col gap-5">
+        <div className="w-full max-w-sm">
+          <LoginWithEmailAndPasswordForm />
+        </div>
+
+        <div className="flex w-full max-w-sm flex-col items-center justify-center [@media(min-height:650px)]:gap-5">
           <p className="text-[#DBDBDB]">Outras formas de login:</p>
           <button
             onClick={handleGoogleLoginButtonClick}
-            className="flex justify-center items-center gap-2.5 bg-[#DBDBDB] p-2 rounded w-[320px] text-[#1E1E1E] text-sm font-medium rounded-tl-3xl rounded-tr-sm rounded-br-3xl rounded-bl-sm z-10 relative"
+            className="relative z-10 flex w-full items-center justify-center gap-2.5 rounded-tl-3xl rounded-tr-sm rounded-br-3xl rounded-bl-sm bg-[#DBDBDB] p-2 text-sm font-medium text-[#1E1E1E]"
           >
             <img src={googleIcon} alt="Ícone do Google" />
-            Logar com o Google
+            Continuar com o Google
           </button>
         </div>
 
         <img
           src={loginBackgroundBottom}
-          alt="Plano de fundo"
-          className="absolute left-0 bottom-0 w-full h-auto object-contain"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="
+            pointer-events-none select-none absolute left-0 bottom-0 w-full h-auto object-contain -z-10 lg:hidden
+            [@media(orientation:landscape)]:hidden [@media(max-height:480px)]:hidden
+          "
         />
       </div>
+
     </>
   )
 }
