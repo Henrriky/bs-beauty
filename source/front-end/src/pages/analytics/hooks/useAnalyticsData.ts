@@ -18,7 +18,10 @@ export const useAnalyticsData = (
   const userType = userData?.user?.userType
   const userId = userData?.user?.id
 
-  const activeProfessionalId = selectedProfessionalId || userId
+  const activeProfessionalId =
+    userType === UserType.MANAGER
+      ? selectedProfessionalId
+      : selectedProfessionalId || userId
 
   const { data: professionalsData } =
     professionalAPI.useFetchProfessionalsQuery(
@@ -33,6 +36,11 @@ export const useAnalyticsData = (
     toISO,
   )
 
+  const shouldSkipQuery =
+    !startDate ||
+    !endDate ||
+    (userType === UserType.PROFESSIONAL && !activeProfessionalId)
+
   const { data: appointmentsCountData } =
     analyticsAPI.useFetchAppointmentsCountQuery(
       {
@@ -40,21 +48,21 @@ export const useAnalyticsData = (
         statusList: selectedStatuses.length > 0 ? selectedStatuses : undefined,
       },
       {
-        skip: !activeProfessionalId || !startDate || !endDate,
+        skip: shouldSkipQuery,
       },
     )
 
   const { data: estimatedTimeData } = analyticsAPI.useFetchEstimatedTimeQuery(
     queryParams,
     {
-      skip: !activeProfessionalId || !startDate || !endDate,
+      skip: shouldSkipQuery,
     },
   )
 
   const { data: cancelationData } = analyticsAPI.useFetchCancelationRateQuery(
     queryParams,
     {
-      skip: !activeProfessionalId || !startDate || !endDate,
+      skip: shouldSkipQuery,
     },
   )
 
@@ -65,7 +73,7 @@ export const useAnalyticsData = (
       endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : undefined,
     },
     {
-      skip: !activeProfessionalId || !startDate || !endDate,
+      skip: shouldSkipQuery,
     },
   )
 

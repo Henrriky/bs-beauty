@@ -7,7 +7,7 @@ export const buildQueryParams = (
   toISO: (date: string, endOfDay?: boolean) => string,
 ) => {
   return {
-    professionalId: professionalId!,
+    professionalId,
     startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
     endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
   }

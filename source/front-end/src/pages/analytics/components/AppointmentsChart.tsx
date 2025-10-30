@@ -34,7 +34,7 @@ function AppointmentsChart({ data }: AppointmentsChartProps) {
           data: chartData.values,
           label: 'Agendamentos',
           color: '#A4978A',
-          curve: 'natural',
+          curve: 'bumpX',
         },
       ]}
       height={350}

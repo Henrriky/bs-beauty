@@ -42,17 +42,17 @@ class AnalyticsUseCase {
       if (typeof rating.appointmentId === 'string' && rating.appointmentId !== '' && rating.score !== null) {
         const appointment = await this.appointmentRepository.findById(rating.appointmentId)
         if (!appointment) continue
-        
+
         if (professionalIdToQuery) {
           const offer = await this.offerRepository.findById(appointment.serviceOfferedId)
           if (!offer || offer.professionalId !== professionalIdToQuery) continue
         }
-        
+
         if (startDate && endDate) {
           const appointmentDate = new Date(appointment.appointmentDate)
           if (appointmentDate < startDate || appointmentDate > endDate) continue
         }
-        
+
         customerCountPerRating[rating.score] = (customerCountPerRating[rating.score] || 0) + 1
       }
     }
@@ -284,13 +284,15 @@ class AnalyticsUseCase {
   }
 
   private defineRequestedProfessionalIdByRequesterUserType(userType: string, requestedProfessionalId?: string, requestingUserId?: string) {
-    if (!requestedProfessionalId) {
-      return requestingUserId
-    } else if (userType === 'PROFESSIONAL') {
-      if (requestedProfessionalId == requestingUserId) return requestingUserId
-      throw new CustomError('Not authorized to perform this action.', 403, 'You do not have permission to access this data.')
-    } else if (userType === 'MANAGER') {
+    if (userType === 'MANAGER') {
       return requestedProfessionalId
+    } else if (userType === 'PROFESSIONAL') {
+      if (!requestedProfessionalId || requestedProfessionalId === requestingUserId) {
+        return requestingUserId
+      }
+      throw new CustomError('Not authorized to perform this action.', 403, 'You do not have permission to access this data.')
+    } else {
+      return requestingUserId
     }
   }
 }

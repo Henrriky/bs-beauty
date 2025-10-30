@@ -120,6 +120,7 @@ function ReportFilters({
                   professionals={professionals}
                   selectedProfessional={selectedProfessional}
                   onSelect={onProfessionalChange}
+                  showAllOption={true}
                 />
               </div>
             )}

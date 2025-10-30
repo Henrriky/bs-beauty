@@ -5,12 +5,14 @@ interface ProfessionalSelectorProps {
   professionals: Professional[]
   selectedProfessional: Professional | null
   onSelect: (professional: Professional | null) => void
+  showAllOption?: boolean
 }
 
 export default function ProfessionalSelector({
   professionals,
   selectedProfessional,
   onSelect,
+  showAllOption = false,
 }: ProfessionalSelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -41,6 +43,17 @@ export default function ProfessionalSelector({
     setIsOpen(false)
   }
 
+  const getDisplayText = () => {
+    if (selectedProfessional) {
+      return null // Will render image and name
+    }
+    return showAllOption ? 'Todos os profissionais' : 'Meu perfil (padrão)'
+  }
+
+  const getDefaultOptionText = () => {
+    return showAllOption ? 'Todos os profissionais' : 'Meu perfil (padrão)'
+  }
+
   return (
     <div className="relative" ref={dropdownRef}>
       <label className="block text-sm text-[#979797] mb-2">Profissional</label>
@@ -63,7 +76,7 @@ export default function ProfessionalSelector({
               <span>{selectedProfessional.name || 'Sem nome'}</span>
             </div>
           ) : (
-            <span className="text-[#979797]">Meu perfil (padrão)</span>
+            <span className="text-[#979797]">{getDisplayText()}</span>
           )}
           <svg
             className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
@@ -102,7 +115,7 @@ export default function ProfessionalSelector({
                   />
                 </svg>
               </div>
-              <span className="text-[#D9D9D9]">Meu perfil (padrão)</span>
+              <span className="text-[#D9D9D9]">{getDefaultOptionText()}</span>
             </button>
 
             {professionals.map((professional) => (
