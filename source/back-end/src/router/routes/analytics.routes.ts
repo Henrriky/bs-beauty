@@ -7,7 +7,7 @@ const analyticsServiceRoutes = Router()
 
 analyticsServiceRoutes.get('/', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleFindAll)
 analyticsServiceRoutes.get('/:id', userTypeAuthMiddleware(['PROFESSIONAL', 'MANAGER']), AnalyticsController.handleFindByProfessionalId)
-analyticsServiceRoutes.get('/customers/ratings', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetCustomerAmountPerRatingScore)
+analyticsServiceRoutes.get('/customers/ratings', userTypeAuthMiddleware(['PROFESSIONAL', 'MANAGER']), AnalyticsController.handleGetCustomerAmountPerRatingScore)
 analyticsServiceRoutes.get('/services/rating', userTypeAuthMiddleware(['MANAGER']), AnalyticsController.handleGetMeanRatingByService)
 analyticsServiceRoutes.get('/professionals/rating', userTypeAuthMiddleware(['MANAGER']), validateFetchAppointmentsCount, AnalyticsController.handleGetMeanRatingOfProfessionals)
 analyticsServiceRoutes.post('/appointments/count', userTypeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateFetchAppointmentsCount, AnalyticsController.handleGetAppointmentAmountInDateRangeByStatusAndProfessional)

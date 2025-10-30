@@ -17,13 +17,43 @@ class AnalyticsUseCase {
     private readonly professionalRepository: ProfessionalRepository
   ) { }
 
-  public async executeGetCustomerAmountPerRatingScore() {
+  public async executeGetCustomerAmountPerRatingScore(
+    requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER' },
+    startDate?: Date,
+    endDate?: Date,
+    requestedProfessionalId?: string
+  ) {
+    const professionalIdToQuery = this.defineRequestedProfessionalIdByRequesterUserType(
+      requestingUser.userType,
+      requestedProfessionalId,
+      requestingUser.id
+    )
+
     const ratings = await this.ratingRepository.findAll()
-    const customerCountPerRating: Record<number, number> = {}
+    const customerCountPerRating: Record<number, number> = {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0
+    }
 
     for (const rating of ratings) {
       if (typeof rating.appointmentId === 'string' && rating.appointmentId !== '' && rating.score !== null) {
-        customerCountPerRating[rating.score] = (typeof customerCountPerRating[rating.score] === 'undefined' ? 0 : customerCountPerRating[rating.score]) + 1
+        const appointment = await this.appointmentRepository.findById(rating.appointmentId)
+        if (!appointment) continue
+        
+        if (professionalIdToQuery) {
+          const offer = await this.offerRepository.findById(appointment.serviceOfferedId)
+          if (!offer || offer.professionalId !== professionalIdToQuery) continue
+        }
+        
+        if (startDate && endDate) {
+          const appointmentDate = new Date(appointment.appointmentDate)
+          if (appointmentDate < startDate || appointmentDate > endDate) continue
+        }
+        
+        customerCountPerRating[rating.score] = (customerCountPerRating[rating.score] || 0) + 1
       }
     }
 

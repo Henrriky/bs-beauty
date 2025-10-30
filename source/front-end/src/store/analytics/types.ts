@@ -71,3 +71,17 @@ export type FetchCancelationRateResponse = {
   totalAppointments: number
   canceledAppointments: number
 }
+
+export type FetchRatingsCountParams = {
+  professionalId?: string
+  startDate?: string
+  endDate?: string
+}
+
+export type FetchRatingsCountResponse = {
+  1: number
+  2: number
+  3: number
+  4: number
+  5: number
+}

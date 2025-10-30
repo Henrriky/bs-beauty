@@ -1,7 +1,13 @@
 import { useState } from 'react'
 import { BarChart } from '@mui/x-charts/BarChart'
+import { LineChart } from '@mui/x-charts/LineChart'
 import { PieChart } from '@mui/x-charts/PieChart'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs, { Dayjs } from 'dayjs'
+import 'dayjs/locale/pt-br'
 import Title from '../../components/texts/Title'
 import Subtitle from '../../components/texts/Subtitle'
 import { analyticsAPI } from '../../store/analytics/analytics-api'
@@ -19,6 +25,8 @@ import {
 } from './hooks/useChartData'
 import { commonChartStyles } from './utils/chartStyles'
 
+dayjs.locale('pt-br')
+
 const darkChartTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -29,6 +37,9 @@ const darkChartTheme = createTheme({
     text: {
       primary: '#D9D9D9',
       secondary: '#979797',
+    },
+    primary: {
+      main: '#A4978A',
     },
   },
   components: {
@@ -49,8 +60,12 @@ const darkChartTheme = createTheme({
 function ProductivityReport() {
   const { defaultDates, toISO } = useDateRange()
 
-  const [startDate, setStartDate] = useState<string>(defaultDates.startDate)
-  const [endDate, setEndDate] = useState<string>(defaultDates.endDate)
+  const [startDate, setStartDate] = useState<Dayjs | null>(
+    dayjs(defaultDates.startDate),
+  )
+  const [endDate, setEndDate] = useState<Dayjs | null>(
+    dayjs(defaultDates.endDate),
+  )
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
   const [selectedProfessional, setSelectedProfessional] =
     useState<Professional | null>(null)
@@ -79,8 +94,8 @@ function ProductivityReport() {
 
   const queryParams = {
     professionalId: activeProfessionalId!,
-    startDate: toISO(startDate),
-    endDate: toISO(endDate, true),
+    startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+    endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
   }
 
   const { data: appointmentsCountData } =
@@ -108,14 +123,45 @@ function ProductivityReport() {
     },
   )
 
+  const { data: ratingsCountData } = analyticsAPI.useFetchRatingsCountQuery(
+    {
+      professionalId: activeProfessionalId,
+      startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : undefined,
+      endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : undefined,
+    },
+    {
+      skip: !activeProfessionalId || !startDate || !endDate,
+    },
+  )
+
   const appointmentsChartData = useChartData(appointmentsCountData, 'count')
   const estimatedTimeChartData = useChartData(estimatedTimeData, 'time')
   const workTimeInHours = useTotalWorkTime(estimatedTimeData)
   const {
     chartData: cancellationChartData,
     cancellationPercentage,
-    completionPercentage,
+    activePercentage,
   } = useCancellationData(cancelationData)
+  console.log(cancelationData)
+
+  const meanRating = ratingsCountData
+    ? (() => {
+        const totalRatings =
+          ratingsCountData[1] +
+          ratingsCountData[2] +
+          ratingsCountData[3] +
+          ratingsCountData[4] +
+          ratingsCountData[5]
+        if (totalRatings === 0) return 0
+        const weightedSum =
+          ratingsCountData[1] * 1 +
+          ratingsCountData[2] * 2 +
+          ratingsCountData[3] * 3 +
+          ratingsCountData[4] * 4 +
+          ratingsCountData[5] * 5
+        return (weightedSum / totalRatings).toFixed(1)
+      })()
+    : null
 
   return (
     <ThemeProvider theme={darkChartTheme}>
@@ -136,32 +182,45 @@ function ProductivityReport() {
           <h2 className="text-lg font-semibold mb-4 text-[#D9D9D9]">
             Período de Análise
           </h2>
-          <div className="flex flex-col gap-4">
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            adapterLocale="pt-br"
+          >
             <div className="flex">
-              <div className="flex-1">
-                <label className="block text-sm text-[#979797] mb-2">
-                  Data Inicial
-                </label>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full bg-[#1E1E1E] border border-[#535353] rounded-l-lg px-4 py-3 text-[#D9D9D9] focus:outline-none focus:border-[#A4978A] transition-colors"
-                />
-              </div>
-              <div className="flex-1">
-                <label className="block text-sm text-[#979797] mb-2">
-                  Data Final
-                </label>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full bg-[#1E1E1E] border border-[#535353] rounded-r-lg px-4 py-3 text-[#D9D9D9] focus:outline-none focus:border-[#A4978A] transition-colors"
-                />
-              </div>
+              <DatePicker
+                label="Data Inicial"
+                value={startDate}
+                onChange={(newValue) => setStartDate(newValue)}
+                format="DD/MM/YYYY"
+                className="w-1/2"
+                slotProps={{
+                  textField: {
+                    sx: {
+                      '& .MuiSvgIcon-root': {
+                        color: '#A4978A',
+                      },
+                    },
+                  },
+                }}
+              />
+              <DatePicker
+                label="Data Final"
+                value={endDate}
+                onChange={(newValue) => setEndDate(newValue)}
+                format="DD/MM/YYYY"
+                className="w-1/2"
+                slotProps={{
+                  textField: {
+                    sx: {
+                      '& .MuiSvgIcon-root': {
+                        color: '#A4978A',
+                      },
+                    },
+                  },
+                }}
+              />
             </div>
-          </div>
+          </LocalizationProvider>
         </div>
 
         <div className="w-full my-6">
@@ -210,19 +269,21 @@ function ProductivityReport() {
 
         <div className="flex flex-col gap-6">
           <div className="bg-[#262626] rounded-lg p-6">
-            <h2 className="text-lg font-semibold mb-4 text-[#D9D9D9]">
-              Visão Geral de Agendamentos
+            <h2 className="text-lg font-semibold mb-4 text-[#D9D9D9] text-center">
+              Quantidade de Agendamentos
             </h2>
             <div className="w-full h-[400px]">
-              <BarChart
+              <LineChart
+                yAxis={[
+                  {
+                    min: 0,
+                    tickMinStep: 1,
+                  },
+                ]}
                 xAxis={[
                   {
-                    scaleType: 'band',
+                    scaleType: 'point',
                     data: appointmentsChartData.dates,
-                    colorMap: {
-                      type: 'ordinal',
-                      colors: ['#A4978A'],
-                    },
                   },
                 ]}
                 series={[
@@ -230,6 +291,7 @@ function ProductivityReport() {
                     data: appointmentsChartData.values,
                     label: 'Agendamentos',
                     color: '#A4978A',
+                    curve: 'natural',
                   },
                 ]}
                 height={350}
@@ -238,9 +300,9 @@ function ProductivityReport() {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-6">
-            <div className="bg-[#262626] rounded-lg p-6 flex-1">
-              <h2 className="text-lg font-semibold mb-4 text-[#D9D9D9]">
+          <div className="flex flex-col gap-6">
+            <div className="bg-[#262626] rounded-lg p-6">
+              <h2 className="text-lg font-semibold mb-4 text-[#D9D9D9] text-center">
                 Tempo Estimado de Trabalho
               </h2>
               <div className="w-full h-[400px]">
@@ -284,20 +346,20 @@ function ProductivityReport() {
               </div>
             </div>
 
-            <div className="bg-[#262626] rounded-lg p-6 flex-1">
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-lg font-semibold text-[#D9D9D9]">
+            <div className="bg-[#262626] rounded-lg p-6">
+              <div className="flex flex-col mb-4">
+                <h2 className="text-lg font-semibold text-[#D9D9D9] mb-4 lg:mb-0 text-center">
                   Taxa de Cancelamento
                 </h2>
-                <div className="text-center mr-8">
-                  <div className="text-base text-[#979797] mb-3">
+                <div className="text-center">
+                  <div className="text-[#979797] mb-3 text-center">
                     Percentuais
                   </div>
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-row gap-3 justify-center">
                     <div className="flex items-center gap-3">
                       <div className="w-4 h-4 rounded-full bg-[#A4978A]"></div>
                       <span className="text-base font-medium text-[#D9D9D9]">
-                        Concluídos: {completionPercentage}%
+                        Ativos: {activePercentage}%
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
@@ -315,6 +377,8 @@ function ProductivityReport() {
                     {
                       data: cancellationChartData,
                       highlightScope: { fade: 'global', highlight: 'item' },
+                      innerRadius: '60%',
+                      outerRadius: '90%',
                     },
                   ]}
                   height={350}
@@ -328,6 +392,73 @@ function ProductivityReport() {
                   }}
                 />
               </div>
+            </div>
+          </div>
+
+          <div className="bg-[#262626] rounded-lg p-6">
+            <h2 className="text-lg font-semibold mb-4 text-[#D9D9D9] text-center">
+              Avaliações dos Clientes
+            </h2>
+            <div className="w-full h-[400px]">
+              {ratingsCountData ? (
+                <>
+                  <div className="text-center mb-4">
+                    <div className="text-3xl font-bold text-[#A4978A]">
+                      {meanRating} ★
+                    </div>
+                    <div className="text-sm text-[#979797]">
+                      Avaliação média
+                    </div>
+                  </div>
+                  <BarChart
+                    layout="horizontal"
+                    borderRadius={10}
+                    yAxis={[
+                      {
+                        scaleType: 'band',
+                        data: ['5 ★', '4 ★', '3 ★', '2 ★', '1 ★'],
+                        colorMap: {
+                          type: 'ordinal',
+                          colors: ['#A4978A'],
+                        },
+                        categoryGapRatio: 0.7,
+                        disableLine: true,
+                        disableTicks: true,
+                        barGapRatio: 40,
+                        tickLabelStyle: {
+                          fontSize: 14,
+                          fill: '#D9D9D9',
+                        },
+                      },
+                    ]}
+                    xAxis={[
+                      {
+                        disableLine: true,
+                        disableTicks: true,
+                        valueFormatter: () => '',
+                      },
+                    ]}
+                    series={[
+                      {
+                        data: [
+                          ratingsCountData[5],
+                          ratingsCountData[4],
+                          ratingsCountData[3],
+                          ratingsCountData[2],
+                          ratingsCountData[1],
+                        ],
+                        label: 'Quantidade de Avaliações',
+                        color: '#A4978A',
+                      },
+                    ]}
+                    height={300}
+                  />
+                </>
+              ) : (
+                <div className="h-full flex items-center justify-center text-[#979797]">
+                  Carregando...
+                </div>
+              )}
             </div>
           </div>
         </div>

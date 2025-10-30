@@ -251,8 +251,18 @@ class AnalyticsController {
 
   public static async handleGetCustomerAmountPerRatingScore(req: Request, res: Response, next: NextFunction) {
     try {
+      const user = req.user
+      const requestedProfessionalId = req.query.professionalId as string | undefined
+      const startDate = req.query.startDate ? new Date(req.query.startDate as string) : undefined
+      const endDate = req.query.endDate ? new Date(req.query.endDate as string) : undefined
+      
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
-      const customerCountPerRating = await analyticsUseCase.executeGetCustomerAmountPerRatingScore()
+      const customerCountPerRating = await analyticsUseCase.executeGetCustomerAmountPerRatingScore(
+        user,
+        startDate,
+        endDate,
+        requestedProfessionalId
+      )
       res.send(customerCountPerRating)
     } catch (error) {
       next(error)

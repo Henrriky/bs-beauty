@@ -24,7 +24,8 @@ export function useChartData(
             (item) => item.count,
           )
         : (data as FetchEstimatedTimeResponse).data.map(
-            (item) => item.estimatedTimeInMinutes / 60,
+            (item) =>
+              Math.round((item.estimatedTimeInMinutes / 60) * 100) / 100,
           )
 
     return { dates, values }
@@ -79,12 +80,12 @@ export function useCancellationData(
     ).toFixed(1)
   }, [cancelationData])
 
-  const completionPercentage = useMemo(() => {
+  const activePercentage = useMemo(() => {
     if (!cancelationData || cancelationData.totalAppointments === 0) return 0
     const completed =
       cancelationData.totalAppointments - cancelationData.canceledAppointments
     return ((completed / cancelationData.totalAppointments) * 100).toFixed(1)
   }, [cancelationData])
 
-  return { chartData, cancellationPercentage, completionPercentage }
+  return { chartData, cancellationPercentage, activePercentage }
 }

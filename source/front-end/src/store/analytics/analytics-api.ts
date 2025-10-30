@@ -9,6 +9,8 @@ import {
   FetchEstimatedTimeResponse,
   FetchCancelationRateParams,
   FetchCancelationRateResponse,
+  FetchRatingsCountParams,
+  FetchRatingsCountResponse,
 } from './types'
 
 export const analyticsAPI = createApi({
@@ -63,6 +65,16 @@ export const analyticsAPI = createApi({
         body: params,
       }),
     }),
+    fetchRatingsCount: builder.query<
+      FetchRatingsCountResponse,
+      FetchRatingsCountParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.ANALYTICS_ENDPOINTS.FETCH_RATINGS_COUNT,
+        method: 'GET',
+        params,
+      }),
+    }),
   }),
 })
 
@@ -72,4 +84,5 @@ export const {
   useFetchAppointmentsCountQuery,
   useFetchEstimatedTimeQuery,
   useFetchCancelationRateQuery,
+  useFetchRatingsCountQuery,
 } = analyticsAPI
