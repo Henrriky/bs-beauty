@@ -84,7 +84,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return { data: appointments, total, page, limit, totalPages: Math.ceil(total / limit) }
   }
 
-  public async findById (id: string) {
+  public async findById(id: string) {
     const appointment = await prismaClient.appointment.findUnique({
       where: { id },
       select: {
@@ -212,11 +212,15 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     professionalId?: string,
     serviceIds?: string[]
   ): Promise<GroupedAppointmentCount[]> {
-    const dateFormat = groupBy === 'day'
-      ? '%Y-%m-%d'
-      : groupBy === 'week'
-        ? '%Y-%u'
-        : '%Y-%m'
+    let dateFormat;
+
+    if (groupBy === 'day') {
+      dateFormat = '%Y-%m-%d';
+    } else if (groupBy === 'week') {
+      dateFormat = '%Y-%u';
+    } else {
+      dateFormat = '%Y-%m';
+    }
 
     let query = `
       SELECT 

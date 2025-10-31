@@ -95,7 +95,7 @@ function LandingPage() {
           }
           ratingCount={data?.salonRating.ratingCount || 0}
         />
-        {data?.professionals && data.professionals.length === 1 ? (
+        {data?.professionals?.length === 1 ? (
           <div className="mt-4">
             <SalonRatingCard
               image={data.professionals[0].profilePhotoUrl || logo}

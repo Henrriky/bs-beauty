@@ -45,7 +45,7 @@ class AnalyticsUseCase {
 
         if (professionalIdToQuery) {
           const offer = await this.offerRepository.findById(appointment.serviceOfferedId)
-          if (!offer || offer.professionalId !== professionalIdToQuery) continue
+          if (offer?.professionalId !== professionalIdToQuery) continue
         }
 
         if (startDate && endDate) {

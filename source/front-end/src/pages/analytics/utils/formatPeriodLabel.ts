@@ -25,7 +25,7 @@ export function formatPeriodLabel(period: string, groupBy: string): string {
   }
 
   const [year, month] = period.split('-')
-  const date = new Date(parseInt(year), parseInt(month) - 1)
+  const date = new Date(Number.parseInt(year), Number.parseInt(month) - 1)
   return date.toLocaleDateString('pt-BR', {
     month: 'short',
     year: 'numeric',
