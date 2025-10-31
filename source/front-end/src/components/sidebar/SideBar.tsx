@@ -25,11 +25,11 @@ function SideBar() {
   const selectUserInfo = authAPI.endpoints.fetchUserInfo.select()
   const userInfoQuery = useAppSelector(selectUserInfo)
 
-  const displayName = userInfoQuery?.data?.user.name ?? user.name;
-  const safeDisplayName = (displayName ?? '') as string;
+  const displayName = userInfoQuery?.data?.user.name ?? user.name
+  const safeDisplayName = (displayName ?? '') as string
   const displayNameCap = safeDisplayName
     ? firstLetterOfWordToUpperCase(safeDisplayName)
-    : '';
+    : ''
   const photoUrl =
     userInfoQuery?.data?.user.profilePhotoUrl ?? user.profilePhotoUrl
 
@@ -53,7 +53,10 @@ function SideBar() {
               <Bars3Icon className="size-7" />
             </button>
 
-            <div className="hover:cursor-pointer" onClick={() => navigate('/profile')}>
+            <div
+              className="hover:cursor-pointer"
+              onClick={() => navigate('/profile')}
+            >
               <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" />
             </div>
           </div>
@@ -75,7 +78,10 @@ function SideBar() {
                   <XMarkIcon />
                 </button>
 
-                <div className="hover:cursor-pointer w-9" onClick={() => navigate('/profile')}>
+                <div
+                  className="hover:cursor-pointer w-9"
+                  onClick={() => navigate('/profile')}
+                >
                   <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" />
                 </div>
 
@@ -116,12 +122,12 @@ function SideBar() {
       <div className="hidden lg:grid lg:grid-cols-[16rem_1fr] lg:min-h-[100dvh]">
         <aside className="bg-primary-900 border-r border-white/10 sticky top-0 h-[100dvh] w-64 px-4 py-6">
           <button
-            className="flex items-center gap-3 mb-6 hover:opacity-90 w-full"
+            className="flex items-center gap-3 mb-6 hover:opacity-90 w-full pl-3"
             onClick={() => navigate('/profile')}
             aria-label="Abrir perfil"
           >
             <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" />
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 text-left ml-1">
               <span
                 className="block truncate text-primary-0 text-sm capitalize"
                 title={safeDisplayName || undefined}
