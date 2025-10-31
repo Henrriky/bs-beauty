@@ -102,7 +102,7 @@ class AnalyticsUseCase {
     serviceIds?: string[]
   ) {
 
-    const professionalIdToQuery = await this.defineRequestedProfessionalIdByRequesterUserType(requestingUser.userType, requestedProfessionalId, requestingUser.id)
+    const professionalIdToQuery = this.defineRequestedProfessionalIdByRequesterUserType(requestingUser.userType, requestedProfessionalId, requestingUser.id)
     const start = this.normalizeDateToStart(startDate)
     const end = this.normalizeDateToEnd(endDate)
 
