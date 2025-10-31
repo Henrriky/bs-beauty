@@ -80,6 +80,10 @@ export const API_VARIABLES = {
     FETCH_ANALYTICS_BY_PROFESSIONAL: (professionalId: string) =>
       `/analytics/${professionalId}`,
     FETCH_RATINGS_ANALYTICS: '/public-analytics/ratings',
+    FETCH_APPOINTMENTS_COUNT: '/analytics/appointments/count',
+    FETCH_ESTIMATED_TIME: '/analytics/appointments/estimated-time',
+    FETCH_CANCELATION_RATE: '/analytics/appointments/cancelation-rate',
+    FETCH_RATINGS_COUNT: '/analytics/customers/ratings',
   },
   NOTIFICATIONS_ENDPOINTS: {
     FETCH_NOTIFICATIONS: '/notifications',

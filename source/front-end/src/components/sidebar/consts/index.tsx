@@ -11,6 +11,7 @@ import {
   ShieldCheckIcon,
   UserIcon,
   UsersIcon,
+  ChartBarIcon,
 } from '@heroicons/react/24/outline'
 import React from 'react'
 import { UserType } from '../../../store/auth/types'
@@ -20,7 +21,7 @@ type SideBarItem = {
   name: string
   navigateTo: string
   icon: React.ReactNode
-  order?: number
+  order: number
   authorization: Omit<UserCanAccessProps, 'user'>
 }
 
@@ -46,6 +47,7 @@ const onlyManagerSideBarItems: SideBarItem[] = [
       allowedPermissions: [],
       allowedUserTypes: [UserType.MANAGER],
     },
+    order: 0,
   },
 ]
 
@@ -58,15 +60,15 @@ const onlyProfessionalSideBarItems: SideBarItem[] = [
       allowedPermissions: [],
       allowedUserTypes: [UserType.PROFESSIONAL],
     },
+    order: 0,
   },
 ]
 
 const sideBarItems: SideBarItem[] = [
   {
-    name: 'Sair',
-    icon: <ArrowLeftStartOnRectangleIcon className="size-6" />,
-    navigateTo: '/',
-    order: 99,
+    name: 'Agendamentos',
+    icon: <CalendarDaysIcon className="size-6" />,
+    navigateTo: '/appointments',
     authorization: {
       allowedPermissions: [],
       allowedUserTypes: [
@@ -75,20 +77,7 @@ const sideBarItems: SideBarItem[] = [
         UserType.CUSTOMER,
       ],
     },
-  },
-  {
-    name: 'Perfil',
-    icon: <UserIcon className="size-6" />,
-    navigateTo: '/profile',
-    order: 98,
-    authorization: {
-      allowedPermissions: [],
-      allowedUserTypes: [
-        UserType.MANAGER,
-        UserType.PROFESSIONAL,
-        UserType.CUSTOMER,
-      ],
-    },
+    order: 1,
   },
   {
     name: 'Notificações',
@@ -102,15 +91,7 @@ const sideBarItems: SideBarItem[] = [
         UserType.CUSTOMER,
       ],
     },
-  },
-  {
-    name: 'Comunicação',
-    icon: <MegaphoneIcon className="size-6" />,
-    navigateTo: '/manager/notification-templates',
-    authorization: {
-      allowedPermissions: [],
-      allowedUserTypes: [UserType.MANAGER],
-    },
+    order: 2,
   },
   {
     name: 'Horários Bloqueados',
@@ -129,6 +110,7 @@ const sideBarItems: SideBarItem[] = [
       ],
       allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
     },
+    order: 3,
   },
   {
     name: 'Turnos',
@@ -138,6 +120,27 @@ const sideBarItems: SideBarItem[] = [
       allowedPermissions: [],
       allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
     },
+    order: 4,
+  },
+  {
+    name: 'Serviços',
+    icon: <BriefcaseIcon className="size-6" />,
+    navigateTo: 'services',
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
+    },
+    order: 5,
+  },
+  {
+    name: 'Comunicação',
+    icon: <MegaphoneIcon className="size-6" />,
+    navigateTo: '/manager/notification-templates',
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [UserType.MANAGER],
+    },
+    order: 6,
   },
   {
     name: 'Funções',
@@ -154,6 +157,17 @@ const sideBarItems: SideBarItem[] = [
       ],
       allowedUserTypes: [UserType.MANAGER],
     },
+    order: 7,
+  },
+  {
+    name: 'Relatórios',
+    icon: <ChartBarIcon className="size-6" />,
+    navigateTo: '/analytics/reports',
+    authorization: {
+      allowedPermissions: [],
+      allowedUserTypes: [UserType.MANAGER, UserType.PROFESSIONAL],
+    },
+    order: 8,
   },
   {
     name: 'Profissionais',
@@ -170,6 +184,7 @@ const sideBarItems: SideBarItem[] = [
       ],
       allowedUserTypes: [UserType.MANAGER],
     },
+    order: 9,
   },
   {
     name: 'Clientes',
@@ -180,20 +195,27 @@ const sideBarItems: SideBarItem[] = [
       allowedPermissions: ['customer.read', 'customer.delete'],
       allowedUserTypes: [UserType.MANAGER],
     },
+    order: 10,
   },
   {
-    name: 'Serviços',
-    icon: <BriefcaseIcon className="size-6" />,
-    navigateTo: 'services',
+    name: 'Perfil',
+    icon: <UserIcon className="size-6" />,
+    navigateTo: '/profile',
+    order: 98,
     authorization: {
       allowedPermissions: [],
-      allowedUserTypes: [UserType.PROFESSIONAL, UserType.MANAGER],
+      allowedUserTypes: [
+        UserType.MANAGER,
+        UserType.PROFESSIONAL,
+        UserType.CUSTOMER,
+      ],
     },
   },
   {
-    name: 'Agendamentos',
-    icon: <CalendarDaysIcon className="size-6" />,
-    navigateTo: '/appointments',
+    name: 'Sair',
+    icon: <ArrowLeftStartOnRectangleIcon className="size-6" />,
+    navigateTo: '/',
+    order: 99,
     authorization: {
       allowedPermissions: [],
       allowedUserTypes: [

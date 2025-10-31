@@ -95,7 +95,20 @@ function LandingPage() {
           }
           ratingCount={data?.salonRating.ratingCount || 0}
         />
-        {data?.professionals && (
+        {data?.professionals?.length === 1 ? (
+          <div className="mt-4">
+            <SalonRatingCard
+              image={data.professionals[0].profilePhotoUrl || logo}
+              name={data.professionals[0].name || 'Profissional'}
+              meanRating={
+                data.professionals[0].meanRating
+                  ? Number(data.professionals[0].meanRating)
+                  : 0
+              }
+              ratingCount={data.professionals[0].ratingCount || 0}
+            />
+          </div>
+        ) : (
           <RatingCardsContainer professionals={data?.professionals || []} />
         )}
       </div>

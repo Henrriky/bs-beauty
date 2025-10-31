@@ -19,9 +19,11 @@ const MockAppointmentRepository: Mocked<AppointmentRepository> = {
   findById: vi.fn(),
   findByCustomerOrProfessionalId: vi.fn(),
   findByServiceOfferedId: vi.fn(),
+  findByDateRangeStatusProfessionalAndServices: vi.fn(),
+  countByDateRangeGrouped: vi.fn(),
+  sumEstimatedTimeByDateRangeGrouped: vi.fn(),
   findNonFinishedByUserAndDay: vi.fn(),
   countCustomerAppointmentsPerDay: vi.fn(),
-  findByDateRange: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   delete: vi.fn()

@@ -24,6 +24,7 @@ import PasswordResetCompleted from '../pages/password-reset/components/PasswordR
 import LandingPage from '../pages/landing-page'
 import Roles from '../pages/roles'
 import NotificationTemplates from '../pages/notification-templates'
+import ProductivityReport from '../pages/analytics'
 import BlockedTimes from '../pages/blocked-times'
 
 function BSBeautyRouter() {
@@ -98,6 +99,10 @@ function BSBeautyRouter() {
               >
                 <Route path="/services" element={<ServiceDashboard />} />
                 <Route path="/shifts" element={<Shifts />} />
+                <Route
+                  path="/analytics/reports"
+                  element={<ProductivityReport />}
+                />
                 <Route path="/blocked-times" element={<BlockedTimes />} />
               </Route>
 
