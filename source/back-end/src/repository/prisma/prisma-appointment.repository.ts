@@ -283,11 +283,15 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     professionalId?: string,
     serviceIds?: string[]
   ): Promise<GroupedEstimatedTime[]> {
-    const dateFormat = groupBy === 'day'
-      ? '%Y-%m-%d'
-      : groupBy === 'week'
-        ? '%Y-%u'
-        : '%Y-%m'
+    let dateFormat;
+
+    if (groupBy === 'day') {
+      dateFormat = '%Y-%m-%d';
+    } else if (groupBy === 'week') {
+      dateFormat = '%Y-%u';
+    } else {
+      dateFormat = '%Y-%m';
+    }
 
     let query = `
       SELECT 

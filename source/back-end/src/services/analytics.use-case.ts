@@ -1,12 +1,11 @@
-import { type AppointmentRepository } from '@/repository/protocols/appointment.repository'
+import { type AppointmentRepository, type GroupingPeriod } from '@/repository/protocols/appointment.repository'
 import { type OfferRepository } from '@/repository/protocols/offer.repository'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 import { type RatingRepository } from '@/repository/protocols/rating.repository'
 import { type ServiceRepository } from '@/repository/protocols/service.repository'
 import { type PublicProfessionalInfo } from '@/types/analytics'
 import { CustomError } from '@/utils/errors/custom.error.util'
-import { Offer, Status } from '@prisma/client'
-import { type GroupingPeriod } from '@/repository/protocols/appointment.repository'
+import { Status } from '@prisma/client'
 
 class AnalyticsUseCase {
   constructor(
