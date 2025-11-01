@@ -1,7 +1,17 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithAuth } from '../fetch-base/custom-fetch-base'
 import { API_VARIABLES } from '../../api/config'
-import { Analytics } from './types'
+import {
+  Analytics,
+  FetchAppointmentsCountParams,
+  FetchAppointmentsCountResponse,
+  FetchEstimatedTimeParams,
+  FetchEstimatedTimeResponse,
+  FetchCancelationRateParams,
+  FetchCancelationRateResponse,
+  FetchRatingsCountParams,
+  FetchRatingsCountResponse,
+} from './types'
 
 export const analyticsAPI = createApi({
   reducerPath: 'analytics',
@@ -14,16 +24,65 @@ export const analyticsAPI = createApi({
         method: 'GET',
       }),
     }),
-    fetchAnalyticsByEmployeeId: builder.query<
+    fetchAnalyticsByProfessionalId: builder.query<
       Analytics,
-      { employeeId: string }
+      { professionalId: string }
     >({
-      query: ({ employeeId }) => ({
-        url: API_VARIABLES.ANALYTICS_ENDPOINTS.FETCH_ANALYTICS_BY_EMPLOYEE(
-          employeeId,
+      query: ({ professionalId }) => ({
+        url: API_VARIABLES.ANALYTICS_ENDPOINTS.FETCH_ANALYTICS_BY_PROFESSIONAL(
+          professionalId,
         ),
         method: 'GET',
       }),
     }),
+    fetchAppointmentsCount: builder.query<
+      FetchAppointmentsCountResponse,
+      FetchAppointmentsCountParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.ANALYTICS_ENDPOINTS.FETCH_APPOINTMENTS_COUNT,
+        method: 'POST',
+        body: params,
+      }),
+    }),
+    fetchEstimatedTime: builder.query<
+      FetchEstimatedTimeResponse,
+      FetchEstimatedTimeParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.ANALYTICS_ENDPOINTS.FETCH_ESTIMATED_TIME,
+        method: 'POST',
+        body: params,
+      }),
+    }),
+    fetchCancelationRate: builder.query<
+      FetchCancelationRateResponse,
+      FetchCancelationRateParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.ANALYTICS_ENDPOINTS.FETCH_CANCELATION_RATE,
+        method: 'POST',
+        body: params,
+      }),
+    }),
+    fetchRatingsCount: builder.query<
+      FetchRatingsCountResponse,
+      FetchRatingsCountParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.ANALYTICS_ENDPOINTS.FETCH_RATINGS_COUNT,
+        method: 'GET',
+        params,
+      }),
+    }),
   }),
 })
+
+export const {
+  useFetchAnalyticsQuery,
+  useFetchAnalyticsByProfessionalIdQuery,
+  useFetchAppointmentsCountQuery,
+  useFetchEstimatedTimeQuery,
+  useFetchCancelationRateQuery,
+  useFetchRatingsCountQuery,
+} = analyticsAPI

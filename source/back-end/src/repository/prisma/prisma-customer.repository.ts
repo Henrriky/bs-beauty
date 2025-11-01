@@ -1,8 +1,9 @@
-import { type Customer, type Prisma } from '@prisma/client'
+import { Prisma, type Customer } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type UpdateOrCreateParams, type CustomerRepository } from '../protocols/customer.repository'
 import { type CustomersFilters } from '../../types/customers/customers-filters'
 import { type PaginatedRequest } from '../../types/pagination'
+import { DateTime } from 'luxon'
 
 class PrismaCustomerRepository implements CustomerRepository {
   public async findAll () {
@@ -22,6 +23,14 @@ class PrismaCustomerRepository implements CustomerRepository {
   public async findByEmailOrPhone (email: string, phone: string) {
     const customer = await prismaClient.customer.findFirst({
       where: { OR: [{ email }, { phone }] }
+    })
+
+    return customer
+  }
+
+  public async findByEmail (email: string) {
+    const customer = await prismaClient.customer.findUnique({
+      where: { email }
     })
 
     return customer
@@ -63,6 +72,18 @@ class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
+  public async updateByEmail (email: string, customerData: Prisma.CustomerUpdateInput) {
+    const customer = await prismaClient.customer.update({
+      where: { email },
+      data: {
+        ...customerData,
+        registerCompleted: true
+      }
+    })
+
+    return customer
+  }
+
   public async updateOrCreate (identifiers: UpdateOrCreateParams, data: Prisma.CustomerCreateInput): Promise<Customer> {
     const customerUpdated = await prismaClient.customer.upsert({
       where: {
@@ -71,7 +92,8 @@ class PrismaCustomerRepository implements CustomerRepository {
         id: identifiers.id
       },
       update: {
-        profilePhotoUrl: data.profilePhotoUrl
+        profilePhotoUrl: data.profilePhotoUrl,
+        googleId: data.googleId
       },
       create: {
         ...data
@@ -94,8 +116,8 @@ class PrismaCustomerRepository implements CustomerRepository {
     const skip = (page - 1) * limit
 
     const where = {
-      name: filters.name ? { contains: filters.name } : undefined,
-      email: filters.email ? { contains: filters.email } : undefined
+      name: (filters.name != null) ? { contains: filters.name } : undefined,
+      email: (filters.email != null) ? { contains: filters.email } : undefined
     }
 
     const [data, total] = await Promise.all([
@@ -115,6 +137,35 @@ class PrismaCustomerRepository implements CustomerRepository {
       totalPages: Math.ceil(total / limit),
       limit
     }
+  }
+
+  public async findBirthdayCustomersOnCurrentDate (date: Date, timezone: string): Promise<Customer[]> {
+    const dt = DateTime.fromJSDate(date).setZone(timezone)
+    const mm = dt.toFormat('MM')
+    const dd = dt.toFormat('dd')
+    const isLeapYear = dt.isInLeapYear
+
+    const mmdd = `${mm}-${dd}`
+    const mmddList = (!isLeapYear && mm === '02' && dd === '28')
+      ? ['02-28', '02-29']
+      : [mmdd]
+
+    const rows = await prismaClient.$queryRaw<Array<{ id: string }>>`
+    SELECT id
+    FROM customer
+    WHERE birthdate IS NOT NULL
+      AND DATE_FORMAT(birthdate, '%m-%d') IN (${Prisma.join(mmddList)})
+  `
+
+    const ids = rows.map(r => r.id)
+    if (ids.length === 0) return []
+
+    const customers = await prismaClient.customer.findMany({
+      where: { id: { in: ids } },
+      orderBy: { name: 'asc' }
+    })
+
+    return customers
   }
 }
 

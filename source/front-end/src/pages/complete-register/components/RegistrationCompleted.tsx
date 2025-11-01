@@ -10,7 +10,7 @@ function RegistrationCompleted() {
 
   return (
     <div className="flex justify-center items-center flex-col h-full opacity-0 animate-fadeIn">
-      <div className="flex justify-center items-center flex-col gap-4 mb-16 animate-moveUp">
+      <div className="flex justify-center items-center flex-col gap-4 mb-6 animate-moveUp">
         <Title align="center">Pronto para Começar!</Title>
         <Subtitle align="center">
           Cadastro concluído com sucesso! Agora você já pode começar a utilizar
@@ -22,8 +22,10 @@ function RegistrationCompleted() {
       <Button
         variant="solid"
         label="Ir para o Painel Inicial"
-        onClick={() => navigate(`/${user.userType.toString().toLowerCase()}/home`)}
-        className="animate-moveUp"
+        onClick={() =>
+          navigate(`/${user.userType.toString().toLowerCase()}/home`)
+        }
+        className="animate-moveUp max-w-[500px]"
       />
     </div>
   )

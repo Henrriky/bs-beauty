@@ -6,9 +6,9 @@ import { ErrorMessage } from '../../components/feedback/ErrorMessage'
 import BSBeautyLoading from '../../components/feedback/Loading'
 import Title from '../../components/texts/Title'
 import { customerAPI } from '../../store/customer/customer-api'
-import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
-import UserCard from './components/UserCard'
-import { useEffect } from 'react'
+import { CustomerList } from './components/CustomerList'
+import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
+import { UserType } from '../../store/auth/types'
 
 function Customers() {
   const { data, isLoading, isError, error } =
@@ -39,23 +39,16 @@ function Customers() {
   }
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full flex flex-col">
       <Title align="left">Listagem de clientes</Title>
-      <div className="flex flex-col max-h-[80vh] overflow-y-scroll px-4">
-        {customers &&
-          customers.map((customer) => {
-            return (
-              <>
-                <UserCard
-                  key={customer.id}
-                  title={firstLetterOfWordToUpperCase(customer.name)}
-                  description={customer.email.toLowerCase()}
-                  picture={customer.profilePhotoUrl}
-                />
-              </>
-            )
-          })}
-      </div>
+      <UserCanAccessContainer
+        allowedPermissions={['customer.read']}
+        allowedUserTypes={[UserType.MANAGER]}
+      >
+        <div className="flex flex-col max-h-[80vh] overflow-y-scroll px-4">
+          <CustomerList customers={customers} isLoading={isLoading} />
+        </div>
+      </UserCanAccessContainer>
     </div>
   )
 }

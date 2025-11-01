@@ -11,21 +11,25 @@ import { ListAppointmentsButtonStatus } from './types'
 import { useMemo, useState } from 'react'
 import { Status } from '../../store/appointment/types'
 import Title from '../../components/texts/Title'
+import { authAPI } from '../../store/auth/auth-api'
 
 const userTypeToAppointmentComponents = {
   [UserType.CUSTOMER]: CustomerAppointments,
-  [UserType.EMPLOYEE]: CustomerAppointments,
+  [UserType.PROFESSIONAL]: CustomerAppointments,
   [UserType.MANAGER]: CustomerAppointments,
 }
 
 function Appointments() {
   const [switchButtonStatus, setSwitchButtonStatus] =
     useState<ListAppointmentsButtonStatus>('schedulled')
+
   const user = useAppSelector((state) => state.auth.user!)
+  const selectUserInfo = authAPI.endpoints.fetchUserInfo.select()
+  const userInfoQuery = useAppSelector(selectUserInfo)
+  const displayName = userInfoQuery?.data?.user?.name ?? user.name
 
   const { data, isLoading, isError, error } =
-    appointmentAPI.useFindAppointmentsByCustomerOrEmployeeIdQuery()
-
+    appointmentAPI.useFindAppointmentsByCustomerOrProfessionalIdQuery()
   if (isError) {
     toast.error('Erro ao carregar os agendamentos')
     console.error(error)
@@ -51,22 +55,22 @@ function Appointments() {
     return data.appointments.filter((appointment) =>
       switchButtonStatus === 'schedulled'
         ? schedulledStatuses.has(appointment.status.toString())
-        : finishedStatuses.has(appointment.status.toString())
+        : finishedStatuses.has(appointment.status.toString()),
     )
   }, [data, switchButtonStatus])
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full flex flex-col">
       <header>
         <Title align="left">Agendamentos</Title>
-        <div className="flex flex-col mt-3 mb-6 max-w-[50%]">
+        <div className="flex flex-col mt-3 mb-6 w-3/4 lg:w-full">
           <Subtitle align="left">
-            Olá {user.name},{' '}
+            Olá {displayName},{' '}
             <b className="text-[#A4978A]">
               aqui você pode visualizar seus agendamentos
             </b>
           </Subtitle>
-          <div className="bg-[#595149] w-1/2 h-0.5 mt-2"></div>
+          <div className="bg-[#595149] w-3/4 h-0.5 mt-2"></div>
         </div>
       </header>
       {/* SWITCH BUTTONS */}
