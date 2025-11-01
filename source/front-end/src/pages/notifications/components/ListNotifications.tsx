@@ -154,25 +154,29 @@ function ListNotifications({ params }: { params: Params }) {
         </div>
       )}
 
-      <div className="w-full mb-8 mt-4">
-        <div className="max-h-[500px] overflow-y-auto w-full">
-          <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
-            {notifications.map((n) => (
-              <NotificationItem
-                key={n.id}
-                notification={n}
-                checked={selectedIds.includes(n.id)}
-                onToggle={toggleOne}
-                onOpenDetails={(notif) => {
-                  setSelected(notif)
-                  setOpen(true)
-                }}
-                enableSelection={!isReadTab}
-              />
-            ))}
+      {
+        notifications.length > 0 && (
+          <div className="w-full mb-8 mt-4">
+            <div className="max-h-[500px] overflow-y-auto w-full">
+              <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
+                {notifications.map((n) => (
+                  <NotificationItem
+                    key={n.id}
+                    notification={n}
+                    checked={selectedIds.includes(n.id)}
+                    onToggle={toggleOne}
+                    onOpenDetails={(notif) => {
+                      setSelected(notif)
+                      setOpen(true)
+                    }}
+                    enableSelection={!isReadTab}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        )
+      }
 
       {showEmpty && (
         <p className="text-[#D9D9D9] mb-8 mt-2 text-sm text-center">
