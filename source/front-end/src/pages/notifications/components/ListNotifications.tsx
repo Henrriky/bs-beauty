@@ -105,7 +105,7 @@ function ListNotifications({ params }: { params: Params }) {
 
   return (
     <>
-      {!isReadTab && notifications.length > 0 && (
+      {notifications.length > 0 && (
         <div className="flex items-center gap-2 mt-3 mb-1 justify-end">
           <Button
             label={allSelectedOnPage ? 'Desmarcar' : 'Selecionar'}
@@ -132,14 +132,18 @@ function ListNotifications({ params }: { params: Params }) {
                 role="menu"
                 className="absolute right-0 mt-2 w-56 rounded-md bg-[#1e1e1e] shadow-lg border border-[#333] z-10 overflow-hidden"
               >
-                <button
-                  role="menuitem"
-                  onClick={() => setConfirmMarkOpen(true)}
-                  disabled={isMarking}
-                  className="w-full text-left px-3 py-2 text-sm text-gray-200 hover:bg-[#2a2a2a] disabled:opacity-60"
-                >
-                  Marcar selecionadas como lidas
-                </button>
+                {/* SOMENTE fora da aba READ */}
+                {!isReadTab && (
+                  <button
+                    role="menuitem"
+                    onClick={() => setConfirmMarkOpen(true)}
+                    disabled={isMarking}
+                    className="w-full text-left px-3 py-2 text-sm text-gray-200 hover:bg-[#2a2a2a] disabled:opacity-60"
+                  >
+                    Marcar selecionadas como lidas
+                  </button>
+                )}
+
                 <button
                   role="menuitem"
                   onClick={() => setConfirmDeleteOpen(true)}
@@ -154,29 +158,27 @@ function ListNotifications({ params }: { params: Params }) {
         </div>
       )}
 
-      {
-        notifications.length > 0 && (
-          <div className="w-full mb-8 mt-4">
-            <div className="max-h-[500px] overflow-y-auto w-full">
-              <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
-                {notifications.map((n) => (
-                  <NotificationItem
-                    key={n.id}
-                    notification={n}
-                    checked={selectedIds.includes(n.id)}
-                    onToggle={toggleOne}
-                    onOpenDetails={(notif) => {
-                      setSelected(notif)
-                      setOpen(true)
-                    }}
-                    enableSelection={!isReadTab}
-                  />
-                ))}
-              </div>
+      {notifications.length > 0 && (
+        <div className="w-full mb-8 mt-4">
+          <div className="overflow-y-auto w-full">
+            <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
+              {notifications.map((n) => (
+                <NotificationItem
+                  key={n.id}
+                  notification={n}
+                  checked={selectedIds.includes(n.id)}
+                  onToggle={toggleOne}
+                  onOpenDetails={(notif) => {
+                    setSelected(notif)
+                    setOpen(true)
+                  }}
+                  enableSelection={true}
+                />
+              ))}
             </div>
           </div>
-        )
-      }
+        </div>
+      )}
 
       {showEmpty && (
         <p className="text-[#D9D9D9] mb-8 mt-2 text-sm text-center">

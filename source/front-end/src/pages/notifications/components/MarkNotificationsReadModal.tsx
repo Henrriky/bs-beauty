@@ -1,3 +1,4 @@
+import { CheckCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '../../../components/button/Button'
 import Modal from '../../../components/modal/Modal'
 
@@ -25,20 +26,8 @@ export function MarkNotificationsReadModal({
     >
       <div className="p-6">
         <div className="mb-6">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-900 bg-opacity-20 mb-4">
-            <svg
-              className="h-6 w-6 text-amber-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0Z"
-              />
-            </svg>
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-500 bg-opacity-20 mb-4">
+            <CheckCircleIcon className="h-6 w-6 text-green-400" />
           </div>
           <div className="text-center">
             <h4 className="text-sm font-medium text-primary-0 mb-2">

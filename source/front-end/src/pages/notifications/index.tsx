@@ -27,7 +27,6 @@ function Notifications() {
           </p>
         </div>
 
-        {/* SWITCH BUTTONS */}
         <div className="flex">
           <Button
             label="Todas"
