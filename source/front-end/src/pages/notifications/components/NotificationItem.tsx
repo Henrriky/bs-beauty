@@ -1,5 +1,7 @@
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { startTransition } from 'react'
+import { notificationAPI } from '../../../store/notification/notification-api'
 import { NotificationDTO } from '../../../store/notification/types'
-import { buildDate, buildTitle } from '../utils/format'
 
 interface NotificationItemProps {
   notification: NotificationDTO
@@ -9,20 +11,6 @@ interface NotificationItemProps {
   enableSelection?: boolean
 }
 
-function ReadBadge({ unread }: { unread: boolean }) {
-  return unread ? (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs text-amber-700 bg-amber-100 rounded border-[1px] border-amber-200 border-opacity-25">
-      <span className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
-      Não lida
-    </span>
-  ) : (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs text-green-700 bg-green-100 rounded border-[1px] border-green-200 border-opacity-25">
-      <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-      Lida
-    </span>
-  )
-}
-
 export default function NotificationItem({
   notification,
   onOpenDetails,
@@ -30,9 +18,20 @@ export default function NotificationItem({
   onToggle,
   enableSelection = true,
 }: NotificationItemProps) {
+  const [markRead, { isLoading: isMarking }] =
+    notificationAPI.useMarkNotificationsReadMutation()
+
+  const handleOpen = () => {
+    if (isMarking) return
+    onOpenDetails(notification)
+    startTransition(() => {
+      markRead({ ids: [notification.id] })
+    })
+  }
+
   const isUnread = !notification.readAt
-  const title = buildTitle(notification.message)
-  const date = buildDate(notification.message)
+  const title = notification.title
+  const message = notification.message
 
   return (
     <div className="w-full bg-[#222222] rounded-2xl border-none px-4 py-3">
@@ -50,32 +49,25 @@ export default function NotificationItem({
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-medium text-white truncate">{title}</h3>
         </div>
-
         <button
           type="button"
-          onClick={() => onOpenDetails(notification)}
-          aria-label="Ver detalhes"
-          className="shrink-0 p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
-          title="Ver detalhes"
+          onClick={handleOpen}
+          aria-label={isMarking ? 'Marcando como lida…' : 'Ver detalhes'}
+          className="shrink-0 p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          title={isMarking ? 'Marcando como lida…' : 'Ver detalhes'}
+          disabled={isMarking}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-4 h-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z"
-            />
-          </svg>
+          {isMarking ? (
+            <div className="w-5 h-5 flex items-center justify-center">
+              <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-[#A4978A] rounded-full animate-spin" />
+            </div>
+          ) : (
+            <MagnifyingGlassIcon className="w-5 h-5" />
+          )}
         </button>
       </div>
       <div>
-        <span className="text-sm text-gray-400">Data: {date}</span>
+        <span className="text-sm text-gray-400 line-clamp-2">{message}</span>
       </div>
       <div className="mt-2 sm:hidden">
         <ReadBadge unread={isUnread} />
@@ -84,5 +76,19 @@ export default function NotificationItem({
         <ReadBadge unread={isUnread} />
       </div>
     </div>
+  )
+}
+
+function ReadBadge({ unread }: { unread: boolean }) {
+  return unread ? (
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs text-amber-700 bg-amber-100 rounded border-[1px] border-amber-200 border-opacity-25">
+      <span className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
+      Não lida
+    </span>
+  ) : (
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs text-green-700 bg-green-100 rounded border-[1px] border-green-200 border-opacity-25">
+      <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+      Lida
+    </span>
   )
 }

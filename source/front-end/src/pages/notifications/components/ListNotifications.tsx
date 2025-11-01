@@ -82,12 +82,8 @@ function ListNotifications({ params }: { params: Params }) {
         Erro ao carregar notificações.
       </p>
     )
-  if (!notifications.length)
-    return (
-      <p className="text-[#D9D9D9] mb-8 mt-2 text-sm text-center">
-        Não há notificações.
-      </p>
-    )
+
+  const showEmpty = !notifications.length && !open
 
   return (
     <>
@@ -133,6 +129,12 @@ function ListNotifications({ params }: { params: Params }) {
           </div>
         </div>
       </div>
+
+      {showEmpty && (
+        <p className="text-[#D9D9D9] mb-8 mt-2 text-sm text-center">
+          Não há notificações.
+        </p>
+      )}
 
       <div className="absolute top-0">
         <Modal
