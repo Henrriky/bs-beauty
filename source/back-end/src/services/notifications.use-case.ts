@@ -39,13 +39,6 @@ class NotificationsUseCase {
     return notification
   }
 
-  public async executeDelete (notificationId: string) {
-    await this.executeFindById(notificationId)
-    const deletedNotification = await this.notificationRepository.delete(notificationId)
-
-    return deletedNotification
-  }
-
   public async executeDeleteMany(ids: string[], userId: string) {
     if (ids.length === 0) return { deletedCount: 0 }
     const uniqueIds = [...new Set(ids)]
