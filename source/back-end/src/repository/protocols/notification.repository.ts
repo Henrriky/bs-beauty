@@ -8,6 +8,7 @@ interface NotificationRepository {
   findById: (notificationId: string) => Promise<Notification | null>
   create: (notificationToCreate: Prisma.NotificationCreateInput) => Promise<Notification>
   delete: (notificationId: string) => Promise<Notification>
+  deleteMany: (ids: string[], userId: string) => Promise<number>
   findByMarker: (marker: string) => Promise<Notification | null>
   markManyAsReadForUser: (ids: string[], userId: string) => Promise<number>
 }

@@ -68,6 +68,16 @@ class PrismaNotificationRepository implements NotificationRepository {
     return deletedNotification
   }
 
+  public async deleteMany(ids: string[], userId: string) {
+    const result = await prismaClient.notification.deleteMany({
+      where: {
+        id: { in: ids },
+        recipientId: userId
+      }
+    })
+    return result.count
+  }
+
   public async findByMarker (marker: string) {
     return await prismaClient.notification.findUnique({ where: { marker } })
   }

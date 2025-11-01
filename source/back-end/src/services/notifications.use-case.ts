@@ -46,6 +46,16 @@ class NotificationsUseCase {
     return deletedNotification
   }
 
+  public async executeDeleteMany(ids: string[], userId: string) {
+    if (ids.length === 0) return { deletedCount: 0 }
+    const uniqueIds = [...new Set(ids)]
+    const deletedCount = await this.notificationRepository.deleteMany(uniqueIds, userId)
+    return {
+      success: true,
+      message: `${deletedCount} notifications deleted successfully.`,
+    }
+  }
+
   public async executeSendOnAppointmentCreated (appointment: FindByIdAppointments): Promise<void> {
     const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
 
@@ -158,7 +168,7 @@ class NotificationsUseCase {
           await this.notificationRepository.create({
             recipientId,
             marker,
-            title: `Agendamento cancelado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
+            title: `Agendamento Cancelado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
             message: `Seu agendamento de ${serviceName} com ${professionalName} foi cancelado 
             (data original: ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}).`,
             recipientType: UserType.CUSTOMER,
@@ -197,7 +207,7 @@ class NotificationsUseCase {
           await this.notificationRepository.create({
             recipientId,
             marker,
-            title: `Agendamento cancelado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
+            title: `Agendamento Cancelado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
             message: `Atendimento de ${serviceName} para ${customerName} foi cancelado 
             (data original: ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}).`,
             recipientType: UserType.PROFESSIONAL,
