@@ -126,6 +126,7 @@ const MockNotificationRepository: Mocked<NotificationRepository> = {
   findById: vi.fn(),
   create: vi.fn(),
   delete: vi.fn(),
+  deleteMany: vi.fn(),
   findByMarker: vi.fn(),
   markManyAsReadForUser: vi.fn()
 }
