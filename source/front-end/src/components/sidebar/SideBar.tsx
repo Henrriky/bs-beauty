@@ -40,6 +40,23 @@ function SideBar() {
     .filter((item) => userCanAccess({ user, ...item.authorization }))
     .reverse()
 
+  const renderSidebarItems = () => {
+    return filteredItems.filter((item) =>
+      userCanAccess({ user, ...item.authorization }),
+    )
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      .map((sideBarItem) => (
+        <SideBarItem
+          key={sideBarItem.name}
+          icon={sideBarItem.icon}
+          path={sideBarItem.navigateTo}
+          closeOnClick={false}
+        >
+          {sideBarItem.name}
+        </SideBarItem>
+      ))
+  }
+
   return (
     <>
       <div className="lg:hidden">
@@ -93,21 +110,7 @@ function SideBar() {
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
 
               <ul className="text-primary-200 mt-8 text-[12px]">
-                {sideBarItems
-                  .filter((item) =>
-                    userCanAccess({ user, ...item.authorization }),
-                  )
-                  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-                  .map((sideBarItem) => (
-                    <SideBarItem
-                      toggleSideBar={toggleSideBar}
-                      key={sideBarItem.name}
-                      icon={sideBarItem.icon}
-                      path={sideBarItem.navigateTo}
-                    >
-                      {sideBarItem.name}
-                    </SideBarItem>
-                  ))}
+                {renderSidebarItems()}
               </ul>
             </nav>
 
@@ -140,16 +143,7 @@ function SideBar() {
           <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
 
           <ul className="text-primary-200 mt-6 text-[13px] space-y-1">
-            {filteredItems.map((item) => (
-              <SideBarItem
-                key={item.name}
-                icon={item.icon}
-                path={item.navigateTo}
-                closeOnClick={false}
-              >
-                {item.name}
-              </SideBarItem>
-            ))}
+            {renderSidebarItems()}
           </ul>
         </aside>
 
