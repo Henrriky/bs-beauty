@@ -26,6 +26,8 @@ enum NotificationType {
   APPOINTMENT = 'APPOINTMENT',
 }
 
-export interface MarkManyAsReadRequest { ids: string[] }
+export interface MarkManyNotificationsRequest { ids: string[] }
 
 export interface MarkManyAsReadResponse { updatedCount: number }
+
+export interface DeleteNotificationsResponse { success: boolean; message: string }
