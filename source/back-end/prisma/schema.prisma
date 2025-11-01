@@ -298,8 +298,7 @@ enum DiscoverySource {
 enum NotificationChannel {
   NONE
   IN_APP
-  EMAIL
-  BOTH
+  ALL
 }
 
 enum NotificationType {

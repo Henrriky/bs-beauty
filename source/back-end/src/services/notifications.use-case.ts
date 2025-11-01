@@ -61,8 +61,8 @@ class NotificationsUseCase {
     const professionalMarker = `[Agendamento Criado - PROFISSIONAL - ${appointmentDateISO}]`
 
     const professionalPreference = appointment.offer.professional.notificationPreference ?? 'NONE'
-    const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'BOTH'
-    const shouldNotifyEmail = professionalPreference === 'EMAIL' || professionalPreference === 'BOTH'
+    const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
+    const shouldNotifyEmail = professionalPreference === 'ALL'
 
     const alreadyExists = await this.notificationRepository.findByMarker(marker)
     if (!alreadyExists) {
@@ -104,8 +104,8 @@ class NotificationsUseCase {
     const customerEmail = appointment.customer.email
 
     const preference = appointment.customer.notificationPreference ?? 'NONE'
-    const shouldNotifyInApp = preference === 'IN_APP' || preference === 'BOTH'
-    const shouldNotifyEmail = preference === 'EMAIL' || preference === 'BOTH'
+    const shouldNotifyInApp = preference === 'IN_APP' || preference === 'ALL'
+    const shouldNotifyEmail = preference === 'ALL'
 
     const alreadyExists = await this.notificationRepository.findByMarker(marker)
 
@@ -155,8 +155,8 @@ class NotificationsUseCase {
       const marker = `appointment:${appointment.id}:cancelled:recipient:${recipientId}`
 
       const customerPreference = appointment.customer.notificationPreference ?? 'NONE'
-      const shouldNotifyCustomerInApp = customerPreference === 'IN_APP' || customerPreference === 'BOTH'
-      const shouldNotifyEmail = customerPreference === 'EMAIL' || customerPreference === 'BOTH'
+      const shouldNotifyCustomerInApp = customerPreference === 'IN_APP' || customerPreference === 'ALL'
+      const shouldNotifyEmail = customerPreference === 'ALL'
 
       const alreadyExists = await this.notificationRepository.findByMarker(marker)
       if (!alreadyExists) {
@@ -195,8 +195,8 @@ class NotificationsUseCase {
 
       const alreadyExists = await this.notificationRepository.findByMarker(marker)
       if (!alreadyExists) {
-        const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'BOTH'
-        const shouldNotifyEmail = professionalPreference === 'EMAIL' || professionalPreference === 'BOTH'
+        const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
+        const shouldNotifyEmail = professionalPreference === 'ALL'
 
         if (shouldNotifyProfessionalInApp) {
           await this.notificationRepository.create({
@@ -241,11 +241,10 @@ class NotificationsUseCase {
 
     const shouldNotifyInApp =
       notificationPreference === NotificationChannel.IN_APP ||
-      notificationPreference === NotificationChannel.BOTH
+      notificationPreference === NotificationChannel.ALL
 
     const shouldNotifyEmail =
-      notificationPreference === NotificationChannel.EMAIL ||
-      notificationPreference === NotificationChannel.BOTH
+      notificationPreference === NotificationChannel.ALL
 
     if (shouldNotifyInApp) {
       await this.notificationRepository.create({

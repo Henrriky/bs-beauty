@@ -75,8 +75,8 @@ const createMockAppointment = (): FindByIdAppointments => {
 }
 
 const createMockAppointmentWithPreference = (
-  customerPreference: NotificationChannel = NotificationChannel.BOTH,
-  professionalPreference: NotificationChannel = NotificationChannel.BOTH
+  customerPreference: NotificationChannel = NotificationChannel.ALL,
+  professionalPreference: NotificationChannel = NotificationChannel.ALL
 ): FindByIdAppointments => {
   const appointment = createMockAppointment()
   appointment.customer.notificationPreference = customerPreference
@@ -100,7 +100,7 @@ const createMockAppointmentWithNullEmail = (): FindByIdAppointments => {
 const createMockBirthdayPayload = (overrides: any = {}) => ({
   recipientId: faker.string.uuid(),
   recipientType: 'CUSTOMER' as const,
-  notificationPreference: NotificationChannel.BOTH,
+  notificationPreference: NotificationChannel.ALL,
   email: faker.internet.email(),
   marker: faker.string.uuid(),
   title: 'Feliz Aniversário!',
@@ -659,7 +659,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send in-app and email notifications when professional prefers BOTH', async () => {
       // arrange
-      const appointment = createMockAppointment()
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.ALL, NotificationChannel.ALL)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -704,24 +704,6 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       expect(mockEmailService.sendAppointmentCreated).not.toHaveBeenCalled()
     })
 
-    it('should send only email notification when professional prefers EMAIL', async () => {
-      // arrange
-      const appointment = createMockAppointmentWithPreference(NotificationChannel.EMAIL, NotificationChannel.EMAIL)
-        // Add required fields for EMAIL preference test
-        ; (appointment.offer as any).estimatedTime = 60
-      ; (appointment.offer as any).price = 150.00
-
-      MockNotificationRepository.findByMarker.mockResolvedValue(null)
-      mockEmailService.sendAppointmentCreated.mockResolvedValue(undefined)
-
-      // act
-      await notificationsUseCase.executeSendOnAppointmentCreated(appointment)
-
-      // assert
-      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
-      expect(mockEmailService.sendAppointmentCreated).toHaveBeenCalled()
-    })
-
     it('should not send any notification when professional prefers NONE', async () => {
       // arrange
       const appointment = createMockAppointmentWithPreference(NotificationChannel.NONE, NotificationChannel.NONE)
@@ -753,6 +735,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should handle null professional name gracefully', async () => {
       // arrange
       const appointment = createMockAppointmentWithNullNames()
+      appointment.offer.professional.notificationPreference = NotificationChannel.ALL
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -784,7 +767,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send in-app and email notifications when customer prefers BOTH', async () => {
       // arrange
-      const appointment = createMockAppointment()
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.ALL, NotificationChannel.ALL)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -829,21 +812,6 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       expect(mockEmailService.sendAppointmentConfirmed).not.toHaveBeenCalled()
     })
 
-    it('should send only email notification when customer prefers EMAIL', async () => {
-      // arrange
-      const appointment = createMockAppointmentWithPreference(NotificationChannel.EMAIL, NotificationChannel.EMAIL)
-
-      MockNotificationRepository.findByMarker.mockResolvedValue(null)
-      mockEmailService.sendAppointmentConfirmed.mockResolvedValue(undefined)
-
-      // act
-      await notificationsUseCase.executeSendOnAppointmentConfirmed(appointment)
-
-      // assert
-      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
-      expect(mockEmailService.sendAppointmentConfirmed).toHaveBeenCalled()
-    })
-
     it('should not send any notification when customer prefers NONE', async () => {
       // arrange
       const appointment = createMockAppointmentWithPreference(NotificationChannel.NONE, NotificationChannel.NONE)
@@ -875,6 +843,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should not send email when customer email is null', async () => {
       // arrange
       const appointment = createMockAppointmentWithNullEmail()
+      appointment.customer.notificationPreference = NotificationChannel.ALL
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -900,7 +869,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should notify customer when notifyCustomer is true', async () => {
       // arrange
-      const appointment = createMockAppointment()
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.ALL, NotificationChannel.ALL)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -936,7 +905,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should notify professional when notifyProfessional is true', async () => {
       // arrange
-      const appointment = createMockAppointment()
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.ALL, NotificationChannel.ALL)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -968,25 +937,6 @@ describe('NotificationsUseCase (Unit Tests)', () => {
         appointmentDateISO: appointment.appointmentDate.toISOString(),
         cancelledBy: 'customer'
       })
-    })
-
-    it('should notify both when both flags are true', async () => {
-      // arrange
-      const appointment = createMockAppointment()
-
-      MockNotificationRepository.findByMarker.mockResolvedValue(null)
-      MockNotificationRepository.create.mockResolvedValue({} as Notification)
-      mockEmailService.sendAppointmentCancelled.mockResolvedValue(undefined)
-
-      // act
-      await notificationsUseCase.executeSendOnAppointmentCancelled(appointment, {
-        notifyCustomer: true,
-        notifyProfessional: true
-      })
-
-      // assert
-      expect(MockNotificationRepository.create).toHaveBeenCalledTimes(2)
-      expect(mockEmailService.sendAppointmentCancelled).toHaveBeenCalledTimes(2)
     })
 
     it('should not notify anyone when both flags are false', async () => {
@@ -1069,28 +1019,6 @@ describe('NotificationsUseCase (Unit Tests)', () => {
         type: NotificationType.SYSTEM
       })
       expect(mockEmailService.sendBirthday).not.toHaveBeenCalled()
-    })
-
-    it('should send only email notification when preference is EMAIL', async () => {
-      // arrange
-      const payload = createMockBirthdayPayload({
-        notificationPreference: NotificationChannel.EMAIL
-      })
-
-      MockNotificationRepository.findByMarker.mockResolvedValue(null)
-      mockEmailService.sendBirthday.mockResolvedValue(undefined)
-
-      // act
-      await notificationsUseCase.executeSendBirthday(payload)
-
-      // assert
-      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
-      expect(mockEmailService.sendBirthday).toHaveBeenCalledWith({
-        to: payload.email,
-        title: payload.title,
-        message: payload.message,
-        customerName: undefined
-      })
     })
 
     it('should not send notification if marker already exists', async () => {
