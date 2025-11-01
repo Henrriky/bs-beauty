@@ -6,7 +6,20 @@ Para o projeto, foi adotada a metodologia Scrum \cite{scrum-2024} voltada tanto 
 
 \subsection{Scrum}
 
-O \textit{framework} Scrum foi escolhido por ter sido bastante estudado em disciplinas anteriores e também devido à equipe já ter uma certa familiaridade em trabalhar com ele. A metodologia foi adaptada de forma a incorporar alguns elementos do \emph{Kanban} \cite{kanban-2023} a fim de ter um sistema visual para monitorar as atividades em andamento.
+O \textit{framework} Scrum foi escolhido por ter sido bastante estudado em disciplinas anteriores e também devido à equipe já ter uma certa familiaridade em trabalhar com ele. Além disso, para possibilitar a aplicação da metodologia, foi utilizado o Taiga \cite{taiga-2025}, uma ferramenta \textit{open-source} voltada justamente para gerenciamento de projetos.
+
+Com o Taiga, foi possível aplicar os elementos do Scrum, como a definição de papéis dos integrantes do grupo, a criação e refinamento do \textit{product backlog} e o estabelecimento dos \textit{sprints} a serem trabalhados.
+
+O Taiga também conta com elementos do \emph{Kanban} \cite{kanban-2023} que, nesse projeto, foram incorporados à metodologia Scrum. Esses recursos incluem:
+
+\begin{itemize}
+	\item Criação de quadros separados para cada sprint voltados ao monitoramento das tarefas definidas;
+	\item Estabelecimento de colunas dentro dos quadros para indicar os estágios das tarefas (“a fazer”, “em andamento”, “concluído” ou “em revisão”);
+	\item Representação de tarefas na forma de cartões, contendo informações como o responsável pela tarefa, seu prazo de conclusão e descrição, que são transitados entre as colunas dos quadros;
+	\item Aplicação de \textit{swimlanes} nos quadros para agrupar tarefas relacionadas de acordo com as \textit{user stories}.
+\end{itemize}
+
+Dessa forma, a integração entre \emph{Kanban} e \emph{Scrum} foi benéfica para a equipe, haja vista que permitiu uma melhor visualização do fluxo de trabalho e andamento do \textit{sprint} trabalhado, além de possibilitar a identificação de dependências entre as tarefas.
 
 Tendo em mente as responsabilidades provenientes do Scrum, o Quadro \ref{frame:papeis-scrum} descreve como os membros do grupo foram distribuídos seguindo os papéis da metodologia.
 
@@ -35,13 +48,9 @@ Tendo em mente as responsabilidades provenientes do Scrum, o Quadro \ref{frame:p
 	\end{center}
 \end{quadro}
 
-A plataforma \emph{Notion} \cite{notion-2025} teve um papel significativo na implementação do Scrum: por meio dela, criou-se um espaço de trabalho para registrar o \textit{product backlog}, os \textit{sprints} e suas respectivas tarefas.
-
-Com essa ferramenta, ainda foi possível atribuir informações --- como prioridade, \textit{status}, prazos e responsáveis --- para cada atividade, além de criar visualizações para simular as colunas e cartões do \emph{Kanban}, criando uma estrutura organizada e informativa que facilitou o gerenciamento do projeto.
-
 \subsubsection{\emph{Sprints}}
 
-Para o desenvolvimento do sistema, foram determinados \textit{sprints} quinzenais que se iniciam na segunda-feira da primeira semana do \textit{sprint} e terminam na sexta-feira da segunda semana. Com essas duas semanas garante-se que a equipe tenha tempo suficiente para desenvolver as funcionalidades do sistema, permitindo entregas incrementais significativas.
+Para o desenvolvimento do projeto, foram determinados \textit{sprints} semanais que se iniciam na quarta-feira e terminam na terça-feira da outra semana. Com esse período de tempo, garante-se que a equipe realize entregas incrementais continuamente.
 
 Dessa forma, os \textit{sprints} e suas tarefas específicas foram definidos ao longo do desenvolvimento com base nos itens do \textit{product backlog}, que por sua vez foram estabelecidos a partir das histórias de usuário levantadas junto à entidade parceira do projeto.
 

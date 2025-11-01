@@ -1,0 +1,13 @@
+2024-10-20|Início do Projeto de SPOENG4
+2024-10-25|Modelagem de Dados
+2024-11-02|Implementação do Back-end
+2024-11-19|Implementação Inicial do Front-end
+2024-12-11|FÉRIAS :D
+2025-01-12|Implementação Final do Front-end
+2025-02-12|Fim de SPOENG4
+2025-04-14|Início do Projeto de SPOPIE1
+2025-04-29|Início da Documentação
+2025-05-07|Reestruturação do Repositório
+2025-05-29|Desenvolvimento da Documentação
+2025-06-14|Ajustes Finais no MVP e Repositório
+2025-07-07|Fim de SPOPIE1
