@@ -101,7 +101,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -152,7 +152,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -281,7 +281,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -351,7 +351,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -417,7 +417,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
           paymentMethods: [],
           passwordHash: faker.internet.password(),
           createdAt: faker.date.past(),
-          notificationPreference: NotificationChannel.BOTH,
+          notificationPreference: NotificationChannel.ALL,
           updatedAt: faker.date.past()
         }
 
@@ -466,7 +466,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
           googleId: null,
           paymentMethods: [],
           passwordHash: faker.internet.password(),
-          notificationPreference: NotificationChannel.BOTH,
+          notificationPreference: NotificationChannel.ALL,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }
@@ -516,7 +516,7 @@ describe('ServicesUseCase (Unit Tests)', () => {
           googleId: null,
           paymentMethods: [],
           passwordHash: faker.internet.password(),
-          notificationPreference: NotificationChannel.BOTH,
+          notificationPreference: NotificationChannel.ALL,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }

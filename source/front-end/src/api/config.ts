@@ -88,6 +88,7 @@ export const API_VARIABLES = {
   NOTIFICATIONS_ENDPOINTS: {
     FETCH_NOTIFICATIONS: '/notifications',
     MARK_MANY_AS_READ: '/notifications/read',
+    DELETE_NOTIFICATIONS: '/notifications',
   },
   NOTIFICATION_TEMPLATES_ENDPOINTS: {
     FETCH_NOTIFICATION_TEMPLATES: '/notification-templates',

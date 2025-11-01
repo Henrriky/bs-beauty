@@ -70,6 +70,12 @@ class DateFormatter {
 
     return days[date.getDay()]
   }
+
+  public static formatDateToLocaleString = (date: Date): string => {
+    if (!date || isNaN(date.getTime())) return ''
+
+    return DateTime.fromJSDate(date).toFormat('dd/LL/yyyy - HH:mm')
+  }
 }
 
 export { DateFormatter }

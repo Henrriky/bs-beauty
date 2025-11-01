@@ -16,7 +16,7 @@ ALTER TABLE `notification` DROP FOREIGN KEY `notification_appointment_id_fkey`;
 DROP INDEX `notification_appointment_id_fkey` ON `notification`;
 
 -- AlterTable
-ALTER TABLE `customer` ADD COLUMN `notification_preference` ENUM('NONE', 'IN_APP', 'EMAIL', 'BOTH') NULL DEFAULT 'NONE';
+ALTER TABLE `customer` ADD COLUMN `notification_preference` ENUM('NONE', 'IN_APP', 'ALL') NULL DEFAULT 'NONE';
 
 -- AlterTable
 ALTER TABLE `notification` DROP COLUMN `appointment_id`,
@@ -28,7 +28,7 @@ ALTER TABLE `notification` DROP COLUMN `appointment_id`,
     MODIFY `message` TEXT NOT NULL;
 
 -- AlterTable
-ALTER TABLE `professional` ADD COLUMN `notification_preference` ENUM('NONE', 'IN_APP', 'EMAIL', 'BOTH') NULL DEFAULT 'NONE';
+ALTER TABLE `professional` ADD COLUMN `notification_preference` ENUM('NONE', 'IN_APP', 'ALL') NULL DEFAULT 'NONE';
 
 -- CreateIndex
 CREATE UNIQUE INDEX `notification_marker_key` ON `notification`(`marker`);

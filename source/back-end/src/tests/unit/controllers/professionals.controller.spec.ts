@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { type Professional, type Prisma } from '@prisma/client'
+import { type Professional, type Prisma, NotificationChannel } from '@prisma/client'
 import { StatusCodes } from 'http-status-codes'
 import { makeProfessionalsUseCaseFactory } from '../../../factory/make-professionals-use-case.factory'
 import { ProfessionalsController } from '../../../controllers/professionals.controller'
@@ -110,7 +110,7 @@ describe('ProfessionalsController', () => {
         specialization: null,
         profilePhotoUrl: null,
         userType: 'MANAGER',
-        notificationPreference: 'BOTH',
+        notificationPreference: NotificationChannel.ALL,
         createdAt: new Date(),
         updatedAt: new Date()
       }

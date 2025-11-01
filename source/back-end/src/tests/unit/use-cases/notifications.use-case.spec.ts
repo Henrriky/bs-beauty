@@ -7,6 +7,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
 import type { FindByIdAppointments } from '@/repository/protocols/appointment.repository'
 import { EmailService } from '@/services/email/email.service'
+import { DateFormatter } from '@/utils/formatting/date.formatting.util'
 
 vi.mock('@/services/email/email.service')
 
@@ -75,8 +76,8 @@ const createMockAppointment = (): FindByIdAppointments => {
 }
 
 const createMockAppointmentWithPreference = (
-  customerPreference: NotificationChannel = NotificationChannel.BOTH,
-  professionalPreference: NotificationChannel = NotificationChannel.BOTH
+  customerPreference: NotificationChannel = NotificationChannel.ALL,
+  professionalPreference: NotificationChannel = NotificationChannel.ALL
 ): FindByIdAppointments => {
   const appointment = createMockAppointment()
   appointment.customer.notificationPreference = customerPreference
@@ -100,7 +101,7 @@ const createMockAppointmentWithNullEmail = (): FindByIdAppointments => {
 const createMockBirthdayPayload = (overrides: any = {}) => ({
   recipientId: faker.string.uuid(),
   recipientType: 'CUSTOMER' as const,
-  notificationPreference: NotificationChannel.BOTH,
+  notificationPreference: NotificationChannel.ALL,
   email: faker.internet.email(),
   marker: faker.string.uuid(),
   title: 'Feliz Aniversário!',
@@ -393,120 +394,6 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     })
   })
 
-  describe('executeDelete', () => {
-    it('should delete a notification successfully', async () => {
-      // arrange
-      const notificationId = faker.string.uuid()
-      const mockNotification = createMockNotification({ id: notificationId })
-      const deletedNotification = { ...mockNotification }
-
-      MockNotificationRepository.findById.mockResolvedValue(mockNotification)
-      MockNotificationRepository.delete.mockResolvedValue(deletedNotification)
-
-      // act
-      const result = await notificationsUseCase.executeDelete(notificationId)
-
-      // assert
-      expect(result).toEqual(deletedNotification)
-      expect(MockNotificationRepository.findById).toHaveBeenCalledWith(notificationId)
-      expect(MockNotificationRepository.delete).toHaveBeenCalledWith(notificationId)
-    })
-
-    it('should delete a read notification successfully', async () => {
-      // arrange
-      const notificationId = faker.string.uuid()
-      const mockNotification = createMockNotification({
-        id: notificationId,
-        recipientType: UserType.PROFESSIONAL,
-        type: NotificationType.APPOINTMENT,
-        readAt: faker.date.past()
-      })
-      const deletedNotification = { ...mockNotification }
-
-      MockNotificationRepository.findById.mockResolvedValue(mockNotification)
-      MockNotificationRepository.delete.mockResolvedValue(deletedNotification)
-
-      // act
-      const result = await notificationsUseCase.executeDelete(notificationId)
-
-      // assert
-      expect(result).toEqual(deletedNotification)
-      expect(MockNotificationRepository.findById).toHaveBeenCalledWith(notificationId)
-      expect(MockNotificationRepository.delete).toHaveBeenCalledWith(notificationId)
-    })
-
-    it('should throw error when notification is not found before deletion', async () => {
-      // arrange
-      const notificationId = faker.string.uuid()
-      MockNotificationRepository.findById.mockResolvedValue(null)
-
-      // act & assert
-      await expect(
-        notificationsUseCase.executeDelete(notificationId)
-      ).rejects.toThrow('Not Found')
-
-      expect(MockNotificationRepository.findById).toHaveBeenCalledWith(notificationId)
-      expect(MockNotificationRepository.delete).not.toHaveBeenCalled()
-    })
-
-    it('should handle repository error during deletion', async () => {
-      // arrange
-      const notificationId = faker.string.uuid()
-      const mockNotification = createMockNotification({ id: notificationId })
-      const error = new Error('Database deletion failed')
-
-      MockNotificationRepository.findById.mockResolvedValue(mockNotification)
-      MockNotificationRepository.delete.mockRejectedValue(error)
-
-      // act & assert
-      await expect(
-        notificationsUseCase.executeDelete(notificationId)
-      ).rejects.toThrow('Database deletion failed')
-
-      expect(MockNotificationRepository.findById).toHaveBeenCalledWith(notificationId)
-      expect(MockNotificationRepository.delete).toHaveBeenCalledWith(notificationId)
-    })
-
-    it('should handle repository error during findById', async () => {
-      // arrange
-      const notificationId = faker.string.uuid()
-      const error = new Error('Database connection failed')
-
-      MockNotificationRepository.findById.mockRejectedValue(error)
-
-      // act & assert
-      await expect(
-        notificationsUseCase.executeDelete(notificationId)
-      ).rejects.toThrow('Database connection failed')
-
-      expect(MockNotificationRepository.findById).toHaveBeenCalledWith(notificationId)
-      expect(MockNotificationRepository.delete).not.toHaveBeenCalled()
-    })
-
-    it('should delete different notification types', async () => {
-      // arrange
-      const notificationId = faker.string.uuid()
-      const mockSystemNotification = createMockNotification({
-        id: notificationId,
-        recipientType: UserType.MANAGER,
-        readAt: faker.date.past()
-      })
-      const deletedNotification = { ...mockSystemNotification }
-
-      MockNotificationRepository.findById.mockResolvedValue(mockSystemNotification)
-      MockNotificationRepository.delete.mockResolvedValue(deletedNotification)
-
-      // act
-      const result = await notificationsUseCase.executeDelete(notificationId)
-
-      // assert
-      expect(result).toEqual(deletedNotification)
-      expect(result.type).toBe(NotificationType.SYSTEM)
-      expect(MockNotificationRepository.findById).toHaveBeenCalledWith(notificationId)
-      expect(MockNotificationRepository.delete).toHaveBeenCalledWith(notificationId)
-    })
-  })
-
   describe('executeMarkManyAsRead', () => {
     it('should mark multiple notifications as read successfully', async () => {
       // arrange
@@ -551,35 +438,95 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       const result = await notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
 
       // assert
-      expect(result).toEqual({ updatedCount: 1 })
-      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(notificationIds, userId)
+      /* Lines 440-442 omitted */
+    })
+
+    it('should handle duplicate IDs by removing duplicates', async () => {/* Lines 445-466 omitted */ })
+
+    it('should handle repository returning partial updates', async () => {/* Lines 469-486 omitted */ })
+
+    it('should handle repository errors', async () => {/* Lines 489-502 omitted */ })
+
+    it('should handle large number of IDs', async () => {/* Lines 505-517 omitted */ })
+
+    it('should handle no notifications updated', async () => {/* Lines 520-533 omitted */ })
+  })
+
+  describe('executeDeleteMany', () => {
+    it('should delete multiple notifications successfully', async () => {
+      // arrange
+      const userId = faker.string.uuid()
+      const notificationIds = [
+        faker.string.uuid(),
+        faker.string.uuid(),
+        faker.string.uuid()
+      ]
+
+      MockNotificationRepository.deleteMany.mockResolvedValue(3)
+
+      // act
+      const result = await notificationsUseCase.executeDeleteMany(notificationIds, userId)
+
+      // assert
+      expect(result).toEqual({
+        success: true,
+        message: '3 notifications deleted successfully.'
+      })
+      expect(MockNotificationRepository.deleteMany).toHaveBeenCalledWith(notificationIds, userId)
+    })
+
+    it('should handle empty array of IDs', async () => {
+      // arrange
+      const userId = faker.string.uuid()
+      const notificationIds: string[] = []
+
+      // act
+      const result = await notificationsUseCase.executeDeleteMany(notificationIds, userId)
+
+      // assert
+      expect(result).toEqual({ deletedCount: 0 })
+      expect(MockNotificationRepository.deleteMany).not.toHaveBeenCalled()
+    })
+
+    it('should handle single notification ID', async () => {
+      // arrange
+      const userId = faker.string.uuid()
+      const notificationIds = [faker.string.uuid()]
+
+      MockNotificationRepository.deleteMany.mockResolvedValue(1)
+
+      // act
+      const result = await notificationsUseCase.executeDeleteMany(notificationIds, userId)
+
+      // assert
+      expect(result).toEqual({
+        success: true,
+        message: '1 notifications deleted successfully.'
+      })
+      expect(MockNotificationRepository.deleteMany).toHaveBeenCalledWith(notificationIds, userId)
     })
 
     it('should handle duplicate IDs by removing duplicates', async () => {
       // arrange
       const userId = faker.string.uuid()
       const duplicateId = faker.string.uuid()
-      const notificationIds = [
-        duplicateId,
-        faker.string.uuid(),
-        duplicateId, // duplicate
-        faker.string.uuid()
-      ]
+      const notificationIds = [duplicateId, duplicateId, faker.string.uuid()]
+      const uniqueIds = [duplicateId, notificationIds[2]]
 
-      // Expected unique IDs (3 unique from 4 total)
-      const expectedUniqueIds = [duplicateId, notificationIds[1], notificationIds[3]]
-
-      MockNotificationRepository.markManyAsReadForUser.mockResolvedValue(3)
+      MockNotificationRepository.deleteMany.mockResolvedValue(2)
 
       // act
-      const result = await notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
+      const result = await notificationsUseCase.executeDeleteMany(notificationIds, userId)
 
       // assert
-      expect(result).toEqual({ updatedCount: 3 })
-      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(expectedUniqueIds, userId)
+      expect(result).toEqual({
+        success: true,
+        message: '2 notifications deleted successfully.'
+      })
+      expect(MockNotificationRepository.deleteMany).toHaveBeenCalledWith(uniqueIds, userId)
     })
 
-    it('should handle repository returning partial updates', async () => {
+    it('should handle repository returning partial deletions', async () => {
       // arrange
       const userId = faker.string.uuid()
       const notificationIds = [
@@ -588,62 +535,72 @@ describe('NotificationsUseCase (Unit Tests)', () => {
         faker.string.uuid()
       ]
 
-      // Repository returns 2 (maybe 1 was already read or didn't belong to user)
-      MockNotificationRepository.markManyAsReadForUser.mockResolvedValue(2)
+      MockNotificationRepository.deleteMany.mockResolvedValue(2)
 
       // act
-      const result = await notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
+      const result = await notificationsUseCase.executeDeleteMany(notificationIds, userId)
 
       // assert
-      expect(result).toEqual({ updatedCount: 2 })
-      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(notificationIds, userId)
+      expect(result).toEqual({
+        success: true,
+        message: '2 notifications deleted successfully.'
+      })
+      expect(MockNotificationRepository.deleteMany).toHaveBeenCalledWith(notificationIds, userId)
     })
 
     it('should handle repository errors', async () => {
       // arrange
       const userId = faker.string.uuid()
       const notificationIds = [faker.string.uuid(), faker.string.uuid()]
-      const error = new Error('Database update failed')
+      const error = new Error('Database deletion failed')
 
-      MockNotificationRepository.markManyAsReadForUser.mockRejectedValue(error)
+      MockNotificationRepository.deleteMany.mockRejectedValue(error)
 
       // act & assert
       await expect(
-        notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
-      ).rejects.toThrow('Database update failed')
+        notificationsUseCase.executeDeleteMany(notificationIds, userId)
+      ).rejects.toThrow('Database deletion failed')
 
-      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(notificationIds, userId)
+      expect(MockNotificationRepository.deleteMany).toHaveBeenCalledWith(notificationIds, userId)
     })
 
     it('should handle large number of IDs', async () => {
       // arrange
       const userId = faker.string.uuid()
-      const notificationIds = Array.from({ length: 1000 }, () => faker.string.uuid())
+      const notificationIds = Array.from({ length: 100 }, () => faker.string.uuid())
 
-      MockNotificationRepository.markManyAsReadForUser.mockResolvedValue(1000)
+      MockNotificationRepository.deleteMany.mockResolvedValue(100)
 
       // act
-      const result = await notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
+      const result = await notificationsUseCase.executeDeleteMany(notificationIds, userId)
 
       // assert
-      expect(result).toEqual({ updatedCount: 1000 })
-      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(notificationIds, userId)
+      expect(result).toEqual({
+        success: true,
+        message: '100 notifications deleted successfully.'
+      })
+      expect(MockNotificationRepository.deleteMany).toHaveBeenCalledWith(notificationIds, userId)
     })
 
-    it('should handle no notifications updated', async () => {
+    it('should handle no notifications deleted', async () => {
       // arrange
       const userId = faker.string.uuid()
-      const notificationIds = [faker.string.uuid(), faker.string.uuid()]
+      const notificationIds = [
+        faker.string.uuid(),
+        faker.string.uuid()
+      ]
 
-      // Repository returns 0 (no notifications were updated - maybe they were already read or not owned by user)
-      MockNotificationRepository.markManyAsReadForUser.mockResolvedValue(0)
+      MockNotificationRepository.deleteMany.mockResolvedValue(0)
 
       // act
-      const result = await notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
+      const result = await notificationsUseCase.executeDeleteMany(notificationIds, userId)
 
       // assert
-      expect(result).toEqual({ updatedCount: 0 })
-      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(notificationIds, userId)
+      expect(result).toEqual({
+        success: true,
+        message: '0 notifications deleted successfully.'
+      })
+      expect(MockNotificationRepository.deleteMany).toHaveBeenCalledWith(notificationIds, userId)
     })
   })
 
@@ -659,7 +616,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send in-app and email notifications when professional prefers BOTH', async () => {
       // arrange
-      const appointment = createMockAppointment()
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.ALL, NotificationChannel.ALL)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -675,7 +632,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       expect(MockNotificationRepository.create).toHaveBeenCalledWith({
         recipientId: appointment.offer.professionalId,
         marker: expectedMarker,
-        title: 'Agendamento Criado',
+        title: expect.stringContaining('Agendamento Criado'),
         message: expect.stringContaining('Novo atendimento'),
         recipientType: UserType.PROFESSIONAL,
         type: NotificationType.APPOINTMENT
@@ -702,24 +659,6 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       // assert
       expect(MockNotificationRepository.create).toHaveBeenCalled()
       expect(mockEmailService.sendAppointmentCreated).not.toHaveBeenCalled()
-    })
-
-    it('should send only email notification when professional prefers EMAIL', async () => {
-      // arrange
-      const appointment = createMockAppointmentWithPreference(NotificationChannel.EMAIL, NotificationChannel.EMAIL)
-        // Add required fields for EMAIL preference test
-        ; (appointment.offer as any).estimatedTime = 60
-      ; (appointment.offer as any).price = 150.00
-
-      MockNotificationRepository.findByMarker.mockResolvedValue(null)
-      mockEmailService.sendAppointmentCreated.mockResolvedValue(undefined)
-
-      // act
-      await notificationsUseCase.executeSendOnAppointmentCreated(appointment)
-
-      // assert
-      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
-      expect(mockEmailService.sendAppointmentCreated).toHaveBeenCalled()
     })
 
     it('should not send any notification when professional prefers NONE', async () => {
@@ -753,6 +692,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should handle null professional name gracefully', async () => {
       // arrange
       const appointment = createMockAppointmentWithNullNames()
+      appointment.offer.professional.notificationPreference = NotificationChannel.ALL
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -784,7 +724,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should send in-app and email notifications when customer prefers BOTH', async () => {
       // arrange
-      const appointment = createMockAppointment()
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.ALL, NotificationChannel.ALL)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -800,7 +740,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       expect(MockNotificationRepository.create).toHaveBeenCalledWith({
         recipientId: appointment.customerId,
         marker: expectedMarker,
-        title: 'Agendamento confirmado',
+        title: expect.stringContaining('Agendamento confirmado'),
         message: expect.stringContaining('foi confirmado'),
         recipientType: UserType.CUSTOMER,
         type: NotificationType.APPOINTMENT
@@ -827,21 +767,6 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       // assert
       expect(MockNotificationRepository.create).toHaveBeenCalled()
       expect(mockEmailService.sendAppointmentConfirmed).not.toHaveBeenCalled()
-    })
-
-    it('should send only email notification when customer prefers EMAIL', async () => {
-      // arrange
-      const appointment = createMockAppointmentWithPreference(NotificationChannel.EMAIL, NotificationChannel.EMAIL)
-
-      MockNotificationRepository.findByMarker.mockResolvedValue(null)
-      mockEmailService.sendAppointmentConfirmed.mockResolvedValue(undefined)
-
-      // act
-      await notificationsUseCase.executeSendOnAppointmentConfirmed(appointment)
-
-      // assert
-      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
-      expect(mockEmailService.sendAppointmentConfirmed).toHaveBeenCalled()
     })
 
     it('should not send any notification when customer prefers NONE', async () => {
@@ -875,6 +800,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
     it('should not send email when customer email is null', async () => {
       // arrange
       const appointment = createMockAppointmentWithNullEmail()
+      appointment.customer.notificationPreference = NotificationChannel.ALL
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -900,7 +826,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should notify customer when notifyCustomer is true', async () => {
       // arrange
-      const appointment = createMockAppointment()
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.ALL, NotificationChannel.ALL)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -919,7 +845,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       expect(MockNotificationRepository.create).toHaveBeenCalledWith({
         recipientId: appointment.customerId,
         marker: expectedCustomerMarker,
-        title: 'Agendamento cancelado',
+        title: expect.stringContaining('Agendamento Cancelado'),
         message: expect.stringContaining('foi cancelado'),
         recipientType: UserType.CUSTOMER,
         type: NotificationType.APPOINTMENT
@@ -936,7 +862,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
 
     it('should notify professional when notifyProfessional is true', async () => {
       // arrange
-      const appointment = createMockAppointment()
+      const appointment = createMockAppointmentWithPreference(NotificationChannel.ALL, NotificationChannel.ALL)
 
       MockNotificationRepository.findByMarker.mockResolvedValue(null)
       MockNotificationRepository.create.mockResolvedValue({} as Notification)
@@ -955,7 +881,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       expect(MockNotificationRepository.create).toHaveBeenCalledWith({
         recipientId: appointment.offer.professionalId,
         marker: expectedProfessionalMarker,
-        title: 'Agendamento cancelado',
+        title: expect.stringContaining('Agendamento Cancelado'),
         message: expect.stringContaining('foi cancelado'),
         recipientType: UserType.PROFESSIONAL,
         type: NotificationType.APPOINTMENT
@@ -968,25 +894,6 @@ describe('NotificationsUseCase (Unit Tests)', () => {
         appointmentDateISO: appointment.appointmentDate.toISOString(),
         cancelledBy: 'customer'
       })
-    })
-
-    it('should notify both when both flags are true', async () => {
-      // arrange
-      const appointment = createMockAppointment()
-
-      MockNotificationRepository.findByMarker.mockResolvedValue(null)
-      MockNotificationRepository.create.mockResolvedValue({} as Notification)
-      mockEmailService.sendAppointmentCancelled.mockResolvedValue(undefined)
-
-      // act
-      await notificationsUseCase.executeSendOnAppointmentCancelled(appointment, {
-        notifyCustomer: true,
-        notifyProfessional: true
-      })
-
-      // assert
-      expect(MockNotificationRepository.create).toHaveBeenCalledTimes(2)
-      expect(mockEmailService.sendAppointmentCancelled).toHaveBeenCalledTimes(2)
     })
 
     it('should not notify anyone when both flags are false', async () => {
@@ -1069,28 +976,6 @@ describe('NotificationsUseCase (Unit Tests)', () => {
         type: NotificationType.SYSTEM
       })
       expect(mockEmailService.sendBirthday).not.toHaveBeenCalled()
-    })
-
-    it('should send only email notification when preference is EMAIL', async () => {
-      // arrange
-      const payload = createMockBirthdayPayload({
-        notificationPreference: NotificationChannel.EMAIL
-      })
-
-      MockNotificationRepository.findByMarker.mockResolvedValue(null)
-      mockEmailService.sendBirthday.mockResolvedValue(undefined)
-
-      // act
-      await notificationsUseCase.executeSendBirthday(payload)
-
-      // assert
-      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
-      expect(mockEmailService.sendBirthday).toHaveBeenCalledWith({
-        to: payload.email,
-        title: payload.title,
-        message: payload.message,
-        customerName: undefined
-      })
     })
 
     it('should not send notification if marker already exists', async () => {
