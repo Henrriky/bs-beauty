@@ -63,6 +63,14 @@ class ProfessionalSchemas {
         .string({ required_error: 'O e-mail é obrigatório' })
         .email('Formato de e-mail inválido.'),
       userType: z.enum(['MANAGER', 'PROFESSIONAL']).optional(),
+      isCommissioned: z.boolean(),
+      commissionPercentage: z
+        .number({
+          invalid_type_error: 'A porcentagem deve ser um número',
+        })
+        .min(0, 'A porcentagem não pode ser negativa')
+        .max(100, 'A porcentagem não pode ser maior que 100')
+        .optional(),
     })
     .strict()
 
@@ -78,7 +86,7 @@ class ProfessionalSchemas {
         .optional(),
       userType: z.enum(['MANAGER', 'PROFESSIONAL']).optional(),
       specialization: SharedSchemas.specializationSchema,
-      notificationPreference: SharedSchemas.notificationPreference
+      notificationPreference: SharedSchemas.notificationPreference,
     })
     .strict()
 
@@ -93,7 +101,7 @@ class ProfessionalSchemas {
         .refine((value) => RegexPatterns.phone.test(value))
         .optional(),
       specialization: SharedSchemas.specializationSchema,
-      notificationPreference: SharedSchemas.notificationPreference
+      notificationPreference: SharedSchemas.notificationPreference,
     })
     .strict()
 

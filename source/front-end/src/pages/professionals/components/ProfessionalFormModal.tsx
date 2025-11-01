@@ -4,6 +4,8 @@ import { Input } from '../../../components/inputs/Input'
 import { Professional } from '../../../store/auth/types'
 import { useProfessionalForm } from '../hooks/useProfessionalForm'
 import Modal from '../../../components/modal/Modal'
+import { Checkbox } from '../../../components/inputs/Checkbox'
+import { useEffect } from 'react'
 
 interface ProfessionalFormModalProps {
   isOpen: boolean
@@ -19,8 +21,16 @@ export function ProfessionalFormModal({
   onClose,
   onSubmit,
 }: ProfessionalFormModalProps) {
-  const { register, handleSubmit, errors, resetForm } =
+  const { register, handleSubmit, errors, resetForm, watch, setValue } =
     useProfessionalForm(onSubmit)
+
+  const isCommissioned = watch('isCommissioned')
+
+  useEffect(() => {
+    if (!isCommissioned) {
+      setValue('commissionPercentage', undefined)
+    }
+  }, [isCommissioned, setValue])
 
   const handleClose = () => {
     resetForm()
@@ -48,7 +58,38 @@ export function ProfessionalFormModal({
             placeholder="Digite o e-mail do novo funcionário"
             autoComplete="off"
             error={errors.email?.message?.toString()}
+            wrapperClassName="mb-4"
           />
+          <Checkbox
+            registration={{
+              ...register('isCommissioned'),
+            }}
+            label="Profissional comissionado?"
+            id="isCommissioned"
+            error={errors?.isCommissioned?.message?.toString()}
+          />
+          {isCommissioned && (
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-primary-0 mb-2">
+                Porcentagem de Comissão (%)
+                <label className="text-red-400"> * </label>
+              </label>
+              <Input
+                registration={register('commissionPercentage', {
+                  valueAsNumber: true,
+                })}
+                id="commissionPercentage"
+                type="number"
+                placeholder="Ex: 10"
+                autoComplete="off"
+                error={errors.commissionPercentage?.message?.toString()}
+                min={0}
+                max={100}
+                step={0.01}
+                inputClassName="[&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              />
+            </div>
+          )}
         </div>
 
         {/* Buttons */}
