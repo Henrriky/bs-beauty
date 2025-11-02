@@ -6,7 +6,6 @@ import { CreditCardIcon, UserIcon } from '@heroicons/react/24/outline'
 import ComboBox from '../../../components/combobox/ComboBox'
 import { customerAPI } from '../../../store/customer/customer-api'
 import { Customer, Professional } from '../../../store/auth/types'
-import ProfilePicture from '../../profile/components/ProfilePicture'
 import {
   OnSubmitUpdatePaymentRecordForm,
   paymentLabels,
