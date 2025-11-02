@@ -1,17 +1,16 @@
+import { useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Button } from '../../components/button/Button'
+import { ErrorMessage } from '../../components/feedback/ErrorMessage'
 import BSBeautyLoading from '../../components/feedback/Loading'
-import Subtitle from '../../components/texts/Subtitle'
 import useAppSelector from '../../hooks/use-app-selector'
+import { PageHeader } from '../../layouts/PageHeader'
+import { appointmentAPI } from '../../store/appointment/appointment-api'
+import { Status } from '../../store/appointment/types'
+import { authAPI } from '../../store/auth/auth-api'
 import { UserType } from '../../store/auth/types'
 import { CustomerAppointments } from './components/CustomerAppointments'
-import { ErrorMessage } from '../../components/feedback/ErrorMessage'
-import { appointmentAPI } from '../../store/appointment/appointment-api'
 import { ListAppointmentsButtonStatus } from './types'
-import { useMemo, useState } from 'react'
-import { Status } from '../../store/appointment/types'
-import Title from '../../components/texts/Title'
-import { authAPI } from '../../store/auth/auth-api'
 
 const userTypeToAppointmentComponents = {
   [UserType.CUSTOMER]: CustomerAppointments,
@@ -60,19 +59,19 @@ function Appointments() {
   }, [data, switchButtonStatus])
 
   return (
-    <div className="h-full flex flex-col">
-      <header>
-        <Title align="left">Agendamentos</Title>
-        <div className="flex flex-col mt-3 mb-6 w-3/4 lg:w-full">
-          <Subtitle align="left">
+    <div className="h-full flex flex-col gap-3">
+      <PageHeader
+        title="Agendamentos"
+        subtitle={
+          <>
             Olá {displayName},{' '}
             <b className="text-[#A4978A]">
               aqui você pode visualizar seus agendamentos
             </b>
-          </Subtitle>
-          <div className="bg-[#595149] w-3/4 h-0.5 mt-2"></div>
-        </div>
-      </header>
+            .
+          </>
+        }
+      />
       {/* SWITCH BUTTONS */}
       <div className="flex">
         <Button

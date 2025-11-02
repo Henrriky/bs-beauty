@@ -1,20 +1,18 @@
-import { Button } from '../../components/button/Button'
-import { ProfessionalList } from './components/ProfessionalList'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { useProfessionalsLogic } from './hooks/useProfessionalsLogic'
-import useAppSelector from '../../hooks/use-app-selector'
-import { UserType } from '../../store/auth/types'
-import { Pagination } from '../../components/select/Pagination'
 import { useState } from 'react'
+import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
+import { Button } from '../../components/button/Button'
+import SearchInput from '../../components/inputs/SearchInput'
+import { Pagination } from '../../components/select/Pagination'
+import { PageHeader } from '../../layouts/PageHeader'
+import { UserType } from '../../store/auth/types'
 import { DeleteProfessionalModal } from './components/DeleteProfessionalModal'
 import { ProfessionalFormModal } from './components/ProfessionalFormModal'
+import { ProfessionalList } from './components/ProfessionalList'
 import { ProfessionalRolesModal } from './components/ProfessionalRolesModal'
-import SearchInput from '../../components/inputs/SearchInput'
-import Title from '../../components/texts/Title'
-import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
+import { useProfessionalsLogic } from './hooks/useProfessionalsLogic'
 
 function Professionals() {
-  const { name: username } = useAppSelector((state) => state.auth!.user!)
   const [searchTerm, setSearchTerm] = useState('')
 
   const {
@@ -62,15 +60,10 @@ function Professionals() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Title align="left">Gerenciamento de Profissionais</Title>
-      <div className="mt-2">
-        <span className="text-sm text-[#D9D9D9]">
-          Olá, <span className="text-primary-200 font-bold">{username}</span>!
-          Nessa tela você pode gerenciar os colaboradores cadastrados na{' '}
-          <span className="text-secondary-200 font-bold">BS Beauty</span>.
-        </span>
-      </div>
-
+      <PageHeader
+        title="Gerenciamento de Profissionais"
+        subtitle="Aqui você pode gerenciar os profissionais cadastrados na plataforma."
+      />
       <UserCanAccessContainer
         allowedPermissions={['professional.read']}
         allowedUserTypes={[UserType.MANAGER]}

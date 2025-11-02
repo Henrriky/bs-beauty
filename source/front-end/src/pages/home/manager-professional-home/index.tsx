@@ -4,6 +4,7 @@ import useAppSelector from '../../../hooks/use-app-selector'
 import AnalyticsCards from './components/AnalyticsCards'
 import MonthlyAgendaModal from './components/monthly-professional-agenda'
 import WeekAppointments from './components/WeekAppointments'
+import { SectionDivider } from '../../../layouts/SectionDivider'
 
 function ManagerHome() {
   const user = useAppSelector((state) => state.auth.user!)
@@ -11,14 +12,14 @@ function ManagerHome() {
 
   return (
     <>
-      <h2 className="text-2xl mb-2">
+      <h2 className="text-2xl mt-3 mb-2">
         <span className="text-primary-100">Bem-vindo(a) ao seu </span>
         <span className="text-secondary-200">perfil </span>
         <span className="text-primary-100">
           como {user.userType === 'MANAGER' ? 'gerente' : 'profissional'}!
         </span>
       </h2>
-      <div className="bg-[#595149] w-1/2 h-0.5 mt-2"></div>
+      <SectionDivider />
 
       <div className="h-44 bg-secondary-100 rounded-[10px] pt-[18px] pb-[25px] px-[15px] mt-6">
         <div className="flex items-center justify-between">

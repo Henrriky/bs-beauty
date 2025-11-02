@@ -1,13 +1,13 @@
+import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Button } from '../../components/button/Button'
 import { WeekDays } from '../../enums/enums'
+import { PageHeader } from '../../layouts/PageHeader'
 import { Shift } from '../../store/auth/types'
 import { shiftAPI } from '../../store/shift/shift-api'
 import DaysRow from './components/DaysRow'
 import ShiftsRow from './components/ShiftsRow'
-import { DateTime } from 'luxon'
-import Title from '../../components/texts/Title'
 
 const WeekDayMapping: { [key: string]: string } = {
   Domingo: 'SUNDAY',
@@ -159,12 +159,14 @@ const Shifts = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-2">
-        <Title align="left">Turnos</Title>
-        <p className="text-primary-200 text-sm">
-          Defina seus horários de expediente
-        </p>
-      </div>
+      <PageHeader
+        title="Turnos"
+        subtitle={
+          <>
+            Defina seus horários de expediente
+          </>
+        }
+      />
       <div className="mt-6 flex flex-col items-center gap-6">
         <div
           className="grid grid-cols-2 w-full gap-x-4 text-[#D9D9D9] text-sm"

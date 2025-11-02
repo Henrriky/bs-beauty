@@ -1,19 +1,18 @@
-import { useState } from 'react'
 import { ThemeProvider } from '@mui/material/styles'
 import dayjs, { Dayjs } from 'dayjs'
 import 'dayjs/locale/pt-br'
-import Title from '../../components/texts/Title'
-import Subtitle from '../../components/texts/Subtitle'
+import { useState } from 'react'
+import { PageHeader } from '../../layouts/PageHeader'
 import { Professional } from '../../store/auth/types'
-import { useDateRange } from './hooks/useDateRange'
-import { useAnalyticsData } from './hooks/useAnalyticsData'
-import { darkChartTheme } from './constants/theme'
-import ReportFilters from './components/ReportFilters'
-import ChartContainer from './components/ChartContainer'
 import AppointmentsChart from './components/AppointmentsChart'
-import EstimatedTimeChart from './components/EstimatedTimeChart'
 import CancellationChart from './components/CancellationChart'
+import ChartContainer from './components/ChartContainer'
+import EstimatedTimeChart from './components/EstimatedTimeChart'
 import RatingsChart from './components/RatingsChart'
+import ReportFilters from './components/ReportFilters'
+import { darkChartTheme } from './constants/theme'
+import { useAnalyticsData } from './hooks/useAnalyticsData'
+import { useDateRange } from './hooks/useDateRange'
 
 dayjs.locale('pt-br')
 
@@ -50,17 +49,14 @@ function ProductivityReport() {
   return (
     <ThemeProvider theme={darkChartTheme}>
       <div className="h-full flex flex-col">
-        <header>
-          <Title align="left">Relatórios de Produtividade</Title>
-          <div className="flex flex-col mt-3 mb-6 max-w-[50%]">
-            <Subtitle align="left">
-              <b className="text-[#A4978A]">
-                Visualize os dados de agendamentos e desempenho
-              </b>
-            </Subtitle>
-            <div className="bg-[#595149] w-1/2 h-0.5 mt-2"></div>
-          </div>
-        </header>
+        <PageHeader
+          title="Relatórios de Produtividade"
+          subtitle={
+            <>
+              Visualize os dados de <b className='text-[#A4978A]'>agendamentos</b> e <b className='text-[#A4978A]'>desempenho</b>
+            </>
+          }
+        />
 
         <ReportFilters
           startDate={startDate}
