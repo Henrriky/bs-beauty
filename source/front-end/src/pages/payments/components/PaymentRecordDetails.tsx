@@ -25,6 +25,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PaymentRecordSchemas } from '../../../utils/validation/zod-schemas/payment-record.zod-schemas.validation.utils'
 import { toast } from 'react-toastify'
+import { OptionIcon } from '../../../components/combobox/OptionIcon'
 
 function PaymentRecordDetails() {
   const { paymentRecordId } = useParams()
@@ -182,9 +183,8 @@ function PaymentRecordDetails() {
                     </div>
                   }
                   getOptionIcon={(option) => (
-                    <ProfilePicture
+                    <OptionIcon
                       profilePhotoUrl={option?.profilePhotoUrl ?? ''}
-                      size="sm"
                     />
                   )}
                   setQuery={setCustomerQuery}

@@ -5,7 +5,6 @@ import { Customer, Professional } from '../../../store/auth/types'
 import { authAPI } from '../../../store/auth/auth-api'
 import SelectServicesField from './SelectServicesField'
 import { Button } from '../../../components/button/Button'
-import ProfilePicture from '../../profile/components/ProfilePicture'
 import {
   CreatePaymentRecordFormData,
   OnSubmitCreatePaymentRecordForm,
@@ -23,6 +22,7 @@ import { paymentRecordAPI } from '../../../store/payment-record/payment-record-a
 import { toast } from 'react-toastify'
 import { ErrorMessage } from '../../../components/feedback/ErrorMessage'
 import useAppSelector from '../../../hooks/use-app-selector'
+import { OptionIcon } from '../../../components/combobox/OptionIcon'
 
 interface CreatePaymentRecordFormProps {
   closeModal: () => void
@@ -148,9 +148,8 @@ function CreatePaymentRecordForm({ closeModal }: CreatePaymentRecordFormProps) {
                   displayValue={(option) => option?.name ?? ''}
                   notFoundMessage="Cliente não encontrado"
                   getOptionIcon={(option) => (
-                    <ProfilePicture
-                      profilePhotoUrl={option.profilePhotoUrl ?? ''}
-                      size="sm"
+                    <OptionIcon
+                      profilePhotoUrl={option?.profilePhotoUrl ?? ''}
                     />
                   )}
                 />

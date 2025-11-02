@@ -93,10 +93,12 @@ function SelectServicesField({
                       value={selectedOffer}
                       onChange={(serviceOffered) => {
                         onChange(serviceOffered?.id)
-                        setValue(
-                          `items.${index}.price`,
-                          Number(serviceOffered?.price) ?? 0,
-                        )
+
+                        const price = serviceOffered?.price
+                          ? Number(serviceOffered.price)
+                          : 0
+
+                        setValue(`items.${index}.price`, price)
                       }}
                       options={filteredServices}
                       notFoundMessage="Serviço não encontrado"
