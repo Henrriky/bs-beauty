@@ -29,18 +29,22 @@ function PaymentRecords() {
     })
 
   useEffect(() => {
-    if (data?.data) {
-      if (page === 1) {
-        setAllPaymentRecords(data.data)
-      } else {
-        setAllPaymentRecords((prev) => {
-          const newPaymentRecords = data.data.filter(
-            (emp) => !prev.some((e) => e.id === emp.id),
-          )
-          return [...prev, ...newPaymentRecords]
-        })
-      }
+    if (!data?.data) return
+
+    const paymentData = data.data
+
+    const isFirstPage = page === 1
+    if (isFirstPage) {
+      setAllPaymentRecords(paymentData)
+      return
     }
+
+    setAllPaymentRecords((prev) => {
+      const newRecords = paymentData.filter(
+        (record) => !prev.some((existing) => existing.id === record.id),
+      )
+      return [...prev, ...newRecords]
+    })
   }, [data, page])
 
   if (isError) {
@@ -75,7 +79,7 @@ function PaymentRecords() {
           allPaymentRecords?.map((record, index) => {
             return (
               <PaymentRecordCard
-                key={index}
+                key={record.id}
                 paymentRecord={record}
                 index={index + 1}
               />
