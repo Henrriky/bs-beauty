@@ -131,6 +131,28 @@ export const PERMISSIONS_MAP = {
       action: 'Deletar Todos',
     },
   },
+  PAYMENT_RECORD: {
+    READ: {
+      permissionName: 'payment_record.read',
+      resource: 'Registro de Pagamento',
+      action: 'Ler',
+    },
+    CREATE: {
+      permissionName: 'payment_record.create',
+      resource: 'Registro de Pagamento',
+      action: 'Criar',
+    },
+    EDIT: {
+      permissionName: 'payment_record.edit',
+      resource: 'Registro de Pagamento',
+      action: 'Editar',
+    },
+    DELETE: {
+      permissionName: 'payment_record.delete',
+      resource: 'Registro de Pagamento',
+      action: 'Deletar',
+    },
+  },
 } as const
 
 function createPermissionDisplayMap() {

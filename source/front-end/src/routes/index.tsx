@@ -101,11 +101,6 @@ function BSBeautyRouter() {
               >
                 <Route path="/services" element={<ServiceDashboard />} />
                 <Route path="/shifts" element={<Shifts />} />
-                <Route path="/payments" element={<PaymentRecords />} />
-                <Route
-                  path="/payments/:paymentRecordId"
-                  element={<PaymentRecordDetails />}
-                />
                 <Route
                   path="/analytics/reports"
                   element={<ProductivityReport />}
@@ -164,6 +159,28 @@ function BSBeautyRouter() {
                 }
               >
                 <Route path="/manager/roles" element={<Roles />} />
+              </Route>
+
+              {/* Payment Records */}
+              <Route
+                element={
+                  <PrivateRoute
+                    strategy={'ANY'}
+                    allowedPermissions={[
+                      'payment_record.create',
+                      'payment_record.delete',
+                      'payment_record.edit',
+                      'payment_record.read',
+                    ]}
+                    allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
+                  />
+                }
+              >
+                <Route path="/payments" element={<PaymentRecords />} />
+                <Route
+                  path="/payments/:paymentRecordId"
+                  element={<PaymentRecordDetails />}
+                />
               </Route>
 
               <Route path="/profile" element={<Profile />} />

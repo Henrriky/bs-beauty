@@ -203,7 +203,13 @@ const sideBarItems: SideBarItem[] = [
     icon: <BanknotesIcon className="size-6" />,
     navigateTo: '/payments',
     authorization: {
-      allowedPermissions: [],
+      strategy: 'ANY',
+      allowedPermissions: [
+        'payment_record.create',
+        'payment_record.delete',
+        'payment_record.read',
+        'payment_record.edit',
+      ],
       allowedUserTypes: [UserType.MANAGER, UserType.PROFESSIONAL],
     },
     order: 11,
