@@ -6,7 +6,7 @@ import { UserType } from '@prisma/client'
 
 const validateUpdateProfessional = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const userType = req.headers.userType as UserType
+    const userType = req.user.userType
     const requestBody = req.body
 
     if (userType === UserType.MANAGER) {

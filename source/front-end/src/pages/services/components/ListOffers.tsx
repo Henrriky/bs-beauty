@@ -84,7 +84,7 @@ function ListOffers({
       onClick={() => setSelected(null)}
       className="animate-fadeIn w-full max-w-[540px] mb-8 mt-4"
     >
-      <div className="max-h-[161px] scroll overflow-y-auto w-full">
+      <div className="max-h-[500px] scroll overflow-y-auto w-full">
         <div className="gap-2 p-[2px] w-full flex flex-col justify-center items-center">
           {offers!.length > 0 ? (
             <>

@@ -19,15 +19,30 @@ import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
 import PaymentRecords from '../pages/payments'
 import PaymentRecordDetails from '../pages/payments/components/PaymentRecordDetails'
+import Notifications from '../pages/notifications'
+import UserRegistration from '../pages/user-registration'
+import PasswordReset from '../pages/password-reset'
+import PasswordResetCompleted from '../pages/password-reset/components/PasswordResetCompleted'
+import LandingPage from '../pages/landing-page'
+import Roles from '../pages/roles'
+import NotificationTemplates from '../pages/notification-templates'
+import ProductivityReport from '../pages/analytics'
+import BlockedTimes from '../pages/blocked-times'
 
 function BSBeautyRouter() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Login />} />
+          <Route index element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth/google/callback" element={<Callback />} />
+          <Route path="/register" element={<UserRegistration />} />
+          <Route path="/reset-password" element={<PasswordReset />} />
+          <Route
+            path="/password-reset-completed"
+            element={<PasswordResetCompleted />}
+          />
           <Route
             element={
               <PrivateRoute
@@ -46,7 +61,7 @@ function BSBeautyRouter() {
                 path="/appointments/:appointmentId"
                 element={<AppointmentDetails />}
               />
-
+              <Route path="/notifications" element={<Notifications />} />
               {/* CUSTOMER ROUTES */}
               <Route
                 element={
@@ -70,10 +85,9 @@ function BSBeautyRouter() {
                 element={<PrivateRoute allowedUserTypes={[UserType.MANAGER]} />}
               >
                 <Route path="/manager/home" element={<ManagerHome />} />
-                <Route path="/manager/customers" element={<Customers />} />
                 <Route
-                  path="/manager/professionals"
-                  element={<Professionals />}
+                  path="/manager/notification-templates"
+                  element={<NotificationTemplates />}
                 />
               </Route>
 
@@ -92,6 +106,64 @@ function BSBeautyRouter() {
                   path="/payments/:paymentRecordId"
                   element={<PaymentRecordDetails />}
                 />
+                <Route
+                  path="/analytics/reports"
+                  element={<ProductivityReport />}
+                />
+                <Route path="/blocked-times" element={<BlockedTimes />} />
+              </Route>
+
+              {/* PERMISSIONS BASED ROUTES */}
+              {/* Customers */}
+              <Route
+                element={
+                  <PrivateRoute
+                    strategy={'ANY'}
+                    allowedPermissions={['customer.read', 'customer.delete']}
+                    allowedUserTypes={[UserType.MANAGER]}
+                  />
+                }
+              >
+                <Route path="/manager/customers" element={<Customers />} />
+              </Route>
+              {/* Professionals */}
+              <Route
+                element={
+                  <PrivateRoute
+                    strategy={'ANY'}
+                    allowedPermissions={[
+                      'professional.read',
+                      'professional.create',
+                      'professional.delete',
+                      'professional.edit',
+                      'professional.manage_roles',
+                    ]}
+                    allowedUserTypes={[UserType.MANAGER]}
+                  />
+                }
+              >
+                <Route
+                  path="/manager/professionals"
+                  element={<Professionals />}
+                />
+              </Route>
+              {/* ROLES */}
+              <Route
+                element={
+                  <PrivateRoute
+                    strategy={'ANY'}
+                    allowedPermissions={[
+                      'roles.read',
+                      'roles.create',
+                      'roles.edit',
+                      'roles.delete',
+                      'roles.change_permissions',
+                    ]}
+                    allowedUserTypes={[UserType.MANAGER]}
+                  />
+                }
+              >
+                <Route path="/manager/roles" element={<Roles />} />
               </Route>
 
               <Route path="/profile" element={<Profile />} />

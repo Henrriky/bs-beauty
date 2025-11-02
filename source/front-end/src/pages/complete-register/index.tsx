@@ -35,7 +35,6 @@ function CompleteRegister() {
 
   async function handleUpdateProfileToken() {
     if (!tokens?.googleAccessToken) {
-      toast.error('Token de acesso inválido')
       return
     }
 
@@ -49,12 +48,7 @@ function CompleteRegister() {
       dispatchRedux(
         setToken({
           user: {
-            id: decodedToken.id,
-            userType: decodedToken.userType,
-            email: decodedToken.email,
-            name: decodedToken.name,
-            registerCompleted: decodedToken.registerCompleted,
-            profilePhotoUrl: decodedToken.profilePhotoUrl,
+            ...decodedToken,
           },
           token: {
             googleAccessToken: tokens.googleAccessToken,
@@ -101,7 +95,7 @@ function CompleteRegister() {
   }, [])
 
   return (
-    <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn">
+    <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn max-w-[500px] mx-auto">
       <Title align="center">Quase lá, finalize seu cadastro</Title>
       <InputContainer handleSubmit={handleSubmit} isLoading={isLoading} />
     </div>

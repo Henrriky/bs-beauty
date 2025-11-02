@@ -8,6 +8,14 @@ export default defineConfig({
     root: './',
     coverage: {
       reporter: ['text', 'html'],
+      exclude: [
+        'src/server.ts',
+        'src/app.ts',
+        'src/router/**',
+        'src/tests/integration/**',
+        'prisma/**',
+        'src/factory/**',
+      ]
     },
     setupFiles: ['./src/tests/unit/setup-integration-unit.ts'],
   },

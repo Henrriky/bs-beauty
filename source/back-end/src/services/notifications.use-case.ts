@@ -1,19 +1,35 @@
-import { type Notification } from '@prisma/client'
+import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { type FindByIdAppointments } from '@/repository/protocols/appointment.repository'
+import { type NotificationFilters } from '@/types/notifications/notification-filters'
+import { type PaginatedRequest } from '@/types/pagination'
+import { NotificationChannel, NotificationType, UserType, type Notification } from '@prisma/client'
 import { type NotificationRepository } from '../repository/protocols/notification.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { EmailService } from './email/email.service'
+import { DateFormatter } from '@/utils/formatting/date.formatting.util'
 
-interface NotificationsOutput {
-  notifications: Notification[]
+export interface BirthdayNotificationPayload {
+  recipientId: string
+  recipientType: 'CUSTOMER'
+  notificationPreference: NotificationChannel
+  email?: string | null
+  marker: string
+  title: string
+  message: string
+  templateKey?: 'BIRTHDAY'
+  year?: number
 }
 
 class NotificationsUseCase {
   constructor (private readonly notificationRepository: NotificationRepository) { }
 
-  public async executeFindAll (): Promise<NotificationsOutput> {
-    const notifications = await this.notificationRepository.findAll()
-    RecordExistence.validateManyRecordsExistence(notifications, 'notifications')
+  public async executeFindAll (
+    user: TokenPayload,
+    params: PaginatedRequest<NotificationFilters>
+  ) {
+    const notifications = await this.notificationRepository.findAll(user, params)
 
-    return { notifications }
+    return notifications
   }
 
   public async executeFindById (notificationId: string): Promise<Notification | null> {
@@ -23,51 +39,239 @@ class NotificationsUseCase {
     return notification
   }
 
-  public async executeFindByUserId (userId: string): Promise<NotificationsOutput> {
-    const notifications = await this.notificationRepository.findByUserId(userId)
-    RecordExistence.validateManyRecordsExistence(notifications, 'notifications')
-
-    return { notifications }
-  }
-
-  public async executeDelete (notificationId: string) {
-    await this.executeFindById(notificationId)
-    const deletedNotification = await this.notificationRepository.delete(notificationId)
-
-    return deletedNotification
-  }
-
-  public async executeMarkAsRead (notificationId: string) {
-    const notification = await this.executeFindById(notificationId)
-    if (notification?.readAt != null) {
-      return notification
+  public async executeDeleteMany(ids: string[], userId: string) {
+    if (ids.length === 0) return { deletedCount: 0 }
+    const uniqueIds = [...new Set(ids)]
+    const deletedCount = await this.notificationRepository.deleteMany(uniqueIds, userId)
+    return {
+      success: true,
+      message: `${deletedCount} notifications deleted successfully.`,
     }
-    const readNotification = await this.notificationRepository.markAsRead(notificationId)
-
-    return readNotification
   }
 
-  public async sendAppointmentNotification (appointmentId: string) {
-    // const appointmentUseCase = makeAppointmentsUseCaseFactory()
-    // const appointment = await appointmentUseCase.executeFindById(appointmentId)
+  public async executeSendOnAppointmentCreated (appointment: FindByIdAppointments): Promise<void> {
+    const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
 
-    // const customerUseCase = makeCustomersUseCaseFactory()
-    // const customer = await customerUseCase.executeFindById(`${appointment?.customerId}`)
+    const professionalEmail = appointment.offer.professional.email
+    const professionalName = appointment.offer.professional.name ?? 'Profissional'
 
-    // const appointmentServicesUseCase = makeAppointmentServicesUseCaseFactory()
-    // const appointmentServices = await appointmentServicesUseCase.executeFindByAppointmentId(appointmentId)
+    const serviceName = appointment.offer.service.name
+    const customerName = appointment.customer.name ?? 'Cliente'
+    const recipientId = appointment.offer.professionalId
+    const marker = `appointment:${appointment.id}:created:recipient:${recipientId}`
 
-    // const servicesUseCase = makeServiceUseCaseFactory()
-    // const offersUseCase = makeOffersUseCaseFactory()
+    const professionalPreference = appointment.offer.professional.notificationPreference ?? 'NONE'
+    const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
+    const shouldNotifyEmail = professionalPreference === 'ALL'
 
-    // for (const item of appointmentServices.appointmentServices) {
-    //   const serviceId = item.serviceId
-    //   console.log(item)
-    //   const service = await servicesUseCase.executeFindById(serviceId)
-    //   const offer = await offersUseCase.executeFindByServiceId(serviceId)
-    //   const data = { title: 'Novo agendamento', content: `Cliente: ${customer?.name}, Serviço: ${service?.name}, Dia: ${item.appointmentDate as unknown as string}`, professionalId: `${offer?.professionalId}` }
-    //   await this.notificationRepository.create(data)
-    // }
+    const alreadyExists = await this.notificationRepository.findByMarker(marker)
+    if (!alreadyExists) {
+      if (shouldNotifyProfessionalInApp) {
+        if (!alreadyExists) {
+          await this.notificationRepository.create({
+            recipientId,
+            marker,
+            title: `Agendamento Criado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
+            message: `Novo atendimento de ${serviceName} para ${customerName} em ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}.`,
+            recipientType: UserType.PROFESSIONAL,
+            type: NotificationType.APPOINTMENT
+          })
+        }
+      }
+
+      if (shouldNotifyEmail) {
+        const emailService = new EmailService()
+        await emailService.sendAppointmentCreated({
+          to: professionalEmail,
+          professionalName,
+          customerName,
+          serviceName,
+          appointmentDateISO
+        })
+      }
+    }
+  }
+
+  public async executeSendOnAppointmentConfirmed (appointment: FindByIdAppointments): Promise<void> {
+    const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
+    const serviceName = appointment.offer.service.name
+    const professionalName = appointment.offer.professional.name ?? 'Profissional'
+    const recipientId = appointment.customerId
+    const marker = `appointment:${appointment.id}:confirmed:recipient:${recipientId}`
+
+    const customerName = appointment.customer.name ?? 'Cliente'
+    const customerEmail = appointment.customer.email
+
+    const preference = appointment.customer.notificationPreference ?? 'NONE'
+    const shouldNotifyInApp = preference === 'IN_APP' || preference === 'ALL'
+    const shouldNotifyEmail = preference === 'ALL'
+
+    const alreadyExists = await this.notificationRepository.findByMarker(marker)
+
+    if (!alreadyExists) {
+      if (shouldNotifyInApp) {
+        await this.notificationRepository.create({
+          message: `Seu agendamento de ${serviceName} com ${professionalName} 
+                    foi confirmado para ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}.`,
+          marker,
+          recipientId,
+          title: `Agendamento confirmado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
+          recipientType: UserType.CUSTOMER,
+          type: NotificationType.APPOINTMENT
+        })
+      }
+
+      if (shouldNotifyEmail && customerEmail) {
+        const emailService = new EmailService()
+        emailService
+          .sendAppointmentConfirmed({
+            to: customerEmail,
+            customerName,
+            professionalName,
+            serviceName,
+            appointmentDateISO
+          })
+          .catch(err => { console.error('Erro ao enviar e-mail de confirmação:', err?.message || err) })
+      }
+    }
+  }
+
+  public async executeSendOnAppointmentCancelled (
+    appointment: FindByIdAppointments,
+    options: { notifyCustomer: boolean, notifyProfessional: boolean }
+  ): Promise<void> {
+    const appointmentDateISO = new Date(appointment.appointmentDate).toISOString()
+    const serviceName = appointment.offer.service.name
+    const customerName = appointment.customer.name ?? 'Cliente'
+    const customerEmail = appointment.customer.email
+    const professionalName = appointment.offer.professional.name ?? 'Profissional'
+    const professionalEmail = appointment.offer.professional.email
+
+    if (options.notifyCustomer) {
+      const recipientId = appointment.customerId
+      const marker = `appointment:${appointment.id}:cancelled:recipient:${recipientId}`
+
+      const customerPreference = appointment.customer.notificationPreference ?? 'NONE'
+      const shouldNotifyCustomerInApp = customerPreference === 'IN_APP' || customerPreference === 'ALL'
+      const shouldNotifyEmail = customerPreference === 'ALL'
+
+      const alreadyExists = await this.notificationRepository.findByMarker(marker)
+      if (!alreadyExists) {
+        if (shouldNotifyCustomerInApp) {
+          await this.notificationRepository.create({
+            recipientId,
+            marker,
+            title: `Agendamento Cancelado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
+            message: `Seu agendamento de ${serviceName} com ${professionalName} foi cancelado 
+            (data original: ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}).`,
+            recipientType: UserType.CUSTOMER,
+            type: NotificationType.APPOINTMENT
+          })
+        }
+
+        if (shouldNotifyEmail) {
+          const emailService = new EmailService()
+          emailService
+            .sendAppointmentCancelled({
+              to: customerEmail,
+              customerName,
+              professionalName,
+              serviceName,
+              appointmentDateISO,
+              cancelledBy: 'professional'
+            })
+            .catch(err => { console.error('Erro ao enviar e-mail de confirmação:', err?.message || err) })
+        }
+      }
+    }
+
+    if (options.notifyProfessional) {
+      const recipientId = appointment.offer.professionalId
+      const marker = `appointment:${appointment.id}:cancelled:recipient:${recipientId}`
+
+      const professionalPreference = appointment.offer.professional.notificationPreference ?? 'NONE'
+
+      const alreadyExists = await this.notificationRepository.findByMarker(marker)
+      if (!alreadyExists) {
+        const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
+        const shouldNotifyEmail = professionalPreference === 'ALL'
+
+        if (shouldNotifyProfessionalInApp) {
+          await this.notificationRepository.create({
+            recipientId,
+            marker,
+            title: `Agendamento Cancelado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
+            message: `Atendimento de ${serviceName} para ${customerName} foi cancelado 
+            (data original: ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}).`,
+            recipientType: UserType.PROFESSIONAL,
+            type: NotificationType.APPOINTMENT
+          })
+        }
+
+        if (shouldNotifyEmail) {
+          const emailService = new EmailService()
+          emailService
+            .sendAppointmentCancelled({
+              to: professionalEmail,
+              customerName,
+              professionalName,
+              serviceName,
+              appointmentDateISO,
+              cancelledBy: 'customer'
+            })
+            .catch(err => { console.error('Erro ao enviar e-mail de confirmação:', err?.message || err) })
+        }
+      }
+    }
+  }
+
+  public async executeSendBirthday (payload: BirthdayNotificationPayload): Promise<void> {
+    const {
+      recipientId,
+      notificationPreference,
+      email,
+      marker,
+      title,
+      message
+    } = payload
+
+    const alreadyExists = await this.notificationRepository.findByMarker(marker)
+    if (alreadyExists) return
+
+    const shouldNotifyInApp =
+      notificationPreference === NotificationChannel.IN_APP ||
+      notificationPreference === NotificationChannel.ALL
+
+    const shouldNotifyEmail =
+      notificationPreference === NotificationChannel.ALL
+
+    if (shouldNotifyInApp) {
+      await this.notificationRepository.create({
+        recipientId,
+        marker,
+        title,
+        message,
+        recipientType: UserType.CUSTOMER,
+        type: NotificationType.SYSTEM
+      })
+    }
+
+    if (shouldNotifyEmail && email) {
+      const emailService = new EmailService()
+      await emailService.sendBirthday({
+        to: email,
+        title,
+        message,
+        customerName: undefined
+      })
+    }
+  }
+
+  public async executeMarkManyAsRead (ids: string[], currentUserId: string) {
+    if (ids.length === 0) return { updatedCount: 0 }
+    const uniqueIds = [...new Set(ids)]
+    const updatedCount = await this.notificationRepository.markManyAsReadForUser(uniqueIds, currentUserId)
+    return { updatedCount }
   }
 }
 

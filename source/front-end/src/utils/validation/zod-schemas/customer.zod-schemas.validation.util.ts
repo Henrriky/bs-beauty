@@ -50,8 +50,11 @@ class CustomerSchemas {
         }),
       phone: SharedSchemas.phoneSchema,
       alwaysAllowImageUse: z.boolean().optional(),
+      notificationPreference: SharedSchemas.notificationPreference
     })
     .strict()
+
+  public static registerCustomerBodySchema = SharedSchemas.registerBodySchema
 }
 
 export { CustomerSchemas }

@@ -2,15 +2,18 @@ import { Router } from 'express'
 import { ServicesController } from '../../controllers/services.controller'
 import { validateCreateService } from '../../middlewares/data-validation/service/create-service.validation.middleware'
 import { validateUpdateService } from '../../middlewares/data-validation/service/update-service.validation.middleware'
-import { routeAuthMiddleware } from '../../middlewares/route-auth.middleware'
+import { combinedAuthMiddleware } from '@/middlewares/auth/combined-auth.middleware'
 
 const serviceRoutes = Router()
 
+/* Public routes */
 serviceRoutes.get('/', ServicesController.handleFindAllPaginated)
-serviceRoutes.get('/:id', ServicesController.handleFindById)
 serviceRoutes.get('/:id/offer/professionals', ServicesController.handleFetchProfessionalsOfferingService)
-serviceRoutes.post('/', routeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateCreateService, ServicesController.handleCreate)
-serviceRoutes.put('/:id', routeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), validateUpdateService, ServicesController.handleUpdate)
-serviceRoutes.delete('/:id', routeAuthMiddleware(['MANAGER', 'PROFESSIONAL']), ServicesController.handleDelete)
+serviceRoutes.get('/:id', ServicesController.handleFindById)
+
+/* Protected routes */
+serviceRoutes.post('/', combinedAuthMiddleware(['MANAGER', 'PROFESSIONAL'], ['service.create']), validateCreateService, ServicesController.handleCreate)
+serviceRoutes.put('/:id', combinedAuthMiddleware(['MANAGER', 'PROFESSIONAL'], ['service.edit']), validateUpdateService, ServicesController.handleUpdate)
+serviceRoutes.delete('/:id', combinedAuthMiddleware(['MANAGER', 'PROFESSIONAL'], ['service.delete']), ServicesController.handleDelete)
 
 export { serviceRoutes }

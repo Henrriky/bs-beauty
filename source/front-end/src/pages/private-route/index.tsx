@@ -1,29 +1,30 @@
 import { Navigate, Outlet } from 'react-router'
 import useAppSelector from '../../hooks/use-app-selector'
-import { UserType } from '../../store/auth/types'
-import { toast } from 'react-toastify'
-import { userHasPermission } from '../../utils/authorization/user-has-permission'
+import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
+import { UserCanAccessProps } from '../../utils/authorization/authorization.utils'
 
-interface PrivateRouteProps {
-  allowedUserTypes: UserType[]
-}
+type PrivateRouteProps = Omit<UserCanAccessProps, 'user'>
 
-function PrivateRoute({ allowedUserTypes }: PrivateRouteProps) {
+function PrivateRoute({
+  allowedUserTypes,
+  allowedPermissions,
+  strategy,
+}: PrivateRouteProps) {
   const currentUserAuthInformations = useAppSelector((state) => state.auth)
 
   if (!currentUserAuthInformations?.token)
     return <Navigate to={'/login'} replace />
 
-  const userType = currentUserAuthInformations.user?.userType
-  const currentUserHasPermission =
-    userType && userHasPermission(allowedUserTypes, userType)
-
-  if (!currentUserHasPermission) {
-    toast.warn('Você não tem permissão para acessar esta página.')
-    return <Navigate to={'/home'} replace />
-  }
-
-  return <Outlet />
+  return (
+    <UserCanAccessContainer
+      allowedPermissions={allowedPermissions}
+      allowedUserTypes={allowedUserTypes}
+      strategy={strategy}
+      fallback={<Navigate to={'/home'} replace />}
+    >
+      <Outlet />
+    </UserCanAccessContainer>
+  )
 }
 
 export default PrivateRoute

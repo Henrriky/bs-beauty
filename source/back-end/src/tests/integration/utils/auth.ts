@@ -20,7 +20,8 @@ export async function getProfessionalToken (role: $Enums.UserType = $Enums.UserT
     email: professional.email,
     name: professional.name,
     registerCompleted: professional.registerCompleted,
-    profilePhotoUrl: professional.profilePhotoUrl
+    profilePhotoUrl: professional.profilePhotoUrl,
+    permissions: []
   }
 
   return {
@@ -40,7 +41,8 @@ export async function getCustomerToken (): Promise<{ token: string, customer: Cu
     email: customer.email,
     name: customer.name,
     registerCompleted: customer.registerCompleted,
-    profilePhotoUrl: customer.profilePhotoUrl
+    profilePhotoUrl: customer.profilePhotoUrl,
+    permissions: []
   }
 
   if (secret == null) throw new Error('JWT_SECRET Must be defined.')

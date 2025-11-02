@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { faker } from '@faker-js/faker'
-import { type Customer, DiscoverySource, type Prisma, UserType } from '@prisma/client'
+import { type Customer, DiscoverySource, NotificationChannel, type Prisma, UserType } from '@prisma/client'
 import { type Response } from 'express'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CustomersController } from '../../../controllers/customers.controller'
@@ -109,6 +109,7 @@ describe('CustomerController', () => {
         id: 'random-uuid',
         name: 'John Doe',
         email: 'johndoe@example.com',
+        passwordHash: null,
         registerCompleted: true,
         googleId: 'google-id-1',
         birthdate: null,
@@ -120,6 +121,7 @@ describe('CustomerController', () => {
         createdAt: new Date(),
         alwaysAllowImageUse: false,
         discoverySource: DiscoverySource.INSTAGRAM,
+        notificationPreference: NotificationChannel.ALL,
         updatedAt: new Date()
       }
       usecaseMock.executeFindById.mockResolvedValueOnce(customer)

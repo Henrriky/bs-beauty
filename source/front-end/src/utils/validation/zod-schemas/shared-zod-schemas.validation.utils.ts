@@ -1,5 +1,11 @@
 import { z } from 'zod'
 import { RegexPatterns } from '../regex.validation.util'
+import { NotificationPreference } from '../../../store/auth/types'
+
+export const NotificationChannelEnum = z.enum(['NONE', 'IN_APP', 'EMAIL', 'BOTH'], {
+  required_error: 'Por favor, selecione um canal de notificação',
+  invalid_type_error: 'Opção inválida',
+})
 
 class SharedSchemas {
   public static nameSchema = z
@@ -69,6 +75,41 @@ class SharedSchemas {
     .string()
     .max(50, 'A especialização deve ter no máximo 50 caracteres')
     .optional()
+
+  public static notificationPreference = z.nativeEnum(NotificationPreference).optional()
+
+  public static registerBodySchema = z
+    .object({
+      email: z.string().email(),
+      password: z.string().regex(RegexPatterns.password, {
+        message:
+          'A senha deve ter ao menos 8 caracteres e incluir uma letra maiúscula, uma letra minúscula, um número e um caractere especial (@$!%*?&).',
+      }),
+      confirmPassword: z.string().regex(RegexPatterns.password, {
+        message:
+          'A senha de confirmação deve seguir as mesmas regras que a senha.',
+      }),
+    })
+    .strict()
+    .superRefine((data, ctx) => {
+      const hasPassword = !!data.password
+      const hasConfirm = !!data.confirmPassword
+      if (hasPassword !== hasConfirm) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Ambas senhas e confirmação devem ser preenchidas.',
+          path: hasPassword ? ['confirmPassword'] : ['password'],
+        })
+      }
+
+      if (hasPassword && hasConfirm && data.password !== data.confirmPassword) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'A senha e a confirmação não coincidem.',
+          path: ['confirmPassword'],
+        })
+      }
+    })
 }
 
 export { SharedSchemas }
