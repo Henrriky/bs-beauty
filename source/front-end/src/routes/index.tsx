@@ -17,6 +17,8 @@ import { UserType } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
+import PaymentRecords from '../pages/payments'
+import PaymentRecordDetails from '../pages/payments/components/PaymentRecordDetails'
 import Notifications from '../pages/notifications'
 import UserRegistration from '../pages/user-registration'
 import PasswordReset from '../pages/password-reset'
@@ -157,6 +159,28 @@ function BSBeautyRouter() {
                 }
               >
                 <Route path="/manager/roles" element={<Roles />} />
+              </Route>
+
+              {/* Payment Records */}
+              <Route
+                element={
+                  <PrivateRoute
+                    strategy={'ANY'}
+                    allowedPermissions={[
+                      'payment_record.create',
+                      'payment_record.delete',
+                      'payment_record.edit',
+                      'payment_record.read',
+                    ]}
+                    allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
+                  />
+                }
+              >
+                <Route path="/payments" element={<PaymentRecords />} />
+                <Route
+                  path="/payments/:paymentRecordId"
+                  element={<PaymentRecordDetails />}
+                />
               </Route>
 
               <Route path="/profile" element={<Profile />} />

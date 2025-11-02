@@ -115,4 +115,12 @@ export const API_VARIABLES = {
     FIND_BY_PROFESSIONAL_AND_PERIOD: (professionalId: string) =>
       `/professionals/${professionalId}/blocked-times`,
   },
+  PAYMENT_RECORDS_ENDPONTS: {
+    FIND_BY_ID: (id: string) => `/payment-records/${id}`,
+    FIND_BY_PROFESSIONAL_ID: (professionalId: string) =>
+      `/payment-records/professional/${professionalId}`,
+    CREATE_PAYMENT_RECORD: '/payment-records',
+    UPDATE_PAYMENT_RECORD: (id: string) => `/payment-records/${id}`,
+    DELETE_PAYMENT_RECORD: (id: string) => `/payment-records/${id}`,
+  },
 } as const
