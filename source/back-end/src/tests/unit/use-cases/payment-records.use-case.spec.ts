@@ -210,11 +210,11 @@ describe('PaymentRecordsUseCase (Unit Tests)', () => {
           {
             quantity: 1,
             discount: 0,
-            price: 150.0,
+            price: 150,
             offerId: faker.string.uuid()
           }
         ],
-        totalValue: 150.0
+        totalValue: 150
       }
 
       const createdPaymentRecord: PaymentRecord = {
@@ -222,7 +222,7 @@ describe('PaymentRecordsUseCase (Unit Tests)', () => {
         paymentMethod: 'CREDIT_CARD',
         customerId,
         professionalId,
-        totalValue: 150.0 as any,
+        totalValue: 150 as any,
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -248,7 +248,7 @@ describe('PaymentRecordsUseCase (Unit Tests)', () => {
         customerId,
         professionalId,
         items: [],
-        totalValue: 150.0
+        totalValue: 150
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(null)
@@ -287,7 +287,7 @@ describe('PaymentRecordsUseCase (Unit Tests)', () => {
         customerId,
         professionalId,
         items: [],
-        totalValue: 150.0
+        totalValue: 150
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(professional)
@@ -317,13 +317,13 @@ describe('PaymentRecordsUseCase (Unit Tests)', () => {
 
       const updateData: UpdatePaymentRecordInput = {
         paymentMethod: 'PIX',
-        totalValue: 140.0
+        totalValue: 140
       }
 
       const updatedPaymentRecord: PaymentRecord = {
         ...existingPaymentRecord,
         paymentMethod: 'PIX',
-        totalValue: 140.0 as any,
+        totalValue: 140 as any,
         updatedAt: new Date()
       }
 
@@ -340,7 +340,7 @@ describe('PaymentRecordsUseCase (Unit Tests)', () => {
     it('should throw an error if payment record to update is not found', async () => {
       const paymentRecordId = faker.string.uuid()
       const updateData: UpdatePaymentRecordInput = {
-        totalValue: 140.0
+        totalValue: 140
       }
 
       MockPaymentRecordRepository.findById.mockResolvedValue(null)
