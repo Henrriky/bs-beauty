@@ -53,7 +53,7 @@ function SideBar() {
     .filter((item) => userCanAccess({ user, ...item.authorization }))
     .reverse()
 
-  const renderSidebarItems = () => {
+  const renderSidebarItems = (isMobile = false) => {
     return filteredItems
       .filter((item) => userCanAccess({ user, ...item.authorization }))
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
@@ -62,7 +62,8 @@ function SideBar() {
           key={sideBarItem.name}
           icon={sideBarItem.icon}
           path={sideBarItem.navigateTo}
-          closeOnClick={false}
+          closeOnClick={isMobile}
+          toggleSideBar={isMobile ? toggleSideBar : undefined}
           isActive={
             isActivePath(pathname, sideBarItem.navigateTo)
           }
@@ -126,7 +127,7 @@ function SideBar() {
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
 
               <ul className="text-primary-200 mt-8 text-[12px]">
-                {renderSidebarItems()}
+                {renderSidebarItems(true)}
               </ul>
             </nav>
 
