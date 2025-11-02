@@ -10,6 +10,7 @@ import { type ServiceRepository } from '@/repository/protocols/service.repositor
 import { type ShiftRepository } from '@/repository/protocols/shift.repository'
 import { type Mocked } from 'vitest'
 import { type BlockedTimeRepository } from '@/repository/protocols/blocked-times.repository'
+import { type PaymentRecordRepository } from '@/repository/protocols/payment-record.repository'
 
 vi.mock('@/factory/make-appointments-use-case.factory')
 
@@ -146,6 +147,15 @@ const MockBlockedTimesRepository: Mocked<BlockedTimeRepository> = {
   findByProfessionalAndPeriod: vi.fn()
 }
 
+const MockPaymentRecordRepository: Mocked<PaymentRecordRepository> = {
+  findById: vi.fn(),
+  findByProfessionalId: vi.fn(),
+  findByProfessionalIdPaginated: vi.fn(),
+  create: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn()
+}
+
 export {
   MockAppointmentRepository,
   MockCustomerRepository,
@@ -157,5 +167,6 @@ export {
   MockServiceRepository,
   MockShiftRepository,
   MockRatingRepository,
-  MockBlockedTimesRepository
+  MockBlockedTimesRepository,
+  MockPaymentRecordRepository
 }

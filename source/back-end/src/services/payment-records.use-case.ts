@@ -39,8 +39,8 @@ class PaymentRecordsUseCase {
     const professionalId = paymentRecord.professionalId
     const customerId = paymentRecord.customerId
 
-    const professional = this.professionalRepository.findById(professionalId)
-    const customer = this.customerRepository.findById(customerId)
+    const professional = await this.professionalRepository.findById(professionalId)
+    const customer = await this.customerRepository.findById(customerId)
 
     RecordExistence.validateRecordExistence(professional, 'Professional')
     RecordExistence.validateRecordExistence(customer, 'Customer')
