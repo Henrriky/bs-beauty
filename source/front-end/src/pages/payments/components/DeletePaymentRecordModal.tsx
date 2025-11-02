@@ -3,6 +3,7 @@ import { Button } from '../../../components/button/Button'
 import Title from '../../../components/texts/Title'
 import { paymentRecordAPI } from '../../../store/payment-record/payment-record-api'
 import { toast } from 'react-toastify'
+import Modal from '../../../components/modal/Modal'
 
 interface DeletePaymentRecordModalProps {
   isOpen: boolean
@@ -30,36 +31,62 @@ function DeletePaymentRecordModal({
     }
   }
   return (
-    <>
-      {isOpen && (
-        <div
-          className={`fixed inset-0 flex justify-center items-center animate-fadeIn z-[1000] transition-colors ${isOpen ? 'visible bg-black/60' : 'invisible'} animate-d`}
-          onClick={setIsOpen}
-        >
-          <div
-            className="bg-[#1E1E1E] rounded-2xl shadow p-6 w-full max-w-[480px] max-h-screen flex flex-col justify-center items-center gap-5"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Title align="center">Deseja excluir o registro?</Title>
-            <p className="text-lg text-secondary-200">
-              Esta ação <span className="font-bold">não</span> poderá ser
-              desfeita.
-            </p>
-            <div className="w-full flex gap-5">
-              <Button label="Cancelar" variant="outline" onClick={setIsOpen} />
-              <Button
-                label="Excluir"
-                onClick={() => {
-                  handleDelete(paymentRecordId ?? '')
-                  navigate('/payments')
-                }}
-              />
-            </div>
-          </div>
+    <Modal
+      isOpen={isOpen}
+      onClose={setIsOpen}
+      title="Excluir Registro de Pagamento"
+      size="md"
+    >
+      <div className="flex flex-col gap-4 p-6 space-y-2 items-center">
+        <h3 className="text-lg font-medium text-primary-0">
+          Deseja excluir o registro?
+        </h3>
+        <p className="text-base text-secondary-200">
+          Esta ação <span className="font-bold">não</span> poderá ser desfeita.
+        </p>
+        <div className="w-full flex gap-5">
+          <Button label="Cancelar" variant="outline" onClick={setIsOpen} />
+          <Button
+            label="Excluir"
+            className="!bg-red-600 hover:!bg-red-700"
+            onClick={() => {
+              handleDelete(paymentRecordId ?? '')
+              navigate('/payments')
+            }}
+          />
         </div>
-      )}
-    </>
+      </div>
+    </Modal>
   )
 }
 
 export default DeletePaymentRecordModal
+
+// --- IGNORE ---
+// (
+//         <div
+//           className={`fixed inset-0 flex justify-center items-center animate-fadeIn z-[1000] transition-colors ${isOpen ? 'visible bg-black/60' : 'invisible'} animate-d`}
+//           onClick={setIsOpen}
+//         >
+//           <div
+//             className="bg-[#1E1E1E] rounded-2xl shadow p-6 w-full max-w-[480px] max-h-screen flex flex-col justify-center items-center gap-5"
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             <Title align="center">Deseja excluir o registro?</Title>
+//             <p className="text-lg text-secondary-200">
+//               Esta ação <span className="font-bold">não</span> poderá ser
+//               desfeita.
+//             </p>
+//             <div className="w-full flex gap-5">
+//               <Button label="Cancelar" variant="outline" onClick={setIsOpen} />
+//               <Button
+//                 label="Excluir"
+//                 onClick={() => {
+//                   handleDelete(paymentRecordId ?? '')
+//                   navigate('/payments')
+//                 }}
+//               />
+//             </div>
+//           </div>
+//         </div>
+//       )

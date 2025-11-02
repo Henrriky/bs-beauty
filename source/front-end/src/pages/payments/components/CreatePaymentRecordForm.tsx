@@ -113,7 +113,7 @@ function CreatePaymentRecordForm({ closeModal }: CreatePaymentRecordFormProps) {
   return (
     <FormProvider {...methods}>
       <form
-        className="w-full flex flex-col gap-4 animate-fadeIn"
+        className="w-full flex flex-col gap-4 animate-fadeIn p-6"
         onSubmit={methods.handleSubmit(handleSubmitConcrete)}
       >
         <input
