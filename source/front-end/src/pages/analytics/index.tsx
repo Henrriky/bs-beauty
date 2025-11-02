@@ -77,20 +77,18 @@ function ProductivityReport() {
           onToggleFilters={() => setFiltersOpen(!filtersOpen)}
         />
 
-        <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <ChartContainer title="Quantidade de Agendamentos">
             <AppointmentsChart data={appointmentsCountData} />
           </ChartContainer>
 
-          <div className="flex flex-col gap-6">
-            <ChartContainer title="Tempo Estimado de Trabalho">
-              <EstimatedTimeChart data={estimatedTimeData} />
-            </ChartContainer>
+          <ChartContainer title="Tempo Estimado de Trabalho">
+            <EstimatedTimeChart data={estimatedTimeData} />
+          </ChartContainer>
 
-            <ChartContainer title="Taxa de Cancelamento">
-              <CancellationChart data={cancelationData} />
-            </ChartContainer>
-          </div>
+          <ChartContainer title="Taxa de Cancelamento">
+            <CancellationChart data={cancelationData} />
+          </ChartContainer>
 
           <ChartContainer title="Avaliações dos Clientes no Período">
             <RatingsChart data={ratingsCountData} />
