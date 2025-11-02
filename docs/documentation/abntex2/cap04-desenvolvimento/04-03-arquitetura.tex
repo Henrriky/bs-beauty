@@ -52,9 +52,16 @@ No diagrama de componentes proposto, a aplicação é composta por diversos mód
 
   \item \textbf{\emph{Appointments}}: Gerencia os agendamentos realizados pelos clientes. Engloba tanto a criação, listagem e atualização dos agendamentos quanto a associação com os serviços ofertados.
 
-  \item \textbf{\emph{Customers}}: Controla os dados relacionados aos clientes da plataforma. Permite o cadastro, consulta e edição de informações do perfil dos usuários.
+  \item \textbf{\emph{Professionals}}: Controla os dados relacionados aos clientes da plataforma. Permite o cadastro, consulta e edição de informações do perfil dos usuários.
 
   \item \textbf{\emph{Professionals}}: Administra os dados dos profissionais que prestam serviços na aplicação, incluindo informações cadastrais, disponibilidade e associação a serviços específicos.
+
+  \item \textbf{\emph{Permissions}}: Gerencia as permissões granulares do sistema, definindo ações e privilégios que podem ser atribuídos a papéis (roles) ou diretamente a usuários. Esse módulo é utilizado pelo mecanismo de autorização para controlar o acesso a recursos e operações sensíveis da aplicação.
+
+  \item \textbf{\emph{Roles}}: Responsável pelo gerenciamento de papéis (roles) que agrupam permissões, simplificando a atribuição de conjuntos de privilégios a profissionais ou usuários. Facilita a administração de acesso em grande escala e a composição de políticas de autorização.
+
+  \item \textbf{\emph{Blocked Times}}: Trata do registro de períodos temporários em que um profissional não está disponível (por exemplo, férias, ausências ou compromissos). Diferencia-se dos turnos regulares (
+\emph{Shift}) por representar exceções pontuais que impedem o agendamento de atendimentos.
 
   \item \textbf{\emph{Notifications}}: Responsável por enviar notificações aos usuários, como lembretes, confirmações de agendamento e atualizações importantes. Pode incluir o envio por \emph{e-mail} ou outros canais.
 
@@ -97,15 +104,15 @@ O diagrama acima é composto pelos seguintes componentes:
     \begin{itemize}
       \item A \textit{\gls{api} (Back-end em NodeJS)}: Principal serviço da aplicação, sendo o responsável por prover os \emph{"endpoints"} que fornecem os dados e arquivos estáticos para o \textit{front-end} através de uma \textit{\gls{api} RestFull}, se comunicando com o banco de dados, um componente que é executado no mesmo dispositivo.
       \item \textit{Banco de Dados (\gls{sgbd} MariaDB)}: Serviço de \gls{sgbd} que provê os dados para o \textit{back-end} da aplicação, o que possibilita a persistência e consulta de forma eficiente. Para garantir a persistência dos dados gerenciados pelo MariaDB, o contêiner utiliza volumes \emph{Docker} montados na instância \gls{ec2} privada. Isso assegura que os dados não sejam perdidos em reinicializações do contêiner.
+      \item \textit{Redis}: Banco de dados em memória utilizado para a persistência de dados efêmeros e de acesso rápido, como cache de respostas, sessões e armazenamento temporário de códigos de autenticação/validação. O uso do \emph{Redis} melhora a performance em operações que exigem baixa latência e é empregado para suportar tarefas de autenticação (geração e busca de códigos) e mecanismos de cache da aplicação.
     \end{itemize}
-  Além dos serviços em execução, a instância privada também contém os seguintes artefatos essenciais para o empacotamento e execução dos serviços via contêineres \emph{Docker}~\cite{DockerDocs}:
+    Além dos serviços em execução, a instância privada também contém os seguintes artefatos essenciais para o empacotamento e execução dos serviços via contêineres \emph{Docker}~\cite{DockerDocs}:
     \begin{itemize}
       \item \textit{Dockerfile}: Esse artefato descreve as instruções necessárias para criar a imagem \emph{Docker} da aplicação \textit{back-end}, especificando o ambiente base (como a imagem do Node.js), os arquivos a serem copiados, dependências a serem instaladas e os comandos de inicialização da aplicação.
-
       \item \textit{docker-compose.yaml}: Esse arquivo é utilizado como ferramenta de orquestração para os serviços \emph{Docker}~\cite{DockerComposeDocs} da aplicação. Ele define a configuração dos contêineres da aplicação, como o contêiner da \gls{api} e o do banco de dados, bem como as variáveis de ambiente, volumes, redes e dependências entre os serviços. É a partir deste artefato que os contêineres são gerados e executados de forma integrada.
     \end{itemize}
 
-  \item \textbf{\textit{Google Cloud (Device):}} Localizada na nuvem pública da Google (\textit{Google Cloud}), essa \gls{api} é utilizada pelo \emph{back-end} da aplicação para realizar a autenticação de usuários através do protocolo \emph{OAuth} 2.0 \cite{GoogleOAuth}. Esse processo ocorre quando o usuário opta por fazer \emph{login} com sua conta Google. Nesse cenário, a aplicação redireciona o usuário para a tela de autenticação da Google, e após a confirmação, a \gls{api} recebe um \textit{token} de acesso que é utilizado para obter as informações do usuário autenticado. Esse fluxo garante uma autenticação segura, delegando a responsabilidade da validação de identidade à Google.
+  \item \textbf{\textit{Google Cloud (Device):}} Localizada na nuvem pública da Google (\textit{Google Cloud}), essa \gls{api} é utilizada pelo \emph{back-end} da aplicação para realizar a autenticação de usuários através do protocolo \emph{OAuth} 2.0 \cite{GoogleOAuth}. Esse processo ocorre quando o usuário opta por fazer \emph{login} com sua conta Google. Nesse cenário, a aplicação redireciona o usuário para a tela de autenticação da Google, e após a confirmação, a \gls{api} recebe um \textit{token} de acesso que é utilizado para obter as informações do usuário autenticado. Esse fluxo garante uma autenticação segura, delegando a responsabilidade da validação de identidade à Google. Além disso, o \emph{back-end} integra-se ao servidor SMTP do Gmail para o envio de e-mails aos usuários (por exemplo: notificações de agendamento, códigos de verificação e recuperação de senha), conforme previsto no diagrama de componentes.
 \end{itemize}
 
 O fluxo de execução típico da aplicação baseado no diagrama de implantação acima segue os seguintes passos:
