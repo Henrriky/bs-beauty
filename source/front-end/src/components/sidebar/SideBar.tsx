@@ -1,6 +1,6 @@
 import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import { ReactNode, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router'
+import { Outlet, useNavigate, useLocation } from 'react-router'
 import useAppSelector from '../../hooks/use-app-selector'
 import ProfilePicture from '../../pages/profile/components/ProfilePicture'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
@@ -16,11 +16,24 @@ interface SideBarItemProps {
   children?: ReactNode
   toggleSideBar?: () => void
   closeOnClick?: boolean
+  isActive?: boolean
+}
+
+function normalizePath(p: string) {
+  if (!p) return '/'
+  return p.startsWith('/') ? p : `/${p}`
+}
+
+function isActivePath(currentPath: string, itemPath: string) {
+  const curr = normalizePath(currentPath)
+  const target = normalizePath(itemPath)
+  return curr === target || curr.startsWith(`${target}/`)
 }
 
 function SideBar() {
   const user = useAppSelector((state) => state.auth.user!)
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
+  const { pathname } = useLocation()
 
   const selectUserInfo = authAPI.endpoints.fetchUserInfo.select()
   const userInfoQuery = useAppSelector(selectUserInfo)
@@ -40,8 +53,28 @@ function SideBar() {
     .filter((item) => userCanAccess({ user, ...item.authorization }))
     .reverse()
 
+  const renderSidebarItems = () => {
+    return filteredItems
+      .filter((item) => userCanAccess({ user, ...item.authorization }))
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      .map((sideBarItem) => (
+        <SideBarItem
+          key={sideBarItem.name}
+          icon={sideBarItem.icon}
+          path={sideBarItem.navigateTo}
+          closeOnClick={false}
+          isActive={
+            isActivePath(pathname, sideBarItem.navigateTo)
+          }
+        >
+          {sideBarItem.name}
+        </SideBarItem>
+      ))
+  }
+
   return (
     <>
+      { /* SIDEBAR MOBILE */}
       <div className="lg:hidden">
         <nav className="transition-opacity ease-in-out bg-primary-900 mb-5 w-full z-0 left-0 top-0">
           <div className="text-[12px] transition-all flex flex-row gap-2 justify-center pt-5">
@@ -93,21 +126,7 @@ function SideBar() {
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
 
               <ul className="text-primary-200 mt-8 text-[12px]">
-                {sideBarItems
-                  .filter((item) =>
-                    userCanAccess({ user, ...item.authorization }),
-                  )
-                  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-                  .map((sideBarItem) => (
-                    <SideBarItem
-                      toggleSideBar={toggleSideBar}
-                      key={sideBarItem.name}
-                      icon={sideBarItem.icon}
-                      path={sideBarItem.navigateTo}
-                    >
-                      {sideBarItem.name}
-                    </SideBarItem>
-                  ))}
+                {renderSidebarItems()}
               </ul>
             </nav>
 
@@ -119,7 +138,8 @@ function SideBar() {
         )}
       </div>
 
-      <div className="hidden lg:grid lg:grid-cols-[16rem_1fr] lg:min-h-[100dvh]">
+      {/* SIDEBAR DESKTOP */}
+      <div className="hidden lg:grid lg:grid-cols-[16rem_1fr] lg:min_h-[100dvh]">
         <aside className="bg-primary-900 border-r border-white/10 sticky top-0 h-[100dvh] w-64 px-4 py-6">
           <button
             className="flex items-center gap-3 mb-6 hover:opacity-90 w-full pl-3"
@@ -140,16 +160,7 @@ function SideBar() {
           <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
 
           <ul className="text-primary-200 mt-6 text-[13px] space-y-1">
-            {filteredItems.map((item) => (
-              <SideBarItem
-                key={item.name}
-                icon={item.icon}
-                path={item.navigateTo}
-                closeOnClick={false}
-              >
-                {item.name}
-              </SideBarItem>
-            ))}
+            {renderSidebarItems()}
           </ul>
         </aside>
 
@@ -175,16 +186,20 @@ function SideBarItem(props: SideBarItemProps) {
     if (props.closeOnClick && props.toggleSideBar) props.toggleSideBar()
   }
 
+  const activeClasses = props.isActive ? 'bg-primary-300 text-white' : ''
+
   return (
     <li
-      className="
+      className={`
         relative transition-colors px-4 py-2 rounded-full
         flex items-center gap-[18px] text-sm cursor-pointer
         h-[40px] w-full max-w-full
         hover:bg-primary-300 hover:text-white
         overflow-hidden
-      "
+        ${activeClasses}
+      `}
       onClick={handleClick}
+      aria-current={props.isActive ? 'page' : undefined}
     >
       {props.icon}
       <p className="text-primary-0 truncate">{props.children}</p>

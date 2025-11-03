@@ -4,32 +4,39 @@ Nessa seção, apresenta-se a arquitetura da aplicação, que define como os com
 
 \subsection{Definições da arquitetura}
 
-O sistema foi estruturado com base no modelo cliente-servidor, no qual o \emph{front-end} e o \emph{back-end} operam como aplicações independentes que se comunicam por meio de requisições \gls{http}, seguindo a arquitetura RESTful~\cite{RESTArch}.
+O \emph{BSBeauty} adota uma arquitetura de software em camadas, na qual cada camada da aplicação é responsável por uma função específica dentro do sistema. Essa arquitetura organiza o código de forma modular, promovendo a separação de responsabilidades, a facilidade de manutenção e escalabilidade da aplicação.
 
-O \emph{back-end} é responsável pelo processamento da lógica de negócios e pela persistência dos dados, enquanto o \emph{front-end} realiza a apresentação e interação com o usuário. Essa separação garante maior modularidade e facilita a manutenção da aplicação, cujo domínio é um ambiente de \textit{coworking} para salões de beleza.
+No contexto do projeto, o \emph{front-end} é responsável pela camada de \emph{View}, sendo implementada com a biblioteca \emph{React}. Ele centraliza todas as funcionalidades relacionadas à interface do usuário, incluindo a renderização dinâmica das telas e a interação com o usuário final. O \emph{front-end} consome os dados fornecidos pela \gls{api} do \emph{back-end} por meio de requisições \gls{http}, seguindo os princípios RESTFul~\cite{RESTArch}.
 
-A arquitetura do sistema adota um padrão baseado no \gls{mvc}~\cite{MDNMVC} de forma adaptada, aproximando-se de uma arquitetura em camadas. Cada camada possui uma responsabilidade bem definida, conforme descrito a seguir:
+O \emph{back-end}, por sua vez, foi estruturado com base nos princípios da arquitetura em camadas descrita por Fowler~\cite{FowlerPatterns}. Nesse modelo, o sistema é dividido em camadas lógicas, cada uma com uma responsabilidade bem definida. Essa divisão permite o desacoplamento entre a lógica de negócio, o controle de fluxo e o acesso de dados, tornando o sistema mais coeso e flexível. 
+
+Essa escolha organiza o código de forma modular, o que proporciona uma definição clara das responsabilidades de cada camada. A seguir, são apresentadas as camadas que compõem a aplicação:
 
 \begin{itemize}
+  \item \textbf{\emph{View:}} Implementada no \emph{front-end} com a biblioteca \emph{React}, é responsável por toda a interface do usuário, incluindo a apresentação dos dados e a captura das interações do usuário. Ela consome os dados fornecidos pela \gls{api} do \emph{back-end} para renderizar as telas de forma dinâmica.
   \item \textbf{\emph{Controller:}} Responsável por receber e tratar as requisições provenientes do cliente (\emph{front-end}), encaminhando-as para a camada de serviço correspondente. Esta camada lida diretamente com aspectos de infraestrutura externa,  como servidores de borda ou \emph{gateways} de entrada da aplicação, servindo como ponto inicial de processamento das solicitações.
   \item \textbf{\emph{Service:}} Centraliza a lógica de negócio da aplicação. É responsável por processar as regras do domínio e pode tanto consumir outras funções de serviço quanto interagir com a camada de persistência.
   \item \textbf{\emph{Repository:}} Trata das operações relacionadas à persistência de dados. Atua como uma interface entre os serviços e os mecanismos de armazenamento, como bancos de dados relacionais ou caches, promovendo o desacoplamento da lógica de negócio em relação à camada de dados.
 \end{itemize}
 
+
+
+Esse modelo de arquitetura é amplamente adotado em frameworks modernos de desenvolvimento \emph{back-end}, como o \emph{Spring Boot}\cite{SpringBootLayers} (Java) e o \emph{NestJS}\cite{NestJSLayers} (Node.js), que também seguem o padrão de separação entre  as camadas de \emph{Controller}, \emph{Service} e \emph{Repository}. A escolha dessa arquitetura dentro da aplicação proporciona uma série de vantagens: primeiro, há um claro desacoplamento entre a interface do usuário e a lógica de negócio, o que permite que diferentes equipes possam realizar o desenvolvimento do \emph{front-end} e do \emph{back-end} de forma independente, utilizando tecnologias e ferramentas específicas para cada camada. Além disso, cada camada pode ser mantida e evoluída de forma independente, o que facilita a manutenção do sistema ao longo do tempo. Essa separação melhora significativamente a testabilidade, permitindo a criação de testes isolados para cada camada, o que contribui para a qualidade do software. Por fim, o modelo favorece a escalabilidade e o reuso de componentes, uma vez que cada camada pode ser dimensionada conforme a demanda e reutilizada em diferentes contextos, garantindo maior modularidade e flexibilidade na evolução do sistema.
+
 \subsection{Diagrama da arquitetura}
 
-Esta subseção apresenta dois diagramas que representam a arquitetura do sistema desenvolvido: o diagrama de componentes e o diagrama de implantação. Esses diagramas auxiliam na visualização do relacionamento entre as partes da aplicação, bem como a sua distribuição nos ambientes computacionais.
+Esta subseção apresenta dois diagramas que representam a arquitetura do sistema desenvolvido: o diagrama de componentes e o diagrama de implantação. Esses diagramas auxiliam na visualização do relacionamento entre os componentes do sistema, bem como a sua distribuição nos ambientes computacionais.
 
 \subsubsection{Diagrama de componentes}
 
-O diagrama de componentes representa a estrutura modular principais módulos do sistema, evidenciando as dependências e as formas de comunicação entre eles, como comentado em ~\cite{Booch2005}. Ele demonstra como os componentes interagem por meio de interfaces — que definem contratos de uso — e implementações — que oferecem as funcionalidades esperadas.
+O diagrama de componentes representa a estrutura modular dos principais módulos do sistema, evidenciando as dependências e as formas de comunicação entre eles, como comentado em ~\cite{Booch2005}. Ele demonstra como os componentes interagem por meio de interfaces — que definem contratos de uso — e implementações — que oferecem as funcionalidades esperadas.
 
 Esse tipo de diagrama é útil para visualizar a estrutura modular da aplicação, facilitando o entendimento da separação de responsabilidades e da reutilização de código, além de apoiar decisões relacionadas à manutenção e evolução do sistema.
 
 \begin{figure}[htb]
   \centering
   \caption{Diagrama de componentes da aplicação}
-  \includegraphics[width=\textwidth]{cap04-desenvolvimento/images/4-3-2-1-diagrama-componentes}
+  \includegraphics[width=1.1\textwidth]{cap04-desenvolvimento/images/4-3-2-1-diagrama-componentes}
   \label{fig:diagrama-componente}
   \fonte{Produzido pelos autores}
 \end{figure}
@@ -45,17 +52,24 @@ No diagrama de componentes proposto, a aplicação é composta por diversos mód
 
   \item \textbf{\emph{Appointments}}: Gerencia os agendamentos realizados pelos clientes. Engloba tanto a criação, listagem e atualização dos agendamentos quanto a associação com os serviços ofertados.
 
-  \item \textbf{\emph{Customers}}: Controla os dados relacionados aos clientes da plataforma. Permite o cadastro, consulta e edição de informações do perfil dos usuários.
+  \item \textbf{\emph{Professionals}}: Controla os dados relacionados aos clientes da plataforma. Permite o cadastro, consulta e edição de informações do perfil dos usuários.
 
-  \item \textbf{\emph{Employees}}: Administra os dados dos profissionais que prestam serviços na aplicação, incluindo informações cadastrais, disponibilidade e associação a serviços específicos.
+  \item \textbf{\emph{Professionals}}: Administra os dados dos profissionais que prestam serviços na aplicação, incluindo informações cadastrais, disponibilidade e associação a serviços específicos.
+
+  \item \textbf{\emph{Permissions}}: Gerencia as permissões granulares do sistema, definindo ações e privilégios que podem ser atribuídos a papéis (roles) ou diretamente a usuários. Esse módulo é utilizado pelo mecanismo de autorização para controlar o acesso a recursos e operações sensíveis da aplicação.
+
+  \item \textbf{\emph{Roles}}: Responsável pelo gerenciamento de papéis (roles) que agrupam permissões, simplificando a atribuição de conjuntos de privilégios a profissionais ou usuários. Facilita a administração de acesso em grande escala e a composição de políticas de autorização.
+
+  \item \textbf{\emph{Blocked Times}}: Trata do registro de períodos temporários em que um profissional não está disponível (por exemplo, férias, ausências ou compromissos). Diferencia-se dos turnos regulares (
+\emph{Shift}) por representar exceções pontuais que impedem o agendamento de atendimentos.
 
   \item \textbf{\emph{Notifications}}: Responsável por enviar notificações aos usuários, como lembretes, confirmações de agendamento e atualizações importantes. Pode incluir o envio por \emph{e-mail} ou outros canais.
 
-  \item \textbf{\emph{Offers}}: Define a relação entre profissionais e os serviços que eles oferecem. Cada oferta especifica o tempo estimado e o valor cobrado por um funcionário para realizar determinado serviço. Esse componente é fundamental para a composição de um agendamento, pois determina quais combinações de profissional e serviço estão disponíveis.
+  \item \textbf{\emph{Offers}}: Define a relação entre profissionais e os serviços que eles oferecem. Cada oferta especifica o tempo estimado e o valor cobrado por um profissional para realizar determinado serviço. Esse componente é fundamental para a composição de um agendamento, pois determina quais combinações de profissional e serviço estão disponíveis.
 
   \item \textbf{\emph{Services}}: Representa os serviços oferecidos pela empresa, armazenando informações descritivas como nome e descrição. Este módulo não define valores ou tempos de execução, pois esses dados são especificados nas ofertas individuais de cada profissional (por meio do módulo \textit{Offers}).
 
-  \item \textbf{\emph{Shift}}: Trata do controle de turnos de trabalho dos funcionários, possibilitando a definição de horários disponíveis para realização dos agendamentos.
+  \item \textbf{\emph{Shift}}: Trata do controle de turnos de trabalho dos profissionais, possibilitando a definição de horários disponíveis para realização dos agendamentos.
 
   \item \textbf{\emph{Rating}}: Permite que os clientes avaliem os serviços e os profissionais após os atendimentos, promovendo um sistema de \emph{feedback} contínuo.
   
@@ -90,20 +104,20 @@ O diagrama acima é composto pelos seguintes componentes:
     \begin{itemize}
       \item A \textit{\gls{api} (Back-end em NodeJS)}: Principal serviço da aplicação, sendo o responsável por prover os \emph{"endpoints"} que fornecem os dados e arquivos estáticos para o \textit{front-end} através de uma \textit{\gls{api} RestFull}, se comunicando com o banco de dados, um componente que é executado no mesmo dispositivo.
       \item \textit{Banco de Dados (\gls{sgbd} MariaDB)}: Serviço de \gls{sgbd} que provê os dados para o \textit{back-end} da aplicação, o que possibilita a persistência e consulta de forma eficiente. Para garantir a persistência dos dados gerenciados pelo MariaDB, o contêiner utiliza volumes \emph{Docker} montados na instância \gls{ec2} privada. Isso assegura que os dados não sejam perdidos em reinicializações do contêiner.
+      \item \textit{Redis}: Banco de dados em memória utilizado para a persistência de dados efêmeros e de acesso rápido, como cache de respostas, sessões e armazenamento temporário de códigos de autenticação/validação. O uso do \emph{Redis} melhora a performance em operações que exigem baixa latência e é empregado para suportar tarefas de autenticação (geração e busca de códigos) e mecanismos de cache da aplicação.
     \end{itemize}
-  Além dos serviços em execução, a instância privada também contém os seguintes artefatos essenciais para o empacotamento e execução dos serviços via contêineres \emph{Docker}~\cite{DockerDocs}:
+    Além dos serviços em execução, a instância privada também contém os seguintes artefatos essenciais para o empacotamento e execução dos serviços via contêineres \emph{Docker}~\cite{DockerDocs}:
     \begin{itemize}
       \item \textit{Dockerfile}: Esse artefato descreve as instruções necessárias para criar a imagem \emph{Docker} da aplicação \textit{back-end}, especificando o ambiente base (como a imagem do Node.js), os arquivos a serem copiados, dependências a serem instaladas e os comandos de inicialização da aplicação.
-
       \item \textit{docker-compose.yaml}: Esse arquivo é utilizado como ferramenta de orquestração para os serviços \emph{Docker}~\cite{DockerComposeDocs} da aplicação. Ele define a configuração dos contêineres da aplicação, como o contêiner da \gls{api} e o do banco de dados, bem como as variáveis de ambiente, volumes, redes e dependências entre os serviços. É a partir deste artefato que os contêineres são gerados e executados de forma integrada.
     \end{itemize}
 
-  \item \textbf{\textit{Google Cloud (Device):}} Localizada na nuvem pública da Google (\textit{Google Cloud}), essa \gls{api} é utilizada pelo \emph{back-end} da aplicação para realizar a autenticação de usuários através do protocolo \emph{OAuth} 2.0 \cite{GoogleOAuth}. Esse processo ocorre quando o usuário opta por fazer \emph{login} com sua conta Google. Nesse cenário, a aplicação redireciona o usuário para a tela de autenticação da Google, e após a confirmação, a \gls{api} recebe um \textit{token} de acesso que é utilizado para obter as informações do usuário autenticado. Esse fluxo garante uma autenticação segura, delegando a responsabilidade da validação de identidade à Google.
+  \item \textbf{\textit{Google Cloud (Device):}} Localizada na nuvem pública da Google (\textit{Google Cloud}), essa \gls{api} é utilizada pelo \emph{back-end} da aplicação para realizar a autenticação de usuários através do protocolo \emph{OAuth} 2.0 \cite{GoogleOAuth}. Esse processo ocorre quando o usuário opta por fazer \emph{login} com sua conta Google. Nesse cenário, a aplicação redireciona o usuário para a tela de autenticação da Google, e após a confirmação, a \gls{api} recebe um \textit{token} de acesso que é utilizado para obter as informações do usuário autenticado. Esse fluxo garante uma autenticação segura, delegando a responsabilidade da validação de identidade à Google. Além disso, o \emph{back-end} integra-se ao servidor SMTP do Gmail para o envio de e-mails aos usuários (por exemplo: notificações de agendamento, códigos de verificação e recuperação de senha), conforme previsto no diagrama de componentes.
 \end{itemize}
 
 O fluxo de execução típico da aplicação baseado no diagrama de implantação acima segue os seguintes passos:
 \begin{enumerate}
-  \item O usuário acessa a aplicação pelo navegador, requisitando os arquivos \gls{html}/\gls{css}/\gls{js} ao servidor \emph{NGINX}.
+  \item O usuário acessa a aplicação pelo navegador, requisitando os arquivos \gls{html}\slash\gls{css}\slash\gls{js} ao servidor \emph{NGINX}.
   \item O \emph{NGINX}, atuando como proxy reverso, redireciona essas requisições para o serviço de \emph{back-end} na instância privada.
   \item A \gls{api} processa a requisição, acessa o banco de dados quando necessário e retorna os dados.
   \item Em caso de autenticação via Google, a \gls{api} redireciona o usuário para o serviço \emph{Google OAuth} \cite{GoogleOAuth}, que retorna um \emph{token} de acesso após o \emph{login}.

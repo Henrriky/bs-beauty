@@ -38,8 +38,3 @@ export function buildCompactTitle(message: string) {
   const compact = when.replace(/(\d{2}\/\d{2})\/\d{4}/, '$1')
   return `${baseTitle} - ${compact}`
 }
-
-export function prettifyISOInText(text: string) {
-  const isoRegex = /\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z\b/g
-  return text.replace(isoRegex, (iso) => formatPtBrWithAs(iso) ?? iso)
-}

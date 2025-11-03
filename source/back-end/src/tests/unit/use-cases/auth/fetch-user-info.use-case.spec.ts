@@ -33,7 +33,7 @@ describe('FetchUserInfoUseCase', () => {
           userType: UserType.CUSTOMER,
           registerCompleted: true,
           profilePhotoUrl: faker.internet.url(),
-          notificationPreference: NotificationChannel.BOTH,
+          notificationPreference: NotificationChannel.ALL,
           birthdate: faker.date.past(),
           referrerId: null,
           referralCount: 0,
@@ -102,7 +102,7 @@ describe('FetchUserInfoUseCase', () => {
           profilePhotoUrl: faker.internet.url(),
           socialMedia: {},
           paymentMethods: ['PIX', 'CARTAO_CREDITO'],
-          notificationPreference: NotificationChannel.EMAIL,
+          notificationPreference: NotificationChannel.ALL,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }
@@ -242,7 +242,7 @@ describe('FetchUserInfoUseCase', () => {
           profilePhotoUrl: null,
           socialMedia: null,
           paymentMethods: null,
-          notificationPreference: NotificationChannel.BOTH,
+          notificationPreference: NotificationChannel.ALL,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }

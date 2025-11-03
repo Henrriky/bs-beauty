@@ -10,8 +10,7 @@ export enum UserType {
 export enum NotificationPreference {
   NONE = "NONE",
   IN_APP = 'IN_APP',
-  EMAIL = 'EMAIL',
-  BOTH = 'BOTH'
+  ALL = 'ALL'
 }
 
 export interface CustomerOrProfessional {
