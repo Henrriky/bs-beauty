@@ -148,6 +148,19 @@ function ProfessionalProfile({
         )}
         disabled
       />
+      {userInfo.isCommissioned && (
+        <Input
+          label="Taxa de Comissão"
+          id="commissionRate"
+          type="text"
+          value={
+            userInfo.commissionRate
+              ? (userInfo.commissionRate * 100).toFixed(2) + '%'
+              : 'N/A'
+          }
+          disabled
+        />
+      )}
       <SocialMediaContainerInput
         socialMediaFields={socialMediaFields}
         removeSocialMedia={removeSocialMedia}
