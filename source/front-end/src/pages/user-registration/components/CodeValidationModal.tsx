@@ -97,9 +97,9 @@ function CodeValidationModal({
           <div className="bg-[#1E1E1E] rounded-2xl shadow p-6 w-full h-full max-w-[480px] max-h-[320px] flex flex-col justify-center items-center gap-5">
             <div>
               <Title align="center">Confirmação de E-mail</Title>
-              <p className="text-[#979797] text-sm mt-2">
+              <p className="text-[#DBDBDB] text-sm mt-2">
                 Nós enviamos um código para{' '}
-                <span className="text-primary-0">{email}</span>
+                <span className="text-[#A4978A]">{email}</span>
               </p>
             </div>
             <div className="flex flex-col gap-5 items-center">
@@ -111,7 +111,7 @@ function CodeValidationModal({
                 inputClassName="w-[300px] text-center text-[20px]"
                 onChange={handleCodeInputChange}
               />
-              <p className="text-[#DBDBDB] text-xs">
+              <p className="text-[#DBDBDB] text-sm">
                 Não recebeu o código? {''}
                 <Button
                   variant="text-only"

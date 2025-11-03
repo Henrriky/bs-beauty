@@ -55,7 +55,7 @@ const AnalyticsCards = () => {
   }
 
   return (
-    <div className="my-12 flex flex-col gap-6">
+    <div className="my-6 flex flex-col gap-6">
       <Card
         icon={<CalendarDateRangeIcon />}
         text="Total de agendamentos"
