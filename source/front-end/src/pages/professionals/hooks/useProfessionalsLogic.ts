@@ -98,7 +98,14 @@ export function useProfessionalsLogic({
   const handleCreateProfessional = useCallback(
     async (data: CreateProfessionalFormData) => {
       try {
-        await createProfessional(data).unwrap()
+        const payload = {
+          ...data,
+          commissionRate:
+            data.commissionRate !== undefined
+              ? data.commissionRate / 100
+              : undefined,
+        }
+        await createProfessional(payload).unwrap()
         toast.success('Funcionário criado com sucesso!')
         closeFormModal()
         refetchProfessionals()

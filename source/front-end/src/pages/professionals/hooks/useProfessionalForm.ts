@@ -20,7 +20,7 @@ export function useProfessionalForm(
       email: '',
       userType: UserType.PROFESSIONAL,
       isCommissioned: false,
-      commissionPercentage: undefined,
+      commissionRate: undefined,
     },
   })
 

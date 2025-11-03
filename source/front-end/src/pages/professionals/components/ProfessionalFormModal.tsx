@@ -5,7 +5,7 @@ import { Professional } from '../../../store/auth/types'
 import { useProfessionalForm } from '../hooks/useProfessionalForm'
 import Modal from '../../../components/modal/Modal'
 import { Checkbox } from '../../../components/inputs/Checkbox'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface ProfessionalFormModalProps {
   isOpen: boolean
@@ -25,15 +25,22 @@ export function ProfessionalFormModal({
     useProfessionalForm(onSubmit)
 
   const isCommissioned = watch('isCommissioned')
+  const prevIsOpenRef = useRef(isOpen)
+
+  useEffect(() => {
+    if (prevIsOpenRef.current && !isOpen) {
+      resetForm()
+    }
+    prevIsOpenRef.current = isOpen
+  }, [isOpen, resetForm])
 
   useEffect(() => {
     if (!isCommissioned) {
-      setValue('commissionPercentage', undefined)
+      setValue('commissionRate', undefined)
     }
   }, [isCommissioned, setValue])
 
   const handleClose = () => {
-    resetForm()
     onClose()
   }
 
@@ -75,14 +82,14 @@ export function ProfessionalFormModal({
                 <label className="text-red-400"> * </label>
               </label>
               <Input
-                registration={register('commissionPercentage', {
+                registration={register('commissionRate', {
                   valueAsNumber: true,
                 })}
-                id="commissionPercentage"
+                id="commissionRate"
                 type="number"
                 placeholder="Ex: 10"
                 autoComplete="off"
-                error={errors.commissionPercentage?.message?.toString()}
+                error={errors.commissionRate?.message?.toString()}
                 min={0}
                 max={100}
                 step={0.01}

@@ -35,12 +35,28 @@ export function ProfessionalCard({
         "
           >
             <UserGroupIcon className="size-4 " />
-            {professional.userType === 'MANAGER' ? 'Gerente' : 'Profissional'}
+            {professional.userType === 'MANAGER'
+              ? 'Gerente'
+              : professional.isCommissioned
+                ? 'Comissionado'
+                : 'Profissional'}
           </span>
         </div>
       </div>
       {/* Actions - Right Side */}
       <div className="flex gap-2 shrink-0">
+        <UserCanAccessContainer
+          allowedPermissions={['professional.manage_roles']}
+          allowedUserTypes={[UserType.MANAGER]}
+        >
+          <button
+            onClick={() => onManageProfessionalRoles(professional)}
+            className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-400/10 rounded transition-all"
+            title="Editar Comissão"
+          >
+            <CogIcon className="w-4 h-4" />
+          </button>
+        </UserCanAccessContainer>
         <UserCanAccessContainer
           allowedPermissions={['professional.manage_roles']}
           allowedUserTypes={[UserType.MANAGER]}

@@ -132,7 +132,7 @@ model Professional {
   googleId               String?              @unique @map("google_id")
   registerCompleted      Boolean              @default(false) @map("register_completed")
   paymentMethods         Json?                @map("payment_methods")
-  isComissioned          Boolean              @default(false) @map("is_comissioned")
+  isCommissioned         Boolean              @default(false) @map("is_commissioned")
   commissionRate         Decimal?             @map("commission_rate") @db.Decimal(5, 4)
   socialMedia            Json?                @map("social_media")
   contact                String?              @unique

@@ -50,6 +50,8 @@ export type Professional = {
   registerCompleted: boolean;
   socialMedia: { name: string, url: string }[] | null;
   paymentMethods: { name: string, }[] | null;
+  isCommissioned: boolean;
+  commissionRate: number | null;
   contact: string | null;
   specialization: string | null;
   profilePhotoUrl: string;

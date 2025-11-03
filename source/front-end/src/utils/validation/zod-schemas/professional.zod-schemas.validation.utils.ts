@@ -64,9 +64,10 @@ class ProfessionalSchemas {
         .email('Formato de e-mail inválido.'),
       userType: z.enum(['MANAGER', 'PROFESSIONAL']).optional(),
       isCommissioned: z.boolean(),
-      commissionPercentage: z
+      commissionRate: z
         .number({
-          invalid_type_error: 'A porcentagem deve ser um número',
+          required_error: 'A porcentagem de comissão é obrigatória',
+          invalid_type_error: 'A porcentagem de comissão deve ser um número',
         })
         .min(0, 'A porcentagem não pode ser negativa')
         .max(100, 'A porcentagem não pode ser maior que 100')
