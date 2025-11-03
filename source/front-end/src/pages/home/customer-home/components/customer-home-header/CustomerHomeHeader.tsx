@@ -7,7 +7,7 @@ function CustomerHomeHeader() {
 
   return (
     <header>
-      <h2 className="text-2xl mt-10 mb-2">
+      <h2 className="text-2xl mb-2">
         <span className="text-primary-100">Bem vindo(a), </span>
         <span className="text-[#A4978A]"> {isFetching ? '...' : userName}</span>
       </h2>

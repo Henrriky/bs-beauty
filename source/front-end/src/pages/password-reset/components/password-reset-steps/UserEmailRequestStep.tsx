@@ -36,11 +36,13 @@ function UserEmailRequestStep({
       />
       <div className="flex gap-3">
         <Button
-          label="Cancelar"
+          className='p-2'
+          label="Voltar para o início"
           variant="outline"
-          onClick={() => navigate('/')}
+          onClick={() => navigate(-1)}
         />
         <Button
+          className='p-2'
           label={
             isLoading ? (
               <div className="flex justify-center items-center gap-4">

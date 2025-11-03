@@ -1,10 +1,10 @@
+import { type ServicesOfferedByProfessional } from '@/repository/types/professional-repository.types'
 import { ProfessionalsUseCase } from '@/services/professionals.use-case'
-import { MockProfessionalRepository, MockRoleRepository } from '../utils/mocks/repository'
+import { CustomError } from '@/utils/errors/custom.error.util'
 import { faker } from '@faker-js/faker'
 import { NotificationChannel, Prisma, type Professional, UserType } from '@prisma/client'
-import { type ServicesOfferedByProfessional } from '@/repository/types/professional-repository.types'
 import bcrypt from 'bcrypt'
-import { CustomError } from '@/utils/errors/custom.error.util'
+import { MockProfessionalRepository, MockRoleRepository } from '../utils/mocks/repository'
 
 describe('ProfessionalsUseCase (Unit Tests)', () => {
   let professionalsUseCase: ProfessionalsUseCase
@@ -42,7 +42,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
           updatedAt: faker.date.past(),
           profilePhotoUrl: faker.internet.url(),
           paymentMethods: null,
-          notificationPreference: 'BOTH'
+          notificationPreference: NotificationChannel.ALL
         }
       ]
 
@@ -81,7 +81,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
         paymentMethods: null,
-        notificationPreference: 'BOTH'
+        notificationPreference: NotificationChannel.ALL
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(professional)
@@ -128,7 +128,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         paymentMethods: null,
-        notificationPreference: 'BOTH'
+        notificationPreference: NotificationChannel.ALL
       }
 
       MockProfessionalRepository.findByEmail.mockResolvedValue(null)
@@ -166,7 +166,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         paymentMethods: null,
-        notificationPreference: 'BOTH'
+        notificationPreference: NotificationChannel.ALL
       }
 
       MockProfessionalRepository.findByEmail.mockResolvedValue(existingProfessional)
@@ -202,7 +202,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
         paymentMethods: null,
-        notificationPreference: 'BOTH'
+        notificationPreference: NotificationChannel.ALL
       }
 
       MockProfessionalRepository.findById.mockResolvedValue(updatedProfessional)
@@ -245,7 +245,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
-        notificationPreference: 'BOTH',
+        notificationPreference: NotificationChannel.ALL,
         paymentMethods: null
       }
 
@@ -295,7 +295,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
         paymentMethods: null,
-        notificationPreference: 'BOTH'
+        notificationPreference: NotificationChannel.ALL
       }
 
       const paginatedResult = {
@@ -397,7 +397,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -433,7 +433,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
         createdAt: faker.date.past(),
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         updatedAt: faker.date.past()
       }
 
@@ -488,7 +488,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         passwordHash: null,
         userType: 'PROFESSIONAL' as const,
         createdAt: faker.date.past(),
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         updatedAt: faker.date.past()
       }
 
@@ -534,7 +534,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
         createdAt: faker.date.past(),
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         updatedAt: faker.date.past()
       }
 
@@ -569,7 +569,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
         createdAt: faker.date.past(),
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         updatedAt: faker.date.past()
       }
 
@@ -623,7 +623,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -683,7 +683,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -727,7 +727,7 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
-        notificationPreference: NotificationChannel.BOTH,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }

@@ -31,7 +31,7 @@ class GenerateTokensUseCase {
     if (user.userType === UserType.PROFESSIONAL) { permissions.push(...await this.professionalRepository.findProfessionalPermissions(user.id)) }
 
     const { accessToken } = await this.encrypter.encrypt({
-      userId: user.id,
+      userId: user.googleId ?? user.id,
       id: user.id,
       userType: user.userType,
       email: user.email,

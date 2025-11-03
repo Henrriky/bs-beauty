@@ -80,10 +80,15 @@ export const API_VARIABLES = {
     FETCH_ANALYTICS_BY_PROFESSIONAL: (professionalId: string) =>
       `/analytics/${professionalId}`,
     FETCH_RATINGS_ANALYTICS: '/public-analytics/ratings',
+    FETCH_APPOINTMENTS_COUNT: '/analytics/appointments/count',
+    FETCH_ESTIMATED_TIME: '/analytics/appointments/estimated-time',
+    FETCH_CANCELATION_RATE: '/analytics/appointments/cancelation-rate',
+    FETCH_RATINGS_COUNT: '/analytics/customers/ratings',
   },
   NOTIFICATIONS_ENDPOINTS: {
     FETCH_NOTIFICATIONS: '/notifications',
     MARK_MANY_AS_READ: '/notifications/read',
+    DELETE_NOTIFICATIONS: '/notifications',
   },
   NOTIFICATION_TEMPLATES_ENDPOINTS: {
     FETCH_NOTIFICATION_TEMPLATES: '/notification-templates',
@@ -109,5 +114,13 @@ export const API_VARIABLES = {
     DELETE_BLOCKED_TIME: (id: string) => `/blocked-times/${id}`,
     FIND_BY_PROFESSIONAL_AND_PERIOD: (professionalId: string) =>
       `/professionals/${professionalId}/blocked-times`,
+  },
+  PAYMENT_RECORDS_ENDPONTS: {
+    FIND_BY_ID: (id: string) => `/payment-records/${id}`,
+    FIND_BY_PROFESSIONAL_ID: (professionalId: string) =>
+      `/payment-records/professional/${professionalId}`,
+    CREATE_PAYMENT_RECORD: '/payment-records',
+    UPDATE_PAYMENT_RECORD: (id: string) => `/payment-records/${id}`,
+    DELETE_PAYMENT_RECORD: (id: string) => `/payment-records/${id}`,
   },
 } as const

@@ -27,7 +27,7 @@ O acesso a essa instância é feito pela instância pública por meio do protoco
 
 \subsubsection{Controle de Acesso Baseado em Papéis}
 Outra medida de segurança, dessa vez mais relacionada a estrutura do software em si, é o controle de acesso baseado em \textit{roles}, traduzido geralmente como papéis.
-Na aplicação desenvolvida existem diversas páginas disponíveis, sendo cada uma delas destinada a um tipo de usuário (papel), como gerente, funcionários ou clientes. Assim, faz-se necessário uma maneira de bloquear e liberar o acesso a esses recursos conforme o papel do usuário atual, evitando que clientes do salão tenham acesso a páginas de relatório por exemplo.
+Na aplicação desenvolvida existem diversas páginas disponíveis, sendo cada uma delas destinada a um tipo de usuário (papel), como gerente, profissional ou cliente. Assim, faz-se necessário uma maneira de bloquear e liberar o acesso a esses recursos conforme o papel do usuário atual, evitando que clientes do salão tenham acesso a páginas de relatório por exemplo.
 O controle de acesso foi implementado por meio do mapeamento dos papéis e permissões dentro da aplicação. Consequentemente, toda vez que uma página é requisitada, faz-se uma verificação do papel do usuário atual, que recebe ou não permissão para acessá-la.
 Dessa forma os recursos são disponibilizados de forma consoante ao usuário. Resolvendo o problema de acessos indevidos a partes do sistema e também tornando a experiência do usuário coerente.
 

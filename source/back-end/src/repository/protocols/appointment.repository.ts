@@ -42,17 +42,45 @@ export type FindByIdAppointments = Prisma.AppointmentGetPayload<{
   }
 }>
 
+export type GroupedAppointmentCount = {
+  period: string
+  count: number
+}
+
+export type GroupedEstimatedTime = {
+  period: string
+  estimatedTimeInMinutes: number
+}
+
+export type GroupingPeriod = 'day' | 'week' | 'month'
+
 interface AppointmentRepository {
   findAll: () => Promise<Appointment[]>
   findAllPaginated: (params: PaginatedRequest<AppointmentFilters>, scope: { userId: string; viewAll: boolean }) => Promise<PaginatedResult<Appointment>>
   findById: (id: string) => Promise<FindByIdAppointments | null>
   findByCustomerOrProfessionalId: (customerOrProfessionalId: string) => Promise<Appointment[]>
   findByServiceOfferedId: (id: string) => Promise<Appointment[]>
-  findByDateRange: (startDate: Date, endDate: Date) => Promise<Appointment[]>
+  findByDateRangeStatusProfessionalAndServices: (startDate: Date, endDate: Date, statusList?: Status[], professionalId?: string, serviceIds?: string[]) => Promise<Appointment[]>
+  countByDateRangeGrouped: (
+    startDate: Date,
+    endDate: Date,
+    groupBy: GroupingPeriod,
+    statusList?: Status[],
+    professionalId?: string,
+    serviceIds?: string[]
+  ) => Promise<GroupedAppointmentCount[]>
+  sumEstimatedTimeByDateRangeGrouped: (
+    startDate: Date,
+    endDate: Date,
+    groupBy: GroupingPeriod,
+    statusList?: Status[],
+    professionalId?: string,
+    serviceIds?: string[]
+  ) => Promise<GroupedEstimatedTime[]>
   findNonFinishedByUserAndDay: (
     userId: string,
     dayToFetchAvailableSchedulling: Date
-  ) => Promise<{ validAppointmentsOnDay: FindNonFinishedByUserAndDay } >
+  ) => Promise<{ validAppointmentsOnDay: FindNonFinishedByUserAndDay }>
   countCustomerAppointmentsPerDay: (
     customerId: string,
     day?: Date,

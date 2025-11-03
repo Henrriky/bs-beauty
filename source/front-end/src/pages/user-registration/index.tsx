@@ -88,7 +88,7 @@ function UserRegistration() {
   }
 
   return (
-    <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn">
+    <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn max-w-[500px] mx-auto">
       <Title align="center">Cadastre-se e Transforme Seu Estilo!</Title>
       <UserRegisterForm
         handleSubmit={handleSubmit}

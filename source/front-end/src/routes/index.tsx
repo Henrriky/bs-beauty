@@ -17,6 +17,8 @@ import { UserType } from '../store/auth/types'
 import CustomerHome from '../pages/home/customer-home'
 import Appointments from '../pages/appointments'
 import AppointmentDetails from '../pages/appointments/components/AppointmentsDetails'
+import PaymentRecords from '../pages/payments'
+import PaymentRecordDetails from '../pages/payments/components/PaymentRecordDetails'
 import Notifications from '../pages/notifications'
 import UserRegistration from '../pages/user-registration'
 import PasswordReset from '../pages/password-reset'
@@ -24,6 +26,7 @@ import PasswordResetCompleted from '../pages/password-reset/components/PasswordR
 import LandingPage from '../pages/landing-page'
 import Roles from '../pages/roles'
 import NotificationTemplates from '../pages/notification-templates'
+import ProductivityReport from '../pages/analytics'
 import BlockedTimes from '../pages/blocked-times'
 
 function BSBeautyRouter() {
@@ -98,6 +101,10 @@ function BSBeautyRouter() {
               >
                 <Route path="/services" element={<ServiceDashboard />} />
                 <Route path="/shifts" element={<Shifts />} />
+                <Route
+                  path="/analytics/reports"
+                  element={<ProductivityReport />}
+                />
                 <Route path="/blocked-times" element={<BlockedTimes />} />
               </Route>
 
@@ -152,6 +159,28 @@ function BSBeautyRouter() {
                 }
               >
                 <Route path="/manager/roles" element={<Roles />} />
+              </Route>
+
+              {/* Payment Records */}
+              <Route
+                element={
+                  <PrivateRoute
+                    strategy={'ANY'}
+                    allowedPermissions={[
+                      'payment_record.create',
+                      'payment_record.delete',
+                      'payment_record.edit',
+                      'payment_record.read',
+                    ]}
+                    allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
+                  />
+                }
+              >
+                <Route path="/payments" element={<PaymentRecords />} />
+                <Route
+                  path="/payments/:paymentRecordId"
+                  element={<PaymentRecordDetails />}
+                />
               </Route>
 
               <Route path="/profile" element={<Profile />} />

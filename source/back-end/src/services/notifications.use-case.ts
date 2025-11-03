@@ -6,18 +6,16 @@ import { NotificationChannel, NotificationType, UserType, type Notification } fr
 import { type NotificationRepository } from '../repository/protocols/notification.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { EmailService } from './email/email.service'
+import { DateFormatter } from '@/utils/formatting/date.formatting.util'
 
 export interface BirthdayNotificationPayload {
   recipientId: string
   recipientType: 'CUSTOMER'
   notificationPreference: NotificationChannel
   email?: string | null
-
   marker: string
-
   title: string
   message: string
-
   templateKey?: 'BIRTHDAY'
   year?: number
 }
@@ -41,11 +39,14 @@ class NotificationsUseCase {
     return notification
   }
 
-  public async executeDelete (notificationId: string) {
-    await this.executeFindById(notificationId)
-    const deletedNotification = await this.notificationRepository.delete(notificationId)
-
-    return deletedNotification
+  public async executeDeleteMany(ids: string[], userId: string) {
+    if (ids.length === 0) return { deletedCount: 0 }
+    const uniqueIds = [...new Set(ids)]
+    const deletedCount = await this.notificationRepository.deleteMany(uniqueIds, userId)
+    return {
+      success: true,
+      message: `${deletedCount} notifications deleted successfully.`,
+    }
   }
 
   public async executeSendOnAppointmentCreated (appointment: FindByIdAppointments): Promise<void> {
@@ -58,11 +59,10 @@ class NotificationsUseCase {
     const customerName = appointment.customer.name ?? 'Cliente'
     const recipientId = appointment.offer.professionalId
     const marker = `appointment:${appointment.id}:created:recipient:${recipientId}`
-    const professionalMarker = `[Agendamento Criado - PROFISSIONAL - ${appointmentDateISO}]`
 
     const professionalPreference = appointment.offer.professional.notificationPreference ?? 'NONE'
-    const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'BOTH'
-    const shouldNotifyEmail = professionalPreference === 'EMAIL' || professionalPreference === 'BOTH'
+    const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
+    const shouldNotifyEmail = professionalPreference === 'ALL'
 
     const alreadyExists = await this.notificationRepository.findByMarker(marker)
     if (!alreadyExists) {
@@ -71,8 +71,8 @@ class NotificationsUseCase {
           await this.notificationRepository.create({
             recipientId,
             marker,
-            title: 'Agendamento Criado',
-            message: `${professionalMarker} | Novo atendimento de ${serviceName} para ${customerName} em ${appointmentDateISO}.`,
+            title: `Agendamento Criado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
+            message: `Novo atendimento de ${serviceName} para ${customerName} em ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}.`,
             recipientType: UserType.PROFESSIONAL,
             type: NotificationType.APPOINTMENT
           })
@@ -99,23 +99,23 @@ class NotificationsUseCase {
     const recipientId = appointment.customerId
     const marker = `appointment:${appointment.id}:confirmed:recipient:${recipientId}`
 
-    const customerMarker = `[Agendamento Confirmado - CLIENTE - ${appointmentDateISO}]`
     const customerName = appointment.customer.name ?? 'Cliente'
     const customerEmail = appointment.customer.email
 
     const preference = appointment.customer.notificationPreference ?? 'NONE'
-    const shouldNotifyInApp = preference === 'IN_APP' || preference === 'BOTH'
-    const shouldNotifyEmail = preference === 'EMAIL' || preference === 'BOTH'
+    const shouldNotifyInApp = preference === 'IN_APP' || preference === 'ALL'
+    const shouldNotifyEmail = preference === 'ALL'
 
     const alreadyExists = await this.notificationRepository.findByMarker(marker)
 
     if (!alreadyExists) {
       if (shouldNotifyInApp) {
         await this.notificationRepository.create({
-          message: `${customerMarker} | Seu agendamento de ${serviceName} com ${professionalName} foi confirmado para ${appointmentDateISO}.`,
+          message: `Seu agendamento de ${serviceName} com ${professionalName} 
+                    foi confirmado para ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}.`,
           marker,
           recipientId,
-          title: 'Agendamento confirmado',
+          title: `Agendamento confirmado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
           recipientType: UserType.CUSTOMER,
           type: NotificationType.APPOINTMENT
         })
@@ -147,16 +147,13 @@ class NotificationsUseCase {
     const professionalName = appointment.offer.professional.name ?? 'Profissional'
     const professionalEmail = appointment.offer.professional.email
 
-    const customerMarker = `[Agendamento Cancelado - CLIENTE - ${appointmentDateISO}]`
-    const professionalMarker = `[Agendamento Cancelado - PROFISSIONAL - ${appointmentDateISO}]`
-
     if (options.notifyCustomer) {
       const recipientId = appointment.customerId
       const marker = `appointment:${appointment.id}:cancelled:recipient:${recipientId}`
 
       const customerPreference = appointment.customer.notificationPreference ?? 'NONE'
-      const shouldNotifyCustomerInApp = customerPreference === 'IN_APP' || customerPreference === 'BOTH'
-      const shouldNotifyEmail = customerPreference === 'EMAIL' || customerPreference === 'BOTH'
+      const shouldNotifyCustomerInApp = customerPreference === 'IN_APP' || customerPreference === 'ALL'
+      const shouldNotifyEmail = customerPreference === 'ALL'
 
       const alreadyExists = await this.notificationRepository.findByMarker(marker)
       if (!alreadyExists) {
@@ -164,8 +161,9 @@ class NotificationsUseCase {
           await this.notificationRepository.create({
             recipientId,
             marker,
-            title: 'Agendamento cancelado',
-            message: `${customerMarker} | Seu agendamento de ${serviceName} com ${professionalName} foi cancelado (data original: ${appointmentDateISO}).`,
+            title: `Agendamento Cancelado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
+            message: `Seu agendamento de ${serviceName} com ${professionalName} foi cancelado 
+            (data original: ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}).`,
             recipientType: UserType.CUSTOMER,
             type: NotificationType.APPOINTMENT
           })
@@ -195,15 +193,16 @@ class NotificationsUseCase {
 
       const alreadyExists = await this.notificationRepository.findByMarker(marker)
       if (!alreadyExists) {
-        const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'BOTH'
-        const shouldNotifyEmail = professionalPreference === 'EMAIL' || professionalPreference === 'BOTH'
+        const shouldNotifyProfessionalInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
+        const shouldNotifyEmail = professionalPreference === 'ALL'
 
         if (shouldNotifyProfessionalInApp) {
           await this.notificationRepository.create({
             recipientId,
             marker,
-            title: 'Agendamento cancelado',
-            message: `${professionalMarker} | Atendimento de ${serviceName} para ${customerName} foi cancelado (data original: ${appointmentDateISO}).`,
+            title: `Agendamento Cancelado | ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}`,
+            message: `Atendimento de ${serviceName} para ${customerName} foi cancelado 
+            (data original: ${DateFormatter.formatDateToLocaleString(appointment.appointmentDate)}).`,
             recipientType: UserType.PROFESSIONAL,
             type: NotificationType.APPOINTMENT
           })
@@ -241,11 +240,10 @@ class NotificationsUseCase {
 
     const shouldNotifyInApp =
       notificationPreference === NotificationChannel.IN_APP ||
-      notificationPreference === NotificationChannel.BOTH
+      notificationPreference === NotificationChannel.ALL
 
     const shouldNotifyEmail =
-      notificationPreference === NotificationChannel.EMAIL ||
-      notificationPreference === NotificationChannel.BOTH
+      notificationPreference === NotificationChannel.ALL
 
     if (shouldNotifyInApp) {
       await this.notificationRepository.create({

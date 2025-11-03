@@ -10,6 +10,7 @@ import { Input } from '../../../components/inputs/Input'
 import { Button } from '../../../components/button/Button'
 import PasswordEyeIcon from '../../../components/password/PasswordEyeIcon'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 interface UserRegistrationProps {
   isLoading: boolean
@@ -22,6 +23,8 @@ interface UserRegistrationProps {
 }
 
 function UserRegistrationForm(props: UserRegistrationProps) {
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -87,20 +90,31 @@ function UserRegistrationForm(props: UserRegistrationProps) {
           showPasswordFunction={() => setShowPassword(!showPassword)}
         />
       </div>
-      <Button
-        type="submit"
-        label={
-          props.isLoading && !props.isOpen ? (
-            <div className="flex justify-center items-center gap-4">
-              <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
-              <p className="text-sm">Carregando...</p>
-            </div>
-          ) : (
-            'Prosseguir para próxima etapa'
-          )
-        }
-        disabled={props.isLoading}
-      />
+      <div className='flex gap-5 justify-between'>
+        <Button
+          type="button"
+          className='p-2'
+          variant='outline'
+          onClick={() => navigate(-1)}
+          label={'Voltar para o início'}
+          disabled={props.isLoading}
+        />
+        <Button
+          type="submit"
+          className='p-2'
+          label={
+            props.isLoading && !props.isOpen ? (
+              <div className="flex justify-center items-center gap-4">
+                <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-white rounded-full animate-spin"></div>
+                <p className="text-sm">Carregando...</p>
+              </div>
+            ) : (
+              'Prosseguir para próxima etapa'
+            )
+          }
+          disabled={props.isLoading}
+        />
+      </div>
     </form>
   )
 }

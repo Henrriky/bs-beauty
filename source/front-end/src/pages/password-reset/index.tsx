@@ -46,7 +46,7 @@ function PasswordReset() {
   }
 
   return (
-    <div className="flex justify-center items-center flex-col h-full gap-7 animate-fadeIn w-full">
+    <div className="flex justify-center items-center flex-col h-full gap-7 animate-fadeIn max-w-[500px] mx-auto">
       <div className="flex flex-col gap-5">
         <Title align="center">Redefinição de Senha</Title>
         <Subtitle align="center">{subtitlesBasedOnStep[step]}</Subtitle>
