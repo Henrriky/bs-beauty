@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Button } from '../../components/button/Button'
@@ -59,7 +58,7 @@ const Shifts = () => {
       initialShifts[day] = {
         shiftStart: shift ? formatTime(shift.shiftStart) : '',
         shiftEnd: shift ? formatTime(shift.shiftEnd) : '',
-        isBusy: shift ? shift.isBusy : false,
+        isBusy: shift ? shift.isBusy : true,
       }
     })
     setEditableShifts(initialShifts)
@@ -80,20 +79,12 @@ const Shifts = () => {
           const backendDay: WeekDays = WeekDayMapping[day] as WeekDays
           const existingShift = getShiftByDay(data?.shifts || [], day)
 
-          const toUtcTime = (time: string) => {
-            if (!time) return '00:00'
-            const [hour, minute] = time.split(':').map(Number)
-
-            const localTime = DateTime.local().set({ hour, minute })
-            const utcTime = localTime.toUTC()
-
-            return utcTime.toFormat('HH:mm')
-          }
+          const normalize = (t: string) => (t || '00:00').slice(0, 5)
 
           const payload = {
             weekDay: backendDay,
-            shiftStart: toUtcTime(shiftData.shiftStart),
-            shiftEnd: toUtcTime(shiftData.shiftEnd),
+            shiftStart: normalize(shiftData.shiftStart),
+            shiftEnd: normalize(shiftData.shiftEnd),
             isBusy: shiftData.isBusy,
           }
 
@@ -119,23 +110,16 @@ const Shifts = () => {
     }
   }
 
-  const formatTime = (isoTime: string) => {
-    if (!isoTime) return ''
-    try {
-      const date = new Date(isoTime)
+  const formatTime = (time: string) => {
+    if (!time) return ''
+    let m = /^(\d{2}):(\d{2})/.exec(time)
+    if (m) return `${m[1]}:${m[2]}`
 
-      const localDate = new Date(date.getTime() - 3 * 60 * 60 * 1000)
-
-      const hours = localDate.getUTCHours()
-      const minutes = localDate.getUTCMinutes()
-
-      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
-    } catch (error) {
-      console.error('Invalid ISO time:', isoTime)
-      console.error(error)
-      return ''
-    }
+    m = /T(\d{2}):(\d{2})/.exec(time)
+    if (m) return `${m[1]}:${m[2]}`
+    return ''
   }
+
 
   const validateShifts = (): boolean => {
     let isValid = true
