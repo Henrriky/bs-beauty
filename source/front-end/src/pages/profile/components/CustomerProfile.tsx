@@ -132,7 +132,7 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
         id="notificationPreference"
         label="Deseja receber notificações?"
         options={NOTIFICATION_OPTIONS}
-        error={errors?.name?.message?.toString()}
+        error={errors?.notificationPreference?.message?.toString()}
         variant="outline"
         wrapperClassName="w-full"
       />
