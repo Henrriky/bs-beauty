@@ -104,7 +104,7 @@ function Profile() {
             title="Perfil"
             subtitle="Gerencie suas informações pessoais aqui."
           />
-          <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} />
+          <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} displayName={userInfo.name ?? undefined} />
           <ProfileContainer
             userInfo={userInfo}
             onProfileUpdate={handlePostProfileUpdate}

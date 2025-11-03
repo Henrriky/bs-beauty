@@ -91,7 +91,11 @@ function SideBar() {
               className="hover:cursor-pointer"
               onClick={() => navigate('/profile')}
             >
-              <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" />
+              <ProfilePicture
+                profilePhotoUrl={photoUrl ?? ''}
+                displayName={displayName || undefined}
+                size="sm"
+              />
             </div>
           </div>
         </nav>
@@ -147,7 +151,7 @@ function SideBar() {
             onClick={() => navigate('/profile')}
             aria-label="Abrir perfil"
           >
-            <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" />
+            <ProfilePicture profilePhotoUrl={photoUrl ?? ''} displayName={displayName || undefined} size="sm" />
             <div className="min-w-0 text-left ml-1">
               <span
                 className="block truncate text-primary-0 text-sm capitalize"
