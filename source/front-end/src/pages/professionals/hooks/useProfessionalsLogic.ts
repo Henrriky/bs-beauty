@@ -4,6 +4,7 @@ import {
   useDeleteProfessionalMutation,
   useFetchProfessionalsQuery,
   useInsertProfessionalMutation,
+  useUpdateCommissionMutation,
 } from '../../../store/professional/professional-api'
 import { CreateProfessionalFormData, GetProfessionalsFiters } from '../types'
 import { Professional } from '../../../store/auth/types'
@@ -27,9 +28,12 @@ export function useProfessionalsLogic({
     useState<Professional | null>(null)
   const [professionalToManageRoles, setProfessionalToManageRoles] =
     useState<Professional | null>(null)
+  const [professionalToEditCommission, setProfessionalToEditCommission] =
+    useState<Professional | null>(null)
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [isRolesModalOpen, setIsRolesModalOpen] = useState(false)
+  const [isCommissionModalOpen, setIsCommissionModalOpen] = useState(false)
 
   // RTK Query Hooks
   const {
@@ -47,6 +51,8 @@ export function useProfessionalsLogic({
     useInsertProfessionalMutation()
   const [deleteProfessional, { isLoading: isDeleting }] =
     useDeleteProfessionalMutation()
+  const [updateCommission, { isLoading: isUpdatingCommission }] =
+    useUpdateCommissionMutation()
 
   // Handlers for Pagination
   const handlePageChange = useCallback((page: number) => {
@@ -161,11 +167,47 @@ export function useProfessionalsLogic({
     setProfessionalToManageRoles(null)
   }, [])
 
+  // Handlers para modal de comissão
+  const openCommissionModal = useCallback((professional: Professional) => {
+    setProfessionalToEditCommission(professional)
+    setIsCommissionModalOpen(true)
+  }, [])
+
+  const closeCommissionModal = useCallback(() => {
+    setIsCommissionModalOpen(false)
+    setProfessionalToEditCommission(null)
+  }, [])
+
+  /* Handlers for update commission */
+  const handleUpdateCommission = useCallback(
+    async (professionalId: string, commissionPercentage: number) => {
+      try {
+        await updateCommission({
+          professionalId,
+          data: {
+            commissionRate: commissionPercentage / 100,
+          },
+        }).unwrap()
+        toast.success('Comissão atualizada com sucesso!')
+        closeCommissionModal()
+        refetchProfessionals()
+      } catch (error) {
+        console.error('Error updating commission:', error)
+        const message =
+          (error as { data?: { message?: string } })?.data?.message ||
+          'Erro inesperado ao atualizar comissão'
+        toast.error(translateProfessionalAPIError(message))
+      }
+    },
+    [updateCommission, closeCommissionModal, refetchProfessionals],
+  )
+
   return {
     professionals: professionalsResponse?.data || [],
     selectedProfessional,
     professionalToDelete,
     professionalToManageRoles,
+    professionalToEditCommission,
 
     // States for Pagination and Filters
     filters,
@@ -180,11 +222,13 @@ export function useProfessionalsLogic({
     isLoadingProfessionals,
     isCreating,
     isDeleting,
+    isUpdatingCommission,
 
     // Modal States
     isFormModalOpen,
     isDeleteModalOpen,
     isRolesModalOpen,
+    isCommissionModalOpen,
 
     // Errors
     professionalsError,
@@ -201,13 +245,16 @@ export function useProfessionalsLogic({
     openCreateModal,
     openDeleteModal,
     openRolesModal,
+    openCommissionModal,
     closeDeleteModal,
     closeFormModal,
     closeRolesModal,
+    closeCommissionModal,
 
     // API Crud Handlers
     handleCreateProfessional,
     handleDeleteProfessional,
+    handleUpdateCommission,
 
     // Utils
     refetchProfessionals,

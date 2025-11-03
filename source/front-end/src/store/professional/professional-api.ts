@@ -16,6 +16,8 @@ import {
   AddRoleToProfessionalResponse,
   RemoveRoleFromProfessionalRequest,
   RemoveRoleFromProfessionalResponse,
+  UpdateCommissionRequest,
+  UpdateCommissionResponse,
 } from '../../pages/professionals/types'
 
 export const professionalAPI = createApi({
@@ -68,6 +70,22 @@ export const professionalAPI = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: ['Professionals'],
+    }),
+    updateCommission: builder.mutation<
+      UpdateCommissionResponse,
+      UpdateCommissionRequest
+    >({
+      query: ({ professionalId, data }) => ({
+        url: API_VARIABLES.PROFESSIONALS_ENDPOINTS.UPDATE_COMMISSION(
+          professionalId,
+        ),
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { professionalId }) => [
+        { type: 'Professionals', id: professionalId },
+        { type: 'Professionals', id: 'LIST' },
+      ],
     }),
     fetchServicesOfferedByProfessional: builder.query<
       { professional: ServicesOfferedByProfessionalResponse },
@@ -141,6 +159,7 @@ export const {
   useFetchProfessionalsQuery,
   useInsertProfessionalMutation,
   useDeleteProfessionalMutation,
+  useUpdateCommissionMutation,
   useFetchServicesOfferedByProfessionalQuery,
   useFetchProfessionalRolesQuery,
   useAddRoleToProfessionalMutation,

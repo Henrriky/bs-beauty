@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { DeleteProfessionalModal } from './components/DeleteProfessionalModal'
 import { ProfessionalFormModal } from './components/ProfessionalFormModal'
 import { ProfessionalRolesModal } from './components/ProfessionalRolesModal'
+import { EditCommissionModal } from './components/EditCommissionModal'
 import SearchInput from '../../components/inputs/SearchInput'
 import Title from '../../components/texts/Title'
 import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
@@ -24,12 +25,15 @@ function Professionals() {
     selectedProfessional,
     professionalToDelete,
     professionalToManageRoles,
+    professionalToEditCommission,
     isLoadingProfessionals,
     isCreating,
     isDeleting,
+    isUpdatingCommission,
     isFormModalOpen,
     isDeleteModalOpen,
     isRolesModalOpen,
+    isCommissionModalOpen,
     handlePageChange,
     handleFiltersChange,
     clearFilters,
@@ -39,8 +43,11 @@ function Professionals() {
     closeDeleteModal,
     openRolesModal,
     closeRolesModal,
+    openCommissionModal,
+    closeCommissionModal,
     handleCreateProfessional,
     handleDeleteProfessional,
+    handleUpdateCommission,
   } = useProfessionalsLogic()
 
   const handleSearch = (value: string) => {
@@ -99,6 +106,7 @@ function Professionals() {
           isLoading={isLoadingProfessionals}
           onDelete={openDeleteModal}
           onManageProfessionalRoles={openRolesModal}
+          onEditCommission={openCommissionModal}
         />
 
         {/* Pagination */}
@@ -152,6 +160,15 @@ function Professionals() {
         isOpen={isRolesModalOpen}
         professional={professionalToManageRoles}
         onClose={closeRolesModal}
+      />
+
+      {/* Edit Commission Modal */}
+      <EditCommissionModal
+        isOpen={isCommissionModalOpen}
+        professional={professionalToEditCommission}
+        isLoading={isUpdatingCommission}
+        onClose={closeCommissionModal}
+        onSubmit={handleUpdateCommission}
       />
     </div>
   )

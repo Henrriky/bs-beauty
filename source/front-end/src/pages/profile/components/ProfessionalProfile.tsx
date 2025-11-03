@@ -141,7 +141,11 @@ function ProfessionalProfile({
         label="Função"
         id="userType"
         type="userType"
-        value={getPrettyRoles(userInfo.userType, userInfo.roles)}
+        value={getPrettyRoles(
+          userInfo.userType,
+          userInfo.roles,
+          userInfo.isCommissioned,
+        )}
         disabled
       />
       <SocialMediaContainerInput
