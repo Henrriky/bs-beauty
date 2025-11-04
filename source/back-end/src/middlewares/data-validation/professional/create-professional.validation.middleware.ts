@@ -5,6 +5,7 @@ import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/profe
 
 const validateCreateProfessional = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    console.log(req.body)
     ProfessionalSchemas.createSchema.parse(req.body)
     next()
   } catch (error) {

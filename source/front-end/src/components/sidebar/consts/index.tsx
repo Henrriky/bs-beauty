@@ -31,7 +31,7 @@ const onlyCustomerSideBarItems: SideBarItem[] = [
     name: 'Home',
     icon: <HomeIcon className="size-6" />,
     navigateTo: '/customer/home',
-    order: 1,
+    order: 0,
     authorization: {
       allowedPermissions: [],
       allowedUserTypes: [UserType.CUSTOMER],

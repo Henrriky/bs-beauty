@@ -111,6 +111,8 @@ describe('ProfessionalsController', () => {
         profilePhotoUrl: null,
         userType: 'MANAGER',
         notificationPreference: NotificationChannel.ALL,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: new Date(),
         updatedAt: new Date()
       }

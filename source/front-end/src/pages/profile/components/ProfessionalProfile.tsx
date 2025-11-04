@@ -140,9 +140,26 @@ function ProfessionalProfile({
         label="Função"
         id="userType"
         type="userType"
-        value={getPrettyRoles(userInfo.userType, userInfo.roles)}
+        value={getPrettyRoles(
+          userInfo.userType,
+          userInfo.roles,
+          userInfo.isCommissioned,
+        )}
         disabled
       />
+      {userInfo.isCommissioned && (
+        <Input
+          label="Taxa de Comissão"
+          id="commissionRate"
+          type="text"
+          value={
+            userInfo.commissionRate
+              ? (userInfo.commissionRate * 100).toFixed(2) + '%'
+              : 'N/A'
+          }
+          disabled
+        />
+      )}
       <SocialMediaContainerInput
         socialMediaFields={socialMediaFields}
         removeSocialMedia={removeSocialMedia}
