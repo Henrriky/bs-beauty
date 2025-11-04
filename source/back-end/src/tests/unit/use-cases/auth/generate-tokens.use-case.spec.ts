@@ -116,6 +116,8 @@ describe('GenerateTokensUseCase', () => {
         userType: UserType.PROFESSIONAL,
         registerCompleted: true,
         profilePhotoUrl: faker.internet.url(),
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: new Date(),
         updatedAt: new Date(),
         passwordHash: null,
