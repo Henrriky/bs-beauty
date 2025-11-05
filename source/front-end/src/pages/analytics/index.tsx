@@ -14,8 +14,15 @@ import AppointmentsChart from './components/AppointmentsChart'
 import EstimatedTimeChart from './components/EstimatedTimeChart'
 import CancellationChart from './components/CancellationChart'
 import RatingsChart from './components/RatingsChart'
+import { SwitchButton } from '../../components/button/SwitchButton'
 
 dayjs.locale('pt-br')
+
+type SwitchButtonValues =
+  | 'productivity'
+  | 'financial'
+  | 'customers'
+  | 'occupancy'
 
 function ProductivityReport() {
   const { defaultDates } = useDateRange()
@@ -31,6 +38,8 @@ function ProductivityReport() {
     useState<Professional | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
 
+  const [switchValue, setSwitchValue] =
+    useState<SwitchButtonValues>('productivity')
   const activeProfessionalId = selectedProfessional?.id || undefined
 
   const {
@@ -62,6 +71,18 @@ function ProductivityReport() {
           </div>
         </header>
 
+        <SwitchButton
+          value={switchValue}
+          onChange={setSwitchValue}
+          options={[
+            { value: 'productivity', label: 'Produtividade' },
+            { value: 'financial', label: 'Financeiro' },
+            { value: 'customers', label: 'Clientes' },
+            { value: 'occupancy', label: 'Ocupação' },
+          ]}
+          className="mb-6"
+        />
+
         <ReportFilters
           startDate={startDate}
           endDate={endDate}
@@ -77,25 +98,27 @@ function ProductivityReport() {
           onToggleFilters={() => setFiltersOpen(!filtersOpen)}
         />
 
-        <div className="flex flex-col gap-6">
-          <ChartContainer title="Quantidade de Agendamentos">
-            <AppointmentsChart data={appointmentsCountData} />
-          </ChartContainer>
-
+        {switchValue === 'productivity' && (
           <div className="flex flex-col gap-6">
-            <ChartContainer title="Tempo Estimado de Trabalho">
-              <EstimatedTimeChart data={estimatedTimeData} />
+            <ChartContainer title="Quantidade de Agendamentos">
+              <AppointmentsChart data={appointmentsCountData} />
             </ChartContainer>
 
-            <ChartContainer title="Taxa de Cancelamento">
-              <CancellationChart data={cancelationData} />
+            <div className="flex flex-col gap-6">
+              <ChartContainer title="Tempo Estimado de Trabalho">
+                <EstimatedTimeChart data={estimatedTimeData} />
+              </ChartContainer>
+
+              <ChartContainer title="Taxa de Cancelamento">
+                <CancellationChart data={cancelationData} />
+              </ChartContainer>
+            </div>
+
+            <ChartContainer title="Avaliações dos Clientes no Período">
+              <RatingsChart data={ratingsCountData} />
             </ChartContainer>
           </div>
-
-          <ChartContainer title="Avaliações dos Clientes no Período">
-            <RatingsChart data={ratingsCountData} />
-          </ChartContainer>
-        </div>
+        )}
       </div>
     </ThemeProvider>
   )
