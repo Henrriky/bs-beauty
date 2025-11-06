@@ -51,7 +51,7 @@ function ProfilePicture({
 
   return (
     <div
-      className={`relative ${containerSize} ${variation === 'square-with-bg'
+      className={`relative shrink-0 ${containerSize} ${variation === 'square-with-bg'
         ? 'before:absolute before:w-full before:h-full before:bg-[#717171] before:-right-[3px] before:-top-[2.5px] before:rounded-md'
         : ''
       }`}

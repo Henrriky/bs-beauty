@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { DateTime } from 'luxon'
 import { Button } from '../../components/button/Button'
 import { WeekDays } from '../../enums/enums'
 import { PageHeader } from '../../layouts/PageHeader'
@@ -81,10 +82,17 @@ const Shifts = () => {
 
           const normalize = (t: string) => (t || '00:00').slice(0, 5)
 
+          const convertLocalTimeToUTC = (time: string): string => {
+            const [hours, minutes] = time.split(':').map(Number)
+            const localDateTime = DateTime.local().set({ hour: hours, minute: minutes, second: 0, millisecond: 0 })
+            const utcDateTime = localDateTime.plus({ hours: 3 })
+            return utcDateTime.toFormat('HH:mm')
+          }
+
           const payload = {
             weekDay: backendDay,
-            shiftStart: normalize(shiftData.shiftStart),
-            shiftEnd: normalize(shiftData.shiftEnd),
+            shiftStart: convertLocalTimeToUTC(normalize(shiftData.shiftStart)),
+            shiftEnd: convertLocalTimeToUTC(normalize(shiftData.shiftEnd)),
             isBusy: shiftData.isBusy,
           }
 
@@ -112,12 +120,24 @@ const Shifts = () => {
 
   const formatTime = (time: string) => {
     if (!time) return ''
-    let m = /^(\d{2}):(\d{2})/.exec(time)
-    if (m) return `${m[1]}:${m[2]}`
 
-    m = /T(\d{2}):(\d{2})/.exec(time)
-    if (m) return `${m[1]}:${m[2]}`
-    return ''
+    let m = /^(\d{2}):(\d{2})/.exec(time)
+    if (!m) {
+      m = /T(\d{2}):(\d{2})/.exec(time)
+    }
+
+    if (!m) return ''
+
+    const [_, hours, minutes] = m
+    const utcDateTime = DateTime.local().set({
+      hour: parseInt(hours),
+      minute: parseInt(minutes),
+      second: 0,
+      millisecond: 0
+    })
+    const localDateTime = utcDateTime.minus({ hours: 3 })
+
+    return localDateTime.toFormat('HH:mm')
   }
 
 
