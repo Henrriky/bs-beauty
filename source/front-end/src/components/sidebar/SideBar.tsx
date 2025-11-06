@@ -120,7 +120,7 @@ function SideBar() {
                   className="hover:cursor-pointer w-9"
                   onClick={() => navigate('/profile')}
                 >
-                  <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" />
+                  <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" displayName={displayName || undefined} />
                 </div>
 
                 <h2 className="text-primary-0 mb-9 text-sm capitalize">

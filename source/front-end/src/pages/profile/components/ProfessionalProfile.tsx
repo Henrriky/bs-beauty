@@ -13,6 +13,8 @@ import PaymentMethodsInput from '../../../components/inputs/payment-methods-inpu
 import { Select } from '../../../components/inputs/Select'
 import { useEffect } from 'react'
 import { getPrettyRoles } from '../utils/get-pretty-roles'
+import useAppDispatch from '../../../hooks/use-app-dispatch'
+import { refreshUserToken } from '../../../utils/auth/refresh-token.util'
 
 interface ProfessionalProfileProps {
   userInfo: FetchUserInfoProfessional
@@ -32,6 +34,7 @@ function ProfessionalProfile({
   onProfileUpdate,
 }: ProfessionalProfileProps) {
   const [updateProfile, { isLoading }] = userAPI.useUpdateProfileMutation()
+  const dispatch = useAppDispatch()
 
   const {
     register,
@@ -78,6 +81,8 @@ function ProfessionalProfile({
     try {
       await updateProfile({ userId: userInfo.id, profileData: data }).unwrap()
       toast.success('Perfil atualizado com sucesso!')
+
+      await refreshUserToken(dispatch)
       await onProfileUpdate?.()
     } catch (error) {
       console.error('Error trying to complete register', error)
@@ -119,6 +124,7 @@ function ProfessionalProfile({
         id="specialization"
         type="specialization"
         placeholder="Digite sua especialização"
+        error={errors?.specialization?.message?.toString()}
       />
       <Input
         registration={{ ...register('email') }}
