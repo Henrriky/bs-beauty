@@ -64,9 +64,9 @@ function Appointments() {
         title="Agendamentos"
         subtitle={
           <>
-            Olá {displayName},{' '}
+            Olá, {displayName}.{' '}
             <b className="text-[#A4978A]">
-              aqui você pode visualizar seus agendamentos
+              Aqui você pode visualizar seus agendamentos
             </b>
             .
           </>

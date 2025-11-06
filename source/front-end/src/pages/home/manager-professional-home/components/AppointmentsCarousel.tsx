@@ -83,6 +83,18 @@ export default function AppointmentsCarousel({
 
   return (
     <div className="relative mt-3 min-w-0">
+      <style>{`
+        .apptCarouselHost::-webkit-scrollbar {
+          height: 6px;
+        }
+        .apptCarouselHost::-webkit-scrollbar-thumb {
+          background: #A4978A;
+          border-radius: 3px;
+        }
+        .apptCarouselHost::-webkit-scrollbar-thumb:hover {
+          background: #A4978A;
+        }
+      `}</style>
 
       <div
         ref={scrollRef}
