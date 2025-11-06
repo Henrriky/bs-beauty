@@ -70,7 +70,7 @@ function FilterSharedContent({
       </div>
 
       <div className="px-3 py-2 border-t border-[#595149] flex justify-end gap-2">
-        <button className="px-3 py-1.5 rounded hover:bg黑/20 hover:bg-black/20" onClick={onClear}>
+        <button className="px-3 py-1.5 hover:bg-black/10 rounded text-primary-300" onClick={onClear}>
           Limpar
         </button>
         <button className="px-3 py-1.5 rounded bg-[#595149] text-[#D9D9D9]" onClick={onApply}>

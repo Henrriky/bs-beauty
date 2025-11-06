@@ -1,10 +1,20 @@
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { Button } from '../../../components/button/Button'
 import { Input } from '../../../components/inputs/Input'
 import Title from '../../../components/texts/Title'
 import { authAPI } from '../../../store/auth/auth-api'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router'
+import { SharedSchemas } from '../../../utils/validation/zod-schemas/shared-zod-schemas.validation.utils'
+
+const codeValidationSchema = z.object({
+  code: SharedSchemas.verificationCodeSchema,
+})
+
+type CodeValidationFormData = z.infer<typeof codeValidationSchema>
 
 interface CodeValidationModalProps {
   email: string
@@ -27,7 +37,19 @@ function CodeValidationModal({
 }: CodeValidationModalProps) {
   const navigate = useNavigate()
 
-  const [code, setCode] = useState('')
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CodeValidationFormData>({
+    resolver: zodResolver(codeValidationSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      code: '',
+    },
+  })
+
   const [secondsLeft, setSecondsLeft] = useState(60)
   const [resendAvailableAt, setResendAvailableAt] = useState<Date | null>(
     new Date(Date.now() + 60000),
@@ -46,17 +68,25 @@ function CodeValidationModal({
 
   const [validateCode, { isLoading }] = authAPI.useValidateCodeMutation()
 
-  const handleCodeInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setCode(event.target.value)
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight']
+
+    if ((event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())) {
+      return
+    }
+
+    if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
+      event.preventDefault()
+    }
   }
 
-  const handleOnClick = async (data: {
-    purpose: string
-    email: string
-    code: string
-  }) => {
+  const handleOnClick = async (formData: CodeValidationFormData) => {
+    const data = {
+      purpose: 'register',
+      email,
+      code: formData.code.trim(),
+    }
+
     await validateCode(data)
       .unwrap()
       .then(() => {
@@ -65,16 +95,15 @@ function CodeValidationModal({
         setIsOpen()
         navigate('/complete-register')
       })
-      .catch((error: unknown) => {
+      .catch((error: any) => {
         console.error('Error trying to validate code', error)
-        toast.error('Ocorreu um erro ao validar seu e-mail.')
-      })
-  }
 
-  const data = {
-    purpose: 'register',
-    email,
-    code: code.trim(),
+        if (error?.data?.details === 'Invalid code' || error?.data?.message === 'Invalid code') {
+          toast.error('Código de verificação incorreto. Verifique e tente novamente.')
+        } else {
+          toast.error('Ocorreu um erro ao validar seu e-mail.')
+        }
+      })
   }
 
   useEffect(() => {
@@ -92,9 +121,9 @@ function CodeValidationModal({
     <div>
       {isOpen && (
         <div
-          className={`fixed inset-0 flex justify-center items-center animate-fadeIn z-[1000] transition-colors ${isOpen ? 'visible bg-black/60' : 'invisible'} animate-d`}
+          className={`fixed p-2 inset-0 flex justify-center items-center animate-fadeIn z-[1000] transition-colors ${isOpen ? 'visible bg-black/60' : 'invisible'} animate-d`}
         >
-          <div className="bg-[#1E1E1E] rounded-2xl shadow p-6 w-full h-full max-w-[480px] max-h-[320px] flex flex-col justify-center items-center gap-5">
+          <div className="bg-[#1E1E1E] rounded-2xl shadow p-6 w-full h-full max-w-max max-h-fit flex flex-col justify-center items-center gap-5">
             <div>
               <Title align="center">Confirmação de E-mail</Title>
               <p className="text-[#DBDBDB] text-sm mt-2">
@@ -108,8 +137,12 @@ function CodeValidationModal({
                 type="text"
                 variant="solid"
                 label="Código de verificação"
+                wrapperClassName="items-center"
                 inputClassName="w-[300px] text-center text-[20px]"
-                onChange={handleCodeInputChange}
+                error={errors.code?.message}
+                maxLength={6}
+                onKeyDown={handleKeyDown}
+                registration={register('code')}
               />
               <p className="text-[#DBDBDB] text-sm">
                 Não recebeu o código? {''}
@@ -123,7 +156,7 @@ function CodeValidationModal({
                         : `Reenviar em ${secondsLeft}`
                   }
                   disabled={secondsLeft > 0}
-                  className="text-xs"
+                  className="text-sm"
                   onClick={handleResend}
                 />
               </p>
@@ -144,7 +177,7 @@ function CodeValidationModal({
                       'Validar'
                     )
                   }
-                  onClick={() => handleOnClick(data)}
+                  onClick={handleSubmit(handleOnClick)}
                 />
               </div>
             </div>

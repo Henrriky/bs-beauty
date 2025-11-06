@@ -22,9 +22,9 @@ function PasswordReset() {
       </>
     ),
     code: (
-      <>
-        Enviamos um código para <span className="text-primary-0">{email}</span>
-      </>
+      <div className='text-[#DBDBDB]'>
+        Enviamos um código para <span className="text-[#A4978A]">{email}</span>
+      </div>
     ),
     newPassword: <>E-mail verificado! Você pode redefinir sua senha agora.</>,
   }
