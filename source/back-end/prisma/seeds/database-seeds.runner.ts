@@ -1,7 +1,15 @@
 import { AppLoggerInstance } from '@/utils/logger/logger.util'
 import { permissionSeeder } from './permission-seeder.service'
+import { professionalSeeder } from './professional-seeder.service'
+import { customerSeeder } from './customer-seeder.service'
+import { serviceSeeder } from './service-seeder.service'
+import { offerSeeder } from './offer-seeder.service'
+import { shiftSeeder } from './shift-seeder.service'
+import { appointmentSeeder } from './appointment-seeder.service'
+import { notificationTemplateSeeder } from './notification-template-seeder.service'
+import { notificationSeeder } from './notification-seeder.service'
 
-export async function runDatabaseSeeds (): Promise<void> {
+export async function runDatabaseSeeds(): Promise<void> {
   const logger = AppLoggerInstance
 
   logger.info('Starting database seeding process', {
@@ -10,6 +18,14 @@ export async function runDatabaseSeeds (): Promise<void> {
 
   try {
     await permissionSeeder.seedPermissions()
+    await notificationTemplateSeeder.seedNotificationTemplates()
+    await professionalSeeder.seedProfessionals()
+    await customerSeeder.seedCustomers()
+    await serviceSeeder.seedServices()
+    await offerSeeder.seedOffers()
+    await shiftSeeder.seedShifts()
+    await appointmentSeeder.seedAppointments()
+    await notificationSeeder.seedNotifications()
 
     logger.info('Database seeding completed successfully', {
       context: 'DatabaseSeeds'
@@ -27,7 +43,7 @@ export async function runDatabaseSeeds (): Promise<void> {
   }
 }
 
-export async function verifyDatabaseSeeds (): Promise<boolean> {
+export async function verifyDatabaseSeeds(): Promise<boolean> {
   const logger = AppLoggerInstance
 
   logger.info('Verifying database seeds', {
@@ -36,15 +52,30 @@ export async function verifyDatabaseSeeds (): Promise<boolean> {
 
   try {
     const permissionsValid = await permissionSeeder.verifyPermissions()
+    await notificationTemplateSeeder.verifyNotificationTemplates()
+    const professionalsValid = await professionalSeeder.verifyProfessionals()
+    const customersValid = await customerSeeder.verifyCustomers()
+    const servicesValid = await serviceSeeder.verifyServices()
+    const offersValid = await offerSeeder.verifyOffers()
+    await shiftSeeder.verifyShifts()
+    await appointmentSeeder.verifyAppointments()
+    await notificationSeeder.verifyNotifications()
 
-    if (permissionsValid) {
+    const allValid = permissionsValid && professionalsValid && customersValid && servicesValid && offersValid
+
+    if (allValid) {
       logger.info('All database seeds verified successfully', {
         context: 'DatabaseSeeds'
       })
       return true
     } else {
       logger.warn('Some database seeds are missing or invalid', {
-        context: 'DatabaseSeeds'
+        context: 'DatabaseSeeds',
+        permissionsValid,
+        professionalsValid,
+        customersValid,
+        servicesValid,
+        offersValid
       })
       return false
     }
