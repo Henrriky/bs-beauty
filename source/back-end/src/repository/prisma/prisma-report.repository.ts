@@ -168,6 +168,111 @@ class PrismaReportRepository implements ReportRepository {
       transactionCount: result._count
     }
   }
+
+  public async getRevenueByService(startDate: Date, endDate: Date, professionalId?: string) {
+    const paymentRecordWhere: Prisma.PaymentRecordWhereInput = {
+      createdAt: {
+        gte: startDate,
+        lte: endDate
+      }
+    }
+
+    if (professionalId) {
+      paymentRecordWhere.professionalId = professionalId
+    }
+
+    const where: Prisma.PaymentItemWhereInput = {
+      paymentRecord: paymentRecordWhere
+    }
+
+    const paymentItems = await prismaClient.paymentItem.findMany({
+      where,
+      include: {
+        offer: {
+          include: {
+            service: true
+          }
+        }
+      }
+    })
+
+    const revenueMap = new Map<string, {
+      serviceId: string
+      serviceName: string
+      category: string
+      totalRevenue: number
+      quantity: number
+    }>()
+
+    paymentItems.forEach(item => {
+      const serviceId = item.offer.service.id
+      const existing = revenueMap.get(serviceId)
+
+      if (existing) {
+        existing.totalRevenue += Number(item.price) * item.quantity
+        existing.quantity += item.quantity
+      } else {
+        revenueMap.set(serviceId, {
+          serviceId,
+          serviceName: item.offer.service.name,
+          category: item.offer.service.category,
+          totalRevenue: Number(item.price) * item.quantity,
+          quantity: item.quantity
+        })
+      }
+    })
+
+    const report = Array.from(revenueMap.values())
+      .map(item => ({
+        ...item,
+        totalRevenue: Math.round(item.totalRevenue * 100) / 100
+      }))
+      .sort((a, b) => b.totalRevenue - a.totalRevenue)
+
+    return report
+  }
+
+  public async getRevenueByProfessional(startDate: Date, endDate: Date) {
+    const payments = await prismaClient.paymentRecord.groupBy({
+      by: ['professionalId'],
+      where: {
+        createdAt: {
+          gte: startDate,
+          lte: endDate
+        }
+      },
+      _sum: {
+        totalValue: true
+      },
+      _count: true
+    })
+
+    const professionalIds = payments.map(p => p.professionalId)
+    const professionals = await prismaClient.professional.findMany({
+      where: {
+        id: {
+          in: professionalIds
+        }
+      },
+      select: {
+        id: true,
+        name: true
+      }
+    })
+
+    const professionalMap = new Map(professionals.map(p => [p.id, p.name || 'Sem nome']))
+
+    const report = payments
+      .map(payment => ({
+        professionalId: payment.professionalId,
+        professionalName: professionalMap.get(payment.professionalId) || 'Desconhecido',
+        totalRevenue: payment._sum.totalValue ? Math.round(Number(payment._sum.totalValue) * 100) / 100 : 0,
+        transactionCount: payment._count
+      }))
+      .sort((a, b) => b.totalRevenue - a.totalRevenue)
+
+    return report
+  }
 }
 
 export { PrismaReportRepository }

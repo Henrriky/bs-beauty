@@ -130,5 +130,7 @@ export const API_VARIABLES = {
     CUSTOMER_AGE_DISTRIBUTION: '/reports/customer-age-distribution',
     REVENUE_EVOLUTION: '/reports/revenue-evolution',
     TOTAL_REVENUE: '/reports/total-revenue',
+    REVENUE_BY_SERVICE: '/reports/revenue-by-service',
+    REVENUE_BY_PROFESSIONAL: '/reports/revenue-by-professional',
   },
 } as const

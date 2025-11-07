@@ -4,7 +4,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import 'dayjs/locale/pt-br'
 import Title from '../../components/texts/Title'
 import Subtitle from '../../components/texts/Subtitle'
-import { Professional } from '../../store/auth/types'
+import { Professional, UserType } from '../../store/auth/types'
 import { useDateRange } from './hooks/useDateRange'
 import { useAnalyticsData } from './hooks/useAnalyticsData'
 import { darkChartTheme } from './constants/theme'
@@ -18,6 +18,8 @@ import DiscoverySourceChart from './components/DiscoverySourceChart'
 import CustomerAgeChart from './components/CustomerAgeChart'
 import RevenueChart from './components/RevenueChart'
 import TotalRevenueCard from './components/TotalRevenueCard'
+import RevenueByServiceGrid from './components/RevenueByServiceGrid'
+import RevenueByProfessionalGrid from './components/RevenueByProfessionalGrid'
 import { SwitchButton } from '../../components/button/SwitchButton'
 import { SwitchButtonValues } from './types'
 
@@ -53,6 +55,10 @@ function ProductivityReport() {
     revenueData,
     totalRevenueData,
     isTotalRevenueLoading,
+    revenueByServiceData,
+    isRevenueByServiceLoading,
+    revenueByProfessionalData,
+    isRevenueByProfessionalLoading,
   } = useAnalyticsData(
     startDate,
     endDate,
@@ -146,6 +152,18 @@ function ProductivityReport() {
             <ChartContainer title="Evolução do Faturamento">
               <RevenueChart data={revenueData} />
             </ChartContainer>
+
+            <RevenueByServiceGrid
+              data={revenueByServiceData}
+              isLoading={isRevenueByServiceLoading}
+            />
+
+            {userType === UserType.MANAGER && (
+              <RevenueByProfessionalGrid
+                data={revenueByProfessionalData}
+                isLoading={isRevenueByProfessionalLoading}
+              />
+            )}
           </div>
         )}
       </div>

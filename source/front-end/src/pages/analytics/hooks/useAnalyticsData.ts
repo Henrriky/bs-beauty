@@ -131,6 +131,31 @@ export const useAnalyticsData = (
       },
     )
 
+  const { data: revenueByServiceData, isLoading: isRevenueByServiceLoading } =
+    reportAPI.useGetRevenueByServiceQuery(
+      {
+        startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+        endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+        professionalId: activeProfessionalId,
+      },
+      {
+        skip: !startDate || !endDate,
+      },
+    )
+
+  const {
+    data: revenueByProfessionalData,
+    isLoading: isRevenueByProfessionalLoading,
+  } = reportAPI.useGetRevenueByProfessionalQuery(
+    {
+      startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+      endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+    },
+    {
+      skip: !startDate || !endDate || userType !== UserType.MANAGER,
+    },
+  )
+
   return {
     userType,
     professionalsData,
@@ -143,5 +168,9 @@ export const useAnalyticsData = (
     revenueData,
     totalRevenueData,
     isTotalRevenueLoading,
+    revenueByServiceData,
+    isRevenueByServiceLoading,
+    revenueByProfessionalData,
+    isRevenueByProfessionalLoading,
   }
 }

@@ -59,5 +59,35 @@ export interface GetTotalRevenueParams {
   professionalId?: string
 }
 
+export interface RevenueByService {
+  serviceId: string
+  serviceName: string
+  category: string
+  totalRevenue: number
+  quantity: number
+}
+
+export type GetRevenueByServiceResponse = RevenueByService[]
+
+export interface GetRevenueByServiceParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface RevenueByProfessional {
+  professionalId: string
+  professionalName: string
+  totalRevenue: number
+  transactionCount: number
+}
+
+export type GetRevenueByProfessionalResponse = RevenueByProfessional[]
+
+export interface GetRevenueByProfessionalParams {
+  startDate: string
+  endDate: string
+}
+
 
 
