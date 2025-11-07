@@ -14,15 +14,11 @@ import AppointmentsChart from './components/AppointmentsChart'
 import EstimatedTimeChart from './components/EstimatedTimeChart'
 import CancellationChart from './components/CancellationChart'
 import RatingsChart from './components/RatingsChart'
+import DiscoverySourceChart from './components/DiscoverySourceChart'
 import { SwitchButton } from '../../components/button/SwitchButton'
+import { SwitchButtonValues } from './types'
 
 dayjs.locale('pt-br')
-
-type SwitchButtonValues =
-  | 'productivity'
-  | 'financial'
-  | 'customers'
-  | 'occupancy'
 
 function ProductivityReport() {
   const { defaultDates } = useDateRange()
@@ -49,6 +45,7 @@ function ProductivityReport() {
     estimatedTimeData,
     cancelationData,
     ratingsCountData,
+    discoverySourceData,
   } = useAnalyticsData(
     startDate,
     endDate,
@@ -77,12 +74,11 @@ function ProductivityReport() {
           options={[
             { value: 'productivity', label: 'Produtividade' },
             { value: 'financial', label: 'Financeiro' },
-            { value: 'customers', label: 'Clientes' },
+            { value: 'customer', label: 'Clientes' },
             { value: 'occupancy', label: 'Ocupação' },
           ]}
           className="mb-6"
         />
-
         <ReportFilters
           startDate={startDate}
           endDate={endDate}
@@ -96,6 +92,7 @@ function ProductivityReport() {
           onStatusesChange={setSelectedStatuses}
           onProfessionalChange={setSelectedProfessional}
           onToggleFilters={() => setFiltersOpen(!filtersOpen)}
+          selectedReportType={switchValue}
         />
 
         {switchValue === 'productivity' && (
@@ -116,6 +113,14 @@ function ProductivityReport() {
 
             <ChartContainer title="Avaliações dos Clientes no Período">
               <RatingsChart data={ratingsCountData} />
+            </ChartContainer>
+          </div>
+        )}
+
+        {switchValue === 'customer' && (
+          <div className="flex flex-col gap-6">
+            <ChartContainer title="Fontes de Captação de Clientes">
+              <DiscoverySourceChart data={discoverySourceData} />
             </ChartContainer>
           </div>
         )}

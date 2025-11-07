@@ -125,4 +125,7 @@ export const API_VARIABLES = {
     UPDATE_PAYMENT_RECORD: (id: string) => `/payment-records/${id}`,
     DELETE_PAYMENT_RECORD: (id: string) => `/payment-records/${id}`,
   },
+  REPORTS_ENDPOINTS: {
+    DISCOVERY_SOURCE_COUNT: '/reports/discovery-source-count',
+  },
 } as const

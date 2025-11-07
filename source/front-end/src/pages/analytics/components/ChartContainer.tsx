@@ -11,7 +11,7 @@ function ChartContainer({ title, children }: ChartContainerProps) {
       <h2 className="text-lg font-semibold mb-4 text-[#D9D9D9] text-center">
         {title}
       </h2>
-      <div className="w-full h-[400px]">{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   )
 }

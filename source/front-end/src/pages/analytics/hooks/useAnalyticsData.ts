@@ -2,6 +2,7 @@ import { Dayjs } from 'dayjs'
 import { analyticsAPI } from '../../../store/analytics/analytics-api'
 import { authAPI } from '../../../store/auth/auth-api'
 import { professionalAPI } from '../../../store/professional/professional-api'
+import { reportAPI } from '../../../store/reports/report-api'
 import { UserType } from '../../../store/auth/types'
 import { buildQueryParams } from '../utils/queryHelpers'
 import { useDateRange } from './useDateRange'
@@ -77,6 +78,21 @@ export const useAnalyticsData = (
     },
   )
 
+  const { data: discoverySourceData } =
+    reportAPI.useGetDiscoverySourceCountQuery(
+      {
+        startDate: startDate
+          ? toISO(startDate.format('YYYY-MM-DD'))
+          : undefined,
+        endDate: endDate
+          ? toISO(endDate.format('YYYY-MM-DD'), true)
+          : undefined,
+      },
+      {
+        skip: !startDate || !endDate,
+      },
+    )
+
   return {
     userType,
     professionalsData,
@@ -84,5 +100,6 @@ export const useAnalyticsData = (
     estimatedTimeData,
     cancelationData,
     ratingsCountData,
+    discoverySourceData,
   }
 }

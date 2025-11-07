@@ -7,6 +7,7 @@ import ProfessionalSelector from '../../../components/inputs/professional-select
 import { Professional, UserType } from '../../../store/auth/types'
 import expandArrow from '../../../assets/expand-arrow.svg'
 import 'dayjs/locale/pt-br'
+import { SwitchButtonValues } from '../types'
 
 interface ReportFiltersProps {
   startDate: Dayjs | null
@@ -16,6 +17,7 @@ interface ReportFiltersProps {
   professionals: Professional[]
   userType: UserType | undefined
   filtersOpen: boolean
+  selectedReportType: SwitchButtonValues
   onStartDateChange: (date: Dayjs | null) => void
   onEndDateChange: (date: Dayjs | null) => void
   onStatusesChange: (statuses: string[]) => void
@@ -31,6 +33,7 @@ function ReportFilters({
   professionals,
   userType,
   filtersOpen,
+  selectedReportType,
   onStartDateChange,
   onEndDateChange,
   onStatusesChange,
@@ -90,50 +93,52 @@ function ReportFilters({
         </LocalizationProvider>
       </div>
 
-      <div className="w-full my-6">
-        <button
-          onClick={onToggleFilters}
-          className="flex justify-center items-center"
-        >
-          <img
-            src={expandArrow}
-            alt="Ícone de seta"
-            className={`transition-transform duration-500 ${
-              shouldShowFilters ? 'rotate-180' : 'rotate-0'
-            }`}
-          />
-          <span className="text-[#B19B86] text-sm ml-[13px]">
-            Filtrar resultados
-            {hasActiveFilters && (
-              <span className="bg-[#A4978A] text-[#1E1E1E] text-xs font-medium px-2 py-1 rounded-full ml-2">
-                {activeFiltersCount} ativo{activeFiltersCount > 1 ? 's' : ''}
-              </span>
-            )}
-          </span>
-        </button>
+      {selectedReportType !== 'customer' && (
+        <div className="w-full my-6">
+          <button
+            onClick={onToggleFilters}
+            className="flex justify-center items-center"
+          >
+            <img
+              src={expandArrow}
+              alt="Ícone de seta"
+              className={`transition-transform duration-500 ${
+                shouldShowFilters ? 'rotate-180' : 'rotate-0'
+              }`}
+            />
+            <span className="text-[#B19B86] text-sm ml-[13px]">
+              Filtrar resultados
+              {hasActiveFilters && (
+                <span className="bg-[#A4978A] text-[#1E1E1E] text-xs font-medium px-2 py-1 rounded-full ml-2">
+                  {activeFiltersCount} ativo{activeFiltersCount > 1 ? 's' : ''}
+                </span>
+              )}
+            </span>
+          </button>
 
-        {shouldShowFilters && (
-          <div className="mt-6 space-y-4">
-            {userType === UserType.MANAGER && (
+          {shouldShowFilters && (
+            <div className="mt-6 space-y-4">
+              {userType === UserType.MANAGER && (
+                <div>
+                  <ProfessionalSelector
+                    professionals={professionals}
+                    selectedProfessional={selectedProfessional}
+                    onSelect={onProfessionalChange}
+                    showAllOption={true}
+                  />
+                </div>
+              )}
+
               <div>
-                <ProfessionalSelector
-                  professionals={professionals}
-                  selectedProfessional={selectedProfessional}
-                  onSelect={onProfessionalChange}
-                  showAllOption={true}
+                <StatusFilterInput
+                  value={selectedStatuses}
+                  onChange={onStatusesChange}
                 />
               </div>
-            )}
-
-            <div>
-              <StatusFilterInput
-                value={selectedStatuses}
-                onChange={onStatusesChange}
-              />
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </>
   )
 }
