@@ -60,7 +60,8 @@ class PrismaAppointmentRepository implements AppointmentRepository {
                 select: {
                   id: true,
                   name: true,
-                  email: true
+                  email: true,
+                  profilePhotoUrl: true
                 }
               }
             },
@@ -71,7 +72,8 @@ class PrismaAppointmentRepository implements AppointmentRepository {
               name: true,
               email: true,
             }
-          }
+          },
+          rating: true
         },
         where,
         skip: (page - 1) * limit,
