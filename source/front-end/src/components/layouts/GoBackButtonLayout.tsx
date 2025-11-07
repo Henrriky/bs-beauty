@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import GoBackButton from '../button/GoBackButton'
+import GoBackButton from '../button/GoBackButton/GoBackButton'
 
 interface props {
   children: ReactNode
