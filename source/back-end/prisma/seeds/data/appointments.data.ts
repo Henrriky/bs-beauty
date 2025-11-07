@@ -33,8 +33,10 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
 
   const customerEmails = [
     'ana.oliveira@example.com',
-    'roberto.mendes@example.com',
-    'patricia.santos@example.com'
+    'roberta.mendes@example.com',
+    'patricia.santos@example.com',
+    'rosemary.almeida@example.com',
+    'maria.fernanda@example.com'
   ]
 
   const statuses: Array<'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'FINISHED'> = [
@@ -69,9 +71,9 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
   ]
 
   const today = new Date()
-  const todayHours = [12, 14, 16, 18]
+  const todayHours = [12, 13, 14, 15, 16, 17, 18, 19, 20]
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 9; i++) {
     const offer = faker.helpers.arrayElement(validOffers)
     const customerEmail = faker.helpers.arrayElement(customerEmails)
     const status = faker.helpers.arrayElement(statuses)
@@ -92,7 +94,7 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
 
   const previousMonthStatuses: Array<'CANCELLED' | 'FINISHED'> = ['CANCELLED', 'FINISHED']
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 15; i++) {
     const offer = faker.helpers.arrayElement(validOffers)
     const customerEmail = faker.helpers.arrayElement(customerEmails)
     const status = faker.helpers.arrayElement(previousMonthStatuses)
@@ -116,7 +118,7 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
     })
   }
 
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 45; i++) {
     const offer = faker.helpers.arrayElement(validOffers)
     const customerEmail = faker.helpers.arrayElement(customerEmails)
     const status = getWeightedStatus()
@@ -141,7 +143,7 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
 
   const nextMonthStatuses: Array<'PENDING' | 'CONFIRMED'> = ['PENDING', 'CONFIRMED']
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 30; i++) {
     const offer = faker.helpers.arrayElement(validOffers)
     const customerEmail = faker.helpers.arrayElement(customerEmails)
     const status = faker.helpers.arrayElement(nextMonthStatuses)

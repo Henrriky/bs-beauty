@@ -39,8 +39,8 @@ export function generateCustomersData(): CustomerSeedData[] {
       discoverySource: 'GOOGLE' as const
     },
     {
-      name: 'Roberto Carlos Mendes',
-      email: 'roberto.mendes@example.com',
+      name: 'Roberta Carlos Mendes',
+      email: 'roberta.mendes@example.com',
       phone: '(55) 11 92001-0004',
       discoverySource: 'REFERRAL' as const
     },
@@ -48,6 +48,18 @@ export function generateCustomersData(): CustomerSeedData[] {
       name: 'Patricia Silva Santos',
       email: 'patricia.santos@example.com',
       phone: '(55) 11 92001-0005',
+      discoverySource: 'GOOGLE' as const
+    },
+    {
+      name: 'Rosemary Almeida',
+      email: 'rosemary.almeida@example.com',
+      phone: '(55) 11 92001-0006',
+      discoverySource: 'GOOGLE' as const
+    },
+    {
+      name: 'Maria Fernanda',
+      email: 'maria.fernanda@example.com',
+      phone: '(55) 11 92001-0007',
       discoverySource: 'GOOGLE' as const
     },
   ]

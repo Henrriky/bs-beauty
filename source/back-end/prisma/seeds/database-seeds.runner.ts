@@ -8,6 +8,7 @@ import { shiftSeeder } from './shift-seeder.service'
 import { appointmentSeeder } from './appointment-seeder.service'
 import { notificationTemplateSeeder } from './notification-template-seeder.service'
 import { notificationSeeder } from './notification-seeder.service'
+import { ratingSeeder } from './rating-seeder.service'
 
 export async function runDatabaseSeeds(): Promise<void> {
   const logger = AppLoggerInstance
@@ -25,6 +26,7 @@ export async function runDatabaseSeeds(): Promise<void> {
     await offerSeeder.seedOffers()
     await shiftSeeder.seedShifts()
     await appointmentSeeder.seedAppointments()
+    await ratingSeeder.seedRatings()
     await notificationSeeder.seedNotifications()
 
     logger.info('Database seeding completed successfully', {
@@ -59,6 +61,7 @@ export async function verifyDatabaseSeeds(): Promise<boolean> {
     const offersValid = await offerSeeder.verifyOffers()
     await shiftSeeder.verifyShifts()
     await appointmentSeeder.verifyAppointments()
+    await ratingSeeder.verifyRatings()
     await notificationSeeder.verifyNotifications()
 
     const allValid = permissionsValid && professionalsValid && customersValid && servicesValid && offersValid
