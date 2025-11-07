@@ -19,7 +19,7 @@ export interface ProfessionalSeedData {
   googleId?: string | null
   specialization: string | null
   contact: string
-  paymentMethods: string[]
+  paymentMethods: { name: string }[]
   isCommissioned: boolean
   commissionRate: number | null
   socialMedia: {
@@ -32,13 +32,13 @@ export interface ProfessionalSeedData {
 }
 
 const paymentMethodOptions = [
-  ['pix', 'cash'],
-  ['pix', 'credit-card', 'cash'],
-  ['pix', 'credit-card', 'debit-card', 'cash'],
-  ['pix', 'cash', 'credit-card'],
-  ['pix', 'debit-card', 'cash'],
-  ['pix', 'credit-card', 'debit-card', 'bank-transfer'],
-  ['pix']
+  [{ 'name': 'pix' }, { 'name': 'cash' }],
+  [{ 'name': 'pix' }, { 'name': 'credit-card' }, { 'name': 'cash' }],
+  [{ 'name': 'pix' }, { 'name': 'credit-card' }, { 'name': 'debit-card' }, { 'name': 'cash' }],
+  [{ 'name': 'pix' }, { 'name': 'cash' }, { 'name': 'credit-card' }],
+  [{ 'name': 'pix' }, { 'name': 'debit-card' }, { 'name': 'cash' }],
+  [{ 'name': 'pix' }, { 'name': 'credit-card' }, { 'name': 'debit-card' }, { 'name': 'bank-transfer' }],
+  [{ 'name': 'pix' }]
 ]
 
 function generatePhoneNumber(): string {
