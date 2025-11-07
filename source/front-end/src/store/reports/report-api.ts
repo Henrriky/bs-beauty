@@ -6,6 +6,8 @@ import {
   GetDiscoverySourceCountParams,
   GetCustomerAgeDistributionResponse,
   GetCustomerAgeDistributionParams,
+  GetRevenueEvolutionResponse,
+  GetRevenueEvolutionParams,
 } from './types'
 
 export const reportAPI = createApi({
@@ -35,10 +37,22 @@ export const reportAPI = createApi({
       }),
       providesTags: ['Report'],
     }),
+    getRevenueEvolution: builder.query<
+      GetRevenueEvolutionResponse,
+      GetRevenueEvolutionParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.REPORTS_ENDPOINTS.REVENUE_EVOLUTION,
+        method: 'GET',
+        params,
+      }),
+      providesTags: ['Report'],
+    }),
   }),
 })
 
 export const {
   useGetDiscoverySourceCountQuery,
   useGetCustomerAgeDistributionQuery,
+  useGetRevenueEvolutionQuery,
 } = reportAPI

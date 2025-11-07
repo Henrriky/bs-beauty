@@ -128,13 +128,14 @@ function ReportFilters({
                   />
                 </div>
               )}
-
-              <div>
-                <StatusFilterInput
-                  value={selectedStatuses}
-                  onChange={onStatusesChange}
-                />
-              </div>
+              {selectedReportType === 'productivity' && (
+                <div>
+                  <StatusFilterInput
+                    value={selectedStatuses}
+                    onChange={onStatusesChange}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>

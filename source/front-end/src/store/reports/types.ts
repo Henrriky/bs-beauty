@@ -33,3 +33,17 @@ export interface GetCustomerAgeDistributionParams {
   endDate?: string
 }
 
+export interface RevenueEvolution {
+  date: string
+  totalValue: number
+}
+
+export type GetRevenueEvolutionResponse = RevenueEvolution[]
+
+export interface GetRevenueEvolutionParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+

@@ -16,6 +16,7 @@ import CancellationChart from './components/CancellationChart'
 import RatingsChart from './components/RatingsChart'
 import DiscoverySourceChart from './components/DiscoverySourceChart'
 import CustomerAgeChart from './components/CustomerAgeChart'
+import RevenueChart from './components/RevenueChart'
 import { SwitchButton } from '../../components/button/SwitchButton'
 import { SwitchButtonValues } from './types'
 
@@ -48,6 +49,7 @@ function ProductivityReport() {
     ratingsCountData,
     discoverySourceData,
     customerAgeData,
+    revenueData,
   } = useAnalyticsData(
     startDate,
     endDate,
@@ -127,6 +129,14 @@ function ProductivityReport() {
 
             <ChartContainer title="Distribuição de Idade dos Clientes">
               <CustomerAgeChart data={customerAgeData} />
+            </ChartContainer>
+          </div>
+        )}
+
+        {switchValue === 'financial' && (
+          <div className="flex flex-col gap-6">
+            <ChartContainer title="Evolução do Faturamento">
+              <RevenueChart data={revenueData} />
             </ChartContainer>
           </div>
         )}

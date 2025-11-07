@@ -108,6 +108,17 @@ export const useAnalyticsData = (
       },
     )
 
+  const { data: revenueData } = reportAPI.useGetRevenueEvolutionQuery(
+    {
+      startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+      endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+      professionalId: activeProfessionalId,
+    },
+    {
+      skip: !startDate || !endDate,
+    },
+  )
+
   return {
     userType,
     professionalsData,
@@ -117,5 +128,6 @@ export const useAnalyticsData = (
     ratingsCountData,
     discoverySourceData,
     customerAgeData,
+    revenueData,
   }
 }

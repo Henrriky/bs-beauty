@@ -78,6 +78,70 @@ class PrismaReportRepository implements ReportRepository {
 
     return report
   }
+
+  public async getRevenueEvolution(startDate: Date, endDate: Date, professionalId?: string) {
+    const where: Prisma.PaymentRecordWhereInput = {
+      createdAt: {
+        gte: startDate,
+        lte: endDate
+      }
+    }
+
+    if (professionalId) {
+      where.professionalId = professionalId
+    }
+
+    const payments = await prismaClient.paymentRecord.findMany({
+      where,
+      select: {
+        createdAt: true,
+        totalValue: true
+      },
+      orderBy: {
+        createdAt: 'asc'
+      }
+    })
+
+    const daysDiff = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
+
+    let groupingFormat: string
+    if (daysDiff <= 31) {
+      groupingFormat = 'day'
+    } else if (daysDiff <= 90) {
+      groupingFormat = 'week'
+    } else {
+      groupingFormat = 'month'
+    }
+
+    const revenueMap = new Map<string, number>()
+
+    payments.forEach(payment => {
+      let key: string
+      const date = new Date(payment.createdAt)
+
+      if (groupingFormat === 'day') {
+        key = date.toISOString().split('T')[0]
+      } else if (groupingFormat === 'week') {
+        const weekStart = new Date(date)
+        weekStart.setDate(date.getDate() - date.getDay())
+        key = weekStart.toISOString().split('T')[0]
+      } else {
+        key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+      }
+
+      const currentValue = revenueMap.get(key) || 0
+      revenueMap.set(key, currentValue + Number(payment.totalValue))
+    })
+
+    const report = Array.from(revenueMap.entries())
+      .map(([date, totalValue]) => ({
+        date,
+        totalValue: Math.round(totalValue * 100) / 100
+      }))
+      .sort((a, b) => a.date.localeCompare(b.date))
+
+    return report
+  }
 }
 
 export { PrismaReportRepository }

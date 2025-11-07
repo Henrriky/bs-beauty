@@ -12,6 +12,11 @@ class ReportsUseCase {
     const report = await this.reportRepository.getCustomerAgeDistribution(startDate, endDate)
     return report
   }
+
+  public async executeGetRevenueEvolution(startDate: Date, endDate: Date, professionalId?: string) {
+    const report = await this.reportRepository.getRevenueEvolution(startDate, endDate, professionalId)
+    return report
+  }
 }
 
 export { ReportsUseCase }
