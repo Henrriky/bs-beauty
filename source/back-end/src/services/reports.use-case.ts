@@ -13,6 +13,11 @@ class ReportsUseCase {
     return report
   }
 
+  public async executeGetNewCustomersCount(startDate: Date, endDate: Date) {
+    const report = await this.reportRepository.getNewCustomersCount(startDate, endDate)
+    return report
+  }
+
   public async executeGetRevenueEvolution(startDate: Date, endDate: Date, professionalId?: string) {
     const report = await this.reportRepository.getRevenueEvolution(startDate, endDate, professionalId)
     return report

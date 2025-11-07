@@ -4,6 +4,7 @@ interface ReportRepository {
   // Customer Reports
   getDiscoverySourceCount: (startDate?: Date, endDate?: Date) => Promise<Array<{ source: DiscoverySource | null, count: number }>>
   getCustomerAgeDistribution: (startDate?: Date, endDate?: Date) => Promise<Array<{ ageRange: string, count: number }>>
+  getNewCustomersCount: (startDate: Date, endDate: Date) => Promise<{ totalCustomers: number }>
   // Financial Reports
   getRevenueEvolution: (startDate: Date, endDate: Date, professionalId?: string) => Promise<Array<{ date: string, totalValue: number }>>
   getTotalRevenue: (startDate: Date, endDate: Date, professionalId?: string) => Promise<{ totalRevenue: number, transactionCount: number }>

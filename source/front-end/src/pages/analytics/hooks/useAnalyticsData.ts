@@ -108,6 +108,17 @@ export const useAnalyticsData = (
       },
     )
 
+  const { data: newCustomersData, isLoading: isNewCustomersLoading } =
+    reportAPI.useGetNewCustomersCountQuery(
+      {
+        startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+        endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+      },
+      {
+        skip: !startDate || !endDate,
+      },
+    )
+
   const { data: revenueData } = reportAPI.useGetRevenueEvolutionQuery(
     {
       startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
@@ -165,6 +176,8 @@ export const useAnalyticsData = (
     ratingsCountData,
     discoverySourceData,
     customerAgeData,
+    newCustomersData,
+    isNewCustomersLoading,
     revenueData,
     totalRevenueData,
     isTotalRevenueLoading,

@@ -18,6 +18,7 @@ import DiscoverySourceChart from './components/DiscoverySourceChart'
 import CustomerAgeChart from './components/CustomerAgeChart'
 import RevenueChart from './components/RevenueChart'
 import TotalRevenueCard from './components/TotalRevenueCard'
+import NewCustomersCard from './components/NewCustomersCard'
 import RevenueByServiceGrid from './components/RevenueByServiceGrid'
 import RevenueByProfessionalGrid from './components/RevenueByProfessionalGrid'
 import { SwitchButton } from '../../components/button/SwitchButton'
@@ -52,6 +53,8 @@ function ProductivityReport() {
     ratingsCountData,
     discoverySourceData,
     customerAgeData,
+    newCustomersData,
+    isNewCustomersLoading,
     revenueData,
     totalRevenueData,
     isTotalRevenueLoading,
@@ -132,6 +135,11 @@ function ProductivityReport() {
 
         {switchValue === 'customer' && (
           <div className="flex flex-col gap-6">
+            <NewCustomersCard
+              data={newCustomersData}
+              isLoading={isNewCustomersLoading}
+            />
+
             <ChartContainer title="Fontes de Captação de Clientes">
               <DiscoverySourceChart data={discoverySourceData} />
             </ChartContainer>

@@ -6,6 +6,8 @@ import {
   GetDiscoverySourceCountParams,
   GetCustomerAgeDistributionResponse,
   GetCustomerAgeDistributionParams,
+  GetNewCustomersCountResponse,
+  GetNewCustomersCountParams,
   GetRevenueEvolutionResponse,
   GetRevenueEvolutionParams,
   GetTotalRevenueResponse,
@@ -40,6 +42,17 @@ export const reportAPI = createApi({
         url: API_VARIABLES.REPORTS_ENDPOINTS.CUSTOMER_AGE_DISTRIBUTION,
         method: 'GET',
         ...(params ? { params } : {}),
+      }),
+      providesTags: ['Report'],
+    }),
+    getNewCustomersCount: builder.query<
+      GetNewCustomersCountResponse,
+      GetNewCustomersCountParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.REPORTS_ENDPOINTS.NEW_CUSTOMERS_COUNT,
+        method: 'GET',
+        params,
       }),
       providesTags: ['Report'],
     }),
@@ -93,6 +106,7 @@ export const reportAPI = createApi({
 export const {
   useGetDiscoverySourceCountQuery,
   useGetCustomerAgeDistributionQuery,
+  useGetNewCustomersCountQuery,
   useGetRevenueEvolutionQuery,
   useGetTotalRevenueQuery,
   useGetRevenueByServiceQuery,

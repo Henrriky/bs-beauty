@@ -128,6 +128,7 @@ export const API_VARIABLES = {
   REPORTS_ENDPOINTS: {
     DISCOVERY_SOURCE_COUNT: '/reports/discovery-source-count',
     CUSTOMER_AGE_DISTRIBUTION: '/reports/customer-age-distribution',
+    NEW_CUSTOMERS_COUNT: '/reports/new-customers-count',
     REVENUE_EVOLUTION: '/reports/revenue-evolution',
     TOTAL_REVENUE: '/reports/total-revenue',
     REVENUE_BY_SERVICE: '/reports/revenue-by-service',

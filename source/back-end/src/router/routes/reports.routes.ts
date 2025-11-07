@@ -6,6 +6,7 @@ const reportRoutes = Router()
 // Customer Reports
 reportRoutes.get('/discovery-source-count', ReportsController.getDiscoverySourceCount)
 reportRoutes.get('/customer-age-distribution', ReportsController.getCustomerAgeDistribution)
+reportRoutes.get('/new-customers-count', ReportsController.getNewCustomersCount)
 
 // Financial Reports
 reportRoutes.get('/revenue-evolution', ReportsController.getRevenueEvolution)

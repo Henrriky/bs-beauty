@@ -33,6 +33,17 @@ export interface GetCustomerAgeDistributionParams {
   endDate?: string
 }
 
+export interface NewCustomersCount {
+  totalCustomers: number
+}
+
+export type GetNewCustomersCountResponse = NewCustomersCount
+
+export interface GetNewCustomersCountParams {
+  startDate: string
+  endDate: string
+}
+
 export interface RevenueEvolution {
   date: string
   totalValue: number

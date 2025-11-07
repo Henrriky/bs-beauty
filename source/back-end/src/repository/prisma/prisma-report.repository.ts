@@ -273,6 +273,21 @@ class PrismaReportRepository implements ReportRepository {
 
     return report
   }
+
+  public async getNewCustomersCount(startDate: Date, endDate: Date) {
+    const count = await prismaClient.customer.count({
+      where: {
+        createdAt: {
+          gte: startDate,
+          lte: endDate
+        }
+      }
+    })
+
+    return {
+      totalCustomers: count
+    }
+  }
 }
 
 export { PrismaReportRepository }
