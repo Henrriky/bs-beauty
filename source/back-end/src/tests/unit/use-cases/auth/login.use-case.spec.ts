@@ -117,6 +117,8 @@ describe('LoginUseCase', () => {
         contact: null,
         specialization: null,
         notificationPreference: null,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -238,6 +240,8 @@ describe('LoginUseCase', () => {
         contact: null,
         specialization: null,
         notificationPreference: null,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: new Date(),
         updatedAt: new Date()
       }

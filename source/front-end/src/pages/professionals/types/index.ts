@@ -21,6 +21,18 @@ export type GetProfessionalsResponse = PaginatedResponse<Professional>
 export type CreateProfessionalRequest = CreateProfessionalFormData
 export type CreateProfessionalResponse = Professional
 
+/* Update Commission */
+export type UpdateCommissionRequest = {
+  professionalId: string
+  data: {
+    commissionRate: number
+  }
+}
+
+export type UpdateCommissionResponse = {
+  message: string
+}
+
 /* ============== Professional Roles Management ============== */
 export interface ProfessionalRole {
   id: string

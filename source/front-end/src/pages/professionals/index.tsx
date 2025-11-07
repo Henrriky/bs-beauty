@@ -11,6 +11,7 @@ import { ProfessionalFormModal } from './components/ProfessionalFormModal'
 import { ProfessionalList } from './components/ProfessionalList'
 import { ProfessionalRolesModal } from './components/ProfessionalRolesModal'
 import { useProfessionalsLogic } from './hooks/useProfessionalsLogic'
+import { EditCommissionModal } from './components/EditCommissionModal'
 
 function Professionals() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -22,12 +23,15 @@ function Professionals() {
     selectedProfessional,
     professionalToDelete,
     professionalToManageRoles,
+    professionalToEditCommission,
     isLoadingProfessionals,
     isCreating,
     isDeleting,
+    isUpdatingCommission,
     isFormModalOpen,
     isDeleteModalOpen,
     isRolesModalOpen,
+    isCommissionModalOpen,
     handlePageChange,
     handleFiltersChange,
     clearFilters,
@@ -37,8 +41,11 @@ function Professionals() {
     closeDeleteModal,
     openRolesModal,
     closeRolesModal,
+    openCommissionModal,
+    closeCommissionModal,
     handleCreateProfessional,
     handleDeleteProfessional,
+    handleUpdateCommission,
   } = useProfessionalsLogic()
 
   const handleSearch = (value: string) => {
@@ -92,6 +99,7 @@ function Professionals() {
           isLoading={isLoadingProfessionals}
           onDelete={openDeleteModal}
           onManageProfessionalRoles={openRolesModal}
+          onEditCommission={openCommissionModal}
         />
 
         {/* Pagination */}
@@ -145,6 +153,15 @@ function Professionals() {
         isOpen={isRolesModalOpen}
         professional={professionalToManageRoles}
         onClose={closeRolesModal}
+      />
+
+      {/* Edit Commission Modal */}
+      <EditCommissionModal
+        isOpen={isCommissionModalOpen}
+        professional={professionalToEditCommission}
+        isLoading={isUpdatingCommission}
+        onClose={closeCommissionModal}
+        onSubmit={handleUpdateCommission}
       />
     </div>
   )

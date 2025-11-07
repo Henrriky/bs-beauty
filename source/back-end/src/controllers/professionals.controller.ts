@@ -72,6 +72,19 @@ class ProfessionalsController {
     }
   }
 
+  public static async handleUpdateCommission (req: Request, res: Response, next: NextFunction) {
+    try {
+      const professionalId = req.params.id
+      const { commissionRate } = req.body
+      const useCase = makeProfessionalsUseCaseFactory()
+      await useCase.executeUpdateCommission(professionalId, commissionRate)
+
+      res.status(StatusCodes.OK).send({ message: 'Commission updated successfully' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   public static async handleFetchServicesOfferedByProfessional (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeProfessionalsUseCaseFactory()

@@ -23,6 +23,7 @@ interface ProfessionalRepository {
   update: (id: string, customerUpdated: Prisma.ProfessionalUpdateInput) => Promise<Professional>
   updateByEmailAndGoogleId: (googleId: string, email: string, customerUpdated: Prisma.ProfessionalUpdateInput) => Promise<Professional>
   updateProfessionalByEmail: (email: string, customerUpdated: Prisma.ProfessionalUpdateInput) => Promise<Professional>
+  updateCommission: (professionalId: string, commissionRate: number) => Promise<void>
   delete: (id: string) => Promise<Professional>
   fetchServicesOfferedByProfessional: (professionalId: string, params: PaginatedRequest<PartialHandleFetchServicesOfferedByProfessionalQuerySchema>) => Promise<{
     professional: ServicesOfferedByProfessional

@@ -267,6 +267,8 @@ describe('RegisterUserController', () => {
         registerCompleted: true,
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL',
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: new Date(),
         updatedAt: new Date()
       }

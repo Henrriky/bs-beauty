@@ -6,6 +6,7 @@ interface ProfessionalListProps {
   isLoading: boolean
   onDelete: (professional: Professional) => void
   onManageProfessionalRoles: (professional: Professional) => void
+  onEditCommission: (professional: Professional) => void
 }
 
 function ProfessionalList({
@@ -13,6 +14,7 @@ function ProfessionalList({
   isLoading,
   onDelete,
   onManageProfessionalRoles,
+  onEditCommission,
 }: ProfessionalListProps) {
   if (isLoading) return <ProfessionalListSkeleton />
   if (professionals.length === 0) return <ProfessionalListEmpty />
@@ -25,6 +27,7 @@ function ProfessionalList({
           professional={professional}
           onDelete={onDelete}
           onManageProfessionalRoles={onManageProfessionalRoles}
+          onEditCommission={onEditCommission}
         />
       ))}
     </div>
