@@ -4,6 +4,8 @@ import { API_VARIABLES } from '../../api/config'
 import {
   GetDiscoverySourceCountResponse,
   GetDiscoverySourceCountParams,
+  GetCustomerAgeDistributionResponse,
+  GetCustomerAgeDistributionParams,
 } from './types'
 
 export const reportAPI = createApi({
@@ -18,11 +20,25 @@ export const reportAPI = createApi({
       query: (params) => ({
         url: API_VARIABLES.REPORTS_ENDPOINTS.DISCOVERY_SOURCE_COUNT,
         method: 'GET',
-        params,
+        ...(params ? { params } : {}),
+      }),
+      providesTags: ['Report'],
+    }),
+    getCustomerAgeDistribution: builder.query<
+      GetCustomerAgeDistributionResponse,
+      GetCustomerAgeDistributionParams | void
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.REPORTS_ENDPOINTS.CUSTOMER_AGE_DISTRIBUTION,
+        method: 'GET',
+        ...(params ? { params } : {}),
       }),
       providesTags: ['Report'],
     }),
   }),
 })
 
-export const { useGetDiscoverySourceCountQuery } = reportAPI
+export const {
+  useGetDiscoverySourceCountQuery,
+  useGetCustomerAgeDistributionQuery,
+} = reportAPI

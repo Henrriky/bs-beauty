@@ -20,3 +20,16 @@ export interface GetDiscoverySourceCountParams {
   startDate?: string
   endDate?: string
 }
+
+export interface CustomerAgeDistribution {
+  ageRange: string
+  count: number
+}
+
+export type GetCustomerAgeDistributionResponse = CustomerAgeDistribution[]
+
+export interface GetCustomerAgeDistributionParams {
+  startDate?: string
+  endDate?: string
+}
+

@@ -93,6 +93,21 @@ export const useAnalyticsData = (
       },
     )
 
+  const { data: customerAgeData } =
+    reportAPI.useGetCustomerAgeDistributionQuery(
+      {
+        startDate: startDate
+          ? toISO(startDate.format('YYYY-MM-DD'))
+          : undefined,
+        endDate: endDate
+          ? toISO(endDate.format('YYYY-MM-DD'), true)
+          : undefined,
+      },
+      {
+        skip: !startDate || !endDate,
+      },
+    )
+
   return {
     userType,
     professionalsData,
@@ -101,5 +116,6 @@ export const useAnalyticsData = (
     cancelationData,
     ratingsCountData,
     discoverySourceData,
+    customerAgeData,
   }
 }

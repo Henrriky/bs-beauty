@@ -127,5 +127,6 @@ export const API_VARIABLES = {
   },
   REPORTS_ENDPOINTS: {
     DISCOVERY_SOURCE_COUNT: '/reports/discovery-source-count',
+    CUSTOMER_AGE_DISTRIBUTION: '/reports/customer-age-distribution',
   },
 } as const
