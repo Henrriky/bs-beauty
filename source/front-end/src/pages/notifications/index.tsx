@@ -7,15 +7,22 @@ type ReadSwitch = 'UNREAD' | 'READ' | 'ALL'
 
 function Notifications() {
   const [readSwitch, setReadSwitch] = useState<ReadSwitch>('UNREAD')
+  const [currentPage, setCurrentPage] = useState(1)
 
   const params = useMemo(
     () => ({
-      page: 1,
+      page: currentPage,
       limit: 10,
       readStatus: readSwitch,
     }),
-    [readSwitch],
+    [currentPage, readSwitch],
   )
+
+  // Reseta para página 1 quando mudar o filtro
+  const handleReadSwitchChange = (newSwitch: ReadSwitch) => {
+    setReadSwitch(newSwitch)
+    setCurrentPage(1)
+  }
 
   return (
     <>
@@ -35,25 +42,28 @@ function Notifications() {
             variant="outline"
             outlineVariantBorderStyle="solid"
             className={`rounded-r-none ${readSwitch === 'ALL' ? 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default' : ''}`}
-            onClick={() => setReadSwitch('ALL')}
+            onClick={() => handleReadSwitchChange('ALL')}
           />
           <Button
             label="Não lidas"
             variant="outline"
             outlineVariantBorderStyle="solid"
             className={`rounded-none ${readSwitch === 'UNREAD' ? 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default' : ''}`}
-            onClick={() => setReadSwitch('UNREAD')}
+            onClick={() => handleReadSwitchChange('UNREAD')}
           />
           <Button
             label="Lidas"
             variant="outline"
             outlineVariantBorderStyle="solid"
             className={`rounded-l-none ${readSwitch === 'READ' ? 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default' : ''}`}
-            onClick={() => setReadSwitch('READ')}
+            onClick={() => handleReadSwitchChange('READ')}
           />
         </div>
 
-        <ListNotifications params={params} />
+        <ListNotifications
+          params={params}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </>
   )
