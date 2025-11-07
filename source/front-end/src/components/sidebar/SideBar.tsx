@@ -53,7 +53,7 @@ function SideBar() {
     .filter((item) => userCanAccess({ user, ...item.authorization }))
     .reverse()
 
-  const renderSidebarItems = () => {
+  const renderSidebarItems = (isMobile = false) => {
     return filteredItems
       .filter((item) => userCanAccess({ user, ...item.authorization }))
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
@@ -62,7 +62,8 @@ function SideBar() {
           key={sideBarItem.name}
           icon={sideBarItem.icon}
           path={sideBarItem.navigateTo}
-          closeOnClick={false}
+          closeOnClick={isMobile}
+          toggleSideBar={isMobile ? toggleSideBar : undefined}
           isActive={
             isActivePath(pathname, sideBarItem.navigateTo)
           }
@@ -90,7 +91,11 @@ function SideBar() {
               className="hover:cursor-pointer"
               onClick={() => navigate('/profile')}
             >
-              <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" />
+              <ProfilePicture
+                profilePhotoUrl={photoUrl ?? ''}
+                displayName={displayName || undefined}
+                size="sm"
+              />
             </div>
           </div>
         </nav>
@@ -115,7 +120,7 @@ function SideBar() {
                   className="hover:cursor-pointer w-9"
                   onClick={() => navigate('/profile')}
                 >
-                  <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" />
+                  <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" displayName={displayName || undefined} />
                 </div>
 
                 <h2 className="text-primary-0 mb-9 text-sm capitalize">
@@ -126,7 +131,7 @@ function SideBar() {
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
 
               <ul className="text-primary-200 mt-8 text-[12px]">
-                {renderSidebarItems()}
+                {renderSidebarItems(true)}
               </ul>
             </nav>
 
@@ -146,7 +151,7 @@ function SideBar() {
             onClick={() => navigate('/profile')}
             aria-label="Abrir perfil"
           >
-            <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" />
+            <ProfilePicture profilePhotoUrl={photoUrl ?? ''} displayName={displayName || undefined} size="sm" />
             <div className="min-w-0 text-left ml-1">
               <span
                 className="block truncate text-primary-0 text-sm capitalize"

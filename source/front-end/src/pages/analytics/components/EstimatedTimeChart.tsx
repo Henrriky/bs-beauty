@@ -19,7 +19,7 @@ function EstimatedTimeChart({ data }: EstimatedTimeChartProps) {
   return (
     <>
       <div className="text-center mb-4">
-        <div className="text-3xl font-bold text-[#A4978A]">
+        <div className="text-2xl font-bold text-[#A4978A]">
           {workTimeInHours} horas
         </div>
         <div className="text-sm text-[#979797]">

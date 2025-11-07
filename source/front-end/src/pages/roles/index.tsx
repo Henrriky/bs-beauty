@@ -1,17 +1,17 @@
-import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { useRolesLogic } from './hooks/useRolesLogic'
-import { RolesList } from './components/RolesList'
-import { RoleFormModal } from './components/RoleFormModal'
-import { DeleteRoleModal } from './components/DeleteRoleModal'
-import { RolePermissionsModal } from './components/RolePermissionsModal'
-import { Button } from '../../components/button/Button'
-import SearchInput from '../../components/inputs/SearchInput'
-import Title from '../../components/texts/Title'
-import { UserType } from '../../store/auth/types'
-import { Pagination } from '../../components/select/Pagination'
+import { useState } from 'react'
 import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
+import { Button } from '../../components/button/Button'
 import Unauthorized from '../../components/feedback/Unauthorized'
+import SearchInput from '../../components/inputs/SearchInput'
+import { Pagination } from '../../components/select/Pagination'
+import { PageHeader } from '../../layouts/PageHeader'
+import { UserType } from '../../store/auth/types'
+import { DeleteRoleModal } from './components/DeleteRoleModal'
+import { RoleFormModal } from './components/RoleFormModal'
+import { RolePermissionsModal } from './components/RolePermissionsModal'
+import { RolesList } from './components/RolesList'
+import { useRolesLogic } from './hooks/useRolesLogic'
 
 export default function Roles() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -62,11 +62,12 @@ export default function Roles() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-3">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <Title align="left">Gerenciamento de Funções</Title>
-      </div>
+      <PageHeader
+        title="Gerenciamento de Funções"
+        subtitle="Crie, edite e gerencie as funções de profissionais na plataforma."
+      />
       {/* Filters and Roles List */}
       <UserCanAccessContainer
         allowedPermissions={['roles.read']}

@@ -14,10 +14,9 @@ function CustomerCard({ customer }: CustomerCardProps) {
       <ProfilePicture
         size="sm"
         profilePhotoUrl={
-          customer.profilePhotoUrl
-            ? customer.profilePhotoUrl
-            : 'https://cdn-site-assets.veed.io/cdn-cgi/image/width=256,quality=75,format=auto/Fish_6e8d209905/Fish_6e8d209905.webp'
+          customer.profilePhotoUrl ?? ''
         }
+        displayName={customer.name ?? 'Cliente'}
       />
       <div>
         <CustomerCardTitle>

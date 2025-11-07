@@ -76,16 +76,16 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
 
   const monthStart = startOfMonth(currentMonth)
   const monthEnd = endOfMonth(currentMonth)
-  const fromISO = monthStart.toISOString()
-  const toISO = monthEnd.toISOString()
+  const fromYMD = format(monthStart, 'yyyy-MM-dd')
+  const toYMD = format(monthEnd, 'yyyy-MM-dd')
 
   const queryStatuses = appliedStatuses.length ? appliedStatuses : undefined
 
   const { data, isLoading, isError } = appointmentAPI.useFetchAppointmentsQuery({
     page: 1,
     limit: 50,
-    from: fromISO,
-    to: toISO,
+    from: fromYMD,
+    to: toYMD,
     status: queryStatuses,
     viewAll: isManager ? viewAll : undefined,
   })

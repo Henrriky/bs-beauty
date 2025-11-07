@@ -1,31 +1,40 @@
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Button } from '../../components/button/Button'
-import Title from '../../components/texts/Title'
+import { PageHeader } from '../../layouts/PageHeader'
 import ListNotifications from './components/ListNotifications'
 
 type ReadSwitch = 'UNREAD' | 'READ' | 'ALL'
 
 function Notifications() {
   const [readSwitch, setReadSwitch] = useState<ReadSwitch>('UNREAD')
+  const [currentPage, setCurrentPage] = useState(1)
 
   const params = useMemo(
     () => ({
-      page: 1,
+      page: currentPage,
       limit: 10,
       readStatus: readSwitch,
     }),
-    [readSwitch],
+    [currentPage, readSwitch],
   )
+
+  // Reseta para página 1 quando mudar o filtro
+  const handleReadSwitchChange = (newSwitch: ReadSwitch) => {
+    setReadSwitch(newSwitch)
+    setCurrentPage(1)
+  }
 
   return (
     <>
       <div className="flex flex-col gap-3">
-        <div className="flex flex-col gap-2">
-          <Title align="left">Notificações</Title>
-          <p className="text-primary-200 text-sm">
-            Confira suas notificações sobre os agendamentos realizados.
-          </p>
-        </div>
+        <PageHeader
+          title="Notificações"
+          subtitle={
+            <>
+              Confira suas notificações sobre eventos que ocorreram recentemente.
+            </>
+          }
+        />
 
         <div className="flex">
           <Button
@@ -33,25 +42,28 @@ function Notifications() {
             variant="outline"
             outlineVariantBorderStyle="solid"
             className={`rounded-r-none ${readSwitch === 'ALL' ? 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default' : ''}`}
-            onClick={() => setReadSwitch('ALL')}
+            onClick={() => handleReadSwitchChange('ALL')}
           />
           <Button
             label="Não lidas"
             variant="outline"
             outlineVariantBorderStyle="solid"
             className={`rounded-none ${readSwitch === 'UNREAD' ? 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default' : ''}`}
-            onClick={() => setReadSwitch('UNREAD')}
+            onClick={() => handleReadSwitchChange('UNREAD')}
           />
           <Button
             label="Lidas"
             variant="outline"
             outlineVariantBorderStyle="solid"
             className={`rounded-l-none ${readSwitch === 'READ' ? 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default' : ''}`}
-            onClick={() => setReadSwitch('READ')}
+            onClick={() => handleReadSwitchChange('READ')}
           />
         </div>
 
-        <ListNotifications params={params} />
+        <ListNotifications
+          params={params}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </>
   )
