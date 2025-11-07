@@ -46,4 +46,18 @@ export interface GetRevenueEvolutionParams {
   professionalId?: string
 }
 
+export interface TotalRevenue {
+  totalRevenue: number
+  transactionCount: number
+}
+
+export type GetTotalRevenueResponse = TotalRevenue
+
+export interface GetTotalRevenueParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+
 

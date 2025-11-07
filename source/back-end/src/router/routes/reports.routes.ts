@@ -9,5 +9,6 @@ reportRoutes.get('/customer-age-distribution', ReportsController.getCustomerAgeD
 
 // Financial Reports
 reportRoutes.get('/revenue-evolution', ReportsController.getRevenueEvolution)
+reportRoutes.get('/total-revenue', ReportsController.getTotalRevenue)
 
 export { reportRoutes }

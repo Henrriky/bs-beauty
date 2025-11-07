@@ -119,6 +119,18 @@ export const useAnalyticsData = (
     },
   )
 
+  const { data: totalRevenueData, isLoading: isTotalRevenueLoading } =
+    reportAPI.useGetTotalRevenueQuery(
+      {
+        startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+        endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+        professionalId: activeProfessionalId,
+      },
+      {
+        skip: !startDate || !endDate,
+      },
+    )
+
   return {
     userType,
     professionalsData,
@@ -129,5 +141,7 @@ export const useAnalyticsData = (
     discoverySourceData,
     customerAgeData,
     revenueData,
+    totalRevenueData,
+    isTotalRevenueLoading,
   }
 }

@@ -142,6 +142,32 @@ class PrismaReportRepository implements ReportRepository {
 
     return report
   }
+
+  public async getTotalRevenue(startDate: Date, endDate: Date, professionalId?: string) {
+    const where: Prisma.PaymentRecordWhereInput = {
+      createdAt: {
+        gte: startDate,
+        lte: endDate
+      }
+    }
+
+    if (professionalId) {
+      where.professionalId = professionalId
+    }
+
+    const result = await prismaClient.paymentRecord.aggregate({
+      where,
+      _sum: {
+        totalValue: true
+      },
+      _count: true
+    })
+
+    return {
+      totalRevenue: result._sum.totalValue ? Math.round(Number(result._sum.totalValue) * 100) / 100 : 0,
+      transactionCount: result._count
+    }
+  }
 }
 
 export { PrismaReportRepository }

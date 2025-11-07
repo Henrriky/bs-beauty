@@ -129,5 +129,6 @@ export const API_VARIABLES = {
     DISCOVERY_SOURCE_COUNT: '/reports/discovery-source-count',
     CUSTOMER_AGE_DISTRIBUTION: '/reports/customer-age-distribution',
     REVENUE_EVOLUTION: '/reports/revenue-evolution',
+    TOTAL_REVENUE: '/reports/total-revenue',
   },
 } as const

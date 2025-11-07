@@ -8,6 +8,8 @@ import {
   GetCustomerAgeDistributionParams,
   GetRevenueEvolutionResponse,
   GetRevenueEvolutionParams,
+  GetTotalRevenueResponse,
+  GetTotalRevenueParams,
 } from './types'
 
 export const reportAPI = createApi({
@@ -48,6 +50,17 @@ export const reportAPI = createApi({
       }),
       providesTags: ['Report'],
     }),
+    getTotalRevenue: builder.query<
+      GetTotalRevenueResponse,
+      GetTotalRevenueParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.REPORTS_ENDPOINTS.TOTAL_REVENUE,
+        method: 'GET',
+        params,
+      }),
+      providesTags: ['Report'],
+    }),
   }),
 })
 
@@ -55,4 +68,5 @@ export const {
   useGetDiscoverySourceCountQuery,
   useGetCustomerAgeDistributionQuery,
   useGetRevenueEvolutionQuery,
+  useGetTotalRevenueQuery,
 } = reportAPI

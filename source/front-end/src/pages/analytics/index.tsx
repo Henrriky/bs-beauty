@@ -17,6 +17,7 @@ import RatingsChart from './components/RatingsChart'
 import DiscoverySourceChart from './components/DiscoverySourceChart'
 import CustomerAgeChart from './components/CustomerAgeChart'
 import RevenueChart from './components/RevenueChart'
+import TotalRevenueCard from './components/TotalRevenueCard'
 import { SwitchButton } from '../../components/button/SwitchButton'
 import { SwitchButtonValues } from './types'
 
@@ -50,6 +51,8 @@ function ProductivityReport() {
     discoverySourceData,
     customerAgeData,
     revenueData,
+    totalRevenueData,
+    isTotalRevenueLoading,
   } = useAnalyticsData(
     startDate,
     endDate,
@@ -135,6 +138,11 @@ function ProductivityReport() {
 
         {switchValue === 'financial' && (
           <div className="flex flex-col gap-6">
+            <TotalRevenueCard
+              data={totalRevenueData}
+              isLoading={isTotalRevenueLoading}
+            />
+
             <ChartContainer title="Evolução do Faturamento">
               <RevenueChart data={revenueData} />
             </ChartContainer>

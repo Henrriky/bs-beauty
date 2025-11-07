@@ -31,6 +31,50 @@ class ReportsController {
       next(error)
     }
   }
+
+  public static async getRevenueEvolution(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetRevenueEvolution(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getTotalRevenue(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetTotalRevenue(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { ReportsController }
