@@ -120,7 +120,6 @@ describe('RatingsUseCase (Unit Tests)', () => {
         createdAt: new Date()
       }
 
-      // Mock that no rating exists for this appointment yet
       MockRatingRepository.findByAppointmentId.mockResolvedValue(null)
       MockRatingRepository.create.mockResolvedValue(createdRating)
 
@@ -147,7 +146,6 @@ describe('RatingsUseCase (Unit Tests)', () => {
         createdAt: faker.date.past()
       }
 
-      // Mock that a rating already exists for this appointment
       MockRatingRepository.findByAppointmentId.mockResolvedValue(existingRating)
 
       const promise = ratingsUseCase.executeCreate(ratingToCreate)
