@@ -125,6 +125,7 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
                   setValue('professionalId', professional.id)
                   setValue('name', professional.name || 'Não definido')
                   setValue('paymentMethods', professional.paymentMethods)
+                  setValue('professionalPhotoUrl', professional.profilePhotoUrl ?? '')
                 }}
               />
             </div>
