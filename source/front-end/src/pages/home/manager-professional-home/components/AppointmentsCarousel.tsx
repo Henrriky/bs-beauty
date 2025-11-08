@@ -1,6 +1,6 @@
 import { ClockIcon, MagnifyingGlassCircleIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { DateTime } from 'luxon'
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '../../../../components/button/Button'
 import StatusBadge from '../../../../components/status/StatusBadge'
@@ -48,6 +48,8 @@ export default function AppointmentsCarousel({
   emptyMessage = 'Nenhum agendamento para hoje.',
 }: AppointmentsCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const [isPaused, setIsPaused] = useState(false)
+  const scrollIntervalRef = useRef<number | null>(null)
 
   const hasItems = (items?.length ?? 0) > 0
 
@@ -62,6 +64,47 @@ export default function AppointmentsCarousel({
         ),
     [items],
   )
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el || isPaused || !itemsSortedByTime || itemsSortedByTime.length <= 1) return
+
+    const cardElement = el.querySelector('article') as HTMLElement
+    const cardWidthPx = cardElement ? cardElement.offsetWidth : 280
+    const gap = 12
+    const step = cardWidthPx + gap
+    const delayMs = 4000
+
+    el.style.scrollBehavior = 'smooth'
+
+    const advance = () => {
+      if (!el || isPaused) return
+      const maxScrollLeft = el.scrollWidth - el.clientWidth
+      const next = Math.min(el.scrollLeft + step, maxScrollLeft)
+      el.scrollTo({ left: next })
+
+      if (next >= maxScrollLeft) {
+        setTimeout(() => {
+          if (el && !isPaused) {
+            el.scrollTo({ left: 0 })
+          }
+        }, delayMs)
+      }
+    }
+
+    scrollIntervalRef.current = window.setInterval(advance, delayMs)
+
+    return () => {
+      if (scrollIntervalRef.current) {
+        window.clearInterval(scrollIntervalRef.current)
+      }
+    }
+  }, [itemsSortedByTime, isPaused])
+
+  const handleMouseEnter = () => setIsPaused(true)
+  const handleMouseLeave = () => setIsPaused(false)
+  const handleTouchStart = () => setIsPaused(true)
+  const handleTouchEnd = () => setIsPaused(false)
 
   if (loading) {
     return (
@@ -83,23 +126,10 @@ export default function AppointmentsCarousel({
 
   return (
     <div className="relative mt-3 min-w-0">
-      <style>{`
-        .apptCarouselHost::-webkit-scrollbar {
-          height: 6px;
-        }
-        .apptCarouselHost::-webkit-scrollbar-thumb {
-          background: #A4978A;
-          border-radius: 3px;
-        }
-        .apptCarouselHost::-webkit-scrollbar-thumb:hover {
-          background: #A4978A;
-        }
-      `}</style>
-
       <div
         ref={scrollRef}
         className="
-          apptCarouselHost
+          carousel-scrollbar
           flex gap-3 overflow-x-auto overflow-y-hidden scroll-smooth
           snap-x snap-mandatory px-1 pb-3 overscroll-x-contain
         "
@@ -108,6 +138,10 @@ export default function AppointmentsCarousel({
           WebkitOverflowScrolling: 'touch',
           contain: 'inline-size',
         }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         {itemsSortedByTime.map((appointment) => {
           const d = DateTime.fromISO(appointment.appointmentDate).setZone(DISPLAY_TZ)
@@ -127,16 +161,17 @@ export default function AppointmentsCarousel({
               <header className="flex items-center justify-between">
                 <div>
                   <div className="text-lg text-[#D9D9D9] leading-6">{d.toFormat('HH:mm')}</div>
-                  <div className="text-xs text-primary-100/70">{d.setLocale('pt-BR').toFormat('ccc dd/LL')}</div>
+                  <div className="text-xs text-[#979797]">{d.setLocale('pt-BR').toFormat('ccc dd/LL')}</div>
                 </div>
                 <div className="relative">
                   <ProfilePicture
                     size="sm"
                     profilePhotoUrl={
                       appointment.offer?.professional?.profilePhotoUrl ??
-                      'https://cdn-site-assets.veed.io/cdn-cgi/image/width=256,quality=75,format=auto/Fish_6e8d209905/Fish_6e8d209905.webp'
+                      ''
                     }
                     filter={isSchedulled ? 'none' : 'black-white'}
+                    displayName={appointment.customer?.name ?? 'Cliente'}
                   />
                   {hasPendingRating && (
                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2">
@@ -151,8 +186,8 @@ export default function AppointmentsCarousel({
                   <div className="text-[#D9D9D9] text-sm truncate">
                     {appointment.offer?.service?.name ?? 'Serviço'}
                   </div>
-                  <div className="text-primary-100/70 text-xs truncate">
-                    {appointment.offer?.professional?.name ?? 'Profissional não definido'}
+                  <div className="text-[#979797] text-xs truncate">
+                    {appointment.customer?.name ?? 'Cliente'}
                   </div>
                 </div>
 
