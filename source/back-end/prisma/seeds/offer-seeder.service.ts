@@ -23,7 +23,6 @@ export class OfferSeederService {
       let updatedCount = 0
 
       for (const offerData of offersToSeed) {
-        // Buscar o serviço pelo nome
         const service = await prismaClient.service.findFirst({
           where: { name: offerData.serviceName }
         })
@@ -35,7 +34,6 @@ export class OfferSeederService {
           continue
         }
 
-        // Buscar o profissional pelo nome
         const professional = await prismaClient.professional.findFirst({
           where: { name: offerData.professionalName }
         })
@@ -47,7 +45,6 @@ export class OfferSeederService {
           continue
         }
 
-        // Verificar se já existe a oferta
         const existingOffer = await prismaClient.offer.findFirst({
           where: {
             serviceId: service.id,
@@ -67,14 +64,11 @@ export class OfferSeederService {
           })
           createdCount++
 
-          this.logger.info(
-            `Created offer: ${service.name} by ${professional.name}`,
-            {
-              context: 'OfferSeederService',
-              price: offerData.price,
-              estimatedTime: offerData.estimatedTime
-            }
-          )
+          this.logger.info(`Created offer: ${service.name} by ${professional.name}`, {
+            context: 'OfferSeederService',
+            price: offerData.price,
+            estimatedTime: offerData.estimatedTime
+          })
         } else {
           await prismaClient.offer.update({
             where: { id: existingOffer.id },
@@ -87,13 +81,10 @@ export class OfferSeederService {
           updatedCount++
           existingCount++
 
-          this.logger.info(
-            `Updated existing offer: ${service.name} by ${professional.name}`,
-            {
-              context: 'OfferSeederService',
-              price: offerData.price
-            }
-          )
+          this.logger.info(`Updated existing offer: ${service.name} by ${professional.name}`, {
+            context: 'OfferSeederService',
+            price: offerData.price
+          })
         }
       }
 

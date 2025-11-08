@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 faker.seed(789)
 
 export interface RatingSeedData {
-  score: number
+  score: number | null
   comment: string | null
   appointmentId: string
 }
@@ -20,7 +20,8 @@ export function generateRatingsData(appointments: AppointmentForRating[]): Ratin
 
   const finishedAppointments = appointments.filter(apt => apt.status === 'FINISHED')
 
-  const appointmentsToRate = finishedAppointments.filter(() => faker.datatype.boolean(0.8))
+  // TODOS os agendamentos finalizados devem ter um Rating (como faz o executeFinishAppointment)
+  const appointmentsToRate = finishedAppointments
 
   const excellentComments = [
     'Atendimento excelente! Profissional muito atencioso e caprichoso.',
@@ -53,7 +54,22 @@ export function generateRatingsData(appointments: AppointmentForRating[]): Ratin
   ]
 
   for (const appointment of appointmentsToRate) {
-    // Distribuição de notas:
+    // 70% dos clientes avaliam (score e comment preenchidos)
+    // 30% não avaliam ainda (score e comment ficam null = "Pendente")
+    const hasRated = faker.datatype.boolean(0.7)
+
+    if (!hasRated) {
+      // Rating pendente - ainda não avaliado pelo cliente
+      ratings.push({
+        score: null,
+        comment: null,
+        appointmentId: appointment.id
+      })
+      continue
+    }
+
+    // Rating avaliado - cliente já deu nota e comentário
+    // Distribuição de notas para avaliações concluídas:
     // 5 estrelas: 50%
     // 4 estrelas: 30%
     // 3 estrelas: 15%

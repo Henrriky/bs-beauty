@@ -1,32 +1,24 @@
 import { PrismaClient } from '@prisma/client'
-import { AppLoggerInstance } from '../../src/utils/logger/logger.util'
 import { generateRatingsData } from './data/ratings.data'
+import { BaseRelationSeederService } from './base-relation-seeder.service'
 
-export class RatingSeederService {
-  private readonly logger = AppLoggerInstance
+export class RatingSeederService extends BaseRelationSeederService {
+  private readonly entityName = 'rating'
 
-  constructor(private readonly prismaClient: PrismaClient) { }
+  constructor(private readonly prismaClient: PrismaClient) {
+    super()
+  }
 
   async seedRatings(): Promise<void> {
-    this.logger.info('[RATING SEED] Starting rating seeding...')
+    this.logSeedingStart(this.entityName)
 
     const appointments = await this.prismaClient.appointment.findMany({
-      where: {
-        status: 'FINISHED'
-      },
+      where: { status: 'FINISHED' },
       include: {
         offer: {
           include: {
-            professional: {
-              select: {
-                name: true
-              }
-            },
-            service: {
-              select: {
-                name: true
-              }
-            }
+            professional: { select: { name: true } },
+            service: { select: { name: true } }
           }
         }
       }
@@ -49,7 +41,7 @@ export class RatingSeederService {
       })
 
       if (existingRating) {
-        this.logger.info(`[RATING SEED] Rating already exists for appointment: ${rating.appointmentId}`)
+        this.logInfo(this.entityName, `Rating already exists for appointment: ${rating.appointmentId}`)
         skippedCount++
         continue
       }
@@ -65,13 +57,11 @@ export class RatingSeederService {
       createdCount++
     }
 
-    this.logger.info(
-      `[RATING SEED] Rating seeding completed: ${createdCount} created, ${skippedCount} skipped`
-    )
+    this.logSeedingComplete(this.entityName, { createdCount, skippedCount })
   }
 
   async verifyRatings(): Promise<void> {
-    this.logger.info('[RATING SEED] Verifying ratings...')
+    this.logVerificationStart(this.entityName)
 
     const totalRatings = await this.prismaClient.rating.count()
     const totalFinishedAppointments = await this.prismaClient.appointment.count({
@@ -80,36 +70,27 @@ export class RatingSeederService {
 
     const ratingsByScore = await this.prismaClient.rating.groupBy({
       by: ['score'],
-      _count: {
-        score: true
-      },
-      orderBy: {
-        score: 'desc'
-      }
+      _count: { score: true },
+      orderBy: { score: 'desc' }
     })
 
     const ratingsWithComments = await this.prismaClient.rating.count({
-      where: {
-        comment: {
-          not: null
-        }
-      }
+      where: { comment: { not: null } }
     })
 
-    this.logger.info(`[RATING SEED] Total ratings: ${totalRatings}`)
-    this.logger.info(`[RATING SEED] Total finished appointments: ${totalFinishedAppointments}`)
-    this.logger.info(
-      `[RATING SEED] Rating coverage: ${totalFinishedAppointments > 0 ? ((totalRatings / totalFinishedAppointments) * 100).toFixed(1) : 0}%`
+    this.logInfo(this.entityName, `Total ratings: ${totalRatings}`)
+    this.logInfo(this.entityName, `Total finished appointments: ${totalFinishedAppointments}`)
+    this.logInfo(
+      this.entityName,
+      `Rating coverage: ${totalFinishedAppointments > 0 ? ((totalRatings / totalFinishedAppointments) * 100).toFixed(1) : 0}%`
     )
-    this.logger.info(`[RATING SEED] Ratings with comments: ${ratingsWithComments}`)
+    this.logInfo(this.entityName, `Ratings with comments: ${ratingsWithComments}`)
 
     for (const scoreGroup of ratingsByScore) {
-      this.logger.info(
-        `[RATING SEED] Score ${scoreGroup.score}: ${scoreGroup._count.score} ratings`
-      )
+      this.logInfo(this.entityName, `Score ${scoreGroup.score}: ${scoreGroup._count.score} ratings`)
     }
 
-    this.logger.info('[RATING SEED] Rating verification completed')
+    this.logVerificationComplete(this.entityName)
   }
 }
 

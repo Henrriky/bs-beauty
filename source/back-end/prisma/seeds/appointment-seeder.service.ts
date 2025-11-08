@@ -1,14 +1,16 @@
 import { PrismaClient } from '@prisma/client'
-import { AppLoggerInstance } from '../../src/utils/logger/logger.util'
 import { generateAppointmentsData } from './data/appointments.data'
+import { BaseRelationSeederService } from './base-relation-seeder.service'
 
-export class AppointmentSeederService {
-  private readonly logger = AppLoggerInstance
+export class AppointmentSeederService extends BaseRelationSeederService {
+  private readonly entityName = 'appointment'
 
-  constructor(private readonly prismaClient: PrismaClient) { }
+  constructor(private readonly prismaClient: PrismaClient) {
+    super()
+  }
 
   async seedAppointments(): Promise<void> {
-    this.logger.info('[APPOINTMENT SEED] Starting appointment seeding...')
+    this.logSeedingStart(this.entityName)
 
     const appointments = generateAppointmentsData()
     let createdCount = 0
@@ -20,7 +22,7 @@ export class AppointmentSeederService {
       })
 
       if (!customer) {
-        this.logger.warn(`[APPOINTMENT SEED] Customer not found: ${appointment.customerEmail}`)
+        this.logWarning(this.entityName, `Customer not found: ${appointment.customerEmail}`)
         skippedCount++
         continue
       }
@@ -30,7 +32,7 @@ export class AppointmentSeederService {
       })
 
       if (!professional) {
-        this.logger.warn(`[APPOINTMENT SEED] Professional not found: ${appointment.professionalName}`)
+        this.logWarning(this.entityName, `Professional not found: ${appointment.professionalName}`)
         skippedCount++
         continue
       }
@@ -40,7 +42,7 @@ export class AppointmentSeederService {
       })
 
       if (!service) {
-        this.logger.warn(`[APPOINTMENT SEED] Service not found: ${appointment.serviceName}`)
+        this.logWarning(this.entityName, `Service not found: ${appointment.serviceName}`)
         skippedCount++
         continue
       }
@@ -53,8 +55,9 @@ export class AppointmentSeederService {
       })
 
       if (!offer) {
-        this.logger.warn(
-          `[APPOINTMENT SEED] Offer not found for professional "${appointment.professionalName}" and service "${appointment.serviceName}"`
+        this.logWarning(
+          this.entityName,
+          `Offer not found for professional "${appointment.professionalName}" and service "${appointment.serviceName}"`
         )
         skippedCount++
         continue
@@ -69,8 +72,9 @@ export class AppointmentSeederService {
       })
 
       if (existingAppointment) {
-        this.logger.info(
-          `[APPOINTMENT SEED] Appointment already exists for customer ${customer.email} on ${appointment.appointmentDate.toISOString()}`
+        this.logInfo(
+          this.entityName,
+          `Appointment already exists for customer ${customer.email} on ${appointment.appointmentDate.toISOString()}`
         )
         skippedCount++
         continue
@@ -90,32 +94,29 @@ export class AppointmentSeederService {
       createdCount++
     }
 
-    this.logger.info(
-      `[APPOINTMENT SEED] Appointment seeding completed: ${createdCount} created, ${skippedCount} skipped`
-    )
+    this.logSeedingComplete(this.entityName, { createdCount, skippedCount })
   }
 
   async verifyAppointments(): Promise<void> {
-    this.logger.info('[APPOINTMENT SEED] Verifying appointments...')
+    this.logVerificationStart(this.entityName)
 
     const totalAppointments = await this.prismaClient.appointment.count()
 
     const appointmentsByStatus = await this.prismaClient.appointment.groupBy({
       by: ['status'],
-      _count: {
-        status: true
-      }
+      _count: { status: true }
     })
 
-    this.logger.info(`[APPOINTMENT SEED] Total appointments: ${totalAppointments}`)
+    this.logInfo(this.entityName, `Total appointments: ${totalAppointments}`)
 
     for (const statusGroup of appointmentsByStatus) {
-      this.logger.info(
-        `[APPOINTMENT SEED] Status "${statusGroup.status}": ${statusGroup._count.status} appointments`
+      this.logInfo(
+        this.entityName,
+        `Status "${statusGroup.status}": ${statusGroup._count.status} appointments`
       )
     }
 
-    this.logger.info('[APPOINTMENT SEED] Appointment verification completed')
+    this.logVerificationComplete(this.entityName)
   }
 }
 

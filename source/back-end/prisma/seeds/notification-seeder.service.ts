@@ -1,36 +1,24 @@
 import { PrismaClient } from '@prisma/client'
-import { AppLoggerInstance } from '../../src/utils/logger/logger.util'
 import { generateNotificationsData } from './data/notifications.data'
+import { BaseRelationSeederService } from './base-relation-seeder.service'
 
-export class NotificationSeederService {
-  private readonly logger = AppLoggerInstance
+export class NotificationSeederService extends BaseRelationSeederService {
+  private readonly entityName = 'notification'
 
-  constructor(private readonly prismaClient: PrismaClient) { }
+  constructor(private readonly prismaClient: PrismaClient) {
+    super()
+  }
 
   async seedNotifications(): Promise<void> {
-    this.logger.info('[NOTIFICATION SEED] Starting notification seeding...')
+    this.logSeedingStart(this.entityName)
 
     const appointments = await this.prismaClient.appointment.findMany({
       include: {
-        customer: {
-          select: {
-            id: true,
-            name: true
-          }
-        },
+        customer: { select: { id: true, name: true } },
         offer: {
           include: {
-            professional: {
-              select: {
-                id: true,
-                name: true
-              }
-            },
-            service: {
-              select: {
-                name: true
-              }
-            }
+            professional: { select: { id: true, name: true } },
+            service: { select: { name: true } }
           }
         }
       }
@@ -57,7 +45,7 @@ export class NotificationSeederService {
       })
 
       if (existingNotification) {
-        this.logger.info(`[NOTIFICATION SEED] Notification already exists: ${notification.marker}`)
+        this.logInfo(this.entityName, `Notification already exists: ${notification.marker}`)
         skippedCount++
         continue
       }
@@ -77,45 +65,38 @@ export class NotificationSeederService {
       createdCount++
     }
 
-    this.logger.info(
-      `[NOTIFICATION SEED] Notification seeding completed: ${createdCount} created, ${skippedCount} skipped`
-    )
+    this.logSeedingComplete(this.entityName, { createdCount, skippedCount })
   }
 
   async verifyNotifications(): Promise<void> {
-    this.logger.info('[NOTIFICATION SEED] Verifying notifications...')
+    this.logVerificationStart(this.entityName)
 
     const totalNotifications = await this.prismaClient.notification.count()
 
     const notificationsByType = await this.prismaClient.notification.groupBy({
       by: ['type'],
-      _count: {
-        type: true
-      }
+      _count: { type: true }
     })
 
     const notificationsByRecipientType = await this.prismaClient.notification.groupBy({
       by: ['recipientType'],
-      _count: {
-        recipientType: true
-      }
+      _count: { recipientType: true }
     })
 
-    this.logger.info(`[NOTIFICATION SEED] Total notifications: ${totalNotifications}`)
+    this.logInfo(this.entityName, `Total notifications: ${totalNotifications}`)
 
     for (const typeGroup of notificationsByType) {
-      this.logger.info(
-        `[NOTIFICATION SEED] Type "${typeGroup.type}": ${typeGroup._count.type} notifications`
-      )
+      this.logInfo(this.entityName, `Type "${typeGroup.type}": ${typeGroup._count.type} notifications`)
     }
 
     for (const recipientGroup of notificationsByRecipientType) {
-      this.logger.info(
-        `[NOTIFICATION SEED] Recipient type "${recipientGroup.recipientType}": ${recipientGroup._count.recipientType} notifications`
+      this.logInfo(
+        this.entityName,
+        `Recipient type "${recipientGroup.recipientType}": ${recipientGroup._count.recipientType} notifications`
       )
     }
 
-    this.logger.info('[NOTIFICATION SEED] Notification verification completed')
+    this.logVerificationComplete(this.entityName)
   }
 }
 

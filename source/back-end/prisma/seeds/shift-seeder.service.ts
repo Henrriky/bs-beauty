@@ -1,14 +1,16 @@
 import { PrismaClient } from '@prisma/client'
-import { AppLoggerInstance } from '../../src/utils/logger/logger.util'
 import { generateShiftsData } from './data/shifts.data'
+import { BaseRelationSeederService } from './base-relation-seeder.service'
 
-export class ShiftSeederService {
-  private readonly logger = AppLoggerInstance
+export class ShiftSeederService extends BaseRelationSeederService {
+  private readonly entityName = 'shift'
 
-  constructor(private readonly prismaClient: PrismaClient) { }
+  constructor(private readonly prismaClient: PrismaClient) {
+    super()
+  }
 
   async seedShifts(): Promise<void> {
-    this.logger.info('[SHIFT SEED] Starting shift seeding...')
+    this.logSeedingStart(this.entityName)
 
     const shifts = generateShiftsData()
     let createdCount = 0
@@ -20,7 +22,7 @@ export class ShiftSeederService {
       })
 
       if (!professional) {
-        this.logger.warn(`[SHIFT SEED] Professional not found: ${shift.professionalName}`)
+        this.logWarning(this.entityName, `Professional not found: ${shift.professionalName}`)
         continue
       }
 
@@ -36,9 +38,7 @@ export class ShiftSeederService {
       if (existingShift) {
         await this.prismaClient.shift.update({
           where: { id: existingShift.id },
-          data: {
-            isBusy: shift.isBusy
-          }
+          data: { isBusy: shift.isBusy }
         })
         updatedCount++
       } else {
@@ -55,13 +55,11 @@ export class ShiftSeederService {
       }
     }
 
-    this.logger.info(
-      `[SHIFT SEED] Shift seeding completed: ${createdCount} created, ${updatedCount} updated`
-    )
+    this.logSeedingComplete(this.entityName, { createdCount, updatedCount })
   }
 
   async verifyShifts(): Promise<void> {
-    this.logger.info('[SHIFT SEED] Verifying shifts...')
+    this.logVerificationStart(this.entityName)
 
     const shifts = generateShiftsData()
     const professionalNames = [...new Set(shifts.map(s => s.professionalName))]
@@ -72,7 +70,7 @@ export class ShiftSeederService {
       })
 
       if (!professional) {
-        this.logger.warn(`[SHIFT SEED] Professional not found: ${professionalName}`)
+        this.logWarning(this.entityName, `Professional not found: ${professionalName}`)
         continue
       }
 
@@ -80,12 +78,10 @@ export class ShiftSeederService {
         where: { professionalId: professional.id }
       })
 
-      this.logger.info(
-        `[SHIFT SEED] Professional "${professionalName}" has ${shiftsCount} shifts`
-      )
+      this.logInfo(this.entityName, `Professional "${professionalName}" has ${shiftsCount} shifts`)
     }
 
-    this.logger.info('[SHIFT SEED] Shift verification completed')
+    this.logVerificationComplete(this.entityName)
   }
 }
 
