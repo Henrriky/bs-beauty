@@ -1,11 +1,13 @@
 import { Pagination } from '../../../components/select/Pagination'
 import { FindAppointmentByCustomerId } from '../../../store/appointment/types'
+import { UserType } from '../../../store/auth/types'
 import { ListAppointmentsButtonStatus } from '../types'
 import { CustomerAppointmentCard } from './CustomerAppointmentCard'
 
 interface CustomerAppointmentsProps {
   appointmentsService: FindAppointmentByCustomerId[]
   switchButtonStatus: ListAppointmentsButtonStatus
+  userType: UserType
   pagination?: {
     currentPage: number
     totalPages: number
@@ -29,6 +31,7 @@ function CustomerAppointments(props: CustomerAppointmentsProps) {
                   <CustomerAppointmentCard
                     appointment={appointment}
                     switchButtonStatus={props.switchButtonStatus}
+                    userType={props.userType}
                     key={appointment.id}
                   />
                 )

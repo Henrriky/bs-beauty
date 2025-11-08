@@ -108,7 +108,8 @@ function Appointments() {
         ) : (
           <AppointmentContainer
                   appointmentsService={data.data}
-            switchButtonStatus={switchButtonStatus}
+                  switchButtonStatus={switchButtonStatus}
+                  userType={user.userType}
                   pagination={{
                     currentPage: data.page,
                     totalPages: data.totalPages,

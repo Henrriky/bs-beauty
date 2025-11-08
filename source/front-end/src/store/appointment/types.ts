@@ -35,7 +35,12 @@ export interface FindAppointmentByCustomerId {
   observation: string | null;
   status: Status;
   appointmentDate: string;
-  allowImageUse: boolean
+  allowImageUse: boolean;
+  customer: {
+    id: string;
+    name: string;
+    profilePhotoUrl: string | null;
+  }
   customerId: string;
   serviceOfferedId: string;
   createdAt: Date;
