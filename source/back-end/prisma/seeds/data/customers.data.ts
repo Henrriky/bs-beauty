@@ -28,7 +28,7 @@ export function generateCustomersData(): CustomerSeedData[] {
     },
     {
       name: 'Marcelo Tavares',
-      email: 'juliana.costa@example.com',
+      email: 'marcelo.tavares@example.com',
       phone: '(55) 11 92001-0002',
       discoverySource: 'INSTAGRAM' as const
     },
