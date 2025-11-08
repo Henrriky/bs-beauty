@@ -8,18 +8,16 @@ export interface NotificationTemplateSeedData {
   variables: string[]
 }
 
+const BIRTHDAY_TEMPLATE: NotificationTemplateSeedData = {
+  key: 'BIRTHDAY',
+  name: 'Mensagem de aniversário',
+  description: 'Modelo de mensagem automática usado para parabenizar aniversariantes do dia.',
+  title: 'Feliz aniversário, {nome}! 🎉',
+  body: 'Oi, {nome}! Hoje você completa {idade} anos. A {empresa} te deseja um dia incrível!',
+  isActive: true,
+  variables: ['nome', 'idade', 'empresa', 'data_aniversário']
+}
+
 export function generateNotificationTemplatesData(): NotificationTemplateSeedData[] {
-  const templates: NotificationTemplateSeedData[] = []
-
-  templates.push({
-    key: 'BIRTHDAY',
-    name: 'Mensagem de aniversário',
-    description: 'Modelo de mensagem automática usado para parabenizar aniversariantes do dia.',
-    title: 'Feliz aniversário, {nome}! 🎉',
-    body: 'Oi, {nome}! Hoje você completa {idade} anos. A {empresa} te deseja um dia incrível!',
-    isActive: true,
-    variables: ['nome', 'idade', 'empresa', 'data_aniversário']
-  })
-
-  return templates
+  return [BIRTHDAY_TEMPLATE]
 }

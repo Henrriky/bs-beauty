@@ -9,7 +9,7 @@ export interface NotificationSeedData {
   appointmentId: string
 }
 
-export function generateNotificationsData(appointments: Array<{
+interface AppointmentData {
   id: string
   status: string
   appointmentDate: Date
@@ -18,73 +18,120 @@ export function generateNotificationsData(appointments: Array<{
   customerName: string
   professionalName: string
   serviceName: string
-}>): NotificationSeedData[] {
-  const notifications: NotificationSeedData[] = []
+}
 
-  for (const appointment of appointments) {
-    const appointmentDateStr = new Date(appointment.appointmentDate).toLocaleDateString('pt-BR')
-
-    notifications.push({
-      marker: `appointment:${appointment.id}:created:recipient:${appointment.professionalId}`,
-      title: `Agendamento Criado | ${appointmentDateStr}`,
-      message: `Novo atendimento de ${appointment.serviceName} para ${appointment.customerName} em ${appointmentDateStr}.`,
-      type: 'APPOINTMENT',
-      recipientId: appointment.professionalId,
-      recipientType: 'PROFESSIONAL',
-      readAt: ['CONFIRMED', 'CANCELLED', 'FINISHED'].includes(appointment.status) ? new Date(appointment.appointmentDate.getTime() - 1000 * 60 * 60) : null,
-      appointmentId: appointment.id
-    })
-
-    if (appointment.status === 'CONFIRMED' || appointment.status === 'FINISHED') {
-      notifications.push({
-        marker: `appointment:${appointment.id}:confirmed:recipient:${appointment.customerId}`,
-        title: `Agendamento Confirmado | ${appointmentDateStr}`,
-        message: `Seu agendamento de ${appointment.serviceName} com ${appointment.professionalName} foi confirmado para ${appointmentDateStr}.`,
-        type: 'APPOINTMENT',
-        recipientId: appointment.customerId,
-        recipientType: 'CUSTOMER',
-        readAt: appointment.status === 'FINISHED' ? new Date(appointment.appointmentDate.getTime() - 1000 * 60 * 30) : null,
-        appointmentId: appointment.id
-      })
-    }
-
-    if (appointment.status === 'CANCELLED') {
-      notifications.push({
-        marker: `appointment:${appointment.id}:cancelled:recipient:${appointment.customerId}`,
-        title: `Agendamento Cancelado | ${appointmentDateStr}`,
-        message: `Seu agendamento de ${appointment.serviceName} com ${appointment.professionalName} foi cancelado (data original: ${appointmentDateStr}).`,
-        type: 'APPOINTMENT',
-        recipientId: appointment.customerId,
-        recipientType: 'CUSTOMER',
-        readAt: null,
-        appointmentId: appointment.id
-      })
-
-      notifications.push({
-        marker: `appointment:${appointment.id}:cancelled:recipient:${appointment.professionalId}`,
-        title: `Agendamento Cancelado | ${appointmentDateStr}`,
-        message: `O agendamento de ${appointment.serviceName} com ${appointment.customerName} foi cancelado (data original: ${appointmentDateStr}).`,
-        type: 'APPOINTMENT',
-        recipientId: appointment.professionalId,
-        recipientType: 'PROFESSIONAL',
-        readAt: null,
-        appointmentId: appointment.id
-      })
-    }
-
-    if (appointment.status === 'FINISHED') {
-      notifications.push({
-        marker: `appointment:${appointment.id}:finished:recipient:${appointment.customerId}`,
-        title: `Agendamento Finalizado | ${appointmentDateStr}`,
-        message: `Seu atendimento de ${appointment.serviceName} com ${appointment.professionalName} foi concluído. Que tal avaliar o serviço?`,
-        type: 'APPOINTMENT',
-        recipientId: appointment.customerId,
-        recipientType: 'CUSTOMER',
-        readAt: null,
-        appointmentId: appointment.id
-      })
-    }
+function createNotification(
+  marker: string,
+  title: string,
+  message: string,
+  recipientId: string,
+  recipientType: 'CUSTOMER' | 'PROFESSIONAL',
+  appointmentId: string,
+  readAt: Date | null = null
+): NotificationSeedData {
+  return {
+    marker,
+    title,
+    message,
+    type: 'APPOINTMENT',
+    recipientId,
+    recipientType,
+    readAt,
+    appointmentId
   }
+}
 
-  return notifications
+function getReadAtTime(appointment: AppointmentData, statusesToCheck: string[], minutesOffset: number): Date | null {
+  return statusesToCheck.includes(appointment.status)
+    ? new Date(appointment.appointmentDate.getTime() - 1000 * 60 * minutesOffset)
+    : null
+}
+
+function createAppointmentCreatedNotification(appointment: AppointmentData): NotificationSeedData {
+  const dateStr = new Date(appointment.appointmentDate).toLocaleDateString('pt-BR')
+
+  return createNotification(
+    `appointment:${appointment.id}:created:recipient:${appointment.professionalId}`,
+    `Agendamento Criado | ${dateStr}`,
+    `Novo atendimento de ${appointment.serviceName} para ${appointment.customerName} em ${dateStr}.`,
+    appointment.professionalId,
+    'PROFESSIONAL',
+    appointment.id,
+    getReadAtTime(appointment, ['CONFIRMED', 'CANCELLED', 'FINISHED'], 60)
+  )
+}
+
+function createAppointmentConfirmedNotification(appointment: AppointmentData): NotificationSeedData | null {
+  if (!['CONFIRMED', 'FINISHED'].includes(appointment.status)) return null
+
+  const dateStr = new Date(appointment.appointmentDate).toLocaleDateString('pt-BR')
+
+  return createNotification(
+    `appointment:${appointment.id}:confirmed:recipient:${appointment.customerId}`,
+    `Agendamento Confirmado | ${dateStr}`,
+    `Seu agendamento de ${appointment.serviceName} com ${appointment.professionalName} foi confirmado para ${dateStr}.`,
+    appointment.customerId,
+    'CUSTOMER',
+    appointment.id,
+    getReadAtTime(appointment, ['FINISHED'], 30)
+  )
+}
+
+function createAppointmentCancelledNotifications(appointment: AppointmentData): NotificationSeedData[] {
+  if (appointment.status !== 'CANCELLED') return []
+
+  const dateStr = new Date(appointment.appointmentDate).toLocaleDateString('pt-BR')
+  const cancelMessage = `foi cancelado (data original: ${dateStr}).`
+
+  return [
+    createNotification(
+      `appointment:${appointment.id}:cancelled:recipient:${appointment.customerId}`,
+      `Agendamento Cancelado | ${dateStr}`,
+      `Seu agendamento de ${appointment.serviceName} com ${appointment.professionalName} ${cancelMessage}`,
+      appointment.customerId,
+      'CUSTOMER',
+      appointment.id
+    ),
+    createNotification(
+      `appointment:${appointment.id}:cancelled:recipient:${appointment.professionalId}`,
+      `Agendamento Cancelado | ${dateStr}`,
+      `O agendamento de ${appointment.serviceName} com ${appointment.customerName} ${cancelMessage}`,
+      appointment.professionalId,
+      'PROFESSIONAL',
+      appointment.id
+    )
+  ]
+}
+
+function createAppointmentFinishedNotification(appointment: AppointmentData): NotificationSeedData | null {
+  if (appointment.status !== 'FINISHED') return null
+
+  const dateStr = new Date(appointment.appointmentDate).toLocaleDateString('pt-BR')
+
+  return createNotification(
+    `appointment:${appointment.id}:finished:recipient:${appointment.customerId}`,
+    `Agendamento Finalizado | ${dateStr}`,
+    `Seu atendimento de ${appointment.serviceName} com ${appointment.professionalName} foi concluído. Que tal avaliar o serviço?`,
+    appointment.customerId,
+    'CUSTOMER',
+    appointment.id
+  )
+}
+
+export function generateNotificationsData(appointments: AppointmentData[]): NotificationSeedData[] {
+  return appointments.flatMap(appointment => {
+    const notifications: NotificationSeedData[] = []
+
+    notifications.push(createAppointmentCreatedNotification(appointment))
+
+    const confirmedNotif = createAppointmentConfirmedNotification(appointment)
+    if (confirmedNotif) notifications.push(confirmedNotif)
+
+    notifications.push(...createAppointmentCancelledNotifications(appointment))
+
+    const finishedNotif = createAppointmentFinishedNotification(appointment)
+    if (finishedNotif) notifications.push(finishedNotif)
+
+    return notifications
+  })
 }

@@ -2,6 +2,13 @@ import { faker } from '@faker-js/faker'
 
 faker.seed(456)
 
+interface CustomerInfo {
+  name: string
+  email: string
+  phone: string
+  discoverySource: 'INSTAGRAM' | 'REFERRAL' | 'GOOGLE' | 'WHATSAPP'
+}
+
 export interface CustomerSeedData {
   name: string
   email: string
@@ -16,10 +23,24 @@ export interface CustomerSeedData {
   notificationPreference: 'IN_APP' | 'ALL' | 'NONE'
 }
 
-export function generateCustomersData(): CustomerSeedData[] {
-  const customers: CustomerSeedData[] = []
+function createCustomerData(info: CustomerInfo): CustomerSeedData {
+  return {
+    name: info.name,
+    email: info.email,
+    passwordHash: '$2b$10$jL/UoBjQ2w31M29iLvwyK.kLqBuD2PSL86JJbXm3GOFUIrgA1o5vS',
+    phone: info.phone,
+    birthdate: faker.date.birthdate({ min: 18, max: 65, mode: 'age' }),
+    registerCompleted: true,
+    userType: 'CUSTOMER',
+    referralCount: faker.number.int({ min: 0, max: 5 }),
+    alwaysAllowImageUse: faker.datatype.boolean(0.6),
+    discoverySource: info.discoverySource,
+    notificationPreference: faker.helpers.arrayElement(['IN_APP', 'ALL', 'NONE'])
+  }
+}
 
-  const customersInfo = [
+export function generateCustomersData(): CustomerSeedData[] {
+  const customersInfo: CustomerInfo[] = [
     {
       name: 'Johnata Souza',
       email: 'johnata.santicioli@example.com',
@@ -64,21 +85,5 @@ export function generateCustomersData(): CustomerSeedData[] {
     },
   ]
 
-  for (const info of customersInfo) {
-    customers.push({
-      name: info.name,
-      email: info.email,
-      passwordHash: '$2b$10$jL/UoBjQ2w31M29iLvwyK.kLqBuD2PSL86JJbXm3GOFUIrgA1o5vS',
-      phone: info.phone,
-      birthdate: faker.date.birthdate({ min: 18, max: 65, mode: 'age' }),
-      registerCompleted: true,
-      userType: 'CUSTOMER',
-      referralCount: faker.number.int({ min: 0, max: 5 }),
-      alwaysAllowImageUse: faker.datatype.boolean(0.6),
-      discoverySource: info.discoverySource,
-      notificationPreference: faker.helpers.arrayElement(['IN_APP', 'ALL', 'NONE'])
-    })
-  }
-
-  return customers
+  return customersInfo.map(createCustomerData)
 }

@@ -54,6 +54,36 @@ function generateInstagramHandle(name: string): string {
   return `@${cleanName}${suffix}`
 }
 
+function createProfessionalData(
+  prof: RequiredProfessional,
+  userType: UserType,
+  commissionProbability: number
+): ProfessionalSeedData {
+  const firstName = prof.name.split(' ')[0].toLowerCase()
+  const isCommissioned = faker.datatype.boolean(commissionProbability)
+  const commissionRate = isCommissioned
+    ? parseFloat(faker.number.float({ min: 0.15, max: 0.4, fractionDigits: 2 }).toFixed(4))
+    : null
+
+  return {
+    name: prof.name,
+    email: prof.email,
+    passwordHash: prof.passwordHash,
+    googleId: prof.googleId,
+    specialization: prof.specialization,
+    contact: generatePhoneNumber(),
+    paymentMethods: faker.helpers.arrayElement(paymentMethodOptions),
+    isCommissioned,
+    commissionRate,
+    socialMedia: {
+      instagram: generateInstagramHandle(firstName),
+      whatsapp: generatePhoneNumber()
+    },
+    registerCompleted: true,
+    userType
+  }
+}
+
 export function generateProfessionalsData(): ProfessionalSeedData[] {
   const professionals: ProfessionalSeedData[] = []
 
@@ -61,6 +91,14 @@ export function generateProfessionalsData(): ProfessionalSeedData[] {
     {
       name: 'Alyson Fumagalli',
       email: 'alyson.fumagalli@bsbeauty.com',
+      specialization: null,
+      googleId: null,
+      passwordHash: '$2b$10$jL/UoBjQ2w31M29iLvwyK.kLqBuD2PSL86JJbXm3GOFUIrgA1o5vS',
+      userType: UserType.MANAGER
+    },
+    {
+      name: 'Bruna Silva',
+      email: 'bruna.silva@bsbeauty.com',
       specialization: null,
       googleId: null,
       passwordHash: '$2b$10$jL/UoBjQ2w31M29iLvwyK.kLqBuD2PSL86JJbXm3GOFUIrgA1o5vS',
@@ -109,109 +147,40 @@ export function generateProfessionalsData(): ProfessionalSeedData[] {
   ]
 
   for (const prof of requiredProfessionals) {
-    const firstName = prof.name.split(' ')[0].toLowerCase()
-    const isCommissioned = faker.datatype.boolean(0.5)
-    const commissionRate = isCommissioned
-      ? parseFloat(faker.number.float({ min: 0.15, max: 0.4, fractionDigits: 2 }).toFixed(4))
-      : null
-
-    professionals.push({
-      name: prof.name,
-      email: prof.email,
-      passwordHash: prof.passwordHash,
-      googleId: prof.googleId,
-      specialization: prof.specialization,
-      contact: generatePhoneNumber(),
-      paymentMethods: faker.helpers.arrayElement(paymentMethodOptions),
-      isCommissioned,
-      commissionRate,
-      socialMedia: {
-        instagram: generateInstagramHandle(firstName),
-        whatsapp: generatePhoneNumber()
-      },
-      registerCompleted: true,
-      userType: UserType.MANAGER
-    })
+    professionals.push(createProfessionalData(prof, UserType.MANAGER, 0.5))
   }
 
   for (const prof of requiredProfessionals) {
-    const firstName = prof.name.split(' ')[0].toLowerCase()
-    const isCommissioned = faker.datatype.boolean(0.7)
-    const commissionRate = isCommissioned
-      ? parseFloat(faker.number.float({ min: 0.15, max: 0.4, fractionDigits: 2 }).toFixed(4))
-      : null
-
-    professionals.push({
-      name: prof.name,
-      email: prof.email,
-      passwordHash: prof.passwordHash,
-      googleId: prof.googleId,
-      specialization: prof.specialization,
-      contact: generatePhoneNumber(),
-      paymentMethods: faker.helpers.arrayElement(paymentMethodOptions),
-      isCommissioned,
-      commissionRate,
-      socialMedia: {
-        instagram: generateInstagramHandle(firstName),
-        whatsapp: generatePhoneNumber()
-      },
-      registerCompleted: true,
-      userType: 'PROFESSIONAL'
-    })
+    professionals.push(createProfessionalData(prof, 'PROFESSIONAL' as UserType, 0.7))
   }
 
-  // Profissionais adicionais (fictícios)
-  const additionalNames = [
-    'Ana Carolina Santos',
-    'Camila Rodrigues Lima',
-    'Daniel Costa Oliveira',
-    'Fernanda Almeida Souza',
-    'Gabriel Martins Pereira',
-    'Isabella Ferreira Santos',
-    'João Pedro Ribeiro',
-    'Larissa Mendes Costa',
-    'Marcos Vinícius Dias'
+  const additionalProfessionals = [
+    { name: 'Ana Carolina Santos', specialization: 'Cortes e Escovação' },
+    { name: 'Camila Rodrigues Lima', specialization: 'Manicure e Pedicure' },
+    { name: 'Fernanda Almeida Souza', specialization: 'Maquiagem Profissional' },
+    { name: 'Isabella Ferreira Santos', specialization: 'Extensão de Cílios' },
+    { name: 'Larissa Mendes Costa', specialization: 'Tratamentos Capilares' }
   ]
 
-  const additionalSpecializations = [
-    'Cortes e Escovação',
-    'Manicure e Pedicure',
-    'Designer de Sobrancelhas',
-    'Maquiagem Profissional',
-    'Depilação',
-    'Extensão de Cílios',
-    'Penteados e Noivas',
-    'Tratamentos Capilares',
-    'Barbeiro'
-  ]
-
-  for (let i = 0; i < additionalNames.length; i++) {
-    const name = additionalNames[i]
+  for (const { name, specialization } of additionalProfessionals) {
     const firstName = name.split(' ')[0].toLowerCase()
     const lastName = name.split(' ').pop()?.toLowerCase() || ''
     const email = `${firstName}.${lastName}@bsbeauty.com`
-    const specialization = additionalSpecializations[i]
-    const isCommissioned = faker.datatype.boolean(0.7)
-    const commissionRate = isCommissioned
-      ? parseFloat(faker.number.float({ min: 0.15, max: 0.4, fractionDigits: 2 }).toFixed(4))
-      : null
 
-    professionals.push({
-      name,
-      email,
-      passwordHash: '$2b$10$jL/UoBjQ2w31M29iLvwyK.kLqBuD2PSL86JJbXm3GOFUIrgA1o5vS',
-      specialization,
-      contact: generatePhoneNumber(),
-      paymentMethods: faker.helpers.arrayElement(paymentMethodOptions),
-      isCommissioned,
-      commissionRate,
-      socialMedia: {
-        instagram: generateInstagramHandle(firstName),
-        whatsapp: generatePhoneNumber()
-      },
-      registerCompleted: true,
-      userType: 'PROFESSIONAL'
-    })
+    professionals.push(
+      createProfessionalData(
+        {
+          name,
+          email,
+          specialization,
+          googleId: null,
+          passwordHash: '$2b$10$jL/UoBjQ2w31M29iLvwyK.kLqBuD2PSL86JJbXm3GOFUIrgA1o5vS',
+          userType: 'PROFESSIONAL' as UserType
+        },
+        'PROFESSIONAL' as UserType,
+        0.7
+      )
+    )
   }
 
   return professionals

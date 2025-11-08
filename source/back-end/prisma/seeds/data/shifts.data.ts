@@ -6,44 +6,47 @@ export interface ShiftSeedData {
   professionalName: string
 }
 
-export function generateShiftsData(): ShiftSeedData[] {
-  const shifts: ShiftSeedData[] = []
+const PROFESSIONALS = [
+  'Alyson Fumagalli',
+  'Eliel da Silva',
+  'Henrique Santiago Pires',
+  'Henrriky Jhonny'
+] as const
 
-  const professionals = [
-    'Alyson Fumagalli',
-    'Eliel da Silva',
-    'Henrique Santiago Pires',
-    'Henrriky Jhonny'
-  ]
+const WEEK_DAYS: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY'> = [
+  'MONDAY',
+  'TUESDAY',
+  'WEDNESDAY',
+  'THURSDAY',
+  'FRIDAY',
+  'SATURDAY'
+]
 
-  const weekDays: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY'> = [
-    'MONDAY',
-    'TUESDAY',
-    'WEDNESDAY',
-    'THURSDAY',
-    'FRIDAY',
-    'SATURDAY'
-  ]
+const SHIFT_TIMES = [
+  { start: '12:00:00', end: '15:00:00' },
+  { start: '17:00:00', end: '21:00:00' }
+] as const
 
-  for (const professionalName of professionals) {
-    for (const weekDay of weekDays) {
-      shifts.push({
-        weekDay,
-        isBusy: false,
-        shiftStart: new Date('2024-01-01T12:00:00.000Z'),
-        shiftEnd: new Date('2024-01-01T15:00:00.000Z'),
-        professionalName
-      })
-
-      shifts.push({
-        weekDay,
-        isBusy: false,
-        shiftStart: new Date('2024-01-01T17:00:00.000Z'),
-        shiftEnd: new Date('2024-01-01T21:00:00.000Z'),
-        professionalName
-      })
-    }
+function createShift(
+  professionalName: string,
+  weekDay: typeof WEEK_DAYS[number],
+  shiftTime: typeof SHIFT_TIMES[number]
+): ShiftSeedData {
+  return {
+    weekDay,
+    isBusy: false,
+    shiftStart: new Date(`2024-01-01T${shiftTime.start}.000Z`),
+    shiftEnd: new Date(`2024-01-01T${shiftTime.end}.000Z`),
+    professionalName
   }
+}
 
-  return shifts
+export function generateShiftsData(): ShiftSeedData[] {
+  return PROFESSIONALS.flatMap(professionalName =>
+    WEEK_DAYS.flatMap(weekDay =>
+      SHIFT_TIMES.map(shiftTime =>
+        createShift(professionalName, weekDay, shiftTime)
+      )
+    )
+  )
 }
