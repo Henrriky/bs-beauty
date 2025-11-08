@@ -28,6 +28,7 @@ function CustomerHomeProfessionalCardPersonalInfo(
         <ProfilePicture
           size="md"
           variation="square-with-bg"
+          displayName={props.professionalName}
           profilePhotoUrl={props.professionalPhotoUrl}
         />
       </div>

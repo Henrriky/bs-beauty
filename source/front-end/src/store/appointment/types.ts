@@ -90,7 +90,7 @@ export interface FindAppointmentById {
 }
 
 export interface PaginatedAppointmentsResponse {
-  data: Appointment[]
+  data: FindAppointmentByCustomerId[]
   total: number
   page: number
   totalPages: number

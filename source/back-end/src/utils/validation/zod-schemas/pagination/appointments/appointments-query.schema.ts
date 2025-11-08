@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { basePaginationSchema } from '../pagination.schema'
 import { Status } from '@prisma/client'
+import { DateTime } from 'luxon'
 
 const StatusEnum = z.nativeEnum(Status)
 
@@ -27,10 +28,36 @@ const viewAllParam = z.union([
   z.boolean()
 ]).optional().default(false)
 
+
+const TZ = 'America/Sao_Paulo'
+
+const dateInput = z.union([
+  z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD format.'),
+  z.date(),
+])
+
 export const appointmentsQuerySchema = basePaginationSchema
   .extend({
-    from: z.coerce.date().optional(),
-    to: z.coerce.date().optional(),
+    from: dateInput
+      .transform((value) => {
+        const dt =
+          typeof value === 'string'
+            ? DateTime.fromISO(value, { zone: TZ })
+            : DateTime.fromJSDate(value, { zone: TZ })
+        return dt.startOf('day').toUTC().toJSDate()
+      })
+      .optional(),
+
+    to: dateInput
+      .transform((value) => {
+        const dt =
+          typeof value === 'string'
+            ? DateTime.fromISO(value, { zone: TZ })
+            : DateTime.fromJSDate(value, { zone: TZ })
+        return dt.endOf('day').toUTC().toJSDate()
+      })
+      .optional(),
+
     status: statusParam,
     viewAll: viewAllParam
   })

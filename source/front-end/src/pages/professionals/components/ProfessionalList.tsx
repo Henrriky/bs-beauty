@@ -20,7 +20,7 @@ function ProfessionalList({
   if (professionals.length === 0) return <ProfessionalListEmpty />
 
   return (
-    <div className="flex items-center flex-col gap-6 px-2 max-h-[50vh] overflow-y-auto">
+    <div className="flex items-center flex-col gap-6 px-2">
       {professionals.map((professional) => (
         <ProfessionalCard
           key={professional.id}

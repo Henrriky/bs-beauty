@@ -71,12 +71,29 @@ class SharedSchemas {
       'Por favor, forneça um número de telefone válido',
     )
 
-  public static specializationSchema = z
-    .string()
-    .max(50, 'A especialização deve ter no máximo 50 caracteres')
-    .optional()
+  public static specializationSchema = z.preprocess(
+    (val) => {
+      if (val === null || val === undefined || (typeof val === 'string' && val.trim() === '')) {
+        return null
+      }
+      return val
+    },
+    z
+      .string()
+      .min(3, 'A especialização deve ter no mínimo 3 caracteres')
+      .max(50, 'A especialização deve ter no máximo 50 caracteres')
+      .nullable()
+      .optional()
+  )
 
   public static notificationPreference = z.nativeEnum(NotificationPreference).optional()
+
+  public static verificationCodeSchema = z
+    .string({ required_error: 'O código de verificação é obrigatório' })
+    .trim()
+    .min(1, 'O código de verificação é obrigatório')
+    .regex(/^\d+$/, 'O código deve conter apenas números')
+    .length(6, 'O código deve ter exatamente 6 dígitos')
 
   public static registerBodySchema = z
     .object({

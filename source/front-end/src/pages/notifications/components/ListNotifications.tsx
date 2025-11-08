@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../../../components/button/Button'
+import { Pagination } from '../../../components/select/Pagination'
 import { NotificationDTO } from '../../../store/notification/types'
 import Modal from '../../services/components/Modal'
 import { Params, useNotificationsLogic } from '../hooks/useNotificationsLogic'
@@ -8,7 +9,12 @@ import NotificationItem from './NotificationItem'
 import { DeleteNotificationsModal } from './DeleteNotificationsModal'
 import { MarkNotificationsReadModal } from './MarkNotificationsReadModal'
 
-function ListNotifications({ params }: { params: Params }) {
+interface ListNotificationsProps {
+  params: Params
+  onPageChange?: (page: number) => void
+}
+
+function ListNotifications({ params, onPageChange }: ListNotificationsProps) {
   const {
     data,
     isError,
@@ -184,6 +190,16 @@ function ListNotifications({ params }: { params: Params }) {
         <p className="text-[#D9D9D9] mb-8 mt-2 text-sm text-center">
           Não há notificações.
         </p>
+      )}
+
+      {data && data.totalPages > 1 && (
+        <Pagination
+          totalItems={data.total}
+          totalPages={data.totalPages}
+          currentPage={data.page}
+          pageLimit={data.limit}
+          onPageChange={(page) => onPageChange?.(page)}
+        />
       )}
 
       <div className="absolute top-0">

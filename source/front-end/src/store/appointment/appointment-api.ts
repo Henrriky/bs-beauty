@@ -29,11 +29,9 @@ export const appointmentAPI = createApi({
       async queryFn(params, _api, _extra, fetchWithBQ) {
         const MAX_LIMIT = 50;
 
-        // o que o chamador pediu
         const requestedLimit = Math.max(1, Number(params?.limit ?? 20));
         const pageStart = Math.max(1, Number(params?.page ?? 1));
 
-        // quanto pedir por requisição (capado no back)
         const perPage = Math.min(MAX_LIMIT, requestedLimit);
 
         const buildQS = (page: number, limit: number) => {
@@ -66,7 +64,6 @@ export const appointmentAPI = createApi({
           total = payload.total;
           lastPage = payload.totalPages ?? Math.ceil(total / payload.limit);
 
-          // se o caller pediu mais que 50, vamos acumulando até atingir o pedido
           const enoughForCaller = requestedLimit > MAX_LIMIT
             ? acc.length >= requestedLimit
             : true;
@@ -75,7 +72,6 @@ export const appointmentAPI = createApi({
           page += 1;
         }
 
-        // corta pro tamanho que o caller pediu (se pediu >50)
         const sliced = acc.slice(0, requestedLimit);
 
         return {
@@ -105,6 +101,9 @@ export const appointmentAPI = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: (_res, _err, _arg) => [
+        { type: 'Appointments', id: 'LIST' },
+      ],
     }),
     updateAppointmentService: builder.mutation<
       void,
@@ -121,6 +120,10 @@ export const appointmentAPI = createApi({
           id: undefined,
         },
       }),
+      invalidatesTags: (_res, _err, arg) => [
+        { type: 'Appointments', id: arg.id },
+        { type: 'Appointments', id: 'LIST' },
+      ],
     }),
     finishAppointment: builder.mutation<
       void,
@@ -134,6 +137,10 @@ export const appointmentAPI = createApi({
           id: undefined,
         },
       }),
+      invalidatesTags: (_res, _err, arg) => [
+        { type: 'Appointments', id: arg.id },
+        { type: 'Appointments', id: 'LIST' },
+      ],
     }),
     findAppointmentsByCustomerOrProfessionalId: builder.query<
       {
