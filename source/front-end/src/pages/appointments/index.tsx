@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Button } from '../../components/button/Button'
 import { ErrorMessage } from '../../components/feedback/ErrorMessage'
-import BSBeautyLoading from '../../components/feedback/Loading'
 import useAppSelector from '../../hooks/use-app-selector'
 import { PageHeader } from '../../layouts/PageHeader'
 import { appointmentAPI } from '../../store/appointment/appointment-api'
@@ -22,6 +21,7 @@ function Appointments() {
   const [switchButtonStatus, setSwitchButtonStatus] =
     useState<ListAppointmentsButtonStatus>('schedulled')
   const [currentPage, setCurrentPage] = useState(1)
+  const LIMIT = 10
 
   const user = useAppSelector((state) => state.auth.user!)
   const selectUserInfo = authAPI.endpoints.fetchUserInfo.select()
@@ -40,10 +40,11 @@ function Appointments() {
     Status.NO_SHOW,
   ]
 
-  const { data, isLoading, isError, error } =
+
+  const { data, isLoading, isFetching, isError, error } =
     appointmentAPI.useFetchAppointmentsQuery({
       page: currentPage,
-      limit: 10,
+      limit: LIMIT,
       status: switchButtonStatus === 'schedulled'
         ? schedulledStatuses
         : finishedStatuses,
@@ -55,6 +56,7 @@ function Appointments() {
   }
 
   const AppointmentContainer = userTypeToAppointmentComponents[user.userType]
+  const showSkeleton = isLoading || isFetching
 
   const handleSwitchChange = (newStatus: ListAppointmentsButtonStatus) => {
     setSwitchButtonStatus(newStatus)
@@ -67,14 +69,11 @@ function Appointments() {
         title="Agendamentos"
         subtitle={
           <>
-            Olá, {displayName}.{' '}
-            <b className="text-[#A4978A]">
-              Aqui você pode visualizar seus agendamentos
-            </b>
-            .
+            Olá, {displayName}. <b className="text-[#A4978A]">Aqui você pode visualizar seus agendamentos</b>.
           </>
         }
       />
+
       {/* SWITCH BUTTONS */}
       <div className="flex">
         <Button
@@ -92,31 +91,34 @@ function Appointments() {
           onClick={() => handleSwitchChange('finished')}
         />
       </div>
+
       <section>
-        {isLoading ? (
-          <BSBeautyLoading title="Carregando as informações..." />
-        ) : isError ? (
-          <ErrorMessage
-            message={
-              'Erro ao carregar informações. Tente novamente mais tarde.'
-            }
-          />
-        ) : !data ? (
+        <AppointmentContainer
+          isLoading={showSkeleton}
+          skeletonCount={LIMIT}
+          appointmentsService={data?.data ?? []}
+          switchButtonStatus={switchButtonStatus}
+          userType={user.userType}
+          pagination={
+            data
+              ? {
+                currentPage: data.page,
+                totalPages: data.totalPages,
+                total: data.total,
+                onPageChange: setCurrentPage,
+              }
+              : undefined
+          }
+        />
+
+        {!showSkeleton && !isError && !data && (
           <div className="flex justify-center items-center h-full text-yellow-500">
             Agendamentos não disponíveis no momento
           </div>
-        ) : (
-          <AppointmentContainer
-                  appointmentsService={data.data}
-                  switchButtonStatus={switchButtonStatus}
-                  userType={user.userType}
-                  pagination={{
-                    currentPage: data.page,
-                    totalPages: data.totalPages,
-                    total: data.total,
-                    onPageChange: setCurrentPage,
-                  }}
-          />
+        )}
+
+        {isError && (
+          <ErrorMessage message="Erro ao carregar informações. Tente novamente mais tarde." />
         )}
       </section>
     </div>

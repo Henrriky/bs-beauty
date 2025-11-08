@@ -108,10 +108,58 @@ export default function AppointmentsCarousel({
 
   if (loading) {
     return (
-      <div className="mt-3 flex gap-3 overflow-hidden">
+      <div className="relative mt-3 min-w-0">
+        <div
+          className="
+          carousel-scrollbar
+          flex gap-3 overflow-x-auto overflow-y-hidden scroll-smooth
+          snap-x snap-mandatory px-1 pb-3 overscroll-x-contain
+        "
+          style={{
+            scrollPaddingLeft: '0.25rem',
+            WebkitOverflowScrolling: 'touch',
+            contain: 'inline-size',
+          }}
+        >
         {Array.from({ length: SKELETON_CARD_COUNT }).map((_, i) => (
-          <div key={i} className="min-w-[280px] sm:min-w-[320px] md:min-w-[360px] h-[140px] rounded-2xl bg-primary-800/60 animate-pulse" />
+          <article
+            key={i}
+            className="
+              snap-start shrink-0
+              min-w-[280px] sm:min-w-[320px] md:min-w-[360px]
+              rounded-2xl bg-[#262626] border border-secondary-300/30
+              px-4 py-4 flex flex-col gap-3
+              animate-pulse
+              min-h-[156px]
+            "
+          >
+            <header className="flex items-center justify-between">
+              <div>
+                <div className="h-5 w-16 bg-[#3A3A3A] rounded mb-1" />
+                <div className="h-3 w-24 bg-[#3A3A3A] rounded" />
+              </div>
+              <div className="relative">
+                <div className="h-10 w-10 rounded-full bg-[#3A3A3A]" />
+              </div>
+            </header>
+
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <div className="h-4 w-40 bg-[#3A3A3A] rounded mb-2" />
+                <div className="h-3 w-32 bg-[#3A3A3A] rounded" />
+              </div>
+              <div className="shrink-0">
+                <div className="h-6 w-24 bg-[#3A3A3A] rounded-full" />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="h-4 w-28 bg-[#3A3A3A] rounded" />
+              <div className="ml-auto h-5 w-20 bg-[#3A3A3A] rounded" />
+            </div>
+          </article>
         ))}
+      </div>
       </div>
     )
   }
