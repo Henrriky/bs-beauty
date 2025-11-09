@@ -60,6 +60,7 @@ describe('NotificationsController', () => {
       executeFindAll: vi.fn(),
       executeFindById: vi.fn(),
       executeDelete: vi.fn(),
+      executeDeleteMany: vi.fn(),
       executeMarkManyAsRead: vi.fn()
     }
 
@@ -80,7 +81,7 @@ describe('NotificationsController', () => {
       const mockUser = createMockUser()
       const mockNotifications = [
         createMockNotification({ recipientId: mockUser.id }),
-        createMockNotification({ 
+        createMockNotification({
           recipientId: mockUser.id,
           type: NotificationType.APPOINTMENT,
           readAt: faker.date.past()
@@ -265,81 +266,191 @@ describe('NotificationsController', () => {
     })
   })
 
-  describe('handleDelete', () => {
-    it('should delete a notification successfully', async () => {
+  describe('handleDeleteMany', () => {
+    it('should delete multiple notifications successfully', async () => {
       // arrange
-      const notificationId = faker.string.uuid()
-      const deletedNotification = createMockNotification({ id: notificationId })
+      const mockUser = createMockUser()
+      const notificationIds = [
+        faker.string.uuid(),
+        faker.string.uuid(),
+        faker.string.uuid()
+      ]
+      const mockResult = {
+        success: true,
+        message: '3 notifications deleted successfully.'
+      }
 
-      req.params = { id: notificationId }
-      useCaseMock.executeDelete.mockResolvedValue(deletedNotification)
+      req.user = mockUser
+      req.body = { ids: notificationIds }
+      useCaseMock.executeDeleteMany.mockResolvedValue(mockResult)
 
       // act
-      await NotificationsController.handleDelete(req, res, next)
+      await NotificationsController.handleDeleteMany(req, res, next)
 
       // assert
-      expect(useCaseMock.executeDelete).toHaveBeenCalledWith(notificationId)
-      expect(res.send).toHaveBeenCalledWith(deletedNotification)
+      expect(useCaseMock.executeDeleteMany).toHaveBeenCalledWith(notificationIds, mockUser.id)
+      expect(res.send).toHaveBeenCalledWith(mockResult)
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should delete a read notification successfully', async () => {
+    it('should handle validation error for empty array of IDs', async () => {
       // arrange
-      const notificationId = faker.string.uuid()
-      const deletedNotification = createMockNotification({
-        id: notificationId,
-        recipientType: UserType.PROFESSIONAL,
-        type: NotificationType.APPOINTMENT,
-        readAt: faker.date.past()
-      })
+      const mockUser = createMockUser(UserType.PROFESSIONAL)
 
-      req.params = { id: notificationId }
-      useCaseMock.executeDelete.mockResolvedValue(deletedNotification)
+      req.user = mockUser
+      req.body = { ids: [] }
 
       // act
-      await NotificationsController.handleDelete(req, res, next)
+      await NotificationsController.handleDeleteMany(req, res, next)
 
       // assert
-      expect(useCaseMock.executeDelete).toHaveBeenCalledWith(notificationId)
-      expect(res.send).toHaveBeenCalledWith(deletedNotification)
+      expect(next).toHaveBeenCalled()
+      const errorArg = next.mock.calls[0][0]
+      expect(errorArg).toBeInstanceOf(Error)
+      expect(useCaseMock.executeDeleteMany).not.toHaveBeenCalled()
+    })
+
+    it('should handle single notification ID', async () => {
+      // arrange
+      const mockUser = createMockUser()
+      const notificationIds = [faker.string.uuid()]
+      const mockResult = {
+        success: true,
+        message: '1 notifications deleted successfully.'
+      }
+
+      req.user = mockUser
+      req.body = { ids: notificationIds }
+      useCaseMock.executeDeleteMany.mockResolvedValue(mockResult)
+
+      // act
+      await NotificationsController.handleDeleteMany(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeDeleteMany).toHaveBeenCalledWith(notificationIds, mockUser.id)
+      expect(res.send).toHaveBeenCalledWith(mockResult)
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should handle errors and call next middleware', async () => {
+    it('should handle validation errors for invalid UUIDs', async () => {
       // arrange
-      const notificationId = faker.string.uuid()
-      const error = new Error('Notification not found')
+      const mockUser = createMockUser()
 
-      req.params = { id: notificationId }
-      useCaseMock.executeDelete.mockRejectedValue(error)
+      req.user = mockUser
+      req.body = { ids: ['invalid-uuid', 'another-invalid'] }
 
       // act
-      await NotificationsController.handleDelete(req, res, next)
+      await NotificationsController.handleDeleteMany(req, res, next)
 
       // assert
-      expect(useCaseMock.executeDelete).toHaveBeenCalledWith(notificationId)
+      expect(next).toHaveBeenCalled()
+      const errorArg = next.mock.calls[0][0]
+      expect(errorArg).toBeInstanceOf(Error)
+      expect(useCaseMock.executeDeleteMany).not.toHaveBeenCalled()
+    })
+
+    it('should handle use case errors and call next middleware', async () => {
+      // arrange
+      const mockUser = createMockUser(UserType.PROFESSIONAL)
+      const notificationIds = [faker.string.uuid(), faker.string.uuid()]
+      const error = new Error('Database deletion failed')
+
+      req.user = mockUser
+      req.body = { ids: notificationIds }
+      useCaseMock.executeDeleteMany.mockRejectedValue(error)
+
+      // act
+      await NotificationsController.handleDeleteMany(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeDeleteMany).toHaveBeenCalledWith(notificationIds, mockUser.id)
       expect(next).toHaveBeenCalledWith(error)
       expect(res.send).not.toHaveBeenCalled()
     })
 
-    it('should handle deletion of different notification types', async () => {
+    it('should handle maximum limit of IDs (1000)', async () => {
       // arrange
-      const notificationId = faker.string.uuid()
-      const deletedSystemNotification = createMockNotification({
-        id: notificationId,
-        recipientType: UserType.MANAGER,
-        readAt: faker.date.past()
-      })
+      const mockUser = createMockUser(UserType.MANAGER)
+      // Generate 1000 valid UUIDs (the maximum allowed)
+      const notificationIds = Array.from({ length: 1000 }, () => faker.string.uuid())
+      const mockResult = {
+        success: true,
+        message: '1000 notifications deleted successfully.'
+      }
 
-      req.params = { id: notificationId }
-      useCaseMock.executeDelete.mockResolvedValue(deletedSystemNotification)
+      req.user = mockUser
+      req.body = { ids: notificationIds }
+      useCaseMock.executeDeleteMany.mockResolvedValue(mockResult)
 
       // act
-      await NotificationsController.handleDelete(req, res, next)
+      await NotificationsController.handleDeleteMany(req, res, next)
 
       // assert
-      expect(useCaseMock.executeDelete).toHaveBeenCalledWith(notificationId)
-      expect(res.send).toHaveBeenCalledWith(deletedSystemNotification)
+      expect(useCaseMock.executeDeleteMany).toHaveBeenCalledWith(notificationIds, mockUser.id)
+      expect(res.send).toHaveBeenCalledWith(mockResult)
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should handle validation error when exceeding maximum limit of IDs', async () => {
+      // arrange
+      const mockUser = createMockUser()
+      // Generate 1001 valid UUIDs (exceeds the maximum allowed)
+      const notificationIds = Array.from({ length: 1001 }, () => faker.string.uuid())
+
+      req.user = mockUser
+      req.body = { ids: notificationIds }
+
+      // act
+      await NotificationsController.handleDeleteMany(req, res, next)
+
+      // assert
+      expect(next).toHaveBeenCalled()
+      const errorArg = next.mock.calls[0][0]
+      expect(errorArg).toBeInstanceOf(Error)
+      expect(useCaseMock.executeDeleteMany).not.toHaveBeenCalled()
+    })
+
+    it('should handle no notifications deleted', async () => {
+      // arrange
+      const mockUser = createMockUser(UserType.PROFESSIONAL)
+      const notificationIds = [faker.string.uuid(), faker.string.uuid()]
+      const mockResult = {
+        success: true,
+        message: '0 notifications deleted successfully.'
+      }
+
+      req.user = mockUser
+      req.body = { ids: notificationIds }
+      useCaseMock.executeDeleteMany.mockResolvedValue(mockResult)
+
+      // act
+      await NotificationsController.handleDeleteMany(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeDeleteMany).toHaveBeenCalledWith(notificationIds, mockUser.id)
+      expect(res.send).toHaveBeenCalledWith(mockResult)
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should handle different user types correctly', async () => {
+      // arrange
+      const mockManagerUser = createMockUser(UserType.MANAGER)
+      const notificationIds = [faker.string.uuid()]
+      const mockResult = {
+        success: true,
+        message: '1 notifications deleted successfully.'
+      }
+
+      req.user = mockManagerUser
+      req.body = { ids: notificationIds }
+      useCaseMock.executeDeleteMany.mockResolvedValue(mockResult)
+
+      // act
+      await NotificationsController.handleDeleteMany(req, res, next)
+
+      // assert
+      expect(useCaseMock.executeDeleteMany).toHaveBeenCalledWith(notificationIds, mockManagerUser.id)
+      expect(res.send).toHaveBeenCalledWith(mockResult)
       expect(next).not.toHaveBeenCalled()
     })
   })
@@ -443,7 +554,6 @@ describe('NotificationsController', () => {
     it('should handle maximum limit of IDs', async () => {
       // arrange
       const mockUser = createMockUser(UserType.MANAGER)
-      // Generate 1000 valid UUIDs (the maximum allowed)
       const notificationIds = Array.from({ length: 1000 }, () => faker.string.uuid())
       const mockResult = { updatedCount: 1000 }
 

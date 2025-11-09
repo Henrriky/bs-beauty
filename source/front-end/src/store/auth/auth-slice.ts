@@ -81,6 +81,10 @@ const authSlice = createSlice({
       }
     },
     logout: () => {
+      localStorage.removeItem('token')
+      localStorage.removeItem('googleAccessToken')
+      localStorage.removeItem('hasRefresh')
+
       return {
         user: null,
         token: null,

@@ -89,7 +89,7 @@ function RatingCardsContainer({
   const handleTouchEnd = () => setIsPaused(false)
 
   return (
-    <div className="w-full mt-8 mb-16">
+    <div className="w-full mt-8">
       <div
         ref={containerRef}
         className={`flex ${gapClass} items-stretch overflow-x-auto carousel-scrollbar no-scrollbar ${isOverflowing ? 'justify-start' : 'justify-between'}`}

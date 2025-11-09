@@ -5,6 +5,7 @@ import { validateUpdateProfessional } from '../../middlewares/data-validation/pr
 import { validateQuery } from '../../middlewares/pagination/zod-request-validation.middleware'
 import { professionalQuerySchema } from '../../utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
 import { combinedAuthMiddleware } from '@/middlewares/auth/combined-auth.middleware'
+import { blockedTimeRelatedWithProfessionalRoutes } from './blocked-times.routes'
 
 const professionalRoutes = Router()
 
@@ -18,6 +19,7 @@ professionalRoutes.get(
   validateQuery(professionalQuerySchema),
   ProfessionalsController.handleFindAll
 )
+professionalRoutes.use('/:professionalId/blocked-times', blockedTimeRelatedWithProfessionalRoutes)
 
 /* Protected routes */
 
@@ -44,6 +46,12 @@ professionalRoutes.delete(
   '/:id',
   combinedAuthMiddleware(['MANAGER'], ['professional.delete']),
   ProfessionalsController.handleDelete
+)
+
+professionalRoutes.patch(
+  '/:id/commission',
+  combinedAuthMiddleware(['MANAGER'], ['professional.edit']),
+  ProfessionalsController.handleUpdateCommission
 )
 
 professionalRoutes.get(

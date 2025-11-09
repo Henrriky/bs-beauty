@@ -1,7 +1,10 @@
 export type NotificationDTO = {
   id: string
+  marker: string
+  title: string
   message: string
   createdAt: string
+  type: NotificationType
   readAt: string | null
   appointmentId: string | null
 }
@@ -19,6 +22,12 @@ export type FindAllNotificationsParams = {
   limit?: number
 }
 
-export interface MarkManyAsReadRequest { ids: string[] }
+enum NotificationType {
+  APPOINTMENT = 'APPOINTMENT',
+}
+
+export interface MarkManyNotificationsRequest { ids: string[] }
 
 export interface MarkManyAsReadResponse { updatedCount: number }
+
+export interface DeleteNotificationsResponse { success: boolean; message: string }

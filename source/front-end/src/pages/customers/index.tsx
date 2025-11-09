@@ -9,6 +9,7 @@ import { customerAPI } from '../../store/customer/customer-api'
 import { CustomerList } from './components/CustomerList'
 import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
 import { UserType } from '../../store/auth/types'
+import { PageHeader } from '../../layouts/PageHeader'
 
 function Customers() {
   const { data, isLoading, isError, error } =
@@ -39,8 +40,11 @@ function Customers() {
   }
 
   return (
-    <div className="h-full flex flex-col justify-between">
-      <Title align="left">Listagem de clientes</Title>
+    <div className="h-full flex flex-col">
+      <PageHeader
+        title="Listagem de Clientes"
+        subtitle="Gerencie as informações dos clientes aqui."
+      />
       <UserCanAccessContainer
         allowedPermissions={['customer.read']}
         allowedUserTypes={[UserType.MANAGER]}

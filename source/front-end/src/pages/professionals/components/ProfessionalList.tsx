@@ -6,6 +6,7 @@ interface ProfessionalListProps {
   isLoading: boolean
   onDelete: (professional: Professional) => void
   onManageProfessionalRoles: (professional: Professional) => void
+  onEditCommission: (professional: Professional) => void
 }
 
 function ProfessionalList({
@@ -13,18 +14,20 @@ function ProfessionalList({
   isLoading,
   onDelete,
   onManageProfessionalRoles,
+  onEditCommission,
 }: ProfessionalListProps) {
   if (isLoading) return <ProfessionalListSkeleton />
   if (professionals.length === 0) return <ProfessionalListEmpty />
 
   return (
-    <div className="flex items-center flex-col gap-6 px-2 max-h-[50vh] overflow-y-auto">
+    <div className="flex items-center flex-col gap-6 px-2">
       {professionals.map((professional) => (
         <ProfessionalCard
           key={professional.id}
           professional={professional}
           onDelete={onDelete}
           onManageProfessionalRoles={onManageProfessionalRoles}
+          onEditCommission={onEditCommission}
         />
       ))}
     </div>

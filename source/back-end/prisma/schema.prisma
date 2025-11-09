@@ -34,8 +34,9 @@ model Customer {
   updatedAt              DateTime             @updatedAt @map("updated_at")
 
   appointments Appointment[]
-  referrer     Customer?     @relation("refers", fields: [referrerId], references: [id])
-  referrals    Customer[]    @relation("refers")
+  referrer     Customer?       @relation("refers", fields: [referrerId], references: [id])
+  referrals    Customer[]      @relation("refers")
+  payments     PaymentRecord[]
 
   @@map("customer")
 }
@@ -66,6 +67,8 @@ model Rating {
   appointmentId String   @unique @map("appointment_id")
 
   appointment Appointment @relation(fields: [appointmentId], references: [id])
+
+  @@map("rating")
 }
 
 model Notification {
@@ -118,6 +121,7 @@ model Offer {
   appointments Appointment[]
   service      Service       @relation(fields: [serviceId], references: [id])
   professional Professional  @relation(fields: [professionalId], references: [id])
+  payments     PaymentItem[]
 
   @@map("offer")
 }
@@ -130,6 +134,8 @@ model Professional {
   googleId               String?              @unique @map("google_id")
   registerCompleted      Boolean              @default(false) @map("register_completed")
   paymentMethods         Json?                @map("payment_methods")
+  isCommissioned         Boolean              @default(false) @map("is_commissioned")
+  commissionRate         Decimal?             @map("commission_rate") @db.Decimal(5, 4)
   socialMedia            Json?                @map("social_media")
   contact                String?              @unique
   specialization         String?
@@ -139,12 +145,42 @@ model Professional {
   createdAt              DateTime             @default(now()) @map("created_at")
   updatedAt              DateTime             @updatedAt @map("updated_at")
 
+  blockedTimes BlockedTime[]
+
   shifts           Shift[]
   offers           Offer[]
   professionalRole ProfessionalRole[]
   Service          Service[]
+  payments         PaymentRecord[]
 
   @@map("professional")
+}
+
+model BlockedTime {
+  id       String  @id @default(uuid())
+  reason   String
+  isActive Boolean @default(true) @map("is_active")
+
+  startDate DateTime  @map("start_date") @db.Date()
+  endDate   DateTime? @map("end_date") @db.Date()
+  startTime DateTime  @map("start_time") @db.Time()
+  endTime   DateTime  @map("end_time") @db.Time()
+
+  monday    Boolean @default(false)
+  tuesday   Boolean @default(false)
+  wednesday Boolean @default(false)
+  thursday  Boolean @default(false)
+  friday    Boolean @default(false)
+  saturday  Boolean @default(false)
+  sunday    Boolean @default(false)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  professional   Professional? @relation(fields: [professionalId], references: [id])
+  professionalId String?       @map("professional_id")
+
+  @@map("blocked_time")
 }
 
 model Shift {
@@ -199,17 +235,17 @@ model RolePermission {
 }
 
 model NotificationTemplate {
-  id        String   @id @default(uuid())
-  key       String   @unique @map("key")
-  name      String   @map("name")
-  description String @map("description")
-  title     String   @map("title")
-  body      String   @db.Text @map("body")
-  isActive  Boolean  @map("is_active") @default(true)
-  variables Json?    @map("variables")
+  id          String  @id @default(uuid())
+  key         String  @unique @map("key")
+  name        String  @map("name")
+  description String  @map("description")
+  title       String  @map("title")
+  body        String  @map("body") @db.Text
+  isActive    Boolean @default(true) @map("is_active")
+  variables   Json?   @map("variables")
 
-  createdAt DateTime @default(now())  @map("created_at")
-  updatedAt DateTime @updatedAt       @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("notification_template")
 }
@@ -226,6 +262,38 @@ model Permission {
 
   @@unique([resource, action])
   @@map("permission")
+}
+
+model PaymentRecord {
+  id             String   @id @default(uuid())
+  totalValue     Decimal  @map("total_value") @db.Decimal(10, 2)
+  paymentMethod  String   @map("payment_method")
+  customerId     String   @map("customer_id")
+  professionalId String   @map("professional_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  professional Professional  @relation(fields: [professionalId], references: [id])
+  customer     Customer      @relation(fields: [customerId], references: [id])
+  items        PaymentItem[]
+
+  @@map("payment_record")
+}
+
+model PaymentItem {
+  id              String   @id @default(uuid())
+  quantity        Int      @default(1)
+  discount        Int      @default(0)
+  price           Decimal  @db.Decimal(10, 2)
+  paymentRecordId String   @map("payment_record_id")
+  offerId         String   @map("offer_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  paymentRecord PaymentRecord @relation(fields: [paymentRecordId], references: [id], onDelete: Cascade)
+  offer         Offer         @relation(fields: [offerId], references: [id])
+
+  @@map("payment_item")
 }
 
 enum WeekDays {
@@ -267,8 +335,7 @@ enum DiscoverySource {
 enum NotificationChannel {
   NONE
   IN_APP
-  EMAIL
-  BOTH
+  ALL
 }
 
 enum NotificationType {

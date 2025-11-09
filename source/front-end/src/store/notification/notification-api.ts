@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithAuth } from "../fetch-base/custom-fetch-base";
 import { API_VARIABLES } from "../../api/config";
-import { FindAllNotificationsParams, MarkManyAsReadRequest, MarkManyAsReadResponse, PaginatedNotificationsResponse } from "./types";
+import { baseQueryWithAuth } from "../fetch-base/custom-fetch-base";
+import { DeleteNotificationsResponse, FindAllNotificationsParams, MarkManyAsReadResponse, MarkManyNotificationsRequest, PaginatedNotificationsResponse } from "./types";
 
 export const notificationAPI = createApi({
   reducerPath: 'notification-api',
@@ -33,7 +33,7 @@ export const notificationAPI = createApi({
 
     markNotificationsRead: builder.mutation<
       MarkManyAsReadResponse,
-      MarkManyAsReadRequest
+      MarkManyNotificationsRequest
     >({
       query: (body) => ({
         url: API_VARIABLES.NOTIFICATIONS_ENDPOINTS.MARK_MANY_AS_READ,
@@ -42,5 +42,17 @@ export const notificationAPI = createApi({
       }),
       invalidatesTags: [{ type: 'Notifications', id: 'LIST' }],
     }),
+
+    deleteNotifications: builder.mutation<
+      DeleteNotificationsResponse,
+      MarkManyNotificationsRequest
+    >({
+      query: (body) => ({
+        url: API_VARIABLES.NOTIFICATIONS_ENDPOINTS.DELETE_NOTIFICATIONS,
+        method: 'DELETE',
+        body,
+      }),
+      invalidatesTags: [{ type: 'Notifications', id: 'LIST' }],
+    })
   })
 })

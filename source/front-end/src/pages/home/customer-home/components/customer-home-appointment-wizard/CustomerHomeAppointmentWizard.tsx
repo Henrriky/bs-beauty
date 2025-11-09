@@ -118,7 +118,11 @@ function CustomerHomeAppointmentWizard() {
       await makeAppointment(payload).unwrap()
 
       setModalIsOpen(true)
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.data?.message?.toString().includes('maximum number of appointments')) {
+        toast.error('Você já atingiu o número máximo de agendamentos por hoje. Por favor, tente novamente amanhã.')
+        return
+      }
       console.error('❌ Erro ao criar o agendamento:', error)
       toast.error('Erro ao criar o agendamento. Tente novamente.')
     }
@@ -148,7 +152,7 @@ function CustomerHomeAppointmentWizard() {
           <AppointmentCurrentStepForm currentFlow={currentFlow} />
         </div>
         <div
-          className={`flex mt-6 ${!currentStep.previousStep ? 'justify-end' : 'justify-between'}`}
+          className={`flex mt-6 ${!currentStep.previousStep ? 'justify-end' : 'justify-between'} px-4`}
         >
           {currentStep.previousStep && (
             <Button

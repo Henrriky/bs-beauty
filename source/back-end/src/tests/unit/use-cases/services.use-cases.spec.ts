@@ -101,7 +101,9 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
-        notificationPreference: NotificationChannel.BOTH,
+        isCommissioned: false,
+        commissionRate: null,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -152,7 +154,9 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
-        notificationPreference: NotificationChannel.BOTH,
+        isCommissioned: false,
+        commissionRate: null,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -281,7 +285,9 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
-        notificationPreference: NotificationChannel.BOTH,
+        isCommissioned: false,
+        commissionRate: null,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -351,7 +357,9 @@ describe('ServicesUseCase (Unit Tests)', () => {
         googleId: null,
         paymentMethods: [],
         passwordHash: faker.internet.password(),
-        notificationPreference: NotificationChannel.BOTH,
+        isCommissioned: false,
+        commissionRate: null,
+        notificationPreference: NotificationChannel.ALL,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -416,8 +424,10 @@ describe('ServicesUseCase (Unit Tests)', () => {
           googleId: null,
           paymentMethods: [],
           passwordHash: faker.internet.password(),
+          isCommissioned: false,
+          commissionRate: null,
           createdAt: faker.date.past(),
-          notificationPreference: NotificationChannel.BOTH,
+          notificationPreference: NotificationChannel.ALL,
           updatedAt: faker.date.past()
         }
 
@@ -466,7 +476,9 @@ describe('ServicesUseCase (Unit Tests)', () => {
           googleId: null,
           paymentMethods: [],
           passwordHash: faker.internet.password(),
-          notificationPreference: NotificationChannel.BOTH,
+          isCommissioned: false,
+          commissionRate: null,
+          notificationPreference: NotificationChannel.ALL,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }
@@ -512,11 +524,13 @@ describe('ServicesUseCase (Unit Tests)', () => {
           socialMedia: null,
           contact: faker.phone.number(),
           specialization: faker.person.jobType(),
+          commissionRate: new Prisma.Decimal(faker.number.float({ min: 0, max: 1 })),
+          isCommissioned: true,
           profilePhotoUrl: faker.internet.url(),
           googleId: null,
           paymentMethods: [],
           passwordHash: faker.internet.password(),
-          notificationPreference: NotificationChannel.BOTH,
+          notificationPreference: NotificationChannel.ALL,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }

@@ -1,12 +1,11 @@
 import { NotificationTemplateUseCase, extractPlaceholders } from '../../../services/notifications-template.use-case'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi, type Mocked } from 'vitest'
 import { faker } from '@faker-js/faker'
 import { CustomError } from '../../../utils/errors/custom.error.util'
 import type { NotificationTemplate } from '@prisma/client'
 import type { NotificationTemplateRepository } from '../../../repository/protocols/notification-template.repository'
-import { Mocked } from 'vitest'
 
-function createMockNotificationTemplate(overrides: Partial<NotificationTemplate> = {}): NotificationTemplate {
+function createMockNotificationTemplate (overrides: Partial<NotificationTemplate> = {}): NotificationTemplate {
   return {
     id: faker.string.uuid(),
     key: 'BIRTHDAY',
@@ -22,7 +21,7 @@ function createMockNotificationTemplate(overrides: Partial<NotificationTemplate>
   }
 }
 
-function createMockPaginationResult<T>(data: T[], overrides: Partial<{ total: number; page: number; totalPages: number; limit: number }> = {}) {
+function createMockPaginationResult<T> (data: T[], overrides: Partial<{ total: number, page: number, totalPages: number, limit: number }> = {}) {
   return {
     data,
     total: data.length,
@@ -114,7 +113,7 @@ describe('NotificationTemplateUseCase', () => {
         total: 0,
         page: 2,
         totalPages: 0,
-        limit: 5 
+        limit: 5
       })
 
       repositoryMock.findAll.mockResolvedValue(mockResult)
@@ -317,6 +316,7 @@ describe('NotificationTemplateUseCase', () => {
         expect((error as CustomError).statusCode).toBe(422)
         expect((error as CustomError).message).toBe('Invalid placeholders along the title/body.')
 
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const details = JSON.parse((error as CustomError).details!)
         expect(details.invalidPlaceholders).toContain('{invalidOne}')
         expect(details.invalidPlaceholders).toContain('{invalidTwo}')

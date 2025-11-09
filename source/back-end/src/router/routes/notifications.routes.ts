@@ -14,7 +14,7 @@ notificationRoutes.get(
   NotificationsController.handleFindAll
 )
 notificationRoutes.get('/:id', NotificationsController.handleFindById)
-notificationRoutes.delete('/:id', NotificationsController.handleDelete)
+notificationRoutes.delete('/', NotificationsController.handleDeleteMany)
 notificationRoutes.put(
   '/read',
   userTypeAuthMiddleware([UserType.CUSTOMER, UserType.PROFESSIONAL, UserType.MANAGER]),

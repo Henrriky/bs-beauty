@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { useNavigate } from 'react-router'
 import useAppDispatch from '../../../hooks/use-app-dispatch'
 import { setToken } from '../../../store/auth/auth-slice'
@@ -9,20 +12,42 @@ import { Input } from '../../../components/inputs/Input'
 import { Button } from '../../../components/button/Button'
 import PasswordEyeIcon from '../../../components/password/PasswordEyeIcon'
 
+const loginSchema = z.object({
+  email: z
+    .string({ required_error: 'O e-mail é obrigatório' })
+    .min(1, 'O e-mail é obrigatório')
+    .email('Por favor, forneça um e-mail válido'),
+  password: z
+    .string({ required_error: 'A senha é obrigatória' })
+    .min(1, 'A senha é obrigatória'),
+})
+
+type LoginFormData = z.infer<typeof loginSchema>
+
 function LoginWithEmailAndPasswordForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const dispatchRedux = useAppDispatch()
   const navigate = useNavigate()
 
-  async function handleStandardLoginButtonClick(e: React.FormEvent) {
-    e.preventDefault()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
 
+  async function handleStandardLoginButtonClick(formData: LoginFormData) {
     try {
       const { accessToken } = await AuthAPI.loginWithEmailAndPassword(
-        email,
-        password,
+        formData.email,
+        formData.password,
       )
 
       const decodedToken: TokenPayload = decodeUserToken(accessToken)
@@ -46,9 +71,12 @@ function LoginWithEmailAndPasswordForm() {
       } else {
         navigate('/complete-register')
       }
-    } catch (error) {
-      console.log(error)
-      toast.error('Erro ao tentar logar.')
+    } catch (error: any) {
+      if (error?.response?.status === 400 || error?.message?.includes('Invalid credentials')) {
+        toast.error('E-mail ou senha incorretos. Verifique suas credenciais.')
+      } else {
+        toast.error('Erro ao tentar logar.')
+      }
     }
   }
 
@@ -56,50 +84,53 @@ function LoginWithEmailAndPasswordForm() {
     <>
       <div className="flex justify-center items-center flex-col gap-3 w-full">
         <form
-          onSubmit={handleStandardLoginButtonClick}
+          onSubmit={handleSubmit(handleStandardLoginButtonClick)}
           className="flex justify-center items-center flex-col gap-3 w-[340px]"
         >
           <Input
             id="email"
             type="email"
             variant="solid"
-            value={email}
             placeholder="E-mail"
-            onChange={(e) => setEmail(e.target.value)}
             wrapperClassName="w-full"
-          ></Input>
+            error={errors.email?.message}
+            registration={register('email')}
+          />
           <div className="relative w-full">
             <Input
               id="password"
               type={showPassword ? 'text' : 'password'}
               variant="solid"
-              value={password}
               placeholder="Senha"
-              onChange={(e) => setPassword(e.target.value)}
-            ></Input>
+              error={errors.password?.message}
+              registration={register('password')}
+            />
             <PasswordEyeIcon
               showPassword={showPassword}
               showPasswordFunction={() => setShowPassword(!showPassword)}
             />
           </div>
-          <Button label="Entrar" type="submit" variant="outline"></Button>
+          <Button type="submit"
+            label="Entrar"
+            variant="outline"
+          />
         </form>
         <div className="flex flex-col items-center">
-          <p className="text-[#DBDBDB] text-xs">
+          <p className="text-[#DBDBDB] text-sm mt-2">
             Não possui conta? {''}
             <Button
               variant="text-only"
               label="Crie uma agora!"
-              className="text-xs"
+              className="text-sm"
               onClick={() => navigate('/register')}
             />
           </p>
-          <p className="text-[#DBDBDB] text-xs">
+          <p className="text-[#DBDBDB] text-sm mt-2">
             Esqueceu sua senha? {''}
             <Button
               variant="text-only"
               label="Redefinir senha"
-              className="text-xs"
+              className="text-sm"
               onClick={() => navigate('/reset-password')}
             />
           </p>

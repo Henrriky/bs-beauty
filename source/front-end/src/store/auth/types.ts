@@ -10,8 +10,7 @@ export enum UserType {
 export enum NotificationPreference {
   NONE = "NONE",
   IN_APP = 'IN_APP',
-  EMAIL = 'EMAIL',
-  BOTH = 'BOTH'
+  ALL = 'ALL'
 }
 
 export interface CustomerOrProfessional {
@@ -50,6 +49,8 @@ export type Professional = {
   registerCompleted: boolean;
   socialMedia: { name: string, url: string }[] | null;
   paymentMethods: { name: string, }[] | null;
+  isCommissioned: boolean;
+  commissionRate: number | null;
   contact: string | null;
   specialization: string | null;
   profilePhotoUrl: string;

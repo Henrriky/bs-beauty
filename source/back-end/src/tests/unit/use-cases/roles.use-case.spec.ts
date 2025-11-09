@@ -464,7 +464,9 @@ describe('RoleUseCase (Unit Tests)', () => {
           specialization: null,
           profilePhotoUrl: null,
           userType: 'PROFESSIONAL',
-          notificationPreference: NotificationChannel.BOTH,
+          notificationPreference: NotificationChannel.ALL,
+          isCommissioned: false,
+          commissionRate: null,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }

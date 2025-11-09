@@ -89,4 +89,22 @@ export interface FindAppointmentById {
   } | undefined
 }
 
+export interface PaginatedAppointmentsResponse {
+  data: FindAppointmentByCustomerId[]
+  total: number
+  page: number
+  totalPages: number
+  limit: number
+}
+
+export interface FindAllAppointmentsParams {
+  page?: number
+  limit?: number
+  from?: string
+  to?: string
+  status?: Status[]
+  viewAll?: boolean
+}
+
+
 export type CreateAppointmentAPIData = z.infer<typeof AppointmentSchemas.createSchemaForm>

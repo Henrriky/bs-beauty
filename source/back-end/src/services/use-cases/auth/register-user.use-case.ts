@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import { type CustomerRepository } from '../../../repository/protocols/customer.repository'
 import { type ProfessionalRepository } from '../../../repository/protocols/professional.repository'
 import { CustomError } from '../../../utils/errors/custom.error.util'
-import { type CodeValidationService } from './code-validation.service'
+import { type CodeValidationService } from './services/code-validation.service'
 
 interface RegisterUserInput {
   email: string
@@ -30,6 +30,7 @@ export class RegisterUserUseCase {
       this.professionalRepository.findByEmail(email)
     ])
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     if (customerByEmail || professionalByEmail) {
       throw new CustomError(
         'Bad Request',

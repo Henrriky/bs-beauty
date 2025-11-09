@@ -24,6 +24,8 @@ class ProfessionalSchemas {
     email: z.string().email(),
     socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
     paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
+    isCommissioned: z.boolean().optional().default(false),
+    commissionRate: z.number().min(0).max(1).optional(),
     contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
     userType: z.enum([UserType.MANAGER, UserType.PROFESSIONAL]).optional(),
     specialization: z.string().min(3).max(3).optional(),
@@ -66,7 +68,7 @@ class ProfessionalSchemas {
     paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
     contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
     userType: z.enum([UserType.MANAGER, UserType.PROFESSIONAL]).optional(),
-    specialization: z.string().min(3).max(30).optional(),
+    specialization: z.string().min(3).max(30).nullable().optional(),
     notificationPreference: z.nativeEnum(NotificationChannel).optional()
   }).strict()
 
@@ -76,7 +78,7 @@ class ProfessionalSchemas {
     socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
     paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
     contact: z.string().refine((value) => RegexPatterns.phone.test(value)).optional(),
-    specialization: z.string().min(3).max(30).optional(),
+    specialization: z.string().min(3).max(30).nullable().optional(),
     notificationPreference: z.nativeEnum(NotificationChannel).optional()
   }).strict()
 }

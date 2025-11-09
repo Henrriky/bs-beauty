@@ -94,6 +94,65 @@ export const PERMISSIONS_MAP = {
       action: 'Alterar Permissões',
     },
   },
+  BLOCKED_TIME: {
+    CREATE_OWN: {
+      permissionName: 'blocked_time.create_own',
+      resource: 'Bloqueio de Horário',
+      action: 'Criar Próprio',
+    },
+    DELETE_OWN: {
+      permissionName: 'blocked_time.delete_own',
+      resource: 'Bloqueio de Horário',
+      action: 'Deletar Próprio',
+    },
+    EDIT_OWN: {
+      permissionName: 'blocked_time.edit_own',
+      resource: 'Bloqueio de Horário',
+      action: 'Editar Próprio',
+    },
+    READ_OWN: {
+      permissionName: 'blocked_time.read_own',
+      resource: 'Bloqueio de Horário',
+      action: 'Ler Próprio',
+    },
+    READ_ALL: {
+      permissionName: 'blocked_time.read_all',
+      resource: 'Bloqueio de Horário',
+      action: 'Ler Todos',
+    },
+    EDIT_ALL: {
+      permissionName: 'blocked_time.edit_all',
+      resource: 'Bloqueio de Horário',
+      action: 'Editar Todos',
+    },
+    DELETE_ALL: {
+      permissionName: 'blocked_time.delete_all',
+      resource: 'Bloqueio de Horário',
+      action: 'Deletar Todos',
+    },
+  },
+  PAYMENT_RECORD: {
+    READ: {
+      permissionName: 'payment_record.read',
+      resource: 'Registro de Pagamento',
+      action: 'Ler',
+    },
+    CREATE: {
+      permissionName: 'payment_record.create',
+      resource: 'Registro de Pagamento',
+      action: 'Criar',
+    },
+    EDIT: {
+      permissionName: 'payment_record.edit',
+      resource: 'Registro de Pagamento',
+      action: 'Editar',
+    },
+    DELETE: {
+      permissionName: 'payment_record.delete',
+      resource: 'Registro de Pagamento',
+      action: 'Deletar',
+    },
+  },
 } as const
 
 function createPermissionDisplayMap() {

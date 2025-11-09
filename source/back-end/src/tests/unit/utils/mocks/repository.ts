@@ -9,17 +9,22 @@ import { type RoleRepository } from '@/repository/protocols/role.repository'
 import { type ServiceRepository } from '@/repository/protocols/service.repository'
 import { type ShiftRepository } from '@/repository/protocols/shift.repository'
 import { type Mocked } from 'vitest'
+import { type BlockedTimeRepository } from '@/repository/protocols/blocked-times.repository'
+import { type PaymentRecordRepository } from '@/repository/protocols/payment-record.repository'
 
 vi.mock('@/factory/make-appointments-use-case.factory')
 
 const MockAppointmentRepository: Mocked<AppointmentRepository> = {
   findAll: vi.fn(),
+  findAllPaginated: vi.fn(),
   findById: vi.fn(),
   findByCustomerOrProfessionalId: vi.fn(),
   findByServiceOfferedId: vi.fn(),
+  findByDateRangeStatusProfessionalAndServices: vi.fn(),
+  countByDateRangeGrouped: vi.fn(),
+  sumEstimatedTimeByDateRangeGrouped: vi.fn(),
   findNonFinishedByUserAndDay: vi.fn(),
   countCustomerAppointmentsPerDay: vi.fn(),
-  findByDateRange: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   delete: vi.fn()
@@ -49,6 +54,7 @@ const MockProfessionalRepository: Mocked<ProfessionalRepository> = {
   removeRoleFromProfessional: vi.fn(),
   findProfessionalRoleAssociation: vi.fn(),
   findRolesByProfessionalId: vi.fn(),
+  updateCommission: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   updateByEmailAndGoogleId: vi.fn(),
@@ -122,6 +128,7 @@ const MockNotificationRepository: Mocked<NotificationRepository> = {
   findById: vi.fn(),
   create: vi.fn(),
   delete: vi.fn(),
+  deleteMany: vi.fn(),
   findByMarker: vi.fn(),
   markManyAsReadForUser: vi.fn()
 }
@@ -130,6 +137,24 @@ const MockNotificationTemplateRepository: Mocked<NotificationTemplateRepository>
   findAll: vi.fn(),
   findActiveByKey: vi.fn(),
   updateByKey: vi.fn()
+}
+
+const MockBlockedTimesRepository: Mocked<BlockedTimeRepository> = {
+  findById: vi.fn(),
+  create: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn(),
+  findAllPaginated: vi.fn(),
+  findByProfessionalAndPeriod: vi.fn()
+}
+
+const MockPaymentRecordRepository: Mocked<PaymentRecordRepository> = {
+  findById: vi.fn(),
+  findByProfessionalId: vi.fn(),
+  findByProfessionalIdPaginated: vi.fn(),
+  create: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn()
 }
 
 export {
@@ -142,5 +167,7 @@ export {
   MockRoleRepository,
   MockServiceRepository,
   MockShiftRepository,
-  MockRatingRepository
+  MockRatingRepository,
+  MockBlockedTimesRepository,
+  MockPaymentRecordRepository
 }

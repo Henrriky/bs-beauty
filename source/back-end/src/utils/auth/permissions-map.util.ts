@@ -78,6 +78,55 @@ export const PERMISSIONS_MAP = {
       permissionName: 'roles.change_permissions',
       description: 'Permite alterar as permissões de uma função existente'
     }
+  },
+  BLOCKED_TIME: {
+    CREATE_OWN: {
+      permissionName: 'blocked_time.create_own',
+      description: 'Permite que o usuário crie um bloqueio de horário para si mesmo'
+    },
+    DELETE_OWN: {
+      permissionName: 'blocked_time.delete_own',
+      description: 'Permite que o usuário remova um bloqueio de horário do próprio usuário'
+    },
+    EDIT_OWN: {
+      permissionName: 'blocked_time.edit_own',
+      description: 'Permite que o usuário edite um bloqueio de horário do próprio usuário'
+    },
+    READ_OWN: {
+      permissionName: 'blocked_time.read_own',
+      description: 'Permite que o usuário visualize os próprios bloqueios de horário'
+    },
+    READ_ALL: {
+      permissionName: 'blocked_time.read_all',
+      description:
+        'Permite visualizar os horários bloqueados de todos os usuários'
+    },
+    EDIT_ALL: {
+      permissionName: 'blocked_time.edit_all',
+      description: 'Permite editar os horários bloqueados de todos os usuários'
+    },
+    DELETE_ALL: {
+      permissionName: 'blocked_time.delete_all',
+      description: 'Permite remover os horários bloqueados de todos os usuários'
+    }
+  },
+  PAYMENT_RECORD: {
+    READ: {
+      permissionName: 'payment_record.read',
+      description: 'Permite visualizar os registros de pagamento'
+    },
+    CREATE: {
+      permissionName: 'payment_record.create',
+      description: 'Permite criar novos registros de pagamento'
+    },
+    UPDATE: {
+      permissionName: 'payment_record.edit',
+      description: 'Permite editar registros de pagamento existentes'
+    },
+    DELETE: {
+      permissionName: 'payment_record.delete',
+      description: 'Permite remover registros de pagamento'
+    }
   }
 } as const
 

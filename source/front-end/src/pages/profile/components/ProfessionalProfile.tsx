@@ -13,6 +13,8 @@ import PaymentMethodsInput from '../../../components/inputs/payment-methods-inpu
 import { Select } from '../../../components/inputs/Select'
 import { useEffect } from 'react'
 import { getPrettyRoles } from '../utils/get-pretty-roles'
+import useAppDispatch from '../../../hooks/use-app-dispatch'
+import { refreshUserToken } from '../../../utils/auth/refresh-token.util'
 
 interface ProfessionalProfileProps {
   userInfo: FetchUserInfoProfessional
@@ -22,8 +24,7 @@ interface ProfessionalProfileProps {
 const NOTIFICATION_OPTIONS = [
   { value: 'NONE', label: 'Não receber' },
   { value: 'IN_APP', label: 'Receber pela plataforma' },
-  { value: 'EMAIL', label: 'Receber por email' },
-  { value: 'BOTH', label: 'Receber pela plataforma e por email' }
+  { value: 'ALL', label: 'Receber pela plataforma e por email' },
 ]
 
 // TODO: Separate Social Media to a Component
@@ -33,6 +34,7 @@ function ProfessionalProfile({
   onProfileUpdate,
 }: ProfessionalProfileProps) {
   const [updateProfile, { isLoading }] = userAPI.useUpdateProfileMutation()
+  const dispatch = useAppDispatch()
 
   const {
     register,
@@ -49,7 +51,7 @@ function ProfessionalProfile({
       socialMedia: userInfo.socialMedia || undefined,
       specialization: userInfo.specialization || undefined,
       paymentMethods: userInfo.paymentMethods || undefined,
-      notificationPreference: userInfo.notificationPreference || undefined
+      notificationPreference: userInfo.notificationPreference || undefined,
     },
   })
 
@@ -79,6 +81,8 @@ function ProfessionalProfile({
     try {
       await updateProfile({ userId: userInfo.id, profileData: data }).unwrap()
       toast.success('Perfil atualizado com sucesso!')
+
+      await refreshUserToken(dispatch)
       await onProfileUpdate?.()
     } catch (error) {
       console.error('Error trying to complete register', error)
@@ -120,6 +124,7 @@ function ProfessionalProfile({
         id="specialization"
         type="specialization"
         placeholder="Digite sua especialização"
+        error={errors?.specialization?.message?.toString()}
       />
       <Input
         registration={{ ...register('email') }}
@@ -133,7 +138,7 @@ function ProfessionalProfile({
         id="notificationPreference"
         label="Deseja receber notificações?"
         options={NOTIFICATION_OPTIONS}
-        error={errors?.name?.message?.toString()}
+        error={errors?.notificationPreference?.message?.toString()}
         variant="outline"
         wrapperClassName="w-full"
       />
@@ -141,9 +146,26 @@ function ProfessionalProfile({
         label="Função"
         id="userType"
         type="userType"
-        value={getPrettyRoles(userInfo.userType, userInfo.roles)}
+        value={getPrettyRoles(
+          userInfo.userType,
+          userInfo.roles,
+          userInfo.isCommissioned,
+        )}
         disabled
       />
+      {userInfo.isCommissioned && (
+        <Input
+          label="Taxa de Comissão"
+          id="commissionRate"
+          type="text"
+          value={
+            userInfo.commissionRate
+              ? (userInfo.commissionRate * 100).toFixed(2) + '%'
+              : 'N/A'
+          }
+          disabled
+        />
+      )}
       <SocialMediaContainerInput
         socialMediaFields={socialMediaFields}
         removeSocialMedia={removeSocialMedia}
