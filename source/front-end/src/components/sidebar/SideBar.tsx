@@ -1,77 +1,21 @@
-import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline'
-import { ReactNode, useState } from 'react'
-import { Outlet, useNavigate, useLocation } from 'react-router'
-import useAppSelector from '../../hooks/use-app-selector'
 import ProfilePicture from '../../pages/profile/components/ProfilePicture'
+import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline'
+import { Outlet } from 'react-router'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
-import sideBarItems from './consts'
-import { serverLogout } from '../../store/auth/server-logout'
-import { authAPI } from '../../store/auth/auth-api'
-import { userCanAccess } from '../../utils/authorization/authorization.utils'
-import useAppDispatch from '../../hooks/use-app-dispatch'
-
-interface SideBarItemProps {
-  path: string
-  icon: ReactNode
-  children?: ReactNode
-  toggleSideBar?: () => void
-  closeOnClick?: boolean
-  isActive?: boolean
-}
-
-function normalizePath(p: string) {
-  if (!p) return '/'
-  return p.startsWith('/') ? p : `/${p}`
-}
-
-function isActivePath(currentPath: string, itemPath: string) {
-  const curr = normalizePath(currentPath)
-  const target = normalizePath(itemPath)
-  return curr === target || curr.startsWith(`${target}/`)
-}
+import { useSideBar } from './hooks/use-side-bar'
+import { SideBarItems } from './components/SideBarItems'
 
 function SideBar() {
-  const user = useAppSelector((state) => state.auth.user!)
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false)
-  const { pathname } = useLocation()
+  const {
+    items,
+    currentUserPhotoUrl,
+    currentPagePathInfo,
+    currentUserDisplayName,
+    isSideBarOpen,
+    toggleSideBar,
+    navigate,
+  } = useSideBar()
 
-  const selectUserInfo = authAPI.endpoints.fetchUserInfo.select()
-  const userInfoQuery = useAppSelector(selectUserInfo)
-
-  const displayName = userInfoQuery?.data?.user.name ?? user.name
-  const safeDisplayName = (displayName ?? '') as string
-  const displayNameCap = safeDisplayName
-    ? firstLetterOfWordToUpperCase(safeDisplayName)
-    : ''
-  const photoUrl =
-    userInfoQuery?.data?.user.profilePhotoUrl ?? user.profilePhotoUrl
-
-  const toggleSideBar = () => setIsSideBarOpen((v) => !v)
-  const navigate = useNavigate()
-
-  const filteredItems = sideBarItems
-    .filter((item) => userCanAccess({ user, ...item.authorization }))
-    .reverse()
-
-  const renderSidebarItems = (isMobile = false) => {
-    return filteredItems
-      .filter((item) => userCanAccess({ user, ...item.authorization }))
-      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-      .map((sideBarItem) => (
-        <SideBarItem
-          key={sideBarItem.name}
-          icon={sideBarItem.icon}
-          path={sideBarItem.navigateTo}
-          closeOnClick={isMobile}
-          toggleSideBar={isMobile ? toggleSideBar : undefined}
-          isActive={
-            isActivePath(pathname, sideBarItem.navigateTo)
-          }
-        >
-          {sideBarItem.name}
-        </SideBarItem>
-      ))
-  }
 
   return (
     <>
@@ -92,8 +36,8 @@ function SideBar() {
               onClick={() => navigate('/profile')}
             >
               <ProfilePicture
-                profilePhotoUrl={photoUrl ?? ''}
-                displayName={displayName || undefined}
+                profilePhotoUrl={currentUserPhotoUrl ?? ''}
+                displayName={currentUserDisplayName || undefined}
                 size="sm"
               />
             </div>
@@ -120,18 +64,23 @@ function SideBar() {
                   className="hover:cursor-pointer w-9"
                   onClick={() => navigate('/profile')}
                 >
-                  <ProfilePicture profilePhotoUrl={photoUrl ?? ''} size="sm" displayName={displayName || undefined} />
+                  <ProfilePicture profilePhotoUrl={currentUserPhotoUrl ?? ''} size="sm" displayName={currentUserDisplayName || undefined} />
                 </div>
 
                 <h2 className="text-primary-0 mb-9 text-sm capitalize">
-                  {displayName ? firstLetterOfWordToUpperCase(displayName) : ''}
+                  {currentUserDisplayName ? firstLetterOfWordToUpperCase(currentUserDisplayName) : ''}
                 </h2>
               </div>
 
               <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
 
               <ul className="text-primary-200 mt-8 text-[12px]">
-                {renderSidebarItems(true)}
+                <SideBarItems
+                  items={items}
+                  currentPagePathName={currentPagePathInfo}
+                  toggleSideBar={toggleSideBar}
+                  isMobile={true}
+                />
               </ul>
             </nav>
 
@@ -151,13 +100,13 @@ function SideBar() {
             onClick={() => navigate('/profile')}
             aria-label="Abrir perfil"
           >
-            <ProfilePicture profilePhotoUrl={photoUrl ?? ''} displayName={displayName || undefined} size="sm" />
+            <ProfilePicture profilePhotoUrl={currentUserPhotoUrl ?? ''} displayName={currentUserDisplayName || undefined} size="sm" />
             <div className="min-w-0 text-left ml-1">
               <span
                 className="block truncate text-primary-0 text-sm capitalize"
-                title={safeDisplayName || undefined}
+                title={currentUserDisplayName || undefined}
               >
-                {displayNameCap}
+                {currentUserDisplayName}
               </span>
             </div>
           </button>
@@ -165,7 +114,12 @@ function SideBar() {
           <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
 
           <ul className="text-primary-200 mt-6 text-[13px] space-y-1">
-            {renderSidebarItems()}
+            <SideBarItems
+              items={items}
+              currentPagePathName={currentPagePathInfo}
+              toggleSideBar={toggleSideBar}
+              isMobile={false}
+            />
           </ul>
         </aside>
 
@@ -174,41 +128,6 @@ function SideBar() {
         </main>
       </div>
     </>
-  )
-}
-
-function SideBarItem(props: SideBarItemProps) {
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
-
-  const handleClick = async () => {
-    if (props.children === 'Sair') {
-      await dispatch(serverLogout())
-      navigate('/', { replace: true })
-    } else {
-      navigate(`${props.path}`)
-    }
-    if (props.closeOnClick && props.toggleSideBar) props.toggleSideBar()
-  }
-
-  const activeClasses = props.isActive ? 'bg-primary-300 text-white' : ''
-
-  return (
-    <li
-      className={`
-        relative transition-colors px-4 py-2 rounded-full
-        flex items-center gap-[18px] text-sm cursor-pointer
-        h-[40px] w-full max-w-full
-        hover:bg-primary-300 hover:text-white
-        overflow-hidden
-        ${activeClasses}
-      `}
-      onClick={handleClick}
-      aria-current={props.isActive ? 'page' : undefined}
-    >
-      {props.icon}
-      <p className="text-primary-0 truncate">{props.children}</p>
-    </li>
   )
 }
 

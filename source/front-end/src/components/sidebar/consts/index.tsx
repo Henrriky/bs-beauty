@@ -18,7 +18,7 @@ import React from 'react'
 import { UserType } from '../../../store/auth/types'
 import { UserCanAccessProps } from '../../../utils/authorization/authorization.utils'
 
-type SideBarItem = {
+export type SideBarItem = {
   name: string
   navigateTo: string
   icon: React.ReactNode
