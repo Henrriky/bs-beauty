@@ -173,8 +173,8 @@ describe('combinedAuthMiddleware', () => {
 
       // Mock to return true for first two, false for the third
       vi.mocked(PermissionChecker.hasPermission)
-        .mockReturnValueOnce(true)  // professional.read
-        .mockReturnValueOnce(true)  // professional.edit  
+        .mockReturnValueOnce(true) // professional.read
+        .mockReturnValueOnce(true) // professional.edit
         .mockReturnValueOnce(false) // professional.delete
 
       // act

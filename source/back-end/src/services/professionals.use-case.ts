@@ -56,6 +56,11 @@ class ProfessionalsUseCase {
     return deletedProfessional
   }
 
+  public async executeUpdateCommission (professionalId: string, commissionRate: number) {
+    await this.executeFindById(professionalId)
+    await this.professionalRepository.updateCommission(professionalId, commissionRate)
+  }
+
   public async fetchServicesOfferedByProfessional (
     professionalId: string,
     params: PaginatedRequest<PartialHandleFetchServicesOfferedByProfessionalQuerySchema>

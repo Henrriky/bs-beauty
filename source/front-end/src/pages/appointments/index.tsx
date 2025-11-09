@@ -1,17 +1,16 @@
+import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Button } from '../../components/button/Button'
+import { ErrorMessage } from '../../components/feedback/ErrorMessage'
 import BSBeautyLoading from '../../components/feedback/Loading'
-import Subtitle from '../../components/texts/Subtitle'
 import useAppSelector from '../../hooks/use-app-selector'
+import { PageHeader } from '../../layouts/PageHeader'
+import { appointmentAPI } from '../../store/appointment/appointment-api'
+import { Status } from '../../store/appointment/types'
+import { authAPI } from '../../store/auth/auth-api'
 import { UserType } from '../../store/auth/types'
 import { CustomerAppointments } from './components/CustomerAppointments'
-import { ErrorMessage } from '../../components/feedback/ErrorMessage'
-import { appointmentAPI } from '../../store/appointment/appointment-api'
 import { ListAppointmentsButtonStatus } from './types'
-import { useMemo, useState } from 'react'
-import { Status } from '../../store/appointment/types'
-import Title from '../../components/texts/Title'
-import { authAPI } from '../../store/auth/auth-api'
 
 const userTypeToAppointmentComponents = {
   [UserType.CUSTOMER]: CustomerAppointments,
@@ -22,14 +21,31 @@ const userTypeToAppointmentComponents = {
 function Appointments() {
   const [switchButtonStatus, setSwitchButtonStatus] =
     useState<ListAppointmentsButtonStatus>('schedulled')
+  const [currentPage, setCurrentPage] = useState(1)
 
   const user = useAppSelector((state) => state.auth.user!)
   const selectUserInfo = authAPI.endpoints.fetchUserInfo.select()
   const userInfoQuery = useAppSelector(selectUserInfo)
   const displayName = userInfoQuery?.data?.user?.name ?? user.name
 
+  const schedulledStatuses = [
+    Status.PENDING,
+    Status.CONFIRMED,
+    Status.RESCHEDULED,
+  ]
+
+  const finishedStatuses = [Status.CANCELLED, Status.FINISHED, Status.NO_SHOW]
+
   const { data, isLoading, isError, error } =
-    appointmentAPI.useFindAppointmentsByCustomerOrProfessionalIdQuery()
+    appointmentAPI.useFetchAppointmentsQuery({
+      page: currentPage,
+      limit: 10,
+      status:
+        switchButtonStatus === 'schedulled'
+          ? schedulledStatuses
+          : finishedStatuses,
+    })
+
   if (isError) {
     toast.error('Erro ao carregar os agendamentos')
     console.error(error)
@@ -37,42 +53,25 @@ function Appointments() {
 
   const AppointmentContainer = userTypeToAppointmentComponents[user.userType]
 
-  const filteredAppointments = useMemo(() => {
-    if (!data) return []
-
-    const schedulledStatuses = new Set([
-      Status.PENDING.toString(),
-      Status.CONFIRMED.toString(),
-      Status.RESCHEDULED.toString(),
-    ])
-
-    const finishedStatuses = new Set([
-      Status.CANCELLED.toString(),
-      Status.FINISHED.toString(),
-      Status.NO_SHOW.toString(),
-    ])
-
-    return data.appointments.filter((appointment) =>
-      switchButtonStatus === 'schedulled'
-        ? schedulledStatuses.has(appointment.status.toString())
-        : finishedStatuses.has(appointment.status.toString()),
-    )
-  }, [data, switchButtonStatus])
+  const handleSwitchChange = (newStatus: ListAppointmentsButtonStatus) => {
+    setSwitchButtonStatus(newStatus)
+    setCurrentPage(1)
+  }
 
   return (
-    <div className="h-full flex flex-col">
-      <header>
-        <Title align="left">Agendamentos</Title>
-        <div className="flex flex-col mt-3 mb-6 w-3/4 lg:w-full">
-          <Subtitle align="left">
-            Olá {displayName},{' '}
+    <div className="h-full flex flex-col gap-3">
+      <PageHeader
+        title="Agendamentos"
+        subtitle={
+          <>
+            Olá, {displayName}.{' '}
             <b className="text-[#A4978A]">
-              aqui você pode visualizar seus agendamentos
+              Aqui você pode visualizar seus agendamentos
             </b>
-          </Subtitle>
-          <div className="bg-[#595149] w-3/4 h-0.5 mt-2"></div>
-        </div>
-      </header>
+            .
+          </>
+        }
+      />
       {/* SWITCH BUTTONS */}
       <div className="flex">
         <Button
@@ -80,14 +79,14 @@ function Appointments() {
           variant="outline"
           outlineVariantBorderStyle="solid"
           className={`rounded-r-none ${switchButtonStatus === 'schedulled' && 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default'}`}
-          onClick={() => setSwitchButtonStatus('schedulled')}
+          onClick={() => handleSwitchChange('schedulled')}
         />
         <Button
           label="Finalizados"
           variant="outline"
           outlineVariantBorderStyle="solid"
           className={`rounded-l-none ${switchButtonStatus === 'finished' && 'bg-[#3A3027] hover:!bg-[#3A3027] hover:cursor-default'}`}
-          onClick={() => setSwitchButtonStatus('finished')}
+          onClick={() => handleSwitchChange('finished')}
         />
       </div>
       <section>
@@ -105,8 +104,14 @@ function Appointments() {
           </div>
         ) : (
           <AppointmentContainer
-            appointmentsService={filteredAppointments}
+            appointmentsService={data.data}
             switchButtonStatus={switchButtonStatus}
+            pagination={{
+              currentPage: data.page,
+              totalPages: data.totalPages,
+              total: data.total,
+              onPageChange: setCurrentPage,
+            }}
           />
         )}
       </section>

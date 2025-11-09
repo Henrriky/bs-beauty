@@ -14,6 +14,7 @@ import { decodeUserToken } from '../../utils/decode-token'
 import CustomerProfile from './components/CustomerProfile'
 import ProfessionalProfile from './components/ProfessionalProfile'
 import ProfilePicture from './components/ProfilePicture'
+import { PageHeader } from '../../layouts/PageHeader'
 
 const userTypeToProfileComponents = {
   [UserType.CUSTOMER]: CustomerProfile,
@@ -98,9 +99,15 @@ function Profile() {
   return (
     <div className="h-full flex flex-col justify-between">
       <div>
-        <div className="flex flex-col gap-4 mb-6">
-          <Title align="left">Perfil</Title>
-          <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} />
+        <div className="flex flex-col gap-3">
+          <PageHeader
+            title="Perfil"
+            subtitle="Gerencie suas informações pessoais aqui."
+          />
+          <ProfilePicture
+            profilePhotoUrl={user.profilePhotoUrl}
+            displayName={userInfo.name ?? undefined}
+          />
           <ProfileContainer
             userInfo={userInfo}
             onProfileUpdate={handlePostProfileUpdate}

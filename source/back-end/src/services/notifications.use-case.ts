@@ -2,11 +2,14 @@ import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middlewar
 import { type FindByIdAppointments } from '@/repository/protocols/appointment.repository'
 import { type NotificationFilters } from '@/types/notifications/notification-filters'
 import { type PaginatedRequest } from '@/types/pagination'
-import { NotificationChannel, NotificationType, UserType, type Notification } from '@prisma/client'
+import { NotificationChannel, NotificationType, UserType, type Notification, type Service } from '@prisma/client'
 import { type NotificationRepository } from '../repository/protocols/notification.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { EmailService } from './email/email.service'
 import { DateFormatter } from '@/utils/formatting/date.formatting.util'
+import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
+import { PERMISSIONS_MAP } from '@/utils/auth/permissions-map.util'
+import { logger } from '@/lib/pino'
 
 export interface BirthdayNotificationPayload {
   recipientId: string
@@ -21,7 +24,10 @@ export interface BirthdayNotificationPayload {
 }
 
 class NotificationsUseCase {
-  constructor (private readonly notificationRepository: NotificationRepository) { }
+  constructor (
+    private readonly notificationRepository: NotificationRepository,
+    private readonly professionalRepository: ProfessionalRepository
+  ) { }
 
   public async executeFindAll (
     user: TokenPayload,
@@ -39,13 +45,13 @@ class NotificationsUseCase {
     return notification
   }
 
-  public async executeDeleteMany(ids: string[], userId: string) {
+  public async executeDeleteMany (ids: string[], userId: string) {
     if (ids.length === 0) return { deletedCount: 0 }
     const uniqueIds = [...new Set(ids)]
     const deletedCount = await this.notificationRepository.deleteMany(uniqueIds, userId)
     return {
       success: true,
-      message: `${deletedCount} notifications deleted successfully.`,
+      message: `${deletedCount} notifications deleted successfully.`
     }
   }
 
@@ -272,6 +278,90 @@ class NotificationsUseCase {
     const uniqueIds = [...new Set(ids)]
     const updatedCount = await this.notificationRepository.markManyAsReadForUser(uniqueIds, currentUserId)
     return { updatedCount }
+  }
+
+  public async executeSendOnServiceCreated (service: Service): Promise<void> {
+    logger.info(`Executing send notification for new service created. Service ID: ${service.id}`)
+    const serviceName = service.name
+    const serviceDescription = service.description ?? 'Sem descrição'
+    const serviceCategory = service.category
+
+    const professionalsToNotify = await this.professionalRepository.findProfessionalsWithPermissionOrUserType(
+      PERMISSIONS_MAP.SERVICE.APPROVE.permissionName,
+      'MANAGER'
+    )
+
+    logger.info(`Found ${professionalsToNotify.length} professionals to notify about new service creation.`)
+
+    for (const professional of professionalsToNotify) {
+      const recipientId = professional.id
+      const marker = `service:${service.id}:created:recipient:${recipientId}`
+
+      const alreadyExists = await this.notificationRepository.findByMarker(marker)
+      if (alreadyExists) continue
+
+      const professionalPreference = professional.notificationPreference ?? 'NONE'
+      const shouldNotifyInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
+
+      if (shouldNotifyInApp) {
+        logger.info(`Sending in-app notification to professional ID: ${recipientId} for service ID: ${service.id}`)
+        await this.notificationRepository.create({
+          recipientId,
+          marker,
+          title: 'Novo Serviço Aguardando Aprovação',
+          message: `O serviço "${serviceName}" (${serviceCategory}) foi criado e aguarda aprovação. ${serviceDescription}`,
+          recipientType: UserType.PROFESSIONAL,
+          type: NotificationType.SYSTEM
+        })
+      }
+    }
+  }
+
+  public async executeSendOnServiceStatusChanged (service: Service & { createdBy: string }): Promise<void> {
+    logger.info(`Executing send notification for service status change. Service ID: ${service.id}, New Status: ${service.status}`)
+    const serviceName = service.name
+    const serviceStatus = service.status
+    const createdByProfessionalId = service.createdBy
+
+    if (!createdByProfessionalId) return
+
+    const professional = await this.professionalRepository.findById(createdByProfessionalId)
+    if (!professional) return
+
+    const recipientId = professional.id
+    const marker = `service:${service.id}:status-changed:${serviceStatus}:recipient:${recipientId}`
+
+    const alreadyExists = await this.notificationRepository.findByMarker(marker)
+    if (alreadyExists) return
+
+    const professionalPreference = professional.notificationPreference ?? 'NONE'
+    const shouldNotifyInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
+
+    if (!shouldNotifyInApp) return
+
+    let title = ''
+    let message = ''
+
+    if (serviceStatus === 'APPROVED') {
+      title = 'Serviço Aprovado'
+      message = `Seu serviço "${serviceName}" foi aprovado e agora está disponível para ofertas!`
+    } else if (serviceStatus === 'REJECTED') {
+      title = 'Serviço Rejeitado'
+      message = `Seu serviço "${serviceName}" foi rejeitado. Entre em contato com seu gerente para mais detalhes.`
+    } else {
+      return
+    }
+
+    logger.info(`Sending in-app notification to professional ID: ${recipientId} for service ID: ${service.id} with status: ${serviceStatus}`)
+
+    await this.notificationRepository.create({
+      recipientId,
+      marker,
+      title,
+      message,
+      recipientType: UserType.PROFESSIONAL,
+      type: NotificationType.SYSTEM
+    })
   }
 }
 

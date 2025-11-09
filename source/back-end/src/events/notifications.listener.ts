@@ -4,6 +4,7 @@ import { makeNotificationsUseCaseFactory } from '@/factory/make-notifications-us
 import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
 import { type FindByIdAppointments } from '@/repository/protocols/appointment.repository'
 import { type BirthdayNotificationPayload } from '@/services/notifications.use-case'
+import { type Service } from '@prisma/client'
 
 type CancelledBy = 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER'
 
@@ -41,6 +42,20 @@ export function registerNotificationListeners () {
     enqueue(async () => {
       const useCase = makeNotificationsUseCaseFactory()
       await useCase.executeSendBirthday(payload)
+    })
+  })
+
+  notificationBus.on('service.created', ({ service }: { service: Service }) => {
+    enqueue(async () => {
+      const useCase = makeNotificationsUseCaseFactory()
+      await useCase.executeSendOnServiceCreated(service)
+    })
+  })
+
+  notificationBus.on('service.statusChanged', ({ service }: { service: Service & { createdBy: string } }) => {
+    enqueue(async () => {
+      const useCase = makeNotificationsUseCaseFactory()
+      await useCase.executeSendOnServiceStatusChanged(service)
     })
   })
 }

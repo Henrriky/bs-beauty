@@ -54,6 +54,7 @@ const MockProfessionalRepository: Mocked<ProfessionalRepository> = {
   removeRoleFromProfessional: vi.fn(),
   findProfessionalRoleAssociation: vi.fn(),
   findRolesByProfessionalId: vi.fn(),
+  updateCommission: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   updateByEmailAndGoogleId: vi.fn(),
@@ -61,7 +62,8 @@ const MockProfessionalRepository: Mocked<ProfessionalRepository> = {
   delete: vi.fn(),
   fetchServicesOfferedByProfessional: vi.fn(),
   findAllPaginated: vi.fn(),
-  findProfessionalPermissions: vi.fn()
+  findProfessionalPermissions: vi.fn(),
+  findProfessionalsWithPermissionOrUserType: vi.fn()
 }
 
 const MockServiceRepository: Mocked<ServiceRepository> = {

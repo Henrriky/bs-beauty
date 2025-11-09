@@ -1,7 +1,7 @@
 import { Status, type Appointment, type Prisma } from '@prisma/client'
 import { type FindNonFinishedByUserAndDay } from '../types/appointment-repository.types'
-import { PaginatedRequest, PaginatedResult } from '@/types/pagination'
-import { AppointmentFilters } from '@/types/appointments/appointment-filters'
+import { type PaginatedRequest, type PaginatedResult } from '@/types/pagination'
+import { type AppointmentFilters } from '@/types/appointments/appointment-filters'
 
 const appointmentNonFinishedStatus = [Status.PENDING, Status.RESCHEDULED, Status.CONFIRMED, Status.FINISHED]
 
@@ -42,12 +42,12 @@ export type FindByIdAppointments = Prisma.AppointmentGetPayload<{
   }
 }>
 
-export type GroupedAppointmentCount = {
+export interface GroupedAppointmentCount {
   period: string
   count: number
 }
 
-export type GroupedEstimatedTime = {
+export interface GroupedEstimatedTime {
   period: string
   estimatedTimeInMinutes: number
 }
@@ -56,7 +56,7 @@ export type GroupingPeriod = 'day' | 'week' | 'month'
 
 interface AppointmentRepository {
   findAll: () => Promise<Appointment[]>
-  findAllPaginated: (params: PaginatedRequest<AppointmentFilters>, scope: { userId: string; viewAll: boolean }) => Promise<PaginatedResult<Appointment>>
+  findAllPaginated: (params: PaginatedRequest<AppointmentFilters>, scope: { userId: string, viewAll: boolean }) => Promise<PaginatedResult<Appointment>>
   findById: (id: string) => Promise<FindByIdAppointments | null>
   findByCustomerOrProfessionalId: (customerOrProfessionalId: string) => Promise<Appointment[]>
   findByServiceOfferedId: (id: string) => Promise<Appointment[]>

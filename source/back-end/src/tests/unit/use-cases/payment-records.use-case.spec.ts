@@ -198,6 +198,8 @@ describe('PaymentRecordsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL',
         notificationPreference: NotificationChannel.ALL,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -278,6 +280,8 @@ describe('PaymentRecordsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL',
         notificationPreference: NotificationChannel.ALL,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }

@@ -38,7 +38,7 @@ professionalRoutes.post(
 
 professionalRoutes.put(
   '/:id',
-  combinedAuthMiddleware(['MANAGER'], ['professional.edit']),
+  combinedAuthMiddleware(['MANAGER', 'PROFESSIONAL'], ['professional.edit']),
   validateUpdateProfessional, ProfessionalsController.handleUpdate
 )
 
@@ -46,6 +46,12 @@ professionalRoutes.delete(
   '/:id',
   combinedAuthMiddleware(['MANAGER'], ['professional.delete']),
   ProfessionalsController.handleDelete
+)
+
+professionalRoutes.patch(
+  '/:id/commission',
+  combinedAuthMiddleware(['MANAGER'], ['professional.edit']),
+  ProfessionalsController.handleUpdateCommission
 )
 
 professionalRoutes.get(
