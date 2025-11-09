@@ -12,7 +12,7 @@ interface SideBarItemProps {
   isActive?: boolean
 }
 
-function SideBarItem(props: SideBarItemProps) {
+function SideBarItem(props: Readonly<SideBarItemProps>) {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
@@ -38,10 +38,13 @@ function SideBarItem(props: SideBarItemProps) {
         overflow-hidden
         ${activeClasses}
       `}
-      onClick={handleClick}
       aria-current={props.isActive ? 'page' : undefined}
     >
-      {props.icon}
+      <button
+        onClick={handleClick}
+      >
+        {props.icon}
+      </button>
       <p className="text-primary-0 truncate">{props.children}</p>
     </li>
   )
