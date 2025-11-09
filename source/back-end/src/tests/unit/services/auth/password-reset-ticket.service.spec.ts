@@ -194,7 +194,7 @@ describe('PasswordResetTicketService', () => {
       // arrange
       vi.mocked(MockCache.get)
         .mockResolvedValueOnce(mockPayload) // First consume - success
-        .mockResolvedValueOnce(null)        // Second consume - already deleted
+        .mockResolvedValueOnce(null) // Second consume - already deleted
       vi.mocked(MockCache.delete).mockResolvedValue(undefined)
 
       // act

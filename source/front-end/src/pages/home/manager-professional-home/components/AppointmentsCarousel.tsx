@@ -1,4 +1,8 @@
-import { ClockIcon, MagnifyingGlassCircleIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
+import {
+  ClockIcon,
+  MagnifyingGlassCircleIcon,
+  PencilSquareIcon,
+} from '@heroicons/react/24/outline'
 import { DateTime } from 'luxon'
 import { useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
@@ -15,7 +19,10 @@ export type AppointmentCardItem = {
   offer?: {
     estimatedTime?: number | null
     service?: { name?: string | null } | null
-    professional?: { name?: string | null; profilePhotoUrl?: string | null } | null
+    professional?: {
+      name?: string | null
+      profilePhotoUrl?: string | null
+    } | null
   } | null
   customer?: { name?: string | null } | null
   rating?: { score?: number | null } | null
@@ -67,14 +74,21 @@ export default function AppointmentsCarousel({
     return (
       <div className="mt-3 flex gap-3 overflow-hidden">
         {Array.from({ length: SKELETON_CARD_COUNT }).map((_, i) => (
-          <div key={i} className="min-w-[280px] sm:min-w-[320px] md:min-w-[360px] h-[140px] rounded-2xl bg-primary-800/60 animate-pulse" />
+          <div
+            key={i}
+            className="min-w-[280px] sm:min-w-[320px] md:min-w-[360px] h-[140px] rounded-2xl bg-primary-800/60 animate-pulse"
+          />
         ))}
       </div>
     )
   }
 
   if (error) {
-    return <div className="mt-3 text-sm text-red-400">Erro ao carregar agendamentos.</div>
+    return (
+      <div className="mt-3 text-sm text-red-400">
+        Erro ao carregar agendamentos.
+      </div>
+    )
   }
 
   if (!hasItems) {
@@ -110,9 +124,14 @@ export default function AppointmentsCarousel({
         }}
       >
         {itemsSortedByTime.map((appointment) => {
-          const d = DateTime.fromISO(appointment.appointmentDate).setZone(DISPLAY_TZ)
-          const isSchedulled = appointment.status === Status.PENDING || appointment.status === Status.CONFIRMED
-          const hasPendingRating = appointment.rating !== null && appointment.rating?.score === null
+          const d = DateTime.fromISO(appointment.appointmentDate).setZone(
+            DISPLAY_TZ,
+          )
+          const isSchedulled =
+            appointment.status === Status.PENDING ||
+            appointment.status === Status.CONFIRMED
+          const hasPendingRating =
+            appointment.rating !== null && appointment.rating?.score === null
 
           return (
             <article
@@ -126,8 +145,12 @@ export default function AppointmentsCarousel({
             >
               <header className="flex items-center justify-between">
                 <div>
-                  <div className="text-lg text-[#D9D9D9] leading-6">{d.toFormat('HH:mm')}</div>
-                  <div className="text-xs text-primary-100/70">{d.setLocale('pt-BR').toFormat('ccc dd/LL')}</div>
+                  <div className="text-lg text-[#D9D9D9] leading-6">
+                    {d.toFormat('HH:mm')}
+                  </div>
+                  <div className="text-xs text-primary-100/70">
+                    {d.setLocale('pt-BR').toFormat('ccc dd/LL')}
+                  </div>
                 </div>
                 <div className="relative">
                   <ProfilePicture
@@ -152,13 +175,16 @@ export default function AppointmentsCarousel({
                     {appointment.offer?.service?.name ?? 'Serviço'}
                   </div>
                   <div className="text-primary-100/70 text-xs truncate">
-                    {appointment.offer?.professional?.name ?? 'Profissional não definido'}
+                    {appointment.offer?.professional?.name ??
+                      'Profissional não definido'}
                   </div>
                 </div>
 
                 <div className="shrink-0">
                   <StatusBadge
-                    text={Formatter.formatApplicationStatusToPrettyRepresentation(appointment.status)}
+                    text={Formatter.formatApplicationStatusToPrettyRepresentation(
+                      appointment.status,
+                    )}
                     color={STATUS_BADGE_COLOR[appointment.status]}
                   />
                 </div>
@@ -185,7 +211,8 @@ export default function AppointmentsCarousel({
                           </>
                         ) : (
                           <>
-                            <MagnifyingGlassCircleIcon className="size-4" /> Visualizar
+                            <MagnifyingGlassCircleIcon className="size-4" />{' '}
+                            Visualizar
                           </>
                         )}
                       </>
@@ -197,7 +224,6 @@ export default function AppointmentsCarousel({
           )
         })}
       </div>
-
     </div>
   )
 }

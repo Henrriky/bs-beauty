@@ -43,10 +43,12 @@ export function DeleteNotificationsModal({
           </div>
           <div className="text-center">
             <h4 className="text-sm font-medium text-primary-0 mb-2">
-              Remover {count} notificação{count > 1 ? 'es' : ''} selecionada{count > 1 ? 's' : ''}?
+              Remover {count} notificação{count > 1 ? 'es' : ''} selecionada
+              {count > 1 ? 's' : ''}?
             </h4>
             <p className="text-xs text-primary-200">
-              Esta ação não pode ser desfeita. As notificações serão removidas permanentemente do sistema.
+              Esta ação não pode ser desfeita. As notificações serão removidas
+              permanentemente do sistema.
             </p>
           </div>
         </div>

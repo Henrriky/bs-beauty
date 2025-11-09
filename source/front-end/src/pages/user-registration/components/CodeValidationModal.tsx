@@ -69,9 +69,20 @@ function CodeValidationModal({
   const [validateCode, { isLoading }] = authAPI.useValidateCodeMutation()
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight']
+    const allowedKeys = [
+      'Backspace',
+      'Delete',
+      'Tab',
+      'Escape',
+      'Enter',
+      'ArrowLeft',
+      'ArrowRight',
+    ]
 
-    if ((event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())) {
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())
+    ) {
       return
     }
 
@@ -98,8 +109,13 @@ function CodeValidationModal({
       .catch((error: any) => {
         console.error('Error trying to validate code', error)
 
-        if (error?.data?.details === 'Invalid code' || error?.data?.message === 'Invalid code') {
-          toast.error('Código de verificação incorreto. Verifique e tente novamente.')
+        if (
+          error?.data?.details === 'Invalid code' ||
+          error?.data?.message === 'Invalid code'
+        ) {
+          toast.error(
+            'Código de verificação incorreto. Verifique e tente novamente.',
+          )
         } else {
           toast.error('Ocorreu um erro ao validar seu e-mail.')
         }

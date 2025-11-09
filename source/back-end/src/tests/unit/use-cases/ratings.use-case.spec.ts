@@ -1,7 +1,7 @@
 import { RatingsUseCase } from '@/services/ratings.use-case'
 import { MockRatingRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { Prisma, type Rating } from '@prisma/client'
+import { type Prisma, type Rating } from '@prisma/client'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 describe('RatingsUseCase (Unit Tests)', () => {

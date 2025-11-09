@@ -38,7 +38,9 @@ export default function NotificationDetails({ notification, onClose }: Props) {
           {body}
         </p>
         {createdAt && (
-          <p className="text-xs text-gray-400">Notificação criada em: {createdAt}</p>
+          <p className="text-xs text-gray-400">
+            Notificação criada em: {createdAt}
+          </p>
         )}
       </div>
 

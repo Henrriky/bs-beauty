@@ -34,19 +34,16 @@ function Appointments() {
     Status.RESCHEDULED,
   ]
 
-  const finishedStatuses = [
-    Status.CANCELLED,
-    Status.FINISHED,
-    Status.NO_SHOW,
-  ]
+  const finishedStatuses = [Status.CANCELLED, Status.FINISHED, Status.NO_SHOW]
 
   const { data, isLoading, isError, error } =
     appointmentAPI.useFetchAppointmentsQuery({
       page: currentPage,
       limit: 10,
-      status: switchButtonStatus === 'schedulled'
-        ? schedulledStatuses
-        : finishedStatuses,
+      status:
+        switchButtonStatus === 'schedulled'
+          ? schedulledStatuses
+          : finishedStatuses,
     })
 
   if (isError) {
@@ -107,14 +104,14 @@ function Appointments() {
           </div>
         ) : (
           <AppointmentContainer
-                  appointmentsService={data.data}
+            appointmentsService={data.data}
             switchButtonStatus={switchButtonStatus}
-                  pagination={{
-                    currentPage: data.page,
-                    totalPages: data.totalPages,
-                    total: data.total,
-                    onPageChange: setCurrentPage,
-                  }}
+            pagination={{
+              currentPage: data.page,
+              totalPages: data.totalPages,
+              total: data.total,
+              onPageChange: setCurrentPage,
+            }}
           />
         )}
       </section>

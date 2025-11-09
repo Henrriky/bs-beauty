@@ -24,15 +24,15 @@ function CustomerAppointments(props: CustomerAppointmentsProps) {
       ) : (
         <>
           <div>
-              {props.appointmentsService.map((appointment) => {
-                return (
-                  <CustomerAppointmentCard
-                    appointment={appointment}
-                    switchButtonStatus={props.switchButtonStatus}
-                    key={appointment.id}
-                  />
-                )
-              })}
+            {props.appointmentsService.map((appointment) => {
+              return (
+                <CustomerAppointmentCard
+                  appointment={appointment}
+                  switchButtonStatus={props.switchButtonStatus}
+                  key={appointment.id}
+                />
+              )
+            })}
           </div>
           {props.pagination && props.pagination.totalPages > 1 && (
             <Pagination

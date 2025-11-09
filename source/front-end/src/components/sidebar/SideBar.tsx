@@ -16,10 +16,9 @@ function SideBar() {
     navigate,
   } = useSideBar()
 
-
   return (
     <>
-      { /* SIDEBAR MOBILE */}
+      {/* SIDEBAR MOBILE */}
       <div className="lg:hidden">
         <nav className="transition-opacity ease-in-out bg-primary-900 mb-5 w-full z-0 left-0 top-0">
           <div className="text-[12px] transition-all flex flex-row gap-2 justify-center pt-5">
@@ -64,11 +63,17 @@ function SideBar() {
                   className="hover:cursor-pointer w-9"
                   onClick={() => navigate('/profile')}
                 >
-                  <ProfilePicture profilePhotoUrl={currentUserPhotoUrl ?? ''} size="sm" displayName={currentUserDisplayName || undefined} />
+                  <ProfilePicture
+                    profilePhotoUrl={currentUserPhotoUrl ?? ''}
+                    size="sm"
+                    displayName={currentUserDisplayName || undefined}
+                  />
                 </div>
 
                 <h2 className="text-primary-0 mb-9 text-sm capitalize">
-                  {currentUserDisplayName ? firstLetterOfWordToUpperCase(currentUserDisplayName) : ''}
+                  {currentUserDisplayName
+                    ? firstLetterOfWordToUpperCase(currentUserDisplayName)
+                    : ''}
                 </h2>
               </div>
 
@@ -100,7 +105,11 @@ function SideBar() {
             onClick={() => navigate('/profile')}
             aria-label="Abrir perfil"
           >
-            <ProfilePicture profilePhotoUrl={currentUserPhotoUrl ?? ''} displayName={currentUserDisplayName || undefined} size="sm" />
+            <ProfilePicture
+              profilePhotoUrl={currentUserPhotoUrl ?? ''}
+              displayName={currentUserDisplayName || undefined}
+              size="sm"
+            />
             <div className="min-w-0 text-left ml-1">
               <span
                 className="block truncate text-primary-0 text-sm capitalize"

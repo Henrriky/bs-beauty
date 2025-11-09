@@ -28,12 +28,11 @@ const viewAllParam = z.union([
   z.boolean()
 ]).optional().default(false)
 
-
 const TZ = 'America/Sao_Paulo'
 
 const dateInput = z.union([
   z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD format.'),
-  z.date(),
+  z.date()
 ])
 
 export const appointmentsQuerySchema = basePaginationSchema

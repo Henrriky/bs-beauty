@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router"
-import useAppDispatch from "../../../hooks/use-app-dispatch"
-import { serverLogout } from "../../../store/auth/server-logout"
-import { ReactNode } from "react"
+import { useNavigate } from 'react-router'
+import useAppDispatch from '../../../hooks/use-app-dispatch'
+import { serverLogout } from '../../../store/auth/server-logout'
+import { ReactNode } from 'react'
 
 interface SideBarItemProps {
   path: string
@@ -38,13 +38,10 @@ function SideBarItem(props: Readonly<SideBarItemProps>) {
         overflow-hidden
         ${activeClasses}
       `}
+      onClick={handleClick}
       aria-current={props.isActive ? 'page' : undefined}
     >
-      <button
-        onClick={handleClick}
-      >
-        {props.icon}
-      </button>
+      {props.icon}
       <p className="text-primary-0 truncate">{props.children}</p>
     </li>
   )

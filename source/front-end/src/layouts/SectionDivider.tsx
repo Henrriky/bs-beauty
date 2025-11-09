@@ -12,6 +12,8 @@ export function SectionDivider({
   marginTopClass = 'mt-2',
 }: SectionDividerProps) {
   return (
-    <div className={`${colorClass} ${widthClass} ${heightClass} ${marginTopClass}`} />
+    <div
+      className={`${colorClass} ${widthClass} ${heightClass} ${marginTopClass}`}
+    />
   )
 }

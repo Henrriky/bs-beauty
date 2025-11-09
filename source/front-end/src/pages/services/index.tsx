@@ -54,9 +54,15 @@ function ServiceDashboard() {
           subtitle={
             <>
               {userHasPermissionToCreate ? (
-                <>Selecione algum serviço já criado para ofertar ou crie um caso não exista.</>
+                <>
+                  Selecione algum serviço já criado para ofertar ou crie um caso
+                  não exista.
+                </>
               ) : (
-                <>Selecione algum serviço já criado para ofertar ou crie um caso não exista, mediante aprovação de um gerente.</>
+                <>
+                  Selecione algum serviço já criado para ofertar ou crie um caso
+                  não exista, mediante aprovação de um gerente.
+                </>
               )}
             </>
           }

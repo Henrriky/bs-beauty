@@ -31,7 +31,8 @@ export function MarkNotificationsReadModal({
           </div>
           <div className="text-center">
             <h4 className="text-sm font-medium text-primary-0 mb-2">
-              Marcar {count} notificação{count > 1 ? 'es' : ''} como lida{count > 1 ? 's' : ''}?
+              Marcar {count} notificação{count > 1 ? 'es' : ''} como lida
+              {count > 1 ? 's' : ''}?
             </h4>
             <p className="text-xs text-primary-200">
               Você poderá visualizar estas notificações na aba “Lidas”.
