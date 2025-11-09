@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NotificationsUseCase } from '@/services/notifications.use-case'
 import { MockNotificationRepository, MockProfessionalRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { NotificationType, UserType, type Notification, NotificationChannel, ServiceStatus, type Service, type Professional } from '@prisma/client'
+import { NotificationType, UserType, type Notification, NotificationChannel, ServiceStatus, type Service, type Professional, Prisma } from '@prisma/client'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
 import type { FindByIdAppointments } from '@/repository/protocols/appointment.repository'
 import { EmailService } from '@/services/email/email.service'
-import { DateFormatter } from '@/utils/formatting/date.formatting.util'
 import { PERMISSIONS_MAP } from '@/utils/auth/permissions-map.util'
 
 vi.mock('@/services/email/email.service')
@@ -1120,18 +1120,20 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       id: faker.string.uuid(),
       name: faker.person.fullName(),
       email: faker.internet.email(),
-      phone: faker.phone.number(),
       notificationPreference: NotificationChannel.ALL,
       userType: UserType.MANAGER,
-      cpf: faker.string.numeric(11),
-      birthdate: faker.date.past(),
       googleId: null,
       registerCompleted: true,
       passwordHash: null,
       profilePhotoUrl: null,
-      commissionRate: 0,
+      commissionRate: Prisma.Decimal(0),
       createdAt: faker.date.past(),
       updatedAt: faker.date.recent(),
+      socialMedia: [],
+      isCommissioned: false,
+      paymentMethods: [],
+      contact: faker.phone.number(),
+      specialization: null,
       ...overrides
     })
 
@@ -1293,6 +1295,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       registerCompleted: true,
       passwordHash: null,
       profilePhotoUrl: null,
+      paymentMethods: null,
       commissionRate: 0 as any,
       createdAt: faker.date.past(),
       updatedAt: faker.date.recent(),
