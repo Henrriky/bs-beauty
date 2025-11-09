@@ -34,10 +34,9 @@ export const ratingAPI = createApi({
           await queryFulfilled
 
           dispatch(
-            appointmentAPI.endpoints.findAppointmentsByCustomerOrProfessionalId.initiate(
-              undefined,
-              { forceRefetch: true, subscribe: false },
-            ),
+            appointmentAPI.util.invalidateTags([
+              { type: 'Appointments', id: 'LIST' },
+            ]),
           )
         } catch (error) {
           console.log(error)

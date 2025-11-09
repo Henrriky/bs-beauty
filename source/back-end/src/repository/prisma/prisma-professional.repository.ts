@@ -5,6 +5,7 @@ import { type ProfessionalRepository } from '../protocols/professional.repositor
 import { type ProfessionalsFilters } from '@/types/professionals/professionals-filters'
 import { type PartialHandleFetchServicesOfferedByProfessionalQuerySchema } from '@/utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
 import { PrismaPermissionMapper } from './mapper/prisma-permission-mapper'
+import { type Permissions } from '@/utils/auth/permissions-map.util'
 
 class PrismaProfessionalRepository implements ProfessionalRepository {
   public async findAll () {
@@ -108,6 +109,38 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return uniquePermissions
   }
 
+  public async findProfessionalsWithPermissionOrUserType (permission: Permissions, userType: string) {
+    const [resource, action] = permission.split('.')
+
+    const professionals = await prismaClient.professional.findMany({
+      where: {
+        OR: [
+          {
+            userType: userType as any
+          },
+          {
+            professionalRole: {
+              some: {
+                role: {
+                  rolePermission: {
+                    some: {
+                      permission: {
+                        resource,
+                        action
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    })
+
+    return professionals
+  }
+
   public async create (newProfessional: Prisma.ProfessionalCreateInput) {
     const professional = await prismaClient.professional.create({
       data: { ...newProfessional }
@@ -159,6 +192,13 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     })
 
     return professionalDeleted
+  }
+
+  public async updateCommission (professionalId: string, commissionRate: number) {
+    await prismaClient.professional.update({
+      where: { id: professionalId },
+      data: { commissionRate }
+    })
   }
 
   public async fetchServicesOfferedByProfessional (professionalId: string, { page, limit, filters }: PaginatedRequest<PartialHandleFetchServicesOfferedByProfessionalQuerySchema>) {

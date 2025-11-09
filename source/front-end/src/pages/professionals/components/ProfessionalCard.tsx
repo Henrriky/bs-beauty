@@ -1,5 +1,10 @@
 import { Professional, UserType } from '../../../store/auth/types'
-import { CogIcon, TrashIcon, UserGroupIcon } from '@heroicons/react/24/outline'
+import {
+  CogIcon,
+  PercentBadgeIcon,
+  TrashIcon,
+  UserGroupIcon,
+} from '@heroicons/react/24/outline'
 import { firstLetterOfWordToUpperCase } from '../../../utils/formatter/first-letter-of-word-to-upper-case.util'
 import { UserCanAccessContainer } from '../../../components/authorization/UserCanAccessContainer'
 
@@ -7,12 +12,14 @@ interface ProfessionalCardProps {
   professional: Professional
   onDelete: (professional: Professional) => void
   onManageProfessionalRoles: (professional: Professional) => void
+  onEditCommission: (professional: Professional) => void
 }
 
 export function ProfessionalCard({
   professional,
   onDelete,
   onManageProfessionalRoles,
+  onEditCommission,
 }: ProfessionalCardProps) {
   return (
     <div className="flex items-start justify-between gap-3 bg-[#222222] w-full text-left px-6 py-6 rounded-2xl">
@@ -35,7 +42,11 @@ export function ProfessionalCard({
         "
           >
             <UserGroupIcon className="size-4 " />
-            {professional.userType === 'MANAGER' ? 'Gerente' : 'Profissional'}
+            {professional.userType === 'MANAGER'
+              ? 'Gerente'
+              : professional.isCommissioned
+                ? 'Comissionado'
+                : 'Profissional'}
           </span>
         </div>
       </div>
@@ -53,6 +64,20 @@ export function ProfessionalCard({
             <CogIcon className="w-4 h-4" />
           </button>
         </UserCanAccessContainer>
+        {professional.isCommissioned && (
+          <UserCanAccessContainer
+            allowedPermissions={['professional.manage_roles']}
+            allowedUserTypes={[UserType.MANAGER]}
+          >
+            <button
+              onClick={() => onEditCommission(professional)}
+              className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-400/10 rounded transition-all"
+              title="Editar comissão"
+            >
+              <PercentBadgeIcon className="w-4 h-4" />
+            </button>
+          </UserCanAccessContainer>
+        )}
         <UserCanAccessContainer
           allowedPermissions={['professional.delete']}
           allowedUserTypes={[UserType.MANAGER]}

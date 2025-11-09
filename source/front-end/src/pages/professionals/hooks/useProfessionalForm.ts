@@ -12,11 +12,15 @@ export function useProfessionalForm(
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
+    setValue,
   } = useForm<CreateProfessionalFormData>({
     resolver: zodResolver(ProfessionalSchemas.createSchema),
     defaultValues: {
       email: '',
       userType: UserType.PROFESSIONAL,
+      isCommissioned: false,
+      commissionRate: undefined,
     },
   })
 
@@ -33,5 +37,7 @@ export function useProfessionalForm(
     handleSubmit: handleSubmit(handleFormSubmit),
     errors,
     resetForm,
+    watch,
+    setValue,
   }
 }

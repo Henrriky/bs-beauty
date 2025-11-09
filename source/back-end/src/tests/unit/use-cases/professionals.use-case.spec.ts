@@ -38,6 +38,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
           socialMedia: {},
           contact: faker.phone.number(),
           specialization: faker.person.jobType(),
+          isCommissioned: false,
+          commissionRate: null,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past(),
           profilePhotoUrl: faker.internet.url(),
@@ -77,6 +79,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         socialMedia: {},
         contact: faker.phone.number(),
         specialization: faker.person.jobType(),
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
@@ -125,6 +129,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         contact: professionalToCreate.contact ?? null,
         specialization: professionalToCreate.specialization ?? null,
         profilePhotoUrl: professionalToCreate.profilePhotoUrl ?? null,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         paymentMethods: null,
@@ -163,6 +169,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         contact: professionalToCreate.contact ?? null,
         specialization: professionalToCreate.specialization ?? null,
         profilePhotoUrl: professionalToCreate.profilePhotoUrl ?? null,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         paymentMethods: null,
@@ -198,6 +206,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         socialMedia: {},
         contact: faker.phone.number(),
         specialization: professionalToUpdate.specialization as string,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
@@ -242,6 +252,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         socialMedia: {},
         contact: faker.phone.number(),
         specialization: faker.person.jobType(),
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
@@ -291,6 +303,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         socialMedia: {},
         contact: faker.phone.number(),
         specialization: params.filters.specialization,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         profilePhotoUrl: faker.internet.url(),
@@ -398,6 +412,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
         notificationPreference: NotificationChannel.ALL,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -432,6 +448,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         notificationPreference: NotificationChannel.ALL,
         updatedAt: faker.date.past()
@@ -487,6 +505,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         passwordHash: null,
         userType: 'PROFESSIONAL' as const,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         notificationPreference: NotificationChannel.ALL,
         updatedAt: faker.date.past()
@@ -533,6 +553,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         notificationPreference: NotificationChannel.ALL,
         updatedAt: faker.date.past()
@@ -568,6 +590,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         specialization: faker.lorem.word(),
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         notificationPreference: NotificationChannel.ALL,
         updatedAt: faker.date.past()
@@ -624,6 +648,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
         notificationPreference: NotificationChannel.ALL,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -684,6 +710,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
         notificationPreference: NotificationChannel.ALL,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }
@@ -728,6 +756,8 @@ describe('ProfessionalsUseCase (Unit Tests)', () => {
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL' as const,
         notificationPreference: NotificationChannel.ALL,
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past()
       }

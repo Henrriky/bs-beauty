@@ -115,51 +115,51 @@ function ServiceItem({
                   </button>
                   <div className="w-px h-4 bg-gray-600"></div>
                 </UserCanAccessContainer>
-                {canEdit ? (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      openUpdateModal()
-                    }}
-                    className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
-                    title="Editar serviço"
-                  >
-                    <PencilSquareIcon className="w-4 h-4" />
-                  </button>
-                ) : (
-                  <UserCanAccessContainer
-                    allowedPermissions={['service.edit']}
-                    allowedUserTypes={[UserType.MANAGER]}
-                  >
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        openUpdateModal()
-                      }}
-                      className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
-                      title="Editar serviço"
-                    >
-                      <PencilSquareIcon className="w-4 h-4" />
-                    </button>
-                  </UserCanAccessContainer>
-                )}
-                <UserCanAccessContainer
-                  allowedPermissions={['service.delete']}
-                  allowedUserTypes={[UserType.MANAGER]}
-                >
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      openDeleteModal()
-                    }}
-                    className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
-                    title="Excluir serviço"
-                  >
-                    <TrashIcon className="w-4 h-4" />
-                  </button>
-                </UserCanAccessContainer>
               </>
             )}
+            {canEdit ? (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  openUpdateModal()
+                }}
+                className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
+                title="Editar serviço"
+              >
+                <PencilSquareIcon className="w-4 h-4" />
+              </button>
+            ) : (
+              <UserCanAccessContainer
+                allowedPermissions={['service.edit']}
+                allowedUserTypes={[UserType.MANAGER]}
+              >
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    openUpdateModal()
+                  }}
+                  className="p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
+                  title="Editar serviço"
+                >
+                  <PencilSquareIcon className="w-4 h-4" />
+                </button>
+              </UserCanAccessContainer>
+            )}
+            <UserCanAccessContainer
+              allowedPermissions={['service.delete']}
+              allowedUserTypes={[UserType.MANAGER]}
+            >
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  openDeleteModal()
+                }}
+                className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
+                title="Excluir serviço"
+              >
+                <TrashIcon className="w-4 h-4" />
+              </button>
+            </UserCanAccessContainer>
           </div>
         </div>
       }

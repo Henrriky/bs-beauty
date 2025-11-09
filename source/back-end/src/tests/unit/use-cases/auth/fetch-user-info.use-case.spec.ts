@@ -103,6 +103,8 @@ describe('FetchUserInfoUseCase', () => {
           socialMedia: {},
           paymentMethods: ['PIX', 'CARTAO_CREDITO'],
           notificationPreference: NotificationChannel.ALL,
+          isCommissioned: false,
+          commissionRate: null,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }
@@ -174,6 +176,8 @@ describe('FetchUserInfoUseCase', () => {
           socialMedia: {},
           paymentMethods: null,
           notificationPreference: NotificationChannel.IN_APP,
+          isCommissioned: false,
+          commissionRate: null,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }
@@ -243,6 +247,8 @@ describe('FetchUserInfoUseCase', () => {
           socialMedia: null,
           paymentMethods: null,
           notificationPreference: NotificationChannel.ALL,
+          isCommissioned: false,
+          commissionRate: null,
           createdAt: faker.date.past(),
           updatedAt: faker.date.past()
         }

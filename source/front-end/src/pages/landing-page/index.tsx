@@ -114,7 +114,8 @@ function LandingPage() {
 
       <div className="flex flex-col items-center gap-6 my-10 text-center">
         <p className="text-[#D9D9D9] font-kumbh text-base sm:text-lg leading-normal max-w-xl">
-          Venha nos conhecer e se permitir viver essa experiência com você mesma!
+          Venha nos conhecer e se permitir viver essa experiência com você
+          mesma!
         </p>
 
         <Button

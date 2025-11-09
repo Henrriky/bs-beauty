@@ -51,7 +51,7 @@ export const userCanAccess = ({
 
   const isUserPermissionsEmpty = permissions.length === 0
 
-  if (!isUserPermissionsEmpty) {
+  if (!isUserPermissionsEmpty && !isAllowedPermissionsEmpty) {
     return userHasPermission(allowedPermissions, permissions, strategy)
   }
 

@@ -11,7 +11,7 @@ import { CustomerSchemas } from '../../../../utils/validation/zod-schemas/custom
 import { ProfessionalSchemas } from '../../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { formatValidationErrors } from '../../../../utils/formatting/zod-validation-errors.formatting.util'
 import { CustomError } from '../../../../utils/errors/custom.error.util'
-import { NotificationChannel, Professional } from '@prisma/client'
+import { NotificationChannel, type Professional } from '@prisma/client'
 
 vi.mock('../../../../factory/auth/make-register-user.use-case.factory', () => ({
   makeRegisterUserUseCase: vi.fn()
@@ -267,6 +267,8 @@ describe('RegisterUserController', () => {
         registerCompleted: true,
         profilePhotoUrl: null,
         userType: 'PROFESSIONAL',
+        isCommissioned: false,
+        commissionRate: null,
         createdAt: new Date(),
         updatedAt: new Date()
       }

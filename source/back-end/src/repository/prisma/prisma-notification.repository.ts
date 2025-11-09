@@ -68,7 +68,7 @@ class PrismaNotificationRepository implements NotificationRepository {
     return deletedNotification
   }
 
-  public async deleteMany(ids: string[], userId: string) {
+  public async deleteMany (ids: string[], userId: string) {
     const result = await prismaClient.notification.deleteMany({
       where: {
         id: { in: ids },

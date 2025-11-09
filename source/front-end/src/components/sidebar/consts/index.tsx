@@ -18,7 +18,7 @@ import React from 'react'
 import { UserType } from '../../../store/auth/types'
 import { UserCanAccessProps } from '../../../utils/authorization/authorization.utils'
 
-type SideBarItem = {
+export type SideBarItem = {
   name: string
   navigateTo: string
   icon: React.ReactNode
@@ -31,7 +31,7 @@ const onlyCustomerSideBarItems: SideBarItem[] = [
     name: 'Home',
     icon: <HomeIcon className="size-6" />,
     navigateTo: '/customer/home',
-    order: 1,
+    order: 0,
     authorization: {
       allowedPermissions: [],
       allowedUserTypes: [UserType.CUSTOMER],

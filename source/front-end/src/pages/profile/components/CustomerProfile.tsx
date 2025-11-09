@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import ExclamationMarkIcon from '../../../../src/assets/exclamation-mark.svg'
 import { Button } from '../../../components/button/Button'
@@ -16,6 +15,8 @@ import { Formatter } from '../../../utils/formatter/formatter.util'
 import { CustomerUpdateProfileFormData } from '../types'
 import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
 import Modal from '../../services/components/Modal'
+import useAppDispatch from '../../../hooks/use-app-dispatch'
+import { refreshUserToken } from '../../../utils/auth/refresh-token.util'
 
 interface CustomerProfileProps {
   userInfo: Customer
@@ -30,7 +31,7 @@ const NOTIFICATION_OPTIONS = [
 
 function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
   const [updateProfile, { isLoading }] = userAPI.useUpdateProfileMutation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const {
     register,
@@ -62,10 +63,11 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
       profileData: data,
     })
       .unwrap()
-      .then(() => {
+      .then(async () => {
         toast.success('Perfil atualizado com sucesso!')
-        onProfileUpdate()
 
+        await refreshUserToken(dispatch)
+        onProfileUpdate()
         dispatch(customerAPI.util.invalidateTags(['Customers']))
       })
       .catch((error: unknown) => {
@@ -132,7 +134,7 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
         id="notificationPreference"
         label="Deseja receber notificações?"
         options={NOTIFICATION_OPTIONS}
-        error={errors?.name?.message?.toString()}
+        error={errors?.notificationPreference?.message?.toString()}
         variant="outline"
         wrapperClassName="w-full"
       />

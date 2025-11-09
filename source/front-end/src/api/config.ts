@@ -48,6 +48,8 @@ export const API_VARIABLES = {
     CREATE_PROFESSIONAL: '/professionals',
     DELETE_PROFESSIONAL: (professionalId: string) =>
       `/professionals/${professionalId}`,
+    UPDATE_COMMISSION: (professionalId: string) =>
+      `/professionals/${professionalId}/commission`,
     FETCH_SERVICES_OFFERED_BY_PROFESSIONAL: (professionalId: string) =>
       `/professionals/${professionalId}/offers/service`,
     FETCH_PROFESSIONAL_ROLES: (professionalId: string) =>

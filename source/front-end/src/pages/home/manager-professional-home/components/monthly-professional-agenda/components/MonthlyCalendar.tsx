@@ -6,7 +6,7 @@ import {
   buildStatusCounts,
   generateTileClasses,
   baseCalendarConfig,
-  formatShortWeekday
+  formatShortWeekday,
 } from '../shared/calendar-utils'
 import { renderStatusChips } from '../shared/calendar-components'
 
@@ -24,8 +24,6 @@ type Props = {
   onMonthChange: (d: Date) => void
   onSelectDate: (d: Date) => void
 }
-
-
 
 export default function MonthlyCalendar({
   currentMonth,
@@ -46,13 +44,11 @@ export default function MonthlyCalendar({
       prevLabel={<ChevronLeftIcon className="size-5" />}
       nextLabel={<ChevronRightIcon className="size-5" />}
       navigationLabel={({ view }) =>
-        view === 'month'
-          ? (
-            <span className="text-[#595149]">
-              {format(currentMonth, "LLLL 'de' yyyy", { locale: ptBR })}
-            </span>
-          )
-          : null
+        view === 'month' ? (
+          <span className="text-[#595149]">
+            {format(currentMonth, "LLLL 'de' yyyy", { locale: ptBR })}
+          </span>
+        ) : null
       }
       formatShortWeekday={formatShortWeekday}
       activeStartDate={currentMonth}
@@ -62,7 +58,9 @@ export default function MonthlyCalendar({
       value={selectedDate ?? undefined}
       onClickDay={(value) => onSelectDate(value as Date)}
       tileClassName={({ date, view }) =>
-        view !== 'month' ? '' : generateTileClasses(date, selectedDate, currentMonth)
+        view !== 'month'
+          ? ''
+          : generateTileClasses(date, selectedDate, currentMonth)
       }
       tileContent={({ date, view }) => {
         if (view !== 'month') return null

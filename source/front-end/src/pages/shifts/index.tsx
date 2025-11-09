@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { DateTime } from 'luxon'
 import { Button } from '../../components/button/Button'
 import { WeekDays } from '../../enums/enums'
+import { PageHeader } from '../../layouts/PageHeader'
 import { Shift } from '../../store/auth/types'
 import { shiftAPI } from '../../store/shift/shift-api'
 import DaysRow from './components/DaysRow'
 import ShiftsRow from './components/ShiftsRow'
-import { DateTime } from 'luxon'
-import Title from '../../components/texts/Title'
 
 const WeekDayMapping: { [key: string]: string } = {
   Domingo: 'SUNDAY',
@@ -59,7 +59,7 @@ const Shifts = () => {
       initialShifts[day] = {
         shiftStart: shift ? formatTime(shift.shiftStart) : '',
         shiftEnd: shift ? formatTime(shift.shiftEnd) : '',
-        isBusy: shift ? shift.isBusy : false,
+        isBusy: shift ? shift.isBusy : true,
       }
     })
     setEditableShifts(initialShifts)
@@ -80,20 +80,24 @@ const Shifts = () => {
           const backendDay: WeekDays = WeekDayMapping[day] as WeekDays
           const existingShift = getShiftByDay(data?.shifts || [], day)
 
-          const toUtcTime = (time: string) => {
-            if (!time) return '00:00'
-            const [hour, minute] = time.split(':').map(Number)
+          const normalize = (t: string) => (t || '00:00').slice(0, 5)
 
-            const localTime = DateTime.local().set({ hour, minute })
-            const utcTime = localTime.toUTC()
-
-            return utcTime.toFormat('HH:mm')
+          const convertLocalTimeToUTC = (time: string): string => {
+            const [hours, minutes] = time.split(':').map(Number)
+            const localDateTime = DateTime.local().set({
+              hour: hours,
+              minute: minutes,
+              second: 0,
+              millisecond: 0,
+            })
+            const utcDateTime = localDateTime.plus({ hours: 3 })
+            return utcDateTime.toFormat('HH:mm')
           }
 
           const payload = {
             weekDay: backendDay,
-            shiftStart: toUtcTime(shiftData.shiftStart),
-            shiftEnd: toUtcTime(shiftData.shiftEnd),
+            shiftStart: convertLocalTimeToUTC(normalize(shiftData.shiftStart)),
+            shiftEnd: convertLocalTimeToUTC(normalize(shiftData.shiftEnd)),
             isBusy: shiftData.isBusy,
           }
 
@@ -119,22 +123,26 @@ const Shifts = () => {
     }
   }
 
-  const formatTime = (isoTime: string) => {
-    if (!isoTime) return ''
-    try {
-      const date = new Date(isoTime)
+  const formatTime = (time: string) => {
+    if (!time) return ''
 
-      const localDate = new Date(date.getTime() - 3 * 60 * 60 * 1000)
-
-      const hours = localDate.getUTCHours()
-      const minutes = localDate.getUTCMinutes()
-
-      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
-    } catch (error) {
-      console.error('Invalid ISO time:', isoTime)
-      console.error(error)
-      return ''
+    let m = /^(\d{2}):(\d{2})/.exec(time)
+    if (!m) {
+      m = /T(\d{2}):(\d{2})/.exec(time)
     }
+
+    if (!m) return ''
+
+    const [_, hours, minutes] = m
+    const utcDateTime = DateTime.local().set({
+      hour: parseInt(hours),
+      minute: parseInt(minutes),
+      second: 0,
+      millisecond: 0,
+    })
+    const localDateTime = utcDateTime.minus({ hours: 3 })
+
+    return localDateTime.toFormat('HH:mm')
   }
 
   const validateShifts = (): boolean => {
@@ -159,12 +167,10 @@ const Shifts = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-2">
-        <Title align="left">Turnos</Title>
-        <p className="text-primary-200 text-sm">
-          Defina seus horários de expediente
-        </p>
-      </div>
+      <PageHeader
+        title="Turnos"
+        subtitle={<>Defina seus horários de expediente</>}
+      />
       <div className="mt-6 flex flex-col items-center gap-6">
         <div
           className="grid grid-cols-2 w-full gap-x-4 text-[#D9D9D9] text-sm"

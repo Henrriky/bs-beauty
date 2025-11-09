@@ -1,5 +1,4 @@
 import { VerifyPasswordResetUseCase } from '@/services/use-cases/auth/verify-password-reset.use-case'
-import { CustomError } from '@/utils/errors/custom.error.util'
 import { UserType } from '@prisma/client'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { MockCustomerRepository, MockProfessionalRepository } from '../../utils/mocks/repository'

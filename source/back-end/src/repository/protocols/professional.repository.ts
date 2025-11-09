@@ -19,10 +19,12 @@ interface ProfessionalRepository {
   findProfessionalRoleAssociation: (professionalId: string, roleId: string) => Promise<boolean>
   findRolesByProfessionalId: (professionalId: string) => Promise<FindRolesByProfessionalId[]>
   findProfessionalPermissions: (professionalId: string) => Promise<Permissions[]>
+  findProfessionalsWithPermissionOrUserType: (permission: Permissions, userType: string) => Promise<Professional[]>
   create: (newCustomer: Prisma.ProfessionalCreateInput) => Promise<Professional>
   update: (id: string, customerUpdated: Prisma.ProfessionalUpdateInput) => Promise<Professional>
   updateByEmailAndGoogleId: (googleId: string, email: string, customerUpdated: Prisma.ProfessionalUpdateInput) => Promise<Professional>
   updateProfessionalByEmail: (email: string, customerUpdated: Prisma.ProfessionalUpdateInput) => Promise<Professional>
+  updateCommission: (professionalId: string, commissionRate: number) => Promise<void>
   delete: (id: string) => Promise<Professional>
   fetchServicesOfferedByProfessional: (professionalId: string, params: PaginatedRequest<PartialHandleFetchServicesOfferedByProfessionalQuerySchema>) => Promise<{
     professional: ServicesOfferedByProfessional

@@ -7,12 +7,16 @@ const userTypeToPrettyNameMap: Record<UserType, string> = {
   [UserType.CUSTOMER]: 'Cliente',
 }
 
-export const getPrettyRoles = (userType: UserType, roles: string[]) => {
+export const getPrettyRoles = (
+  userType: UserType,
+  roles: string[],
+  isCommissioned: boolean,
+) => {
   const userTypePrettyName = userTypeToPrettyNameMap[userType] || 'Desconhecido'
 
   const rolesPrettyName = roles
     .map((role) => firstLetterOfWordToUpperCase(role))
     .join(', ')
 
-  return `${userTypePrettyName} ${rolesPrettyName && `(${rolesPrettyName})`}`
+  return `${userTypePrettyName} ${rolesPrettyName && `(${rolesPrettyName})`} ${isCommissioned ? 'Comissionada (o)' : ''}`
 }

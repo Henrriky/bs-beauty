@@ -29,6 +29,18 @@ export default function SessionBootstrap({
     const localToken = localStorage.getItem('token')
 
     if (localToken && !isExpired(localToken)) {
+      const payload = decodeUserToken(localToken)
+      dispatch(
+        setToken({
+          token: {
+            accessToken: localToken,
+            expiresAt: payload.exp!,
+            googleAccessToken:
+              localStorage.getItem('googleAccessToken') ?? undefined,
+          },
+          user: { ...payload },
+        }),
+      )
       setReady(true)
       return
     }
