@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NotificationsUseCase } from '@/services/notifications.use-case'
-import { MockNotificationRepository } from '../utils/mocks/repository'
+import { MockNotificationRepository, MockProfessionalRepository } from '../utils/mocks/repository'
 import { faker } from '@faker-js/faker'
-import { NotificationType, UserType, type Notification, NotificationChannel } from '@prisma/client'
+import { NotificationType, UserType, type Notification, NotificationChannel, ServiceStatus, type Service, type Professional } from '@prisma/client'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
 import type { FindByIdAppointments } from '@/repository/protocols/appointment.repository'
 import { EmailService } from '@/services/email/email.service'
 import { DateFormatter } from '@/utils/formatting/date.formatting.util'
+import { PERMISSIONS_MAP } from '@/utils/auth/permissions-map.util'
 
 vi.mock('@/services/email/email.service')
 
@@ -113,7 +114,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
   let notificationsUseCase: NotificationsUseCase
 
   beforeEach(() => {
-    notificationsUseCase = new NotificationsUseCase(MockNotificationRepository)
+    notificationsUseCase = new NotificationsUseCase(MockNotificationRepository, MockProfessionalRepository)
     vi.clearAllMocks()
   })
 
@@ -438,18 +439,94 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       const result = await notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
 
       // assert
-      /* Lines 440-442 omitted */
+      expect(result).toEqual({ updatedCount: 1 })
+      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(notificationIds, userId)
     })
 
-    it('should handle duplicate IDs by removing duplicates', async () => { /* Lines 445-466 omitted */ })
+    it('should handle duplicate IDs by removing duplicates', async () => {
+      // arrange
+      const userId = faker.string.uuid()
+      const duplicateId = faker.string.uuid()
+      const notificationIds = [duplicateId, duplicateId, faker.string.uuid()]
+      const uniqueIds = [duplicateId, notificationIds[2]]
 
-    it('should handle repository returning partial updates', async () => { /* Lines 469-486 omitted */ })
+      MockNotificationRepository.markManyAsReadForUser.mockResolvedValue(2)
 
-    it('should handle repository errors', async () => { /* Lines 489-502 omitted */ })
+      // act
+      const result = await notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
 
-    it('should handle large number of IDs', async () => { /* Lines 505-517 omitted */ })
+      // assert
+      expect(result).toEqual({ updatedCount: 2 })
+      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(uniqueIds, userId)
+    })
 
-    it('should handle no notifications updated', async () => { /* Lines 520-533 omitted */ })
+    it('should handle repository returning partial updates', async () => {
+      // arrange
+      const userId = faker.string.uuid()
+      const notificationIds = [
+        faker.string.uuid(),
+        faker.string.uuid(),
+        faker.string.uuid()
+      ]
+
+      MockNotificationRepository.markManyAsReadForUser.mockResolvedValue(1)
+
+      // act
+      const result = await notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
+
+      // assert
+      expect(result).toEqual({ updatedCount: 1 })
+      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(notificationIds, userId)
+    })
+
+    it('should handle repository errors', async () => {
+      // arrange
+      const userId = faker.string.uuid()
+      const notificationIds = [faker.string.uuid(), faker.string.uuid()]
+      const error = new Error('Database connection failed')
+
+      MockNotificationRepository.markManyAsReadForUser.mockRejectedValue(error)
+
+      // act & assert
+      await expect(
+        notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
+      ).rejects.toThrow('Database connection failed')
+
+      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(notificationIds, userId)
+    })
+
+    it('should handle large number of IDs', async () => {
+      // arrange
+      const userId = faker.string.uuid()
+      const notificationIds = Array.from({ length: 100 }, () => faker.string.uuid())
+
+      MockNotificationRepository.markManyAsReadForUser.mockResolvedValue(100)
+
+      // act
+      const result = await notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
+
+      // assert
+      expect(result).toEqual({ updatedCount: 100 })
+      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(notificationIds, userId)
+    })
+
+    it('should handle no notifications updated', async () => {
+      // arrange
+      const userId = faker.string.uuid()
+      const notificationIds = [
+        faker.string.uuid(),
+        faker.string.uuid()
+      ]
+
+      MockNotificationRepository.markManyAsReadForUser.mockResolvedValue(0)
+
+      // act
+      const result = await notificationsUseCase.executeMarkManyAsRead(notificationIds, userId)
+
+      // assert
+      expect(result).toEqual({ updatedCount: 0 })
+      expect(MockNotificationRepository.markManyAsReadForUser).toHaveBeenCalledWith(notificationIds, userId)
+    })
   })
 
   describe('executeDeleteMany', () => {
@@ -1023,6 +1100,171 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       // assert
       expect(MockNotificationRepository.create).not.toHaveBeenCalled()
       expect(mockEmailService.sendBirthday).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('executeSendOnServiceCreated', () => {
+    const createMockService = (overrides: Partial<Service> = {}): Service => ({
+      id: faker.string.uuid(),
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      category: faker.commerce.department(),
+      status: ServiceStatus.PENDING,
+      createdBy: faker.string.uuid(),
+      createdAt: faker.date.past(),
+      updatedAt: faker.date.recent(),
+      ...overrides
+    })
+
+    const createMockProfessional = (overrides: Partial<Professional> = {}): Professional => ({
+      id: faker.string.uuid(),
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+      phone: faker.phone.number(),
+      notificationPreference: NotificationChannel.ALL,
+      userType: UserType.MANAGER,
+      cpf: faker.string.numeric(11),
+      birthdate: faker.date.past(),
+      googleId: null,
+      registerCompleted: true,
+      passwordHash: null,
+      profilePhotoUrl: null,
+      commissionRate: 0,
+      createdAt: faker.date.past(),
+      updatedAt: faker.date.recent(),
+      ...overrides
+    })
+
+    it('should send notifications to managers when a service is created', async () => {
+      // arrange
+      const service = createMockService()
+      const manager1 = createMockProfessional({ userType: UserType.MANAGER })
+      const manager2 = createMockProfessional({ userType: UserType.MANAGER })
+
+      MockProfessionalRepository.findProfessionalsWithPermissionOrUserType.mockResolvedValue([manager1, manager2])
+      MockNotificationRepository.findByMarker.mockResolvedValue(null)
+      MockNotificationRepository.create.mockResolvedValue({} as Notification)
+
+      // act
+      await notificationsUseCase.executeSendOnServiceCreated(service)
+
+      // assert
+      expect(MockProfessionalRepository.findProfessionalsWithPermissionOrUserType).toHaveBeenCalledWith(
+        PERMISSIONS_MAP.SERVICE.APPROVE.permissionName,
+        'MANAGER'
+      )
+      expect(MockNotificationRepository.create).toHaveBeenCalledTimes(2)
+      expect(MockNotificationRepository.create).toHaveBeenCalledWith({
+        recipientId: manager1.id,
+        marker: `service:${service.id}:created:recipient:${manager1.id}`,
+        title: 'Novo Serviço Aguardando Aprovação',
+        message: expect.stringContaining(service.name),
+        recipientType: UserType.PROFESSIONAL,
+        type: NotificationType.SYSTEM
+      })
+    })
+
+    it('should send notifications to professionals with service.approve permission', async () => {
+      // arrange
+      const service = createMockService()
+      const professional = createMockProfessional({ userType: UserType.PROFESSIONAL })
+
+      MockProfessionalRepository.findProfessionalsWithPermissionOrUserType.mockResolvedValue([professional])
+      MockNotificationRepository.findByMarker.mockResolvedValue(null)
+      MockNotificationRepository.create.mockResolvedValue({} as Notification)
+
+      // act
+      await notificationsUseCase.executeSendOnServiceCreated(service)
+
+      // assert
+      expect(MockProfessionalRepository.findProfessionalsWithPermissionOrUserType).toHaveBeenCalledWith(
+        PERMISSIONS_MAP.SERVICE.APPROVE.permissionName,
+        'MANAGER'
+      )
+      expect(MockNotificationRepository.create).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not send duplicate notifications if marker already exists', async () => {
+      // arrange
+      const service = createMockService()
+      const manager = createMockProfessional()
+
+      MockProfessionalRepository.findProfessionalsWithPermissionOrUserType.mockResolvedValue([manager])
+      MockNotificationRepository.findByMarker.mockResolvedValue({} as Notification)
+
+      // act
+      await notificationsUseCase.executeSendOnServiceCreated(service)
+
+      // assert
+      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
+    })
+
+    it('should only send in-app notifications when preference is IN_APP', async () => {
+      // arrange
+      const service = createMockService()
+      const manager = createMockProfessional({ notificationPreference: NotificationChannel.IN_APP })
+
+      MockProfessionalRepository.findProfessionalsWithPermissionOrUserType.mockResolvedValue([manager])
+      MockNotificationRepository.findByMarker.mockResolvedValue(null)
+      MockNotificationRepository.create.mockResolvedValue({} as Notification)
+
+      // act
+      await notificationsUseCase.executeSendOnServiceCreated(service)
+
+      // assert
+      expect(MockNotificationRepository.create).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not send notifications when preference is NONE', async () => {
+      // arrange
+      const service = createMockService()
+      const manager = createMockProfessional({ notificationPreference: NotificationChannel.NONE })
+
+      MockProfessionalRepository.findProfessionalsWithPermissionOrUserType.mockResolvedValue([manager])
+      MockNotificationRepository.findByMarker.mockResolvedValue(null)
+
+      // act
+      await notificationsUseCase.executeSendOnServiceCreated(service)
+
+      // assert
+      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
+    })
+
+    it('should handle service without description', async () => {
+      // arrange
+      const service = createMockService({ description: null })
+      const manager = createMockProfessional()
+
+      MockProfessionalRepository.findProfessionalsWithPermissionOrUserType.mockResolvedValue([manager])
+      MockNotificationRepository.findByMarker.mockResolvedValue(null)
+      MockNotificationRepository.create.mockResolvedValue({} as Notification)
+
+      // act
+      await notificationsUseCase.executeSendOnServiceCreated(service)
+
+      // assert
+      expect(MockNotificationRepository.create).toHaveBeenCalledWith({
+        recipientId: manager.id,
+        marker: `service:${service.id}:created:recipient:${manager.id}`,
+        title: 'Novo Serviço Aguardando Aprovação',
+        message: expect.stringContaining('Sem descrição'),
+        recipientType: UserType.PROFESSIONAL,
+        type: NotificationType.SYSTEM
+      })
+    })
+
+    it('should not send notifications if no professionals found', async () => {
+      // arrange
+      const service = createMockService()
+
+      MockProfessionalRepository.findProfessionalsWithPermissionOrUserType.mockResolvedValue([])
+      MockNotificationRepository.findByMarker.mockResolvedValue(null)
+
+      // act
+      await notificationsUseCase.executeSendOnServiceCreated(service)
+
+      // assert
+      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
     })
   })
 })

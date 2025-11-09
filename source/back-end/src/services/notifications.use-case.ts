@@ -2,11 +2,13 @@ import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middlewar
 import { type FindByIdAppointments } from '@/repository/protocols/appointment.repository'
 import { type NotificationFilters } from '@/types/notifications/notification-filters'
 import { type PaginatedRequest } from '@/types/pagination'
-import { NotificationChannel, NotificationType, UserType, type Notification } from '@prisma/client'
+import { NotificationChannel, NotificationType, UserType, type Notification, type Service } from '@prisma/client'
 import { type NotificationRepository } from '../repository/protocols/notification.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { EmailService } from './email/email.service'
 import { DateFormatter } from '@/utils/formatting/date.formatting.util'
+import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
+import { PERMISSIONS_MAP } from '@/utils/auth/permissions-map.util'
 
 export interface BirthdayNotificationPayload {
   recipientId: string
@@ -21,7 +23,10 @@ export interface BirthdayNotificationPayload {
 }
 
 class NotificationsUseCase {
-  constructor (private readonly notificationRepository: NotificationRepository) { }
+  constructor (
+    private readonly notificationRepository: NotificationRepository,
+    private readonly professionalRepository: ProfessionalRepository
+  ) { }
 
   public async executeFindAll (
     user: TokenPayload,
@@ -272,6 +277,39 @@ class NotificationsUseCase {
     const uniqueIds = [...new Set(ids)]
     const updatedCount = await this.notificationRepository.markManyAsReadForUser(uniqueIds, currentUserId)
     return { updatedCount }
+  }
+
+  public async executeSendOnServiceCreated (service: Service): Promise<void> {
+    const serviceName = service.name
+    const serviceDescription = service.description ?? 'Sem descrição'
+    const serviceCategory = service.category
+
+    const professionalsToNotify = await this.professionalRepository.findProfessionalsWithPermissionOrUserType(
+      PERMISSIONS_MAP.SERVICE.APPROVE.permissionName,
+      'MANAGER'
+    )
+
+    for (const professional of professionalsToNotify) {
+      const recipientId = professional.id
+      const marker = `service:${service.id}:created:recipient:${recipientId}`
+
+      const alreadyExists = await this.notificationRepository.findByMarker(marker)
+      if (alreadyExists) continue
+
+      const professionalPreference = professional.notificationPreference ?? 'NONE'
+      const shouldNotifyInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
+
+      if (shouldNotifyInApp) {
+        await this.notificationRepository.create({
+          recipientId,
+          marker,
+          title: 'Novo Serviço Aguardando Aprovação',
+          message: `O serviço "${serviceName}" (${serviceCategory}) foi criado e aguarda aprovação. ${serviceDescription}`,
+          recipientType: UserType.PROFESSIONAL,
+          type: NotificationType.SYSTEM
+        })
+      }
+    }
   }
 }
 
