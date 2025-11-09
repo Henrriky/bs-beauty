@@ -28,13 +28,7 @@ export function useSideBar() {
 
   const items = useMemo(() => {
     return sideBarItems
-      .filter((item) => {
-        console.log('Evaluating sidebar item:', item.name)
-        console.log('Item authorization requirements:', item.authorization)
-        const userCanAccess2 = userCanAccess({ user, ...item.authorization })
-        console.log(`User can access ${item.name}:`, userCanAccess2)
-        return userCanAccess2
-      })
+      .filter((item) => userCanAccess({ user, ...item.authorization }))
       .reverse()
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
   }, [])

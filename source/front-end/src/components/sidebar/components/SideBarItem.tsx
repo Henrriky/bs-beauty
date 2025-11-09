@@ -38,13 +38,11 @@ function SideBarItem(props: Readonly<SideBarItemProps>) {
         overflow-hidden
         ${activeClasses}
       `}
+      onClick={handleClick}
       aria-current={props.isActive ? 'page' : undefined}
     >
-      <button
-        onClick={handleClick}
-      >
-        {props.icon}
-      </button>
+
+      {props.icon}
       <p className="text-primary-0 truncate">{props.children}</p>
     </li>
   )
