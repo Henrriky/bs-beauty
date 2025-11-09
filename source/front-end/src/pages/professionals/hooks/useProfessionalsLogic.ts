@@ -39,6 +39,7 @@ export function useProfessionalsLogic({
   const {
     data: professionalsResponse,
     isLoading: isLoadingProfessionals,
+    isFetching: isFetchingProfessionals,
     error: professionalsError,
     refetch: refetchProfessionals,
   } = useFetchProfessionalsQuery({
@@ -219,6 +220,7 @@ export function useProfessionalsLogic({
     },
 
     // Loading States
+    isFetchingProfessionals,
     isLoadingProfessionals,
     isCreating,
     isDeleting,

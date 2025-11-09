@@ -19,6 +19,7 @@ export const notificationAPI = createApi({
         method: 'GET',
         params,
       }),
+      keepUnusedDataFor: 0,
       providesTags: (result) =>
         result
           ? [

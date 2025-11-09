@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react'
-import Subtitle from '../../components/texts/Subtitle'
-import Title from '../../components/texts/Title'
-import useAppSelector from '../../hooks/use-app-selector'
-import { paymentRecordAPI } from '../../store/payment-record/payment-record-api'
-import PaymentRecordCard from './components/PaymentRecordCard'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
-import PaymentRecordModal from './components/PaymentRecordModal'
-import { Button } from '../../components/button/Button'
-import { PaymentRecord } from '../../store/payment-record/types'
-import { ErrorMessage } from '../../components/feedback/ErrorMessage'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { Button } from '../../components/button/Button'
+import { ErrorMessage } from '../../components/feedback/ErrorMessage'
+import useAppSelector from '../../hooks/use-app-selector'
+import { PageHeader } from '../../layouts/PageHeader'
+import { paymentRecordAPI } from '../../store/payment-record/payment-record-api'
+import { PaymentRecord } from '../../store/payment-record/types'
+import PaymentRecordCard from './components/PaymentRecordCard'
+import PaymentRecordModal from './components/PaymentRecordModal'
 
 function PaymentRecords() {
   const [isOpen, setIsOpen] = useState(false)
@@ -58,12 +57,10 @@ function PaymentRecords() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <Title align="left">Registro de Pagamentos</Title>
-        <Subtitle align="left">
-          Confira registros de pagamentos passados ou crie novos registros.
-        </Subtitle>
-      </div>
+      <PageHeader
+        title="Registros de Pagamentos"
+        subtitle="Gerencie os registros de pagamentos dos seus serviços aqui."
+      />
       <div className="flex flex-col max-h-[70vh] overflow-y-auto ">
         {allPaymentRecords.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-gray-500 gap-2">

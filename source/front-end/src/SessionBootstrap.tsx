@@ -3,6 +3,7 @@ import { decodeUserToken } from './utils/decode-token'
 import useAppDispatch from './hooks/use-app-dispatch'
 import { API_VARIABLES } from './api/config'
 import { logout, setToken } from './store/auth/auth-slice'
+import BSBeautyLoading from './components/feedback/Loading'
 
 function isExpired(accessToken: string): boolean {
   try {
@@ -45,7 +46,7 @@ export default function SessionBootstrap({
       return
     }
 
-    ;(async () => {
+    ; (async () => {
       try {
         const res = await fetch(
           `${API_VARIABLES.BASE_URL}${API_VARIABLES.AUTH_ENDPOINTS.NEW_TOKENS}`,
@@ -90,7 +91,16 @@ export default function SessionBootstrap({
   }, [dispatch])
 
   if (!ready) {
-    return <div className="p-6 text-[#D9D9D9]">Checando sessão…</div>
+    return <>
+      <div className="flex flex-col items-center justify-center p-6 text-[#D9D9D9] h-[95vh] ">
+        <BSBeautyLoading
+          title="Carregando..."
+          textClassName="text-base md:text-lg"
+          spinnerClassName="w-5 h-5"
+        />
+      </div>
+
+    </>
   }
 
   return <>{children}</>

@@ -94,6 +94,8 @@ function LandingPage() {
           }
           ratingCount={data?.salonRating.ratingCount || 0}
         />
+      </div>
+      <div className='w-11/12 max-w-[700px]'>
         {data?.professionals?.length === 1 ? (
           <div className="mt-4">
             <SalonRatingCard

@@ -69,8 +69,10 @@ function Callback() {
         localStorage.setItem('token', accessToken)
         localStorage.setItem('googleAccessToken', googleAccessToken)
         if (decodedToken.registerCompleted) {
+          toast.success('Login realizado com sucesso!')
           navigate('/')
         } else {
+          toast.info('Login realizado! Por gentileza, complete seu cadastro.')
           navigate('/complete-register')
         }
       })

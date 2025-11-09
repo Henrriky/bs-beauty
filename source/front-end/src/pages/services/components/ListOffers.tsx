@@ -65,7 +65,7 @@ function ListOffers({
 
   if (isError && data == null) {
     return (
-      <p className="text-[#CC3636] animate-fadeIn w-full mt-2 text-sm">
+      <p className="text-primary-100 animate-fadeIn w-full mt-2 text-sm">
         Não há ofertas disponíveis.
       </p>
     )

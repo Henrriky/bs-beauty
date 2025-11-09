@@ -18,10 +18,9 @@ function CustomerHomeProfessionalCardPersonalInfo(
   const { setValue } = useFormContext<CreateAppointmentFormData>()
 
   useEffect(() => {
-    if (props.professionalPhotoUrl) {
-      setValue('professionalPhotoUrl', props.professionalPhotoUrl)
-    }
+    setValue('professionalPhotoUrl', props.professionalPhotoUrl)
   }, [props.professionalPhotoUrl, setValue])
+
   return (
     <div className="flex items-center gap-4">
       <div className="">

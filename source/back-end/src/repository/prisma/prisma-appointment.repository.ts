@@ -71,6 +71,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
               id: true,
               name: true,
               email: true,
+              profilePhotoUrl: true
             }
           },
           rating: true

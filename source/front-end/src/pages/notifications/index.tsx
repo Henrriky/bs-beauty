@@ -18,7 +18,6 @@ function Notifications() {
     [currentPage, readSwitch],
   )
 
-  // Reseta para página 1 quando mudar o filtro
   const handleReadSwitchChange = (newSwitch: ReadSwitch) => {
     setReadSwitch(newSwitch)
     setCurrentPage(1)
