@@ -9,6 +9,7 @@ import { EmailService } from './email/email.service'
 import { DateFormatter } from '@/utils/formatting/date.formatting.util'
 import { type ProfessionalRepository } from '@/repository/protocols/professional.repository'
 import { PERMISSIONS_MAP } from '@/utils/auth/permissions-map.util'
+import { logger } from '@/lib/pino'
 
 export interface BirthdayNotificationPayload {
   recipientId: string
@@ -280,6 +281,7 @@ class NotificationsUseCase {
   }
 
   public async executeSendOnServiceCreated (service: Service): Promise<void> {
+    logger.info(`Executing send notification for new service created. Service ID: ${service.id}`)
     const serviceName = service.name
     const serviceDescription = service.description ?? 'Sem descrição'
     const serviceCategory = service.category
@@ -288,6 +290,8 @@ class NotificationsUseCase {
       PERMISSIONS_MAP.SERVICE.APPROVE.permissionName,
       'MANAGER'
     )
+
+    logger.info(`Found ${professionalsToNotify.length} professionals to notify about new service creation.`)
 
     for (const professional of professionalsToNotify) {
       const recipientId = professional.id
@@ -300,6 +304,7 @@ class NotificationsUseCase {
       const shouldNotifyInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
 
       if (shouldNotifyInApp) {
+        logger.info(`Sending in-app notification to professional ID: ${recipientId} for service ID: ${service.id}`)
         await this.notificationRepository.create({
           recipientId,
           marker,
@@ -310,6 +315,53 @@ class NotificationsUseCase {
         })
       }
     }
+  }
+
+  public async executeSendOnServiceStatusChanged (service: Service & { createdBy: string }): Promise<void> {
+    logger.info(`Executing send notification for service status change. Service ID: ${service.id}, New Status: ${service.status}`)
+    const serviceName = service.name
+    const serviceStatus = service.status
+    const createdByProfessionalId = service.createdBy
+
+    if (!createdByProfessionalId) return
+
+    const professional = await this.professionalRepository.findById(createdByProfessionalId)
+    if (!professional) return
+
+    const recipientId = professional.id
+    const marker = `service:${service.id}:status-changed:${serviceStatus}:recipient:${recipientId}`
+
+    const alreadyExists = await this.notificationRepository.findByMarker(marker)
+    if (alreadyExists) return
+
+    const professionalPreference = professional.notificationPreference ?? 'NONE'
+    const shouldNotifyInApp = professionalPreference === 'IN_APP' || professionalPreference === 'ALL'
+
+    if (!shouldNotifyInApp) return
+
+    let title = ''
+    let message = ''
+
+    if (serviceStatus === 'APPROVED') {
+      title = 'Serviço Aprovado'
+      message = `Seu serviço "${serviceName}" foi aprovado e agora está disponível para ofertas!`
+    } else if (serviceStatus === 'REJECTED') {
+      title = 'Serviço Rejeitado'
+      message = `Seu serviço "${serviceName}" foi rejeitado. Entre em contato com seu gerente para mais detalhes.`
+    } else {
+      return
+    }
+
+    logger.info(`Sending in-app notification to professional ID: ${recipientId} for service ID: ${service.id} with status: ${serviceStatus}`)
+
+    await this.notificationRepository.create({
+      recipientId,
+      marker,
+      title,
+      message,
+      recipientType: UserType.PROFESSIONAL,
+      type: NotificationType.SYSTEM
+    })
   }
 }
 

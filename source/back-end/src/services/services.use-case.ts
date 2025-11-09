@@ -89,7 +89,13 @@ class ServicesUseCase {
 
     const updatedServiceResult = await this.serviceRepository.update(serviceId, updatedService)
 
-    // TODO: Call notification use case to notify professionals about service status change
+    // Notificar o profissional criador sobre a mudança de status do serviço
+    if (this.isStatusBeingUpdated(updatedService)) {
+      if (ENV.NOTIFY_ASYNC_ENABLED) {
+        notificationBus.emit('service.statusChanged', { service: updatedServiceResult })
+      }
+    }
+
     return updatedServiceResult
   }
 

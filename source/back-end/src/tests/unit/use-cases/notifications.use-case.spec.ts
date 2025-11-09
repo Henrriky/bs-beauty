@@ -1189,7 +1189,7 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       const service = createMockService()
       const manager = createMockProfessional()
 
-      MockProfessionalRepository.findProfessionalsWithPermissionOrUserType.mockResolvedValue([manager])
+      MockProfessionalRepository
       MockNotificationRepository.findByMarker.mockResolvedValue({} as Notification)
 
       // act
@@ -1264,6 +1264,120 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       await notificationsUseCase.executeSendOnServiceCreated(service)
 
       // assert
+      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('executeSendOnServiceStatusChanged', () => {
+    const createMockService = (overrides: Partial<Service> = {}): Service & { createdBy: string } => ({
+      id: faker.string.uuid(),
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      category: faker.commerce.department(),
+      status: ServiceStatus.APPROVED,
+      createdBy: faker.string.uuid(),
+      createdAt: faker.date.past(),
+      updatedAt: faker.date.recent(),
+      ...overrides
+    } as any)
+
+    const createMockProfessional = (overrides: Partial<Professional> = {}): Professional => ({
+      id: faker.string.uuid(),
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+      notificationPreference: NotificationChannel.ALL,
+      userType: UserType.PROFESSIONAL,
+      cpf: faker.string.numeric(11),
+      birthdate: faker.date.past(),
+      googleId: null,
+      registerCompleted: true,
+      passwordHash: null,
+      profilePhotoUrl: null,
+      commissionRate: 0 as any,
+      createdAt: faker.date.past(),
+      updatedAt: faker.date.recent(),
+      ...overrides
+    } as any)
+
+    it('should send notification when service is approved', async () => {
+      const professionalId = faker.string.uuid()
+      const service = createMockService({ status: ServiceStatus.APPROVED, createdBy: professionalId })
+      const professional = createMockProfessional({ id: professionalId })
+
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockNotificationRepository.findByMarker.mockResolvedValue(null)
+      MockNotificationRepository.create.mockResolvedValue({} as any)
+
+      await notificationsUseCase.executeSendOnServiceStatusChanged(service)
+
+      expect(MockProfessionalRepository.findById).toHaveBeenCalledWith(professionalId)
+      expect(MockNotificationRepository.create).toHaveBeenCalledWith({
+        recipientId: professionalId,
+        marker: `service:${service.id}:status-changed:APPROVED:recipient:${professionalId}`,
+        title: 'Serviço Aprovado',
+        message: `Seu serviço "${service.name}" foi aprovado e agora está disponível para ofertas!`,
+        recipientType: UserType.PROFESSIONAL,
+        type: NotificationType.SYSTEM
+      })
+    })
+
+    it('should send notification when service is rejected', async () => {
+      const professionalId = faker.string.uuid()
+      const service = createMockService({ status: ServiceStatus.REJECTED, createdBy: professionalId })
+      const professional = createMockProfessional({ id: professionalId })
+
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockNotificationRepository.findByMarker.mockResolvedValue(null)
+      MockNotificationRepository.create.mockResolvedValue({} as any)
+
+      await notificationsUseCase.executeSendOnServiceStatusChanged(service)
+
+      expect(MockNotificationRepository.create).toHaveBeenCalledWith({
+        recipientId: professionalId,
+        marker: `service:${service.id}:status-changed:REJECTED:recipient:${professionalId}`,
+        title: 'Serviço Rejeitado',
+        message: `Seu serviço "${service.name}" foi rejeitado. Entre em contato com seu gerente para mais detalhes.`,
+        recipientType: UserType.PROFESSIONAL,
+        type: NotificationType.SYSTEM
+      })
+    })
+
+    it('should not send notification if service status is PENDING', async () => {
+      const professionalId = faker.string.uuid()
+      const service = createMockService({ status: ServiceStatus.PENDING, createdBy: professionalId })
+      const professional = createMockProfessional({ id: professionalId })
+
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockNotificationRepository.findByMarker.mockResolvedValue(null)
+
+      await notificationsUseCase.executeSendOnServiceStatusChanged(service)
+
+      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
+    })
+
+    it('should not send notification if professional not found', async () => {
+      const service = createMockService()
+
+      MockProfessionalRepository.findById.mockResolvedValue(null)
+
+      await notificationsUseCase.executeSendOnServiceStatusChanged(service)
+
+      expect(MockNotificationRepository.create).not.toHaveBeenCalled()
+    })
+
+    it('should not send notification when preference is NONE', async () => {
+      const professionalId = faker.string.uuid()
+      const service = createMockService({ status: ServiceStatus.APPROVED, createdBy: professionalId })
+      const professional = createMockProfessional({
+        id: professionalId,
+        notificationPreference: NotificationChannel.NONE
+      })
+
+      MockProfessionalRepository.findById.mockResolvedValue(professional)
+      MockNotificationRepository.findByMarker.mockResolvedValue(null)
+
+      await notificationsUseCase.executeSendOnServiceStatusChanged(service)
+
       expect(MockNotificationRepository.create).not.toHaveBeenCalled()
     })
   })

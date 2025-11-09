@@ -51,4 +51,11 @@ export function registerNotificationListeners () {
       await useCase.executeSendOnServiceCreated(service)
     })
   })
+
+  notificationBus.on('service.statusChanged', ({ service }: { service: Service & { createdBy: string } }) => {
+    enqueue(async () => {
+      const useCase = makeNotificationsUseCaseFactory()
+      await useCase.executeSendOnServiceStatusChanged(service)
+    })
+  })
 }
