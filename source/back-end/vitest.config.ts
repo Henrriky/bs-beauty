@@ -9,12 +9,24 @@ export default defineConfig({
     coverage: {
       reporter: ['text', 'html'],
       exclude: [
-        'src/server.ts',
-        'src/app.ts',
-        'src/router/**',
-        'src/tests/integration/**',
         'prisma/**',
+        'build/**',
+        'src/config/**',
+        'src/lib/**',
+        'src/repository/**',
+        'src/router/**',
+        'src/types/**',
+        'src/tests/**',
         'src/factory/**',
+        'src/server.ts',
+        'src/utils/logger/**',
+        'src/utils/validation/zod-schemas/**',
+        'src/app.ts',
+        'src/utils/scheduler.ts',
+        'src/middlewares/data-validation/**',
+        'src/middlewares/pagination/**',
+        'custom.d.ts',
+        '*.config.ts'
       ]
     },
     setupFiles: ['./src/tests/unit/setup-integration-unit.ts'],
