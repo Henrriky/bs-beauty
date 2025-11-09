@@ -44,16 +44,18 @@ function ProfilePicture({
 
   const initialLetter = getInitialLetter(displayName)
 
-  const bgColor =
-    initialLetter ? PALETTE[hashString(displayName!.toLowerCase()) % PALETTE.length] : '#717171'
+  const bgColor = initialLetter
+    ? PALETTE[hashString(displayName!.toLowerCase()) % PALETTE.length]
+    : '#717171'
 
   const textSize = size === 'md' ? 'text-lg' : 'text-sm'
 
   return (
     <div
-      className={`relative shrink-0 ${containerSize} ${variation === 'square-with-bg'
-        ? 'before:absolute before:w-full before:h-full before:bg-[#717171] before:-right-[3px] before:-top-[2.5px] before:rounded-md'
-        : ''
+      className={`relative shrink-0 ${containerSize} ${
+        variation === 'square-with-bg'
+          ? 'before:absolute before:w-full before:h-full before:bg-[#717171] before:-right-[3px] before:-top-[2.5px] before:rounded-md'
+          : ''
       }`}
       aria-label={displayName ? `Avatar de ${displayName}` : 'Avatar'}
     >

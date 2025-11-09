@@ -53,7 +53,9 @@ function ProductivityReport() {
           title="Relatórios de Produtividade"
           subtitle={
             <>
-              Visualize os dados de <b className='text-[#A4978A]'>agendamentos</b> e <b className='text-[#A4978A]'>desempenho</b>
+              Visualize os dados de{' '}
+              <b className="text-[#A4978A]">agendamentos</b> e{' '}
+              <b className="text-[#A4978A]">desempenho</b>
             </>
           }
         />

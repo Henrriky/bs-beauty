@@ -53,8 +53,7 @@ function ServiceItem({
     isServiceOwner &&
     (service.status === 'PENDING' || service.status === 'REJECTED')
 
-  const canDelete =
-    isServiceOwner && service.status === 'PENDING'
+  const canDelete = isServiceOwner && service.status === 'PENDING'
 
   return (
     <Button

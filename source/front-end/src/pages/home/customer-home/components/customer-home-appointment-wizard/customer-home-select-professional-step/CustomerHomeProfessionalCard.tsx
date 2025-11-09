@@ -27,8 +27,7 @@ function CustomerHomeProfessionalCard(
         professionalSpecialization={
           props.professional.specialization || 'Nenhuma'
         }
-        professionalPhotoUrl={
-          props.professional.profilePhotoUrl ?? ''}
+        professionalPhotoUrl={props.professional.profilePhotoUrl ?? ''}
       />
       {props.currentFlow === 'service' && (
         <CustomerHomeOfferInfo

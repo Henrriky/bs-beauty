@@ -13,9 +13,7 @@ function CustomerCard({ customer }: CustomerCardProps) {
     <div className="flex items-center gap-4 py-4 px-6 rounded-2xl mt-5 bg-[#262626] border-[1px] border-[#D9D9D9] border-opacity-25">
       <ProfilePicture
         size="sm"
-        profilePhotoUrl={
-          customer.profilePhotoUrl ?? ''
-        }
+        profilePhotoUrl={customer.profilePhotoUrl ?? ''}
         displayName={customer.name ?? 'Cliente'}
       />
       <div>

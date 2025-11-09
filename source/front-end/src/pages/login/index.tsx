@@ -44,7 +44,6 @@ function Login() {
   return (
     <>
       <div className="flex justify-center items-center h-screen flex-col gap-8">
-
         <img
           src={loginBackgroundTop}
           alt=""
@@ -86,7 +85,6 @@ function Login() {
           "
         />
       </div>
-
     </>
   )
 }

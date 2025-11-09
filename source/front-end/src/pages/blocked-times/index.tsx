@@ -60,11 +60,7 @@ export default function BlockedTimes() {
       {/* Header */}
       <PageHeader
         title="Gerenciamento de Bloqueio de Horário"
-        subtitle={
-          <>
-            Gerencie os bloqueios de horário para sua agenda.
-          </>
-        }
+        subtitle={<>Gerencie os bloqueios de horário para sua agenda.</>}
       />
 
       {/* Filters and BlockedTimes List */}

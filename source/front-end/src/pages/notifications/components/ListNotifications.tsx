@@ -116,7 +116,9 @@ function ListNotifications({ params, onPageChange }: ListNotificationsProps) {
           <Button
             label={allSelectedOnPage ? 'Desmarcar' : 'Selecionar'}
             onClick={toggleAllOnPage}
-            disabled={isFetching || isMarking || isDeleting || pageIds.length === 0}
+            disabled={
+              isFetching || isMarking || isDeleting || pageIds.length === 0
+            }
             variant="outline"
             outlineVariantBorderStyle="solid"
             className="!w-auto !max-w-[120px] !px-3 !py-1.5 text-sm rounded-md shrink-0"
@@ -124,7 +126,9 @@ function ListNotifications({ params, onPageChange }: ListNotificationsProps) {
 
           <div className="relative">
             <Button
-              label={selectedIds.length ? `Ações (${selectedIds.length})` : 'Ações'}
+              label={
+                selectedIds.length ? `Ações (${selectedIds.length})` : 'Ações'
+              }
               onClick={() => setActionMenuOpen((v) => !v)}
               disabled={selectedIds.length === 0 || isMarking || isDeleting}
               variant="outline"

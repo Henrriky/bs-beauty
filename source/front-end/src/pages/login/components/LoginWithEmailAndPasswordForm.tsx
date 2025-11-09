@@ -72,7 +72,10 @@ function LoginWithEmailAndPasswordForm() {
         navigate('/complete-register')
       }
     } catch (error: any) {
-      if (error?.response?.status === 400 || error?.message?.includes('Invalid credentials')) {
+      if (
+        error?.response?.status === 400 ||
+        error?.message?.includes('Invalid credentials')
+      ) {
         toast.error('E-mail ou senha incorretos. Verifique suas credenciais.')
       } else {
         toast.error('Erro ao tentar logar.')
@@ -110,10 +113,7 @@ function LoginWithEmailAndPasswordForm() {
               showPasswordFunction={() => setShowPassword(!showPassword)}
             />
           </div>
-          <Button type="submit"
-            label="Entrar"
-            variant="outline"
-          />
+          <Button type="submit" label="Entrar" variant="outline" />
         </form>
         <div className="flex flex-col items-center">
           <p className="text-[#DBDBDB] text-sm mt-2">

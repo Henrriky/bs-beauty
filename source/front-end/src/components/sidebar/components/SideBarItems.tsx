@@ -1,6 +1,6 @@
-import { SideBarItem as SideBarItemType } from "../consts"
-import { isActivePath } from "../utils"
-import SideBarItem from "./SideBarItem"
+import { SideBarItem as SideBarItemType } from '../consts'
+import { isActivePath } from '../utils'
+import SideBarItem from './SideBarItem'
 
 interface SideBarItemsProps {
   isMobile?: boolean
@@ -15,7 +15,6 @@ function SideBarItems({
   toggleSideBar,
   currentPagePathName,
 }: SideBarItemsProps) {
-
   return items.map((item) => (
     <SideBarItem
       key={item.name.concat(item.navigateTo).toLowerCase()}
@@ -26,7 +25,8 @@ function SideBarItems({
       isActive={isActivePath(currentPagePathName, item.navigateTo)}
     >
       {item.name}
-    </ SideBarItem>))
+    </SideBarItem>
+  ))
 }
 
 export { SideBarItems }

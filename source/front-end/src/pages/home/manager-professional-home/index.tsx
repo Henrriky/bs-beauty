@@ -14,7 +14,7 @@ import AppointmentsCarousel from './components/AppointmentsCarousel'
 function ManagerHome() {
   const user = useAppSelector((state) => state.auth.user!)
   const [agendaOpen, setAgendaOpen] = useState(false)
-  const today = DateTime.now().toISODate();
+  const today = DateTime.now().toISODate()
 
   const {
     data: appointmentsData,
@@ -68,7 +68,11 @@ function ManagerHome() {
 
       <SectionDivider />
 
-      <Subtitle className="mt-4 text-xl text-[#D9D9D9]" align='left' children='Agendamentos do dia' />
+      <Subtitle
+        className="mt-4 text-xl text-[#D9D9D9]"
+        align="left"
+        children="Agendamentos do dia"
+      />
 
       <AppointmentsCarousel
         items={appointmentsData?.data || []}
@@ -79,7 +83,10 @@ function ManagerHome() {
 
       <AnalyticsCards />
 
-      <MonthlyAgendaModal isOpen={agendaOpen} onClose={() => setAgendaOpen(false)} />
+      <MonthlyAgendaModal
+        isOpen={agendaOpen}
+        onClose={() => setAgendaOpen(false)}
+      />
     </>
   )
 }
