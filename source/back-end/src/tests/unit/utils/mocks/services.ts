@@ -1,11 +1,11 @@
-import { Encrypter } from "@/services/protocols/encrypter.protocol"
-import { OAuthIdentityProvider } from "@/services/protocols/oauth-identity-provider.protocol"
-import { Cache } from "@/services/protocols/cache.protocol"
-import { CodeValidationService } from "@/services/use-cases/auth/services/code-validation.service"
-import { PasswordResetTicketService } from "@/services/use-cases/auth/services/password-reset-ticket.service"
-import { Mocked, vi } from "vitest"
-import { RefreshTokenService } from "@/services/encrypter/refresh-token.service"
-import { EmailService } from "@/services/email/email.service"
+import { type Encrypter } from '@/services/protocols/encrypter.protocol'
+import { type OAuthIdentityProvider } from '@/services/protocols/oauth-identity-provider.protocol'
+import { type Cache } from '@/services/protocols/cache.protocol'
+import { type CodeValidationService } from '@/services/use-cases/auth/services/code-validation.service'
+import { type PasswordResetTicketService } from '@/services/use-cases/auth/services/password-reset-ticket.service'
+import { type Mocked, vi } from 'vitest'
+import { type RefreshTokenService } from '@/services/encrypter/refresh-token.service'
+import { type EmailService } from '@/services/email/email.service'
 
 const MockCodeValidationService: Mocked<CodeValidationService> = {
   savePendingCode: vi.fn(),

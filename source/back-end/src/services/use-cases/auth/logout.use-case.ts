@@ -1,12 +1,11 @@
-import { RefreshTokenService } from "@/services/encrypter/refresh-token.service"
+import { type RefreshTokenService } from '@/services/encrypter/refresh-token.service'
 
 class LogoutUseCase {
-
-  constructor(
+  constructor (
     private readonly refreshTokens: RefreshTokenService
   ) { }
 
-  async execute(refreshToken: string) {
+  async execute (refreshToken: string) {
     if (refreshToken) {
       await this.refreshTokens.revokeByJwt(refreshToken)
     }

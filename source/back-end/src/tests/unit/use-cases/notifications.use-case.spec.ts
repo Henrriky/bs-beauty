@@ -441,15 +441,15 @@ describe('NotificationsUseCase (Unit Tests)', () => {
       /* Lines 440-442 omitted */
     })
 
-    it('should handle duplicate IDs by removing duplicates', async () => {/* Lines 445-466 omitted */ })
+    it('should handle duplicate IDs by removing duplicates', async () => { /* Lines 445-466 omitted */ })
 
-    it('should handle repository returning partial updates', async () => {/* Lines 469-486 omitted */ })
+    it('should handle repository returning partial updates', async () => { /* Lines 469-486 omitted */ })
 
-    it('should handle repository errors', async () => {/* Lines 489-502 omitted */ })
+    it('should handle repository errors', async () => { /* Lines 489-502 omitted */ })
 
-    it('should handle large number of IDs', async () => {/* Lines 505-517 omitted */ })
+    it('should handle large number of IDs', async () => { /* Lines 505-517 omitted */ })
 
-    it('should handle no notifications updated', async () => {/* Lines 520-533 omitted */ })
+    it('should handle no notifications updated', async () => { /* Lines 520-533 omitted */ })
   })
 
   describe('executeDeleteMany', () => {

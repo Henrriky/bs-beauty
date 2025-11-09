@@ -24,7 +24,9 @@ describe('RefreshTokenService (Unit Tests)', () => {
       get: vi.fn(),
       set: vi.fn(),
       delete: vi.fn(),
-      has: vi.fn()
+      incr: vi.fn(),
+      ttl: vi.fn(),
+      withLock: vi.fn()
     }
 
     refreshTokenService = new RefreshTokenService(cacheMock)

@@ -549,7 +549,7 @@ describe('CodeValidationService', () => {
       })
       vi.mocked(MockCache.get)
         .mockResolvedValueOnce(testPendingEntry) // First call - success
-        .mockResolvedValueOnce(null)              // Second call - already deleted
+        .mockResolvedValueOnce(null) // Second call - already deleted
       vi.mocked(MockCache.delete).mockResolvedValue(undefined)
 
       // act

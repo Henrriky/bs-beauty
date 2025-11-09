@@ -39,13 +39,13 @@ class NotificationsUseCase {
     return notification
   }
 
-  public async executeDeleteMany(ids: string[], userId: string) {
+  public async executeDeleteMany (ids: string[], userId: string) {
     if (ids.length === 0) return { deletedCount: 0 }
     const uniqueIds = [...new Set(ids)]
     const deletedCount = await this.notificationRepository.deleteMany(uniqueIds, userId)
     return {
       success: true,
-      message: `${deletedCount} notifications deleted successfully.`,
+      message: `${deletedCount} notifications deleted successfully.`
     }
   }
 

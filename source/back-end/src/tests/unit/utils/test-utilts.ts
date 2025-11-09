@@ -30,7 +30,7 @@ export function mockRequest (options?: {
 export function mockResponse (): Response {
   const res = {
     status: vi.fn().mockReturnThis(),
-    send: vi.fn(),
+    send: vi.fn().mockReturnThis(),
     json: vi.fn().mockReturnThis(),
     end: vi.fn(),
     clearCookie: vi.fn(),
