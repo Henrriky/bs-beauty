@@ -22,9 +22,11 @@ WORKDIR /home/node/app/front-end
 
 COPY ./front-end .
 
-RUN npm install
+RUN npm install -g pnpm
 
-RUN npm run build
+RUN pnpm install
+
+RUN pnpm build
 
 # =============CHECKOUT TO BACK-END AND EXECUTE APP=============
 WORKDIR /home/node/app/back-end
