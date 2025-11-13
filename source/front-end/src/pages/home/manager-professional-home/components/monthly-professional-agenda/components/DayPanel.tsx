@@ -42,12 +42,18 @@ export default function DayPanel({
     <>
       <div className="flex items-center justify-between p-3 sm:p-4">
         <div className="text-[#595149] font-medium">
-          {selectedDate ? format(selectedDate, "EEEE, dd 'de' LLL", { locale: ptBR }) : 'Selecione um dia'}
+          {selectedDate
+            ? format(selectedDate, "EEEE, dd 'de' LLL", { locale: ptBR })
+            : 'Selecione um dia'}
         </div>
       </div>
       <div className="bg-[#595149] w-full h-0.5" />
       {isLoading && (
-        <div className="p-4 text-sm text-primary-300" role="status" aria-live="polite">
+        <div
+          className="p-4 text-sm text-primary-300"
+          role="status"
+          aria-live="polite"
+        >
           Carregando agendamentos…
         </div>
       )}
@@ -58,7 +64,7 @@ export default function DayPanel({
       )}
       <div className="p-3 sm:p-4 space-y-2">
         {selectedDate && dayList.length > 0 ? (
-          dayList.map(a => (
+          dayList.map((a) => (
             <DayAppointmentCard
               key={a.id}
               id={a.id}
@@ -78,7 +84,9 @@ export default function DayPanel({
           ))
         ) : (
           <div className="text-primary-300 text-sm py-6 text-center">
-            {selectedDate ? 'Sem agendamentos neste dia.' : 'Selecione um dia no calendário.'}
+            {selectedDate
+              ? 'Sem agendamentos neste dia.'
+              : 'Selecione um dia no calendário.'}
           </div>
         )}
       </div>

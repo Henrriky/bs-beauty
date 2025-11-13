@@ -1,22 +1,22 @@
 import { SetStateAction, useState } from 'react'
-import Title from '../../components/texts/Title'
-import CreateServiceForm from './components/CreateServiceForm'
-import ExpansiveItem from './components/ExpansiveItem'
-import ListServices from './components/ListServices'
-import Modal from './components/Modal'
-import { Service } from '../../store/service/types'
-import CreateOfferForm from './components/CreateOfferForm'
+import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
+import useAppSelector from '../../hooks/use-app-selector'
+import { PageHeader } from '../../layouts/PageHeader'
 import { authAPI } from '../../store/auth/auth-api'
 import { UserType } from '../../store/auth/types'
-import useAppSelector from '../../hooks/use-app-selector'
-import ListOffers from './components/ListOffers'
-import UpdateOfferForm from './components/UpdateOfferForm'
 import { Offer } from '../../store/offer/types'
+import { Service } from '../../store/service/types'
+import { userCanAccess } from '../../utils/authorization/authorization.utils'
+import CreateOfferForm from './components/CreateOfferForm'
+import CreateServiceForm from './components/CreateServiceForm'
 import DeleteOfferWarn from './components/DeleteOfferWarn'
 import DeleteServiceWarn from './components/DeleteServiceWarn'
+import ExpansiveItem from './components/ExpansiveItem'
+import ListOffers from './components/ListOffers'
+import ListServices from './components/ListServices'
+import Modal from './components/Modal'
+import UpdateOfferForm from './components/UpdateOfferForm'
 import UpdateServiceForm from './components/UpdateServiceForm'
-import { userCanAccess } from '../../utils/authorization/authorization.utils'
-import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
 
 function ServiceDashboard() {
   const [openCreateOfferModal, setOpenCreateOfferModal] = useState(false)
@@ -49,14 +49,25 @@ function ServiceDashboard() {
   return (
     <>
       <div className="w-full">
-        <div>
-          <Title align="left">Serviços</Title>
-          <p className="text-[#979797] text-sm mt-2">
-            {userHasPermissionToCreate
-              ? 'Selecione algum serviço já criado para ofertar ou crie um caso não exista.'
-              : 'Selecione algum serviço já criado para ofertar ou crie um caso não exista, mediante aprovação de um gerente.'}
-          </p>
-        </div>
+        <PageHeader
+          title="Serviços"
+          subtitle={
+            <>
+              {userHasPermissionToCreate ? (
+                <>
+                  Selecione algum serviço já criado para ofertar ou crie um caso
+                  não exista.
+                </>
+              ) : (
+                <>
+                  Selecione algum serviço já criado para ofertar ou crie um caso
+                  não exista, mediante aprovação de um gerente.
+                </>
+              )}
+            </>
+          }
+        />
+
         <div className="w-full">
           <ExpansiveItem
             text="Serviços já criados"

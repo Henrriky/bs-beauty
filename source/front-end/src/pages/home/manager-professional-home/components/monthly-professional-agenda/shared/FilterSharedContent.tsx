@@ -49,8 +49,12 @@ function FilterSharedContent({
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between px-3 py-2 border-b border-[#595149]">
-        <span className="text-primary-200 font-medium">{title}</span>
-        <button className="p-1.5 rounded hover:bg-black/20" onClick={onClose} aria-label="Fechar filtros">
+        <span className="text-primary-300 font-medium">{title}</span>
+        <button
+          className="p-1.5 rounded hover:bg-black/20"
+          onClick={onClose}
+          aria-label="Fechar filtros"
+        >
           <XMarkIcon className="size-5" />
         </button>
       </div>
@@ -70,10 +74,16 @@ function FilterSharedContent({
       </div>
 
       <div className="px-3 py-2 border-t border-[#595149] flex justify-end gap-2">
-        <button className="px-3 py-1.5 rounded hover:bg黑/20 hover:bg-black/20" onClick={onClear}>
+        <button
+          className="px-3 py-1.5 hover:bg-black/10 rounded text-primary-300"
+          onClick={onClear}
+        >
           Limpar
         </button>
-        <button className="px-3 py-1.5 rounded bg-[#3A3027] text-[#A4978A]" onClick={onApply}>
+        <button
+          className="px-3 py-1.5 rounded bg-[#595149] text-[#D9D9D9]"
+          onClick={onApply}
+        >
           Aplicar
         </button>
       </div>

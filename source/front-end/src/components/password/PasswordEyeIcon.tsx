@@ -14,9 +14,9 @@ function PasswordEyeIcon(props: PasswordEyeIconProps) {
     />
   ) : (
     <EyeSlashIcon
-        className="size-5 stroke-[#D9D9D9] absolute inset-y-[10px] right-2 hover:stroke-[#A4978A] transition-all cursor-pointer"
-        onMouseDown={(e) => e.preventDefault()}
-        onClick={() => props.showPasswordFunction()}
+      className="size-5 stroke-[#D9D9D9] absolute inset-y-[10px] right-2 hover:stroke-[#A4978A] transition-all cursor-pointer"
+      onMouseDown={(e) => e.preventDefault()}
+      onClick={() => props.showPasswordFunction()}
     />
   )
 }

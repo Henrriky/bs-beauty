@@ -90,18 +90,18 @@ function UserRegistrationForm(props: UserRegistrationProps) {
           showPasswordFunction={() => setShowPassword(!showPassword)}
         />
       </div>
-      <div className='flex gap-5 justify-between'>
+      <div className="flex gap-5 justify-between">
         <Button
           type="button"
-          className='p-2'
-          variant='outline'
+          className="p-2"
+          variant="outline"
           onClick={() => navigate(-1)}
           label={'Voltar para o início'}
           disabled={props.isLoading}
         />
         <Button
           type="submit"
-          className='p-2'
+          className="p-2"
           label={
             props.isLoading && !props.isOpen ? (
               <div className="flex justify-center items-center gap-4">

@@ -8,7 +8,7 @@ import { CustomError } from '@/utils/errors/custom.error.util'
 import { Status } from '@prisma/client'
 
 class AnalyticsUseCase {
-  constructor(
+  constructor (
     private readonly ratingRepository: RatingRepository,
     private readonly serviceRepository: ServiceRepository,
     private readonly offerRepository: OfferRepository,
@@ -16,7 +16,7 @@ class AnalyticsUseCase {
     private readonly professionalRepository: ProfessionalRepository
   ) { }
 
-  public async executeGetCustomerAmountPerRatingScore(
+  public async executeGetCustomerAmountPerRatingScore (
     requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER' },
     startDate?: Date,
     endDate?: Date,
@@ -59,7 +59,7 @@ class AnalyticsUseCase {
     return customerCountPerRating
   }
 
-  public async executeGetMeanRatingByService(amount?: number) {
+  public async executeGetMeanRatingByService (amount?: number) {
     const services = await this.serviceRepository.findAll()
 
     const serviceRatings = await Promise.all(services.map(async (service) => {
@@ -76,7 +76,7 @@ class AnalyticsUseCase {
     return await this.getBestRated(serviceRatings, amount)
   }
 
-  public async executeGetMeanRatingOfProfessionals(amount?: number) {
+  public async executeGetMeanRatingOfProfessionals (amount?: number) {
     const professionals = await this.professionalRepository.findAll()
     const professionalRatings = await Promise.all(professionals.map(async (professional) => {
       const offerIds = await this.getOfferIdsByProfessionalId(professional.id)
@@ -92,7 +92,7 @@ class AnalyticsUseCase {
     return await this.getBestRated(professionalRatings, amount)
   }
 
-  public async executeGetAppointmentNumberOnDateRangeByStatusProfessionalAndServices(
+  public async executeGetAppointmentNumberOnDateRangeByStatusProfessionalAndServices (
     requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER' },
     startDate: Date,
     endDate: Date,
@@ -100,7 +100,6 @@ class AnalyticsUseCase {
     requestedProfessionalId?: string,
     serviceIds?: string[]
   ) {
-
     const professionalIdToQuery = this.defineRequestedProfessionalIdByRequesterUserType(requestingUser.userType, requestedProfessionalId, requestingUser.id)
     const start = this.normalizeDateToStart(startDate)
     const end = this.normalizeDateToEnd(endDate)
@@ -129,7 +128,7 @@ class AnalyticsUseCase {
     }
   }
 
-  public async executeGetEstimatedAppointmentTimeByProfessionalAndServices(
+  public async executeGetEstimatedAppointmentTimeByProfessionalAndServices (
     requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER' },
     startDate: Date,
     endDate: Date,
@@ -149,7 +148,7 @@ class AnalyticsUseCase {
       start,
       end,
       groupBy,
-      ["FINISHED"],
+      ['FINISHED'],
       professionalIdToQuery,
       serviceIds
     )
@@ -160,7 +159,7 @@ class AnalyticsUseCase {
     }
   }
 
-  public async executeGetTopProfessionalsRatingsAnalytics(limit: number) {
+  public async executeGetTopProfessionalsRatingsAnalytics (limit: number) {
     const professionals = await this.professionalRepository.findAll()
     const professionalRatings: PublicProfessionalInfo[] = await Promise.all(professionals.map(async (professional) => {
       const offerIds = await this.getOfferIdsByProfessionalId(professional.id)
@@ -175,7 +174,7 @@ class AnalyticsUseCase {
     return await this.getBestRated(professionalRatings, limit)
   }
 
-  public async executeGetAppointmentCancelationRateByProfessional(
+  public async executeGetAppointmentCancelationRateByProfessional (
     requestingUser: { id: string, userType: 'CUSTOMER' | 'PROFESSIONAL' | 'MANAGER' },
     startDate: Date,
     endDate: Date,
@@ -193,56 +192,54 @@ class AnalyticsUseCase {
 
     return {
       totalAppointments: allAppointments.length,
-      canceledAppointments: canceledAppointments.length,
+      canceledAppointments: canceledAppointments.length
     }
   }
 
   // Helper methods
 
-  private determineGroupingPeriod(startDate: Date, endDate: Date): GroupingPeriod {
+  private determineGroupingPeriod (startDate: Date, endDate: Date): GroupingPeriod {
     const diffInMs = endDate.getTime() - startDate.getTime()
     const diffInDays = diffInMs / (1000 * 60 * 60 * 24)
 
     if (diffInDays <= 14) {
       return 'day'
-    }
-    else if (diffInDays <= 60) {
+    } else if (diffInDays <= 60) {
       return 'week'
-    }
-    else {
+    } else {
       return 'month'
     }
   }
 
-  private normalizeDateToStart(date: Date): Date {
-    const start = new Date(date);
-    start.setUTCHours(0, 0, 0, 0);
-    return start;
+  private normalizeDateToStart (date: Date): Date {
+    const start = new Date(date)
+    start.setUTCHours(0, 0, 0, 0)
+    return start
   }
 
-  private normalizeDateToEnd(date: Date): Date {
-    const end = new Date(date);
-    end.setUTCHours(23, 59, 59, 999);
-    return end;
+  private normalizeDateToEnd (date: Date): Date {
+    const end = new Date(date)
+    end.setUTCHours(23, 59, 59, 999)
+    return end
   }
 
-  private validateDateRange(startDate: Date, endDate: Date): void {
+  private validateDateRange (startDate: Date, endDate: Date): void {
     if (startDate.getTime() > endDate.getTime()) {
-      throw new CustomError('startDate must be on or before endDate', 400, 'Please, provide a valid date range');
+      throw new CustomError('startDate must be on or before endDate', 400, 'Please, provide a valid date range')
     }
   }
 
-  private async getOfferIdsByServiceId(serviceId: string): Promise<string[]> {
+  private async getOfferIdsByServiceId (serviceId: string): Promise<string[]> {
     const offers = await this.offerRepository.findByServiceId(serviceId)
     return Array.isArray(offers) ? offers.map(o => o.id) : []
   }
 
-  private async getOfferIdsByProfessionalId(professionalId: string): Promise<string[]> {
+  private async getOfferIdsByProfessionalId (professionalId: string): Promise<string[]> {
     const offers = await this.offerRepository.findByProfessionalId(professionalId)
     return Array.isArray(offers) ? offers.map(o => o.id) : []
   }
 
-  private async getAppointmentIdsFromOfferIds(offerIds: string[]): Promise<string[]> {
+  private async getAppointmentIdsFromOfferIds (offerIds: string[]): Promise<string[]> {
     const appointmentIds: string[] = []
     for (const offerId of offerIds) {
       const appointments = await this.appointmentRepository.findByServiceOfferedId(offerId)
@@ -251,7 +248,7 @@ class AnalyticsUseCase {
     return appointmentIds
   }
 
-  private async getRatingsStatsFromAppointmentIds(appointmentIds: string[], options?: { precision?: number }) {
+  private async getRatingsStatsFromAppointmentIds (appointmentIds: string[], options?: { precision?: number }) {
     const scores: number[] = []
     for (const appointmentId of appointmentIds) {
       const rating = await this.ratingRepository.findByAppointmentId(appointmentId)
@@ -282,7 +279,7 @@ class AnalyticsUseCase {
     return isLimited ? bestRated.slice(0, limit) : bestRated
   }
 
-  private defineRequestedProfessionalIdByRequesterUserType(userType: string, requestedProfessionalId?: string, requestingUserId?: string) {
+  private defineRequestedProfessionalIdByRequesterUserType (userType: string, requestedProfessionalId?: string, requestingUserId?: string) {
     if (userType === 'MANAGER') {
       return requestedProfessionalId
     } else if (userType === 'PROFESSIONAL') {

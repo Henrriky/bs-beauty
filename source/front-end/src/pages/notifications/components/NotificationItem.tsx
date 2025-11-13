@@ -19,13 +19,8 @@ export default function NotificationItem({
   onToggle,
   enableSelection = true,
 }: NotificationItemProps) {
-
-  const {
-    markRead,
-    isMarking,
-    deleteNotifications,
-    isDeleting
-  } = useNotificationsLogic()
+  const { markRead, isMarking, deleteNotifications, isDeleting } =
+    useNotificationsLogic()
 
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
 

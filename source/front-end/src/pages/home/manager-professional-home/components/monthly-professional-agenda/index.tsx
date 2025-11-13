@@ -1,7 +1,4 @@
-import {
-  addMonths, endOfMonth, format,
-  startOfMonth
-} from 'date-fns'
+import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import useAppSelector from '../../../../../hooks/use-app-selector'
@@ -30,7 +27,9 @@ const FILTERABLE_STATUSES: Status[] = [
 ]
 
 export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
-  const [currentMonth, setCurrentMonth] = useState(() => startOfMonth(new Date()))
+  const [currentMonth, setCurrentMonth] = useState(() =>
+    startOfMonth(new Date()),
+  )
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
   const [activeTab, setActiveTab] = useState<'calendar' | 'day'>('calendar')
 
@@ -54,13 +53,22 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
     return () => mm.removeEventListener('change', update)
   }, [])
 
-  const openFilter = () => { setDraftStatuses(appliedStatuses); setFilterOpen(true) }
-  const applyFilter = () => { setAppliedStatuses(draftStatuses); setFilterOpen(false) }
+  const openFilter = () => {
+    setDraftStatuses(appliedStatuses)
+    setFilterOpen(true)
+  }
+  const applyFilter = () => {
+    setAppliedStatuses(draftStatuses)
+    setFilterOpen(false)
+  }
 
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
       if (!filterOpen || !isDesktop) return
-      if (desktopPopoverRef.current && !desktopPopoverRef.current.contains(e.target as Node)) {
+      if (
+        desktopPopoverRef.current &&
+        !desktopPopoverRef.current.contains(e.target as Node)
+      ) {
         setFilterOpen(false)
       }
     }
@@ -71,24 +79,28 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
   useEffect(() => {
     if (!isOpen) return
     document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = '' }
+    return () => {
+      document.body.style.overflow = ''
+    }
   }, [isOpen])
 
   const monthStart = startOfMonth(currentMonth)
   const monthEnd = endOfMonth(currentMonth)
-  const fromISO = monthStart.toISOString()
-  const toISO = monthEnd.toISOString()
+  const fromYMD = format(monthStart, 'yyyy-MM-dd')
+  const toYMD = format(monthEnd, 'yyyy-MM-dd')
 
   const queryStatuses = appliedStatuses.length ? appliedStatuses : undefined
 
-  const { data, isLoading, isError } = appointmentAPI.useFetchAppointmentsQuery({
-    page: 1,
-    limit: 50,
-    from: fromISO,
-    to: toISO,
-    status: queryStatuses,
-    viewAll: isManager ? viewAll : undefined,
-  })
+  const { data, isLoading, isError } = appointmentAPI.useFetchAppointmentsQuery(
+    {
+      page: 1,
+      limit: 50,
+      from: fromYMD,
+      to: toYMD,
+      status: queryStatuses,
+      viewAll: isManager ? viewAll : undefined,
+    },
+  )
 
   const byDay = useMemo(() => {
     type Item = {
@@ -114,7 +126,7 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
         professionalName: appt.offer?.professional?.name ?? null,
       })
     }
-    data?.data.forEach(appt => {
+    data?.data.forEach((appt) => {
       const d = new Date(appt.appointmentDate)
       add(new Date(d.getFullYear(), d.getMonth(), d.getDate()), appt)
     })
@@ -126,34 +138,48 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
     const key = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth(),
-      selectedDate.getDate()
+      selectedDate.getDate(),
     ).toDateString()
     const items = byDay.get(key)?.items ?? []
-    const allow = appliedStatuses.length ? (s: Status) => appliedStatuses.includes(s) : () => true
+    const allow = appliedStatuses.length
+      ? (s: Status) => appliedStatuses.includes(s)
+      : () => true
     return items
-      .filter(i => allow(i.status))
+      .filter((i) => allow(i.status))
       .sort((a, b) => a.start.getTime() - b.start.getTime())
   }, [selectedDate, byDay, appliedStatuses])
 
   if (!isOpen) return null
 
   const monthLabel = format(currentMonth, "LLLL 'de' yyyy", { locale: ptBR })
-  const goPrevMonth = () => setCurrentMonth(d => startOfMonth(addMonths(d, -1)))
-  const goNextMonth = () => setCurrentMonth(d => startOfMonth(addMonths(d, 1)))
-  const goToday = () => { const t = new Date(); setCurrentMonth(startOfMonth(t)); setSelectedDate(t); setActiveTab('day') }
+  const goPrevMonth = () =>
+    setCurrentMonth((d) => startOfMonth(addMonths(d, -1)))
+  const goNextMonth = () =>
+    setCurrentMonth((d) => startOfMonth(addMonths(d, 1)))
+  const goToday = () => {
+    const t = new Date()
+    setCurrentMonth(startOfMonth(t))
+    setSelectedDate(t)
+    setActiveTab('day')
+  }
 
   const toggleDraftStatus = (s: Status) =>
-    setDraftStatuses(prev => (prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]))
+    setDraftStatuses((prev) =>
+      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s],
+    )
   const markAllStatuses = () => setDraftStatuses([...FILTERABLE_STATUSES])
   const clearStatuses = () => setDraftStatuses([])
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Agenda do mês" className="fixed inset-0 z-50">
-
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Agenda do mês"
+      className="fixed inset-0 z-50"
+    >
       <div className="absolute inset-0 bg-black/60" onClick={onClose} />
       <div className="absolute inset-0 flex items-stretch justify-center">
         <div className="relative m-0 sm:m-6 w-full sm:w-[min(980px,95vw)] h-[100svh] sm:h-[82vh] bg-secondary-100 rounded-none sm:rounded-[12px] shadow-xl overflow-hidden text-primary-100 pb-[env(safe-area-inset-bottom)]">
-
           <MonthlyAgendaHeader
             monthLabel={monthLabel}
             onPrevMonth={goPrevMonth}
@@ -162,7 +188,7 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
             onCloseModal={onClose}
             isManager={isManager}
             viewAll={viewAll}
-            onToggleViewAll={() => setViewAll(v => !v)}
+            onToggleViewAll={() => setViewAll((v) => !v)}
             onOpenFilter={openFilter}
           />
 
@@ -184,19 +210,34 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
             />
           )}
 
-
           <div className="sm:hidden flex border-b border-[#595149]">
-            <button className={`flex-1 py-2 text-sm ${activeTab === 'calendar' ? 'text-secondary-300 border-b-2 border-secondary-300' : 'text-primary-300'}`} onClick={() => setActiveTab('calendar')}>Calendário</button>
-            <button className={`flex-1 py-2 text-sm ${activeTab === 'day' ? 'text-secondary-300 border-b-2 border-secondary-300' : 'text-primary-300'}`} onClick={() => setActiveTab('day')} disabled={!selectedDate}>Dia</button>
+            <button
+              className={`flex-1 py-2 text-sm ${activeTab === 'calendar' ? 'text-secondary-300 border-b-2 border-secondary-300' : 'text-primary-300'}`}
+              onClick={() => setActiveTab('calendar')}
+            >
+              Calendário
+            </button>
+            <button
+              className={`flex-1 py-2 text-sm ${activeTab === 'day' ? 'text-secondary-300 border-b-2 border-secondary-300' : 'text-primary-300'}`}
+              onClick={() => setActiveTab('day')}
+              disabled={!selectedDate}
+            >
+              Dia
+            </button>
           </div>
 
           <div className="h-[calc(100%-104px)] sm:h-[calc(100%-64px)] grid grid-cols-1 sm:grid-cols-12">
-            <section className={`${activeTab === 'calendar' ? 'block' : 'hidden'} sm:block sm:col-span-7 md:col-span-8 border-r border-[#595149] overflow-y-auto`}>
+            <section
+              className={`${activeTab === 'calendar' ? 'block' : 'hidden'} sm:block sm:col-span-7 md:col-span-8 border-r border-[#595149] overflow-y-auto`}
+            >
               <CalendarPanel
                 currentMonth={currentMonth}
                 selectedDate={selectedDate}
                 onChangeMonth={(d) => setCurrentMonth(d)}
-                onSelectDate={(d) => { setSelectedDate(d); setActiveTab('day') }}
+                onSelectDate={(d) => {
+                  setSelectedDate(d)
+                  setActiveTab('day')
+                }}
                 byDay={byDay}
                 appliedStatuses={appliedStatuses}
                 legendIcon={legendIcon}
@@ -206,7 +247,9 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
               />
             </section>
 
-            <section className={`${activeTab === 'day' ? 'block' : 'hidden'} sm:block sm:col-span-5 md:col-span-4 overflow-y-auto`}>
+            <section
+              className={`${activeTab === 'day' ? 'block' : 'hidden'} sm:block sm:col-span-5 md:col-span-4 overflow-y-auto`}
+            >
               <DayPanel
                 selectedDate={selectedDate}
                 dayList={dayList}

@@ -31,14 +31,14 @@ function Subtitle({
         : 'text-[#979797]'
 
   return (
-    <h1
+    <h2
       className={clsx(
         `text-sm ${textColor} ${alignment} font-medium`,
         className,
       )}
     >
       {children}
-    </h1>
+    </h2>
   )
 }
 

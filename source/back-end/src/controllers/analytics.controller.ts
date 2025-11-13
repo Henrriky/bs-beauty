@@ -32,7 +32,7 @@ type Analytics = z.infer<typeof schema>
 // TODO: Extract logic/calculations to an use case
 
 class AnalyticsController {
-  public static async handleFindAll(req: Request, res: Response, next: NextFunction) {
+  public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
     try {
       const analytics: Partial<Analytics> = {}
 
@@ -132,7 +132,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleFindByProfessionalId(req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByProfessionalId (req: Request, res: Response, next: NextFunction) {
     try {
       const analytics: Partial<Analytics> = {}
 
@@ -233,7 +233,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetRatingsAnalytics(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetRatingsAnalytics (req: Request, res: Response, next: NextFunction) {
     try {
       const ratingsUseCase = makeRatingsUseCaseFactory()
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
@@ -249,13 +249,13 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetCustomerAmountPerRatingScore(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetCustomerAmountPerRatingScore (req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user
       const requestedProfessionalId = req.query.professionalId as string | undefined
       const startDate = req.query.startDate ? new Date(req.query.startDate as string) : undefined
       const endDate = req.query.endDate ? new Date(req.query.endDate as string) : undefined
-      
+
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
       const customerCountPerRating = await analyticsUseCase.executeGetCustomerAmountPerRatingScore(
         user,
@@ -269,7 +269,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetMeanRatingByService(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetMeanRatingByService (req: Request, res: Response, next: NextFunction) {
     try {
       const amount = req.body.amount as number | undefined
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
@@ -281,7 +281,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetMeanRatingOfProfessionals(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetMeanRatingOfProfessionals (req: Request, res: Response, next: NextFunction) {
     try {
       const amount = req.body.amount as number | undefined
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
@@ -293,7 +293,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetAppointmentAmountInDateRangeByStatusAndProfessional(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetAppointmentAmountInDateRangeByStatusAndProfessional (req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user
       const data = appointmentsFilterSchema.parse(req.body)
@@ -309,7 +309,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetEstimatedAppointmentTimeInDateRangeByProfessional(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetEstimatedAppointmentTimeInDateRangeByProfessional (req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user
       const data = appointmentsFilterSchema.omit({ statusList: true }).parse(req.body)
@@ -325,7 +325,7 @@ class AnalyticsController {
     }
   }
 
-  public static async handleGetAppointmentCancelationRateByProfessional(req: Request, res: Response, next: NextFunction) {
+  public static async handleGetAppointmentCancelationRateByProfessional (req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user
       const data = appointmentsFilterSchema.omit({ statusList: true }).parse(req.body)

@@ -1,15 +1,15 @@
-import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
 import { Button } from '../../components/button/Button'
 import SearchInput from '../../components/inputs/SearchInput'
-import Title from '../../components/texts/Title'
-import { UserType } from '../../store/auth/types'
 import { Pagination } from '../../components/select/Pagination'
-import { useBlockedTimesLogic } from './hooks/useBlockedTimesLogic'
-import { BlockedTimesList } from './components/BlockedTimeList'
+import { PageHeader } from '../../layouts/PageHeader'
+import { UserType } from '../../store/auth/types'
 import { BlockedTimeFormModal } from './components/BlockedTimeFormModal'
+import { BlockedTimesList } from './components/BlockedTimeList'
 import { DeleteBlockedTimeModal } from './components/DeleteBlockedTimeModal'
-import { UserCanAccessContainer } from '../../components/authorization/UserCanAccessContainer'
+import { useBlockedTimesLogic } from './hooks/useBlockedTimesLogic'
 
 export default function BlockedTimes() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -56,11 +56,13 @@ export default function BlockedTimes() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="flex flex-col gap-3">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <Title align="left">Gerenciamento de Bloqueio de Horário</Title>
-      </div>
+      <PageHeader
+        title="Gerenciamento de Bloqueio de Horário"
+        subtitle={<>Gerencie os bloqueios de horário para sua agenda.</>}
+      />
+
       {/* Filters and BlockedTimes List */}
       <UserCanAccessContainer
         strategy="ANY"
