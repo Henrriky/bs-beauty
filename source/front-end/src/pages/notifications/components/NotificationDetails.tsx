@@ -1,6 +1,5 @@
 import { Button } from '../../../components/button/Button'
 import { NotificationDTO } from '../../../store/notification/types'
-import { buildTitleWithDate, prettifyISOInText } from '../utils/format'
 
 interface Props {
   notification: NotificationDTO
@@ -26,10 +25,8 @@ function formatCreatedAt(iso?: string) {
 }
 
 export default function NotificationDetails({ notification, onClose }: Props) {
-  const title = buildTitleWithDate(notification.message)
-  const rawBody =
-    notification.message.split('|')[1]?.trim() ?? notification.message
-  const body = prettifyISOInText(rawBody)
+  const title = notification.title
+  const body = notification.message
   const createdAt = formatCreatedAt(notification.createdAt)
 
   return (
@@ -37,11 +34,11 @@ export default function NotificationDetails({ notification, onClose }: Props) {
       <p className="text-[#D9D9D9] text-base text-center mb-4">{title}</p>
 
       <div className="w-full max-w-[295px]">
-        <p className="text-sm text-[#D9D9D9] leading-relaxed whitespace-pre-wrap break-words mb-4">
+        <p className="text-sm text-[#D9D9D9] leading-relaxed whitespace-pre-wrap break-words mb-4 text-justify">
           {body}
         </p>
         {createdAt && (
-          <p className="text-xs text-gray-400">Criada em: {createdAt}</p>
+          <p className="text-xs text-gray-400">Notificação criada em: {createdAt}</p>
         )}
       </div>
 

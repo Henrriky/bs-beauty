@@ -22,8 +22,7 @@ interface ProfessionalProfileProps {
 const NOTIFICATION_OPTIONS = [
   { value: 'NONE', label: 'Não receber' },
   { value: 'IN_APP', label: 'Receber pela plataforma' },
-  { value: 'EMAIL', label: 'Receber por email' },
-  { value: 'BOTH', label: 'Receber pela plataforma e por email' },
+  { value: 'ALL', label: 'Receber pela plataforma e por email' },
 ]
 
 // TODO: Separate Social Media to a Component
@@ -141,9 +140,26 @@ function ProfessionalProfile({
         label="Função"
         id="userType"
         type="userType"
-        value={getPrettyRoles(userInfo.userType, userInfo.roles)}
+        value={getPrettyRoles(
+          userInfo.userType,
+          userInfo.roles,
+          userInfo.isCommissioned,
+        )}
         disabled
       />
+      {userInfo.isCommissioned && (
+        <Input
+          label="Taxa de Comissão"
+          id="commissionRate"
+          type="text"
+          value={
+            userInfo.commissionRate
+              ? (userInfo.commissionRate * 100).toFixed(2) + '%'
+              : 'N/A'
+          }
+          disabled
+        />
+      )}
       <SocialMediaContainerInput
         socialMediaFields={socialMediaFields}
         removeSocialMedia={removeSocialMedia}

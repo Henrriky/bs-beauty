@@ -48,6 +48,12 @@ professionalRoutes.delete(
   ProfessionalsController.handleDelete
 )
 
+professionalRoutes.patch(
+  '/:id/commission',
+  combinedAuthMiddleware(['MANAGER'], ['professional.edit']),
+  ProfessionalsController.handleUpdateCommission
+)
+
 professionalRoutes.get(
   '/:id/roles',
   combinedAuthMiddleware(['MANAGER'], ['professional.manage_roles']),

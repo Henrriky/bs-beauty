@@ -12,6 +12,7 @@ import {
   UserIcon,
   UsersIcon,
   ChartBarIcon,
+  BanknotesIcon,
 } from '@heroicons/react/24/outline'
 import React from 'react'
 import { UserType } from '../../../store/auth/types'
@@ -30,7 +31,7 @@ const onlyCustomerSideBarItems: SideBarItem[] = [
     name: 'Home',
     icon: <HomeIcon className="size-6" />,
     navigateTo: '/customer/home',
-    order: 1,
+    order: 0,
     authorization: {
       allowedPermissions: [],
       allowedUserTypes: [UserType.CUSTOMER],
@@ -196,6 +197,22 @@ const sideBarItems: SideBarItem[] = [
       allowedUserTypes: [UserType.MANAGER],
     },
     order: 10,
+  },
+  {
+    name: 'Pagamentos',
+    icon: <BanknotesIcon className="size-6" />,
+    navigateTo: '/payments',
+    authorization: {
+      strategy: 'ANY',
+      allowedPermissions: [
+        'payment_record.create',
+        'payment_record.delete',
+        'payment_record.read',
+        'payment_record.edit',
+      ],
+      allowedUserTypes: [UserType.MANAGER, UserType.PROFESSIONAL],
+    },
+    order: 11,
   },
   {
     name: 'Perfil',

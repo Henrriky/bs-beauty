@@ -9,7 +9,7 @@ const markManySchema = z.object({
 })
 
 class NotificationsController {
-  public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindAll(req: Request, res: Response, next: NextFunction) {
     try {
       const { user } = req
       const parsed = notificationQuerySchema.parse(req.query)
@@ -31,7 +31,7 @@ class NotificationsController {
     }
   }
 
-  public static async handleFindById (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindById(req: Request, res: Response, next: NextFunction) {
     try {
       const notificationId = req.params.id
       const useCase = makeNotificationsUseCaseFactory()
@@ -43,19 +43,20 @@ class NotificationsController {
     }
   }
 
-  public static async handleDelete (req: Request, res: Response, next: NextFunction) {
+  public static async handleDeleteMany(req: Request, res: Response, next: NextFunction) {
     try {
-      const notificationId: string = req.params.id
+      const { ids } = markManySchema.parse(req.body)
+      const userId = req.user.id
       const useCase = makeNotificationsUseCaseFactory()
-      const deletedNotification = await useCase.executeDelete(notificationId)
+      const result = await useCase.executeDeleteMany(ids, userId)
 
-      res.send(deletedNotification)
+      return res.send(result)
     } catch (error) {
       next(error)
     }
   }
 
-  public static async handleMarkManyAsRead (req: Request, res: Response, next: NextFunction) {
+  public static async handleMarkManyAsRead(req: Request, res: Response, next: NextFunction) {
     try {
       const { ids } = markManySchema.parse(req.body)
       const userId = req.user.id

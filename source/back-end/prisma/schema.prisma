@@ -34,8 +34,9 @@ model Customer {
   updatedAt              DateTime             @updatedAt @map("updated_at")
 
   appointments Appointment[]
-  referrer     Customer?     @relation("refers", fields: [referrerId], references: [id])
-  referrals    Customer[]    @relation("refers")
+  referrer     Customer?       @relation("refers", fields: [referrerId], references: [id])
+  referrals    Customer[]      @relation("refers")
+  payments     PaymentRecord[]
 
   @@map("customer")
 }
@@ -120,6 +121,7 @@ model Offer {
   appointments Appointment[]
   service      Service       @relation(fields: [serviceId], references: [id])
   professional Professional  @relation(fields: [professionalId], references: [id])
+  payments     PaymentItem[]
 
   @@map("offer")
 }
@@ -132,6 +134,8 @@ model Professional {
   googleId               String?              @unique @map("google_id")
   registerCompleted      Boolean              @default(false) @map("register_completed")
   paymentMethods         Json?                @map("payment_methods")
+  isCommissioned         Boolean              @default(false) @map("is_commissioned")
+  commissionRate         Decimal?             @map("commission_rate") @db.Decimal(5, 4)
   socialMedia            Json?                @map("social_media")
   contact                String?              @unique
   specialization         String?
@@ -147,6 +151,7 @@ model Professional {
   offers           Offer[]
   professionalRole ProfessionalRole[]
   Service          Service[]
+  payments         PaymentRecord[]
 
   @@map("professional")
 }
@@ -259,6 +264,38 @@ model Permission {
   @@map("permission")
 }
 
+model PaymentRecord {
+  id             String   @id @default(uuid())
+  totalValue     Decimal  @map("total_value") @db.Decimal(10, 2)
+  paymentMethod  String   @map("payment_method")
+  customerId     String   @map("customer_id")
+  professionalId String   @map("professional_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  professional Professional  @relation(fields: [professionalId], references: [id])
+  customer     Customer      @relation(fields: [customerId], references: [id])
+  items        PaymentItem[]
+
+  @@map("payment_record")
+}
+
+model PaymentItem {
+  id              String   @id @default(uuid())
+  quantity        Int      @default(1)
+  discount        Int      @default(0)
+  price           Decimal  @db.Decimal(10, 2)
+  paymentRecordId String   @map("payment_record_id")
+  offerId         String   @map("offer_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  paymentRecord PaymentRecord @relation(fields: [paymentRecordId], references: [id], onDelete: Cascade)
+  offer         Offer         @relation(fields: [offerId], references: [id])
+
+  @@map("payment_item")
+}
+
 enum WeekDays {
   SUNDAY
   MONDAY
@@ -298,8 +335,7 @@ enum DiscoverySource {
 enum NotificationChannel {
   NONE
   IN_APP
-  EMAIL
-  BOTH
+  ALL
 }
 
 enum NotificationType {

@@ -161,6 +161,13 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     return professionalDeleted
   }
 
+  public async updateCommission (professionalId: string, commissionRate: number) {
+    await prismaClient.professional.update({
+      where: { id: professionalId },
+      data: { commissionRate }
+    })
+  }
+
   public async fetchServicesOfferedByProfessional (professionalId: string, { page, limit, filters }: PaginatedRequest<PartialHandleFetchServicesOfferedByProfessionalQuerySchema>) {
     const skip = (page - 1) * limit
 

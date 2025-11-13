@@ -109,6 +109,24 @@ export const PERMISSIONS_MAP = {
       permissionName: 'blocked_time.delete_all',
       description: 'Permite remover os horários bloqueados de todos os usuários'
     }
+  },
+  PAYMENT_RECORD: {
+    READ: {
+      permissionName: 'payment_record.read',
+      description: 'Permite visualizar os registros de pagamento'
+    },
+    CREATE: {
+      permissionName: 'payment_record.create',
+      description: 'Permite criar novos registros de pagamento'
+    },
+    UPDATE: {
+      permissionName: 'payment_record.edit',
+      description: 'Permite editar registros de pagamento existentes'
+    },
+    DELETE: {
+      permissionName: 'payment_record.delete',
+      description: 'Permite remover registros de pagamento'
+    }
   }
 } as const
 
