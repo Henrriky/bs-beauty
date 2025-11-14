@@ -20,7 +20,7 @@
     "@mui/x-charts": "^8.14.0",
     "@mui/x-date-pickers": "^8.16.0",
     "@reduxjs/toolkit": "^2.9.1",
-    "@types/jsonwebtoken": "^9.0.7",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/luxon": "^3.4.2",
     "async-mutex": "^0.5.0",
     "axios": "^1.7.7",
