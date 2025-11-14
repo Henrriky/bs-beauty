@@ -7,53 +7,72 @@ Nele foram definidas as seguintes entidades e relacionamentos:
 \begin{itemize}
 	\item \emph{CUSTOMER}: Entidade que representa um cliente.
 	\begin{itemize}
-		\item \textbf{\textit{refers:}} um cliente (\emph{CUSTOMER}) pode ou não indicar (\textit{refers}) outros clientes e um cliente é indicado por nenhum ou um único cliente.
-		\item \textbf{\textit{makes:}} um cliente faz (\emph{makes}) ou não agendamentos (\emph{APPOINTMENT}).
+		\item \textbf{\textit{refers}}: um cliente (\emph{CUSTOMER}) pode ou não indicar (\textit{refers}) outros clientes e um cliente é indicado por nenhum ou um único cliente.
+		\item \textbf{\textit{makes}}: um cliente faz (\emph{makes}) ou não agendamentos (\emph{APPOINTMENT}).
+		\item \textbf{\textit{has}}: um cliente (\emph{CUSTOMER}) tem (\textit{has}) ou não registros de pagamento (\emph{PAYMENT\_RECORD}).
 	\end{itemize}
 	\item \emph{APPOINTMENT}: Entidade que representa um agendamento.
 	\begin{itemize}
 		\item \textbf{\textit{makes}}: um agendamento (\emph{APPOINTMENT}) é feito (\textit{makes}) por um cliente (\emph{CUSTOMER}). 
 		\item \textbf{\textit{has}}: um agendamento (\emph{APPOINTMENT}) tem (\textit{has}) ou não uma avaliação (\emph{RATING}).
-		\item \textbf{\textit{sends}}: um agendamento (\emph{APPOINTMENT}) envia (\textit{sends}) ao menos uma notificação (\emph{NOTIFICATION}).
 		\item \textbf{\textit{includes}}: um agendamento (\emph{APPOINTMENT}) inclui (\textit{includes}) uma oferta (\emph{OFFER}).
 	\end{itemize}
 	\item \emph{RATING}: Entidade que representa a avaliação de um agendamento.
 	\begin{itemize}
-		\item \textbf{\textit{has:}} uma avaliação (\emph{RATING}) é tida (\textit{has}) por um agendamento (\emph{APPOINTMENT}).
-	\end{itemize}
-	\item \emph{NOTIFICATION}: Entidade que representa uma notificação.
-	\begin{itemize}
-		\item \textbf{\textit{sends:}} uma notificação (\emph{NOTIFICATION}) é enviada por (\textit{sends}) um agendamento (\emph{APPOINTMENT}).
+		\item \textbf{\textit{has}}: uma avaliação (\emph{RATING}) é tida (\textit{has}) por um agendamento (\emph{APPOINTMENT}).
 	\end{itemize}
 	\item \emph{OFFER}: Entidade associativa que representa a oferta (\textit{offers}) de um serviço (\emph{SERVICE}) por um profissional (\emph{PROFESSIONAL}).
 	\begin{itemize}
 		\item \textbf{\textit{includes}}: uma oferta (\emph{OFFER}) pode ou não ser incluida (\textit{includes}) em muitos agendamentos (\emph{APPOINTMENT}). 
+		\item \textbf{\textit{has}}: uma oferta (\emph{OFFER}) é tida (\textit{has}) por um item de pagamento (\emph{PAYMENT\_ITEM}). 
 	\end{itemize}
 	\item \emph{PROFESSIONAL}: Entidade que representa um profissional.
 	\begin{itemize}
 		\item \textbf{\textit{offers}}: um profissional (\emph{PROFESSIONAL}) oferece (\textit{offers}) ou não muitos serviços (\emph{SERVICE}).
+		\item \textbf{\textit{creates}}: um profissional (\emph{PROFESSIONAL}) cria (\textit{creates}) ou não muitos serviços (\emph{SERVICE}).
+		\item \textbf{\textit{is created by}}: um profissional (\emph{PROFESSIONAL}) cria (\textit{is created by}) ou não muitos registros de pagamento (\emph{PAYMENT\_RECORD}).
 		\item \textbf{\textit{has}}: um profissional (\emph{PROFESSIONAL}) tem (\textit{has}) ou não muitos turnos (\emph{SHIFT}).
+		\item \textbf{\textit{has}}: um profissional (\emph{PROFESSIONAL}) tem (\textit{has}) ou não muitos horários bloqueados (\emph{BLOCKED\_TIME}).
 		\item \textbf{\textit{has}}: um profissional (\emph{PROFESSIONAL}) tem (\textit{has}) ao menos um papel (\emph{ROLE}).
 	\end{itemize}
 	\item \emph{SERVICE}: Entidade que representa um serviço no salão de beleza.
 	\begin{itemize}
 		\item \textbf{\textit{offers}}: um serviço (\emph{SERVICE}) é oferecido (\textit{offers}) ou não por muitos funcionários (\emph{PROFESSIONAL}).
+		\item \textbf{\textit{creates}}: um serviço (\emph{SERVICE}) é criado (\textit{creates}) por um profissional (\emph{PROFESSIONAL}).
 	\end{itemize}
 	\item \emph{SHIFT}: Entidade que representa os turnos de trabalho de um profissional.
 	\begin{itemize}
 		\item \textbf{\textit{has}}: um turno (\emph{SHIFT}) é tido (\textit{has}) por um profissional (\emph{PROFESSIONAL}).
 	\end{itemize}
+	\item \emph{BLOCKED\_TIME}: Entidade que representa os horários bloqueados de um profissional.
+	\begin{itemize}
+		\item \textbf{\textit{has}}: um horário bloqueado (\emph{BLOCKED\_TIME}) é tido (\textit{has}) por um profissional (\emph{PROFESSIONAL}).
+	\end{itemize}
 	\item \emph{ROLE}: Entidade que representa os papéis que um profissional possui na plataforma.
 	\begin{itemize}
 		\item \textbf{\textit{has}}: um papel (\emph{ROLE}) é tido ou não (\textit{has}) por muitos profissionais (\emph{EMPLOYEE}).
-		\item \textbf{\textit{has}}: um papel (\emph{ROLE}) tem (\textit{has}) ao menos uma permissão (\emph{PERMISSIONS}).
+		\item \textbf{\textit{has}}: um papel (\emph{ROLE}) tem (\textit{has}) ou não muitas permissões (\emph{PERMISSION}).
 	\end{itemize}
 	\item \emph{PROFESSIONAL\_ROLE}: Entidade associativa auxiliar para \emph{PROFESSIONAL} e \emph{ROLE}.
-	\item \emph{PERMISSIONS}: Entidade que representa as permissões que cada papel provê.
+	\item \emph{PERMISSION}: Entidade que representa as permissões que cada papel provê.
 	\begin{itemize}
-		\item \textbf{\textit{has}}: uma permissão (\emph{PERMISSIONS}) é tida (\textit{has}) ou não por muitos papeis (\emph{ROLE}).
-\end{itemize}
-	\item \emph{ROLE\_PERMISSION}: Entidade associativa auxiliar para \emph{ROLE} e \emph{PERMISSIONS}.
+		\item \textbf{\textit{has}}: uma permissão (\emph{PERMISSION}) é tida (\textit{has}) ou não por muitos papeis (\emph{ROLE}).
+	\end{itemize}
+	\item \emph{ROLE\_PERMISSION}: Entidade associativa auxiliar para \emph{ROLE} e \emph{PERMISSION}.
+	\item \emph{PAYMENT\_RECORD}: Entidade que representa um registro de pagamento.
+	\begin{itemize}
+		\item \textbf{\textit{has}}: um registro de pagamento (\emph{PAYMENT\_RECORD}) tem (\textit{has}) pelo menos um item de pagamento (\emph{PAYMENT\_ITEM}).
+		\item \textbf{\textit{is created by}}: um registro de pagamento (\emph{PAYMENT\_RECORD}) é criado (\textit{is created by}) por um profissional (\emph{PROFESSIONAL}).
+		\item \textbf{\textit{has}}: um registro de pagamento (\emph{PAYMENT\_RECORD}) é tido (\textit{has}) por um cliente (\emph{CUSTOMER}).
+	\end{itemize}
+	\item \emph{PAYMENT\_ITEM}: Entidade que representa um item de pagamento.
+	\begin{itemize}
+		\item \textbf{\textit{has}}: um item de pagamento (\emph{PAYMENT\_ITEM}) é tido (\textit{has}) por um registro de pagamento (\emph{PAYMENT\_RECORD}).
+		\item \textbf{\textit{has}}: um item de pagamento (\emph{PAYMENT\_ITEM}) tem (\textit{has}) uma oferta (\emph{OFFER}).
+	\end{itemize}
+	\item \emph{NOTIFICATION\_TEMPLATE}: Entidade que representa um template (modelo) de notificação.
+	\item \emph{NOTIFICATION}: Entidade que representa uma notificação.
+	\item \emph{SALON\_INFO}: Entidade que representa as informações do salão.
 \end{itemize}
 \begin{figure}[h!tbp]
 	\centering
