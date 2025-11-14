@@ -1,23 +1,37 @@
-import path from 'path'
-import express from 'express'
-import cors from 'cors'
-import { appRoutes } from './router'
+import { app } from './app'
+import { drainAndExit } from './events/notification-runner'
+import { registerNotificationListeners } from './events/notifications.listener'
+import { runDatabaseSeeds } from '../prisma/seeds/database-seeds.runner'
+import { AppLoggerInstance } from './utils/logger/logger.util'
+import { registerCronJobs } from './jobs/register-cron-jobs'
 
-const app = express()
+const port = process.env.PORT ?? 3000
 
-/* =========BACK-END-END====== */
-app.use(cors({
-  origin: '*'
-}))
-app.use(express.json())
-app.use('/api', appRoutes)
+async function startServer (): Promise<void> {
+  try {
+    await runDatabaseSeeds()
+    registerNotificationListeners()
+    registerCronJobs()
 
-/* =========FRONT-END====== */
-app.use(express.static(path.join(__dirname, '..', '..', 'front-end', 'build')))
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', '..', 'front-end', 'build', 'index.html'))
-})
+    app.listen(port, () => {
+      AppLoggerInstance.info(`HTTP Server listening on port ${port}`)
+    })
+    process.on('SIGTERM', () => {
+      AppLoggerInstance.info('HTTP Server Shutting down, draining notification queue...')
+      drainAndExit()
+        .then(() => {
+          process.exit(0)
+        })
+        .catch((error) => {
+          AppLoggerInstance.error('Error while draining notification queue during shutdown', error as Error)
+          process.exit(1)
+        })
+    })
+  } catch (error) {
+    AppLoggerInstance.error('Failed to start server:', error as Error)
+    process.exit(1)
+  }
+}
 
-app.listen(3000, () => {
-  console.log(`HTTP Server listening on port ${3000}`)
-})
+startServer()
+  .catch((error) => { AppLoggerInstance.error('Error trying to starting http server', error) })

@@ -95,6 +95,38 @@ Como o projeto encontra-se em estágio inicial, com constantes ajustes nas vari�
 optou-se por validar essas configurações manualmente durante o processo de integração e entrega contínua (\textit{CI/CD}). 
 Assim que os ambientes estiverem estabilizados, pretende-se automatizar parte dessas verificações para garantir maior consistência entre os diferentes estágios de desenvolvimento.
 
+\subsubsection{Testes de Segurança}
+Os testes de segurança são fundamentais para garantir que a aplicação esteja protegida contra vulnerabilidades conhecidas e siga as melhores práticas de segurança web. 
+Neste projeto, foram realizadas validações focadas em dois aspectos críticos: configuração de cabeçalhos de segurança HTTP e segurança de protocolo SSL/TLS.
+
+\paragraph{Teste de Cabeçalhos de Segurança HTTP (\textit{Security Headers Test})}
+A avaliação dos cabeçalhos de segurança foi realizada utilizando a ferramenta \textbf{\textit{Security Headers}}~\cite{securityheaders-2025}, 
+que analisa a presença e configuração de cabeçalhos HTTP essenciais para proteção contra ataques comuns, como \textit{clickjacking}, \textit{XSS} (\textit{Cross-Site Scripting}), injeção de conteúdo malicioso e vazamento de informações sensíveis.
+
+A aplicação obteve classificação \textbf{A}, indicando conformidade com as principais diretrizes de segurança de cabeçalhos HTTP. 
+Essa pontuação reflete a implementação adequada de políticas de segurança, incluindo:
+
+\begin{itemize}
+	\item \textbf{\textit{Content-Security-Policy} (CSP):} Define fontes confiáveis para carregamento de recursos (\textit{scripts}, estilos, imagens), 
+	prevenindo ataques de injeção de código malicioso.
+	\item \textbf{\textit{Strict-Transport-Security} (HSTS):} Força a comunicação exclusivamente via HTTPS, protegendo contra ataques de \textit{downgrade} e interceptação de tráfego.
+	\item \textbf{\textit{X-Content-Type-Options}:} Impede que navegadores interpretem arquivos de forma incorreta (\textit{MIME type sniffing}), reduzindo riscos de execução de código não autorizado.
+	\item \textbf{\textit{X-Frame-Options}:} Protege contra ataques de \textit{clickjacking}, impedindo que a aplicação seja incorporada em \textit{frames} ou \textit{iframes} não autorizados.
+	\item \textbf{\textit{Referrer-Policy}:} Controla a quantidade de informação de referência enviada nas requisições, evitando vazamento de dados sensíveis.
+	\item \textbf{\textit{Permissions-Policy}:} Restringe o uso de APIs e recursos do navegador (câmera, microfone, geolocalização), limitando superfícies de ataque.
+\end{itemize}
+
+A pontuação A confirma que a aplicação segue rigorosamente as boas práticas de segurança recomendadas por organizações como \textit{OWASP} (\textit{Open Web Application Security Project}). Abaixo, segue imagem que ilustra o resultado obtido na análise dos cabeçalhos de segurança HTTP:
+
+\begin{figure}[htb]
+  \centering
+  \caption{Resultado do Teste de Cabeçalhos de Segurança HTTP}
+  \includegraphics[width=\textwidth]{cap04-desenvolvimento/images/4-5-security-headers.png}
+  \label{fig:security-headers-test}
+  \fonte{Produzido pelos autores}
+\end{figure}
+\FloatBarrier
+
 \subsection{Testes automatizados}
 Os testes automatizados agrupam os dois tipos de testes que são usados no desenvolvimento do projeto: unitários e integrados, que são executados de forma automática por ferramentas de validação contínua.
 

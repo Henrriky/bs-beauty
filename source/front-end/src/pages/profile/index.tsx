@@ -12,13 +12,14 @@ import { setToken } from '../../store/auth/auth-slice'
 import { UserType } from '../../store/auth/types'
 import { decodeUserToken } from '../../utils/decode-token'
 import CustomerProfile from './components/CustomerProfile'
-import EmployeeProfile from './components/EmployeeProfile'
+import ProfessionalProfile from './components/ProfessionalProfile'
 import ProfilePicture from './components/ProfilePicture'
+import { PageHeader } from '../../layouts/PageHeader'
 
 const userTypeToProfileComponents = {
   [UserType.CUSTOMER]: CustomerProfile,
-  [UserType.EMPLOYEE]: EmployeeProfile,
-  [UserType.MANAGER]: EmployeeProfile,
+  [UserType.PROFESSIONAL]: ProfessionalProfile,
+  [UserType.MANAGER]: ProfessionalProfile,
 }
 
 function Profile() {
@@ -26,19 +27,15 @@ function Profile() {
   const user = useAppSelector((state) => state.auth.user!)
   const tokens = useAppSelector((state) => state.auth.token)
 
-  const { data, isLoading, isError, error } = authAPI.useFetchUserInfoQuery()
+  const { data, isLoading, isError, error, refetch } =
+    authAPI.useFetchUserInfoQuery()
 
-  async function handleUpdateProfileToken() {
-    if (!tokens?.googleAccessToken) {
-      toast.error('Token de acesso inválido')
-      return
-    }
-
+  async function refreshTokenIfGoogle() {
+    if (!tokens?.googleAccessToken) return
     try {
       const { accessToken } = await AuthAPI.loginWithGoogleAccessToken(
-        tokens.googleAccessToken
+        tokens.googleAccessToken,
       )
-
       const decodedToken = decodeUserToken(accessToken)
 
       dispatchRedux(
@@ -56,7 +53,7 @@ function Profile() {
             accessToken,
             expiresAt: decodedToken.exp!,
           },
-        })
+        }),
       )
 
       localStorage.setItem('token', accessToken)
@@ -65,6 +62,11 @@ function Profile() {
       console.error('Erro ao atualizar token:', err)
       toast.error('Erro ao atualizar token')
     }
+  }
+
+  const handlePostProfileUpdate = async () => {
+    await refreshTokenIfGoogle()
+    await refetch()
   }
 
   if (isLoading) {
@@ -97,12 +99,18 @@ function Profile() {
   return (
     <div className="h-full flex flex-col justify-between">
       <div>
-        <div className="flex flex-col gap-4 mb-6">
-          <Title align="left">Perfil</Title>
-          <ProfilePicture profilePhotoUrl={user.profilePhotoUrl} />
+        <div className="flex flex-col gap-3">
+          <PageHeader
+            title="Perfil"
+            subtitle="Gerencie suas informações pessoais aqui."
+          />
+          <ProfilePicture
+            profilePhotoUrl={user.profilePhotoUrl}
+            displayName={userInfo.name ?? undefined}
+          />
           <ProfileContainer
             userInfo={userInfo}
-            onProfileUpdate={handleUpdateProfileToken}
+            onProfileUpdate={handlePostProfileUpdate}
           />
         </div>
       </div>

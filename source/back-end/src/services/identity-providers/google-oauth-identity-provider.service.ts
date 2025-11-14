@@ -34,7 +34,7 @@ class GoogleAuthIdentityProvider implements OAuthIdentityProvider {
     oauth2Client.setCredentials(tokens)
 
     if (tokens.access_token == null) {
-      throw new Error(`Error trying to exchange code by token: access_token property null or undefined ${tokens}`)
+      throw new Error(`Error trying to exchange code by token: access_token property null or undefined ${JSON.stringify(tokens)}`)
     }
 
     return { accessToken: tokens.access_token }

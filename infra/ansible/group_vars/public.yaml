@@ -1,0 +1,10 @@
+# SSL Configuration
+cert_path: /etc/nginx/certs
+ssl_cert_path: "{{ cert_path }}/fullchain.pem"
+ssl_key_path: "{{ cert_path }}/privkey.pem"
+ssl_cert_content: "{{ lookup('file', lookup('env', 'SSL_CERT_PATH')) }}"
+ssl_key_content: "{{ lookup('file', lookup('env', 'SSL_KEY_PATH')) }}"
+
+# Nginx Configuration
+server_name: "bsbeauty.duckdns.org"
+upstream_server: "{{ lookup('env','PRIVATE_HOST')}}"

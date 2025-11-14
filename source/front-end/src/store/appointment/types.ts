@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { AppointmentSchemas } from "../../utils/validation/zod-schemas/appointment.zod-schemas.validation.utils"
 // import { AppointmentServiceSchemas } from "../../utils/validation/zod-schemas/appointment-service.zod-schemas.validation.util"
-import { Employee } from "../auth/types"
+import { Professional } from "../auth/types"
 
 export enum Status {
   PENDING = "PENDING",
@@ -23,6 +23,7 @@ export interface Appointment {
   observation: string | null;
   status: Status;
   appointmentDate: string;
+  allowImageUse: boolean
   customerId: string;
   serviceOfferedId: string;
   createdAt: Date;
@@ -34,6 +35,7 @@ export interface FindAppointmentByCustomerId {
   observation: string | null;
   status: Status;
   appointmentDate: string;
+  allowImageUse: boolean
   customerId: string;
   serviceOfferedId: string;
   createdAt: Date;
@@ -42,7 +44,7 @@ export interface FindAppointmentByCustomerId {
   // serviceOffered: {
   //   id: string
   //   estimatedTime: number
-  //   employee: Employee
+  //   professional: Professional
   //   service: {
   //     name: string
   //   }
@@ -50,28 +52,59 @@ export interface FindAppointmentByCustomerId {
   offer: {
     id: string
     estimatedTime: number
-    employee: Employee
+    professional: Professional
     service: {
       name: string
     }
   }
+  rating: {
+    id: string
+    score: number | null
+    comment: string | null
+
+  } | undefined
 }
 export interface FindAppointmentById {
   id: string
   observation: string | null
   status: Status
   appointmentDate: string
+  allowImageUse: boolean
   customerId: string
   serviceOfferedId: string
   offer: {
     id: string
     estimatedTime: number
     price: string
-    employee: Employee
+    professional: Professional
     service: {
       name: string
     }
   }
+  rating: {
+    id: string
+    score: number | null
+    comment: string | null
+    
+  } | undefined
 }
+
+export interface PaginatedAppointmentsResponse {
+  data: FindAppointmentByCustomerId[]
+  total: number
+  page: number
+  totalPages: number
+  limit: number
+}
+
+export interface FindAllAppointmentsParams {
+  page?: number
+  limit?: number
+  from?: string
+  to?: string
+  status?: Status[]
+  viewAll?: boolean
+}
+
 
 export type CreateAppointmentAPIData = z.infer<typeof AppointmentSchemas.createSchemaForm>

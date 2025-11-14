@@ -31,19 +31,19 @@ class OffersController {
     try {
       const useCase = makeOffersUseCaseFactory()
       const serviceId = req.params.serviceId
-      const offer = await useCase.executeFindByServiceId(serviceId)
+      const offers = await useCase.executeFindByServiceId(serviceId)
 
-      res.send(offer)
+      res.send(offers)
     } catch (error) {
       next(error)
     }
   }
 
-  public static async handleFindByEmployeeId (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByProfessionalId (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeOffersUseCaseFactory()
-      const employeeId = req.params.employeeId
-      const { offers } = await useCase.executeFindByEmployeeId(employeeId)
+      const professionalId = req.params.professionalId
+      const { offers } = await useCase.executeFindByProfessionalId(professionalId)
 
       res.send({ offers })
     } catch (error) {
@@ -90,13 +90,15 @@ class OffersController {
 
   public static async handleFetchAvailableSchedulingToOfferByDay (req: Request, res: Response, next: NextFunction) {
     try {
+      const { userId } = req.user
       const useCase = makeOffersUseCaseFactory()
       const serviceOfferingId = req.params.id
       const dayToFetchAvailableSchedulling: Date = new Date((req.query.dayToFetchAvailableSchedulling as string))
-
-      const { availableSchedulling } = await useCase.executeFetchAvailableSchedulingToOfferByDay(
+      const { availableSchedulling } = await useCase.executeFetchAvailableSchedulingToOfferByDay({
+        customerId: userId,
         serviceOfferingId,
         dayToFetchAvailableSchedulling
+      }
       )
 
       res.send({ availableSchedulling })
@@ -105,14 +107,14 @@ class OffersController {
     }
   }
 
-  public static async handleFindByEmployeeIdPaginated (req: Request, res: Response, next: NextFunction) {
+  public static async handleFindByProfessionalIdPaginated (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeOffersUseCaseFactory()
       const parsed = offerQuerySchema.parse(req.query)
       const { page, limit, ...filters } = parsed
-      const employeeId = req.params.employeeId
-      const result = await useCase.executeFindByEmployeeIdPaginated(
-        employeeId,
+      const professionalId = req.params.professionalId
+      const result = await useCase.executeFindByProfessionalIdPaginated(
+        professionalId,
         {
           page,
           limit,

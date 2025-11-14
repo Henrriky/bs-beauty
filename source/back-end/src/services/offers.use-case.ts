@@ -1,4 +1,4 @@
-import { type Prisma, type Offer } from '@prisma/client'
+import { type Prisma, type Offer, ServiceStatus } from '@prisma/client'
 import { type OfferRepository } from '../repository/protocols/offer.repository'
 import { RecordExistence } from '../utils/validation/record-existence.validation.util'
 import { CustomError } from '../utils/errors/custom.error.util'
@@ -6,6 +6,9 @@ import { type ShiftRepository } from '../repository/protocols/shift.repository'
 import { DateFormatter } from '../utils/formatting/date.formatting.util'
 import { type PaginatedRequest, type PaginatedResult } from '../types/pagination'
 import { type OffersFilters } from '../types/offers/offers-filters'
+import { type AppointmentRepository } from '../repository/protocols/appointment.repository'
+import { type ServiceRepository } from '@/repository/protocols/service.repository'
+import { type BlockedTimesUseCase } from './blocked-times.use-case'
 
 interface OfferOutput {
   offers: Offer[]
@@ -17,10 +20,15 @@ interface AvailablesSchedulling {
   isBusy: boolean
 }
 
+const VALID_STATUS_OF_SERVICE_TO_OFFER = ServiceStatus.APPROVED
+
 class OffersUseCase {
   constructor (
     private readonly offerRepository: OfferRepository,
-    private readonly shiftRepository: ShiftRepository
+    private readonly shiftRepository: ShiftRepository,
+    private readonly appointmentRepository: AppointmentRepository,
+    private readonly serviceRepository: ServiceRepository,
+    private readonly blockedTimesUseCase: BlockedTimesUseCase
   ) { }
 
   public async executeFindAll (): Promise<OfferOutput> {
@@ -38,14 +46,14 @@ class OffersUseCase {
   }
 
   public async executeFindByServiceId (serviceId: string) {
-    const offer = await this.offerRepository.findByServiceId(serviceId)
-    RecordExistence.validateRecordExistence(offer, 'Offer')
+    const offers = await this.offerRepository.findByServiceId(serviceId)
+    RecordExistence.validateManyRecordsExistence(offers ?? [], 'offers')
 
-    return offer
+    return offers
   }
 
-  public async executeFindByEmployeeId (employeeId: string): Promise<OfferOutput> {
-    const offers = await this.offerRepository.findByEmployeeId(employeeId)
+  public async executeFindByProfessionalId (professionalId: string): Promise<OfferOutput> {
+    const offers = await this.offerRepository.findByProfessionalId(professionalId)
     RecordExistence.validateManyRecordsExistence(offers, 'offers')
 
     return { offers }
@@ -54,9 +62,17 @@ class OffersUseCase {
   public async executeCreate (offerToCreate: Prisma.OfferCreateInput) {
     const offer = offerToCreate as unknown as Offer
     const serviceId = offer.serviceId
-    const employeeId = offer.employeeId
-    const offerFound = await this.offerRepository.findByEmployeeAndServiceId(serviceId, employeeId)
+    const professionalId = offer.professionalId
+    const offerFound = await this.offerRepository.findByProfessionalAndServiceId(serviceId, professionalId)
     RecordExistence.validateRecordNonExistence(offerFound, 'Offer')
+
+    const service = await this.serviceRepository.findById(serviceId)
+    RecordExistence.validateRecordExistence(service, 'Service')
+    const serviceHasValidStatus = service?.status === VALID_STATUS_OF_SERVICE_TO_OFFER
+    if (!serviceHasValidStatus) {
+      throw new CustomError('Bad Request', 400, `Service must be ${VALID_STATUS_OF_SERVICE_TO_OFFER.toString()} to create an offer.`)
+    }
+
     const newOffer = await this.offerRepository.create(offerToCreate)
 
     return newOffer
@@ -76,7 +92,16 @@ class OffersUseCase {
     return deletedOffer
   }
 
-  public async executeFetchAvailableSchedulingToOfferByDay (serviceOfferingId: string, dayToFetchAvailableSchedulling: Date) {
+  public async executeFetchAvailableSchedulingToOfferByDay (
+    {
+      customerId,
+      serviceOfferingId,
+      dayToFetchAvailableSchedulling
+    }: {
+      customerId: string
+      serviceOfferingId: string
+      dayToFetchAvailableSchedulling: Date
+    }) {
     // Validate
     const serviceOffering = await this.offerRepository.findById(serviceOfferingId)
     const isValidServiceOffering = serviceOffering != null && serviceOffering?.isOffering
@@ -85,42 +110,69 @@ class OffersUseCase {
       throw new CustomError('Unable to fetch available scheduling because offer not exists or is not being offering', 400)
     }
 
-    const employeeShiftByDay = await this.shiftRepository.findByEmployeeAndWeekDay(serviceOffering.employeeId, DateFormatter.formatDayOfDateToWeekDay(dayToFetchAvailableSchedulling))
-    const isValidEmployeeShiftByDay = (employeeShiftByDay !== null) && !employeeShiftByDay.isBusy
+    const professionalShiftByDay = await this.shiftRepository.findByProfessionalAndWeekDay(serviceOffering.professionalId, DateFormatter.formatDayOfDateToWeekDay(dayToFetchAvailableSchedulling))
+    const isValidProfessionalShiftByDay = (professionalShiftByDay !== null) && !professionalShiftByDay.isBusy
 
-    if (!isValidEmployeeShiftByDay) {
-      throw new CustomError('Unable to fetch available scheduling because employee does not work on this day or not exists', 400, '')
+    if (!isValidProfessionalShiftByDay) {
+      throw new CustomError('Unable to fetch available scheduling because professional does not work on this day or not exists', 400, '')
     }
 
-    const { shiftEnd, shiftStart } = employeeShiftByDay
+    const { shiftEnd, shiftStart } = professionalShiftByDay
 
-    const currentDayShiftEndTimeAsDate = new Date(dayToFetchAvailableSchedulling)
-    currentDayShiftEndTimeAsDate.setHours(employeeShiftByDay.shiftEnd.getHours(), shiftEnd.getMinutes(), shiftEnd.getSeconds(), shiftEnd.getMilliseconds())
-    const currentDayShiftEndTime = currentDayShiftEndTimeAsDate.getTime()
+    // Determine start and end cut-off date based on the professional shift
+    const { timestamp: currentDayShiftEndTime, date: currentDayShiftEndTimeAsDate } = this.getDateForCombinedDays({
+      dayToExtractDate: dayToFetchAvailableSchedulling,
+      dayToExtractTime: shiftEnd
+    })
 
-    const currentStartTimeAsDate = new Date(dayToFetchAvailableSchedulling)
-    currentStartTimeAsDate.setHours(shiftStart.getHours(), shiftStart.getMinutes(), shiftStart.getSeconds(), shiftStart.getMilliseconds())
-    let currentStartTime = currentStartTimeAsDate.getTime()
-
+    let { timestamp: currentDayStartTime, date: currentDayShiftStartTimeAsDate } = this.getDateForCombinedDays({
+      dayToExtractDate: dayToFetchAvailableSchedulling,
+      dayToExtractTime: shiftStart
+    })
+    // Determine estimated time in seconds
     const estimatedTimeMs = serviceOffering.estimatedTime * 60_000
 
-    const { validAppointmentsOnDay } = await this.offerRepository.fetchValidAppointmentsByProfessionalOnDay(
-      serviceOffering.employeeId,
-      dayToFetchAvailableSchedulling
-    )
+    // Search non finished appointments by professional and customer on day
+    const [
+      { validAppointmentsOnDay: nonFinishedAppointmentsByProfessionalOnDay },
+      { validAppointmentsOnDay: nonFinishedAppointmentsByCustomerOnDay }
+    ] =
+      await Promise.all([
+        this.appointmentRepository.findNonFinishedByUserAndDay(
+          serviceOffering.professionalId,
+          dayToFetchAvailableSchedulling
+        ),
+        this.appointmentRepository.findNonFinishedByUserAndDay(
+          customerId,
+          dayToFetchAvailableSchedulling
+        )
+      ])
 
+    const nonFinishedAppointmentsByCustomerAndProfessionalOnDay = [
+      ...nonFinishedAppointmentsByCustomerOnDay,
+      ...nonFinishedAppointmentsByProfessionalOnDay
+    ]
+
+    const blockedTimesValidForDay = await this.blockedTimesUseCase.executeFindByProfessionalAndPeriod({
+      professionalId: serviceOffering.professionalId,
+      startDate: currentDayShiftStartTimeAsDate.toISOString(),
+      endDate: currentDayShiftEndTimeAsDate.toISOString()
+    })
+
+    // Variable that should be returned.
     const availableSchedulling: AvailablesSchedulling[] = []
 
-    const hasAppointments = Array.isArray(validAppointmentsOnDay) && validAppointmentsOnDay.length > 0
-    while ((currentStartTime + estimatedTimeMs) <= currentDayShiftEndTime) {
-      const startTimestamp = currentStartTime
+    const hasAppointments = nonFinishedAppointmentsByCustomerAndProfessionalOnDay.length > 0
+    const hasBlockedTimes = blockedTimesValidForDay.length > 0
+    while ((currentDayStartTime + estimatedTimeMs) <= currentDayShiftEndTime) {
+      const startTimestamp = currentDayStartTime
       const endTimestamp = startTimestamp + estimatedTimeMs
 
       let isBusy = false
-      let skipAheadTime = estimatedTimeMs
+      let nextCurrentDayStartTime = currentDayStartTime + estimatedTimeMs
 
       if (hasAppointments) {
-        const overlappingAppointment = validAppointmentsOnDay.find(appointment => {
+        const overlappingAppointment = nonFinishedAppointmentsByCustomerAndProfessionalOnDay.find(appointment => {
           const appointmentStart = appointment.appointmentDate.getTime()
           const appointmentDuration = appointment.estimatedTime * 60_000
           const appointmentEnd = appointmentStart + appointmentDuration
@@ -130,9 +182,46 @@ class OffersUseCase {
           return overlaps
         })
 
-        if (overlappingAppointment) {
+        if (overlappingAppointment != null) {
           isBusy = true
-          skipAheadTime = overlappingAppointment.estimatedTime * 60_000
+          // const ONE_MINUTE_IN_MS = 1000 * 60
+          // const appointmentStart = overlappingAppointment.appointmentDate.getTime()
+          // const appointmentDuration = overlappingAppointment.estimatedTime * 60_000
+          // const overlappingAppointmentEndTime = appointmentStart + appointmentDuration + ONE_MINUTE_IN_MS
+          // nextCurrentDayStartTime = overlappingAppointmentEndTime
+        }
+      }
+
+      if (hasBlockedTimes) {
+        const overlappingBlockedTime = blockedTimesValidForDay.find(blockedTime => {
+          const blockedTimeStartHourAsDate = new Date(dayToFetchAvailableSchedulling)
+          blockedTimeStartHourAsDate.setHours(
+            blockedTime.startTime.getHours(),
+            blockedTime.startTime.getMinutes(),
+            blockedTime.startTime.getSeconds(),
+            blockedTime.startTime.getMilliseconds()
+          )
+          const { timestamp: blockedTimeStartHourTimestamp } = this.getDateForCombinedDays({
+            dayToExtractDate: dayToFetchAvailableSchedulling,
+            dayToExtractTime: blockedTime.startTime
+          })
+          const { timestamp: blockedTimeEndHourTimestamp } = this.getDateForCombinedDays({
+            dayToExtractDate: dayToFetchAvailableSchedulling,
+            dayToExtractTime: blockedTime.endTime
+          })
+
+          const overlaps = startTimestamp < blockedTimeEndHourTimestamp && endTimestamp > blockedTimeStartHourTimestamp
+
+          return overlaps
+        })
+
+        if (overlappingBlockedTime != null) {
+          isBusy = true
+          const { timestamp: blockedTimeEndHourTimestamp } = this.getDateForCombinedDays({
+            dayToExtractDate: dayToFetchAvailableSchedulling,
+            dayToExtractTime: overlappingBlockedTime.endTime
+          })
+          nextCurrentDayStartTime = blockedTimeEndHourTimestamp
         }
       }
 
@@ -142,19 +231,33 @@ class OffersUseCase {
         isBusy
       })
 
-      currentStartTime += skipAheadTime
+      currentDayStartTime = nextCurrentDayStartTime
     }
 
     return { availableSchedulling }
   }
 
-  public async executeFindByEmployeeIdPaginated (
-    employeeId: string,
+  public async executeFindByProfessionalIdPaginated (
+    professionalId: string,
     params: PaginatedRequest<OffersFilters>
   ): Promise<PaginatedResult<Offer>> {
-    const result = await this.offerRepository.findByEmployeeIdPaginated(employeeId, params)
+    const result = await this.offerRepository.findByProfessionalIdPaginated(professionalId, params)
 
     return result
+  }
+
+  private getDateForCombinedDays (
+    {
+      dayToExtractTime,
+      dayToExtractDate
+    }: {
+      dayToExtractTime: Date
+      dayToExtractDate: Date
+    }
+  ) {
+    const mainDay = new Date(dayToExtractDate)
+    mainDay.setHours(dayToExtractTime.getHours(), dayToExtractTime.getMinutes(), dayToExtractTime.getSeconds(), dayToExtractTime.getMilliseconds())
+    return { timestamp: mainDay.getTime(), date: mainDay }
   }
 }
 

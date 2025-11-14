@@ -1,21 +1,37 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import ExclamationMarkIcon from '../../../../src/assets/exclamation-mark.svg'
 import { Button } from '../../../components/button/Button'
+import { Checkbox } from '../../../components/inputs/Checkbox'
 import { Input } from '../../../components/inputs/Input'
+import { Select } from '../../../components/inputs/Select'
+import Subtitle from '../../../components/texts/Subtitle'
 import { Customer } from '../../../store/auth/types'
+import { customerAPI } from '../../../store/customer/customer-api'
 import { userAPI } from '../../../store/user/user-api'
 import { Formatter } from '../../../utils/formatter/formatter.util'
+import { CustomerUpdateProfileFormData } from '../types'
 import { CustomerSchemas } from '../../../utils/validation/zod-schemas/customer.zod-schemas.validation.util'
-import { CustomerUpdateProfileFormData } from './types'
+import Modal from '../../services/components/Modal'
+import useAppDispatch from '../../../hooks/use-app-dispatch'
+import { refreshUserToken } from '../../../utils/auth/refresh-token.util'
 
 interface CustomerProfileProps {
   userInfo: Customer
   onProfileUpdate: () => void
 }
 
+const NOTIFICATION_OPTIONS = [
+  { value: 'NONE', label: 'Não receber' },
+  { value: 'IN_APP', label: 'Receber pela plataforma' },
+  { value: 'ALL', label: 'Receber pela plataforma e por email' },
+]
+
 function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
   const [updateProfile, { isLoading }] = userAPI.useUpdateProfileMutation()
+  const dispatch = useAppDispatch()
 
   const {
     register,
@@ -36,6 +52,8 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
       phone: userInfo.phone || undefined,
       name: userInfo.name || undefined,
       email: userInfo.email || undefined,
+      alwaysAllowImageUse: userInfo.alwaysAllowImageUse ?? undefined,
+      notificationPreference: userInfo.notificationPreference ?? undefined,
     },
   })
 
@@ -45,15 +63,20 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
       profileData: data,
     })
       .unwrap()
-      .then(() => {
+      .then(async () => {
         toast.success('Perfil atualizado com sucesso!')
+
+        await refreshUserToken(dispatch)
         onProfileUpdate()
+        dispatch(customerAPI.util.invalidateTags(['Customers']))
       })
       .catch((error: unknown) => {
         console.error('Error trying to complete register', error)
         toast.error('Ocorreu um erro ao atualizar o perfil')
       })
   }
+
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
 
   return (
     <form
@@ -106,6 +129,29 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
         value={userInfo.email}
         disabled
       />
+      <Select
+        registration={{ ...register('notificationPreference') }}
+        id="notificationPreference"
+        label="Deseja receber notificações?"
+        options={NOTIFICATION_OPTIONS}
+        error={errors?.notificationPreference?.message?.toString()}
+        variant="outline"
+        wrapperClassName="w-full"
+      />
+      <Checkbox
+        registration={{
+          ...register('alwaysAllowImageUse'),
+        }}
+        label="Permitir o uso de minha imagem."
+        id="alwaysAllowImageUse"
+        error={errors?.alwaysAllowImageUse?.message?.toString()}
+      />
+      <span
+        onClick={() => setModalIsOpen(true)}
+        className="text-primary-100 hover:text-primary-0 hover:cursor-pointer hover:underline transition-all w-fit"
+      >
+        O que é isso?
+      </span>
       <Button
         type="submit"
         label={
@@ -120,6 +166,35 @@ function CustomerProfile({ userInfo, onProfileUpdate }: CustomerProfileProps) {
         }
         disabled={isLoading}
       />
+      <Modal
+        className="bg-[#54493F] font-normal relative"
+        isOpen={modalIsOpen}
+        onClose={() => {
+          setModalIsOpen(false)
+        }}
+      >
+        <img
+          src={ExclamationMarkIcon}
+          alt="Ícone de seta"
+          className="absolute -top-[40px] max-w-[150px] max-h-[150px]"
+        />
+        <div className="flex flex-col items-center justify-between h-full pt-8 pb-4">
+          <div className="flex-grow flex items-center justify-center">
+            <Subtitle className="text-[#B5B5B5]" align="center">
+              A permissão para uso de imagem se refere a permissão de retirar
+              fotos durante os procedimentos para divulgar nas redes sociais.
+            </Subtitle>
+          </div>
+          <Button
+            className="transition-all bg-[#A4978A] text-[#54493F] font-medium hover:bg-[#4e483f] hover:text-white"
+            label={'Ok'}
+            id={'agree'}
+            onClick={() => {
+              setModalIsOpen(false)
+            }}
+          />
+        </div>
+      </Modal>
     </form>
   )
 }

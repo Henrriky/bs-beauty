@@ -4,7 +4,7 @@ export type Offer = {
   price: number
   isOffering: boolean
   serviceId: string
-  employeeId: string
+  professionalId: string
   createdAt: Date
   updatedAt: Date
 }

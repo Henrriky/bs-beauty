@@ -11,12 +11,12 @@ import {
   OnSubmitAppointmentDetailsUpdateForm,
 } from '../types'
 import useAppDispatch from '../../../hooks/use-app-dispatch'
-import EmployeeAppointmentDetails from './EmployeeAppointmentDetails'
+import ProfessionalAppointmentDetails from './ProfessionalAppointmentDetails'
 
 const userTypeToAppointmentDetailsComponents = {
   [UserType.CUSTOMER]: CustomerAppointmentDetails,
-  [UserType.EMPLOYEE]: EmployeeAppointmentDetails,
-  [UserType.MANAGER]: EmployeeAppointmentDetails,
+  [UserType.PROFESSIONAL]: ProfessionalAppointmentDetails,
+  [UserType.MANAGER]: ProfessionalAppointmentDetails,
 }
 
 function AppointmentDetails() {
@@ -55,6 +55,9 @@ function AppointmentDetails() {
   const [updateAppointment, { isLoading: isLoadingUpdateAppontmentService }] =
     appointmentAPI.useUpdateAppointmentServiceMutation()
 
+  const [finishAppointment, { isLoading: isLoadingFinishAppointment }] =
+    appointmentAPI.useFinishAppointmentMutation()
+
   if (isLoading) {
     return <BSBeautyLoading title="Carregando as informações..." />
   }
@@ -78,61 +81,70 @@ function AppointmentDetails() {
   }
 
   const handleSubmitConcrete: OnSubmitAppointmentDetailsUpdateForm = async (
-    data,
+    formData,
   ) => {
-    await updateAppointment({
-      id: appointmentId,
-      status: data.status,
-      ...('observation' in data ? { observation: data.observation } : {}),
-    })
-      .unwrap()
-      .then(() => {
-        dispatchRedux(
-          appointmentAPI.util.updateQueryData(
-            'findAppointmentServiceById',
-            { appointmentId },
-            (draft) => {
-              draft.observation = (
-                'observation' in data ? data.observation : null
-              ) as null | string
-              if (data.status) {
-                draft.status = data.status
-              }
-            },
-          ),
-        )
-        dispatchRedux(
-          appointmentAPI.util.updateQueryData(
-            'findAppointmentsByCustomerOrEmployeeId',
-            undefined,
-            (draft) => {
-              if (!data.status) return
+    const handleSuccess = () => {
+      dispatchRedux(
+        appointmentAPI.util.updateQueryData(
+          'findAppointmentServiceById',
+          { appointmentId },
+          (draft) => {
+            draft.observation = (
+              'observation' in formData ? formData.observation : null
+            ) as null | string
+            if (formData.status) {
+              draft.status = formData.status
+            }
+          },
+        ),
+      )
+      dispatchRedux(
+        appointmentAPI.util.invalidateTags([
+          { type: 'Appointments', id: 'LIST' },
+        ]),
+      )
+      toast.success('Agendamento atualizado com sucesso!')
+      navigate('/appointments')
+    }
 
-              const appointmentIndex = draft.appointments.findIndex(
-                (appointment) => appointment.id === appointmentId,
-              )
+    const handleError = (error: unknown) => {
+      console.error('Error trying to update appointment', error)
+      toast.error('Ocorreu um erro ao atualizar o agendamento.')
+    }
 
-              if (appointmentIndex !== -1) {
-                draft.appointments[appointmentIndex].status = data.status
-              }
-            },
-          ),
-        )
-        toast.success('Agendamento atualizado com sucesso!')
-        navigate('/appointments')
+    if (formData.status === 'FINISHED') {
+      await finishAppointment({
+        id: appointmentId,
+        ...('observation' in formData
+          ? { observation: formData.observation }
+          : {}),
       })
-      .catch((error: unknown) => {
-        console.error('Error trying to complete register', error)
-        toast.error('Ocorreu um erro ao completar o seu cadastro.')
+        .unwrap()
+        .then(handleSuccess)
+        .catch(handleError)
+    } else {
+      await updateAppointment({
+        id: appointmentId,
+        status: formData.status,
+        ...('observation' in formData
+          ? { observation: formData.observation }
+          : {}),
       })
+        .unwrap()
+        .then(handleSuccess)
+        .catch(handleError)
+    }
   }
+
+  const isSubmitting =
+    isLoadingUpdateAppontmentService || isLoadingFinishAppointment
 
   return (
     <AppointmentDetailsContainer
       action={action}
       appointment={data}
       handleSubmitConcrete={handleSubmitConcrete}
-      handleSubmitConcreteIsLoading={isLoadingUpdateAppontmentService}
+      handleSubmitConcreteIsLoading={isSubmitting}
     />
   )
 }

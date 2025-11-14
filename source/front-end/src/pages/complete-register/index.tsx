@@ -2,24 +2,25 @@ import { toast } from 'react-toastify'
 
 import Title from '../../components/texts/Title'
 import CustomerInputContainer from './components/CustomerInputContainer'
-import EmployeeInputContainer from './components/EmployeeInputContainer'
+import ProfessionalInputContainer from './components/ProfessionalInputContainer'
 
 import useAppDispatch from '../../hooks/use-app-dispatch'
 import useAppSelector from '../../hooks/use-app-selector'
 import { authAPI } from '../../store/auth/auth-api'
-import { setRegisterCompleted, setToken } from '../../store/auth/auth-slice'
+import { setToken } from '../../store/auth/auth-slice'
+import { refreshUserToken } from '../../utils/auth/refresh-token.util'
 
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import * as AuthAPI from '../../api/auth-api'
 import { UserType } from '../../store/auth/types'
 import { decodeUserToken } from '../../utils/decode-token'
-import { OnSubmitEmployeeOrCustomerForm } from './types'
+import { OnSubmitProfessionalOrCustomerForm } from './types'
 
 const userTypesToInputContainers = {
   [UserType.CUSTOMER]: CustomerInputContainer,
-  [UserType.EMPLOYEE]: EmployeeInputContainer,
-  [UserType.MANAGER]: EmployeeInputContainer,
+  [UserType.PROFESSIONAL]: ProfessionalInputContainer,
+  [UserType.MANAGER]: ProfessionalInputContainer,
 }
 
 function CompleteRegister() {
@@ -35,13 +36,12 @@ function CompleteRegister() {
 
   async function handleUpdateProfileToken() {
     if (!tokens?.googleAccessToken) {
-      toast.error('Token de acesso inválido')
       return
     }
 
     try {
       const { accessToken } = await AuthAPI.loginWithGoogleAccessToken(
-        tokens.googleAccessToken
+        tokens.googleAccessToken,
       )
 
       const decodedToken = decodeUserToken(accessToken)
@@ -49,19 +49,14 @@ function CompleteRegister() {
       dispatchRedux(
         setToken({
           user: {
-            id: decodedToken.id,
-            userType: decodedToken.userType,
-            email: decodedToken.email,
-            name: decodedToken.name,
-            registerCompleted: decodedToken.registerCompleted,
-            profilePhotoUrl: decodedToken.profilePhotoUrl,
+            ...decodedToken,
           },
           token: {
             googleAccessToken: tokens.googleAccessToken,
             accessToken,
             expiresAt: decodedToken.exp!,
           },
-        })
+        }),
       )
 
       localStorage.setItem('token', accessToken)
@@ -73,15 +68,15 @@ function CompleteRegister() {
   }
 
   // REFACTOR TODO: Extract bellow function and useEffect to an customHook
-  const handleSubmit: OnSubmitEmployeeOrCustomerForm = async (data) => {
+  const handleSubmit: OnSubmitProfessionalOrCustomerForm = async (data) => {
     await completeRegister(data)
       .unwrap()
-      .then(() => {
-        dispatchRedux(
-          // TODO: Improve this refreshing token by complete register route
-          setRegisterCompleted()
-        )
-        handleUpdateProfileToken()
+      .then(async () => {
+        const tokenRefreshed = await refreshUserToken(dispatchRedux)
+
+        if (!tokenRefreshed) {
+          await handleUpdateProfileToken()
+        }
         navigate('/register-completed')
       })
       .catch((error: unknown) => {
@@ -93,7 +88,7 @@ function CompleteRegister() {
   useEffect(() => {
     if (user.registerCompleted) {
       toast.info(
-        'Você já completou seu registro, vamos te enviar para a tela inicial'
+        'Você já completou seu registro, vamos te enviar para a tela inicial',
       )
       navigate('/home')
     }
@@ -101,7 +96,7 @@ function CompleteRegister() {
   }, [])
 
   return (
-    <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn">
+    <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn max-w-[500px] mx-auto">
       <Title align="center">Quase lá, finalize seu cadastro</Title>
       <InputContainer handleSubmit={handleSubmit} isLoading={isLoading} />
     </div>
