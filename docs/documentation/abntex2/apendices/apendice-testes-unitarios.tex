@@ -1,18 +1,80 @@
 \chapter{Cobertura de Testes Unitários}
 \label{ap:teste-unitario}
 
-Este apêndice apresenta os relatórios de cobertura de testes unitários obtidos durante o desenvolvimento do sistema, bem como capturas de tela obtidas por meio do framework \textit{Vitest}.
+Este apêndice apresenta um recorte dos relatórios de cobertura de testes unitários
+obtidos durante o desenvolvimento do sistema, bem como capturas de tela geradas
+automaticamente pelo \textit{framework} \textbf{Vitest}. Os relatórios aqui
+apresentados referem-se à versão estável utilizada para a elaboração deste documento.
 
-\begin{figure}[hbtp]
+\section*{Resumo da cobertura}
+
+De forma geral, o \textit{back-end} alcançou os seguintes índices de cobertura:
+
+\begin{itemize}
+	\item \textbf{Cobertura global do diretório \texttt{src/}:}
+	cerca de \textbf{96{,}71\%} de instruções/linhas,
+	\textbf{98{,}55\%} de funções e
+	\textbf{92{,}32\%} de ramos.
+	\item \textbf{Módulo \texttt{src/controllers}:}
+	aproximadamente \textbf{91{,}52\%} de instruções/linhas,
+	\textbf{95{,}6\%} de funções e
+	\textbf{94{,}54\%} de ramos.
+	\item \textbf{Módulo \texttt{src/controllers/auth}:}
+	aproximadamente \textbf{97{,}36\%} de instruções/linhas,
+	\textbf{100\%} de funções e
+	\textbf{96{,}15\%} de ramos.
+	\item \textbf{Módulo \texttt{src/services}:}
+	aproximadamente \textbf{98{,}21\%} de instruções/linhas,
+	\textbf{99{,}25\%} de funções e
+	\textbf{92{,}68\%} de ramos.
+	\item \textbf{Módulo \texttt{src/services/use-cases/auth}:}
+	\textbf{100\%} de instruções/linhas e funções, com
+	cerca de \textbf{97{,}65\%} de ramos.
+\end{itemize}
+
+Esses valores indicam que os principais fluxos de negócio estão amplamente exercitados pelos testes unitários.
+
+\section*{Capturas dos relatórios de cobertura}
+
+A seguir, são apresentadas capturas da interface de relatório de cobertura, com foco
+na visão geral do projeto e nos módulos mais relevantes.
+
+\begin{figure}[htbp]
 	\centering
-	\includegraphics[width=1\textwidth]{apendices/images/cobertura-controllers.png}
-	\caption{Relatório de cobertura de testes unitários das controllers.}
-	\label{fig:coverage-agendamento}
+	\includegraphics[width=\textwidth]{apendices/images/cobertura-geral.png}
+	\caption{Visão geral da cobertura de testes unitários do diretório \texttt{src/}.}
+	\label{fig:coverage-src-geral}
+	\fonte{Produzido pelos autores a partir do relatório de cobertura do Vitest.}
 \end{figure}
 
-\begin{figure}[hbtp]
+\begin{figure}[htbp]
 	\centering
-	\includegraphics[width=1\textwidth]{apendices/images/captura-cobertura-auth-controllers.png}
-	\caption{Relatório de cobertura de testes unitários das controllers de autenticação.}
-	\label{fig:coverage-agendamento}
+	\includegraphics[width=\textwidth]{apendices/images/cobertura-controllers.png}
+	\caption{Cobertura de testes unitários das \textit{controllers} do back-end.}
+	\label{fig:coverage-controllers}
+	\fonte{Produzido pelos autores a partir do relatório de cobertura do Vitest.}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{apendices/images/cobertura-auth-controllers.png}
+	\caption{Cobertura de testes unitários das \textit{controllers} de autenticação.}
+	\label{fig:coverage-controllers-auth}
+	\fonte{Produzido pelos autores a partir do relatório de cobertura do Vitest.}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{apendices/images/cobertura-services.png}
+	\caption{Cobertura de testes unitários dos \textit{services} (casos de uso) do back-end.}
+	\label{fig:coverage-services}
+	\fonte{Produzido pelos autores a partir do relatório de cobertura do Vitest.}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{apendices/images/cobertura-auth-services.png}
+	\caption{Cobertura de testes unitários dos casos de uso de autenticação.}
+	\label{fig:coverage-services-auth}
+	\fonte{Produzido pelos autores a partir do relatório de cobertura do Vitest.}
 \end{figure}
