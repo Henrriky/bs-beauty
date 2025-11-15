@@ -128,9 +128,59 @@ A pontuação A confirma que a aplicação segue rigorosamente as boas práticas
 \FloatBarrier
 
 \subsection{Testes automatizados}
-Os testes automatizados agrupam os dois tipos de testes que são usados no desenvolvimento do projeto: unitários e integrados, que são executados de forma automática por ferramentas de validação contínua.
 
-A execução dos testes automatizados está ligada ao fluxo de integração contínua por meio da ferramenta \textbf{\textit{GitHub Actions}}~\cite{githubactions-2025}. Essa integração visa garantir que o código entregue atenda a padrões mínimos de qualidade e estabilidade em todas as etapas do desenvolvimento.  A cada \textit{push} ou \textit{pull request}, fluxos automatizados são executados para validar o código por meio de testes automatizados, análise estática, e verificação de cobertura. Esse processo assegura que apenas alterações estáveis e em conformidade com os padrões de qualidade sejam incorporadas à base de código principal, promovendo entregas seguras e contínuas ao longo do ciclo de desenvolvimento.
+Os testes automatizados deste projeto estão integrados ao fluxo de integração
+contínua por meio da ferramenta \textbf{\textit{GitHub Actions}}~\cite{githubactions-2025}. 
+A cada \textit{push} ou \textit{pull request} direcionado ao repositório principal,
+uma esteira de validação é acionada com o objetivo de impedir que alterações com
+erros básicos, vulnerabilidades conhecidas ou regressões evidentes sejam
+incorporadas à base de código.
+
+No contexto da \textit{CI}, são executados automaticamente 
+apenas os testes unitários do \textit{back-end}. 
+Os testes de integração permanecem fora da esteira, sendo realizados de forma
+manual em ambiente de desenvolvimento ou homologação, em função da maior
+complexidade de configuração de dependências externas (banco de dados e serviços
+de terceiros). 
+Para o \textit{front-end}, a validação automatizada concentra-se em análise
+estática e verificação de tipos, sem execução de testes unitários automatizados.
+
+De forma resumida, a esteira de \textit{CI/CD} contempla as seguintes etapas
+principais:
+
+\begin{itemize}
+	\item \textbf{Verificação de tipos em TypeScript (\textit{front-end} e \textit{back-end}):}
+	execução de uma etapa de \textit{TypeScript type check}, que compila os projetos
+	sem geração de artefatos finais, garantindo que não existam inconsistências de
+	tipos capazes de comprometer o processo de \textit{build}.
+	
+	\item \textbf{Execução de testes unitários do back-end:}
+	disparo da suíte de testes unitários do \textit{back-end} com o \textit{framework}
+	\textbf{Vitest}~\cite{vitest-2025}, incluindo a geração de relatórios de cobertura.
+	
+	\item \textbf{Análise estática e qualidade de código:}
+	envio do código para inspeção pela plataforma \textbf{SonarQube/SonarCloud}~\cite{sonarqube-2025},
+	complementando as verificações locais realizadas com \textbf{ESLint}~\cite{eslint-2025}. 
+	Essa etapa calcula métricas de qualidade, identifica \textit{code smells},
+	possíveis vulnerabilidades e duplicações, aplicando um \textit{quality gate}
+	antes da aprovação do \textit{merge}. No caso do \textit{front-end}, essa
+	análise estática é o principal mecanismo automatizado para detectar problemas
+	que poderiam inviabilizar a \textit{build}.
+	
+	\item \textbf{Varredura de segurança em dependências:}
+	utilização da ferramenta \textbf{Snyk}~\cite{snyk-2025} para identificar
+	vulnerabilidades conhecidas em bibliotecas e dependências externas do projeto.
+	Caso alguma falha crítica seja detectada, o \textit{pipeline} é marcado como
+	reprovado até que a correção seja realizada.
+\end{itemize}
+
+Com essa configuração, cada solicitação de \textit{merge} para a \textit{branch} de desenvolvimento (\textit{develop}) precisa passar
+obrigatoriamente pelas etapas de verificação de tipos, execução de testes
+unitários do \textit{back-end}, análise estática e varredura de segurança. 
+Dessa forma, a ramificação principal do repositório permanece em um estado
+constantemente executável, testado e monitorado quanto à qualidade e à segurança,
+tanto no \textit{back-end} quanto no \textit{front-end}.
+
 
 \subsection{\textit{Logs}}
 O sistema adota uma estratégia de registro de eventos por meio de mecanismos de \textit{logging} que visam fornecer visibilidade sobre o comportamento da aplicação durante sua execução. Esses registros são essenciais para atividades de depuração, monitoramento e manutenção.
