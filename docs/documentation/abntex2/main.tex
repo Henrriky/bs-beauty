@@ -21,8 +21,7 @@ chapter=TITLE % deixa capitulos em maiusculo
 
 % ---
 % Pacotes básicos 
-% ---
-\usepackage{lmodern}			% Usa a fonte Latin Modern			
+% ---ackage{lmodern}			% Usa a fonte Latin Modern			
 \usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
 \usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
 \usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
@@ -30,10 +29,16 @@ chapter=TITLE % deixa capitulos em maiusculo
 \usepackage{graphicx}			% Inclusão de gráficos
 \usepackage{microtype} 			% para melhorias de justificação
 % ---
-
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[section]{placeins} % cria barreira automática por seção
+\usepackage[T1]{fontenc}
+\usepackage{lmodern} % Latin Modern (Type 1/OT1 escalável)
+\usepackage{microtype}
 % ---
 % Pacotes adicionais, usados apenas no âmbito do Modelo Canônico do abnteX2
 % ---
+\usepackage{pdfpages}
 \usepackage{lipsum}				% para geração de dummy text
 % ---
 \usepackage{amssymb}   %para checkmark
@@ -254,6 +259,7 @@ chapter=TITLE % deixa capitulos em maiusculo
 \newacronym{sms}   {SMS}     {\emph{Short Message Service} – Serviço de Mensagens Curtas}
 \newacronym{spopie}{SPOPIE1} {Projeto Integrado de Extensão I}
 \newacronym{ssh}   {SSH}     {\emph{Secure Shell}}
+\newacronym{ssl}   {SSL}     {\emph{Secure Sockets Layer}}
 \newacronym{sso}   {SSO}     {\emph{Single Sign-On} – Autenticação Única}
 
 \newacronym{tef}   {TEF}     {Transferência Eletrônica de Fundos}
@@ -565,12 +571,47 @@ title={LISTA DE SIGLAS }
 	% Inicia os apêndices
 	% ---
 	\begin{apendicesenv}
+		\partapendices % página inicial "Apêndices"
 		
-		% Imprime uma página indicando o início dos apêndices
-		\partapendices
+		\chapter{Certificação SSL do Domínio} % título do apêndice
+		\label{app:ssl}
 		
-		\input{apendices/apendice-testes-unitarios.tex}
+	\cleardoublepage
+	\includepdf[
+	pages=-,
+	scale=0.95,                  % ajuste fino 0.9–0.97
+	pagecommand={\thispagestyle{plain}},
+	offset=0 -1cm,               % empurra para baixo (y negativo)
+	fitpaper=true
+	]{cap04-desenvolvimento/images/SSL-apendice.pdf}
 	
+\chapter{Testes de Integração}
+\label{app:integracao}
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[height=0.22\textheight]{cap04-desenvolvimento/images/teste1.jpeg}
+		\caption{Teste 1}
+	\end{subfigure}\par\vspace{0.4em}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[height=0.22\textheight]{cap04-desenvolvimento/images/teste2.jpeg}
+		\caption{Teste 2}
+	\end{subfigure}\par\vspace{0.4em}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[height=0.22\textheight]{cap04-desenvolvimento/images/teste3.jpeg}
+		\caption{Teste 3}
+	\end{subfigure}\par\vspace{0.4em}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[height=0.22\textheight]{cap04-desenvolvimento/images/teste4.jpeg}
+		\caption{Teste 4}
+	\end{subfigure}
+	\caption{Resultados dos testes de integração}
+	\label{fig:testes-vert}
+\end{figure}
 		
 	\end{apendicesenv}
 	

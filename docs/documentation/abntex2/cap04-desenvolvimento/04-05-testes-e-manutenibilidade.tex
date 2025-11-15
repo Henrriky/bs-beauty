@@ -71,6 +71,35 @@ Esses testes poderão ser incorporados futuramente, conforme o sistema amadureç
 \subsubsection{Testes de Integração}
 Assim como os testes unitários, os testes integrados seguem uma convenção de nomenclatura para manter a organização do projeto. Um exemplo de nome de arquivo seria \texttt{services.\allowbreak integration.\allowbreak spec.ts} que sinaliza tratar-se de um arquivo de testes vinculado ao módulo de serviços. Essa padronização contribui para a clareza estrutural do projeto de testes.
 
+\subsubsubsection{Resultado dos testes}
+
+O quadro abaixo (\ref{quad:resumo-testes}) ilustra todos os testes de integração feitos e seus respectivos resultados:
+
+
+\begin{quadro}[htbp] % ou [ht] / [H] conforme necessidade de posição
+	\centering
+	\caption{Resumo dos Testes Executados}
+	\label{quad:resumo-testes}
+	\begin{tabularx}{\textwidth}{|X|p{3cm}|}
+		\hline
+		\textbf{Teste} & \textbf{Resultado} \\
+		\hline
+		Sobreposição de agendamentos & \textit{PASS} \\
+		\hline
+		Autenticação no sistema & \textit{PASS} \\
+		\hline
+		Restrição na antecedência de tempo ao agendar & \textit{PASS} \\
+		\hline
+		Filtro de serviços & \textit{PASS} \\
+		\hline
+		Controle de acesso por roles & \textit{PASS} \\
+		\hline
+	\end{tabularx}
+	\fonte{Produzido pelos autores.}
+\end{quadro}
+\FloatBarrier
+
+O Apêndice \ref{app:integracao} deste documento possui capturas de tela que detalham o resultado de cada teste acima.
 
 \subsubsection{Testes \textit{end-to-end}}
 Os testes \textit{end-to-end} não serão desenvolvidos no momento inicial do projeto devido ao alto custo de configuração e manutenção dessa categoria de testes, 
@@ -97,7 +126,8 @@ Assim que os ambientes estiverem estabilizados, pretende-se automatizar parte de
 
 \subsubsection{Testes de Segurança}
 Os testes de segurança são fundamentais para garantir que a aplicação esteja protegida contra vulnerabilidades conhecidas e siga as melhores práticas de segurança web. 
-Neste projeto, foram realizadas validações focadas em dois aspectos críticos: configuração de cabeçalhos de segurança HTTP e segurança de protocolo SSL/TLS.
+
+Neste projeto, foram realizadas validações focadas em dois aspectos críticos: configuração de cabeçalhos de segurança HTTP e segurança de protocolo \gls{ssl}/\gls{tls}.
 
 \paragraph{Teste de Cabeçalhos de Segurança HTTP (\textit{Security Headers Test})}
 A avaliação dos cabeçalhos de segurança foi realizada utilizando a ferramenta \textbf{\textit{Security Headers}}~\cite{securityheaders-2025}, 
@@ -116,7 +146,7 @@ Essa pontuação reflete a implementação adequada de políticas de segurança,
 	\item \textbf{\textit{Permissions-Policy}:} Restringe o uso de APIs e recursos do navegador (câmera, microfone, geolocalização), limitando superfícies de ataque.
 \end{itemize}
 
-A pontuação A confirma que a aplicação segue rigorosamente as boas práticas de segurança recomendadas por organizações como \textit{OWASP} (\textit{Open Web Application Security Project}). Abaixo, segue imagem que ilustra o resultado obtido na análise dos cabeçalhos de segurança HTTP:
+A Figura \ref{fig:security-headers-test} demonstra  o resultado obtido na análise dos cabeçalhos de segurança HTTP:
 
 \begin{figure}[htb]
   \centering
@@ -126,6 +156,10 @@ A pontuação A confirma que a aplicação segue rigorosamente as boas práticas
   \fonte{Produzido pelos autores}
 \end{figure}
 \FloatBarrier
+
+A pontuação A+ confirma que a aplicação segue rigorosamente as boas práticas de segurança recomendadas por organizações como \textit{OWASP} (\textit{Open Web Application Security Project}).
+
+O Apêndice \ref{app:ssl} deste documento ilustra o resultado da análise \gls{ssl} de forma integral.
 
 \subsection{Testes automatizados}
 
