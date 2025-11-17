@@ -153,3 +153,34 @@ export interface GetBusiestWeekdaysParams {
   endDate: string
   professionalId?: string
 }
+
+export interface MostBookedService {
+  serviceId: string
+  serviceName: string
+  category: string
+  bookingCount: number
+}
+
+export type GetMostBookedServicesResponse = MostBookedService[]
+
+export interface GetMostBookedServicesParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface MostProfitableService {
+  serviceId: string
+  serviceName: string
+  category: string
+  totalRevenue: number
+  bookingCount: number
+}
+
+export type GetMostProfitableServicesResponse = MostProfitableService[]
+
+export interface GetMostProfitableServicesParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}

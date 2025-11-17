@@ -215,6 +215,34 @@ export const useAnalyticsData = (
       },
     )
 
+  const {
+    data: mostBookedServicesData,
+    isLoading: isMostBookedServicesLoading,
+  } = reportAPI.useGetMostBookedServicesQuery(
+    {
+      startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+      endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+      professionalId: activeProfessionalId,
+    },
+    {
+      skip: !startDate || !endDate,
+    },
+  )
+
+  const {
+    data: mostProfitableServicesData,
+    isLoading: isMostProfitableServicesLoading,
+  } = reportAPI.useGetMostProfitableServicesQuery(
+    {
+      startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+      endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+      professionalId: activeProfessionalId,
+    },
+    {
+      skip: !startDate || !endDate,
+    },
+  )
+
   return {
     userType,
     professionalsData,
@@ -241,5 +269,9 @@ export const useAnalyticsData = (
     isPeakHoursLoading,
     busiestWeekdaysData,
     isBusiestWeekdaysLoading,
+    mostBookedServicesData,
+    isMostBookedServicesLoading,
+    mostProfitableServicesData,
+    isMostProfitableServicesLoading,
   }
 }

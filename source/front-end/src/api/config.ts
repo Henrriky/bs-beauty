@@ -137,5 +137,7 @@ export const API_VARIABLES = {
     IDLE_RATE: '/reports/idle-rate',
     PEAK_HOURS: '/reports/peak-hours',
     BUSIEST_WEEKDAYS: '/reports/busiest-weekdays',
+    MOST_BOOKED_SERVICES: '/reports/most-booked-services',
+    MOST_PROFITABLE_SERVICES: '/reports/most-profitable-services',
   },
 } as const

@@ -16,6 +16,9 @@ interface ReportRepository {
   // Peak Hours Reports
   getPeakHours: (startDate: Date, endDate: Date, professionalId?: string) => Promise<Array<{ hour: number, appointmentCount: number }>>
   getBusiestWeekdays: (startDate: Date, endDate: Date, professionalId?: string) => Promise<Array<{ weekDay: string, appointmentCount: number }>>
+  // Service Reports
+  getMostBookedServices: (startDate: Date, endDate: Date, professionalId?: string) => Promise<Array<{ serviceId: string, serviceName: string, category: string, bookingCount: number }>>
+  getMostProfitableServices: (startDate: Date, endDate: Date, professionalId?: string) => Promise<Array<{ serviceId: string, serviceName: string, category: string, totalRevenue: number, bookingCount: number }>>
 }
 
 export type { ReportRepository }

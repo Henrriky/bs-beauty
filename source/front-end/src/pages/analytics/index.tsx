@@ -25,6 +25,8 @@ import OccupancyRateCard from './components/OccupancyRateCard'
 import IdleRateCard from './components/IdleRateCard'
 import PeakHoursCard from './components/PeakHoursCard'
 import BusiestWeekdaysCard from './components/BusiestWeekdaysCard'
+import MostBookedServicesCard from './components/MostBookedServicesCard'
+import MostProfitableServicesCard from './components/MostProfitableServicesCard'
 import { SwitchButton } from '../../components/button/SwitchButton'
 import { SwitchButtonValues } from './types'
 
@@ -74,6 +76,10 @@ function ProductivityReport() {
     isPeakHoursLoading,
     busiestWeekdaysData,
     isBusiestWeekdaysLoading,
+    mostBookedServicesData,
+    isMostBookedServicesLoading,
+    mostProfitableServicesData,
+    isMostProfitableServicesLoading,
   } = useAnalyticsData(
     startDate,
     endDate,
@@ -204,6 +210,16 @@ function ProductivityReport() {
             <BusiestWeekdaysCard
               data={busiestWeekdaysData}
               isLoading={isBusiestWeekdaysLoading}
+            />
+
+            <MostBookedServicesCard
+              data={mostBookedServicesData}
+              isLoading={isMostBookedServicesLoading}
+            />
+
+            <MostProfitableServicesCard
+              data={mostProfitableServicesData}
+              isLoading={isMostProfitableServicesLoading}
             />
           </div>
         )}

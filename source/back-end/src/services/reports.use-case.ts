@@ -57,6 +57,16 @@ class ReportsUseCase {
     const report = await this.reportRepository.getBusiestWeekdays(startDate, endDate, professionalId)
     return report
   }
+
+  public async executeGetMostBookedServices(startDate: Date, endDate: Date, professionalId?: string) {
+    const report = await this.reportRepository.getMostBookedServices(startDate, endDate, professionalId)
+    return report
+  }
+
+  public async executeGetMostProfitableServices(startDate: Date, endDate: Date, professionalId?: string) {
+    const report = await this.reportRepository.getMostProfitableServices(startDate, endDate, professionalId)
+    return report
+  }
 }
 
 export { ReportsUseCase }

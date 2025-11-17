@@ -550,6 +550,118 @@ class PrismaReportRepository implements ReportRepository {
 
     return report
   }
+
+  public async getMostBookedServices(startDate: Date, endDate: Date, professionalId?: string) {
+    const where: Prisma.AppointmentWhereInput = {
+      appointmentDate: {
+        gte: startDate,
+        lte: endDate
+      },
+      status: {
+        in: ['CONFIRMED', 'FINISHED']
+      }
+    }
+
+    if (professionalId) {
+      where.offer = {
+        professionalId
+      }
+    }
+
+    const appointments = await prismaClient.appointment.findMany({
+      where,
+      include: {
+        offer: {
+          include: {
+            service: true
+          }
+        }
+      }
+    })
+
+    const serviceCounts: Record<string, { serviceId: string, serviceName: string, category: string, count: number }> = {}
+
+    appointments.forEach(appointment => {
+      const service = appointment.offer.service
+      const serviceId = service.id
+
+      if (!serviceCounts[serviceId]) {
+        serviceCounts[serviceId] = {
+          serviceId,
+          serviceName: service.name,
+          category: service.category,
+          count: 0
+        }
+      }
+      serviceCounts[serviceId].count++
+    })
+
+    const report = Object.values(serviceCounts)
+      .map(item => ({
+        serviceId: item.serviceId,
+        serviceName: item.serviceName,
+        category: item.category,
+        bookingCount: item.count
+      }))
+      .sort((a, b) => b.bookingCount - a.bookingCount)
+
+    return report
+  }
+
+  public async getMostProfitableServices(startDate: Date, endDate: Date, professionalId?: string) {
+    const where: Prisma.PaymentRecordWhereInput = {
+      createdAt: {
+        gte: startDate,
+        lte: endDate
+      }
+    }
+
+    if (professionalId) {
+      where.professionalId = professionalId
+    }
+
+    const paymentRecords = await prismaClient.paymentRecord.findMany({
+      where,
+      include: {
+        items: {
+          include: {
+            offer: {
+              include: {
+                service: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    const serviceRevenue: Record<string, { serviceId: string, serviceName: string, category: string, totalRevenue: number, bookingCount: number }> = {}
+
+    paymentRecords.forEach(record => {
+      record.items.forEach(item => {
+        const service = item.offer.service
+        const serviceId = service.id
+        const itemRevenue = Number(item.price) * item.quantity * (1 - item.discount / 100)
+
+        if (!serviceRevenue[serviceId]) {
+          serviceRevenue[serviceId] = {
+            serviceId,
+            serviceName: service.name,
+            category: service.category,
+            totalRevenue: 0,
+            bookingCount: 0
+          }
+        }
+        serviceRevenue[serviceId].totalRevenue += itemRevenue
+        serviceRevenue[serviceId].bookingCount += item.quantity
+      })
+    })
+
+    const report = Object.values(serviceRevenue)
+      .sort((a, b) => b.totalRevenue - a.totalRevenue)
+
+    return report
+  }
 }
 
 export { PrismaReportRepository }

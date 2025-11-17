@@ -22,4 +22,8 @@ reportRoutes.get('/idle-rate', ReportsController.getIdleRate)
 reportRoutes.get('/peak-hours', ReportsController.getPeakHours)
 reportRoutes.get('/busiest-weekdays', ReportsController.getBusiestWeekdays)
 
+// Service Reports
+reportRoutes.get('/most-booked-services', ReportsController.getMostBookedServices)
+reportRoutes.get('/most-profitable-services', ReportsController.getMostProfitableServices)
+
 export { reportRoutes }
