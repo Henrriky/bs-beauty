@@ -288,6 +288,168 @@ class PrismaReportRepository implements ReportRepository {
       totalCustomers: count
     }
   }
+
+  public async getOccupancyRate(startDate: Date, endDate: Date, professionalId?: string): Promise<{ occupancyRate: number, occupiedMinutes: number, availableMinutes: number }> {
+    const shifts = await prismaClient.shift.findMany({
+      where: {
+        ...(professionalId && { professionalId })
+      },
+      select: {
+        id: true,
+        shiftStart: true,
+        shiftEnd: true,
+        weekDay: true,
+        professionalId: true
+      }
+    })
+
+    console.log('Shifts fetched:', shifts.length)
+
+    const appointments = await prismaClient.appointment.findMany({
+      where: {
+        appointmentDate: {
+          gte: startDate,
+          lte: endDate
+        },
+        status: {
+          in: ['CONFIRMED', 'FINISHED']
+        },
+        ...(professionalId && {
+          offer: {
+            professionalId
+          }
+        })
+      },
+      include: {
+        offer: {
+          select: {
+            estimatedTime: true,
+            professionalId: true
+          }
+        }
+      }
+    })
+
+    let totalAvailableMinutes = 0
+    let totalOccupiedMinutes = 0
+
+    const weekDayMap: Record<string, number> = {
+      SUNDAY: 0,
+      MONDAY: 1,
+      TUESDAY: 2,
+      WEDNESDAY: 3,
+      THURSDAY: 4,
+      FRIDAY: 5,
+      SATURDAY: 6
+    }
+
+    const currentDate = new Date(startDate)
+    while (currentDate <= endDate) {
+      const dayOfWeek = currentDate.getDay()
+
+      const dayShifts = shifts.filter(shift => weekDayMap[shift.weekDay] === dayOfWeek)
+
+      for (const shift of dayShifts) {
+        const shiftStart = new Date(shift.shiftStart)
+        const shiftEnd = new Date(shift.shiftEnd)
+        const shiftDurationMinutes = (shiftEnd.getTime() - shiftStart.getTime()) / (1000 * 60)
+        totalAvailableMinutes += shiftDurationMinutes
+
+        const dayAppointments = appointments.filter(apt => {
+          const aptDate = new Date(apt.appointmentDate)
+          return aptDate.toDateString() === currentDate.toDateString() &&
+            apt.offer.professionalId === shift.professionalId
+        })
+
+        for (const apt of dayAppointments) {
+          totalOccupiedMinutes += apt.offer.estimatedTime
+        }
+      }
+
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+
+    const occupancyRate = totalAvailableMinutes > 0
+      ? (totalOccupiedMinutes / totalAvailableMinutes) * 100
+      : 0
+
+    return {
+      occupancyRate: Math.round(occupancyRate * 100) / 100,
+      occupiedMinutes: totalOccupiedMinutes,
+      availableMinutes: totalAvailableMinutes
+    }
+  }
+
+  public async getIdleRate(startDate: Date, endDate: Date, professionalId?: string): Promise<{ idleRate: number, idleMinutes: number, availableMinutes: number }> {
+    const shifts = await prismaClient.shift.findMany({
+      where: {
+        isBusy: false,
+        ...(professionalId && { professionalId })
+      },
+      select: {
+        shiftStart: true,
+        shiftEnd: true,
+        weekDay: true
+      }
+    })
+
+    let totalAvailableMinutes = 0
+    let totalIdleMinutes = 0
+
+    const weekDayMap: Record<string, number> = {
+      SUNDAY: 0,
+      MONDAY: 1,
+      TUESDAY: 2,
+      WEDNESDAY: 3,
+      THURSDAY: 4,
+      FRIDAY: 5,
+      SATURDAY: 6
+    }
+
+    const allShifts = await prismaClient.shift.findMany({
+      where: {
+        ...(professionalId && { professionalId })
+      },
+      select: {
+        shiftStart: true,
+        shiftEnd: true,
+        weekDay: true
+      }
+    })
+
+    const currentDate = new Date(startDate)
+    while (currentDate <= endDate) {
+      const dayOfWeek = currentDate.getDay()
+
+      const dayAllShifts = allShifts.filter(shift => weekDayMap[shift.weekDay] === dayOfWeek)
+      for (const shift of dayAllShifts) {
+        const shiftStart = new Date(shift.shiftStart)
+        const shiftEnd = new Date(shift.shiftEnd)
+        const shiftDurationMinutes = (shiftEnd.getTime() - shiftStart.getTime()) / (1000 * 60)
+        totalAvailableMinutes += shiftDurationMinutes
+      }
+
+      const dayIdleShifts = shifts.filter(shift => weekDayMap[shift.weekDay] === dayOfWeek)
+      for (const shift of dayIdleShifts) {
+        const shiftStart = new Date(shift.shiftStart)
+        const shiftEnd = new Date(shift.shiftEnd)
+        const shiftDurationMinutes = (shiftEnd.getTime() - shiftStart.getTime()) / (1000 * 60)
+        totalIdleMinutes += shiftDurationMinutes
+      }
+
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+
+    const idleRate = totalAvailableMinutes > 0
+      ? (totalIdleMinutes / totalAvailableMinutes) * 100
+      : 0
+
+    return {
+      idleRate: Math.round(idleRate * 100) / 100,
+      idleMinutes: totalIdleMinutes,
+      availableMinutes: totalAvailableMinutes
+    }
+  }
 }
 
 export { PrismaReportRepository }

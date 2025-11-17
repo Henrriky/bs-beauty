@@ -133,5 +133,7 @@ export const API_VARIABLES = {
     TOTAL_REVENUE: '/reports/total-revenue',
     REVENUE_BY_SERVICE: '/reports/revenue-by-service',
     REVENUE_BY_PROFESSIONAL: '/reports/revenue-by-professional',
+    OCCUPANCY_RATE: '/reports/occupancy-rate',
+    IDLE_RATE: '/reports/idle-rate',
   },
 } as const

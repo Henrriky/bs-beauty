@@ -37,6 +37,16 @@ class ReportsUseCase {
     const report = await this.reportRepository.getRevenueByProfessional(startDate, endDate)
     return report
   }
+
+  public async executeGetOccupancyRate(startDate: Date, endDate: Date, professionalId?: string) {
+    const report = await this.reportRepository.getOccupancyRate(startDate, endDate, professionalId)
+    return report
+  }
+
+  public async executeGetIdleRate(startDate: Date, endDate: Date, professionalId?: string) {
+    const report = await this.reportRepository.getIdleRate(startDate, endDate, professionalId)
+    return report
+  }
 }
 
 export { ReportsUseCase }

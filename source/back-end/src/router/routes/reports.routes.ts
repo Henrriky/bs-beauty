@@ -14,4 +14,8 @@ reportRoutes.get('/total-revenue', ReportsController.getTotalRevenue)
 reportRoutes.get('/revenue-by-service', ReportsController.getRevenueByService)
 reportRoutes.get('/revenue-by-professional', ReportsController.getRevenueByProfessional)
 
+// Occupancy Reports
+reportRoutes.get('/occupancy-rate', ReportsController.getOccupancyRate)
+reportRoutes.get('/idle-rate', ReportsController.getIdleRate)
+
 export { reportRoutes }

@@ -11,6 +11,8 @@ interface ReportRepository {
   getRevenueByService: (startDate: Date, endDate: Date, professionalId?: string) => Promise<Array<{ serviceId: string, serviceName: string, category: string, totalRevenue: number, quantity: number }>>
   getRevenueByProfessional: (startDate: Date, endDate: Date) => Promise<Array<{ professionalId: string, professionalName: string, totalRevenue: number, transactionCount: number }>>
   // Occupancy Reports
+  getOccupancyRate: (startDate: Date, endDate: Date, professionalId?: string) => Promise<{ occupancyRate: number, occupiedMinutes: number, availableMinutes: number }>
+  getIdleRate: (startDate: Date, endDate: Date, professionalId?: string) => Promise<{ idleRate: number, idleMinutes: number, availableMinutes: number }>
 }
 
 export type { ReportRepository }

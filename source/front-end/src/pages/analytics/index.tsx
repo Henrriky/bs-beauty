@@ -21,6 +21,8 @@ import TotalRevenueCard from './components/TotalRevenueCard'
 import NewCustomersCard from './components/NewCustomersCard'
 import RevenueByServiceGrid from './components/RevenueByServiceGrid'
 import RevenueByProfessionalGrid from './components/RevenueByProfessionalGrid'
+import OccupancyRateCard from './components/OccupancyRateCard'
+import IdleRateCard from './components/IdleRateCard'
 import { SwitchButton } from '../../components/button/SwitchButton'
 import { SwitchButtonValues } from './types'
 
@@ -62,6 +64,10 @@ function ProductivityReport() {
     isRevenueByServiceLoading,
     revenueByProfessionalData,
     isRevenueByProfessionalLoading,
+    occupancyRateData,
+    isOccupancyRateLoading,
+    idleRateData,
+    isIdleRateLoading,
   } = useAnalyticsData(
     startDate,
     endDate,
@@ -172,6 +178,17 @@ function ProductivityReport() {
                 isLoading={isRevenueByProfessionalLoading}
               />
             )}
+          </div>
+        )}
+
+        {switchValue === 'occupancy' && (
+          <div className="flex flex-col gap-6">
+            <OccupancyRateCard
+              data={occupancyRateData}
+              isLoading={isOccupancyRateLoading}
+            />
+
+            <IdleRateCard data={idleRateData} isLoading={isIdleRateLoading} />
           </div>
         )}
       </div>

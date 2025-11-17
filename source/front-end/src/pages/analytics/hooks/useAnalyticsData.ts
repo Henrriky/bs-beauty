@@ -167,6 +167,30 @@ export const useAnalyticsData = (
     },
   )
 
+  const { data: occupancyRateData, isLoading: isOccupancyRateLoading } =
+    reportAPI.useGetOccupancyRateQuery(
+      {
+        startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+        endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+        professionalId: activeProfessionalId,
+      },
+      {
+        skip: !startDate || !endDate,
+      },
+    )
+
+  const { data: idleRateData, isLoading: isIdleRateLoading } =
+    reportAPI.useGetIdleRateQuery(
+      {
+        startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+        endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+        professionalId: activeProfessionalId,
+      },
+      {
+        skip: !startDate || !endDate,
+      },
+    )
+
   return {
     userType,
     professionalsData,
@@ -185,5 +209,9 @@ export const useAnalyticsData = (
     isRevenueByServiceLoading,
     revenueByProfessionalData,
     isRevenueByProfessionalLoading,
+    occupancyRateData,
+    isOccupancyRateLoading,
+    idleRateData,
+    isIdleRateLoading,
   }
 }

@@ -16,6 +16,10 @@ import {
   GetRevenueByServiceParams,
   GetRevenueByProfessionalResponse,
   GetRevenueByProfessionalParams,
+  GetOccupancyRateResponse,
+  GetOccupancyRateParams,
+  GetIdleRateResponse,
+  GetIdleRateParams,
 } from './types'
 
 export const reportAPI = createApi({
@@ -100,6 +104,25 @@ export const reportAPI = createApi({
       }),
       providesTags: ['Report'],
     }),
+    getOccupancyRate: builder.query<
+      GetOccupancyRateResponse,
+      GetOccupancyRateParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.REPORTS_ENDPOINTS.OCCUPANCY_RATE,
+        method: 'GET',
+        params,
+      }),
+      providesTags: ['Report'],
+    }),
+    getIdleRate: builder.query<GetIdleRateResponse, GetIdleRateParams>({
+      query: (params) => ({
+        url: API_VARIABLES.REPORTS_ENDPOINTS.IDLE_RATE,
+        method: 'GET',
+        params,
+      }),
+      providesTags: ['Report'],
+    }),
   }),
 })
 
@@ -111,4 +134,6 @@ export const {
   useGetTotalRevenueQuery,
   useGetRevenueByServiceQuery,
   useGetRevenueByProfessionalQuery,
+  useGetOccupancyRateQuery,
+  useGetIdleRateQuery,
 } = reportAPI

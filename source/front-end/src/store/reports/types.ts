@@ -100,5 +100,32 @@ export interface GetRevenueByProfessionalParams {
   endDate: string
 }
 
+export interface OccupancyRate {
+  occupancyRate: number
+  occupiedMinutes: number
+  availableMinutes: number
+}
+
+export type GetOccupancyRateResponse = OccupancyRate
+
+export interface GetOccupancyRateParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface IdleRate {
+  idleRate: number
+  idleMinutes: number
+  availableMinutes: number
+}
+
+export type GetIdleRateResponse = IdleRate
+
+export interface GetIdleRateParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
 
 
