@@ -450,6 +450,106 @@ class PrismaReportRepository implements ReportRepository {
       availableMinutes: totalAvailableMinutes
     }
   }
+
+  public async getPeakHours(startDate: Date, endDate: Date, professionalId?: string) {
+    const where: Prisma.AppointmentWhereInput = {
+      appointmentDate: {
+        gte: startDate,
+        lte: endDate
+      },
+      status: {
+        in: ['CONFIRMED', 'FINISHED']
+      }
+    }
+
+    if (professionalId) {
+      where.offer = {
+        professionalId
+      }
+    }
+
+    const appointments = await prismaClient.appointment.findMany({
+      where,
+      select: {
+        appointmentDate: true
+      }
+    })
+
+    const hourCounts: Record<number, number> = {}
+    for (let i = 0; i < 24; i++) {
+      hourCounts[i] = 0
+    }
+
+    appointments.forEach(appointment => {
+      const hour = appointment.appointmentDate.getHours()
+      hourCounts[hour]++
+    })
+
+    const report = Object.entries(hourCounts).map(([hour, count]) => ({
+      hour: parseInt(hour),
+      appointmentCount: count
+    }))
+
+    return report
+  }
+
+  public async getBusiestWeekdays(startDate: Date, endDate: Date, professionalId?: string) {
+    const where: Prisma.AppointmentWhereInput = {
+      appointmentDate: {
+        gte: startDate,
+        lte: endDate
+      },
+      status: {
+        in: ['CONFIRMED', 'FINISHED']
+      }
+    }
+
+    if (professionalId) {
+      where.offer = {
+        professionalId
+      }
+    }
+
+    const appointments = await prismaClient.appointment.findMany({
+      where,
+      select: {
+        appointmentDate: true
+      }
+    })
+
+    const weekdayMap = {
+      0: 'SUNDAY',
+      1: 'MONDAY',
+      2: 'TUESDAY',
+      3: 'WEDNESDAY',
+      4: 'THURSDAY',
+      5: 'FRIDAY',
+      6: 'SATURDAY'
+    }
+
+    const weekdayCounts: Record<string, number> = {
+      SUNDAY: 0,
+      MONDAY: 0,
+      TUESDAY: 0,
+      WEDNESDAY: 0,
+      THURSDAY: 0,
+      FRIDAY: 0,
+      SATURDAY: 0
+    }
+
+    appointments.forEach(appointment => {
+      const dayOfWeek = appointment.appointmentDate.getDay()
+      const weekDay = weekdayMap[dayOfWeek as keyof typeof weekdayMap]
+      weekdayCounts[weekDay]++
+    })
+
+    const report = Object.entries(weekdayCounts).map(([weekDay, count]) => ({
+      weekDay,
+      appointmentCount: count
+    }))
+
+    return report
+  }
 }
 
 export { PrismaReportRepository }

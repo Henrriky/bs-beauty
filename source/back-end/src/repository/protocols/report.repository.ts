@@ -13,6 +13,9 @@ interface ReportRepository {
   // Occupancy Reports
   getOccupancyRate: (startDate: Date, endDate: Date, professionalId?: string) => Promise<{ occupancyRate: number, occupiedMinutes: number, availableMinutes: number }>
   getIdleRate: (startDate: Date, endDate: Date, professionalId?: string) => Promise<{ idleRate: number, idleMinutes: number, availableMinutes: number }>
+  // Peak Hours Reports
+  getPeakHours: (startDate: Date, endDate: Date, professionalId?: string) => Promise<Array<{ hour: number, appointmentCount: number }>>
+  getBusiestWeekdays: (startDate: Date, endDate: Date, professionalId?: string) => Promise<Array<{ weekDay: string, appointmentCount: number }>>
 }
 
 export type { ReportRepository }

@@ -47,6 +47,16 @@ class ReportsUseCase {
     const report = await this.reportRepository.getIdleRate(startDate, endDate, professionalId)
     return report
   }
+
+  public async executeGetPeakHours(startDate: Date, endDate: Date, professionalId?: string) {
+    const report = await this.reportRepository.getPeakHours(startDate, endDate, professionalId)
+    return report
+  }
+
+  public async executeGetBusiestWeekdays(startDate: Date, endDate: Date, professionalId?: string) {
+    const report = await this.reportRepository.getBusiestWeekdays(startDate, endDate, professionalId)
+    return report
+  }
 }
 
 export { ReportsUseCase }

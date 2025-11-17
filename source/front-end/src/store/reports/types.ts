@@ -128,4 +128,28 @@ export interface GetIdleRateParams {
   professionalId?: string
 }
 
+export interface PeakHour {
+  hour: number
+  appointmentCount: number
+}
 
+export type GetPeakHoursResponse = PeakHour[]
+
+export interface GetPeakHoursParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface BusiestWeekday {
+  weekDay: string
+  appointmentCount: number
+}
+
+export type GetBusiestWeekdaysResponse = BusiestWeekday[]
+
+export interface GetBusiestWeekdaysParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}

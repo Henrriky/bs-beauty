@@ -47,7 +47,6 @@ function RevenueChart({ data }: RevenueChartProps) {
           label: 'Faturamento (R$)',
           min: Math.max(0, minValue - padding),
           valueFormatter: (value: number) => `${(value / 1000).toFixed(1)}k`,
-
         },
       ]}
       series={[

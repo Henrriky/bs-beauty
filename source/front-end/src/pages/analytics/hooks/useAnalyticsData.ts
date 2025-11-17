@@ -191,6 +191,30 @@ export const useAnalyticsData = (
       },
     )
 
+  const { data: peakHoursData, isLoading: isPeakHoursLoading } =
+    reportAPI.useGetPeakHoursQuery(
+      {
+        startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+        endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+        professionalId: activeProfessionalId,
+      },
+      {
+        skip: !startDate || !endDate,
+      },
+    )
+
+  const { data: busiestWeekdaysData, isLoading: isBusiestWeekdaysLoading } =
+    reportAPI.useGetBusiestWeekdaysQuery(
+      {
+        startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+        endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+        professionalId: activeProfessionalId,
+      },
+      {
+        skip: !startDate || !endDate,
+      },
+    )
+
   return {
     userType,
     professionalsData,
@@ -213,5 +237,9 @@ export const useAnalyticsData = (
     isOccupancyRateLoading,
     idleRateData,
     isIdleRateLoading,
+    peakHoursData,
+    isPeakHoursLoading,
+    busiestWeekdaysData,
+    isBusiestWeekdaysLoading,
   }
 }

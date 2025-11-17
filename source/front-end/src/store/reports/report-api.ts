@@ -20,6 +20,10 @@ import {
   GetOccupancyRateParams,
   GetIdleRateResponse,
   GetIdleRateParams,
+  GetPeakHoursResponse,
+  GetPeakHoursParams,
+  GetBusiestWeekdaysResponse,
+  GetBusiestWeekdaysParams,
 } from './types'
 
 export const reportAPI = createApi({
@@ -123,6 +127,25 @@ export const reportAPI = createApi({
       }),
       providesTags: ['Report'],
     }),
+    getPeakHours: builder.query<GetPeakHoursResponse, GetPeakHoursParams>({
+      query: (params) => ({
+        url: API_VARIABLES.REPORTS_ENDPOINTS.PEAK_HOURS,
+        method: 'GET',
+        params,
+      }),
+      providesTags: ['Report'],
+    }),
+    getBusiestWeekdays: builder.query<
+      GetBusiestWeekdaysResponse,
+      GetBusiestWeekdaysParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.REPORTS_ENDPOINTS.BUSIEST_WEEKDAYS,
+        method: 'GET',
+        params,
+      }),
+      providesTags: ['Report'],
+    }),
   }),
 })
 
@@ -136,4 +159,6 @@ export const {
   useGetRevenueByProfessionalQuery,
   useGetOccupancyRateQuery,
   useGetIdleRateQuery,
+  useGetPeakHoursQuery,
+  useGetBusiestWeekdaysQuery,
 } = reportAPI

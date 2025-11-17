@@ -135,5 +135,7 @@ export const API_VARIABLES = {
     REVENUE_BY_PROFESSIONAL: '/reports/revenue-by-professional',
     OCCUPANCY_RATE: '/reports/occupancy-rate',
     IDLE_RATE: '/reports/idle-rate',
+    PEAK_HOURS: '/reports/peak-hours',
+    BUSIEST_WEEKDAYS: '/reports/busiest-weekdays',
   },
 } as const

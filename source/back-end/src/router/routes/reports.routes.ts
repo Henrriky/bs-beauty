@@ -18,4 +18,8 @@ reportRoutes.get('/revenue-by-professional', ReportsController.getRevenueByProfe
 reportRoutes.get('/occupancy-rate', ReportsController.getOccupancyRate)
 reportRoutes.get('/idle-rate', ReportsController.getIdleRate)
 
+// Peak Hours Reports
+reportRoutes.get('/peak-hours', ReportsController.getPeakHours)
+reportRoutes.get('/busiest-weekdays', ReportsController.getBusiestWeekdays)
+
 export { reportRoutes }
