@@ -16,7 +16,7 @@ function CustomerHomeProfessionalCard(
 ) {
   return (
     <label
-      className={`flex items-center justify-between h-20 py-2 px-6 rounded-2xl mt-5 bg-[#262626] hover:cursor-pointer 
+      className={`flex items-center justify-between h-20 py-2 px-6 mt-5 rounded-2xl bg-[#262626] hover:cursor-pointer 
                   transition-all duration-300 ease-in-out
                   ${props.isSelected ? 'border-[1px] border-[#A4978A]' : 'border-[0px] border-transparent'}`}
       htmlFor={props.for}
