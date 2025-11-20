@@ -4,7 +4,7 @@ import { CustomerOrProfessional } from './types'
 
 type TokenParams = {
   accessToken: string
-  googleAccessToken: string
+  googleAccessToken?: string
   expiresAt: number
 }
 
@@ -15,9 +15,10 @@ type AuthState = {
 
 const initialState = (): AuthState => {
   const accessToken = localStorage.getItem('token')
-  const googleAccessToken = localStorage.getItem('googleAccessToken')
+  const googleAccessToken =
+    localStorage.getItem('googleAccessToken') || undefined
 
-  if (!accessToken || !googleAccessToken) {
+  if (!accessToken) {
     console.warn(
       'Access token or Google Access Token from localStorage not found',
     )
@@ -65,12 +66,25 @@ const authSlice = createSlice({
         user: CustomerOrProfessional
       }>,
     ) => {
+      localStorage.setItem('token', action.payload.token.accessToken)
+      if (action.payload.token.googleAccessToken) {
+        localStorage.setItem(
+          'googleAccessToken',
+          action.payload.token.googleAccessToken,
+        )
+      } else {
+        localStorage.removeItem('googleAccessToken')
+      }
       return {
         ...state,
         ...action.payload,
       }
     },
     logout: () => {
+      localStorage.removeItem('token')
+      localStorage.removeItem('googleAccessToken')
+      localStorage.removeItem('hasRefresh')
+
       return {
         user: null,
         token: null,
@@ -94,6 +108,7 @@ const authSlice = createSlice({
 })
 
 export { authSlice }
+export type { TokenParams }
 export const {
   setToken,
   setRegisterCompleted,

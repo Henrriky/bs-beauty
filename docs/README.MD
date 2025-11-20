@@ -1,33 +1,34 @@
-# 🧪 Documentação de Qualidade - Projeto XYZ
+# 📚 Documentação do Projeto
 
-Bem-vindo à documentação de testes do Projeto BS Beauty. Este repositório contém os documentos relacionados ao documento elaborado durante a matéria de PI.
+Este diretório contém toda a documentação técnica, gerencial e visual do projeto BS Beauty Academy. A estrutura foi organizada para facilitar a navegação e compreensão dos diversos aspectos do projeto, desde a concepção até os detalhes de arquitetura e viabilidade financeira.
 
----
+## 📁 Estrutura do Diretório
+```
+docs/
+├── diagrams/                 # Diagramas de arquitetura e banco de dados
+├── documentation/            # Documentação escrita no formato ABNT usando LaTeX
+├── gource/                   # Arquivos relacionados à visualização do histórico de desenvolvimento
+├── project/                  # Arquivos de gerenciamento e planejamento do projeto
+└── README.md                 # Este arquivo
+```
 
-## 📚 Sumário
+## 📝 Sumário
+- [🖼️ Diagramas](./diagrams/)
+- [🗒️ Diário de Bordo](./project/work-log.md)
+- [📘 Documentação (PDF)](./documentation/abntex2/main.pdf)
+- [🎞️ Gource](./gource/)
+- [💼 ProjectLibre](./project/)
 
-- [Documentação - Diagramas](./diagrams/README.MD)
-- [Documentação - LaTeX](./documentation/README.MD)
-- [Documentação - Project Libre](./project/project-libre.md)
-- [Documentação - Diário de Bordo](./project/work-log.md)
-- [Documentação - Lista de requisitos do PI](#1-lista-de-requisitos-do-pi)
-- [Documentação - Planilha de Avaliação](#2-planilha-de-avaliação)
-- [Documentação - Figma](#3-interface-da-aplicação---figma)
+## 🔗 Outros Links
 
----
-
-## 1. Lista de requisitos do PI
+### 1. Lista de requisitos do PI
 
 - Para acessar o Checklist, [clique aqui](https://www.notion.so/LISTA-DE-REQUISITOS-1be2ecd8f83380f385c1f3c5615f4f92)
 
----
+### 2. Planilha de auto-avaliação
 
-## 2. Planilha de Avaliação
+- Para acessar a planilha de auto-avaliação, [clique aqui](https://docs.google.com/spreadsheets/d/13zlsPdDLt_keu1SpGjhjkFbFroOUw8XPwy7vGvQ_8do/edit?usp=sharing)
 
-- Para acessar a planilha de auto-avaliação, [clique aqui](https://docs.google.com/spreadsheets/d/13zlsPdDLt_keu1SpGjhjkFbFroOUw8XPwy7vGvQ_8do/)
+### 3. Interface da aplicação - Figma
 
----
-
-## 3. Interface da Aplicação - Figma
-
-- Para acessar a interface do Figma, [clique aqui](https://www.figma.com/design/3RwDr7um0tpkWj2MZfY04d/BSBeauty.mobile-%E3%85%A4%E2%99%A1%E0%BE%80%E0%BD%B2-%E2%82%8A?node-id=14-7&p=f)
+- Para acessar a interface do Figma, [clique aqui](https://www.figma.com/design/nMIjK1mhxzcvN7YMMALVB3/BSBeauty?node-id=274-202&t=pJLZDjhfmnzAhZhW-1)

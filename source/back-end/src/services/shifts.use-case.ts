@@ -11,7 +11,6 @@ class ShiftUseCase {
 
   public async executeFindAllByProfessionalId (professionalId: string | undefined): Promise<ShiftOutput> {
     const shifts = await this.shiftRepository.findAllByProfessionalId(professionalId)
-    RecordExistence.validateManyRecordsExistence(shifts, 'shifts')
 
     return { shifts }
   }

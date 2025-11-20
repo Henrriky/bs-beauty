@@ -1,8 +1,14 @@
+import { PaginatedRequest, PaginatedResponse } from '../types'
+
+export type ServiceStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
+
 export type Service = {
   id: string
   name: string
   description: string | null
   category: string
+  status: ServiceStatus
+  createdBy: null | string
   createdAt: Date
   updatedAt: Date
 }
@@ -25,10 +31,10 @@ export type ProfessionalsOfferingService = {
   offers: Array<ProfessionalsOfferingServiceOffer>
 }
 
-export interface PaginatedServicesResponse {
-  data: Service[]
-  total: number
-  page: number
-  totalPages: number
-  limit: number
-}
+export type FindAllServicesParams = {
+  name?: string | undefined
+  category?: string | undefined
+  q?: string | undefined
+} & PaginatedRequest
+
+export type FindAllServicesResponse = PaginatedResponse<Service>

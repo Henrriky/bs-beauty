@@ -84,10 +84,10 @@ describe('Appointments API (Integration Test)', () => {
   describe('[GET] /api/appointments', () => {
     it('should return a list with all appointments', async () => {
       const offer = await OfferFactory.makeOffer()
-      const appointments = await Promise.all([
-        AppointmentsFactory.makeAppointments({ offer: { connect: { id: offer.id } }, customer: { connect: { id: customer.id } } }),
-        AppointmentsFactory.makeAppointments({ offer: { connect: { id: offer.id } } })
-      ])
+      const appointment = await AppointmentsFactory.makeAppointments({
+        offer: { connect: { id: offer.id } },
+        customer: { connect: { id: customer.id } }
+      })
 
       const response = await request(app)
         .get('/api/appointments')
@@ -96,20 +96,21 @@ describe('Appointments API (Integration Test)', () => {
 
       expect(response.status).toBe(200)
       expect(response.body).toBeDefined()
-      expect(response.body).toEqual({
-        appointments: expect.arrayContaining(
-          appointments.map(
-            (appointment) =>
-              expect.objectContaining(
-                {
-                  id: appointment.id,
-                  customerId: appointment.customerId,
-                  appointmentDate: appointment.appointmentDate.toISOString()
-                }
-              ))
-        )
-      })
-      expect(response.body.appointments).toHaveLength(appointments.length)
+      expect(response.body.data).toBeDefined()
+      expect(response.body.data).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: appointment.id,
+            customerId: appointment.customerId,
+            appointmentDate: appointment.appointmentDate.toISOString()
+          })
+        ])
+      )
+      expect(response.body.data).toHaveLength(1)
+      expect(response.body).toHaveProperty('total')
+      expect(response.body).toHaveProperty('page')
+      expect(response.body).toHaveProperty('limit')
+      expect(response.body).toHaveProperty('totalPages')
     })
 
     it('should return a empty list of appointments when there is no appointment created', async () => {
@@ -120,7 +121,11 @@ describe('Appointments API (Integration Test)', () => {
 
       expect(response.status).toBe(200)
       expect(response.body).toEqual({
-        appointments: []
+        data: [],
+        total: 0,
+        page: 1,
+        limit: 10,
+        totalPages: 0
       })
     })
 
@@ -301,7 +306,7 @@ describe('Appointments API (Integration Test)', () => {
       expect(appointmentOnDatabase).toBeTruthy()
     })
 
-    it('should return 409 if trying to create an appointment with invalid date', async () => {
+    it('should return 400 if trying to create an appointment with invalid date', async () => {
       const offer = await OfferFactory.makeOffer()
       const appointment: Partial<Appointment> = {
         appointmentDate: new Date('invalid-date'),
@@ -315,8 +320,8 @@ describe('Appointments API (Integration Test)', () => {
         .set(defaultAuthorizationHeader)
         .send(appointment)
 
-      expect(response.status).toBe(409)
-      expect(response.body.message).toContain('Invalid appointment date provided')
+      expect(response.status).toBe(400)
+      expect(response.body.message).toContain('Validation Error')
     })
 
     it(`should return 409 if trying to create an appointment with less than ${MINIMUM_SCHEDULLING_TIME_MINUTES} minutes in advance`, async () => {

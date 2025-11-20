@@ -11,7 +11,8 @@ export function spyProfessionalsWiring () {
     executeCreate: vi.spyOn(ProfessionalsUseCase.prototype, 'executeCreate'),
     executeFindById: vi.spyOn(ProfessionalsUseCase.prototype, 'executeFindById'),
     executeUpdate: vi.spyOn(ProfessionalsUseCase.prototype, 'executeUpdate'),
-    executeDelete: vi.spyOn(ProfessionalsUseCase.prototype, 'executeDelete')
+    executeDelete: vi.spyOn(ProfessionalsUseCase.prototype, 'executeDelete'),
+    fetchServicesOfferedByProfessional: vi.spyOn(ProfessionalsUseCase.prototype, 'fetchServicesOfferedByProfessional')
   }
 
   const repository = {
@@ -21,7 +22,8 @@ export function spyProfessionalsWiring () {
     findByEmail: vi.spyOn(PrismaProfessionalRepository.prototype, 'findByEmail'),
     create: vi.spyOn(PrismaProfessionalRepository.prototype, 'create'),
     update: vi.spyOn(PrismaProfessionalRepository.prototype, 'update'),
-    delete: vi.spyOn(PrismaProfessionalRepository.prototype, 'delete')
+    delete: vi.spyOn(PrismaProfessionalRepository.prototype, 'delete'),
+    fetchServicesOfferedByProfessional: vi.spyOn(PrismaProfessionalRepository.prototype, 'fetchServicesOfferedByProfessional')
   }
 
   return {

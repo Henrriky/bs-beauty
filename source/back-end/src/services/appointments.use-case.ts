@@ -1,9 +1,16 @@
-import { type Prisma, type Appointment } from '@prisma/client'
-import { type FindByIdAppointments, type AppointmentRepository } from '../repository/protocols/appointment.repository'
-import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { ENV } from '@/config/env'
+import { notificationBus } from '@/events/notification-bus'
+import { type TokenPayload } from '@/middlewares/auth/verify-jwt-token.middleware'
+import { type Appointment, type Prisma, Status } from '@prisma/client'
+import { type AppointmentRepository, type FindByIdAppointments } from '../repository/protocols/appointment.repository'
 import { type CustomerRepository } from '../repository/protocols/customer.repository'
 import { type ProfessionalRepository } from '../repository/protocols/professional.repository'
 import { CustomError } from '../utils/errors/custom.error.util'
+import { RecordExistence } from '../utils/validation/record-existence.validation.util'
+import { type RatingRepository } from '@/repository/protocols/rating.repository'
+import { type PaginatedRequest, type PaginatedResult } from '@/types/pagination'
+import { type AppointmentFilters } from '@/types/appointments/appointment-filters'
+import { DateTime } from 'luxon'
 
 export const MINIMUM_SCHEDULLING_TIME_MINUTES = 30
 export const MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS = MINIMUM_SCHEDULLING_TIME_MINUTES * 60 * 1000
@@ -20,13 +27,39 @@ class AppointmentsUseCase {
   constructor (
     private readonly appointmentRepository: AppointmentRepository,
     private readonly customerServiceRepository: CustomerRepository,
-    private readonly professionalServiceRepository: ProfessionalRepository
+    private readonly professionalServiceRepository: ProfessionalRepository,
+    private readonly ratingRepository: RatingRepository
   ) { }
 
   public async executeFindAll (): Promise<AppointmentOutput> {
     const appointments = await this.appointmentRepository.findAll()
 
     return { appointments }
+  }
+
+  public async executeFindAllPaginated (
+    params: PaginatedRequest<AppointmentFilters>,
+    scope: { userId: string, viewAll: boolean }
+  ): Promise<PaginatedResult<Appointment>> {
+    if (params.filters?.from) {
+      params.filters.from = DateTime
+        .fromJSDate(params.filters.from, { zone: 'America/Sao_Paulo' })
+        .startOf('day')
+        .toUTC()
+        .toJSDate()
+    }
+
+    if (params.filters?.to) {
+      params.filters.to = DateTime
+        .fromJSDate(params.filters.to, { zone: 'America/Sao_Paulo' })
+        .endOf('day')
+        .toUTC()
+        .toJSDate()
+    }
+
+    const result = await this.appointmentRepository.findAllPaginated(params, scope)
+
+    return result
   }
 
   public async executeFindById (appointmentId: string): Promise<FindByIdAppointments | null> {
@@ -54,14 +87,17 @@ class AppointmentsUseCase {
     return { appointments }
   }
 
-  public async executeCreate (appointmentToCreate: Prisma.AppointmentCreateInput, customerId: string) {
+  public async executeCreate (
+    appointmentToCreate: Prisma.AppointmentCreateInput,
+    userDetails: TokenPayload
+  ) {
     const { appointmentDate } = appointmentToCreate
 
     const currentTimestamp = new Date()
     const appointmentTimestamp = new Date(appointmentDate)
 
     if (isNaN(appointmentTimestamp.getTime())) {
-      throw new CustomError(`Invalid appointment date provided: ${String(appointmentDate)}`, 409)
+      throw new CustomError(`Invalid appointment date provided: ${String(appointmentDate)}`, 400)
     }
 
     if (appointmentTimestamp < currentTimestamp) {
@@ -76,7 +112,7 @@ class AppointmentsUseCase {
       )
     }
 
-    const appointmentsCount = await this.appointmentRepository.countCustomerAppointmentsPerDay(customerId)
+    const appointmentsCount = await this.appointmentRepository.countCustomerAppointmentsPerDay(userDetails.id)
     const maxAppointmentPerDayReached = appointmentsCount >= MAXIMUM_APPOINTMENTS_PER_DAY
 
     if (maxAppointmentPerDayReached) {
@@ -88,19 +124,60 @@ class AppointmentsUseCase {
 
     const newAppointment = await this.appointmentRepository.create(appointmentToCreate)
 
+    if (newAppointment) {
+      if (ENV.NOTIFY_ASYNC_ENABLED) {
+        notificationBus.emit('appointment.created', { appointment: newAppointment })
+      }
+    }
+
     return newAppointment
   }
 
-  public async executeUpdate (userId: string, appointmentId: string, appointmentToUpdate: Prisma.AppointmentUpdateInput) {
+  public async executeUpdate (
+    appointmentId: string,
+    appointmentToUpdate: Prisma.AppointmentUpdateInput,
+    userDetails: TokenPayload
+  ) {
+    const { userId, userType } = userDetails
     const appointmentById = await this.executeFindById(appointmentId)
 
     if (appointmentById?.customerId !== userId && appointmentById?.offer.professionalId !== userId) {
       throw new CustomError('You are not allowed to update this appointment', 403)
     }
 
-    const updatedCustomer = await this.appointmentRepository.update(appointmentId, appointmentToUpdate)
+    const updatedAppointment = await this.appointmentRepository.update(appointmentId, appointmentToUpdate)
 
-    return updatedCustomer
+    if (updatedAppointment.status === Status.CONFIRMED) {
+      if (ENV.NOTIFY_ASYNC_ENABLED) {
+        notificationBus.emit('appointment.confirmed', { appointment: updatedAppointment })
+      }
+    }
+
+    if (updatedAppointment.status === Status.CANCELLED) {
+      if (ENV.NOTIFY_ASYNC_ENABLED) {
+        notificationBus.emit('appointment.cancelled', {
+          appointment: updatedAppointment,
+          cancelledBy: userType
+        })
+      }
+    }
+
+    return updatedAppointment
+  }
+
+  // TODO: make a transaction to guarantee both requests are made
+  public async executeFinishAppointment (userDetails: TokenPayload, appointmentId: string) {
+    const updatedAppointment = await this.executeUpdate(appointmentId, { status: 'FINISHED' }, userDetails)
+
+    const newRating: Prisma.RatingCreateInput = {
+      appointment: {
+        connect: { id: appointmentId }
+      }
+    }
+
+    await this.ratingRepository.create(newRating)
+
+    return updatedAppointment
   }
 
   public async executeDelete (userId: string, appointmentId: string) {

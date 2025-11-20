@@ -7,7 +7,8 @@ import ProfessionalInputContainer from './components/ProfessionalInputContainer'
 import useAppDispatch from '../../hooks/use-app-dispatch'
 import useAppSelector from '../../hooks/use-app-selector'
 import { authAPI } from '../../store/auth/auth-api'
-import { setRegisterCompleted, setToken } from '../../store/auth/auth-slice'
+import { setToken } from '../../store/auth/auth-slice'
+import { refreshUserToken } from '../../utils/auth/refresh-token.util'
 
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
@@ -35,7 +36,6 @@ function CompleteRegister() {
 
   async function handleUpdateProfileToken() {
     if (!tokens?.googleAccessToken) {
-      toast.error('Token de acesso inválido')
       return
     }
 
@@ -49,12 +49,7 @@ function CompleteRegister() {
       dispatchRedux(
         setToken({
           user: {
-            id: decodedToken.id,
-            userType: decodedToken.userType,
-            email: decodedToken.email,
-            name: decodedToken.name,
-            registerCompleted: decodedToken.registerCompleted,
-            profilePhotoUrl: decodedToken.profilePhotoUrl,
+            ...decodedToken,
           },
           token: {
             googleAccessToken: tokens.googleAccessToken,
@@ -76,12 +71,12 @@ function CompleteRegister() {
   const handleSubmit: OnSubmitProfessionalOrCustomerForm = async (data) => {
     await completeRegister(data)
       .unwrap()
-      .then(() => {
-        dispatchRedux(
-          // TODO: Improve this refreshing token by complete register route
-          setRegisterCompleted(),
-        )
-        handleUpdateProfileToken()
+      .then(async () => {
+        const tokenRefreshed = await refreshUserToken(dispatchRedux)
+
+        if (!tokenRefreshed) {
+          await handleUpdateProfileToken()
+        }
         navigate('/register-completed')
       })
       .catch((error: unknown) => {
@@ -101,7 +96,7 @@ function CompleteRegister() {
   }, [])
 
   return (
-    <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn">
+    <div className="flex justify-center items-center flex-col h-full gap-12 animate-fadeIn max-w-[500px] mx-auto">
       <Title align="center">Quase lá, finalize seu cadastro</Title>
       <InputContainer handleSubmit={handleSubmit} isLoading={isLoading} />
     </div>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { XMarkIcon, PlusIcon } from '@heroicons/react/24/solid'
 import { Input } from '../Input'
 import { Button } from '../../button/Button'
@@ -26,6 +26,8 @@ export default function PaymentMethodsInput({
   onChange,
 }: PaymentMethodsInputProps) {
   const [customMethodName, setCustomMethodName] = useState('')
+  const [selectOpen, setSelectOpen] = useState(false)
+  const selectRef = useRef<HTMLSelectElement | null>(null)
 
   const allDisplayableMethods = useMemo(() => {
     const customMethodsInValue = value
@@ -79,12 +81,12 @@ export default function PaymentMethodsInput({
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto rounded-lg text-white">
+    <div className="w-full max-w-lg mx-auto text-white">
       <label className="text-sm font-medium text-[#D9D9D9]">
         Métodos de Pagamento Aceitos
       </label>
 
-      <div className="mt-2 flex min-h-[48px] flex-wrap items-center border border-[#B19B86] gap-2 rounded-md p-2 bg-[#1a1a1a]">
+      <div className="mt-2 flex min-h-[48px] flex-wrap items-center border border-[#B19B86] gap-2 rounded-3xl p-2 bg-[#1a1a1a]">
         {value.length > 0 ? (
           value.map((method) => (
             <span
@@ -114,28 +116,52 @@ export default function PaymentMethodsInput({
           <label htmlFor="payment-method-select" className="sr-only">
             Adicionar método de pagamento da lista
           </label>
-          <select
-            id="payment-method-select"
-            value=""
-            onChange={(e) => handleAddMethod(e.target.value)}
-            className="h-12 w-full cursor-pointer rounded-full border border-[#B19B86] bg-[#1a1a1a] px-3 text-white focus:border-primary-100 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={availableMethodsInDropdown.length === 0}
-          >
-            <option value="" disabled className="text-gray-500">
-              {availableMethodsInDropdown.length > 0
-                ? 'Adicionar da lista'
-                : 'Opções esgotadas'}
-            </option>
-            {availableMethodsInDropdown.map((method) => (
-              <option
-                key={method.value}
-                value={method.value}
-                className="bg-[#2a2a2a] text-white"
-              >
-                {method.label}
+          <div className="relative">
+            <select
+              ref={selectRef}
+              id="payment-method-select"
+              value=""
+              onChange={(e) => {
+                handleAddMethod(e.target.value)
+                setSelectOpen(false)
+              }}
+              onFocus={() => setSelectOpen(true)}
+              onMouseDown={() => setSelectOpen((s) => !s)}
+              onBlur={() => setSelectOpen(false)}
+              className="appearance-none h-12 w-full cursor-pointer rounded-full border border-[#B19B86] bg-[#1a1a1a] px-3 pr-10 text-white focus:border-primary-100 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={availableMethodsInDropdown.length === 0}
+            >
+              <option value="" disabled className="text-gray-500">
+                {availableMethodsInDropdown.length > 0
+                  ? 'Adicionar da lista'
+                  : 'Opções esgotadas'}
               </option>
-            ))}
-          </select>
+              {availableMethodsInDropdown.map((method) => (
+                <option
+                  key={method.value}
+                  value={method.value}
+                  className="bg-[#2a2a2a] text-white"
+                >
+                  {method.label}
+                </option>
+              ))}
+            </select>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className={`pointer-events-none absolute top-1/2 transform -translate-y-1/2 right-6 h-5 w-5 text-gray-400 transition-transform duration-150 ${selectOpen ? 'rotate-180' : 'rotate-0'}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 justify-between">

@@ -2,7 +2,7 @@ import { type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { type ServiceRepository } from '../protocols/service.repository'
 import { type PaginatedRequest } from '../../types/pagination'
-import { type ServiceFilters } from '../../types/services/service-filters'
+import { type PartialServiceQuerySchema } from '@/utils/validation/zod-schemas/pagination/services/services-query.schema'
 
 class PrismaServiceRepository implements ServiceRepository {
   public async findAll () {
@@ -21,7 +21,7 @@ class PrismaServiceRepository implements ServiceRepository {
   }
 
   public async fetchProfessionalsOfferingService (serviceId: string) {
-    const professionalsOfferingService = await prismaClient.service.findUnique({
+    const professionalsOfferingServiceRaw = await prismaClient.service.findUnique({
       where: {
         id: serviceId
       },
@@ -48,6 +48,27 @@ class PrismaServiceRepository implements ServiceRepository {
         }
       }
     })
+
+    let professionalsOfferingService: any = null
+    if (professionalsOfferingServiceRaw != null) {
+      professionalsOfferingService = {
+        id: professionalsOfferingServiceRaw.id,
+        offers: professionalsOfferingServiceRaw.offers.map((offer: any) => ({
+          id: offer.id,
+          estimatedTime: offer.estimatedTime,
+          price: offer.price,
+          professional: {
+            id: offer.professional.id,
+            name: offer.professional.name,
+            specialization: offer.professional.specialization,
+            profilePhotoUrl: offer.professional.profilePhotoUrl,
+            paymentMethods: Array.isArray(offer.professional.paymentMethods)
+              ? offer.professional.paymentMethods
+              : []
+          }
+        }))
+      }
+    }
 
     return { professionalsOfferingService }
   }
@@ -79,21 +100,47 @@ class PrismaServiceRepository implements ServiceRepository {
   }
 
   public async findAllPaginated (
-    params: PaginatedRequest<ServiceFilters>
+    params: PaginatedRequest<PartialServiceQuerySchema>
   ) {
     const { page, limit, filters } = params
     const skip = (page - 1) * limit
 
-    const where = {
-      name: (filters.name != null) ? { contains: filters.name } : undefined
+    const where: Prisma.ServiceWhereInput = {
+      name: (filters.name != null) ? { contains: filters.name } : undefined,
+      category: (filters.category != null) ? { contains: filters.category } : undefined,
+      OR: (filters.q != null)
+        ? [
+            {
+              name: {
+                contains: filters.q
+              }
+            },
+            {
+              description: {
+                contains: filters.q
+              }
+            },
+            {
+              offers: {
+                some: {
+                  professional: {
+                    name: {
+                      contains: filters.q
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        : undefined
     }
 
     const [data, total] = await Promise.all([
       prismaClient.service.findMany({
-        where,
         skip,
         take: limit,
-        orderBy: { createdAt: 'asc' }
+        orderBy: { createdAt: 'asc' },
+        where
       }),
       prismaClient.service.count({ where })
     ])

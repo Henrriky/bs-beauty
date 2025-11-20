@@ -1,9 +1,16 @@
 import { WeekDays } from "../../enums/enums"
+import { Permissions } from "../../types/authorization"
 
 export enum UserType {
   MANAGER = "MANAGER",
   CUSTOMER = "CUSTOMER",
   PROFESSIONAL = "PROFESSIONAL"
+}
+
+export enum NotificationPreference {
+  NONE = "NONE",
+  IN_APP = 'IN_APP',
+  ALL = 'ALL'
 }
 
 export interface CustomerOrProfessional {
@@ -12,7 +19,8 @@ export interface CustomerOrProfessional {
   registerCompleted: boolean
   email: string
   userType: UserType
-  profilePhotoUrl: string
+  profilePhotoUrl?: string
+  permissions: Permissions[]
 }
 
 export type Customer = {
@@ -28,6 +36,7 @@ export type Customer = {
   userType: UserType;
   referrerId: string;
   referralCount: number;
+  notificationPreference: NotificationPreference
   createdAt: Date;
   updatedAt: Date;
 }
@@ -40,13 +49,24 @@ export type Professional = {
   registerCompleted: boolean;
   socialMedia: { name: string, url: string }[] | null;
   paymentMethods: { name: string, }[] | null;
+  isCommissioned: boolean;
+  commissionRate: number | null;
   contact: string | null;
   specialization: string | null;
   profilePhotoUrl: string;
   userType: UserType;
+  notificationPreference: NotificationPreference
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type FetchUserInfoRequest = void
+export type FetchUserInfoCustomer = Customer
+export type FetchUserInfoProfessional = Professional & { roles: string[] }
+export type FetchUserInfoResponse = {
+  user: FetchUserInfoCustomer | FetchUserInfoProfessional
+}
+
 
 export type Shift = {
   id: string;

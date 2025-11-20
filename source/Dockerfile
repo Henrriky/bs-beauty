@@ -1,5 +1,4 @@
-FROM node:20.10.0
-
+FROM node:22-alpine
 
 # =============BACK-END=============
 
@@ -12,6 +11,8 @@ RUN npm install esbuild@0.21.5
 RUN npm install --omit=dev
 
 RUN npm install -g prisma
+
+RUN npx prisma generate
 
 RUN npm run build
 

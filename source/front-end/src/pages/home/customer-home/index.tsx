@@ -1,11 +1,11 @@
 import CustomerHomeHeader from './components/customer-home-header/CustomerHomeHeader'
-import CustomerHomeServiceContainer from './components/customer-home-appointment-wizard/CustomerHomeAppointmentWizard'
+import CustomerHomeAppointmentWizard from './components/customer-home-appointment-wizard/CustomerHomeAppointmentWizard'
 
 function CustomerHome() {
   return (
-    <div className="flex flex-col max-h-[80vh] overflow-y-scroll px-4 gap-4">
+    <div className="flex flex-col max-h-[80vh] overflow-y-scroll gap-4">
       <CustomerHomeHeader />
-      <CustomerHomeServiceContainer />
+      <CustomerHomeAppointmentWizard />
     </div>
   )
 }

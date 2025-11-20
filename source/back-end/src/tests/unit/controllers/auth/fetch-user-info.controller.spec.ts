@@ -28,7 +28,8 @@ describe('FetchUserInfoController', () => {
         userType: 'PROFESSIONAL',
         profilePhotoUrl: 'http://example.com/photo.jpg',
         registerCompleted: false,
-        userId: '12345'
+        userId: '12345',
+        permissions: []
       }
     })
 

@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import { makeProfessionalsUseCaseFactory } from '../factory/make-professionals-use-case.factory'
 import type { Prisma } from '@prisma/client'
 import { StatusCodes } from 'http-status-codes'
-import { professionalQuerySchema } from '../utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
+import { handleFetchServicesOfferedByProfessionalQuerySchema, professionalQuerySchema } from '../utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
 
 class ProfessionalsController {
   public static async handleFindAll (req: Request, res: Response, next: NextFunction) {
@@ -72,12 +72,71 @@ class ProfessionalsController {
     }
   }
 
+  public static async handleUpdateCommission (req: Request, res: Response, next: NextFunction) {
+    try {
+      const professionalId = req.params.id
+      const { commissionRate } = req.body
+      const useCase = makeProfessionalsUseCaseFactory()
+      await useCase.executeUpdateCommission(professionalId, commissionRate)
+
+      res.status(StatusCodes.OK).send({ message: 'Commission updated successfully' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   public static async handleFetchServicesOfferedByProfessional (req: Request, res: Response, next: NextFunction) {
     try {
       const useCase = makeProfessionalsUseCaseFactory()
-      const { professional } = await useCase.fetchServicesOfferedByProfessional(req.params.id)
+      const parsed = handleFetchServicesOfferedByProfessionalQuerySchema.parse(req.query)
+      const { page, limit, ...filters } = parsed
+      const { professional } = await useCase.fetchServicesOfferedByProfessional(
+        req.params.id,
+        {
+          page,
+          limit,
+          filters
+        })
 
       res.send({ professional })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleAddRole (req: Request, res: Response, next: NextFunction) {
+    try {
+      const professionalId = req.params.id
+      const { roleId } = req.body
+      const useCase = makeProfessionalsUseCaseFactory()
+      await useCase.executeAddRole(professionalId, roleId)
+
+      res.status(StatusCodes.OK).send({ message: 'Role added to professional successfully' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleRemoveRole (req: Request, res: Response, next: NextFunction) {
+    try {
+      const professionalId = req.params.id
+      const { roleId } = req.body
+      const useCase = makeProfessionalsUseCaseFactory()
+      await useCase.executeRemoveRole(professionalId, roleId)
+
+      res.status(StatusCodes.OK).send({ message: 'Role removed from professional successfully' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async handleGetRoles (req: Request, res: Response, next: NextFunction) {
+    try {
+      const professionalId = req.params.id
+      const useCase = makeProfessionalsUseCaseFactory()
+      const roles = await useCase.executeFindRolesByProfessionalId(professionalId)
+
+      res.status(StatusCodes.OK).send({ roles })
     } catch (error) {
       next(error)
     }

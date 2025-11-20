@@ -11,6 +11,7 @@ export class ProfessionalFactory {
         socialMedia: data.socialMedia === null ? Prisma.JsonNull : data.socialMedia ?? { name: faker.internet.displayName(), url: faker.internet.url() },
         profilePhotoUrl: data.profilePhotoUrl ?? faker.image.urlLoremFlickr({ category: 'people' }),
         registerCompleted: data.registerCompleted ?? true,
+        contact: data.contact ?? faker.phone.number(),
         ...data
       }
     })

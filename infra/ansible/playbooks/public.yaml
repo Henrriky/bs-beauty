@@ -1,0 +1,69 @@
+- hosts: public
+  become: true
+  vars_files:
+    - ../group_vars/public.yaml
+  tasks:
+    - name: Configurar Nginx com segurança
+      block:
+
+        - name: Instalar Nginx
+          apt:
+            name: nginx
+            state: present
+            update_cache: yes
+
+        - name: Criar diretório para certificados
+          file:
+            path: "{{ cert_path }}"
+            state: directory
+            owner: root
+            group: root
+            mode: 0755
+
+        - name: Criar arquivo do certificado SSL
+          copy:
+            content: "{{ ssl_cert_content }}"
+            dest: "{{ ssl_cert_path }}"
+            owner: root
+            group: root
+            mode: 0644
+
+        - name: Criar arquivo da chave privada SSL
+          copy:
+            content: "{{ ssl_key_content }}"
+            dest: "{{ ssl_key_path }}"
+            owner: root
+            group: root
+            mode: 0600
+
+        - name: Iniciar e habilitar Nginx
+          service:
+            name: nginx
+            state: started
+            enabled: yes
+
+        - name: Configurar Nginx para {{ server_name }}
+          template:
+            src: ../templates/nginx.conf.j2
+            dest: /etc/nginx/conf.d/bsbeauty.conf
+            owner: root
+            group: root
+            mode: 0644
+
+        - name: Testar configuração do Nginx
+          command: nginx -t
+          register: nginx_test
+          failed_when: "'successful' not in nginx_test.stderr"
+          changed_when: false
+
+        - name: Recarregar Nginx
+          service:
+            name: nginx
+            state: reloaded
+            
+      rescue:
+        - name: Falha na configuração do Nginx
+          debug:
+            msg: >
+              Configuração inválida! O Nginx não será recarregado.
+              Corrija o arquivo nginx.conf.j2 ou os certificados antes de rodar novamente.

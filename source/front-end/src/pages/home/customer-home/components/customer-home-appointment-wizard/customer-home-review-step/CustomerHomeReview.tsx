@@ -10,7 +10,6 @@ import Modal from '../../../../../services/components/Modal'
 import { Button } from '../../../../../../components/button/Button'
 import Subtitle from '../../../../../../components/texts/Subtitle'
 
-
 function CustomerHomeReviewStep() {
   const { watch, setValue } = useFormContext<CreateAppointmentFormData>()
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
@@ -23,11 +22,13 @@ function CustomerHomeReviewStep() {
   const price = watch('price')
   const paymentMethods = watch('paymentMethods')
   const customerId = watch('customerId')
-  const allowImageUse = watch('allowImageUse')
 
-  const { data: serviceData } = serviceAPI.useGetServiceByIdQuery(serviceId, {
-    skip: !serviceId,
-  })
+  const { data: serviceData } = serviceAPI.useGetServiceByIdQuery(
+    serviceId || 'Serviço não definido',
+    {
+      skip: !serviceId,
+    },
+  )
 
   const { data: customerData } = customerAPI.useGetCustomerByIdQuery(
     customerId,
@@ -81,7 +82,7 @@ function CustomerHomeReviewStep() {
         minute: '2-digit',
       })
     : '--:--'
-    
+
   return (
     <div className="p-8 rounded-lg space-y-4 bg-[#262626]">
       <h2 className="text-xl font-semibold text-secondary-200 border-b pb-2">
@@ -130,6 +131,7 @@ function CustomerHomeReviewStep() {
         isOpen={modalIsOpen}
         onClose={() => {
           setModalIsOpen(false)
+          setValue('allowImageUse', false)
         }}
       >
         <img
@@ -140,10 +142,12 @@ function CustomerHomeReviewStep() {
         <div className="flex flex-col items-center justify-between h-full pt-8 pb-4">
           <div className="flex-grow flex flex-col items-center justify-center gap-2">
             <Subtitle className="text-[#B5B5B5]" align="center">
-              Deseja permitir o uso de sua imagem? Podemos fazer fotos ou vídeos para divulgação do Salão.
+              Deseja permitir o uso de sua imagem? Podemos fazer fotos ou vídeos
+              para divulgação do Salão.
             </Subtitle>
             <Subtitle className="text-primary-100 text-sm" align="center">
-              Você também pode desativar essa mensagem alterando as opções na aba Perfil.
+              Você também pode desativar essa mensagem alterando as opções na
+              aba Perfil.
             </Subtitle>
           </div>
           <div className="flex gap-2 justify-between w-full">

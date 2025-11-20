@@ -16,5 +16,4 @@ const validateCreateOffer = async (req: Request, res: Response, next: NextFuncti
   }
 }
 
-
 export { validateCreateOffer }

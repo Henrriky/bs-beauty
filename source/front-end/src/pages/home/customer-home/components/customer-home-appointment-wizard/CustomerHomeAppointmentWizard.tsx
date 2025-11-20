@@ -9,7 +9,6 @@ import useAppSelector from '../../../../../hooks/use-app-selector'
 import { appointmentAPI } from '../../../../../store/appointment/appointment-api'
 import Modal from '../../../../services/components/Modal'
 import CustomerHomeSelectProfessionalContainer from './customer-home-select-professional-step/CustomerHomeSelectProfessional'
-import CustomerHomeSelectServiceContainer from './customer-home-select-service-step/CustomerHomeSelectService'
 import CustomerHomeSelectTimeContainer from './customer-home-select-time-step/CustomerHomeSelectTime'
 import { appointmentFormData, CreateAppointmentFormData } from './types'
 
@@ -17,6 +16,7 @@ import SuccessfullAppointmentCreationIcon from '../../../../../assets/create-app
 import { toast } from 'react-toastify'
 import CustomerHomeSelectAppointmentFlow from './CustomerHomeSelectAppointmentFlow'
 import CustomerHomeReviewStep from './customer-home-review-step/CustomerHomeReview'
+import CustomerHomeSelectServiceContainer from './customer-home-select-service-step'
 
 type Step = {
   currentStepName: string
@@ -118,7 +118,17 @@ function CustomerHomeAppointmentWizard() {
       await makeAppointment(payload).unwrap()
 
       setModalIsOpen(true)
-    } catch (error) {
+    } catch (error: any) {
+      if (
+        error?.data?.message
+          ?.toString()
+          .includes('maximum number of appointments')
+      ) {
+        toast.error(
+          'Você já atingiu o número máximo de agendamentos por hoje. Por favor, tente novamente amanhã.',
+        )
+        return
+      }
       console.error('❌ Erro ao criar o agendamento:', error)
       toast.error('Erro ao criar o agendamento. Tente novamente.')
     }
@@ -148,7 +158,7 @@ function CustomerHomeAppointmentWizard() {
           <AppointmentCurrentStepForm currentFlow={currentFlow} />
         </div>
         <div
-          className={`flex mt-6 ${!currentStep.previousStep ? 'justify-end' : 'justify-between'}`}
+          className={`flex mt-6 ${!currentStep.previousStep ? 'justify-end' : 'justify-between'} px-4`}
         >
           {currentStep.previousStep && (
             <Button

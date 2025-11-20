@@ -20,11 +20,11 @@ class PrismaOfferRepository implements OfferRepository {
   }
 
   public async findByServiceId (serviceId: string) {
-    const offer = await prismaClient.offer.findFirst({
+    const offers = await prismaClient.offer.findMany({
       where: { serviceId }
     })
 
-    return offer
+    return offers
   }
 
   public async findByProfessionalId (professionalId: string) {
@@ -66,64 +66,6 @@ class PrismaOfferRepository implements OfferRepository {
     })
 
     return deletedOffer
-  }
-
-  public async fetchValidAppointmentsByProfessionalOnDay (professionalId: string, dayToFetchAvailableSchedulling: Date) {
-    const startOfDay = new Date(dayToFetchAvailableSchedulling)
-    startOfDay.setHours(0, 0, 0, 0)
-
-    const endOfDay = new Date(dayToFetchAvailableSchedulling)
-    endOfDay.setHours(23, 59, 59, 999)
-
-    const validAppointmentsByProfessionalOnDay = await prismaClient.offer.findMany({
-      where: {
-        isOffering: true,
-        professionalId
-      },
-      select: {
-        professionalId: true,
-        estimatedTime: true,
-        appointments: {
-          where: {
-            appointmentDate: {
-              gte: startOfDay,
-              lte: endOfDay
-            },
-            status: {
-              in: [Status.PENDING, Status.RESCHEDULED, Status.CONFIRMED, Status.FINISHED]
-            }
-          }
-        }
-      }
-    })
-
-    if (validAppointmentsByProfessionalOnDay == null) {
-      return {
-        validAppointmentsOnDay: null
-      }
-    }
-
-    const validAppointmentsOnDay = validAppointmentsByProfessionalOnDay.reduce(
-      (acc: Array<FetchValidAppointmentsByProfessionalOnDay[0]>, offer) => {
-        if (offer.appointments.length > 0) {
-          acc.push(...offer.appointments.map(appointment => {
-            return {
-              id: appointment.id,
-              observation: appointment.observation,
-              status: appointment.status,
-              appointmentDate: appointment.appointmentDate,
-              appointmentId: appointment.id,
-              estimatedTime: offer.estimatedTime
-            }
-          }))
-        }
-
-        return acc
-      }, [])
-
-    return {
-      validAppointmentsOnDay
-    }
   }
 
   public async findByProfessionalIdPaginated (
