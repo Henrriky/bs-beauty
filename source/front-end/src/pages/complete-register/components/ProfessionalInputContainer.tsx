@@ -13,6 +13,7 @@ import {
 import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import SocialMediaContainerInput from '../../../components/inputs/social-media-input/SocialMediaContainerInput'
+import NotificationPreferenceSelect from '../../../components/inputs/NotificationPreferenceSelect'
 
 interface ProfessionalInputContainerProps {
   isLoading: boolean
@@ -68,6 +69,10 @@ function ProfessionalInputContainer(props: ProfessionalInputContainerProps) {
         type="contact"
         placeholder="Digite seu telefone de contato"
         error={errors?.contact?.message?.toString()}
+      />
+      <NotificationPreferenceSelect
+        register={register}
+        error={errors.notificationPreference}
       />
       <Input
         label="Email"
