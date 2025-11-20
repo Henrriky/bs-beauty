@@ -141,4 +141,8 @@ export const API_VARIABLES = {
     MOST_PROFITABLE_SERVICES: '/reports/most-profitable-services',
     COMMISSIONED_REVENUE: '/reports/commissioned-revenue',
   },
+  SALON_INFO_ENDPOINTS: {
+    FETCH_SALON_INFO: (id: number) => `/salon-info/${id}`,
+    UPDATE_SALON_INFO: (id: number) => `/salon-info/${id}`,
+  },
 } as const

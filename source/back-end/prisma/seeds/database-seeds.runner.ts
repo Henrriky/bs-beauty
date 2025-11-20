@@ -9,6 +9,7 @@ import { appointmentSeeder } from './appointment-seeder.service'
 import { notificationTemplateSeeder } from './notification-template-seeder.service'
 import { notificationSeeder } from './notification-seeder.service'
 import { ratingSeeder } from './rating-seeder.service'
+import { salonInfoSeeder } from './salon-info-seeder.service'
 
 export async function runDatabaseSeeds(): Promise<void> {
   const logger = AppLoggerInstance
@@ -28,6 +29,7 @@ export async function runDatabaseSeeds(): Promise<void> {
     await appointmentSeeder.seedAppointments()
     await ratingSeeder.seedRatings()
     await notificationSeeder.seedNotifications()
+    await salonInfoSeeder.seedSalonInfo()
 
     logger.info('Database seeding completed successfully', {
       context: 'DatabaseSeeds'
