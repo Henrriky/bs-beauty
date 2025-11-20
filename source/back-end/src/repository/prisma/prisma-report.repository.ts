@@ -662,6 +662,52 @@ class PrismaReportRepository implements ReportRepository {
 
     return report
   }
+
+  public async getCommissionedRevenue(startDate: Date, endDate: Date, professionalId: string) {
+    const professional = await prismaClient.professional.findUnique({
+      where: { id: professionalId },
+      select: {
+        isCommissioned: true,
+        commissionRate: true
+      }
+    })
+
+    if (!professional) {
+      return null
+    }
+
+    if (!professional.isCommissioned) {
+      return null
+    }
+
+    if (!professional.commissionRate || Number(professional.commissionRate) === 0) {
+      return null
+    }
+
+    const payments = await prismaClient.paymentRecord.findMany({
+      where: {
+        professionalId,
+        createdAt: {
+          gte: startDate,
+          lte: endDate
+        }
+      },
+      select: {
+        totalValue: true
+      }
+    })
+
+    const totalRevenue = payments.reduce((sum, payment) => sum + Number(payment.totalValue), 0)
+    const commissionRate = Number(professional.commissionRate)
+    const commissionedRevenue = totalRevenue * commissionRate
+
+    return {
+      totalRevenue: Math.round(totalRevenue * 100) / 100,
+      commissionedRevenue: Math.round(commissionedRevenue * 100) / 100,
+      commissionRate,
+      transactionCount: payments.length
+    }
+  }
 }
 
 export { PrismaReportRepository }

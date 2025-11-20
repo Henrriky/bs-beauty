@@ -271,6 +271,33 @@ class ReportsController {
       next(error)
     }
   }
+
+  public static async getCommissionedRevenue(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate || !professionalId) {
+        res.status(400).send({ error: 'startDate, endDate, and professionalId are required' })
+        return
+      }
+
+      const report = await useCase.executeGetCommissionedRevenue(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        String(professionalId)
+      )
+
+      if (!report) {
+        res.status(404).send({ error: 'Professional not found or not commissioned' })
+        return
+      }
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { ReportsController }

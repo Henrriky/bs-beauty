@@ -243,8 +243,25 @@ export const useAnalyticsData = (
     },
   )
 
+  const {
+    data: commissionedRevenueData,
+    isLoading: isCommissionedRevenueLoading,
+    isError: isCommissionedRevenueError,
+  } = reportAPI.useGetCommissionedRevenueQuery(
+    {
+      startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+      endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+      professionalId: activeProfessionalId || '',
+    },
+    {
+      skip: !startDate || !endDate || !activeProfessionalId,
+    },
+  )
+
   return {
     userType,
+    userId,
+    activeProfessionalId,
     professionalsData,
     appointmentsCountData,
     estimatedTimeData,
@@ -273,5 +290,9 @@ export const useAnalyticsData = (
     isMostBookedServicesLoading,
     mostProfitableServicesData,
     isMostProfitableServicesLoading,
+    commissionedRevenueData: isCommissionedRevenueError
+      ? null
+      : commissionedRevenueData,
+    isCommissionedRevenueLoading,
   }
 }

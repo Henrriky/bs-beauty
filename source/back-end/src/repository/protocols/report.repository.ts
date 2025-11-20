@@ -19,6 +19,8 @@ interface ReportRepository {
   // Service Reports
   getMostBookedServices: (startDate: Date, endDate: Date, professionalId?: string) => Promise<Array<{ serviceId: string, serviceName: string, category: string, bookingCount: number }>>
   getMostProfitableServices: (startDate: Date, endDate: Date, professionalId?: string) => Promise<Array<{ serviceId: string, serviceName: string, category: string, totalRevenue: number, bookingCount: number }>>
+  // Commissioned Revenue Report
+  getCommissionedRevenue: (startDate: Date, endDate: Date, professionalId: string) => Promise<{ totalRevenue: number, commissionedRevenue: number, commissionRate: number, transactionCount: number } | null>
 }
 
 export type { ReportRepository }

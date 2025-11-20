@@ -184,3 +184,18 @@ export interface GetMostProfitableServicesParams {
   endDate: string
   professionalId?: string
 }
+
+export interface CommissionedRevenue {
+  totalRevenue: number
+  commissionedRevenue: number
+  commissionRate: number
+  transactionCount: number
+}
+
+export type GetCommissionedRevenueResponse = CommissionedRevenue
+
+export interface GetCommissionedRevenueParams {
+  startDate: string
+  endDate: string
+  professionalId: string
+}

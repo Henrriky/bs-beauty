@@ -139,5 +139,6 @@ export const API_VARIABLES = {
     BUSIEST_WEEKDAYS: '/reports/busiest-weekdays',
     MOST_BOOKED_SERVICES: '/reports/most-booked-services',
     MOST_PROFITABLE_SERVICES: '/reports/most-profitable-services',
+    COMMISSIONED_REVENUE: '/reports/commissioned-revenue',
   },
 } as const

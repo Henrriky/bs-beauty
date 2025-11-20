@@ -26,4 +26,7 @@ reportRoutes.get('/busiest-weekdays', ReportsController.getBusiestWeekdays)
 reportRoutes.get('/most-booked-services', ReportsController.getMostBookedServices)
 reportRoutes.get('/most-profitable-services', ReportsController.getMostProfitableServices)
 
+// Commissioned Revenue Report
+reportRoutes.get('/commissioned-revenue', ReportsController.getCommissionedRevenue)
+
 export { reportRoutes }

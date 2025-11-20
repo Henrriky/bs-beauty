@@ -67,6 +67,11 @@ class ReportsUseCase {
     const report = await this.reportRepository.getMostProfitableServices(startDate, endDate, professionalId)
     return report
   }
+
+  public async executeGetCommissionedRevenue(startDate: Date, endDate: Date, professionalId: string) {
+    const report = await this.reportRepository.getCommissionedRevenue(startDate, endDate, professionalId)
+    return report
+  }
 }
 
 export { ReportsUseCase }

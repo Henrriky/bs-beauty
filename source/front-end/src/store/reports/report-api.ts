@@ -28,6 +28,8 @@ import {
   GetMostBookedServicesParams,
   GetMostProfitableServicesResponse,
   GetMostProfitableServicesParams,
+  GetCommissionedRevenueResponse,
+  GetCommissionedRevenueParams,
 } from './types'
 
 export const reportAPI = createApi({
@@ -172,6 +174,17 @@ export const reportAPI = createApi({
       }),
       providesTags: ['Report'],
     }),
+    getCommissionedRevenue: builder.query<
+      GetCommissionedRevenueResponse,
+      GetCommissionedRevenueParams
+    >({
+      query: (params) => ({
+        url: API_VARIABLES.REPORTS_ENDPOINTS.COMMISSIONED_REVENUE,
+        method: 'GET',
+        params,
+      }),
+      providesTags: ['Report'],
+    }),
   }),
 })
 
@@ -189,4 +202,5 @@ export const {
   useGetBusiestWeekdaysQuery,
   useGetMostBookedServicesQuery,
   useGetMostProfitableServicesQuery,
+  useGetCommissionedRevenueQuery,
 } = reportAPI

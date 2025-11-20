@@ -21,6 +21,7 @@ import TotalRevenueCard from './components/TotalRevenueCard'
 import NewCustomersCard from './components/NewCustomersCard'
 import RevenueByServiceGrid from './components/RevenueByServiceGrid'
 import RevenueByProfessionalGrid from './components/RevenueByProfessionalGrid'
+import CommissionedRevenueCard from './components/CommissionedRevenueCard'
 import OccupancyRateCard from './components/OccupancyRateCard'
 import IdleRateCard from './components/IdleRateCard'
 import PeakHoursCard from './components/PeakHoursCard'
@@ -48,7 +49,6 @@ function ProductivityReport() {
 
   const [switchValue, setSwitchValue] =
     useState<SwitchButtonValues>('productivity')
-  const activeProfessionalId = selectedProfessional?.id || undefined
 
   const {
     userType,
@@ -80,11 +80,14 @@ function ProductivityReport() {
     isMostBookedServicesLoading,
     mostProfitableServicesData,
     isMostProfitableServicesLoading,
+    commissionedRevenueData,
+    isCommissionedRevenueLoading,
+    activeProfessionalId,
   } = useAnalyticsData(
     startDate,
     endDate,
     selectedStatuses,
-    activeProfessionalId,
+    selectedProfessional?.id,
   )
 
   return (
@@ -174,6 +177,13 @@ function ProductivityReport() {
               data={totalRevenueData}
               isLoading={isTotalRevenueLoading}
             />
+
+            {activeProfessionalId && (
+              <CommissionedRevenueCard
+                data={commissionedRevenueData}
+                isLoading={isCommissionedRevenueLoading}
+              />
+            )}
 
             <ChartContainer title="Evolução do Faturamento">
               <RevenueChart data={revenueData} />
