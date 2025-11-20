@@ -20,7 +20,7 @@ function CustomerList({ customers, isLoading, pagination }: CustomerListProps) {
 
   return (
     <>
-      <div>
+      <div className="space-y-3">
         {customers.map((customer) => (
           <CustomerCard key={customer.id} customer={customer} />
         ))}
@@ -39,16 +39,19 @@ function CustomerList({ customers, isLoading, pagination }: CustomerListProps) {
 
 function CustomerListSkeleton({ count = 10 }: { count?: number }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
-          className="flex items-center gap-4 py-4 px-6 rounded-2xl mt-5 bg-primary-800 animate-pulse border-[1px] border-[#D9D9D9] border-opacity-25"
+          className="w-full bg-[#222222] rounded-2xl border-none px-4 py-3 flex items-center gap-3 animate-pulse"
         >
-          <div className="h-12 w-14 bg-primary-400 rounded-full"></div>
-          <div className="flex flex-col gap-2 w-full">
-            <div className="h-4 bg-primary-400 rounded w-32 mb-2"></div>
-            <div className="h-3 bg-primary-400 rounded w-48"></div>
+          <div className="mr-3">
+            <div className="h-10 w-10 bg-[#3A3A3A] rounded-full shrink-0"></div>
+          </div>
+          <div className="flex flex-col gap-1 min-w-0 flex-1">
+            <div className="h-4 bg-[#3A3A3A] rounded w-40"></div>
+            <div className="h-3 bg-[#3A3A3A] rounded w-48"></div>
+            <div className="h-3 bg-[#3A3A3A] rounded w-32"></div>
           </div>
         </div>
       ))}

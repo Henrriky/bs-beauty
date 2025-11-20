@@ -31,7 +31,7 @@ function Customers() {
     <div className="h-full flex flex-col">
       <PageHeader
         title="Listagem de Clientes"
-        subtitle="Gerencie as informações dos clientes aqui."
+        subtitle="Confira as informações dos clientes aqui."
       />
       <UserCanAccessContainer
         allowedPermissions={['customer.read']}

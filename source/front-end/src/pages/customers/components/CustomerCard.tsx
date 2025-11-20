@@ -3,6 +3,7 @@ import { firstLetterOfWordToUpperCase } from '../../../utils/formatter/first-let
 import ProfilePicture from '../../profile/components/ProfilePicture'
 import CustomerCardDescription from './CustomerCardDescription'
 import CustomerCardTitle from './CustomerCardTitle'
+import { Formatter } from '../../../utils/formatter/formatter.util'
 
 interface CustomerCardProps {
   customer: Customer
@@ -10,19 +11,25 @@ interface CustomerCardProps {
 
 function CustomerCard({ customer }: CustomerCardProps) {
   return (
-    <div className="flex items-center gap-4 py-4 px-6 rounded-2xl mt-5 bg-[#262626] border-[1px] border-[#D9D9D9] border-opacity-25">
-      <ProfilePicture
-        size="sm"
-        profilePhotoUrl={
-          customer.profilePhotoUrl ?? ''
-        }
-        displayName={customer.name ?? 'Cliente'}
-      />
-      <div>
+    <div className="w-full bg-[#222222] rounded-2xl border-none px-4 py-3 flex items-center gap-3">
+      <div className='mr-3'>
+        <ProfilePicture
+          size="sm"
+          profilePhotoUrl={customer.profilePhotoUrl ?? ''}
+          displayName={customer.name ?? 'Cliente'}
+        />
+      </div>
+
+      <div className="flex flex-col gap-1 min-w-0">
         <CustomerCardTitle>
           {firstLetterOfWordToUpperCase(customer.name ?? 'Nome não disponível')}
         </CustomerCardTitle>
         <CustomerCardDescription>{customer.email}</CustomerCardDescription>
+        {customer.phone && (
+          <CustomerCardDescription>
+            {Formatter.formatPhoneNumber(customer.phone)}
+          </CustomerCardDescription>
+        )}
       </div>
     </div>
   )
