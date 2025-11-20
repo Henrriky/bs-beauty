@@ -12,6 +12,7 @@ import { errorHandlerMiddleware } from '../middlewares/error-handler.middleware'
 import { authRoutes } from './routes/auth.routes'
 import { verifyJwtTokenMiddleware } from '../middlewares/auth/verify-jwt-token.middleware'
 import { analyticsServiceRoutes } from './routes/analytics.routes'
+import { salonInfoRoutes } from './routes/salon-info.routes'
 import { paymentRecordRoutes } from './routes/payment-record.routes'
 import { notificationTemplatesRoutes } from './routes/notification-templates.routes'
 import { ratingRoutes } from './routes/ratings.routes'
@@ -33,6 +34,7 @@ appRoutes.use('/offers', verifyJwtTokenMiddleware, offerRoutes)
 appRoutes.use('/roles', verifyJwtTokenMiddleware, roleRoutes)
 appRoutes.use('/permissions', verifyJwtTokenMiddleware, permissionRoutes)
 appRoutes.use('/analytics', verifyJwtTokenMiddleware, analyticsServiceRoutes)
+appRoutes.use('/salon-info', verifyJwtTokenMiddleware, salonInfoRoutes)
 appRoutes.use('/payment-records', verifyJwtTokenMiddleware, paymentRecordRoutes)
 appRoutes.use('/ratings', verifyJwtTokenMiddleware, ratingRoutes)
 appRoutes.use('/public-analytics', publicAnalyticsRoutes)
