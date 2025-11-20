@@ -5,7 +5,7 @@ export interface ServiceSeedData {
   status: 'APPROVED'
 }
 
-export function generateServicesData (): ServiceSeedData[] {
+export function generateServicesData(): ServiceSeedData[] {
   return [
     {
       name: 'Corte Feminino',
@@ -53,6 +53,30 @@ export function generateServicesData (): ServiceSeedData[] {
       name: 'Extensão de Cílios',
       description: 'Aplicação de extensão de cílios fio a fio',
       category: 'Cílios',
+      status: 'APPROVED'
+    },
+    {
+      name: 'Corte Masculino',
+      description: 'Corte de cabelo masculino com finalização',
+      category: 'Cabelo',
+      status: 'APPROVED'
+    },
+    {
+      name: 'Pedicure Completa',
+      description: 'Pedicure com tratamento de cutículas e esmaltação',
+      category: 'Unhas',
+      status: 'APPROVED'
+    },
+    {
+      name: 'Design de Sobrancelhas com Henna',
+      description: 'Design com aplicação de henna para realçar o formato',
+      category: 'Sobrancelhas',
+      status: 'APPROVED'
+    },
+    {
+      name: 'Maquiagem Social',
+      description: 'Maquiagem leve a média para eventos diurnos ou noturnos',
+      category: 'Maquiagem',
       status: 'APPROVED'
     }
   ]

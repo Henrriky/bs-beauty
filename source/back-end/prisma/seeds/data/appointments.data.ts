@@ -128,7 +128,7 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
   }
 
   const previousMonthStatuses: Array<'CANCELLED' | 'FINISHED'> = ['CANCELLED', 'FINISHED']
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 200; i++) {
     const appointmentDate = new Date(today)
     appointmentDate.setMonth(appointmentDate.getMonth() - 1)
     appointmentDate.setDate(faker.number.int({ min: 1, max: 28 }))
@@ -149,7 +149,7 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
     )
   }
 
-  for (let i = 0; i < 45; i++) {
+  for (let i = 0; i < 70; i++) {
     const appointmentDate = new Date(today)
     appointmentDate.setDate(faker.number.int({ min: 1, max: 30 }))
     appointmentDate.setUTCHours(
@@ -170,7 +170,7 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
   }
 
   const nextMonthStatuses: Array<'PENDING' | 'CONFIRMED'> = ['PENDING', 'CONFIRMED']
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 20; i++) {
     const appointmentDate = new Date(today)
     appointmentDate.setMonth(appointmentDate.getMonth() + 1)
     appointmentDate.setDate(faker.number.int({ min: 1, max: 28 }))

@@ -22,11 +22,10 @@ export interface ProfessionalSeedData {
   paymentMethods: { name: string }[]
   isCommissioned: boolean
   commissionRate: number | null
-  socialMedia: {
-    instagram?: string
-    facebook?: string
-    whatsapp?: string
-  } | null
+  socialMedia: Array<{
+    name: string
+    url: string
+  }> | null
   registerCompleted: boolean
   userType: UserType
 }
@@ -45,13 +44,13 @@ function generatePhoneNumber(): string {
   const ddd = faker.helpers.arrayElement(['11', '21', '31', '41', '51', '61', '71', '81'])
   const prefix = '9' + faker.string.numeric(4)
   const suffix = faker.string.numeric(4)
-  return `(55) ${ddd} ${prefix}-${suffix}`
+  return `(${ddd}) ${prefix}-${suffix}`
 }
 
 function generateInstagramHandle(name: string): string {
   const cleanName = name.toLowerCase().replace(/\s+/g, '')
   const suffix = faker.helpers.arrayElement(['beauty', 'hair', 'nails', 'makeup', 'style', ''])
-  return `@${cleanName}${suffix}`
+  return `https://instagram.com/${cleanName}${suffix}`
 }
 
 function createProfessionalData(
@@ -75,10 +74,12 @@ function createProfessionalData(
     paymentMethods: faker.helpers.arrayElement(paymentMethodOptions),
     isCommissioned,
     commissionRate,
-    socialMedia: {
-      instagram: generateInstagramHandle(firstName),
-      whatsapp: generatePhoneNumber()
-    },
+    socialMedia: [
+      {
+        name: 'Instagram',
+        url: generateInstagramHandle(firstName)
+      }
+    ],
     registerCompleted: true,
     userType
   }
@@ -99,7 +100,7 @@ export function generateProfessionalsData(): ProfessionalSeedData[] {
     {
       name: 'Bruna Silva',
       email: 'bruna.silva@bsbeauty.com',
-      specialization: null,
+      specialization: 'Cortes e Escovação',
       googleId: null,
       passwordHash: '$2b$10$jL/UoBjQ2w31M29iLvwyK.kLqBuD2PSL86JJbXm3GOFUIrgA1o5vS',
       userType: UserType.MANAGER
