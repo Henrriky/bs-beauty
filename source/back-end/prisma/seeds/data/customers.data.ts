@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { generatePhoneNumber } from './utils/utils'
 
 faker.seed(456)
 
@@ -44,43 +45,43 @@ export function generateCustomersData(): CustomerSeedData[] {
     {
       name: 'Johnata Souza',
       email: 'johnata.santicioli@example.com',
-      phone: '+55 11 92001-0001',
+      phone: generatePhoneNumber(),
       discoverySource: 'WHATSAPP' as const
     },
     {
       name: 'Marcelo Tavares',
       email: 'marcelo.tavares@example.com',
-      phone: '(55) 11 92001-0002',
+      phone: generatePhoneNumber(),
       discoverySource: 'INSTAGRAM' as const
     },
     {
       name: 'Ana Beatriz Oliveira',
       email: 'ana.oliveira@example.com',
-      phone: '(55) 11 92001-0003',
+      phone: generatePhoneNumber(),
       discoverySource: 'GOOGLE' as const
     },
     {
       name: 'Roberta Carlos Mendes',
       email: 'roberta.mendes@example.com',
-      phone: '(55) 11 92001-0004',
+      phone: generatePhoneNumber(),
       discoverySource: 'REFERRAL' as const
     },
     {
       name: 'Patricia Silva Santos',
       email: 'patricia.santos@example.com',
-      phone: '(55) 11 92001-0005',
+      phone: generatePhoneNumber(),
       discoverySource: 'GOOGLE' as const
     },
     {
       name: 'Rosemary Almeida',
       email: 'rosemary.almeida@example.com',
-      phone: '(55) 11 92001-0006',
+      phone: generatePhoneNumber(),
       discoverySource: 'GOOGLE' as const
     },
     {
       name: 'Maria Fernanda',
       email: 'maria.fernanda@example.com',
-      phone: '(55) 11 92001-0007',
+      phone: generatePhoneNumber(),
       discoverySource: 'GOOGLE' as const
     },
   ]
