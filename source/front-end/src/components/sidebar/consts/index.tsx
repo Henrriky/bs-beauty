@@ -135,7 +135,7 @@ const sideBarItems: SideBarItem[] = [
     order: 5,
   },
   {
-    name: 'Comunicação',
+    name: 'Modelos de notificação',
     icon: <MegaphoneIcon className="size-6" />,
     navigateTo: '/manager/notification-templates',
     authorization: {

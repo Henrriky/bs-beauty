@@ -158,7 +158,7 @@ function CustomerHomeAppointmentWizard() {
           <AppointmentCurrentStepForm currentFlow={currentFlow} />
         </div>
         <div
-          className={`flex mt-6 ${!currentStep.previousStep ? 'justify-end' : 'justify-between'} px-4`}
+          className={`flex mb-4 ${!currentStep.previousStep ? 'justify-end' : 'justify-between'} px-4 mt-3`}
         >
           {currentStep.previousStep && (
             <Button

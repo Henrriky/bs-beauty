@@ -7,11 +7,11 @@ import { Pagination } from '../../components/select/Pagination'
 import { PageHeader } from '../../layouts/PageHeader'
 import { UserType } from '../../store/auth/types'
 import { DeleteProfessionalModal } from './components/DeleteProfessionalModal'
+import { EditCommissionModal } from './components/EditCommissionModal'
 import { ProfessionalFormModal } from './components/ProfessionalFormModal'
 import { ProfessionalList } from './components/ProfessionalList'
 import { ProfessionalRolesModal } from './components/ProfessionalRolesModal'
 import { useProfessionalsLogic } from './hooks/useProfessionalsLogic'
-import { EditCommissionModal } from './components/EditCommissionModal'
 
 function Professionals() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -25,6 +25,7 @@ function Professionals() {
     professionalToManageRoles,
     professionalToEditCommission,
     isLoadingProfessionals,
+    isFetchingProfessionals,
     isCreating,
     isDeleting,
     isUpdatingCommission,
@@ -64,6 +65,8 @@ function Professionals() {
     clearFilters()
   }
 
+  const showSkeleton = isLoadingProfessionals || isFetchingProfessionals
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -96,10 +99,11 @@ function Professionals() {
         {/* Professional List */}
         <ProfessionalList
           professionals={professionals}
-          isLoading={isLoadingProfessionals}
+          isLoading={showSkeleton}
           onDelete={openDeleteModal}
           onManageProfessionalRoles={openRolesModal}
           onEditCommission={openCommissionModal}
+          skeletonCount={pagination.pageLimit}
         />
 
         {/* Pagination */}

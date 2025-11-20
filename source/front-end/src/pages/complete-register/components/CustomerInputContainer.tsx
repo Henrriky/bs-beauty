@@ -10,6 +10,7 @@ import {
 } from '../types'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import { Select } from '../../../components/inputs/Select'
+import NotificationPreferenceSelect from '../../../components/inputs/NotificationPreferenceSelect'
 
 interface CustomerInputContainerProps {
   isLoading: boolean
@@ -90,6 +91,10 @@ function CustomerInputContainer(props: CustomerInputContainerProps) {
         error={errors?.discoverySource?.message?.toString()}
         variant="outline"
         wrapperClassName="w-full"
+      />
+      <NotificationPreferenceSelect
+        register={register}
+        error={errors.notificationPreference}
       />
       <Input
         label="Email"

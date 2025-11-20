@@ -80,8 +80,5 @@
     "node": "20.10.x",
     "npm": "10.x"
   },
-  "engineStrict": true,
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  }
+  "engineStrict": true
 }
