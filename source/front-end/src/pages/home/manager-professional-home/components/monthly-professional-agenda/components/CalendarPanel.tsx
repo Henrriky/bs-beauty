@@ -59,11 +59,6 @@ export default function CalendarPanel({
 
   return (
     <div className="rcWrap w-full">
-      {isLoading && (
-        <div className="px-4 py-3 text-sm text-primary-300" role="status" aria-live="polite">
-          Carregando agendamentos…
-        </div>
-      )}
       {isError && !isLoading && (
         <div className="px-4 py-3 text-sm text-red-300" role="alert">
           Erro ao carregar dados.

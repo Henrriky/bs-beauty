@@ -185,7 +185,7 @@ function SideBarItem(props: SideBarItemProps) {
   const handleClick = async () => {
     if (props.children === 'Sair') {
       await dispatch(serverLogout())
-      toast.success('Logout realizado com sucesso. Volte sempre!')
+      toast.success('Saída realizada com sucesso. Volte sempre!')
       navigate('/', { replace: true })
     } else {
       navigate(`${props.path}`)

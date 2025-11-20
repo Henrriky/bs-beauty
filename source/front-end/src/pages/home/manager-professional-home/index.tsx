@@ -68,7 +68,7 @@ function ManagerHome() {
 
       <SectionDivider />
 
-      <Subtitle className="mt-4 text-xl text-[#D9D9D9]" align='left' children='Agendamentos do dia' />
+      <Subtitle className="mt-4 text-xl text-[#D9D9D9]" align='left' children='Seus agendamentos do dia' />
 
       <AppointmentsCarousel
         items={appointmentsData?.data || []}
