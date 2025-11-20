@@ -10,10 +10,11 @@ interface InfoCardProps {
   icon: React.ReactNode
   inputInfos: {
     label: string
-    inputType: HTMLInputTypeAttribute
+    inputType: HTMLInputTypeAttribute | 'select'
     fieldName: keyof SalonInfoUpdateFormData
     error?: string | undefined
-    onChange?: (e: any) => void
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    selectOptions?: { label: string; value: string }[]
   }[]
   showAddNewButton?: boolean
   register: UseFormRegister<SalonInfoUpdateFormData>
@@ -32,7 +33,7 @@ function InfoCard({
     <div className="flex flex-col gap-6 p-4 mb-2 bg-[#222222] text-primary-0 rounded-lg shadow-md">
       <div className="flex gap-2 items-center">
         {icon}
-        <p className="text-base text-primary-0">{name}</p>
+        <h2 className="text-base text-primary-0">{name}</h2>
       </div>
       <div className="flex flex-col gap-8">
         {inputInfos.map((inputInfo, index) => {
@@ -48,6 +49,7 @@ function InfoCard({
               errors={inputInfo.error}
               onChange={inputInfo.onChange}
               salonData={salonData}
+              selectOptions={inputInfo.selectOptions}
             />
           )
         })}

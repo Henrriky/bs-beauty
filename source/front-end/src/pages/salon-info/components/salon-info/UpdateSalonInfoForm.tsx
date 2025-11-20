@@ -88,9 +88,15 @@ function UpdateSalonInfoForm({ salonInfoData }: UpdateSalonInfoFormProps) {
         inputInfos={[
           {
             label: 'Tempo mínimo de antecedência',
-            inputType: 'text',
+            inputType: 'select',
             fieldName: 'minimumAdvanceTime',
             error: errors?.minimumAdvanceTime?.message?.toString(),
+            selectOptions: [
+              { label: '30 minutos', value: '30' },
+              { label: '1 hora', value: '60' },
+              { label: '2 horas', value: '120' },
+              { label: '3 horas', value: '180' },
+            ],
           },
         ]}
         register={register}

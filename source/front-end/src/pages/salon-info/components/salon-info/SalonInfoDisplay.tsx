@@ -13,6 +13,25 @@ interface SalonInfoDisplayProps {
 function SalonInfoDisplay({ salonData }: SalonInfoDisplayProps) {
   const openingHours = salonData?.openingHours
 
+  const formatMinimumAdvanceTime = (minutes: string | null | undefined) => {
+    if (!minutes) return 'Não definido'
+
+    const minutesNumber = parseInt(minutes, 10)
+
+    if (isNaN(minutesNumber)) return minutes
+
+    if (minutesNumber < 60) {
+      return `${minutesNumber} minutos`
+    }
+
+    const hours = minutesNumber / 60
+    if (hours === 1) {
+      return '1 hora'
+    }
+
+    return `${hours} horas`
+  }
+
   const infoCards = [
     {
       name: 'Horários de funcionamento',
@@ -53,7 +72,7 @@ function SalonInfoDisplay({ salonData }: SalonInfoDisplayProps) {
       infos: [
         {
           name: 'Tempo mínimo de antecedência',
-          content: salonData?.minimumAdvanceTime,
+          content: formatMinimumAdvanceTime(salonData?.minimumAdvanceTime),
         },
       ],
     },

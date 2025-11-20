@@ -13,6 +13,7 @@ import {
   UsersIcon,
   ChartBarIcon,
   BanknotesIcon,
+  InformationCircleIcon,
 } from '@heroicons/react/24/outline'
 import React from 'react'
 import { UserType } from '../../../store/auth/types'
@@ -213,6 +214,21 @@ const sideBarItems: SideBarItem[] = [
       allowedUserTypes: [UserType.MANAGER, UserType.PROFESSIONAL],
     },
     order: 11,
+  },
+  {
+    name: 'Informações do Salão',
+    icon: <InformationCircleIcon className="size-6" />,
+    navigateTo: '/salon-info',
+    authorization: {
+      strategy: 'ANY',
+      allowedPermissions: [],
+      allowedUserTypes: [
+        UserType.MANAGER,
+        UserType.PROFESSIONAL,
+        UserType.CUSTOMER,
+      ],
+    },
+    order: 12,
   },
   {
     name: 'Perfil',

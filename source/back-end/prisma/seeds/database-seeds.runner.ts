@@ -1,5 +1,6 @@
 import { AppLoggerInstance } from '@/utils/logger/logger.util'
 import { permissionSeeder } from './permission-seeder.service'
+import { salonInfoSeeder } from './salon-info-seeder.service'
 
 export async function runDatabaseSeeds (): Promise<void> {
   const logger = AppLoggerInstance
@@ -10,6 +11,7 @@ export async function runDatabaseSeeds (): Promise<void> {
 
   try {
     await permissionSeeder.seedPermissions()
+    await salonInfoSeeder.seedSalonInfo()
 
     logger.info('Database seeding completed successfully', {
       context: 'DatabaseSeeds'

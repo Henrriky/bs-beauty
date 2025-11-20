@@ -29,6 +29,7 @@ import NotificationTemplates from '../pages/notification-templates'
 import ProductivityReport from '../pages/analytics'
 import BlockedTimes from '../pages/blocked-times'
 import GoBackButton from '../components/button/GoBackButton/GoBackButton'
+import SalonInfo from '../pages/salon-info'
 
 function BSBeautyRouter() {
   return (
@@ -64,6 +65,7 @@ function BSBeautyRouter() {
                   element={<AppointmentDetails />}
                 />
                 <Route path="/notifications" element={<Notifications />} />
+                <Route path="/salon-info" element={<SalonInfo />} />
                 {/* CUSTOMER ROUTES */}
                 <Route
                   element={
