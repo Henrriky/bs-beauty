@@ -95,8 +95,10 @@ export default function BusiestWeekdaysCard({
       )
     }
 
-    const busiestDay = filteredData.reduce((prev, current) =>
-      prev.appointmentCount > current.appointmentCount ? prev : current,
+    const busiestDay = filteredData.reduce(
+      (prev, current) =>
+        prev.appointmentCount > current.appointmentCount ? prev : current,
+      filteredData[0],
     )
 
     return (

@@ -74,8 +74,10 @@ export default function PeakHoursCard({ data, isLoading }: PeakHoursCardProps) {
       )
     }
 
-    const topPeakHour = filteredData.reduce((prev, current) =>
-      prev.appointmentCount > current.appointmentCount ? prev : current,
+    const topPeakHour = filteredData.reduce(
+      (prev, current) =>
+        prev.appointmentCount > current.appointmentCount ? prev : current,
+      filteredData[0],
     )
 
     return (
