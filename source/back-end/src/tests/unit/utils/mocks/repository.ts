@@ -11,6 +11,7 @@ import { type ShiftRepository } from '@/repository/protocols/shift.repository'
 import { type Mocked } from 'vitest'
 import { type BlockedTimeRepository } from '@/repository/protocols/blocked-times.repository'
 import { type PaymentRecordRepository } from '@/repository/protocols/payment-record.repository'
+import { type ReportRepository } from '@/repository/protocols/report.repository'
 
 vi.mock('@/factory/make-appointments-use-case.factory')
 
@@ -157,6 +158,23 @@ const MockPaymentRecordRepository: Mocked<PaymentRecordRepository> = {
   delete: vi.fn()
 }
 
+const MockReportRepository: Mocked<ReportRepository> = {
+  getDiscoverySourceCount: vi.fn(),
+  getCustomerAgeDistribution: vi.fn(),
+  getNewCustomersCount: vi.fn(),
+  getRevenueEvolution: vi.fn(),
+  getTotalRevenue: vi.fn(),
+  getRevenueByService: vi.fn(),
+  getRevenueByProfessional: vi.fn(),
+  getOccupancyRate: vi.fn(),
+  getIdleRate: vi.fn(),
+  getPeakHours: vi.fn(),
+  getBusiestWeekdays: vi.fn(),
+  getMostBookedServices: vi.fn(),
+  getMostProfitableServices: vi.fn(),
+  getCommissionedRevenue: vi.fn()
+}
+
 export {
   MockAppointmentRepository,
   MockCustomerRepository,
@@ -169,5 +187,6 @@ export {
   MockShiftRepository,
   MockRatingRepository,
   MockBlockedTimesRepository,
-  MockPaymentRecordRepository
+  MockPaymentRecordRepository,
+  MockReportRepository
 }
