@@ -1,4 +1,4 @@
-import { useState, startTransition } from 'react'
+import { useState } from 'react'
 import { MagnifyingGlassIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { NotificationDTO } from '../../../store/notification/types'
 import { useNotificationsLogic } from '../hooks/useNotificationsLogic'
@@ -21,8 +21,6 @@ export default function NotificationItem({
 }: NotificationItemProps) {
 
   const {
-    markRead,
-    isMarking,
     deleteNotifications,
     isDeleting
   } = useNotificationsLogic()
@@ -30,11 +28,7 @@ export default function NotificationItem({
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
 
   const handleOpen = () => {
-    if (isMarking) return
     onOpenDetails(notification)
-    startTransition(() => {
-      markRead({ ids: [notification.id] })
-    })
   }
 
   const handleAskDelete = () => {
@@ -73,18 +67,11 @@ export default function NotificationItem({
           <button
             type="button"
             onClick={handleOpen}
-            aria-label={isMarking ? 'Marcando como lida…' : 'Ver detalhes'}
-            className="shrink-0 p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            title={isMarking ? 'Marcando como lida…' : 'Ver detalhes'}
-            disabled={isMarking}
+            aria-label="Ver detalhes"
+            className="shrink-0 p-1.5 text-gray-400 hover:text-[#B19B86] hover:bg-[#B19B86]/10 rounded transition-all"
+            title="Ver detalhes"
           >
-            {isMarking ? (
-              <div className="w-5 h-5 flex items-center justify-center">
-                <div className="w-4 h-4 border-2 border-t-2 border-transparent border-t-[#A4978A] rounded-full animate-spin" />
-              </div>
-            ) : (
-              <MagnifyingGlassIcon className="w-4 h-4" />
-            )}
+            <MagnifyingGlassIcon className="w-4 h-4" />
           </button>
 
           <button

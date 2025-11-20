@@ -34,6 +34,14 @@ function ListNotifications({ params, onPageChange }: ListNotificationsProps) {
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
   const [confirmMarkOpen, setConfirmMarkOpen] = useState(false)
 
+  const handleCloseModal = () => {
+    if (selected && !selected.readAt) {
+      markRead({ ids: [selected.id] })
+    }
+    setOpen(false)
+    setSelected(null)
+  }
+
   const notifications = data?.data ?? []
   const pageIds = useMemo(() => notifications.map((n) => n.id), [notifications])
 
@@ -94,8 +102,7 @@ function ListNotifications({ params, onPageChange }: ListNotificationsProps) {
     setConfirmMarkOpen(false)
   }, [isReadTab, normalizedPageIds])
 
-  const hasRenderedData = (data?.data?.length ?? 0) > 0
-  const showSkeleton = isLoading || (isFetching && !hasRenderedData)
+  const showSkeleton = isLoading || isFetching
 
   if (isError)
     return (
@@ -216,19 +223,13 @@ function ListNotifications({ params, onPageChange }: ListNotificationsProps) {
       <div className="absolute top-0">
         <Modal
           isOpen={open}
-          onClose={() => {
-            setOpen(false)
-            setSelected(null)
-          }}
+          onClose={handleCloseModal}
           className="max-w-[343px]"
         >
           {selected && (
             <NotificationDetails
               notification={selected}
-              onClose={() => {
-                setOpen(false)
-                setSelected(null)
-              }}
+              onClose={handleCloseModal}
             />
           )}
         </Modal>
