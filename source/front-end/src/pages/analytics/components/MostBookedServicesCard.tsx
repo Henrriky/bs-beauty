@@ -1,7 +1,8 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import { ChartBarIcon } from '@heroicons/react/24/outline'
 import ChartContainer from './ChartContainer'
+import { ReportCard } from './ReportCard'
 import type { MostBookedService } from '../../../store/reports/types'
 
 interface MostBookedServicesCardProps {
@@ -14,40 +15,7 @@ export default function MostBookedServicesCard({
   isLoading,
 }: MostBookedServicesCardProps) {
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-          }}
-        >
-          <CircularProgress sx={{ color: '#A4978A' }} />
-        </Box>
-      )
-    }
-
-    if (!data || data.length === 0) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-            gap: 2,
-          }}
-        >
-          <ChartBarIcon style={{ width: 48, height: 48, color: '#666' }} />
-          <Typography sx={{ color: '#999' }}>
-            Nenhum dado disponível para o período selecionado
-          </Typography>
-        </Box>
-      )
-    }
+    if (!data || data.length === 0) return null
 
     const topServices = data.slice(0, 10)
     const topService = topServices[0]
@@ -112,7 +80,15 @@ export default function MostBookedServicesCard({
 
   return (
     <ChartContainer title="Serviços Mais Agendados">
-      {renderContent()}
+      <ReportCard
+        data={data}
+        isLoading={isLoading}
+        emptyIcon={<ChartBarIcon style={{ width: 48, height: 48, color: '#666' }} />}
+        emptyMessage="Nenhum dado disponível para o período selecionado"
+        minHeight={300}
+      >
+        {renderContent()}
+      </ReportCard>
     </ChartContainer>
   )
 }

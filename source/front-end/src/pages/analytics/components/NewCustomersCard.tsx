@@ -1,6 +1,7 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { UserPlusIcon } from '@heroicons/react/24/outline'
 import ChartContainer from './ChartContainer'
+import { ReportCard } from './ReportCard'
 import type { NewCustomersCount } from '../../../store/reports/types'
 
 interface NewCustomersCardProps {
@@ -13,40 +14,7 @@ export default function NewCustomersCard({
   isLoading,
 }: NewCustomersCardProps) {
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 200,
-          }}
-        >
-          <CircularProgress sx={{ color: '#A4978A' }} />
-        </Box>
-      )
-    }
-
-    if (!data) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 200,
-            gap: 2,
-          }}
-        >
-          <UserPlusIcon style={{ width: 48, height: 48, color: '#666' }} />
-          <Typography sx={{ color: '#999' }}>
-            Nenhum dado disponível para o período selecionado
-          </Typography>
-        </Box>
-      )
-    }
+    if (!data) return null
 
     return (
       <Box
@@ -107,7 +75,15 @@ export default function NewCustomersCard({
 
   return (
     <ChartContainer title="Captação de Clientes">
-      {renderContent()}
+      <ReportCard
+        data={data}
+        isLoading={isLoading}
+        emptyIcon={<UserPlusIcon style={{ width: 48, height: 48, color: '#666' }} />}
+        emptyMessage="Nenhum dado disponível para o período selecionado"
+        minHeight={200}
+      >
+        {renderContent()}
+      </ReportCard>
     </ChartContainer>
   )
 }

@@ -1,7 +1,8 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import { CalendarDaysIcon } from '@heroicons/react/24/outline'
 import ChartContainer from './ChartContainer'
+import { ReportCard } from './ReportCard'
 import type { BusiestWeekday } from '../../../store/reports/types'
 
 interface BusiestWeekdaysCardProps {
@@ -34,40 +35,7 @@ export default function BusiestWeekdaysCard({
   isLoading,
 }: BusiestWeekdaysCardProps) {
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-          }}
-        >
-          <CircularProgress sx={{ color: '#A4978A' }} />
-        </Box>
-      )
-    }
-
-    if (!data || data.length === 0) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-            gap: 2,
-          }}
-        >
-          <CalendarDaysIcon style={{ width: 48, height: 48, color: '#666' }} />
-          <Typography sx={{ color: '#999' }}>
-            Nenhum dado disponível para o período selecionado
-          </Typography>
-        </Box>
-      )
-    }
+    if (!data || data.length === 0) return null
 
     const sortedData = [...data].sort((a, b) => {
       return weekdayOrder.indexOf(a.weekDay) - weekdayOrder.indexOf(b.weekDay)
@@ -76,23 +44,7 @@ export default function BusiestWeekdaysCard({
     const filteredData = sortedData.filter((item) => item.appointmentCount > 0)
 
     if (filteredData.length === 0) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-            gap: 2,
-          }}
-        >
-          <CalendarDaysIcon style={{ width: 48, height: 48, color: '#666' }} />
-          <Typography sx={{ color: '#999' }}>
-            Nenhum agendamento registrado no período selecionado
-          </Typography>
-        </Box>
-      )
+      return null
     }
 
     const busiestDay = filteredData.reduce(
@@ -164,7 +116,17 @@ export default function BusiestWeekdaysCard({
 
   return (
     <ChartContainer title="Dias Mais Movimentados">
-      {renderContent()}
+      <ReportCard
+        data={data}
+        isLoading={isLoading}
+        emptyIcon={
+          <CalendarDaysIcon style={{ width: 48, height: 48, color: '#666' }} />
+        }
+        emptyMessage="Nenhum agendamento registrado no período selecionado"
+        minHeight={300}
+      >
+        {renderContent()}
+      </ReportCard>
     </ChartContainer>
   )
 }

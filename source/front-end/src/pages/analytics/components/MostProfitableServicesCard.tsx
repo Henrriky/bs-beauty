@@ -1,7 +1,8 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import ChartContainer from './ChartContainer'
+import { ReportCard } from './ReportCard'
 import type { MostProfitableService } from '../../../store/reports/types'
 
 interface MostProfitableServicesCardProps {
@@ -21,42 +22,7 @@ export default function MostProfitableServicesCard({
   }
 
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-          }}
-        >
-          <CircularProgress sx={{ color: '#A4978A' }} />
-        </Box>
-      )
-    }
-
-    if (!data || data.length === 0) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-            gap: 2,
-          }}
-        >
-          <CurrencyDollarIcon
-            style={{ width: 48, height: 48, color: '#666' }}
-          />
-          <Typography sx={{ color: '#999' }}>
-            Nenhum dado disponível para o período selecionado
-          </Typography>
-        </Box>
-      )
-    }
+    if (!data || data.length === 0) return null
 
     const topServices = data.slice(0, 10)
     const topService = topServices[0]
@@ -130,7 +96,19 @@ export default function MostProfitableServicesCard({
 
   return (
     <ChartContainer title="Serviços Mais Lucrativos">
-      {renderContent()}
+      <ReportCard
+        data={data}
+        isLoading={isLoading}
+        emptyIcon={
+          <CurrencyDollarIcon
+            style={{ width: 48, height: 48, color: '#666' }}
+          />
+        }
+        emptyMessage="Nenhum dado disponível para o período selecionado"
+        minHeight={300}
+      >
+        {renderContent()}
+      </ReportCard>
     </ChartContainer>
   )
 }

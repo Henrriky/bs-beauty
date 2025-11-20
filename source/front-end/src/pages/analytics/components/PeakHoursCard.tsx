@@ -1,7 +1,8 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import ChartContainer from './ChartContainer'
+import { ReportCard } from './ReportCard'
 import type { PeakHour } from '../../../store/reports/types'
 
 interface PeakHoursCardProps {
@@ -15,63 +16,14 @@ export default function PeakHoursCard({ data, isLoading }: PeakHoursCardProps) {
   }
 
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-          }}
-        >
-          <CircularProgress sx={{ color: '#A4978A' }} />
-        </Box>
-      )
-    }
-
-    if (!data || data.length === 0) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-            gap: 2,
-          }}
-        >
-          <ClockIcon style={{ width: 48, height: 48, color: '#666' }} />
-          <Typography sx={{ color: '#999' }}>
-            Nenhum dado disponível para o período selecionado
-          </Typography>
-        </Box>
-      )
-    }
+    if (!data || data.length === 0) return null
 
     const filteredData = data
       .filter((item) => item.appointmentCount > 0)
       .sort((a, b) => a.hour - b.hour)
 
     if (filteredData.length === 0) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-            gap: 2,
-          }}
-        >
-          <ClockIcon style={{ width: 48, height: 48, color: '#666' }} />
-          <Typography sx={{ color: '#999' }}>
-            Nenhum agendamento registrado no período selecionado
-          </Typography>
-        </Box>
-      )
+      return null
     }
 
     const topPeakHour = filteredData.reduce(
@@ -139,6 +91,16 @@ export default function PeakHoursCard({ data, isLoading }: PeakHoursCardProps) {
   }
 
   return (
-    <ChartContainer title="Horários de Pico">{renderContent()}</ChartContainer>
+    <ChartContainer title="Horários de Pico">
+      <ReportCard
+        data={data}
+        isLoading={isLoading}
+        emptyIcon={<ClockIcon style={{ width: 48, height: 48, color: '#666' }} />}
+        emptyMessage="Nenhum agendamento registrado no período selecionado"
+        minHeight={300}
+      >
+        {renderContent()}
+      </ReportCard>
+    </ChartContainer>
   )
 }

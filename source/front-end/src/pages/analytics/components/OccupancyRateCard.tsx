@@ -1,6 +1,7 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import ChartContainer from './ChartContainer'
+import { ReportCard } from './ReportCard'
 import type { OccupancyRate } from '../../../store/reports/types'
 
 interface OccupancyRateCardProps {
@@ -19,42 +20,7 @@ export default function OccupancyRateCard({
   }
 
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 200,
-          }}
-        >
-          <CircularProgress sx={{ color: '#A4978A' }} />
-        </Box>
-      )
-    }
-
-    if (!data) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 200,
-            gap: 2,
-          }}
-        >
-          <ClockIcon style={{ width: 48, height: 48, color: '#666' }} />
-          <Typography sx={{ color: '#999' }}>
-            Nenhum dado disponível para o período selecionado
-          </Typography>
-        </Box>
-      )
-    }
-
-    console.log('Occupancy Rate Data:', data.availableMinutes)
+    if (!data) return null
 
     return (
       <Box
@@ -136,7 +102,15 @@ export default function OccupancyRateCard({
 
   return (
     <ChartContainer title="Taxa de Ocupação do Salão">
-      {renderContent()}
+      <ReportCard
+        data={data}
+        isLoading={isLoading}
+        emptyIcon={<ClockIcon style={{ width: 48, height: 48, color: '#666' }} />}
+        emptyMessage="Nenhum dado disponível para o período selecionado"
+        minHeight={200}
+      >
+        {renderContent()}
+      </ReportCard>
     </ChartContainer>
   )
 }

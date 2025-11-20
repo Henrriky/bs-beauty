@@ -1,6 +1,7 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
 import ChartContainer from './ChartContainer'
+import { ReportCard } from './ReportCard'
 import type { TotalRevenue } from '../../../store/reports/types'
 
 interface TotalRevenueCardProps {
@@ -20,42 +21,7 @@ export default function TotalRevenueCard({
   }
 
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 200,
-          }}
-        >
-          <CircularProgress sx={{ color: '#A4978A' }} />
-        </Box>
-      )
-    }
-
-    if (!data) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 200,
-            gap: 2,
-          }}
-        >
-          <ArrowTrendingUpIcon
-            style={{ width: 48, height: 48, color: '#666' }}
-          />
-          <Typography sx={{ color: '#999' }}>
-            Nenhum dado disponível para o período selecionado
-          </Typography>
-        </Box>
-      )
-    }
+    if (!data) return null
 
     return (
       <Box
@@ -120,6 +86,20 @@ export default function TotalRevenueCard({
   }
 
   return (
-    <ChartContainer title="Resumo Financeiro">{renderContent()}</ChartContainer>
+    <ChartContainer title="Resumo Financeiro">
+      <ReportCard
+        data={data}
+        isLoading={isLoading}
+        emptyIcon={
+          <ArrowTrendingUpIcon
+            style={{ width: 48, height: 48, color: '#666' }}
+          />
+        }
+        emptyMessage="Nenhum dado disponível para o período selecionado"
+        minHeight={200}
+      >
+        {renderContent()}
+      </ReportCard>
+    </ChartContainer>
   )
 }

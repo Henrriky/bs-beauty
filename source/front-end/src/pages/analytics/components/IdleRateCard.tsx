@@ -1,6 +1,7 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { PauseCircleIcon } from '@heroicons/react/24/outline'
 import ChartContainer from './ChartContainer'
+import { ReportCard } from './ReportCard'
 import type { IdleRate } from '../../../store/reports/types'
 
 interface IdleRateCardProps {
@@ -16,40 +17,7 @@ export default function IdleRateCard({ data, isLoading }: IdleRateCardProps) {
   }
 
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 200,
-          }}
-        >
-          <CircularProgress sx={{ color: '#A4978A' }} />
-        </Box>
-      )
-    }
-
-    if (!data) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 200,
-            gap: 2,
-          }}
-        >
-          <PauseCircleIcon style={{ width: 48, height: 48, color: '#666' }} />
-          <Typography sx={{ color: '#999' }}>
-            Nenhum dado disponível para o período selecionado
-          </Typography>
-        </Box>
-      )
-    }
+    if (!data) return null
 
     return (
       <Box
@@ -131,7 +99,15 @@ export default function IdleRateCard({ data, isLoading }: IdleRateCardProps) {
 
   return (
     <ChartContainer title="Taxa de Ociosidade do Salão">
-      {renderContent()}
+      <ReportCard
+        data={data}
+        isLoading={isLoading}
+        emptyIcon={<PauseCircleIcon style={{ width: 48, height: 48, color: '#666' }} />}
+        emptyMessage="Nenhum dado disponível para o período selecionado"
+        minHeight={200}
+      >
+        {renderContent()}
+      </ReportCard>
     </ChartContainer>
   )
 }

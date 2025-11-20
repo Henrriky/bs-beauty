@@ -1,6 +1,8 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid'
+import { TableCellsIcon } from '@heroicons/react/24/outline'
 import ChartContainer from './ChartContainer'
+import { ReportCard } from './ReportCard'
 import type { RevenueByService } from '../../../store/reports/types'
 import { ptBR } from '@mui/x-data-grid/locales'
 
@@ -53,39 +55,7 @@ export default function RevenueByServiceGrid({
   ]
 
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-          }}
-        >
-          <CircularProgress sx={{ color: '#A4978A' }} />
-        </Box>
-      )
-    }
-
-    if (!data || data.length === 0) {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 300,
-            gap: 2,
-          }}
-        >
-          <Typography sx={{ color: '#999' }}>
-            Nenhum serviço prestado no período selecionado
-          </Typography>
-        </Box>
-      )
-    }
+    if (!data || data.length === 0) return null
 
     return (
       <Box sx={{ height: 400, width: '100%' }}>
@@ -133,7 +103,17 @@ export default function RevenueByServiceGrid({
 
   return (
     <ChartContainer title="Faturamento por Serviço">
-      {renderContent()}
+      <ReportCard
+        data={data}
+        isLoading={isLoading}
+        emptyIcon={
+          <TableCellsIcon style={{ width: 48, height: 48, color: '#666' }} />
+        }
+        emptyMessage="Nenhum serviço prestado no período selecionado"
+        minHeight={300}
+      >
+        {renderContent()}
+      </ReportCard>
     </ChartContainer>
   )
 }
