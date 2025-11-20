@@ -18,6 +18,7 @@ import { ratingAPI } from './rating/rating-api'
 import { roleAPI } from './role/role-api'
 import { permissionAPI } from './permission/permission-api'
 import { blockedtimesAPI } from './blocked-times/blocked-times-api'
+import { reportAPI } from './reports/report-api'
 
 export const store = configureStore({
   reducer: {
@@ -40,6 +41,7 @@ export const store = configureStore({
     [roleAPI.reducerPath]: roleAPI.reducer,
     [permissionAPI.reducerPath]: permissionAPI.reducer,
     [blockedtimesAPI.reducerPath]: blockedtimesAPI.reducer,
+    [reportAPI.reducerPath]: reportAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -59,5 +61,6 @@ export const store = configureStore({
       .concat(ratingAPI.middleware)
       .concat(roleAPI.middleware)
       .concat(permissionAPI.middleware)
-      .concat(blockedtimesAPI.middleware),
+      .concat(blockedtimesAPI.middleware)
+      .concat(reportAPI.middleware),
 })

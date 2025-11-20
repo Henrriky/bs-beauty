@@ -25,6 +25,7 @@ enum UserType {
 - Proteção por role usando `PrivateRoute` com `allowedUserTypes[]`
 - Sidebar automática para usuários autenticados
 - Redirecionamento específico por tipo de usuário
+- **Sistema de Navegação Inteligente**: GoBackButton com regras contextuais (ver `SMART_NAVIGATION.md`)
 
 ### Redux + RTK Query
 - **Store centralizado**: `src/store/index.ts` com múltiplas APIs
@@ -104,6 +105,13 @@ export const entityAPI = createApi({
 ### Estado de Loading/Erro
 - Componentes `Loading` e `ErrorMessage` padronizados
 - Estados RTK Query: `isLoading`, `isError`, `data`
+
+### Sistema de Navegação (GoBackButton)
+- **Hook `useSmartNavigation`**: Regras centralizadas de navegação contextual
+- **Hierarquia inteligente**: Detail → List → Home (baseado em userType)
+- **Auto-hide em home**: Botão não aparece nas páginas principais
+- **Documentação completa**: Ver `SMART_NAVIGATION.md`
+- **Como adicionar regras**: Editar array `navigationRules` no hook
 
 ## ⚡ Comandos Essenciais
 ```bash

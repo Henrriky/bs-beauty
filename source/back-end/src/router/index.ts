@@ -17,6 +17,7 @@ import { notificationTemplatesRoutes } from './routes/notification-templates.rou
 import { ratingRoutes } from './routes/ratings.routes'
 import { publicAnalyticsRoutes } from './routes/public-analytics.routes'
 import { blockedTimesRoutes } from './routes/blocked-times.routes'
+import { reportRoutes } from './routes/reports.routes'
 
 const appRoutes = Router()
 
@@ -36,6 +37,7 @@ appRoutes.use('/payment-records', verifyJwtTokenMiddleware, paymentRecordRoutes)
 appRoutes.use('/ratings', verifyJwtTokenMiddleware, ratingRoutes)
 appRoutes.use('/public-analytics', publicAnalyticsRoutes)
 appRoutes.use('/blocked-times', verifyJwtTokenMiddleware, blockedTimesRoutes)
+appRoutes.use('/reports', reportRoutes)
 appRoutes.use(errorHandlerMiddleware)
 
 export { appRoutes }
