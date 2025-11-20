@@ -1,4 +1,8 @@
-import { ClockIcon, MagnifyingGlassCircleIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
+import {
+  ClockIcon,
+  MagnifyingGlassCircleIcon,
+  PencilSquareIcon,
+} from '@heroicons/react/24/outline'
 import { DateTime } from 'luxon'
 import { useMemo, useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -15,7 +19,10 @@ export type AppointmentCardItem = {
   offer?: {
     estimatedTime?: number | null
     service?: { name?: string | null } | null
-    professional?: { name?: string | null; profilePhotoUrl?: string | null } | null
+    professional?: {
+      name?: string | null
+      profilePhotoUrl?: string | null
+    } | null
   } | null
   customer?: { name?: string | null } | null
   rating?: { score?: number | null } | null
@@ -121,10 +128,10 @@ export default function AppointmentsCarousel({
             contain: 'inline-size',
           }}
         >
-        {Array.from({ length: SKELETON_CARD_COUNT }).map((_, i) => (
-          <article
-            key={i}
-            className="
+          {Array.from({ length: SKELETON_CARD_COUNT }).map((_, i) => (
+            <article
+              key={i}
+              className="
               snap-start shrink-0
               min-w-[280px] sm:min-w-[320px] md:min-w-[360px]
               rounded-2xl bg-[#262626] border border-secondary-300/30
@@ -132,40 +139,44 @@ export default function AppointmentsCarousel({
               animate-pulse
               min-h-[156px]
             "
-          >
-            <header className="flex items-center justify-between">
-              <div>
-                <div className="h-5 w-16 bg-[#3A3A3A] rounded mb-1" />
-                <div className="h-3 w-24 bg-[#3A3A3A] rounded" />
-              </div>
-              <div className="relative">
-                <div className="h-10 w-10 rounded-full bg-[#3A3A3A]" />
-              </div>
-            </header>
+            >
+              <header className="flex items-center justify-between">
+                <div>
+                  <div className="h-5 w-16 bg-[#3A3A3A] rounded mb-1" />
+                  <div className="h-3 w-24 bg-[#3A3A3A] rounded" />
+                </div>
+                <div className="relative">
+                  <div className="h-10 w-10 rounded-full bg-[#3A3A3A]" />
+                </div>
+              </header>
 
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0 flex-1">
-                <div className="h-4 w-40 bg-[#3A3A3A] rounded mb-2" />
-                <div className="h-3 w-32 bg-[#3A3A3A] rounded" />
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <div className="h-4 w-40 bg-[#3A3A3A] rounded mb-2" />
+                  <div className="h-3 w-32 bg-[#3A3A3A] rounded" />
+                </div>
+                <div className="shrink-0">
+                  <div className="h-6 w-24 bg-[#3A3A3A] rounded-full" />
+                </div>
               </div>
-              <div className="shrink-0">
-                <div className="h-6 w-24 bg-[#3A3A3A] rounded-full" />
-              </div>
-            </div>
 
-            <div className="flex items-center gap-3">
-              <div className="h-4 w-28 bg-[#3A3A3A] rounded" />
-              <div className="ml-auto h-5 w-20 bg-[#3A3A3A] rounded" />
-            </div>
-          </article>
-        ))}
-      </div>
+              <div className="flex items-center gap-3">
+                <div className="h-4 w-28 bg-[#3A3A3A] rounded" />
+                <div className="ml-auto h-5 w-20 bg-[#3A3A3A] rounded" />
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     )
   }
 
   if (error) {
-    return <div className="mt-3 text-sm text-red-400">Erro ao carregar agendamentos.</div>
+    return (
+      <div className="mt-3 text-sm text-red-400">
+        Erro ao carregar agendamentos.
+      </div>
+    )
   }
 
   if (!hasItems) {
@@ -192,9 +203,14 @@ export default function AppointmentsCarousel({
         onTouchEnd={handleTouchEnd}
       >
         {itemsSortedByTime.map((appointment) => {
-          const d = DateTime.fromISO(appointment.appointmentDate).setZone(DISPLAY_TZ)
-          const isSchedulled = appointment.status === Status.PENDING || appointment.status === Status.CONFIRMED
-          const hasPendingRating = appointment.rating !== null && appointment.rating?.score === null
+          const d = DateTime.fromISO(appointment.appointmentDate).setZone(
+            DISPLAY_TZ,
+          )
+          const isSchedulled =
+            appointment.status === Status.PENDING ||
+            appointment.status === Status.CONFIRMED
+          const hasPendingRating =
+            appointment.rating !== null && appointment.rating?.score === null
 
           return (
             <article
@@ -241,7 +257,9 @@ export default function AppointmentsCarousel({
 
                 <div className="shrink-0">
                   <StatusBadge
-                    text={Formatter.formatApplicationStatusToPrettyRepresentation(appointment.status)}
+                    text={Formatter.formatApplicationStatusToPrettyRepresentation(
+                      appointment.status,
+                    )}
                     color={STATUS_BADGE_COLOR[appointment.status]}
                   />
                 </div>
@@ -268,7 +286,8 @@ export default function AppointmentsCarousel({
                           </>
                         ) : (
                           <>
-                            <MagnifyingGlassCircleIcon className="size-4" /> Visualizar
+                            <MagnifyingGlassCircleIcon className="size-4" />{' '}
+                            Visualizar
                           </>
                         )}
                       </>
@@ -280,7 +299,6 @@ export default function AppointmentsCarousel({
           )
         })}
       </div>
-
     </div>
   )
 }

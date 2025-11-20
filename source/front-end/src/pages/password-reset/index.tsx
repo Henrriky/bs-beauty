@@ -22,7 +22,7 @@ function PasswordReset() {
       </>
     ),
     code: (
-      <div className='text-[#DBDBDB]'>
+      <div className="text-[#DBDBDB]">
         Enviamos um código para <span className="text-[#A4978A]">{email}</span>
       </div>
     ),

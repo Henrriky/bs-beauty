@@ -85,7 +85,7 @@ describe('GenerateOAuthRedirectUriUseCase', () => {
 
       identityProviderMock.generateRedirectUri = vi.fn().mockReturnValue(urlWithParams)
 
-      // act  
+      // act
       const result = generateOAuthRedirectUriUseCase.execute()
 
       // assert

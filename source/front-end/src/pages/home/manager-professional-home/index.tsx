@@ -14,7 +14,7 @@ import AppointmentsCarousel from './components/AppointmentsCarousel'
 function ManagerHome() {
   const user = useAppSelector((state) => state.auth.user!)
   const [agendaOpen, setAgendaOpen] = useState(false)
-  const today = DateTime.now().toISODate();
+  const today = DateTime.now().toISODate()
 
   const {
     data: appointmentsData,
@@ -79,7 +79,10 @@ function ManagerHome() {
 
       <AnalyticsCards />
 
-      <MonthlyAgendaModal isOpen={agendaOpen} onClose={() => setAgendaOpen(false)} />
+      <MonthlyAgendaModal
+        isOpen={agendaOpen}
+        onClose={() => setAgendaOpen(false)}
+      />
     </>
   )
 }

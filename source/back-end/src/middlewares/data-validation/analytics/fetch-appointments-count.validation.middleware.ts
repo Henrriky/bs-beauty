@@ -1,6 +1,6 @@
-import { formatValidationErrors } from "@/utils/formatting/zod-validation-errors.formatting.util"
-import { Request, Response, NextFunction } from "express"
-import z from "zod"
+import { formatValidationErrors } from '@/utils/formatting/zod-validation-errors.formatting.util'
+import { type Request, type Response, type NextFunction } from 'express'
+import z from 'zod'
 
 const getAnalyticsSchema = z.object({
   body: z.object({
@@ -8,8 +8,8 @@ const getAnalyticsSchema = z.object({
     endDate: z.string().datetime({ message: 'Invalid endDate. Must be a valid ISO date string.' }),
     statusList: z.array(z.string()).optional(),
     professionalId: z.string().optional(),
-    serviceIds: z.array(z.string()).optional(),
-  }),
+    serviceIds: z.array(z.string()).optional()
+  })
 })
 
 const validateFetchAppointmentsCount = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

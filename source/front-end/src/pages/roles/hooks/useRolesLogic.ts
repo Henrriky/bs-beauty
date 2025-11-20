@@ -119,7 +119,7 @@ export function useRolesLogic({
         console.error('Error creating role:', error)
         const message =
           (error as { data?: { message?: string } })?.data?.message ||
-          'Erro inesperado ao criar role'
+          'Erro inesperado ao criar função'
         toast.error(message)
       }
     },
@@ -133,14 +133,14 @@ export function useRolesLogic({
 
       try {
         await updateRole({ id: selectedRole.id, data }).unwrap()
-        toast.success('Role atualizada com sucesso!')
+        toast.success('Função atualizada com sucesso!')
         closeFormModal()
         refetchRoles()
       } catch (error: unknown) {
         console.error('Error updating role:', error)
         const message =
           (error as { data?: { message?: string } })?.data?.message ||
-          'Erro inesperado ao atualizar role'
+          'Erro inesperado ao atualizar função'
         toast.error(message)
       }
     },

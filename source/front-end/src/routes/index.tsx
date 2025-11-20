@@ -28,6 +28,7 @@ import Roles from '../pages/roles'
 import NotificationTemplates from '../pages/notification-templates'
 import ProductivityReport from '../pages/analytics'
 import BlockedTimes from '../pages/blocked-times'
+import GoBackButton from '../components/button/GoBackButton/GoBackButton'
 
 function BSBeautyRouter() {
   return (
@@ -55,135 +56,145 @@ function BSBeautyRouter() {
             }
           >
             <Route element={<SideBar />}>
-              {/* ALL ROLES ROUTES */}
-              <Route path="/appointments" element={<Appointments />} />
-              <Route
-                path="/appointments/:appointmentId"
-                element={<AppointmentDetails />}
-              />
-              <Route path="/notifications" element={<Notifications />} />
-              {/* CUSTOMER ROUTES */}
-              <Route
-                element={
-                  <PrivateRoute allowedUserTypes={[UserType.CUSTOMER]} />
-                }
-              >
-                <Route path="/customer/home" element={<CustomerHome />} />
-              </Route>
-
-              {/* PROFESSIONAL ROUTES */}
-              <Route
-                element={
-                  <PrivateRoute allowedUserTypes={[UserType.PROFESSIONAL]} />
-                }
-              >
-                <Route path="/professional/home" element={<ManagerHome />} />
-              </Route>
-
-              {/* MANAGER ROUTES */}
-              <Route
-                element={<PrivateRoute allowedUserTypes={[UserType.MANAGER]} />}
-              >
-                <Route path="/manager/home" element={<ManagerHome />} />
+              <Route element={<GoBackButton />}>
+                {/* ALL ROLES ROUTES */}
+                <Route path="/appointments" element={<Appointments />} />
                 <Route
-                  path="/manager/notification-templates"
-                  element={<NotificationTemplates />}
+                  path="/appointments/:appointmentId"
+                  element={<AppointmentDetails />}
                 />
-              </Route>
-
-              {/* PROFESSIONAL/MANAGER ROUTES */}
-              <Route
-                element={
-                  <PrivateRoute
-                    allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
-                  />
-                }
-              >
-                <Route path="/services" element={<ServiceDashboard />} />
-                <Route path="/shifts" element={<Shifts />} />
+                <Route path="/notifications" element={<Notifications />} />
+                {/* CUSTOMER ROUTES */}
                 <Route
-                  path="/analytics/reports"
-                  element={<ProductivityReport />}
-                />
-                <Route path="/blocked-times" element={<BlockedTimes />} />
-              </Route>
+                  element={
+                    <PrivateRoute allowedUserTypes={[UserType.CUSTOMER]} />
+                  }
+                >
+                  <Route path="/customer/home" element={<CustomerHome />} />
+                </Route>
 
-              {/* PERMISSIONS BASED ROUTES */}
-              {/* Customers */}
-              <Route
-                element={
-                  <PrivateRoute
-                    strategy={'ANY'}
-                    allowedPermissions={['customer.read', 'customer.delete']}
-                    allowedUserTypes={[UserType.MANAGER]}
-                  />
-                }
-              >
-                <Route path="/manager/customers" element={<Customers />} />
-              </Route>
-              {/* Professionals */}
-              <Route
-                element={
-                  <PrivateRoute
-                    strategy={'ANY'}
-                    allowedPermissions={[
-                      'professional.read',
-                      'professional.create',
-                      'professional.delete',
-                      'professional.edit',
-                      'professional.manage_roles',
-                    ]}
-                    allowedUserTypes={[UserType.MANAGER]}
-                  />
-                }
-              >
+                {/* PROFESSIONAL ROUTES */}
                 <Route
-                  path="/manager/professionals"
-                  element={<Professionals />}
-                />
-              </Route>
-              {/* ROLES */}
-              <Route
-                element={
-                  <PrivateRoute
-                    strategy={'ANY'}
-                    allowedPermissions={[
-                      'roles.read',
-                      'roles.create',
-                      'roles.edit',
-                      'roles.delete',
-                      'roles.change_permissions',
-                    ]}
-                    allowedUserTypes={[UserType.MANAGER]}
-                  />
-                }
-              >
-                <Route path="/manager/roles" element={<Roles />} />
-              </Route>
+                  element={
+                    <PrivateRoute allowedUserTypes={[UserType.PROFESSIONAL]} />
+                  }
+                >
+                  <Route path="/professional/home" element={<ManagerHome />} />
+                </Route>
 
-              {/* Payment Records */}
-              <Route
-                element={
-                  <PrivateRoute
-                    strategy={'ANY'}
-                    allowedPermissions={[
-                      'payment_record.create',
-                      'payment_record.delete',
-                      'payment_record.edit',
-                      'payment_record.read',
-                    ]}
-                    allowedUserTypes={[UserType.MANAGER, UserType.PROFESSIONAL]}
-                  />
-                }
-              >
-                <Route path="/payments" element={<PaymentRecords />} />
+                {/* MANAGER ROUTES */}
                 <Route
-                  path="/payments/:paymentRecordId"
-                  element={<PaymentRecordDetails />}
-                />
-              </Route>
+                  element={
+                    <PrivateRoute allowedUserTypes={[UserType.MANAGER]} />
+                  }
+                >
+                  <Route path="/manager/home" element={<ManagerHome />} />
+                  <Route
+                    path="/manager/notification-templates"
+                    element={<NotificationTemplates />}
+                  />
+                </Route>
 
-              <Route path="/profile" element={<Profile />} />
+                {/* PROFESSIONAL/MANAGER ROUTES */}
+                <Route
+                  element={
+                    <PrivateRoute
+                      allowedUserTypes={[
+                        UserType.MANAGER,
+                        UserType.PROFESSIONAL,
+                      ]}
+                    />
+                  }
+                >
+                  <Route path="/services" element={<ServiceDashboard />} />
+                  <Route path="/shifts" element={<Shifts />} />
+                  <Route
+                    path="/analytics/reports"
+                    element={<ProductivityReport />}
+                  />
+                  <Route path="/blocked-times" element={<BlockedTimes />} />
+                </Route>
+
+                {/* PERMISSIONS BASED ROUTES */}
+                {/* Customers */}
+                <Route
+                  element={
+                    <PrivateRoute
+                      strategy={'ANY'}
+                      allowedPermissions={['customer.read', 'customer.delete']}
+                      allowedUserTypes={[UserType.MANAGER]}
+                    />
+                  }
+                >
+                  <Route path="/manager/customers" element={<Customers />} />
+                </Route>
+                {/* Professionals */}
+                <Route
+                  element={
+                    <PrivateRoute
+                      strategy={'ANY'}
+                      allowedPermissions={[
+                        'professional.read',
+                        'professional.create',
+                        'professional.delete',
+                        'professional.edit',
+                        'professional.manage_roles',
+                      ]}
+                      allowedUserTypes={[UserType.MANAGER]}
+                    />
+                  }
+                >
+                  <Route
+                    path="/manager/professionals"
+                    element={<Professionals />}
+                  />
+                </Route>
+                {/* ROLES */}
+                <Route
+                  element={
+                    <PrivateRoute
+                      strategy={'ANY'}
+                      allowedPermissions={[
+                        'roles.read',
+                        'roles.create',
+                        'roles.edit',
+                        'roles.delete',
+                        'roles.change_permissions',
+                      ]}
+                      allowedUserTypes={[UserType.MANAGER]}
+                    />
+                  }
+                >
+                  <Route path="/manager/roles" element={<Roles />} />
+                </Route>
+
+                {/* Payment Records */}
+                <Route
+                  element={
+                    <PrivateRoute
+                      strategy={'ANY'}
+                      allowedPermissions={[
+                        'payment_record.create',
+                        'payment_record.delete',
+                        'payment_record.edit',
+                        'payment_record.read',
+                      ]}
+                      allowedUserTypes={[
+                        UserType.MANAGER,
+                        UserType.PROFESSIONAL,
+                      ]}
+                    />
+                  }
+                >
+                  <Route path="/payments" element={<PaymentRecords />} />
+                  <Route
+                    path="/payments/:paymentRecordId"
+                    element={<PaymentRecordDetails />}
+                  />
+                </Route>
+
+                <Route path="/profile" element={<Profile />} />
+              </Route>
             </Route>
 
             {/* COMPLETE REGISTER ROUTES */}

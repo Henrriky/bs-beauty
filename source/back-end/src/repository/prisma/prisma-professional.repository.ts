@@ -5,6 +5,7 @@ import { type ProfessionalRepository } from '../protocols/professional.repositor
 import { type ProfessionalsFilters } from '@/types/professionals/professionals-filters'
 import { type PartialHandleFetchServicesOfferedByProfessionalQuerySchema } from '@/utils/validation/zod-schemas/pagination/professionals/professionals-query.schema'
 import { PrismaPermissionMapper } from './mapper/prisma-permission-mapper'
+import { type Permissions } from '@/utils/auth/permissions-map.util'
 
 class PrismaProfessionalRepository implements ProfessionalRepository {
   public async findAll () {
@@ -106,6 +107,38 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
     const uniquePermissions = Array.from(new Set(permissions?.map(PrismaPermissionMapper.toDomain)))
 
     return uniquePermissions
+  }
+
+  public async findProfessionalsWithPermissionOrUserType (permission: Permissions, userType: string) {
+    const [resource, action] = permission.split('.')
+
+    const professionals = await prismaClient.professional.findMany({
+      where: {
+        OR: [
+          {
+            userType: userType as any
+          },
+          {
+            professionalRole: {
+              some: {
+                role: {
+                  rolePermission: {
+                    some: {
+                      permission: {
+                        resource,
+                        action
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    })
+
+    return professionals
   }
 
   public async create (newProfessional: Prisma.ProfessionalCreateInput) {

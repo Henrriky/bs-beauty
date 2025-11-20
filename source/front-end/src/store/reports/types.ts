@@ -1,0 +1,201 @@
+export enum DiscoverySource {
+  REFERRAL = 'REFERRAL',
+  INSTAGRAM = 'INSTAGRAM',
+  FACEBOOK = 'FACEBOOK',
+  TIKTOK = 'TIKTOK',
+  GOOGLE = 'GOOGLE',
+  WHATSAPP = 'WHATSAPP',
+  WALK_IN = 'WALK_IN',
+  OTHER = 'OTHER',
+}
+
+export interface DiscoverySourceCount {
+  source: DiscoverySource | null
+  count: number
+}
+
+export type GetDiscoverySourceCountResponse = DiscoverySourceCount[]
+
+export interface GetDiscoverySourceCountParams {
+  startDate?: string
+  endDate?: string
+}
+
+export interface CustomerAgeDistribution {
+  ageRange: string
+  count: number
+}
+
+export type GetCustomerAgeDistributionResponse = CustomerAgeDistribution[]
+
+export interface GetCustomerAgeDistributionParams {
+  startDate?: string
+  endDate?: string
+}
+
+export interface NewCustomersCount {
+  totalCustomers: number
+}
+
+export type GetNewCustomersCountResponse = NewCustomersCount
+
+export interface GetNewCustomersCountParams {
+  startDate: string
+  endDate: string
+}
+
+export interface RevenueEvolution {
+  date: string
+  totalValue: number
+}
+
+export type GetRevenueEvolutionResponse = RevenueEvolution[]
+
+export interface GetRevenueEvolutionParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface TotalRevenue {
+  totalRevenue: number
+  transactionCount: number
+}
+
+export type GetTotalRevenueResponse = TotalRevenue
+
+export interface GetTotalRevenueParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface RevenueByService {
+  serviceId: string
+  serviceName: string
+  category: string
+  totalRevenue: number
+  quantity: number
+}
+
+export type GetRevenueByServiceResponse = RevenueByService[]
+
+export interface GetRevenueByServiceParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface RevenueByProfessional {
+  professionalId: string
+  professionalName: string
+  totalRevenue: number
+  transactionCount: number
+}
+
+export type GetRevenueByProfessionalResponse = RevenueByProfessional[]
+
+export interface GetRevenueByProfessionalParams {
+  startDate: string
+  endDate: string
+}
+
+export interface OccupancyRate {
+  occupancyRate: number
+  occupiedMinutes: number
+  availableMinutes: number
+}
+
+export type GetOccupancyRateResponse = OccupancyRate
+
+export interface GetOccupancyRateParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface IdleRate {
+  idleRate: number
+  idleMinutes: number
+  availableMinutes: number
+}
+
+export type GetIdleRateResponse = IdleRate
+
+export interface GetIdleRateParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface PeakHour {
+  hour: number
+  appointmentCount: number
+}
+
+export type GetPeakHoursResponse = PeakHour[]
+
+export interface GetPeakHoursParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface BusiestWeekday {
+  weekDay: string
+  appointmentCount: number
+}
+
+export type GetBusiestWeekdaysResponse = BusiestWeekday[]
+
+export interface GetBusiestWeekdaysParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface MostBookedService {
+  serviceId: string
+  serviceName: string
+  category: string
+  bookingCount: number
+}
+
+export type GetMostBookedServicesResponse = MostBookedService[]
+
+export interface GetMostBookedServicesParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface MostProfitableService {
+  serviceId: string
+  serviceName: string
+  category: string
+  totalRevenue: number
+  bookingCount: number
+}
+
+export type GetMostProfitableServicesResponse = MostProfitableService[]
+
+export interface GetMostProfitableServicesParams {
+  startDate: string
+  endDate: string
+  professionalId?: string
+}
+
+export interface CommissionedRevenue {
+  totalRevenue: number
+  commissionedRevenue: number
+  commissionRate: number
+  transactionCount: number
+}
+
+export type GetCommissionedRevenueResponse = CommissionedRevenue
+
+export interface GetCommissionedRevenueParams {
+  startDate: string
+  endDate: string
+  professionalId: string
+}

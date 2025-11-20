@@ -1,9 +1,9 @@
-import { Appointment, Status, type Prisma } from '@prisma/client'
+import { type Appointment, type Status, type Prisma } from '@prisma/client'
 import { prismaClient } from '../../lib/prisma'
 import { appointmentNonFinishedStatus, type AppointmentRepository, type GroupedAppointmentCount, type GroupedEstimatedTime, type GroupingPeriod } from '../protocols/appointment.repository'
 import { type FindNonFinishedByUserAndDay } from '../types/appointment-repository.types'
-import { PaginatedRequest, PaginatedResult } from '@/types/pagination'
-import { AppointmentFilters } from '@/types/appointments/appointment-filters'
+import { type PaginatedRequest, type PaginatedResult } from '@/types/pagination'
+import { type AppointmentFilters } from '@/types/appointments/appointment-filters'
 
 class PrismaAppointmentRepository implements AppointmentRepository {
   public async findAll() {
@@ -14,7 +14,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
 
   public async findAllPaginated(
     params: PaginatedRequest<AppointmentFilters>,
-    scope: { userId: string; viewAll: boolean }
+    scope: { userId: string, viewAll: boolean }
   ): Promise<PaginatedResult<Appointment>> {
     const { page, limit, filters } = params
 
@@ -29,12 +29,14 @@ class PrismaAppointmentRepository implements AppointmentRepository {
 
     const filtersWhere: Prisma.AppointmentWhereInput = {
       ...(filters?.status?.length ? { status: { in: filters.status } } : {}),
-      ...(filters?.from || filters?.to ? {
-        appointmentDate: {
-          ...(filters.from ? { gte: filters.from } : {}),
-          ...(filters.to ? { lte: filters.to } : {})
+      ...(filters?.from || filters?.to
+        ? {
+          appointmentDate: {
+            ...(filters.from ? { gte: filters.from } : {}),
+            ...(filters.to ? { lte: filters.to } : {})
+          }
         }
-      } : {})
+        : {})
     }
 
     const where: Prisma.AppointmentWhereInput =
@@ -64,7 +66,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
                   profilePhotoUrl: true
                 }
               }
-            },
+            }
           },
           customer: {
             select: {
@@ -215,14 +217,14 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     professionalId?: string,
     serviceIds?: string[]
   ): Promise<GroupedAppointmentCount[]> {
-    let dateFormat;
+    let dateFormat
 
     if (groupBy === 'day') {
-      dateFormat = '%Y-%m-%d';
+      dateFormat = '%Y-%m-%d'
     } else if (groupBy === 'week') {
-      dateFormat = '%Y-%u';
+      dateFormat = '%Y-%u'
     } else {
-      dateFormat = '%Y-%m';
+      dateFormat = '%Y-%m'
     }
 
     let query = `
@@ -286,14 +288,14 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     professionalId?: string,
     serviceIds?: string[]
   ): Promise<GroupedEstimatedTime[]> {
-    let dateFormat;
+    let dateFormat
 
     if (groupBy === 'day') {
-      dateFormat = '%Y-%m-%d';
+      dateFormat = '%Y-%m-%d'
     } else if (groupBy === 'week') {
-      dateFormat = '%Y-%u';
+      dateFormat = '%Y-%u'
     } else {
-      dateFormat = '%Y-%m';
+      dateFormat = '%Y-%m'
     }
 
     let query = `

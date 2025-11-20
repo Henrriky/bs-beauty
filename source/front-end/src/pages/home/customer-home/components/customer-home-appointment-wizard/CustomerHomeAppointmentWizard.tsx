@@ -119,8 +119,14 @@ function CustomerHomeAppointmentWizard() {
 
       setModalIsOpen(true)
     } catch (error: any) {
-      if (error?.data?.message?.toString().includes('maximum number of appointments')) {
-        toast.error('Você já atingiu o número máximo de agendamentos por hoje. Por favor, tente novamente amanhã.')
+      if (
+        error?.data?.message
+          ?.toString()
+          .includes('maximum number of appointments')
+      ) {
+        toast.error(
+          'Você já atingiu o número máximo de agendamentos por hoje. Por favor, tente novamente amanhã.',
+        )
         return
       }
       console.error('❌ Erro ao criar o agendamento:', error)

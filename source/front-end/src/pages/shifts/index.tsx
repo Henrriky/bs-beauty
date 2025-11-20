@@ -84,7 +84,12 @@ const Shifts = () => {
 
           const convertLocalTimeToUTC = (time: string): string => {
             const [hours, minutes] = time.split(':').map(Number)
-            const localDateTime = DateTime.local().set({ hour: hours, minute: minutes, second: 0, millisecond: 0 })
+            const localDateTime = DateTime.local().set({
+              hour: hours,
+              minute: minutes,
+              second: 0,
+              millisecond: 0,
+            })
             const utcDateTime = localDateTime.plus({ hours: 3 })
             return utcDateTime.toFormat('HH:mm')
           }
@@ -133,13 +138,12 @@ const Shifts = () => {
       hour: parseInt(hours),
       minute: parseInt(minutes),
       second: 0,
-      millisecond: 0
+      millisecond: 0,
     })
     const localDateTime = utcDateTime.minus({ hours: 3 })
 
     return localDateTime.toFormat('HH:mm')
   }
-
 
   const validateShifts = (): boolean => {
     let isValid = true
@@ -165,11 +169,7 @@ const Shifts = () => {
     <>
       <PageHeader
         title="Turnos"
-        subtitle={
-          <>
-            Defina seus horários de expediente
-          </>
-        }
+        subtitle={<>Defina seus horários de expediente</>}
       />
       <div className="mt-6 flex flex-col items-center gap-6">
         <div

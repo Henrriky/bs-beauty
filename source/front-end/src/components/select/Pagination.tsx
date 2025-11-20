@@ -95,10 +95,11 @@ export function Pagination({
             <button
               key={pageNumber}
               onClick={() => onPageChange(pageNumber)}
-              className={`w-8 h-8 flex items-center justify-center rounded-md border text-sm transition-colors ${isActive
-                ? 'bg-[#B19B86] border-[#B19B86] text-white font-medium'
-                : 'border-[#3B3B3B] text-[#D9D9D9] hover:bg-[#2A2A2A]'
-                }`}
+              className={`w-8 h-8 flex items-center justify-center rounded-md border text-sm transition-colors ${
+                isActive
+                  ? 'bg-[#B19B86] border-[#B19B86] text-white font-medium'
+                  : 'border-[#3B3B3B] text-[#D9D9D9] hover:bg-[#2A2A2A]'
+              }`}
             >
               {pageNumber}
             </button>

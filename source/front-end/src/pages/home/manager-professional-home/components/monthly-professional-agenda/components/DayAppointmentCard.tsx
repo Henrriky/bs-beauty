@@ -46,8 +46,11 @@ function DayAppointmentCard({
   return (
     <article className="rounded-md bg-[#3A3027]/60 p-3 flex items-start gap-3">
       <div className="text-primary-0 text-sm w-16 shrink-0">
-        {formatHour(start)}<br />
-        {durationMin ? <span className="text-primary-0 text-xs">({durationMin}m)</span> : null}
+        {formatHour(start)}
+        <br />
+        {durationMin ? (
+          <span className="text-primary-0 text-xs">({durationMin}m)</span>
+        ) : null}
       </div>
 
       <div className="flex-1">

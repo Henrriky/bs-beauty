@@ -30,7 +30,8 @@ function Notifications() {
           title="Notificações"
           subtitle={
             <>
-              Confira suas notificações sobre eventos que ocorreram recentemente.
+              Confira suas notificações sobre eventos que ocorreram
+              recentemente.
             </>
           }
         />
@@ -59,10 +60,7 @@ function Notifications() {
           />
         </div>
 
-        <ListNotifications
-          params={params}
-          onPageChange={setCurrentPage}
-        />
+        <ListNotifications params={params} onPageChange={setCurrentPage} />
       </div>
     </>
   )

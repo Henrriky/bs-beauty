@@ -34,11 +34,7 @@ function Appointments() {
     Status.RESCHEDULED,
   ]
 
-  const finishedStatuses = [
-    Status.CANCELLED,
-    Status.FINISHED,
-    Status.NO_SHOW,
-  ]
+  const finishedStatuses = [Status.CANCELLED, Status.FINISHED, Status.NO_SHOW]
 
 
   const { data, isLoading, isFetching, isError, error } =
