@@ -63,7 +63,8 @@ const MockProfessionalRepository: Mocked<ProfessionalRepository> = {
   delete: vi.fn(),
   fetchServicesOfferedByProfessional: vi.fn(),
   findAllPaginated: vi.fn(),
-  findProfessionalPermissions: vi.fn()
+  findProfessionalPermissions: vi.fn(),
+  findProfessionalsWithPermissionOrUserType: vi.fn()
 }
 
 const MockServiceRepository: Mocked<ServiceRepository> = {

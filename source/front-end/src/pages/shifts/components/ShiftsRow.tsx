@@ -3,7 +3,8 @@ import { CheckIcon } from '@heroicons/react/16/solid'
 const dayId = (day: string) =>
   `busy-${day}`
     .toLowerCase()
-    .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
     .replace(/\s+/g, '-')
 
 interface EditableShift {
@@ -29,7 +30,11 @@ const ShiftsRow = ({
     setEditableShifts((prev) => ({
       ...prev,
       [day]: {
-        ...(prev[day] ?? { shiftStart: '00:00', shiftEnd: '00:00', isBusy: true }),
+        ...(prev[day] ?? {
+          shiftStart: '00:00',
+          shiftEnd: '00:00',
+          isBusy: true,
+        }),
         isBusy: !checked,
       },
     }))
@@ -44,11 +49,18 @@ const ShiftsRow = ({
       </div>
 
       {weekDays.map((day, index) => {
-        const shift = editableShifts[day] ?? { shiftStart: '00:00', shiftEnd: '00:00', isBusy: true }
+        const shift = editableShifts[day] ?? {
+          shiftStart: '00:00',
+          shiftEnd: '00:00',
+          isBusy: true,
+        }
         const id = dayId(day)
         const checked = !shift.isBusy
 
-        const handleChange = (field: 'shiftStart' | 'shiftEnd', value: string) => {
+        const handleChange = (
+          field: 'shiftStart' | 'shiftEnd',
+          value: string,
+        ) => {
           setEditableShifts((prev) => ({
             ...prev,
             [day]: {
@@ -78,7 +90,9 @@ const ShiftsRow = ({
                     peer-checked:border-[#A4978A]
                   "
                 >
-                  <CheckIcon className={`h-3.5 w-3.5 ${checked ? 'opacity-100' : 'opacity-0'} transition`} />
+                  <CheckIcon
+                    className={`h-3.5 w-3.5 ${checked ? 'opacity-100' : 'opacity-0'} transition`}
+                  />
                 </label>
               </div>
             </div>

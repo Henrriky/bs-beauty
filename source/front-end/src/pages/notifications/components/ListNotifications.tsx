@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '../../../components/button/Button'
+import { Pagination } from '../../../components/select/Pagination'
 import { NotificationDTO } from '../../../store/notification/types'
 import Modal from '../../services/components/Modal'
 import { Params, useNotificationsLogic } from '../hooks/useNotificationsLogic'
@@ -8,7 +9,12 @@ import NotificationItem from './NotificationItem'
 import { DeleteNotificationsModal } from './DeleteNotificationsModal'
 import { MarkNotificationsReadModal } from './MarkNotificationsReadModal'
 
-function ListNotifications({ params }: { params: Params }) {
+interface ListNotificationsProps {
+  params: Params
+  onPageChange?: (page: number) => void
+}
+
+function ListNotifications({ params, onPageChange }: ListNotificationsProps) {
   const {
     data,
     isError,
@@ -110,7 +116,9 @@ function ListNotifications({ params }: { params: Params }) {
           <Button
             label={allSelectedOnPage ? 'Desmarcar' : 'Selecionar'}
             onClick={toggleAllOnPage}
-            disabled={isFetching || isMarking || isDeleting || pageIds.length === 0}
+            disabled={
+              isFetching || isMarking || isDeleting || pageIds.length === 0
+            }
             variant="outline"
             outlineVariantBorderStyle="solid"
             className="!w-auto !max-w-[120px] !px-3 !py-1.5 text-sm rounded-md shrink-0"
@@ -118,7 +126,9 @@ function ListNotifications({ params }: { params: Params }) {
 
           <div className="relative">
             <Button
-              label={selectedIds.length ? `Ações (${selectedIds.length})` : 'Ações'}
+              label={
+                selectedIds.length ? `Ações (${selectedIds.length})` : 'Ações'
+              }
               onClick={() => setActionMenuOpen((v) => !v)}
               disabled={selectedIds.length === 0 || isMarking || isDeleting}
               variant="outline"
@@ -184,6 +194,16 @@ function ListNotifications({ params }: { params: Params }) {
         <p className="text-[#D9D9D9] mb-8 mt-2 text-sm text-center">
           Não há notificações.
         </p>
+      )}
+
+      {data && data.totalPages > 1 && (
+        <Pagination
+          totalItems={data.total}
+          totalPages={data.totalPages}
+          currentPage={data.page}
+          pageLimit={data.limit}
+          onPageChange={(page) => onPageChange?.(page)}
+        />
       )}
 
       <div className="absolute top-0">

@@ -38,7 +38,7 @@ professionalRoutes.post(
 
 professionalRoutes.put(
   '/:id',
-  combinedAuthMiddleware(['MANAGER'], ['professional.edit']),
+  combinedAuthMiddleware(['MANAGER', 'PROFESSIONAL'], ['professional.edit']),
   validateUpdateProfessional, ProfessionalsController.handleUpdate
 )
 

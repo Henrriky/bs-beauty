@@ -99,21 +99,9 @@ function AppointmentDetails() {
         ),
       )
       dispatchRedux(
-        appointmentAPI.util.updateQueryData(
-          'findAppointmentsByCustomerOrProfessionalId',
-          undefined,
-          (draft) => {
-            if (!formData.status) return
-
-            const appointmentIndex = draft.appointments.findIndex(
-              (appointment) => appointment.id === appointmentId,
-            )
-
-            if (appointmentIndex !== -1) {
-              draft.appointments[appointmentIndex].status = formData.status
-            }
-          },
-        ),
+        appointmentAPI.util.invalidateTags([
+          { type: 'Appointments', id: 'LIST' },
+        ]),
       )
       toast.success('Agendamento atualizado com sucesso!')
       navigate('/appointments')

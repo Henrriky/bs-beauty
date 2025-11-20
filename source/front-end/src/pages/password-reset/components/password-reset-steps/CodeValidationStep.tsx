@@ -1,9 +1,19 @@
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { authAPI } from '../../../../store/auth/auth-api'
 import { Button } from '../../../../components/button/Button'
 import { Input } from '../../../../components/inputs/Input'
+import { SharedSchemas } from '../../../../utils/validation/zod-schemas/shared-zod-schemas.validation.utils'
+
+const codeValidationSchema = z.object({
+  code: SharedSchemas.verificationCodeSchema,
+})
+
+type CodeValidationFormData = z.infer<typeof codeValidationSchema>
 
 interface CodeValidationStepProps {
   email: string
@@ -22,7 +32,19 @@ function CodeValidationStep({
   setStep,
   setTicket,
 }: CodeValidationStepProps) {
-  const [code, setCode] = useState('')
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CodeValidationFormData>({
+    resolver: zodResolver(codeValidationSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      code: '',
+    },
+  })
+
   const [secondsLeft, setSecondsLeft] = useState(60)
   const [resendAvailableAt, setResendAvailableAt] = useState<Date | null>(
     new Date(Date.now() + 60000),
@@ -30,10 +52,27 @@ function CodeValidationStep({
 
   const navigate = useNavigate()
 
-  const handleCodeInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setCode(event.target.value)
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowedKeys = [
+      'Backspace',
+      'Delete',
+      'Tab',
+      'Escape',
+      'Enter',
+      'ArrowLeft',
+      'ArrowRight',
+    ]
+
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())
+    ) {
+      return
+    }
+
+    if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
+      event.preventDefault()
+    }
   }
 
   const handleResend = async () => {
@@ -49,11 +88,13 @@ function CodeValidationStep({
 
   const [validateCode, { isLoading }] = authAPI.useValidateCodeMutation()
 
-  const handleOnClick = async (data: {
-    purpose: string
-    email: string
-    code: string
-  }) => {
+  const handleOnClick = async (formData: CodeValidationFormData) => {
+    const data = {
+      purpose: 'passwordReset',
+      email,
+      code: formData.code.trim(),
+    }
+
     await validateCode(data)
       .unwrap()
       .then((payload) => {
@@ -61,16 +102,20 @@ function CodeValidationStep({
         setStep('newPassword')
         setTicket(payload.ticket)
       })
-      .catch((error: unknown) => {
+      .catch((error: any) => {
         console.error('Error trying to validate code', error)
-        toast.error('Ocorreu um erro ao validar seu e-mail.')
-      })
-  }
 
-  const data = {
-    purpose: 'passwordReset',
-    email,
-    code: code.trim(),
+        if (
+          error?.data?.details === 'Invalid code' ||
+          error?.data?.message === 'Invalid code'
+        ) {
+          toast.error(
+            'Código de verificação incorreto. Verifique e tente novamente.',
+          )
+        } else {
+          toast.error('Ocorreu um erro ao validar seu e-mail.')
+        }
+      })
   }
 
   useEffect(() => {
@@ -91,10 +136,14 @@ function CodeValidationStep({
         type="text"
         variant="solid"
         label="Código de verificação"
+        wrapperClassName="items-center"
         inputClassName="w-[300px] text-center text-[20px]"
-        onChange={handleCodeInputChange}
+        error={errors.code?.message}
+        maxLength={6}
+        onKeyDown={handleKeyDown}
+        registration={register('code')}
       />
-      <p className="text-[#DBDBDB] text-xs">
+      <p className="text-[#DBDBDB] text-sm">
         Não recebeu o código? {''}
         <Button
           variant="text-only"
@@ -106,7 +155,7 @@ function CodeValidationStep({
                 : `Reenviar em ${secondsLeft}`
           }
           disabled={secondsLeft > 0}
-          className="text-xs"
+          className="text-sm"
           onClick={handleResend}
         />
       </p>
@@ -127,7 +176,7 @@ function CodeValidationStep({
               'Validar'
             )
           }
-          onClick={() => handleOnClick(data)}
+          onClick={handleSubmit(handleOnClick)}
         />
       </div>
     </div>

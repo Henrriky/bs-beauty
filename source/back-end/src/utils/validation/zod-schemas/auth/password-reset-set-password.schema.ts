@@ -1,5 +1,5 @@
-import z from "zod"
-import { RegexPatterns } from "../../regex.validation.util"
+import z from 'zod'
+import { RegexPatterns } from '../../regex.validation.util'
 
 const PasswordResetSetPasswordSchema = z.object({
   ticket: z.string().min(10),

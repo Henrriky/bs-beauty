@@ -146,5 +146,4 @@ describe('CodeValidationController', () => {
     expect(mockVerifyCustomerUseCase.execute).toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED)
   })
-
 })

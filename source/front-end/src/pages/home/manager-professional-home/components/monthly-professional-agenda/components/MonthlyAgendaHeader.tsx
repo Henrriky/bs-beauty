@@ -75,10 +75,11 @@ function MonthlyAgendaHeader({
           <button
             type="button"
             onClick={onToggleViewAll}
-            className={`px-2 sm:px-3 py-1.5 text-sm rounded ${viewAll
+            className={`px-2 sm:px-3 py-1.5 text-sm rounded ${
+              viewAll
                 ? 'bg-[#595149] text-primary-0'
                 : 'text-[#595149] hover:bg-black/20'
-              }`}
+            }`}
             title="Visualizar todos os agendamentos"
           >
             <span className="sm:hidden">Todos</span>

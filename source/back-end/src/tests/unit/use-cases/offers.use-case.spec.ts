@@ -510,5 +510,126 @@ describe('OffersUseCase (Unit Tests)', () => {
 
       await expect(promise).rejects.toThrow('Unable to fetch available scheduling because professional does not work on this day or not exists')
     })
+
+    it('should mark time slots as busy when overlapping with existing appointments', async () => {
+      const customerId = faker.string.uuid()
+      const serviceOfferingId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+      const dayToFetch = new Date('2025-09-20T00:00:00.000Z')
+      const dayOfWeekToFetch = DateFormatter.formatDayOfDateToWeekDay(dayToFetch)
+
+      const offer: Offer = {
+        id: serviceOfferingId,
+        estimatedTime: 60,
+        price: new Prisma.Decimal(100),
+        isOffering: true,
+        serviceId: faker.string.uuid(),
+        professionalId,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      const shift: Shift = {
+        id: faker.string.uuid(),
+        weekDay: dayOfWeekToFetch,
+        isBusy: false,
+        shiftStart: new Date('2025-09-20T08:00:00.000Z'),
+        shiftEnd: new Date('2025-09-20T12:00:00.000Z'),
+        professionalId
+      }
+
+      const existingAppointment = {
+        id: faker.string.uuid(),
+        observation: null,
+        status: 'CONFIRMED' as any,
+        appointmentDate: new Date('2025-09-20T09:00:00.000Z'),
+        appointmentId: faker.string.uuid(),
+        estimatedTime: 60
+      }
+
+      MockOfferRepository.findById.mockResolvedValue(offer)
+      MockShiftRepository.findByProfessionalAndWeekDay.mockResolvedValue(shift)
+      MockAppointmentRepository.findNonFinishedByUserAndDay
+        .mockResolvedValueOnce({ validAppointmentsOnDay: [existingAppointment] })
+        .mockResolvedValueOnce({ validAppointmentsOnDay: [] })
+      MockBlockedTimesUseCase.executeFindByProfessionalAndPeriod.mockResolvedValue([])
+
+      const result = await offersUseCase.executeFetchAvailableSchedulingToOfferByDay({
+        customerId,
+        serviceOfferingId,
+        dayToFetchAvailableSchedulling: dayToFetch
+      })
+
+      expect(result).toHaveProperty('availableSchedulling')
+      expect(Array.isArray(result.availableSchedulling)).toBe(true)
+      expect(result.availableSchedulling.length).toBeGreaterThan(0)
+      // Verify that both repositories were called correctly
+      expect(MockAppointmentRepository.findNonFinishedByUserAndDay).toHaveBeenCalled()
+    })
+
+    it('should mark time slots as busy when overlapping with blocked times', async () => {
+      const customerId = faker.string.uuid()
+      const serviceOfferingId = faker.string.uuid()
+      const professionalId = faker.string.uuid()
+      const dayToFetch = new Date('2025-09-20T00:00:00.000Z')
+      const dayOfWeekToFetch = DateFormatter.formatDayOfDateToWeekDay(dayToFetch)
+
+      const offer: Offer = {
+        id: serviceOfferingId,
+        estimatedTime: 60,
+        price: new Prisma.Decimal(100),
+        isOffering: true,
+        serviceId: faker.string.uuid(),
+        professionalId,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      const shift: Shift = {
+        id: faker.string.uuid(),
+        weekDay: dayOfWeekToFetch,
+        isBusy: false,
+        shiftStart: new Date('2025-09-20T08:00:00.000Z'),
+        shiftEnd: new Date('2025-09-20T12:00:00.000Z'),
+        professionalId
+      }
+
+      const blockedTime = {
+        id: faker.string.uuid(),
+        professionalId,
+        startTime: new Date('2025-09-20T09:00:00.000Z'),
+        endTime: new Date('2025-09-20T10:00:00.000Z'),
+        reason: 'Lunch break',
+        isActive: true,
+        startDate: new Date('2025-09-20T00:00:00.000Z'),
+        endDate: null,
+        monday: false,
+        tuesday: false,
+        wednesday: true,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: false,
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.past()
+      }
+
+      MockOfferRepository.findById.mockResolvedValue(offer)
+      MockShiftRepository.findByProfessionalAndWeekDay.mockResolvedValue(shift)
+      MockAppointmentRepository.findNonFinishedByUserAndDay.mockResolvedValue({
+        validAppointmentsOnDay: []
+      })
+      MockBlockedTimesUseCase.executeFindByProfessionalAndPeriod.mockResolvedValue([blockedTime])
+
+      const result = await offersUseCase.executeFetchAvailableSchedulingToOfferByDay({
+        customerId,
+        serviceOfferingId,
+        dayToFetchAvailableSchedulling: dayToFetch
+      })
+
+      expect(result).toHaveProperty('availableSchedulling')
+      const busySlots = result.availableSchedulling.filter((slot: any) => slot.isBusy)
+      expect(busySlots.length).toBeGreaterThan(0)
+    })
   })
 })

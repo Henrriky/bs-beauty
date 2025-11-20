@@ -8,6 +8,8 @@ import { type ProfessionalRepository } from '@/repository/protocols/professional
 import { CustomError } from '@/utils/errors/custom.error.util'
 import { PermissionChecker } from '@/utils/auth/permission-checker.util'
 import { type Permissions } from '@/utils/auth/permissions-map.util'
+import { notificationBus } from '@/events/notification-bus'
+import { ENV } from '@/config/env'
 
 interface ServicesOutput {
   services: Service[]
@@ -62,7 +64,13 @@ class ServicesUseCase {
 
     const service = await this.serviceRepository.create(newService)
 
-    // TODO: Call notification use case to notify managers or users with service.approve about new service creation and approval request
+    // Notificar gerentes ou usuários com permissão service.approve sobre nova criação de serviço
+    if (service.status === ServiceStatus.PENDING) {
+      if (ENV.NOTIFY_ASYNC_ENABLED) {
+        notificationBus.emit('service.created', { service })
+      }
+    }
+
     return service
   }
 
@@ -81,7 +89,13 @@ class ServicesUseCase {
 
     const updatedServiceResult = await this.serviceRepository.update(serviceId, updatedService)
 
-    // TODO: Call notification use case to notify professionals about service status change
+    // Notificar o profissional criador sobre a mudança de status do serviço
+    if (this.isStatusBeingUpdated(updatedService)) {
+      if (ENV.NOTIFY_ASYNC_ENABLED) {
+        notificationBus.emit('service.statusChanged', { service: updatedServiceResult })
+      }
+    }
+
     return updatedServiceResult
   }
 

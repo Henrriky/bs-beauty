@@ -6,7 +6,7 @@ import {
   buildStatusCounts,
   generateTileClasses,
   baseCalendarConfig,
-  formatShortWeekday
+  formatShortWeekday,
 } from '../shared/calendar-utils'
 import { renderStatusChips } from '../shared/calendar-components'
 
@@ -60,7 +60,11 @@ export default function CalendarPanel({
   return (
     <div className="rcWrap w-full">
       {isLoading && (
-        <div className="px-4 py-3 text-sm text-primary-300" role="status" aria-live="polite">
+        <div
+          className="px-4 py-3 text-sm text-primary-300"
+          role="status"
+          aria-live="polite"
+        >
           Carregando agendamentos…
         </div>
       )}
@@ -74,31 +78,27 @@ export default function CalendarPanel({
         {...baseCalendarConfig}
         prevLabel={<ChevronLeftIcon className="size-5" />}
         nextLabel={<ChevronRightIcon className="size-5" />}
-
         navigationLabel={({ label, view }) =>
-          view === 'month'
-            ? (
-              <span className="text-[#595149]">
-                {`${label.split(' ')[0].replace(/^\w/, c => c.toUpperCase())} - ${label.split(' ')[2]}`}
-              </span>
-            )
-            : label
+          view === 'month' ? (
+            <span className="text-[#595149]">
+              {`${label.split(' ')[0].replace(/^\w/, (c) => c.toUpperCase())} - ${label.split(' ')[2]}`}
+            </span>
+          ) : (
+            label
+          )
         }
-
         formatShortWeekday={formatShortWeekday}
-
         activeStartDate={currentMonth}
         onActiveStartDateChange={({ activeStartDate }) => {
           if (activeStartDate) onChangeMonth(startOfMonth(activeStartDate))
         }}
-
         value={selectedDate ?? undefined}
         onClickDay={(value) => onSelectDate(value as Date)}
-
-        tileClassName={({ date, view }) => (
-          view !== 'month' ? '' : generateTileClasses(date, selectedDate, currentMonth)
-        )}
-
+        tileClassName={({ date, view }) =>
+          view !== 'month'
+            ? ''
+            : generateTileClasses(date, selectedDate, currentMonth)
+        }
         tileContent={({ date, view }) => {
           if (view !== 'month') return null
 

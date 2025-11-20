@@ -68,7 +68,7 @@ describe('permissionAuthMiddleware', () => {
 
     // User has first permission but not second
     vi.mocked(PermissionChecker.hasPermission)
-      .mockReturnValueOnce(true)  // professional.read
+      .mockReturnValueOnce(true) // professional.read
       .mockReturnValueOnce(false) // professional.create
     vi.mocked(CustomError).mockImplementation(() => customError)
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import Title from '../../components/texts/Title'
+import { PageHeader } from '../../layouts/PageHeader'
 import { notificationTemplateAPI } from '../../store/notification-template/notification-template-api'
 import { NotificationTemplate } from '../../store/notification-template/types'
 import NotificationTemplateEditorModal from './components/NotificationTemplateEditorModal'
@@ -55,11 +55,10 @@ function NotificationTemplates() {
 
   return (
     <>
-      <Title align="left">Comunicação</Title>
-      <p className="text-[#979797] text-sm mt-2">
-        Configure e gerencie os modelos usados nas notificações automáticas da
-        plataforma.
-      </p>
+      <PageHeader
+        title="Modelos de Notificação"
+        subtitle="Gerencie os modelos de notificação da plataforma"
+      />
 
       <NotificationTemplateList
         templates={templates}
