@@ -8,6 +8,7 @@ import { ErrorMessage } from '../../../../../../components/feedback/ErrorMessage
 import SelectableServiceList from './components/selectable-service-list'
 import { useNormalizedServices } from './hooks/useNormalizedServices'
 import ServiceFilterForm from './components/customer-home-select-service-filter-form'
+import { Pagination } from '../../../../../../components/select/Pagination'
 
 export type SchedullingFlows = 'service' | 'professional'
 
@@ -15,8 +16,6 @@ interface Props {
   currentFlow: SchedullingFlows
 }
 
-// TODO: CARREGAR MAIS SERVIÇOS QUANDO CHEGA NO LIMITE PADRÃO (10)
-// TODO: POSSÍVEL CRIAÇÃO DE INPUT DE BUSCA PARA BUSCAR PELO NOME (O PARÂMETRO JÁ ESTÁ FEITO NA API)
 function CustomerHomeSelectServiceContainer({ currentFlow }: Props) {
   const { watch } = useFormContext<CreateAppointmentFormData>()
   const professionalId = watch('professionalId')
@@ -39,6 +38,10 @@ function CustomerHomeSelectServiceContainer({ currentFlow }: Props) {
     error,
     isError,
     isLoading,
+    currentPage,
+    totalPages,
+    totalItems,
+    pageLimit,
   } = useNormalizedServices({
     currentFlow,
     professionalId,
@@ -61,12 +64,29 @@ function CustomerHomeSelectServiceContainer({ currentFlow }: Props) {
       <Subtitle align="left" className="text-[#A4978A] font-medium mb-6">
         Selecione o serviço que você deseja agendar:
       </Subtitle>
+
       <ServiceFilterForm
         filters={filters}
-        onFiltersChange={setFilters}
+        onFiltersChange={(next) => setFilters((curr) => ({ ...curr, ...next, page: 1 }))}
         categories={categories}
       />
-      <SelectableServiceList currentFlow={currentFlow} services={services} />
+
+      <SelectableServiceList
+        currentFlow={currentFlow}
+        services={services}
+      />
+
+      {totalPages > 1 && (
+        <div className="mt-6">
+          <Pagination
+            totalItems={totalItems}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            pageLimit={pageLimit}
+            onPageChange={(page) => setFilters((curr) => ({ ...curr, page }))}
+          />
+        </div>
+      )}
     </>
   )
 }

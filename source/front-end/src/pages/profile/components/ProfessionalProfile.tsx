@@ -63,6 +63,7 @@ function ProfessionalProfile({
       socialMedia: userInfo.socialMedia ?? undefined,
       specialization: userInfo.specialization ?? undefined,
       paymentMethods: userInfo.paymentMethods ?? undefined,
+      notificationPreference: userInfo.notificationPreference ?? undefined,
     })
   }, [userInfo, reset])
 
