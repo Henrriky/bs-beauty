@@ -211,3 +211,26 @@ A equipe deverá atingir \textbf{70\% de cobertura geral no back-end} consideran
 	\item Dar atenção a \textbf{ramos e exceções}: caminhos de erro, validações e \textit{edge cases}.
 	\item Para integrações (BD/filas), usar \textbf{\textit{test doubles}} quando possível e poucos testes integrados focados em cenários críticos.
 \end{itemize}
+
+\subsubsection{Resultados Obtidos}
+
+A figura abaixo apresenta o relatório de cobertura dos testes unitários do \textit{back-end}. Os resultados demonstram o atendimento à meta estabelecida de 70\% para a métrica de instruções/linhas, evidenciando a eficácia da estratégia de testes adotada.
+
+\begin{figure}[htb]
+  \centering
+  \caption{Resultado da Cobertura de Testes com Vitest}
+	\includegraphics[width=\textwidth]{cap04-desenvolvimento/images/4-4-8-4-resultado-cobertura-teste-vitest.png}
+  \label{fig:vitest-coverage-result}
+  \fonte{Produzido pelos autores}
+\end{figure}
+\FloatBarrier
+
+A seguir, apresenta-se a análise detalhada dos principais indicadores de cobertura:
+\begin{itemize}
+	\item \textbf{Instruções (Statements):} Corresponde ao percentual de declarações e comandos executados pelos testes. O valor obtido foi de 96,71\%, indicando ampla cobertura das instruções presentes no código.
+	\item \textbf{Ramos (Branches):} Refere-se ao percentual de desvios condicionais (como estruturas \texttt{if/else}) que foram percorridos durante a execução dos testes. O projeto alcançou 92,32\%, demonstrando que diferentes caminhos lógicos foram adequadamente verificados.
+	\item \textbf{Funções (Functions):} Indica o percentual de funções chamadas ao longo da execução dos testes. A cobertura obtida foi de 98,55\%, comprovando que praticamente todas as funções foram exercitadas.
+	\item \textbf{Linhas (Lines):} Representa o percentual de linhas executáveis que foram de fato executadas. O valor alcançado foi de 96,71\%, reforçando a abrangência da cobertura.
+\end{itemize}
+
+Esses resultados evidenciam que o conjunto de testes unitários é robusto e cobre de maneira eficaz as principais estruturas do código, garantindo maior confiabilidade ao \textit{back-end} desenvolvido.

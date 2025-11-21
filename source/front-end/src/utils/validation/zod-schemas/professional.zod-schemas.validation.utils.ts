@@ -54,6 +54,7 @@ class ProfessionalSchemas {
           (value) => RegexPatterns.phone.test(value),
           'Por favor, forneça um número de telefone válido',
         ),
+      notificationPreference: SharedSchemas.notificationPreference.optional(),
     })
     .strict()
 

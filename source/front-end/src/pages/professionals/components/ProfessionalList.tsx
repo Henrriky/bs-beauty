@@ -7,6 +7,7 @@ interface ProfessionalListProps {
   onDelete: (professional: Professional) => void
   onManageProfessionalRoles: (professional: Professional) => void
   onEditCommission: (professional: Professional) => void
+  skeletonCount?: number          // ✅ novo (opcional)
 }
 
 function ProfessionalList({
@@ -15,8 +16,9 @@ function ProfessionalList({
   onDelete,
   onManageProfessionalRoles,
   onEditCommission,
+  skeletonCount = 6,             // ✅ default
 }: ProfessionalListProps) {
-  if (isLoading) return <ProfessionalListSkeleton />
+  if (isLoading) return <ProfessionalListSkeleton count={skeletonCount} />
   if (professionals.length === 0) return <ProfessionalListEmpty />
 
   return (
@@ -34,31 +36,27 @@ function ProfessionalList({
   )
 }
 
-function ProfessionalListSkeleton() {
+function ProfessionalListSkeleton({ count = 6 }: { count?: number }) {
   return (
-    <div className="space-y-4">
-      {Array.from({ length: 3 }).map((_, index) => (
+    <div className="flex items-center flex-col gap-6 px-2 animate-pulse">
+      {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
-          className="bg-primary-800 rounded-2xl p-4 animate-pulse"
+          className="flex items-start justify-between gap-3 bg-[#222222] w-full text-left px-6 py-6 rounded-2xl"
         >
-          <div className="space-y-3">
-            <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <div className="h-4 bg-primary-600 rounded w-24 mb-2"></div>
-                <div className="h-3 bg-primary-600 rounded w-32"></div>
-              </div>
-              <div className="h-6 bg-primary-600 rounded-full w-16"></div>
+          <div className="flex-1 min-w-0">
+            <div className="h-5 w-40 bg-[#3A3A3A] rounded mb-2" />
+            <div className="h-4 w-64 bg-[#3A3A3A] rounded" />
+            <div className="flex items-center gap-2 mt-4">
+              <div className="h-4 w-4 rounded bg-[#3A3A3A]" />
+              <div className="h-4 w-28 bg-[#3A3A3A] rounded" />
             </div>
-            <div className="border-t border-primary-600 pt-3">
-              <div className="flex justify-between items-center">
-                <div className="h-3 bg-primary-600 rounded w-20"></div>
-                <div className="flex gap-2">
-                  <div className="h-8 w-8 bg-primary-600 rounded"></div>
-                  <div className="h-8 w-8 bg-primary-600 rounded"></div>
-                </div>
-              </div>
-            </div>
+          </div>
+
+          <div className="flex gap-2 shrink-0">
+            <div className="h-8 w-8 rounded bg-[#3A3A3A]" />
+            <div className="h-8 w-8 rounded bg-[#3A3A3A]" />
+            <div className="h-8 w-8 rounded bg-[#3A3A3A]" />
           </div>
         </div>
       ))}

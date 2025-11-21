@@ -3,10 +3,9 @@ import { useMemo } from 'react'
 export function useDateRange() {
   const defaultDates = useMemo(() => {
     const today = new Date()
-    const start = new Date(today)
-    start.setDate(today.getDate() - 3)
-    const end = new Date(today)
-    end.setDate(today.getDate() + 3)
+
+    const start = new Date(today.getFullYear(), today.getMonth(), 1)
+    const end = new Date(today.getFullYear(), today.getMonth() + 1, 0)
 
     const formatDate = (date: Date) => {
       const year = date.getFullYear()

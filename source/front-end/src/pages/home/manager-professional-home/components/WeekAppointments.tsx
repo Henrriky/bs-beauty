@@ -18,15 +18,15 @@ const WeekAppointments = () => {
     appointmentAPI.useFetchProfessionalAppointmentsByAllOffersQuery(id!)
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>Carregando...</div>
   }
 
   if (error) {
-    return <div>Error fetching appointments</div>
+    return <div>Erro ao buscar compromissos</div>
   }
 
   if (!data) {
-    return <div>No data could be provided</div>
+    return <div>Nenhum dado pôde ser fornecido</div>
   }
 
   const daysWithAppointments = Array(7).fill(false)

@@ -233,7 +233,18 @@ model RolePermission {
 
   @@map("role_permission")
 }
+model SalonInfo {
+  id                 Int      @id @default(1)
+  name               String
+  openingHours       Json?    @map("opening_hours")
+  salonAddress       String?
+  salonEmail         String?  @map("salon_email")
+  salonPhoneNumber   String?  @map("salon_phone_number")
+  minimumAdvanceTime String?     @map("minimum_advance_time")
+  updatedAt          DateTime @updatedAt @map("updated_at")
 
+  @@map("salon_info")
+}
 model NotificationTemplate {
   id          String  @id @default(uuid())
   key         String  @unique @map("key")

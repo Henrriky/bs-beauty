@@ -1,15 +1,14 @@
 import { ReactNode } from 'react'
-import GoBackButton from '../button/GoBackButton'
+import GoBackButton from '../button/GoBackButton/GoBackButton'
 
 interface props {
   children: ReactNode
-  label?: string
 }
 
-export function GoBackButtonLayout({ children, label }: props) {
+export function GoBackButtonLayout({ children }: props) {
   return (
     <div>
-      <GoBackButton label={label} />
+      <GoBackButton />
       <hr className="border-[#424242] mb-10" />
       <div>{children}</div>
     </div>

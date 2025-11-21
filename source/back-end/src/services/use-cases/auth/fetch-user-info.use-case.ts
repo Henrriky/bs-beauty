@@ -9,9 +9,7 @@ interface FetchUserInfoUseCaseInput {
   email: string
 }
 
-interface FetchCustomerInfo extends Customer {
-
-}
+interface FetchCustomerInfo extends Customer {}
 
 interface FetchProfessionalInfo extends Professional {
   roles: string[]
