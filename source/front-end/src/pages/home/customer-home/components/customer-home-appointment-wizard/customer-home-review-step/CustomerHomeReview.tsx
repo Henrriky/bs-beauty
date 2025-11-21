@@ -94,9 +94,9 @@ function CustomerHomeReviewStep() {
             size="md"
             variation="square-with-bg"
             profilePhotoUrl={
-              professionalPhotoUrl ||
-              'https://cdn-site-assets.veed.io/cdn-cgi/image/width=256,quality=75,format=auto/Fish_6e8d209905/Fish_6e8d209905.webp'
+              professionalPhotoUrl || ''
             }
+            displayName={professionalName || 'Profissional'}
           />
           <p className="text-primary-100 flex items-center">
             {professionalName || 'Desconhecido '}

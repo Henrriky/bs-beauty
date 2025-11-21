@@ -8,19 +8,24 @@ import { ErrorMessage } from '../../../../../../components/feedback/ErrorMessage
 import { FaceFrownIcon } from '@heroicons/react/24/outline'
 import CustomerHomeProfessionalCard from './CustomerHomeProfessionalCard'
 import { professionalAPI } from '../../../../../../store/professional/professional-api'
+import { Pagination } from '../../../../../../components/select/Pagination'
+import { useState } from 'react'
 
 interface Props {
   currentFlow: 'service' | 'professional'
 }
 
-function CustomerHomeSelectProfessionalContainer(props: Props) {
+function CustomerHomeSelectProfessionalContainer({ currentFlow }: Props) {
   const { register, watch, setValue } =
     useFormContext<CreateAppointmentFormData>()
   const serviceId = watch('serviceId')
   const serviceOfferedId = watch('serviceOfferedId')
   const professionalId = watch('professionalId')
 
-  if (!serviceId && props.currentFlow === 'service') {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageLimit] = useState(10)
+
+  if (!serviceId && currentFlow === 'service') {
     toast.error(
       'Por favor, selecione um serviço para acessar a etapa de selecionar os profissionais',
     )
@@ -37,7 +42,7 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
   const { data, isLoading, isError, error } =
     serviceAPI.useFetchProfessionalsOfferingServiceQuery(
       { serviceId: serviceId ?? '' },
-      { skip: props.currentFlow !== 'service' },
+      { skip: currentFlow !== 'service' },
     )
 
   const {
@@ -46,8 +51,8 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
     isError: isErrorProfessionals,
     error: professionalsError,
   } = professionalAPI.useFetchProfessionalsQuery(
-    {},
-    { skip: props.currentFlow !== 'professional' },
+    { page: currentPage, limit: pageLimit },
+    { skip: currentFlow !== 'professional' },
   )
 
   if (isLoading || isLoadingProfessionals)
@@ -65,19 +70,33 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
   }
 
   const professionalsToShow =
-    props.currentFlow === 'service'
-      ? (data?.professionalsOfferingService.offers ?? [])
-      : (professionalsData?.data.map((professional) => ({
-          id: `${professional.id}`,
-          professional,
-        })) ?? [])
+    currentFlow === 'service'
+      ? data?.professionalsOfferingService.offers ?? []
+      : professionalsData?.data.map((professional) => ({
+        id: `${professional.id}`,
+        professional,
+      })) ?? []
 
-  if (professionalsToShow.length === 0) {
+  // Client-side pagination for professionalsOfferingService
+  const paginatedProfessionals =
+    currentFlow === 'service'
+      ? professionalsToShow.slice(
+        (currentPage - 1) * pageLimit,
+        currentPage * pageLimit,
+      )
+      : professionalsToShow
+
+  const totalPages =
+    currentFlow === 'service'
+      ? Math.ceil((professionalsToShow.length || 1) / pageLimit)
+      : professionalsData?.totalPages
+
+  if (paginatedProfessionals.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-48 text-gray-500">
         <FaceFrownIcon className="h-12 w-12 mb-2" />
         <p>Nenhum funcionário disponível</p>
-        {props.currentFlow === 'service' && (
+        {currentFlow === 'service' && (
           <p className="text-sm">
             Este serviço não está sendo feito por nenhum funcionário no momento
           </p>
@@ -87,10 +106,10 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
   }
 
   const fieldToRegister =
-    props.currentFlow === 'service' ? 'serviceOfferedId' : 'professionalId'
+    currentFlow === 'service' ? 'serviceOfferedId' : 'professionalId'
 
   const fieldToCompare =
-    props.currentFlow === 'service' ? serviceOfferedId : professionalId
+    currentFlow === 'service' ? serviceOfferedId : professionalId
 
   return (
     <>
@@ -98,38 +117,44 @@ function CustomerHomeSelectProfessionalContainer(props: Props) {
         Escolha o profissional do seu agendamento:
       </Subtitle>
 
-      {professionalsToShow &&
-        professionalsToShow.map((offerOrProfessional) => {
-          const professional = {
-            ...offerOrProfessional.professional,
-            paymentMethods:
-              offerOrProfessional.professional.paymentMethods ?? undefined,
-          }
-          return (
-            <div key={`professional-${professional.id}`}>
-              <input
-                className="invisible"
-                type="radio"
-                id={offerOrProfessional.id}
-                value={offerOrProfessional.id}
-                {...register(fieldToRegister)}
-              />
-              <CustomerHomeProfessionalCard
-                isSelected={fieldToCompare === offerOrProfessional.id}
-                currentFlow={props.currentFlow}
-                key={offerOrProfessional.id}
-                for={offerOrProfessional.id}
-                {...offerOrProfessional}
-                professional={professional}
-                onClick={() => {
-                  setValue('professionalId', professional.id)
-                  setValue('name', professional.name || 'Não definido')
-                  setValue('paymentMethods', professional.paymentMethods)
-                }}
-              />
-            </div>
-          )
-        })}
+      {paginatedProfessionals.map((offerOrProfessional) => {
+        const professional = {
+          ...offerOrProfessional.professional,
+          paymentMethods:
+            offerOrProfessional.professional.paymentMethods ?? undefined,
+        }
+        return (
+          <div key={`professional-${professional.id}`}>
+            <input
+              className="invisible hidden"
+              type="radio"
+              id={offerOrProfessional.id}
+              value={offerOrProfessional.id}
+              {...register(fieldToRegister)}
+            />
+            <CustomerHomeProfessionalCard
+              isSelected={fieldToCompare === offerOrProfessional.id}
+              currentFlow={currentFlow}
+              key={offerOrProfessional.id}
+              for={offerOrProfessional.id}
+              {...offerOrProfessional}
+              professional={professional}
+              onClick={() => {
+                setValue('professionalId', professional.id)
+                setValue('name', professional.name || 'Não definido')
+                setValue('paymentMethods', professional.paymentMethods)
+                setValue('professionalPhotoUrl', professional.profilePhotoUrl ?? '')
+              }}
+            />
+          </div>
+        )
+      })}
+
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
     </>
   )
 }

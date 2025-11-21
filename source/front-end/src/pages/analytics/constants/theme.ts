@@ -28,4 +28,7 @@ export const darkChartTheme = createTheme({
       },
     },
   },
+  typography: {
+    fontFamily: '"Kumbh Sans", "Fredoka", "sans-serif"',
+  },
 })
