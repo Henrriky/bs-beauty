@@ -37,7 +37,6 @@ class AppointmentController {
     try {
       const useCase = makeAppointmentsUseCaseFactory()
       const customerId = req.user.id
-
       const { appointments } = await useCase.executeFindByCustomerOrProfessionalId(customerId)
 
       res.send({ appointments }).status(200)
