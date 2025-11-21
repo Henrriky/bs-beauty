@@ -49,7 +49,9 @@ export function ReportCard<T>({
         }}
       >
         {emptyIcon}
-        <Typography sx={{ color: '#999' }}>{emptyMessage}</Typography>
+        <Typography sx={{ color: '#999' }} className="text-center">
+          {emptyMessage}
+        </Typography>
       </Box>
     )
   }

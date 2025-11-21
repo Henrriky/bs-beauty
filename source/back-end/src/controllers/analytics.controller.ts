@@ -135,7 +135,6 @@ class AnalyticsController {
   public static async handleFindByProfessionalId (req: Request, res: Response, next: NextFunction) {
     try {
       const analytics: Partial<Analytics> = {}
-
       const professionalId = req.params.id
 
       const offerUseCase = makeOffersUseCaseFactory()
