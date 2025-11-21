@@ -10,6 +10,7 @@ import { shiftAPI } from './shift/shift-api'
 import { professionalAPI } from './professional/professional-api'
 import { appointmentAPI } from './appointment/appointment-api'
 import { analyticsAPI } from './analytics/analytics-api'
+import { salonInfoAPI } from './salon-info/salon-info-api'
 import { paymentRecordAPI } from './payment-record/payment-record-api'
 import { publicAnalyticsApi } from './analytics/public-analytics-api'
 import { notificationAPI } from './notification/notification-api'
@@ -18,6 +19,7 @@ import { ratingAPI } from './rating/rating-api'
 import { roleAPI } from './role/role-api'
 import { permissionAPI } from './permission/permission-api'
 import { blockedtimesAPI } from './blocked-times/blocked-times-api'
+import { reportAPI } from './reports/report-api'
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +34,7 @@ export const store = configureStore({
     [professionalAPI.reducerPath]: professionalAPI.reducer,
     [appointmentAPI.reducerPath]: appointmentAPI.reducer,
     [analyticsAPI.reducerPath]: analyticsAPI.reducer,
+    [salonInfoAPI.reducerPath]: salonInfoAPI.reducer,
     [paymentRecordAPI.reducerPath]: paymentRecordAPI.reducer,
     [publicAnalyticsApi.reducerPath]: publicAnalyticsApi.reducer,
     [notificationAPI.reducerPath]: notificationAPI.reducer,
@@ -40,6 +43,7 @@ export const store = configureStore({
     [roleAPI.reducerPath]: roleAPI.reducer,
     [permissionAPI.reducerPath]: permissionAPI.reducer,
     [blockedtimesAPI.reducerPath]: blockedtimesAPI.reducer,
+    [reportAPI.reducerPath]: reportAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -53,11 +57,13 @@ export const store = configureStore({
       .concat(publicAnalyticsApi.middleware)
       .concat(appointmentAPI.middleware)
       .concat(analyticsAPI.middleware)
+      .concat(salonInfoAPI.middleware)
       .concat(paymentRecordAPI.middleware)
       .concat(notificationAPI.middleware)
       .concat(notificationTemplateAPI.middleware)
       .concat(ratingAPI.middleware)
       .concat(roleAPI.middleware)
       .concat(permissionAPI.middleware)
-      .concat(blockedtimesAPI.middleware),
+      .concat(blockedtimesAPI.middleware)
+      .concat(reportAPI.middleware),
 })

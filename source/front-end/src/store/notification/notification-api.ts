@@ -7,7 +7,7 @@ export const notificationAPI = createApi({
   reducerPath: 'notification-api',
   baseQuery: baseQueryWithAuth,
   tagTypes: ['Notifications'],
-  refetchOnFocus: true,
+  refetchOnFocus: false,
   refetchOnReconnect: true,
   endpoints: (builder) => ({
     fetchNotifications: builder.query<
@@ -19,6 +19,7 @@ export const notificationAPI = createApi({
         method: 'GET',
         params,
       }),
+      keepUnusedDataFor: 30,
       providesTags: (result) =>
         result
           ? [
@@ -40,10 +41,38 @@ export const notificationAPI = createApi({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: [{ type: 'Notifications', id: 'LIST' }],
-    }),
+      async onQueryStarted({ ids }, { dispatch, queryFulfilled }) {
+        const patches: any[] = []
 
-    deleteNotifications: builder.mutation<
+        try {
+          Object.keys((notificationAPI as any).queries || {}).forEach((key: string) => {
+            if (key.startsWith('fetchNotifications')) {
+              const patch = dispatch(
+                notificationAPI.util.updateQueryData(
+                  'fetchNotifications' as any,
+                  undefined as any,
+                  (draft: any) => {
+                    if (draft?.data) {
+                      draft.data.forEach((notification: any) => {
+                        if (ids.includes(notification.id) && !notification.readAt) {
+                          notification.readAt = new Date().toISOString()
+                        }
+                      })
+                    }
+                  }
+                )
+              )
+              patches.push(patch)
+            }
+          })
+
+          await queryFulfilled
+        } catch {
+          patches.forEach(patch => patch.undo())
+        }
+      },
+      invalidatesTags: [{ type: 'Notifications', id: 'LIST' }],
+    }), deleteNotifications: builder.mutation<
       DeleteNotificationsResponse,
       MarkManyNotificationsRequest
     >({

@@ -293,7 +293,7 @@ class PrismaProfessionalRepository implements ProfessionalRepository {
         where,
         skip,
         take: limit,
-        orderBy: { createdAt: 'asc' }
+        orderBy: { name: 'asc' }
       }),
       prismaClient.professional.count({ where })
     ])
