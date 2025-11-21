@@ -30,6 +30,7 @@ import ProductivityReport from '../pages/analytics'
 import BlockedTimes from '../pages/blocked-times'
 import GoBackButton from '../components/button/GoBackButton/GoBackButton'
 import SalonInfo from '../pages/salon-info'
+import PrivacyPolicy from '../pages/privacy-policy'
 
 function BSBeautyRouter() {
   return (
@@ -45,6 +46,7 @@ function BSBeautyRouter() {
             path="/password-reset-completed"
             element={<PasswordResetCompleted />}
           />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route
             element={
               <PrivateRoute

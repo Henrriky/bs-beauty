@@ -11,6 +11,8 @@ import {
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import { Select } from '../../../components/inputs/Select'
 import NotificationPreferenceSelect from '../../../components/inputs/NotificationPreferenceSelect'
+import { useState } from 'react'
+import { Checkbox } from '../../../components/inputs/Checkbox'
 
 interface CustomerInputContainerProps {
   isLoading: boolean
@@ -30,6 +32,9 @@ const DISCOVERY_OPTIONS = [
 // TODO: Separate Social Media to a Component
 
 function CustomerInputContainer(props: CustomerInputContainerProps) {
+  const [acceptedPrivacyPolicy, setAcceptedPrivacyPolicy] = useState(false)
+  const [privacyPolicyError, setPrivacyPolicyError] = useState('')
+
   const {
     register,
     handleSubmit,
@@ -40,10 +45,19 @@ function CustomerInputContainer(props: CustomerInputContainerProps) {
 
   const user = useAppSelector((state) => state.auth.user!)
 
+  const onSubmit = (data: CustomerCompleteRegisterFormData) => {
+    if (!acceptedPrivacyPolicy) {
+      setPrivacyPolicyError('Você precisa aceitar a política de privacidade')
+      return
+    }
+    setPrivacyPolicyError('')
+    props.handleSubmit(data)
+  }
+
   return (
     <form
       className="flex flex-col gap-10 w-full"
-      onSubmit={handleSubmit(props.handleSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         registration={{ ...register('name') }}
@@ -102,6 +116,25 @@ function CustomerInputContainer(props: CustomerInputContainerProps) {
         type="email"
         value={user.email}
         disabled
+      />
+      <Checkbox
+        id="privacyPolicy"
+        checked={acceptedPrivacyPolicy}
+        onChange={(e) => setAcceptedPrivacyPolicy(e.target.checked)}
+        label={
+          <span>
+            Eu li e aceito a{' '}
+            <a
+              href="/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#B19B86] hover:text-[#D4BFAA] underline"
+            >
+              Política de Privacidade
+            </a>
+          </span>
+        }
+        error={privacyPolicyError}
       />
       <Button
         type="submit"
