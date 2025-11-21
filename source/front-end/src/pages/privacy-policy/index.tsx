@@ -23,7 +23,7 @@ function PrivacyPolicy() {
             do Brasil.
           </p>
         </section>
-
+        <br />
         {/* Section 1 */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-[#B19B86]">
@@ -66,7 +66,7 @@ function PrivacyPolicy() {
             </li>
           </ul>
         </section>
-
+        <br />
         {/* Section 2 */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-[#B19B86]">
@@ -124,7 +124,7 @@ function PrivacyPolicy() {
             </li>
           </ul>
         </section>
-
+        <br />
         {/* Section 3 */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-[#B19B86]">
@@ -166,7 +166,7 @@ function PrivacyPolicy() {
             </li>
           </ul>
         </section>
-
+        <br />
         {/* Section 4 */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-[#B19B86]">
@@ -236,7 +236,7 @@ function PrivacyPolicy() {
             através do e-mail.
           </p>
         </section>
-
+        <br />
         {/* Section 5 */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-[#B19B86]">
@@ -281,7 +281,7 @@ function PrivacyPolicy() {
             </li>
           </ul>
         </section>
-
+        <br />
         {/* Section 6 */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-[#B19B86]">
@@ -296,7 +296,7 @@ function PrivacyPolicy() {
             identificação.
           </p>
         </section>
-
+        <br />
         {/* Section 7 */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-[#B19B86]">
@@ -309,7 +309,7 @@ function PrivacyPolicy() {
             revise esta política regularmente.
           </p>
         </section>
-
+        <br />
         {/* Section 8 */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-[#B19B86]">8. Contato</h2>
@@ -318,7 +318,7 @@ function PrivacyPolicy() {
             práticas de dados, entre em contato através do e-mail.
           </p>
         </section>
-
+        <br />
         {/* Closing */}
         <section className="space-y-4 pt-4 border-t border-[#3B3B3B]">
           <p className="text-sm sm:text-base leading-relaxed text-center font-medium text-[#B19B86]">
