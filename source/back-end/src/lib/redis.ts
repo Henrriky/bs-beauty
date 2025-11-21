@@ -20,7 +20,6 @@ function buildRedisOptions (): string | RedisOptions {
       return false
     }
   }
-
   return options
 }
 

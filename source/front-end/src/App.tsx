@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="bg-[#1E1E1E] min-h-[100vh] flex justify-center">
       <Provider store={store}>
-        <SessionBootstrap>
+        <SessionBootstrap>  
           <BSBeautyRouter />
         </SessionBootstrap>
         <ToastContainer

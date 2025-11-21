@@ -81,7 +81,7 @@ export default function PaymentMethodsInput({
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto text-white">
+    <div className="w-full mx-auto text-white">
       <label className="text-sm font-medium text-[#D9D9D9]">
         Métodos de Pagamento Aceitos
       </label>
@@ -111,7 +111,7 @@ export default function PaymentMethodsInput({
         )}
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 ">
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="payment-method-select" className="sr-only">
             Adicionar método de pagamento da lista
@@ -172,6 +172,7 @@ export default function PaymentMethodsInput({
             onChange={(e) => setCustomMethodName(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ou digite um novo"
+            wrapperClassName="ml-2 sm:ml-0 w-full"
           />
           <Button
             type="button"
@@ -179,8 +180,8 @@ export default function PaymentMethodsInput({
             onClick={handleAddCustomMethod}
             disabled={!customMethodName.trim()}
             label={<PlusIcon className="size-5" />}
-            className="max-w-40 sm:w-12 flex"
-          ></Button>
+            className="!w-14 flex"
+          />
         </div>
       </div>
     </div>
