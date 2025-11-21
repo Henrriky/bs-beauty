@@ -15,7 +15,7 @@ import { Formatter } from '../../../utils/formatter/formatter.util'
 import SocialMediaContainerInput from '../../../components/inputs/social-media-input/SocialMediaContainerInput'
 import NotificationPreferenceSelect from '../../../components/inputs/NotificationPreferenceSelect'
 import { useState } from 'react'
-import { Checkbox } from '../../../components/inputs/Checkbox'
+import PrivacyPolicyCheckbox from './PrivacyPolicyCheckbox'
 
 interface ProfessionalInputContainerProps {
   isLoading: boolean
@@ -102,23 +102,9 @@ function ProfessionalInputContainer(props: ProfessionalInputContainerProps) {
         errors={errors}
         appendNewSocialMedia={appendNewSocialMedia}
       />
-      <Checkbox
-        id="privacyPolicy"
+      <PrivacyPolicyCheckbox
         checked={acceptedPrivacyPolicy}
-        onChange={(e) => setAcceptedPrivacyPolicy(e.target.checked)}
-        label={
-          <span>
-            Eu li e aceito a{' '}
-            <a
-              href="/privacy-policy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#B19B86] hover:text-[#D4BFAA] underline"
-            >
-              Política de Privacidade
-            </a>
-          </span>
-        }
+        onChange={setAcceptedPrivacyPolicy}
         error={privacyPolicyError}
       />
       <Button

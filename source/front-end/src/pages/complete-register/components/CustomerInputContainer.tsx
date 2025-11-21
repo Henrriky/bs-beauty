@@ -12,7 +12,7 @@ import { Formatter } from '../../../utils/formatter/formatter.util'
 import { Select } from '../../../components/inputs/Select'
 import NotificationPreferenceSelect from '../../../components/inputs/NotificationPreferenceSelect'
 import { useState } from 'react'
-import { Checkbox } from '../../../components/inputs/Checkbox'
+import PrivacyPolicyCheckbox from './PrivacyPolicyCheckbox'
 
 interface CustomerInputContainerProps {
   isLoading: boolean
@@ -117,23 +117,9 @@ function CustomerInputContainer(props: CustomerInputContainerProps) {
         value={user.email}
         disabled
       />
-      <Checkbox
-        id="privacyPolicy"
+      <PrivacyPolicyCheckbox
         checked={acceptedPrivacyPolicy}
-        onChange={(e) => setAcceptedPrivacyPolicy(e.target.checked)}
-        label={
-          <span>
-            Eu li e aceito a{' '}
-            <a
-              href="/privacy-policy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#B19B86] hover:text-[#D4BFAA] underline"
-            >
-              Política de Privacidade
-            </a>
-          </span>
-        }
+        onChange={setAcceptedPrivacyPolicy}
         error={privacyPolicyError}
       />
       <Button
