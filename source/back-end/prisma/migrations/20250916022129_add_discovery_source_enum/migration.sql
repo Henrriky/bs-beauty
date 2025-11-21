@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `customer` ADD COLUMN `discovery_source` ENUM('REFERRAL', 'INSTAGRAM', 'FACEBOOK', 'TIKTOK', 'GOOGLE', 'WHATSAPP', 'WALK_IN', 'OTHER') NULL;

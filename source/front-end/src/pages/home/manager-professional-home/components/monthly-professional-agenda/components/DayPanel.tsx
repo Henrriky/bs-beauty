@@ -48,15 +48,6 @@ export default function DayPanel({
         </div>
       </div>
       <div className="bg-[#595149] w-full h-0.5" />
-      {isLoading && (
-        <div
-          className="p-4 text-sm text-primary-300"
-          role="status"
-          aria-live="polite"
-        >
-          Carregando agendamentos…
-        </div>
-      )}
       {isError && !isLoading && (
         <div className="p-4 text-sm text-red-300" role="alert">
           Erro ao carregar dados.

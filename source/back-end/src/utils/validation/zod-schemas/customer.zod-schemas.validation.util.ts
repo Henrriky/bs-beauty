@@ -18,7 +18,8 @@ class CustomerSchemas {
       return arg
     }, z.date().refine((date) => !isNaN(date.getTime()) && date < new Date())),
     phone: z.string().refine((value) => RegexPatterns.phone.test(value)),
-    discoverySource: discoverySourceSchema
+    discoverySource: discoverySourceSchema,
+    notificationPreference: z.nativeEnum(NotificationChannel).optional()
   }).strict()
 
   public static createSchema = z.object({

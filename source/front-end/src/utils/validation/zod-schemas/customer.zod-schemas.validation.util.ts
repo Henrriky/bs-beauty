@@ -25,6 +25,7 @@ class CustomerSchemas {
       birthdate: SharedSchemas.birthdateSchema,
       phone: SharedSchemas.phoneSchema,
       discoverySource: discoverySourceSchema,
+      notificationPreference: SharedSchemas.notificationPreference.optional(),
     })
     .strict()
 

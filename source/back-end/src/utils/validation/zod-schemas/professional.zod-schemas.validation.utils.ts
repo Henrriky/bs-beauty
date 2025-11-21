@@ -17,7 +17,8 @@ class ProfessionalSchemas {
     name: z.string().min(3).max(100).refine((string) => RegexPatterns.names.test(string)),
     socialMedia: ProfessionalSchemas.socialMediaSchema.optional(),
     paymentMethods: ProfessionalSchemas.paymentMethodSchema.optional(),
-    contact: z.string().refine((value) => RegexPatterns.phone.test(value))
+    contact: z.string().refine((value) => RegexPatterns.phone.test(value)),
+    notificationPreference: z.nativeEnum(NotificationChannel).optional()
   }).strict()
 
   public static createSchema = z.object({
