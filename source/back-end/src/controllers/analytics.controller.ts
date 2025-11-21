@@ -195,8 +195,8 @@ class AnalyticsController {
         for (const appointment of professionalAppointments) {
           currentProfessionalCustomersIds.add(appointment.customerId)
         }
-        analytics.totalCustomers = currentProfessionalCustomersIds.size
 
+        analytics.totalCustomers = currentProfessionalCustomersIds.size
         analytics.numberOfServices = offerList.length
 
         let revenueCount = Number(0)
