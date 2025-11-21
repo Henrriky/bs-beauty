@@ -10,6 +10,7 @@ import FilterPopover from './components/FilterPopover'
 import FilterSheet from './components/FilterSheet'
 import MonthlyAgendaHeader from './components/MonthlyAgendaHeader'
 import StatusFilterChips from './components/StatusFilterChips'
+import BSBeautyLoading from '../../../../../components/feedback/Loading'
 import {
   chipFor as statusChip,
   iconFor as legendIcon,
@@ -91,16 +92,16 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
 
   const queryStatuses = appliedStatuses.length ? appliedStatuses : undefined
 
-  const { data, isLoading, isError } = appointmentAPI.useFetchAppointmentsQuery(
-    {
-      page: 1,
-      limit: 50,
-      from: fromYMD,
-      to: toYMD,
-      status: queryStatuses,
-      viewAll: isManager ? viewAll : undefined,
-    },
-  )
+  const { data, isLoading, isFetching, isError } = appointmentAPI.useFetchAppointmentsQuery({
+    page: 1,
+    limit: 500,
+    from: fromYMD,
+    to: toYMD,
+    status: queryStatuses,
+    viewAll: isManager ? viewAll : undefined,
+  })
+
+  const showLoading = isLoading || isFetching
 
   const byDay = useMemo(() => {
     type Item = {
@@ -226,43 +227,42 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
             </button>
           </div>
 
-          <div className="h-[calc(100%-104px)] sm:h-[calc(100%-64px)] grid grid-cols-1 sm:grid-cols-12">
-            <section
-              className={`${activeTab === 'calendar' ? 'block' : 'hidden'} sm:block sm:col-span-7 md:col-span-8 border-r border-[#595149] overflow-y-auto`}
-            >
-              <CalendarPanel
-                currentMonth={currentMonth}
-                selectedDate={selectedDate}
-                onChangeMonth={(d) => setCurrentMonth(d)}
-                onSelectDate={(d) => {
-                  setSelectedDate(d)
-                  setActiveTab('day')
-                }}
-                byDay={byDay}
-                appliedStatuses={appliedStatuses}
-                legendIcon={legendIcon}
-                statusChip={statusChip}
-                isLoading={isLoading}
-                isError={isError}
-              />
-            </section>
+          {showLoading ? (
+            <div className="h-[calc(100%-104px)] sm:h-[calc(100%-64px)] flex items-center justify-center">
+              <BSBeautyLoading title="Carregando agendamentos..." className="scale-125" />
+            </div>
+          ) : (
+            <div className="h-[calc(100%-104px)] sm:h-[calc(100%-64px)] grid grid-cols-1 sm:grid-cols-12">
+              <section className={`${activeTab === 'calendar' ? 'block' : 'hidden'} sm:block sm:col-span-7 md:col-span-8 border-r border-[#595149] overflow-y-auto`}>
+                <CalendarPanel
+                  currentMonth={currentMonth}
+                  selectedDate={selectedDate}
+                  onChangeMonth={(d) => setCurrentMonth(d)}
+                  onSelectDate={(d) => { setSelectedDate(d); setActiveTab('day') }}
+                  byDay={byDay}
+                  appliedStatuses={appliedStatuses}
+                  legendIcon={legendIcon}
+                  statusChip={statusChip}
+                  isLoading={showLoading}
+                  isError={isError}
+                />
+              </section>
 
-            <section
-              className={`${activeTab === 'day' ? 'block' : 'hidden'} sm:block sm:col-span-5 md:col-span-4 overflow-y-auto`}
-            >
-              <DayPanel
-                selectedDate={selectedDate}
-                dayList={dayList}
-                isManager={isManager}
-                viewAll={viewAll}
-                legendIcon={legendIcon}
-                prettyStatus={prettyStatus}
-                statusChip={statusChip}
-                isLoading={isLoading}
-                isError={isError}
-              />
-            </section>
-          </div>
+              <section className={`${activeTab === 'day' ? 'block' : 'hidden'} sm:block sm:col-span-5 md:col-span-4 overflow-y-auto`}>
+                <DayPanel
+                  selectedDate={selectedDate}
+                  dayList={dayList}
+                  isManager={isManager}
+                  viewAll={viewAll}
+                  legendIcon={legendIcon}
+                  prettyStatus={prettyStatus}
+                  statusChip={statusChip}
+                  isLoading={showLoading}
+                  isError={isError}
+                />
+              </section>
+            </div>
+          )}
 
           {filterOpen && (
             <FilterSheet

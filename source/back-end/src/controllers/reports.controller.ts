@@ -1,0 +1,303 @@
+import { makeReportsUseCaseFactory } from '@/factory/make-reports-use-case.factory'
+import { type NextFunction, type Request, type Response } from 'express'
+
+class ReportsController {
+  public static async getDiscoverySourceCount(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate } = req.query
+      const report = await useCase.executeGetDiscoverySourceCount(
+        startDate ? new Date(String(startDate)) : undefined,
+        endDate ? new Date(String(endDate)) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getCustomerAgeDistribution(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate } = req.query
+      const report = await useCase.executeGetCustomerAgeDistribution(
+        startDate ? new Date(String(startDate)) : undefined,
+        endDate ? new Date(String(endDate)) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getNewCustomersCount(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetNewCustomersCount(
+        new Date(String(startDate)),
+        new Date(String(endDate))
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getRevenueEvolution(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetRevenueEvolution(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getTotalRevenue(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetTotalRevenue(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getRevenueByService(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetRevenueByService(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getRevenueByProfessional(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetRevenueByProfessional(
+        new Date(String(startDate)),
+        new Date(String(endDate))
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getOccupancyRate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetOccupancyRate(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getIdleRate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetIdleRate(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getPeakHours(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetPeakHours(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getBusiestWeekdays(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetBusiestWeekdays(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getMostBookedServices(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetMostBookedServices(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getMostProfitableServices(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate) {
+        res.status(400).send({ error: 'startDate and endDate are required' })
+        return
+      }
+
+      const report = await useCase.executeGetMostProfitableServices(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        professionalId ? String(professionalId) : undefined
+      )
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public static async getCommissionedRevenue(req: Request, res: Response, next: NextFunction) {
+    try {
+      const useCase = makeReportsUseCaseFactory()
+      const { startDate, endDate, professionalId } = req.query
+
+      if (!startDate || !endDate || !professionalId) {
+        res.status(400).send({ error: 'startDate, endDate, and professionalId are required' })
+        return
+      }
+
+      const report = await useCase.executeGetCommissionedRevenue(
+        new Date(String(startDate)),
+        new Date(String(endDate)),
+        String(professionalId)
+      )
+
+      if (!report) {
+        res.status(404).send({ error: 'Professional not found or not commissioned' })
+        return
+      }
+
+      res.status(200).send(report)
+    } catch (error) {
+      next(error)
+    }
+  }
+}
+
+export { ReportsController }

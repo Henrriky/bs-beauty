@@ -18,13 +18,13 @@ import { shiftAPI } from '../../../../../../store/shift/shift-api'
 import { offerAPI } from '../../../../../../store/offer/offer-api'
 import Subtitle from '../../../../../../components/texts/Subtitle'
 import CustomerHomeSelectTimeCard from './CustomerHomeSelectTimeCard'
-import { MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS } from './constants'
 import { blockedtimesAPI } from '../../../../../../store/blocked-times/blocked-times-api'
 import { useState, useMemo } from 'react'
 import { BlockedTime } from '../../../../../../pages/blocked-times/types'
 import { getHumanDayOfWeekFromDate } from '../../../../../../utils/date/get-human-day-of-week-from-date'
 import { getOnlyDateFromJSDate } from '../../../../../../utils/date/get-only-date-from-js-date'
 import { getDateForCombinedDays } from '../../../../../../utils/date/get-date-for-combined-days'
+import { useMinimumSchedulingTime } from '../../../../../../hooks/use-minimum-scheduling-time'
 
 const minDate = new Date()
 const maxDateCopy = new Date()
@@ -32,6 +32,8 @@ maxDateCopy.setFullYear(maxDateCopy.getFullYear() + 1)
 const maxDate = maxDateCopy
 
 function CustomerHomeSelectTimeContainer() {
+  const minimumSchedulingTime = useMinimumSchedulingTime()
+
   const { watch, setValue } = useFormContext<CreateAppointmentFormData>()
   const serviceOfferedId = watch('serviceOfferedId')
   const professionalId = watch('professionalId')
@@ -428,7 +430,7 @@ function CustomerHomeSelectTimeContainer() {
                               schedullingDate.isBusy ||
                               schedullingDate.startTimestamp < Date.now() ||
                               schedullingDate.startTimestamp - Date.now() <
-                                MINIMUM_SCHEDULLING_TIME_IN_MILLISECONDS
+                                minimumSchedulingTime
                             }
                             onClick={() => {
                               setValue(
