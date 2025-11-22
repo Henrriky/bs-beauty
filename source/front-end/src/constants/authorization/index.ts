@@ -160,6 +160,13 @@ export const PERMISSIONS_MAP = {
       action: 'Editar',
     },
   },
+  REPORT: {
+    READ: {
+      permissionName: 'report.read',
+      resource: 'Relatórios',
+      action: 'Visualizar',
+    },
+  },
 } as const
 
 function createPermissionDisplayMap() {

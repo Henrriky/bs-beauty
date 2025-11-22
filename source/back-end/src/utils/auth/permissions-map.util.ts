@@ -133,6 +133,12 @@ export const PERMISSIONS_MAP = {
       permissionName: 'salon_info.update',
       description: 'Permite atualizar as informações do salão'
     }
+  },
+  REPORT: {
+    READ: {
+      permissionName: 'report.read',
+      description: 'Permite visualizar relatórios'
+    }
   }
 } as const
 
