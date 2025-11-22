@@ -153,6 +153,13 @@ export const PERMISSIONS_MAP = {
       action: 'Deletar',
     },
   },
+  SALON_INFO: {
+    UPDATE: {
+      permissionName: 'salon_info.update',
+      resource: 'Informações do Salão',
+      action: 'Editar',
+    },
+  },
 } as const
 
 function createPermissionDisplayMap() {

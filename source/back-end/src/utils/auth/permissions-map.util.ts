@@ -127,6 +127,12 @@ export const PERMISSIONS_MAP = {
       permissionName: 'payment_record.delete',
       description: 'Permite remover registros de pagamento'
     }
+  },
+  SALON_INFO: {
+    UPDATE: {
+      permissionName: 'salon_info.update',
+      description: 'Permite atualizar as informações do salão'
+    }
   }
 } as const
 
