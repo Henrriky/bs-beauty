@@ -18,7 +18,18 @@ const WeekAppointments = () => {
     appointmentAPI.useFetchProfessionalAppointmentsByAllOffersQuery(id!)
 
   if (isLoading) {
-    return <div>Carregando...</div>
+    return (
+      <div className="flex justify-between mt-7">
+        {Array.from({ length: 7 }).map((_, index) => (
+          <div key={index} className="text-center flex flex-col gap-6 text-xs">
+            <div className="h-4 w-8 bg-secondary-700/30 rounded animate-pulse"></div>
+            <div className="flex flex-col">
+              <div className="size-8 bg-secondary-700/30 rounded animate-pulse"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
   }
 
   if (error) {
