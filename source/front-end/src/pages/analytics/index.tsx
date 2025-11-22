@@ -20,7 +20,6 @@ import RevenueByServiceGrid from './components/RevenueByServiceGrid'
 import RevenueByProfessionalGrid from './components/RevenueByProfessionalGrid'
 import CommissionedRevenueCard from './components/CommissionedRevenueCard'
 import OccupancyRateCard from './components/OccupancyRateCard'
-import IdleRateCard from './components/IdleRateCard'
 import PeakHoursCard from './components/PeakHoursCard'
 import BusiestWeekdaysCard from './components/BusiestWeekdaysCard'
 import MostBookedServicesCard from './components/MostBookedServicesCard'
@@ -61,6 +60,7 @@ function ProductivityReport() {
     newCustomersData,
     isNewCustomersLoading,
     revenueData,
+    isRevenueLoading,
     totalRevenueData,
     isTotalRevenueLoading,
     revenueByServiceData,
@@ -69,8 +69,6 @@ function ProductivityReport() {
     isRevenueByProfessionalLoading,
     occupancyRateData,
     isOccupancyRateLoading,
-    idleRateData,
-    isIdleRateLoading,
     peakHoursData,
     isPeakHoursLoading,
     busiestWeekdaysData,
@@ -182,7 +180,7 @@ function ProductivityReport() {
             )}
 
             <ChartContainer title="Evolução do Faturamento">
-              <RevenueChart data={revenueData} />
+              <RevenueChart data={revenueData} isLoading={isRevenueLoading} />
             </ChartContainer>
 
             <RevenueByServiceGrid
@@ -201,12 +199,12 @@ function ProductivityReport() {
 
         {switchValue === 'occupancy' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <OccupancyRateCard
-              data={occupancyRateData}
-              isLoading={isOccupancyRateLoading}
-            />
-
-            <IdleRateCard data={idleRateData} isLoading={isIdleRateLoading} />
+            <div className="md:col-span-2">
+              <OccupancyRateCard
+                data={occupancyRateData}
+                isLoading={isOccupancyRateLoading}
+              />
+            </div>
 
             <PeakHoursCard
               data={peakHoursData}

@@ -119,16 +119,17 @@ export const useAnalyticsData = (
       },
     )
 
-  const { data: revenueData } = reportAPI.useGetRevenueEvolutionQuery(
-    {
-      startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
-      endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
-      professionalId: activeProfessionalId,
-    },
-    {
-      skip: !startDate || !endDate,
-    },
-  )
+  const { data: revenueData, isLoading: isRevenueLoading } =
+    reportAPI.useGetRevenueEvolutionQuery(
+      {
+        startDate: startDate ? toISO(startDate.format('YYYY-MM-DD')) : '',
+        endDate: endDate ? toISO(endDate.format('YYYY-MM-DD'), true) : '',
+        professionalId: activeProfessionalId,
+      },
+      {
+        skip: !startDate || !endDate,
+      },
+    )
 
   const { data: totalRevenueData, isLoading: isTotalRevenueLoading } =
     reportAPI.useGetTotalRevenueQuery(
@@ -272,6 +273,7 @@ export const useAnalyticsData = (
     newCustomersData,
     isNewCustomersLoading,
     revenueData,
+    isRevenueLoading,
     totalRevenueData,
     isTotalRevenueLoading,
     revenueByServiceData,

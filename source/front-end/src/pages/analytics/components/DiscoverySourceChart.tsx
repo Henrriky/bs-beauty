@@ -55,7 +55,7 @@ function DiscoverySourceChart({ data }: DiscoverySourceChartProps) {
   ]
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 p-3">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {filteredData.map((item, index) => {
           const percentage = ((item.count / total) * 100).toFixed(1)

@@ -7,7 +7,7 @@ interface ChartContainerProps {
 
 function ChartContainer({ title, children }: ChartContainerProps) {
   return (
-    <div className="bg-[#262626] rounded-lg">
+    <div className="bg-[#262626] rounded-lg p-3">
       <h2 className="text-lg font-semibold mt-6 mb-4 text-[#D9D9D9] text-center">
         {title}
       </h2>
