@@ -2,7 +2,7 @@ export function renderStatusChips<TStatus extends string>(
   statusCounts: Array<[TStatus, number]>,
   statusChip: (status: TStatus) => string,
   legendIcon: (status: TStatus) => string,
-  maxVisible: number = 3,
+  maxVisible: number = 4
 ): JSX.Element | null {
   if (!statusCounts.length) return null
 

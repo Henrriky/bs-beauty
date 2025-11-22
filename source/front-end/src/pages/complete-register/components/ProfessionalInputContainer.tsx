@@ -13,6 +13,9 @@ import {
 import { ProfessionalSchemas } from '../../../utils/validation/zod-schemas/professional.zod-schemas.validation.utils'
 import { Formatter } from '../../../utils/formatter/formatter.util'
 import SocialMediaContainerInput from '../../../components/inputs/social-media-input/SocialMediaContainerInput'
+import NotificationPreferenceSelect from '../../../components/inputs/NotificationPreferenceSelect'
+import { useState } from 'react'
+import PrivacyPolicyCheckbox from './PrivacyPolicyCheckbox'
 
 interface ProfessionalInputContainerProps {
   isLoading: boolean
@@ -20,6 +23,9 @@ interface ProfessionalInputContainerProps {
 }
 
 function ProfessionalInputContainer(props: ProfessionalInputContainerProps) {
+  const [acceptedPrivacyPolicy, setAcceptedPrivacyPolicy] = useState(false)
+  const [privacyPolicyError, setPrivacyPolicyError] = useState('')
+
   const {
     register,
     handleSubmit,
@@ -41,10 +47,19 @@ function ProfessionalInputContainer(props: ProfessionalInputContainerProps) {
     name: 'socialMedia',
   })
 
+  const onSubmit = (data: ProfessionalCompleteRegisterFormData) => {
+    if (!acceptedPrivacyPolicy) {
+      setPrivacyPolicyError('Você precisa aceitar a política de privacidade')
+      return
+    }
+    setPrivacyPolicyError('')
+    props.handleSubmit(data)
+  }
+
   return (
     <form
       className="flex flex-col gap-10 w-full"
-      onSubmit={handleSubmit(props.handleSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         label="Nome"
@@ -69,6 +84,10 @@ function ProfessionalInputContainer(props: ProfessionalInputContainerProps) {
         placeholder="Digite seu telefone de contato"
         error={errors?.contact?.message?.toString()}
       />
+      <NotificationPreferenceSelect
+        register={register}
+        error={errors.notificationPreference}
+      />
       <Input
         label="Email"
         id="email"
@@ -82,6 +101,11 @@ function ProfessionalInputContainer(props: ProfessionalInputContainerProps) {
         register={register}
         errors={errors}
         appendNewSocialMedia={appendNewSocialMedia}
+      />
+      <PrivacyPolicyCheckbox
+        checked={acceptedPrivacyPolicy}
+        onChange={setAcceptedPrivacyPolicy}
+        error={privacyPolicyError}
       />
       <Button
         type="submit"

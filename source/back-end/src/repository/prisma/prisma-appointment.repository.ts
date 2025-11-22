@@ -6,13 +6,13 @@ import { type PaginatedRequest, type PaginatedResult } from '@/types/pagination'
 import { type AppointmentFilters } from '@/types/appointments/appointment-filters'
 
 class PrismaAppointmentRepository implements AppointmentRepository {
-  public async findAll () {
+  public async findAll() {
     const appointments = await prismaClient.appointment.findMany()
 
     return appointments
   }
 
-  public async findAllPaginated (
+  public async findAllPaginated(
     params: PaginatedRequest<AppointmentFilters>,
     scope: { userId: string, viewAll: boolean }
   ): Promise<PaginatedResult<Appointment>> {
@@ -21,21 +21,21 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     const scopeWhere: Prisma.AppointmentWhereInput | undefined = scope.viewAll
       ? undefined
       : {
-          OR: [
-            { customerId: scope.userId },
-            { offer: { professionalId: scope.userId } }
-          ]
-        }
+        OR: [
+          { customerId: scope.userId },
+          { offer: { professionalId: scope.userId } }
+        ]
+      }
 
     const filtersWhere: Prisma.AppointmentWhereInput = {
       ...(filters?.status?.length ? { status: { in: filters.status } } : {}),
       ...(filters?.from || filters?.to
         ? {
-            appointmentDate: {
-              ...(filters.from ? { gte: filters.from } : {}),
-              ...(filters.to ? { lte: filters.to } : {})
-            }
+          appointmentDate: {
+            ...(filters.from ? { gte: filters.from } : {}),
+            ...(filters.to ? { lte: filters.to } : {})
           }
+        }
         : {})
     }
 
@@ -72,7 +72,8 @@ class PrismaAppointmentRepository implements AppointmentRepository {
             select: {
               id: true,
               name: true,
-              email: true
+              email: true,
+              profilePhotoUrl: true
             }
           },
           rating: true
@@ -88,7 +89,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return { data: appointments, total, page, limit, totalPages: Math.ceil(total / limit) }
   }
 
-  public async findById (id: string) {
+  public async findById(id: string) {
     const appointment = await prismaClient.appointment.findUnique({
       where: { id },
       select: {
@@ -123,7 +124,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointment
   }
 
-  public async findByCustomerOrProfessionalId (customerOrProfessionalId: string) {
+  public async findByCustomerOrProfessionalId(customerOrProfessionalId: string) {
     const appointments = await prismaClient.appointment.findMany({
       where: {
         OR: [
@@ -167,7 +168,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async findByServiceOfferedId (serviceOfferedId: string) {
+  public async findByServiceOfferedId(serviceOfferedId: string) {
     const appointments = await prismaClient.appointment.findMany({
       where: { serviceOfferedId }
     })
@@ -175,7 +176,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async findByDateRangeStatusProfessionalAndServices (startDate: Date, endDate: Date, statusList?: Status[], professionalId?: string, serviceIds?: string[]) {
+  public async findByDateRangeStatusProfessionalAndServices(startDate: Date, endDate: Date, statusList?: Status[], professionalId?: string, serviceIds?: string[]) {
     const where: Prisma.AppointmentWhereInput = {
       appointmentDate: {
         gte: startDate,
@@ -208,7 +209,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return appointments
   }
 
-  public async countByDateRangeGrouped (
+  public async countByDateRangeGrouped(
     startDate: Date,
     endDate: Date,
     groupBy: GroupingPeriod,
@@ -279,7 +280,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     }))
   }
 
-  public async sumEstimatedTimeByDateRangeGrouped (
+  public async sumEstimatedTimeByDateRangeGrouped(
     startDate: Date,
     endDate: Date,
     groupBy: GroupingPeriod,
@@ -347,7 +348,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     }))
   }
 
-  public async findNonFinishedByUserAndDay (userId: string, dayToFetchAvailableSchedulling: Date) {
+  public async findNonFinishedByUserAndDay(userId: string, dayToFetchAvailableSchedulling: Date) {
     const startOfDay = new Date(dayToFetchAvailableSchedulling)
     startOfDay.setHours(0, 0, 0, 0)
 
@@ -405,7 +406,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     }
   }
 
-  public async countCustomerAppointmentsPerDay (customerId: string, day: Date = new Date()): Promise<number> {
+  public async countCustomerAppointmentsPerDay(customerId: string, day: Date = new Date()): Promise<number> {
     const startOfDay = new Date(day)
     startOfDay.setHours(0, 0, 0, 0)
     const endOfDay = new Date(day)
@@ -422,7 +423,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     })
   }
 
-  public async create (appointmentToCreate: Prisma.AppointmentCreateInput) {
+  public async create(appointmentToCreate: Prisma.AppointmentCreateInput) {
     const newAppointment = await prismaClient.appointment.create({
       data: { ...appointmentToCreate },
       include: {
@@ -443,7 +444,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return newAppointment
   }
 
-  public async update (id: string, appointmentToUpdate: Prisma.AppointmentUpdateInput) {
+  public async update(id: string, appointmentToUpdate: Prisma.AppointmentUpdateInput) {
     const updatedAppointment = await prismaClient.appointment.update({
       where: { id },
       data: { ...appointmentToUpdate },
@@ -465,7 +466,7 @@ class PrismaAppointmentRepository implements AppointmentRepository {
     return updatedAppointment
   }
 
-  public async delete (id: string) {
+  public async delete(id: string) {
     const deletedAppointment = await prismaClient.appointment.delete({
       where: { id }
     })

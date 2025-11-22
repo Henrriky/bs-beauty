@@ -6,7 +6,7 @@ interface CustomerCardDescriptionProps {
 
 function CustomerCardDescription(props: CustomerCardDescriptionProps) {
   return (
-    <h2 className="text-[#696969] text-xs font-medium">{props.children}</h2>
+    <h2 className="text-[#979797] text-sm font-medium">{props.children}</h2>
   )
 }
 

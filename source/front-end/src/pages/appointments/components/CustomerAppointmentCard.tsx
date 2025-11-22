@@ -14,10 +14,12 @@ import { Button } from '../../../components/button/Button'
 import { ListAppointmentsButtonStatus } from '../types'
 import { Link } from 'react-router-dom'
 import StatusBadge from '../../../components/status/StatusBadge'
+import { UserType } from '../../../store/auth/types'
 
 interface CustomerAppointmentCardProps {
   appointment: FindAppointmentByCustomerId
   switchButtonStatus: ListAppointmentsButtonStatus
+  userType: UserType
 }
 
 function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
@@ -30,6 +32,16 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
     props.appointment.rating !== null &&
     props.appointment.rating !== undefined &&
     props.appointment.rating?.score !== null
+
+  const isCustomerView = props.userType === UserType.CUSTOMER
+
+  const displayName = isCustomerView
+    ? props.appointment.offer?.professional?.name || 'Profissional não definido'
+    : props.appointment.customer?.name || 'Cliente não definido'
+
+  const displayPhotoUrl = isCustomerView
+    ? props.appointment.offer?.professional?.profilePhotoUrl ?? ''
+    : props.appointment.customer?.profilePhotoUrl ?? ''
 
   return (
     <label className="flex gap-12 text-[#C0C0C0] mt-2 items-center">
@@ -63,13 +75,9 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
             <div className="">
               <ProfilePicture
                 size="md"
-                profilePhotoUrl={
-                  props.appointment.offer?.professional?.profilePhotoUrl ?? ''
-                }
+                profilePhotoUrl={displayPhotoUrl}
                 filter={isSchedulled ? 'none' : 'black-white'}
-                displayName={
-                  props.appointment.offer.professional.name ?? undefined
-                }
+                displayName={displayName}
               />
             </div>
 
@@ -80,10 +88,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
                 )}
               </h1>
               <h3 className="text-[#D9D9D9] text-xs text-opacity-55">
-                {firstLetterOfWordToUpperCase(
-                  props.appointment.offer?.professional?.name ||
-                    'Profissional não definido',
-                )}
+                {firstLetterOfWordToUpperCase(displayName)}
               </h3>
             </div>
           </div>

@@ -2,8 +2,8 @@ import ProfilePicture from '../../pages/profile/components/ProfilePicture'
 import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import { Outlet } from 'react-router'
 import { firstLetterOfWordToUpperCase } from '../../utils/formatter/first-letter-of-word-to-upper-case.util'
-import { useSideBar } from './hooks/use-side-bar'
 import { SideBarItems } from './components/SideBarItems'
+import { useSideBar } from './hooks/use-side-bar'
 
 function SideBar() {
   const {
