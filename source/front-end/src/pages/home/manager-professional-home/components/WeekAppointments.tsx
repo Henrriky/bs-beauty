@@ -63,7 +63,7 @@ const WeekAppointments = () => {
   const weekDays = Array.from({ length: 7 }, (_, i) => {
     const date = addDays(today, i)
     return {
-      date: date.toLocaleDateString().substring(0, 2),
+      date: date.toLocaleDateString('pt-BR').substring(0, 2),
       day: formatter.format(date).replace('.', '').toUpperCase(),
     }
   })
