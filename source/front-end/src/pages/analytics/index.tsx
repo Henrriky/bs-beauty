@@ -25,9 +25,9 @@ import BusiestWeekdaysCard from './components/BusiestWeekdaysCard'
 import MostBookedServicesCard from './components/MostBookedServicesCard'
 import MostProfitableServicesCard from './components/MostProfitableServicesCard'
 import { SwitchButton } from '../../components/button/SwitchButton'
-import { SwitchButtonValues } from './types'
 import { PageHeader } from '../../layouts/PageHeader'
 import { useState } from 'react'
+import { SwitchButtonValues } from './types'
 
 dayjs.locale('pt-br')
 
@@ -91,12 +91,12 @@ function ProductivityReport() {
     <ThemeProvider theme={darkChartTheme}>
       <div className="h-full flex flex-col">
         <PageHeader
-          title="Relatórios de Produtividade"
+          title="Relatórios do Salão"
           subtitle={
             <>
               Visualize os dados de{' '}
               <b className="text-[#A4978A]">agendamentos</b> e{' '}
-              <b className="text-[#A4978A]">desempenho</b>
+              <b className="text-[#A4978A]">desempenho</b>.
             </>
           }
         />
@@ -104,12 +104,19 @@ function ProductivityReport() {
         <SwitchButton
           value={switchValue}
           onChange={setSwitchValue}
-          options={[
-            { value: 'productivity', label: 'Produtividade' },
-            { value: 'financial', label: 'Financeiro' },
-            { value: 'customer', label: 'Clientes' },
-            { value: 'occupancy', label: 'Ocupação' },
-          ]}
+          options={
+            userType === UserType.MANAGER
+              ? [
+                  { value: 'productivity', label: 'Produtividade' },
+                  { value: 'financial', label: 'Financeiro' },
+                  { value: 'customer', label: 'Clientes' },
+                  { value: 'occupancy', label: 'Ocupação' },
+                ]
+              : [
+                  { value: 'productivity', label: 'Produtividade' },
+                  { value: 'financial', label: 'Financeiro' },
+                ]
+          }
           className="mb-6"
         />
         <ReportFilters
@@ -148,7 +155,7 @@ function ProductivityReport() {
           </div>
         )}
 
-        {switchValue === 'customer' && (
+        {userType === UserType.MANAGER && switchValue === 'customer' && (
           <div className="flex flex-col gap-6">
             <NewCustomersCard
               data={newCustomersData}
@@ -197,7 +204,7 @@ function ProductivityReport() {
           </div>
         )}
 
-        {switchValue === 'occupancy' && (
+        {userType === UserType.MANAGER && switchValue === 'occupancy' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
               <OccupancyRateCard
