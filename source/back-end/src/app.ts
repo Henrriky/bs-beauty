@@ -55,7 +55,7 @@ app.use(helmet({
     }
   },
   referrerPolicy: { policy: 'no-referrer' },
-  crossOriginEmbedderPolicy: true,
+  crossOriginEmbedderPolicy: false,
   crossOriginOpenerPolicy: { policy: 'same-origin' },
   crossOriginResourcePolicy: { policy: 'same-origin' }
 }))
