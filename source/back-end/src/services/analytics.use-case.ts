@@ -72,7 +72,6 @@ class AnalyticsUseCase {
         meanRating
       }
     }))
-
     return await this.getBestRated(serviceRatings, amount)
   }
 

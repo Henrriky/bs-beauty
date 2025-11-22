@@ -18,7 +18,7 @@ class PermissionUseCase {
     }
 
     const result = await this.permissionRepository.findAllPaginated(params)
-
+    
     return result
   }
 }

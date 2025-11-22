@@ -67,8 +67,10 @@ function LoginWithEmailAndPasswordForm() {
       localStorage.setItem('token', accessToken)
 
       if (decodedToken.registerCompleted) {
+        toast.success('Login realizado com sucesso!')
         navigate('/customer/home')
       } else {
+        toast.info('Login realizado! Por gentileza, complete seu cadastro.')
         navigate('/complete-register')
       }
     } catch (error: any) {

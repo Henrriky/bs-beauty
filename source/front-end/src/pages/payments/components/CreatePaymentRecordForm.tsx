@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { customerAPI } from '../../../store/customer/customer-api'
 import ComboBox from '../../../components/combobox/ComboBox'
 import { Customer, Professional } from '../../../store/auth/types'
@@ -34,14 +34,20 @@ function CreatePaymentRecordForm({ closeModal }: CreatePaymentRecordFormProps) {
   )
 
   const [customerQuery, setCustomerQuery] = useState('')
+  const LIMIT = 5
+  const [customersPage, setCustomersPage] = useState(1)
   const [paymentMethodQuery, setPaymentMethodQuery] = useState('')
 
   const user = authAPI.useFetchUserInfoQuery().data?.user as Professional
   const paymentMethods = user?.paymentMethods
 
-  const { data } = customerAPI.useFetchCustomersQuery({
-    page: 1,
-    limit: 5,
+  const {
+    data,
+    isLoading: isLoadingCustomers,
+    isFetching: isFetchingCustomers
+  } = customerAPI.useFetchCustomersQuery({
+    page: customersPage,
+    limit: LIMIT,
   })
 
   const mappedPaymentMethods =
@@ -49,6 +55,10 @@ function CreatePaymentRecordForm({ closeModal }: CreatePaymentRecordFormProps) {
       name,
       label: paymentLabels[name] || name,
     })) ?? []
+
+  useEffect(() => {
+    setCustomersPage(1)
+  }, [customerQuery])
 
   const filteredCustomers =
     customerQuery === ''
@@ -138,7 +148,9 @@ function CreatePaymentRecordForm({ closeModal }: CreatePaymentRecordFormProps) {
               <div>
                 <ComboBox
                   value={selectedCustomer}
-                  onChange={(customer) => onChange(customer?.id ?? '')}
+                  onChange={(customer) => {
+                    if (customer) onChange(customer.id)
+                  }}
                   id="select-customer"
                   label="Cliente"
                   placeholder="Buscar cliente..."
@@ -146,12 +158,19 @@ function CreatePaymentRecordForm({ closeModal }: CreatePaymentRecordFormProps) {
                   options={filteredCustomers}
                   setQuery={setCustomerQuery}
                   displayValue={(option) => option?.name ?? ''}
-                  notFoundMessage="Cliente não encontrado"
+                  notFoundMessage={isLoadingCustomers || isFetchingCustomers ? 'Carregando clientes...' : 'Cliente não encontrado'}
                   getOptionIcon={(option) => (
                     <OptionIcon
                       profilePhotoUrl={option?.profilePhotoUrl ?? ''}
+                      displayName={option?.name ?? ''}
                     />
                   )}
+                  pager={{
+                    currentPage: data?.page ?? customersPage,
+                    totalPages: data?.totalPages ?? 1,
+                    onPageChange: setCustomersPage,
+                    isLoading: isFetchingCustomers || isLoadingCustomers,
+                  }}
                 />
                 {error && <ErrorMessage message={error.message} />}
               </div>
