@@ -12,6 +12,14 @@ import Card from './Card'
 import { authAPI } from '../../../../store/auth/auth-api'
 import { toast } from 'react-toastify'
 
+const CardSkeleton = () => (
+  <div className="text-primary-100 flex items-center gap-2.5 animate-pulse">
+    <div className="size-8 mr-2 bg-secondary-700/30 rounded"></div>
+    <div className="h-4 w-32 bg-secondary-700/30 rounded"></div>
+    <div className="ml-auto h-4 w-12 bg-secondary-700/30 rounded"></div>
+  </div>
+)
+
 const AnalyticsCards = () => {
   const { data: userData } = authAPI.useFetchUserInfoQuery()
   const userType = userData?.user?.userType
@@ -28,28 +36,31 @@ const AnalyticsCards = () => {
     },
   )
 
-  if (!userData) return <p>Loading user...</p>
-
-  if (userType !== 'MANAGER' && userType !== 'PROFESSIONAL') {
-    return <p>No permissions</p>
-  }
-
   const activeQuery = userType === 'MANAGER' ? managerQuery : professionalQuery
   const { data: analytics, isLoading, error } = activeQuery
 
   if (isLoading) {
-    return <p>Loading...</p>
+    return (
+      <div className="my-6 flex flex-col gap-6">
+        {Array.from({ length: 7 }).map((_, index) => (
+          <CardSkeleton key={index} />
+        ))}
+      </div>
+    )
   }
 
   if (error) {
-    toast.warning('Error while fetching data.')
+    return (
+      <h1 className="mt-10 text-primary-200 text-xl">
+        Erro ao carregar dados de análise.
+      </h1>
+    )
   }
 
   if (!analytics) {
-    toast.warn('No analytics data available.')
     return (
       <h1 className="mt-10 text-primary-200 text-xl">
-        No analytics data available.
+        Nenhum dado de análise disponível.
       </h1>
     )
   }
