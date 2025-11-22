@@ -39,7 +39,7 @@ appRoutes.use('/payment-records', verifyJwtTokenMiddleware, paymentRecordRoutes)
 appRoutes.use('/ratings', verifyJwtTokenMiddleware, ratingRoutes)
 appRoutes.use('/public-analytics', publicAnalyticsRoutes)
 appRoutes.use('/blocked-times', verifyJwtTokenMiddleware, blockedTimesRoutes)
-appRoutes.use('/reports', reportRoutes)
+appRoutes.use('/reports', verifyJwtTokenMiddleware, reportRoutes)
 appRoutes.use(errorHandlerMiddleware)
 
 export { appRoutes }
