@@ -66,16 +66,25 @@ function UpdateSalonInfoForm({ salonInfoData }: UpdateSalonInfoFormProps) {
             label: 'Segunda à Sexta',
             inputType: 'time',
             fieldName: 'openingHours',
+            error:
+              errors.openingHours?.[0]?.initialHour?.message?.toString() ||
+              errors.openingHours?.[0]?.finalHour?.message?.toString(),
           },
           {
             label: 'Sábado',
             inputType: 'time',
             fieldName: 'openingHours',
+            error:
+              errors.openingHours?.[1]?.initialHour?.message?.toString() ||
+              errors.openingHours?.[1]?.finalHour?.message?.toString(),
           },
           {
             label: 'Domingo',
             inputType: 'time',
             fieldName: 'openingHours',
+            error:
+              errors.openingHours?.[2]?.initialHour?.message?.toString() ||
+              errors.openingHours?.[2]?.finalHour?.message?.toString(),
           },
         ]}
         showAddNewButton={false}

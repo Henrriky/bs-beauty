@@ -3,6 +3,7 @@ import { Input } from '../../../../components/inputs/Input'
 import { SalonInfoUpdateFormData } from '../../types'
 import { UseFormRegister } from 'react-hook-form'
 import { SalonInfo } from '../../../../store/salon-info/types'
+import { ErrorMessage } from '../../../../components/feedback/ErrorMessage'
 
 interface OpeningHoursInputProps {
   label: string
@@ -10,6 +11,7 @@ interface OpeningHoursInputProps {
   index: number
   register: UseFormRegister<SalonInfoUpdateFormData>
   salonData?: SalonInfo | undefined
+  error?: string | undefined
 }
 
 function OpeningHoursInput({
@@ -18,6 +20,7 @@ function OpeningHoursInput({
   index,
   register,
   salonData,
+  error,
 }: OpeningHoursInputProps) {
   const [isClosed, setIsClosed] = useState(
     salonData?.openingHours?.at(index)?.isClosed,
@@ -32,25 +35,27 @@ function OpeningHoursInput({
   const openingHoursIsClosedField =
     `openingHours.${index}.isClosed` as `openingHours.${number}.isClosed`
 
+  const openingHoursNameField =
+    `openingHours.${index}.name` as `openingHours.${number}.name`
+
   return (
     <div>
       <div>
         <p className={`text-sm mb-1 ${isClosed ? 'text-gray-500' : ''}`}>
           {label}
         </p>
-        <input
-          type="hidden"
-          value={label}
-          {...register(`openingHours.${index}.name`)}
-        />
       </div>
+      <input
+        type="hidden"
+        {...register(openingHoursNameField, { value: label })}
+      />
       <div className="flex justify-between w-1/3">
         <p className={`text-sm ${isClosed ? 'text-gray-500' : ''}`}>Das</p>
         <Input
           id={openingHoursInitialHourField}
           type={inputType}
           inputClassName={`${isClosed ? 'text-gray-500' : 'text-primary-0'}`}
-          disabled={isClosed}
+          readOnly={isClosed}
           registration={{ ...register(openingHoursInitialHourField) }}
           defaultValue={'00:00'}
         />
@@ -59,11 +64,12 @@ function OpeningHoursInput({
           id={openingHoursFinalHourField}
           type={inputType}
           inputClassName={`${isClosed ? 'text-gray-500' : 'text-primary-0'}`}
-          disabled={isClosed}
+          readOnly={isClosed}
           registration={{ ...register(openingHoursFinalHourField) }}
           defaultValue={'00:00'}
         />
       </div>
+      {error && <ErrorMessage message={error} />}
       <div className="flex items-center gap-2 mt-2">
         <Input
           id={openingHoursIsClosedField}

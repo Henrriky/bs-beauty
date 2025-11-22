@@ -39,6 +39,7 @@ function InfoCardInput({
         index={index}
         register={register}
         salonData={salonData}
+        error={errors}
       />
     )
   }
