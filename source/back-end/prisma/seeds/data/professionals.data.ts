@@ -150,11 +150,8 @@ export function generateProfessionalsData(): ProfessionalSeedData[] {
   }
 
   const additionalProfessionals = [
-    { name: 'Ana Carolina Santos', specialization: 'Cortes e Escovação' },
     { name: 'Camila Rodrigues Lima', specialization: 'Manicure e Pedicure' },
     { name: 'Fernanda Almeida Souza', specialization: 'Maquiagem Profissional' },
-    { name: 'Isabella Ferreira Santos', specialization: 'Extensão de Cílios' },
-    { name: 'Larissa Mendes Costa', specialization: 'Tratamentos Capilares' }
   ]
 
   for (const { name, specialization } of additionalProfessionals) {

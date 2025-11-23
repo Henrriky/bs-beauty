@@ -28,7 +28,6 @@ export async function runDatabaseSeeds(): Promise<void> {
     await shiftSeeder.seedShifts()
     await appointmentSeeder.seedAppointments()
     await ratingSeeder.seedRatings()
-    await notificationSeeder.seedNotifications()
     await salonInfoSeeder.seedSalonInfo()
 
     logger.info('Database seeding completed successfully', {
