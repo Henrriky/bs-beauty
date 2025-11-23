@@ -82,8 +82,8 @@ function LandingPage() {
             <p className="text-center lg:text-left text-[#D9D9D9] text-lg sm:text-xl lg:text-2xl leading-relaxed font-light">
               Somos{' '}
               <span className="text-[#A4978A] font-semibold">
-                especialistas{' '}
-              </span>
+                especialistas
+              </span>{' '}
               em:
             </p>
             <div className="h-14 flex flex-col items-center lg:items-start justify-center text-center">
@@ -178,6 +178,14 @@ function LandingPage() {
           alt="Seta Para Baixo"
           className="cursor-pointer w-10 sm:w-12 opacity-70 hover:opacity-100 transition-all duration-300 animate-bounce m-auto mt-8"
           onClick={() => window.scrollBy({ top: 660, behavior: 'smooth' })}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              window.scrollBy({ top: 660, behavior: 'smooth' })
+            }
+          }}
+          tabIndex={0}
+          role="button"
         />
       </div>
 
