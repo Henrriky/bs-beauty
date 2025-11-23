@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router'
 import { ArrowLongLeftIcon } from '@heroicons/react/24/outline'
 import { Button } from '../Button'
-import { useSmartNavigation } from '../../../hooks/useSmartNavigation'
+import { useSmartNavigation } from '../../../hooks/use-smart-navigation'
 
 function GoBackButton() {
   const { isHomePage, navigationInfo, goBack } = useSmartNavigation()
@@ -26,7 +26,7 @@ function GoBackButton() {
         }
         className="border-none rounded-none hover:bg-opacity-0 hover:bg-transparent "
       />
-      <hr className="block h-[1px] border-spacing-0 border-t-secondary-400 mb-10" />
+      <hr className="block h-[1px] border-spacing-0 border-t-secondary-400 mb-5" />
       <Outlet />
     </div>
   )
