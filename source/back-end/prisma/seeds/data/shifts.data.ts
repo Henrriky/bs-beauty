@@ -8,9 +8,14 @@ export interface ShiftSeedData {
 
 const PROFESSIONALS = [
   'Alyson Fumagalli',
+  'Bruna Silva',
+  'Bruno Fischer',
   'Eliel da Silva',
   'Henrique Santiago Pires',
-  'Henrriky Jhonny'
+  'Henrriky Jhonny',
+  'Giovanna Camille',
+  'Camila Rodrigues Lima',
+  'Fernanda Almeida Souza'
 ] as const
 
 const WEEK_DAYS: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY'> = [

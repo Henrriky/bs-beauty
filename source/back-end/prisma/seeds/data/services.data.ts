@@ -56,21 +56,9 @@ export function generateServicesData(): ServiceSeedData[] {
       status: 'APPROVED'
     },
     {
-      name: 'Corte Masculino',
-      description: 'Corte de cabelo masculino com finalização',
-      category: 'Cabelo',
-      status: 'APPROVED'
-    },
-    {
       name: 'Pedicure Completa',
       description: 'Pedicure com tratamento de cutículas e esmaltação',
       category: 'Unhas',
-      status: 'APPROVED'
-    },
-    {
-      name: 'Design de Sobrancelhas com Henna',
-      description: 'Design com aplicação de henna para realçar o formato',
-      category: 'Sobrancelhas',
       status: 'APPROVED'
     },
     {

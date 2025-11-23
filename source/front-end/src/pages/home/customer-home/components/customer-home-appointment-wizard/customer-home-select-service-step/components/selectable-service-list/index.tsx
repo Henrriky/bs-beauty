@@ -15,11 +15,15 @@ interface SelectableServiceListProps {
         service: Service
       }[]
     | ServicesOfferedByProfessionalOffer[]
+  onArrowClick?: () => void
+  onBackClick?: () => void
 }
 
 function SelectableServiceList({
   services,
   currentFlow,
+  onArrowClick,
+  onBackClick,
 }: SelectableServiceListProps) {
   if (services.length === 0) {
     return (
@@ -67,7 +71,10 @@ function SelectableServiceList({
           onClick={() => {
             setValue('serviceId', serviceOffered.id)
             setValue('paymentMethods', paymentMethods)
+            setValue('appointmentDate', '' as any)
           }}
+          onArrowClick={onArrowClick}
+          onBackClick={onBackClick}
         />
       </div>
     )
