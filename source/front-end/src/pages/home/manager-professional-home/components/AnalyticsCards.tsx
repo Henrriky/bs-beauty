@@ -39,10 +39,19 @@ const AnalyticsCards = () => {
   const { data: analytics, isLoading, error } = activeQuery
 
   if (isLoading) {
+    const skeletonIds = [
+      'total',
+      'new',
+      'finished',
+      'customer-count',
+      'service-count',
+      'professional-count',
+      'revenue',
+    ]
     return (
       <div className="my-6 flex flex-col gap-6">
-        {Array.from({ length: 7 }).map((_, index) => (
-          <CardSkeleton key={`skeleton-${index}`} />
+        {skeletonIds.map((id) => (
+          <CardSkeleton key={`skeleton-${id}`} />
         ))}
       </div>
     )

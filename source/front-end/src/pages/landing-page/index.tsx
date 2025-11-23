@@ -80,9 +80,8 @@ function LandingPage() {
               <span className="text-[#A4978A] font-semibold">merece!</span>
             </p>
             <p className="text-center lg:text-left text-[#D9D9D9] text-lg sm:text-xl lg:text-2xl leading-relaxed font-light">
-              Somos
+              Somos{' '}
               <span className="text-[#A4978A] font-semibold">
-                {' '}
                 especialistas{' '}
               </span>
               em:

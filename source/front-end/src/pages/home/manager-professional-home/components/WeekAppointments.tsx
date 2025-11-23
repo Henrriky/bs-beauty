@@ -19,11 +19,12 @@ const WeekAppointments = () => {
     appointmentAPI.useFetchProfessionalAppointmentsByAllOffersQuery(id!)
 
   if (isLoading) {
+    const weekDayKeys = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     return (
       <div className="flex justify-between mt-7">
-        {Array.from({ length: 7 }).map((_, index) => (
+        {weekDayKeys.map((day) => (
           <div
-            key={`day-skeleton-${index}`}
+            key={`day-skeleton-${day}`}
             className="text-center flex flex-col gap-6 text-xs"
           >
             <div className="h-4 w-8 bg-secondary-700/30 rounded animate-pulse"></div>
