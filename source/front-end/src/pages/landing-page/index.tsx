@@ -66,7 +66,7 @@ function LandingPage() {
         alt="Logo"
         className="my-10 sm:my-20 lg:hidden mx-auto w-32 sm:w-48 transition-transform hover:scale-105 duration-300"
       />
-      
+
       <div className="w-full max-w-6xl mb-10 lg:mb-16 mt-0 lg:mt-20">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12">
           <div className="w-full lg:w-1/2 lg:space-y-6 space-y-4 lg:flex lg:flex-col lg:items-center lg:text-center">
@@ -76,12 +76,15 @@ function LandingPage() {
               className="hidden lg:block mx-auto lg:mx-0 w-56 mb-8 transition-transform hover:scale-105 duration-300"
             />
             <p className="text-center lg:text-left text-[#D9D9D9] text-lg sm:text-xl lg:text-2xl leading-relaxed font-light lg:flex lg:flex-col lg:items-center">
-              Entregamos a experiência que você 
-              <span className="text-[#A4978A] font-semibold "> merece!</span>
+              Entregamos a experiência que você{' '}
+              <span className="text-[#A4978A] font-semibold">merece!</span>
             </p>
             <p className="text-center lg:text-left text-[#D9D9D9] text-lg sm:text-xl lg:text-2xl leading-relaxed font-light">
               Somos
-              <span className="text-[#A4978A] font-semibold"> especialistas </span>
+              <span className="text-[#A4978A] font-semibold">
+                {' '}
+                especialistas{' '}
+              </span>
               em:
             </p>
             <div className="h-14 flex flex-col items-center lg:items-start justify-center text-center">
@@ -93,7 +96,7 @@ function LandingPage() {
               </p>
             </div>
           </div>
-          
+
           <div className="w-full lg:w-1/2 flex justify-center">
             <video
               src={video}
@@ -110,8 +113,8 @@ function LandingPage() {
 
       <div className="flex flex-col items-center gap-8  text-center">
         <p className="text-[#D9D9D9] font-kumbh text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-2xl px-4">
-          Reserve um tempo para você. Venha descobrir a sua 
-          <span className="text-[#A4978A] font-semibold"> melhor versão!</span>
+          Reserve um tempo para você. Venha descobrir a sua{' '}
+          <span className="text-[#A4978A] font-semibold">melhor versão!</span>
         </p>
         <Button
           onClick={() => navigate('/login')}
@@ -134,8 +137,10 @@ function LandingPage() {
       <div className="w-full max-w-4xl mt-8">
         <div className="mb-10 w-full">
           <p className="text-center text-[#D9D9D9] text-lg sm:text-xl lg:text-2xl leading-relaxed font-light">
-            Veja o que nossas clientes 
-            <span className="text-[#A4978A] font-semibold"> nossas clientes </span>
+            Veja o que nossas clientes{' '}
+            <span className="text-[#A4978A] font-semibold">
+              nossas clientes
+            </span>{' '}
             acham de nós!
           </p>
         </div>
@@ -145,13 +150,13 @@ function LandingPage() {
             name="BS Beauty"
             meanRating={
               data?.salonRating.meanScore
-          ? Number(data?.salonRating.meanScore)
-          : 0
+                ? Number(data?.salonRating.meanScore)
+                : 0
             }
             ratingCount={data?.salonRating.ratingCount || 0}
           />
         </div>
-        <div className='w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-2xl mx-auto text-center mb-4'>
+        <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-2xl mx-auto text-center mb-4">
           {data?.professionals?.length === 1 ? (
             <div className="w-full shadow-xl hover:shadow-2xl transition-shadow duration-300">
               <SalonRatingCard
@@ -182,16 +187,22 @@ function LandingPage() {
       <div className="w-full max-w-5xl mt-8">
         <div className="mb-10 w-full">
           <p className="text-center text-[#D9D9D9] text-lg sm:text-xl lg:text-2xl leading-relaxed font-light">
-            Faça uma
-            <span className="text-[#A4978A] font-semibold"> visita! </span>
+            Faça uma{' '}
+            <span className="text-[#A4978A] font-semibold">visita!</span>
           </p>
         </div>
         <div className="bg-[#222222] rounded-2xl p-8 sm:p-10 mb-10 shadow-xl hover:shadow-2xl transition-shadow duration-300">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-[#A4978A]/20 p-3 rounded-full">
-              <img src={location} alt="Localização" className="size-7 brightness-150" />
+              <img
+                src={location}
+                alt="Localização"
+                className="size-7 brightness-150"
+              />
             </div>
-            <p className="text-2xl sm:text-3xl font-kumbh font-semibold text-[#A4978A]">Nosso endereço</p>
+            <p className="text-2xl sm:text-3xl font-kumbh font-semibold text-[#A4978A]">
+              Nosso endereço
+            </p>
           </div>
 
           <p className="font-kumbh text-lg sm:text-xl text-[#D9D9D9] leading-relaxed ml-16">
@@ -204,7 +215,11 @@ function LandingPage() {
         <div className="bg-[#222222] rounded-2xl p-8 sm:p-10 shadow-xl hover:shadow-2xl transition-shadow duration-300">
           <div className="flex items-center justify-start gap-3 sm:gap-4 mb-8">
             <div className="bg-[#A4978A]/20 p-3 rounded-full shrink-0">
-              <img src={calendar} alt="Calendário" className="size-7 brightness-150" />
+              <img
+                src={calendar}
+                alt="Calendário"
+                className="size-7 brightness-150"
+              />
             </div>
             <p className="text-lg sm:text-2xl md:text-3xl font-kumbh font-semibold text-[#A4978A] leading-tight">
               Horários de Funcionamento
@@ -222,10 +237,17 @@ function LandingPage() {
                 { day: 'Sábado', time: '08:00 - 18:00' },
                 { day: 'Domingo', time: 'Fechado' },
               ].map(({ day, time }) => (
-                <div key={day} className="flex flex-col items-center sm:flex-row sm:items-center gap-2 sm:gap-4 hover:bg-[#2A2A2A] transition-all duration-200 rounded-xl p-3 group">
-                  <span className="sm:min-w-[150px] md:min-w-[180px] group-hover:text-[#A4978A] transition-colors">{day}</span>
+                <div
+                  key={day}
+                  className="flex flex-col items-center sm:flex-row sm:items-center gap-2 sm:gap-4 hover:bg-[#2A2A2A] transition-all duration-200 rounded-xl p-3 group"
+                >
+                  <span className="sm:min-w-[150px] md:min-w-[180px] group-hover:text-[#A4978A] transition-colors">
+                    {day}
+                  </span>
                   <span className="hidden sm:block flex-grow border-b border-dotted border-[#595149] group-hover:border-[#A4978A] transition-colors" />
-                  <span className="text-[#A4978A] font-semibold text-lg">{time}</span>
+                  <span className="text-[#A4978A] font-semibold text-lg">
+                    {time}
+                  </span>
                 </div>
               ))}
             </div>
@@ -236,9 +258,8 @@ function LandingPage() {
       <div className="w-full max-w-3xl text-center mt-16 mb-8">
         <div className="mb-10 w-full">
           <p className="text-center text-[#D9D9D9] text-lg sm:text-xl lg:text-2xl leading-relaxed font-light">
-            Faça seu
-            <span className="text-[#A4978A] font-semibold"> login </span>
-            e venha aproveitar os nossos serviços!
+            Faça seu <span className="text-[#A4978A] font-semibold">login</span>{' '}
+            aproveitar os nossos serviços!
           </p>
         </div>
 

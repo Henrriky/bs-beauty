@@ -2,6 +2,7 @@ import { addDays } from 'date-fns'
 import { CalendarIcon } from '@heroicons/react/24/outline'
 import { appointmentAPI } from '../../../../store/appointment/appointment-api'
 import { authAPI } from '../../../../store/auth/auth-api'
+import { Status } from '../../../../store/appointment/types'
 
 function getDifferenceInDays(date1: Date, date2: Date) {
   const diffInMilliseconds = Math.abs(
@@ -21,7 +22,10 @@ const WeekAppointments = () => {
     return (
       <div className="flex justify-between mt-7">
         {Array.from({ length: 7 }).map((_, index) => (
-          <div key={index} className="text-center flex flex-col gap-6 text-xs">
+          <div
+            key={`day-skeleton-${index}`}
+            className="text-center flex flex-col gap-6 text-xs"
+          >
             <div className="h-4 w-8 bg-secondary-700/30 rounded animate-pulse"></div>
             <div className="flex flex-col">
               <div className="size-8 bg-secondary-700/30 rounded animate-pulse"></div>
@@ -49,6 +53,9 @@ const WeekAppointments = () => {
   sevenDaysFromNow.setDate(today.getDate() + 7)
 
   data.appointments.forEach((element) => {
+    if (element.status === Status.CANCELLED) {
+      return
+    }
     const currentdate = new Date(element.appointmentDate)
     if (currentdate >= today && currentdate < sevenDaysFromNow) {
       const currentDay = new Date(currentdate)

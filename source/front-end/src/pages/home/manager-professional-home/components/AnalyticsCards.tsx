@@ -42,7 +42,7 @@ const AnalyticsCards = () => {
     return (
       <div className="my-6 flex flex-col gap-6">
         {Array.from({ length: 7 }).map((_, index) => (
-          <CardSkeleton key={index} />
+          <CardSkeleton key={`skeleton-${index}`} />
         ))}
       </div>
     )
