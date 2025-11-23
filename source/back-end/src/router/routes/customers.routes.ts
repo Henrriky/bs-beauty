@@ -11,7 +11,7 @@ const customerRoutes = Router()
 customerRoutes.get('/:id', CustomersController.handleFindById)
 
 /* Protected Routes */
-customerRoutes.get('/', combinedAuthMiddleware(['MANAGER'], ['customer.read']), CustomersController.handleFindAllPaginated)
+customerRoutes.get('/', combinedAuthMiddleware(['MANAGER', 'PROFESSIONAL'], ['customer.read']), CustomersController.handleFindAllPaginated)
 customerRoutes.post('/', userTypeAuthMiddleware(['MANAGER']), validateCreateCustomer, CustomersController.handleCreate)
 customerRoutes.put('/:id', userTypeAuthMiddleware(['CUSTOMER']), validateUpdateCustomer, CustomersController.handleUpdate)
 customerRoutes.delete('/:id', combinedAuthMiddleware(['CUSTOMER'], ['customer.delete']), CustomersController.handleDelete)

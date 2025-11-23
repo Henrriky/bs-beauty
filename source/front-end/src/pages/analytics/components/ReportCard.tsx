@@ -3,7 +3,7 @@ import { Box, CircularProgress, Typography } from '@mui/material'
 interface ReportCardProps<T> {
   data?: T | T[]
   isLoading?: boolean
-  emptyIcon: React.ReactNode
+  emptyIcon?: React.ReactNode
   emptyMessage: string
   minHeight?: number
   children: React.ReactNode
@@ -32,6 +32,7 @@ export function ReportCard<T>({
         }}
       >
         <CircularProgress sx={{ color: '#A4978A' }} />
+        <Box sx={{ ml: 2, color: '#A4978A', fontSize: 16 }}>Carregando...</Box>
       </Box>
     )
   }

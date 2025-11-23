@@ -25,6 +25,7 @@ function CustomerAgeChart({ data }: CustomerAgeChartProps) {
 
   return (
     <BarChart
+      className="p-3"
       yAxis={[
         {
           scaleType: 'band',
