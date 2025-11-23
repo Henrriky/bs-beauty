@@ -9,13 +9,15 @@ class SalonInfoSchemas {
         initialHour: z
           .string()
           .regex(RegexPatterns.time, {
-            message: 'Invalid hour. Please use HH:mm format (00:00 - 23:59).',
+            message:
+              'Horário inválido. Por favor use o formato HH:mm (00:00 - 23:59).',
           })
           .optional(),
         finalHour: z
           .string()
           .regex(RegexPatterns.time, {
-            message: 'Invalid hour. Please use HH:mm format (00:00 - 23:59).',
+            message:
+              'Horário inválido. Por favor use o formato HH:mm (00:00 - 23:59).',
           })
           .optional(),
         isClosed: z.boolean(),

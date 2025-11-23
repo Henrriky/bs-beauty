@@ -13,8 +13,26 @@ interface SalonInfoDisplayProps {
 function SalonInfoDisplay({ salonData }: SalonInfoDisplayProps) {
   const openingHours = salonData?.openingHours
 
+  const displayOpeningHours = (index: number) => {
+    if (openingHours?.at(index)?.isClosed) return 'Fechado'
+
+    if (
+      !openingHours?.at(index)?.initialHour ||
+      !openingHours?.at(index)?.finalHour
+    ) {
+      return 'Não informado'
+    }
+
+    return (
+      'das ' +
+      openingHours?.at(index)?.initialHour +
+      ' até ' +
+      openingHours?.at(index)?.finalHour
+    )
+  }
+
   const formatMinimumAdvanceTime = (minutes: string | null | undefined) => {
-    if (!minutes) return 'Não definido'
+    if (!minutes) return '30 minutos' // valor padrão
 
     const minutesNumber = parseInt(minutes, 10)
 
@@ -39,30 +57,15 @@ function SalonInfoDisplay({ salonData }: SalonInfoDisplayProps) {
       infos: [
         {
           name: 'Segunda à Sexta',
-          content: openingHours?.at(0)?.isClosed
-            ? 'Fechado'
-            : 'das ' +
-              openingHours?.at(0)?.initialHour +
-              ' até ' +
-              openingHours?.at(0)?.finalHour,
+          content: displayOpeningHours(0),
         },
         {
           name: 'Sábado',
-          content: openingHours?.at(1)?.isClosed
-            ? 'Fechado'
-            : 'das ' +
-              openingHours?.at(1)?.initialHour +
-              ' até ' +
-              openingHours?.at(1)?.finalHour,
+          content: displayOpeningHours(1),
         },
         {
           name: 'Domingo',
-          content: openingHours?.at(2)?.isClosed
-            ? 'Fechado'
-            : 'das ' +
-              openingHours?.at(2)?.initialHour +
-              ' até ' +
-              openingHours?.at(2)?.finalHour,
+          content: displayOpeningHours(2),
         },
       ],
     },
@@ -92,11 +95,11 @@ function SalonInfoDisplay({ salonData }: SalonInfoDisplayProps) {
       infos: [
         {
           name: 'E-mail',
-          content: salonData?.salonEmail,
+          content: salonData?.salonEmail || 'Não informado',
         },
         {
           name: 'Telefone',
-          content: salonData?.salonPhoneNumber,
+          content: salonData?.salonPhoneNumber || 'Não informado',
         },
       ],
     },
