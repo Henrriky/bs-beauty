@@ -42,8 +42,11 @@ function CancellationChart({ data }: CancellationChartProps) {
             {
               data: chartData,
               highlightScope: { fade: 'global', highlight: 'item' },
-              innerRadius: '60%',
-              outerRadius: '90%',
+              innerRadius: 80,
+              outerRadius: 140,
+              paddingAngle: 2,
+              cornerRadius: 4,
+              faded: { innerRadius: 70, additionalRadius: -10, color: 'gray' },
             },
           ]}
           height={300}
