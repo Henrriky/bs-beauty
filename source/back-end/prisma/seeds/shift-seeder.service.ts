@@ -29,16 +29,19 @@ export class ShiftSeederService extends BaseRelationSeederService {
       const existingShift = await this.prismaClient.shift.findFirst({
         where: {
           professionalId: professional.id,
-          weekDay: shift.weekDay,
-          shiftStart: shift.shiftStart,
-          shiftEnd: shift.shiftEnd
+          weekDay: shift.weekDay
         }
       })
 
       if (existingShift) {
+        // Update existing shift with seed data
         await this.prismaClient.shift.update({
           where: { id: existingShift.id },
-          data: { isBusy: shift.isBusy }
+          data: {
+            isBusy: shift.isBusy,
+            shiftStart: shift.shiftStart,
+            shiftEnd: shift.shiftEnd
+          }
         })
         updatedCount++
       } else {
