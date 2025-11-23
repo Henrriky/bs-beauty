@@ -13,9 +13,11 @@ import { useState } from 'react'
 
 interface Props {
   currentFlow: 'service' | 'professional'
+  goNextStep?: () => void
+  goPreviousStep?: () => void
 }
 
-function CustomerHomeSelectProfessionalContainer({ currentFlow }: Props) {
+function CustomerHomeSelectProfessionalContainer({ currentFlow, goNextStep, goPreviousStep }: Props) {
   const { register, watch, setValue } =
     useFormContext<CreateAppointmentFormData>()
   const serviceId = watch('serviceId')
@@ -24,20 +26,6 @@ function CustomerHomeSelectProfessionalContainer({ currentFlow }: Props) {
 
   const [currentPage, setCurrentPage] = useState(1)
   const [pageLimit] = useState(10)
-
-  if (!serviceId && currentFlow === 'service') {
-    toast.error(
-      'Por favor, selecione um serviço para acessar a etapa de selecionar os profissionais',
-    )
-
-    return (
-      <ErrorMessage
-        message={
-          'Por favor, selecione um serviço para acessar a etapa de selecionar os profissionais'
-        }
-      />
-    )
-  }
 
   const { data, isLoading, isError, error } =
     serviceAPI.useFetchProfessionalsOfferingServiceQuery(
@@ -54,6 +42,16 @@ function CustomerHomeSelectProfessionalContainer({ currentFlow }: Props) {
     { page: currentPage, limit: pageLimit },
     { skip: currentFlow !== 'professional' },
   )
+
+  if (!serviceId && currentFlow === 'service') {
+    return (
+      <ErrorMessage
+        message={
+          'Por favor, selecione um serviço para acessar a etapa de selecionar os profissionais'
+        }
+      />
+    )
+  }
 
   if (isLoading || isLoadingProfessionals)
     return <BSBeautyLoading title="Carregando os profissionais..." />
@@ -144,7 +142,10 @@ function CustomerHomeSelectProfessionalContainer({ currentFlow }: Props) {
                 setValue('name', professional.name || 'Não definido')
                 setValue('paymentMethods', professional.paymentMethods)
                 setValue('professionalPhotoUrl', professional.profilePhotoUrl ?? '')
+                setValue('appointmentDate', '' as any)
               }}
+              onArrowClick={goNextStep}
+              onBackClick={goPreviousStep}
             />
           </div>
         )

@@ -74,7 +74,8 @@ export default function AppointmentsCarousel({
 
   useEffect(() => {
     const el = scrollRef.current
-    if (!el || isPaused || !itemsSortedByTime || itemsSortedByTime.length <= 1) return
+    if (!el || isPaused || !itemsSortedByTime || itemsSortedByTime.length <= 1)
+      return
 
     const cardElement = el.querySelector('article') as HTMLElement
     const cardWidthPx = cardElement ? cardElement.offsetWidth : 280
@@ -224,15 +225,18 @@ export default function AppointmentsCarousel({
             >
               <header className="flex items-center justify-between">
                 <div>
-                  <div className="text-lg text-[#D9D9D9] leading-6">{d.toFormat('HH:mm')}</div>
-                  <div className="text-xs text-[#979797]">{d.setLocale('pt-BR').toFormat('ccc dd/LL')}</div>
+                  <div className="text-lg text-[#D9D9D9] leading-6">
+                    {d.toFormat('HH:mm')}
+                  </div>
+                  <div className="text-xs text-[#979797]">
+                    {d.setLocale('pt-BR').toFormat('ccc dd/LL')}
+                  </div>
                 </div>
                 <div className="relative">
                   <ProfilePicture
                     size="sm"
                     profilePhotoUrl={
-                      appointment.offer?.professional?.profilePhotoUrl ??
-                      ''
+                      appointment.offer?.professional?.profilePhotoUrl ?? ''
                     }
                     filter={isSchedulled ? 'none' : 'black-white'}
                     displayName={appointment.customer?.name ?? 'Cliente'}

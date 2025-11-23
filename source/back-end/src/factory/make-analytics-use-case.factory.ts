@@ -12,6 +12,7 @@ function makeAnalyticsUseCaseFactory () {
   const appointmentRepository = new PrismaAppointmentRepository()
   const professionalRepository = new PrismaProfessionalRepository()
   const usecase = new AnalyticsUseCase(ratingsRepository, serviceRepository, offerRepository, appointmentRepository, professionalRepository)
+  
   return usecase
 }
 

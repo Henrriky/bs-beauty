@@ -105,7 +105,9 @@ export default function OccupancyRateCard({
       <ReportCard
         data={data}
         isLoading={isLoading}
-        emptyIcon={<ClockIcon style={{ width: 48, height: 48, color: '#666' }} />}
+        emptyIcon={
+          <ClockIcon style={{ width: 48, height: 48, color: '#666' }} />
+        }
         emptyMessage="Nenhum dado disponível para o período selecionado"
         minHeight={200}
       >

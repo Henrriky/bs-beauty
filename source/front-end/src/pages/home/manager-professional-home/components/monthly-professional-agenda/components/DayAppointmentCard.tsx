@@ -12,6 +12,7 @@ type Props = {
   customerName: string
   serviceName: string
   professionalName: string | null
+  canShowActions: boolean
   status: Status
   isManager: boolean
   viewAll: boolean
@@ -19,7 +20,6 @@ type Props = {
   legendIcon: (s: Status) => string
   prettyStatus: (s: Status) => string
   statusChip: (s: Status) => string
-
   formatHour: (d: Date) => string
 }
 
@@ -30,6 +30,7 @@ function DayAppointmentCard({
   customerName,
   serviceName,
   professionalName,
+  canShowActions,
   status,
   isManager,
   viewAll,
@@ -69,27 +70,29 @@ function DayAppointmentCard({
             {legendIcon(status)} {prettyStatus(status)}
           </span>
 
-          <Link to={`/appointments/${id}?action=${isSchedulled ? 'edit' : 'view'}`}>
-            <Button
-              className="flex items-center gap-1 text-[#d9d9d9] text-sm font-semibold !pt-0 !pb-0"
-              variant="text-only"
-              label={
-                <>
-                  {isSchedulled ? (
-                    <>
-                      <PencilSquareIcon className="size-5 text-[#d9d9d9]" />
-                      Editar
-                    </>
-                  ) : (
-                    <>
-                      <MagnifyingGlassCircleIcon className="size-5 text-[#d9d9d9]" />
-                      Visualizar
-                    </>
-                  )}
-                </>
-              }
-            />
-          </Link>
+          {canShowActions && (
+            <Link to={`/appointments/${id}?action=${isSchedulled ? 'edit' : 'view'}`}>
+              <Button
+                className="flex items-center gap-1 text-[#d9d9d9] text-sm font-semibold !pt-0 !pb-0"
+                variant="text-only"
+                label={
+                  <>
+                    {isSchedulled ? (
+                      <>
+                        <PencilSquareIcon className="size-5 text-[#d9d9d9]" />
+                        Editar
+                      </>
+                    ) : (
+                      <>
+                        <MagnifyingGlassCircleIcon className="size-5 text-[#d9d9d9]" />
+                        Visualizar
+                      </>
+                    )}
+                  </>
+                }
+              />
+            </Link>
+          )}
         </div>
       </div>
     </article>

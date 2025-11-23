@@ -109,6 +109,7 @@ function LoginWithEmailAndPasswordForm() {
               placeholder="Senha"
               error={errors.password?.message}
               registration={register('password')}
+              autoComplete="off"
             />
             <PasswordEyeIcon
               showPassword={showPassword}

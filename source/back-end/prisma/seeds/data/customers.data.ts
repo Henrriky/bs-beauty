@@ -43,18 +43,6 @@ function createCustomerData(info: CustomerInfo): CustomerSeedData {
 export function generateCustomersData(): CustomerSeedData[] {
   const customersInfo: CustomerInfo[] = [
     {
-      name: 'Johnata Souza',
-      email: 'johnata.santicioli@example.com',
-      phone: generatePhoneNumber(),
-      discoverySource: 'WHATSAPP' as const
-    },
-    {
-      name: 'Marcelo Tavares',
-      email: 'marcelo.tavares@example.com',
-      phone: generatePhoneNumber(),
-      discoverySource: 'INSTAGRAM' as const
-    },
-    {
       name: 'Ana Beatriz Oliveira',
       email: 'ana.oliveira@example.com',
       phone: generatePhoneNumber(),
