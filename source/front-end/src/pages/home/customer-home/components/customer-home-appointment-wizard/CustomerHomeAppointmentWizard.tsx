@@ -18,11 +18,15 @@ import CustomerHomeSelectAppointmentFlow from './CustomerHomeSelectAppointmentFl
 import CustomerHomeReviewStep from './customer-home-review-step/CustomerHomeReview'
 import CustomerHomeSelectServiceContainer from './customer-home-select-service-step'
 
+type StepComponentProps = {
+  currentFlow: 'service' | 'professional'
+  goNextStep: () => void
+  goPreviousStep?: () => void
+}
+
 type Step = {
   currentStepName: string
-  currentStepAppointmentForm: (props: {
-    currentFlow: 'service' | 'professional'
-  }) => JSX.Element
+  currentStepAppointmentForm: (props: StepComponentProps) => JSX.Element
   previousStep: Step | null
   nextStep: Step | null
 }
@@ -35,10 +39,16 @@ function createSteps(currentFlow: 'service' | 'professional'): Step {
         : 'Selecionar profissional',
     currentStepAppointmentForm:
       currentFlow === 'service'
-        ? () => <CustomerHomeSelectServiceContainer currentFlow={currentFlow} />
-        : () => (
+        ? ({ currentFlow: flowFromProps, goNextStep }) => (
+          <CustomerHomeSelectServiceContainer
+            currentFlow={flowFromProps}
+            goNextStep={goNextStep}
+          />
+        )
+        : ({ currentFlow: flowFromProps, goNextStep }) => (
             <CustomerHomeSelectProfessionalContainer
-              currentFlow={currentFlow}
+            currentFlow={flowFromProps}
+            goNextStep={goNextStep}
             />
           ),
     nextStep: null,
@@ -52,13 +62,19 @@ function createSteps(currentFlow: 'service' | 'professional'): Step {
         : 'Selecionar serviço',
     currentStepAppointmentForm:
       currentFlow === 'service'
-        ? () => (
+        ? ({ currentFlow: flowFromProps, goNextStep, goPreviousStep }) => (
             <CustomerHomeSelectProfessionalContainer
-              currentFlow={currentFlow}
+            currentFlow={flowFromProps}
+            goNextStep={goNextStep}
+            goPreviousStep={goPreviousStep}
             />
           )
-        : () => (
-            <CustomerHomeSelectServiceContainer currentFlow={currentFlow} />
+        : ({ currentFlow: flowFromProps, goNextStep, goPreviousStep }) => (
+          <CustomerHomeSelectServiceContainer
+            currentFlow={flowFromProps}
+            goNextStep={goNextStep}
+            goPreviousStep={goPreviousStep}
+          />
           ),
     nextStep: null,
     previousStep: firstSelectStep,
@@ -66,14 +82,14 @@ function createSteps(currentFlow: 'service' | 'professional'): Step {
 
   const selectAppointmentTimeStep: Step = {
     currentStepName: 'Selecionar horário',
-    currentStepAppointmentForm: CustomerHomeSelectTimeContainer,
+    currentStepAppointmentForm: () => <CustomerHomeSelectTimeContainer />,
     nextStep: null,
     previousStep: secondSelectStep,
   }
 
   const reviewStep: Step = {
     currentStepName: 'Revisão',
-    currentStepAppointmentForm: CustomerHomeReviewStep,
+    currentStepAppointmentForm: () => <CustomerHomeReviewStep />,
     nextStep: null,
     previousStep: selectAppointmentTimeStep,
   }
@@ -84,6 +100,7 @@ function createSteps(currentFlow: 'service' | 'professional'): Step {
 
   return firstSelectStep
 }
+
 
 function CustomerHomeAppointmentWizard() {
   const customerId = useAppSelector((state) => state?.auth?.user?.id)
@@ -99,8 +116,10 @@ function CustomerHomeAppointmentWizard() {
   const createAppointmentForm = useForm<CreateAppointmentFormData>({
     resolver: zodResolver(appointmentFormData),
   })
+
   const { handleSubmit, watch } = createAppointmentForm
   const selectedDate = watch('appointmentDate')
+  const professionalId = watch('professionalId')
 
   const [makeAppointment, { isLoading: isLoadingMakeAppointment }] =
     appointmentAPI.useMakeAppointmentMutation()
@@ -136,6 +155,29 @@ function CustomerHomeAppointmentWizard() {
 
   const AppointmentCurrentStepForm = currentStep.currentStepAppointmentForm
 
+  const goNextStep = () =>
+    setCurrentStep((step) => {
+      if (!step.nextStep) return step
+      if (
+        currentFlow === 'professional' &&
+        step.currentStepName === 'Selecionar profissional' &&
+        !professionalId
+      ) {
+        toast.error(
+          'Por favor, selecione um funcionário para acessar a etapa de selecionar os serviços',
+        )
+        return step
+      }
+
+      return { ...step.nextStep }
+    })
+
+  const goPreviousStep = () =>
+    setCurrentStep((step) => {
+      if (!step.previousStep) return step
+      return { ...step.previousStep }
+    })
+
   useEffect(() => {
     if (customerId) {
       createAppointmentForm.setValue('customerId', customerId)
@@ -154,11 +196,16 @@ function CustomerHomeAppointmentWizard() {
         setCurrenFlow={setCurrentFlow}
       />
       <form onSubmit={handleSubmit(handleSubmitConcrete)}>
-        <div className="">
-          <AppointmentCurrentStepForm currentFlow={currentFlow} />
+        <div>
+          <AppointmentCurrentStepForm
+            currentFlow={currentFlow}
+            goNextStep={goNextStep}
+            goPreviousStep={currentStep.previousStep ? goPreviousStep : undefined}
+          />
         </div>
         <div
-          className={`flex mb-4 ${!currentStep.previousStep ? 'justify-end' : 'justify-between'} px-4 mt-3`}
+          className={`flex mb-4 ${!currentStep.previousStep ? 'justify-end' : 'justify-between'
+            } px-4 mt-3`}
         >
           {currentStep.previousStep && (
             <Button
@@ -166,18 +213,13 @@ function CustomerHomeAppointmentWizard() {
               type="button"
               label={currentStep.previousStep.currentStepName}
               onClick={() =>
-                setCurrentStep((currentStep) => {
-                  if (currentStep.previousStep) {
-                    return {
-                      ...currentStep.previousStep,
-                    }
-                  } else {
-                    return { ...currentStep }
-                  }
-                })
+                setCurrentStep((currentStep) =>
+                  currentStep.previousStep ? { ...currentStep.previousStep } : currentStep,
+                )
               }
             />
           )}
+
           {currentStep.nextStep && (
             <Button
               className="disabled:text-zinc-600"
@@ -186,32 +228,21 @@ function CustomerHomeAppointmentWizard() {
               label={currentStep.nextStep.currentStepName}
               disabled={
                 currentStep.currentStepName === 'Selecionar horário' &&
-                selectedDate === undefined
+                (!selectedDate || selectedDate === '')
               }
-              onClick={() =>
-                setCurrentStep((currentStep) => {
-                  if (currentStep.nextStep) {
-                    return {
-                      ...currentStep.nextStep,
-                    }
-                  } else {
-                    return { ...currentStep }
-                  }
-                })
-              }
+              onClick={goNextStep}
             />
           )}
 
-          {
-            <Button
-              className={`${currentStep.nextStep ? 'invisible hidden' : ''} disabled:text-zinc-600`}
-              type="submit"
-              variant="text-only"
-              label={'Agendar'}
-              id={'submit-button'}
-              disabled={isLoadingMakeAppointment}
-            />
-          }
+          <Button
+            className={`${currentStep.nextStep ? 'invisible hidden' : ''
+              } disabled:text-zinc-600`}
+            type="submit"
+            variant="text-only"
+            label="Agendar"
+            id="submit-button"
+            disabled={isLoadingMakeAppointment}
+          />
         </div>
       </form>
       <Modal

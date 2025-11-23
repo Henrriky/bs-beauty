@@ -392,7 +392,7 @@ function CustomerHomeSelectTimeContainer() {
           ) : schedullingIsError ? (
             <ErrorMessage
               message={
-                'Erro ao carregar informações. Tente novamente mais tarde.'
+                  'O profissional selecionado não possui horários disponíveis para o dia escolhido.'
               }
             />
           ) : (
