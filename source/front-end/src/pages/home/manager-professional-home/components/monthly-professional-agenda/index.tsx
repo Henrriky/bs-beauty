@@ -38,6 +38,7 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
   const [draftStatuses, setDraftStatuses] = useState<Status[]>([])
 
   const user = useAppSelector((state) => state.auth.user!)
+  const currentProfessionalId = user.id ?? null
   const isManager = user?.userType === 'MANAGER'
   const [viewAll, setViewAll] = useState(false)
 
@@ -112,6 +113,7 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
       customerName: string
       serviceName: string
       professionalName: string | null
+      professionalId: string | null
     }
     const map = new Map<string, { date: Date; items: Item[] }>()
     const add = (day: Date, appt: any) => {
@@ -125,6 +127,7 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
         customerName: appt.customer?.name ?? 'Cliente',
         serviceName: appt.offer?.service?.name ?? 'Serviço',
         professionalName: appt.offer?.professional?.name ?? null,
+        professionalId: appt.offer?.professional?.id ?? null,
       })
     }
     data?.data.forEach((appt) => {
@@ -249,18 +252,19 @@ export default function MonthlyAgendaModal({ isOpen, onClose }: Props) {
               </section>
 
               <section className={`${activeTab === 'day' ? 'block' : 'hidden'} sm:block sm:col-span-5 md:col-span-4 overflow-y-auto`}>
-                <DayPanel
-                  selectedDate={selectedDate}
-                  dayList={dayList}
-                  isManager={isManager}
-                  viewAll={viewAll}
-                  legendIcon={legendIcon}
-                  prettyStatus={prettyStatus}
-                  statusChip={statusChip}
-                  isLoading={showLoading}
-                  isError={isError}
-                />
-              </section>
+                  <DayPanel
+                    selectedDate={selectedDate}
+                    dayList={dayList}
+                    isManager={isManager}
+                    currentProfessionalId={currentProfessionalId}
+                    viewAll={viewAll}
+                    legendIcon={legendIcon}
+                    prettyStatus={prettyStatus}
+                    statusChip={statusChip}
+                    isLoading={showLoading}
+                    isError={isError}
+                  />
+                </section>
             </div>
           )}
 

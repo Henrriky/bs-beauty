@@ -13,12 +13,14 @@ type Item = {
   customerName: string
   serviceName: string
   professionalName: string | null
+  professionalId: string | null
 }
 
 type Props = {
   selectedDate: Date | null
   dayList: Item[]
   isManager: boolean
+  currentProfessionalId: string | null
   viewAll: boolean
   legendIcon: (s: Status) => string
   prettyStatus: (s: Status) => string
@@ -31,6 +33,7 @@ export default function DayPanel({
   selectedDate,
   dayList,
   isManager,
+  currentProfessionalId,
   viewAll,
   legendIcon,
   prettyStatus,
@@ -71,6 +74,9 @@ export default function DayPanel({
               prettyStatus={prettyStatus}
               statusChip={statusChip}
               formatHour={(d) => format(d, 'HH:mm')}
+              canShowActions={
+                !!currentProfessionalId && a.professionalId === currentProfessionalId
+              }
             />
           ))
         ) : (
