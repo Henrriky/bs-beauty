@@ -112,10 +112,6 @@ function BSBeautyRouter() {
                 >
                   <Route path="/services" element={<ServiceDashboard />} />
                   <Route path="/shifts" element={<Shifts />} />
-                  <Route
-                    path="/analytics/reports"
-                    element={<ProductivityReport />}
-                  />
                   <Route path="/blocked-times" element={<BlockedTimes />} />
                 </Route>
 
@@ -194,6 +190,24 @@ function BSBeautyRouter() {
                   <Route
                     path="/payments/:paymentRecordId"
                     element={<PaymentRecordDetails />}
+                  />
+                </Route>
+
+                <Route
+                  element={
+                    <PrivateRoute
+                      strategy={'ANY'}
+                      allowedPermissions={['report.read']}
+                      allowedUserTypes={[
+                        UserType.MANAGER,
+                        UserType.PROFESSIONAL,
+                      ]}
+                    />
+                  }
+                >
+                  <Route
+                    path="/analytics/reports"
+                    element={<ProductivityReport />}
                   />
                 </Route>
 

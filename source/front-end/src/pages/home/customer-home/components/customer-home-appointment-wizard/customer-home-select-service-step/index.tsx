@@ -1,10 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useFormContext } from 'react-hook-form'
-import { toast } from 'react-toastify'
 import BSBeautyLoading from '../../../../../../components/feedback/Loading'
 import Subtitle from '../../../../../../components/texts/Subtitle'
 import { CreateAppointmentFormData } from '../types'
-import { ErrorMessage } from '../../../../../../components/feedback/ErrorMessage'
 import SelectableServiceList from './components/selectable-service-list'
 import { useNormalizedServices } from './hooks/useNormalizedServices'
 import ServiceFilterForm from './components/customer-home-select-service-filter-form'
@@ -14,21 +12,13 @@ export type SchedullingFlows = 'service' | 'professional'
 
 interface Props {
   currentFlow: SchedullingFlows
+  goNextStep?: () => void
+  goPreviousStep?: () => void
 }
 
-function CustomerHomeSelectServiceContainer({ currentFlow }: Props) {
+function CustomerHomeSelectServiceContainer({ currentFlow, goNextStep, goPreviousStep }: Props) {
   const { watch } = useFormContext<CreateAppointmentFormData>()
   const professionalId = watch('professionalId')
-  const isMissingProfessionalSelection =
-    !professionalId && currentFlow === 'professional'
-
-  if (isMissingProfessionalSelection) {
-    const message =
-      'Por favor, selecione um funcionário para acessar a etapa de selecionar os serviços'
-
-    toast.error(message)
-    return <ErrorMessage message={message} />
-  }
 
   const {
     filters,
@@ -49,7 +39,6 @@ function CustomerHomeSelectServiceContainer({ currentFlow }: Props) {
 
   if (isLoading) return <BSBeautyLoading title="Carregando os serviços..." />
   if (isError) {
-    toast.error('Erro ao carregar os serviços')
     console.error(`Error trying to fetch services`, error)
 
     return (
@@ -74,6 +63,8 @@ function CustomerHomeSelectServiceContainer({ currentFlow }: Props) {
       <SelectableServiceList
         currentFlow={currentFlow}
         services={services}
+        onArrowClick={goNextStep}
+        onBackClick={goPreviousStep}
       />
 
       {totalPages > 1 && (

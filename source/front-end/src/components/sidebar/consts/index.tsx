@@ -166,7 +166,7 @@ const sideBarItems: SideBarItem[] = [
     icon: <ChartBarIcon className="size-6" />,
     navigateTo: '/analytics/reports',
     authorization: {
-      allowedPermissions: [],
+      allowedPermissions: ['report.read'],
       allowedUserTypes: [UserType.MANAGER, UserType.PROFESSIONAL],
     },
     order: 8,

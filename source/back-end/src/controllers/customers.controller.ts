@@ -20,7 +20,6 @@ class CustomersController {
       const customerId = req.params.id
       const useCase = makeCustomersUseCaseFactory()
       const customer = await useCase.executeFindById(customerId)
-
       res.send(customer)
     } catch (error) {
       next(error)

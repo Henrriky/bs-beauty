@@ -16,10 +16,10 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
   const appointments: AppointmentSeedData[] = []
 
   const STATUS_DISTRIBUTION = {
-    PENDING: 0.25,    // 25%
-    CONFIRMED: 0.35,  // 35%
-    CANCELLED: 0.15,  // 15%
-    FINISHED: 0.25    // 25%
+    PENDING: 0.30,
+    CONFIRMED: 0.37,
+    CANCELLED: 0.05,
+    FINISHED: 0.28
   }
 
   const validOffers = [
@@ -32,9 +32,6 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
     { professionalName: 'Bruna Silva', serviceName: 'Design de Sobrancelhas' },
     { professionalName: 'Bruna Silva', serviceName: 'Design de Sobrancelhas' },
     // Primary professionals - higher appointment volume
-    { professionalName: 'Ana Carolina Santos', serviceName: 'Corte Feminino' },
-    { professionalName: 'Ana Carolina Santos', serviceName: 'Corte Feminino' },
-    { professionalName: 'Ana Carolina Santos', serviceName: 'Escova Progressiva' },
     { professionalName: 'Camila Rodrigues Lima', serviceName: 'Manicure Completa' },
     { professionalName: 'Camila Rodrigues Lima', serviceName: 'Manicure Completa' },
     { professionalName: 'Camila Rodrigues Lima', serviceName: 'Manicure e Pedicure' },
@@ -48,8 +45,6 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
     { professionalName: 'Alyson Fumagalli', serviceName: 'Manicure Completa' },
     { professionalName: 'Eliel da Silva', serviceName: 'Manicure Completa' },
     // Other professionals
-    { professionalName: 'Isabella Ferreira Santos', serviceName: 'Extensão de Cílios' },
-    { professionalName: 'Larissa Mendes Costa', serviceName: 'Hidratação Capilar' },
     { professionalName: 'Giovanna Camille', serviceName: 'Corte Feminino' },
     { professionalName: 'Giovanna Camille', serviceName: 'Manicure Completa' },
     { professionalName: 'Bruno Fischer', serviceName: 'Corte Feminino' },
@@ -127,8 +122,11 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
     )
   }
 
-  const previousMonthStatuses: Array<'CANCELLED' | 'FINISHED'> = ['CANCELLED', 'FINISHED']
-  for (let i = 0; i < 200; i++) {
+  const getPreviousMonthStatus = () => {
+    return Math.random() < 0.8 ? 'FINISHED' : 'CANCELLED'
+  }
+
+  for (let i = 0; i < 40; i++) {
     const appointmentDate = new Date(today)
     appointmentDate.setMonth(appointmentDate.getMonth() - 1)
     appointmentDate.setDate(faker.number.int({ min: 1, max: 28 }))
@@ -143,13 +141,13 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
       createAppointment(
         faker.helpers.arrayElement(validOffers),
         faker.helpers.arrayElement(customerEmails),
-        faker.helpers.arrayElement(previousMonthStatuses),
+        getPreviousMonthStatus(),
         appointmentDate
       )
     )
   }
 
-  for (let i = 0; i < 70; i++) {
+  for (let i = 0; i < 20; i++) {
     const appointmentDate = new Date(today)
     appointmentDate.setDate(faker.number.int({ min: 1, max: 30 }))
     appointmentDate.setUTCHours(
@@ -170,7 +168,7 @@ export function generateAppointmentsData(): AppointmentSeedData[] {
   }
 
   const nextMonthStatuses: Array<'PENDING' | 'CONFIRMED'> = ['PENDING', 'CONFIRMED']
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 5; i++) {
     const appointmentDate = new Date(today)
     appointmentDate.setMonth(appointmentDate.getMonth() + 1)
     appointmentDate.setDate(faker.number.int({ min: 1, max: 28 }))

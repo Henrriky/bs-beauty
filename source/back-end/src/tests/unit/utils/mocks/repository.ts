@@ -12,6 +12,7 @@ import { type Mocked } from 'vitest'
 import { type BlockedTimeRepository } from '@/repository/protocols/blocked-times.repository'
 import { type PaymentRecordRepository } from '@/repository/protocols/payment-record.repository'
 import { type ReportRepository } from '@/repository/protocols/report.repository'
+import { type SalonInfoRepository } from '@/repository/protocols/salon-info.repository'
 
 vi.mock('@/factory/make-appointments-use-case.factory')
 
@@ -176,6 +177,11 @@ const MockReportRepository: Mocked<ReportRepository> = {
   getCommissionedRevenue: vi.fn()
 }
 
+const MockSalonInfoRepository: Mocked<SalonInfoRepository> = {
+  fetchInfo: vi.fn(),
+  updateInfo: vi.fn()
+}
+
 export {
   MockAppointmentRepository,
   MockCustomerRepository,
@@ -189,5 +195,6 @@ export {
   MockRatingRepository,
   MockBlockedTimesRepository,
   MockPaymentRecordRepository,
-  MockReportRepository
+  MockReportRepository,
+  MockSalonInfoRepository
 }

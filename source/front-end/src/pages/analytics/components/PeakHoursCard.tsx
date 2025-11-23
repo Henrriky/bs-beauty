@@ -95,7 +95,9 @@ export default function PeakHoursCard({ data, isLoading }: PeakHoursCardProps) {
       <ReportCard
         data={data}
         isLoading={isLoading}
-        emptyIcon={<ClockIcon style={{ width: 48, height: 48, color: '#666' }} />}
+        emptyIcon={
+          <ClockIcon style={{ width: 48, height: 48, color: '#666' }} />
+        }
         emptyMessage="Nenhum agendamento registrado no período selecionado"
         minHeight={300}
       >

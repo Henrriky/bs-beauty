@@ -45,7 +45,7 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
 
   return (
     <label className="flex gap-12 text-[#C0C0C0] mt-2 items-center">
-      <div className="text-lg">
+      <div className="text-lg min-w-[90px]">
         <h3 className="leading-8">
           {DateTime.fromISO(props.appointment.appointmentDate)
             .setZone('local')
@@ -68,10 +68,10 @@ function CustomerAppointmentCard(props: CustomerAppointmentCardProps) {
       </div>
       <div
         className={`flex justify-between py-4 ${hasPendingRating ? 'pb-6' : ''} px-6 rounded-2xl mt-5 bg-[#262626]
-              transition-all duration-300 ease-in-out flex-grow flex-col sm:flex-row sm:items-center border-secondary-300`}
+          transition-all duration-300 ease-in-out flex-grow flex-col sm:flex-row sm:items-center border-secondary-300`}
       >
         <div>
-          <div className="flex items gap-4 align-middle">
+          <div className={`flex items gap-4 align-middle ${!isSchedulled ? 'filter grayscale' : ''}`}>
             <div className="">
               <ProfilePicture
                 size="md"

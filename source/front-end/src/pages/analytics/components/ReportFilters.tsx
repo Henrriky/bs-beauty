@@ -93,53 +93,58 @@ function ReportFilters({
         </LocalizationProvider>
       </div>
 
-      {selectedReportType !== 'customer' && (
-        <div className="w-full my-6">
-          <button
-            onClick={onToggleFilters}
-            className="flex justify-center items-center"
-          >
-            <img
-              src={expandArrow}
-              alt="Ícone de seta"
-              className={`transition-transform duration-500 ${
-                shouldShowFilters ? 'rotate-180' : 'rotate-0'
-              }`}
-            />
-            <span className="text-[#B19B86] text-sm ml-[13px]">
-              Filtrar resultados
-              {hasActiveFilters && (
-                <span className="bg-[#A4978A] text-[#1E1E1E] text-xs font-medium px-2 py-1 rounded-full ml-2">
-                  {activeFiltersCount} ativo{activeFiltersCount > 1 ? 's' : ''}
-                </span>
-              )}
-            </span>
-          </button>
+      {selectedReportType !== 'customer' &&
+        !(
+          userType === UserType.PROFESSIONAL &&
+          selectedReportType === 'financial'
+        ) && (
+          <div className="w-full my-6">
+            <button
+              onClick={onToggleFilters}
+              className="flex justify-center items-center"
+            >
+              <img
+                src={expandArrow}
+                alt="Ícone de seta"
+                className={`transition-transform duration-500 ${
+                  shouldShowFilters ? 'rotate-180' : 'rotate-0'
+                }`}
+              />
+              <span className="text-[#B19B86] text-sm ml-[13px]">
+                Filtrar resultados
+                {hasActiveFilters && (
+                  <span className="bg-[#A4978A] text-[#1E1E1E] text-xs font-medium px-2 py-1 rounded-full ml-2">
+                    {activeFiltersCount} ativo
+                    {activeFiltersCount > 1 ? 's' : ''}
+                  </span>
+                )}
+              </span>
+            </button>
 
-          {shouldShowFilters && (
-            <div className="mt-6 space-y-4">
-              {userType === UserType.MANAGER && (
-                <div>
-                  <ProfessionalSelector
-                    professionals={professionals}
-                    selectedProfessional={selectedProfessional}
-                    onSelect={onProfessionalChange}
-                    showAllOption={true}
-                  />
-                </div>
-              )}
-              {selectedReportType === 'productivity' && (
-                <div>
-                  <StatusFilterInput
-                    value={selectedStatuses}
-                    onChange={onStatusesChange}
-                  />
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+            {shouldShowFilters && (
+              <div className="mt-6 space-y-4">
+                {userType === UserType.MANAGER && (
+                  <div>
+                    <ProfessionalSelector
+                      professionals={professionals}
+                      selectedProfessional={selectedProfessional}
+                      onSelect={onProfessionalChange}
+                      showAllOption={true}
+                    />
+                  </div>
+                )}
+                {selectedReportType === 'productivity' && (
+                  <div>
+                    <StatusFilterInput
+                      value={selectedStatuses}
+                      onChange={onStatusesChange}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
     </>
   )
 }
