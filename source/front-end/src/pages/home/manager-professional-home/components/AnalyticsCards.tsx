@@ -10,7 +10,6 @@ import {
 import { analyticsAPI } from '../../../../store/analytics/analytics-api'
 import Card from './Card'
 import { authAPI } from '../../../../store/auth/auth-api'
-import { toast } from 'react-toastify'
 
 const CardSkeleton = () => (
   <div className="text-primary-100 flex items-center gap-2.5 animate-pulse">
