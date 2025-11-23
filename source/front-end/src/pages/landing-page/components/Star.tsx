@@ -1,7 +1,7 @@
 function Star({ fillPercent, id }: { fillPercent: number; id: string }) {
   const gradId = `grad-${id}`
   return (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden>
+    <svg className="size-5 lg:size-7" viewBox="0 0 24 24" aria-hidden>
       <defs>
         <linearGradient id={gradId} x1="0%" x2="100%">
           <stop
