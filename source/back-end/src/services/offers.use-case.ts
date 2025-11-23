@@ -246,19 +246,25 @@ class OffersUseCase {
     return result
   }
 
-  private getDateForCombinedDays (
-    {
-      dayToExtractTime,
-      dayToExtractDate
-    }: {
-      dayToExtractTime: Date
-      dayToExtractDate: Date
-    }
-  ) {
+  private getDateForCombinedDays({
+    dayToExtractTime,
+    dayToExtractDate
+  }: {
+    dayToExtractTime: Date
+    dayToExtractDate: Date
+    }) {
     const mainDay = new Date(dayToExtractDate)
-    mainDay.setHours(dayToExtractTime.getHours(), dayToExtractTime.getMinutes(), dayToExtractTime.getSeconds(), dayToExtractTime.getMilliseconds())
+
+    mainDay.setUTCHours(
+      dayToExtractTime.getUTCHours(),
+      dayToExtractTime.getUTCMinutes(),
+      dayToExtractTime.getUTCSeconds(),
+      dayToExtractTime.getUTCMilliseconds()
+    )
+
     return { timestamp: mainDay.getTime(), date: mainDay }
   }
+
 }
 
 export { OffersUseCase }
