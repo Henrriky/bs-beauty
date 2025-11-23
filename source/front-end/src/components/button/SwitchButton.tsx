@@ -42,7 +42,7 @@ export function SwitchButton<T extends string>({
   }
 
   return (
-    <div className={`flex ${className}`}>
+    <div className={`flex ${className} w-full`}>
       {options.map((option, index) => (
         <Button
           key={option.value}
