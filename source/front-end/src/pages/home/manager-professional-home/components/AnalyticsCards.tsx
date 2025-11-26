@@ -1,21 +1,27 @@
 import {
-  BriefcaseIcon,
   CalendarDateRangeIcon,
   CheckBadgeIcon,
   CurrencyDollarIcon,
-  ScissorsIcon,
   UserGroupIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/outline'
 import { analyticsAPI } from '../../../../store/analytics/analytics-api'
 import Card from './Card'
 import { authAPI } from '../../../../store/auth/auth-api'
+import { reportAPI } from '../../../../store/reports/report-api'
+import dayjs from 'dayjs'
 
 const CardSkeleton = () => (
-  <div className="text-primary-100 flex items-center gap-2.5 animate-pulse">
-    <div className="size-8 mr-2 bg-secondary-700/30 rounded"></div>
-    <div className="h-4 w-32 bg-secondary-700/30 rounded"></div>
-    <div className="ml-auto h-4 w-12 bg-secondary-700/30 rounded"></div>
+  <div className="bg-gradient-to-br from-secondary-800/50 to-secondary-900/30 rounded-xl p-6 border border-secondary-700/50 animate-pulse">
+    <div className="flex items-start justify-between mb-4">
+      <div className="p-3 bg-secondary-700/30 rounded-lg">
+        <div className="size-6 bg-secondary-600/30 rounded"></div>
+      </div>
+    </div>
+    <div className="space-y-2">
+      <div className="h-4 w-32 bg-secondary-700/30 rounded"></div>
+      <div className="h-8 w-20 bg-secondary-700/30 rounded"></div>
+    </div>
   </div>
 )
 
@@ -23,6 +29,10 @@ const AnalyticsCards = () => {
   const { data: userData } = authAPI.useFetchUserInfoQuery()
   const userType = userData?.user?.userType
   const id = userData?.user?.id
+
+  const now = dayjs()
+  const startOfWeek = now.startOf('week')
+  const endOfWeek = now.endOf('week')
 
   const managerQuery = analyticsAPI.useFetchAnalyticsQuery(undefined, {
     skip: userType !== 'MANAGER',
@@ -38,21 +48,34 @@ const AnalyticsCards = () => {
   const activeQuery = userType === 'MANAGER' ? managerQuery : professionalQuery
   const { data: analytics, isLoading, error } = activeQuery
 
-  if (isLoading) {
+  const { data: totalRevenueData, isLoading: isRevenueLoading } =
+    reportAPI.useGetTotalRevenueQuery(
+      {
+        startDate: startOfWeek.toISOString(),
+        endDate: endOfWeek.toISOString(),
+        professionalId: userType === 'PROFESSIONAL' ? id : undefined,
+      },
+      {
+        skip: userType === 'PROFESSIONAL' && !id,
+      },
+    )
+
+  if (isLoading || isRevenueLoading) {
     const skeletonIds = [
       'total',
       'new',
       'finished',
       'customer-count',
-      'service-count',
-      'professional-count',
       'revenue',
     ]
     return (
-      <div className="my-6 flex flex-col gap-6">
-        {skeletonIds.map((id) => (
-          <CardSkeleton key={`skeleton-${id}`} />
-        ))}
+      <div className="my-6">
+        <h2 className="text-2xl font-bold text-primary-100 mb-6">Dashboard</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {skeletonIds.map((id) => (
+            <CardSkeleton key={`skeleton-${id}`} />
+          ))}
+        </div>
       </div>
     )
   }
@@ -74,44 +97,39 @@ const AnalyticsCards = () => {
   }
 
   return (
-    <div className="my-6 flex flex-col gap-6">
-      <Card
-        icon={<CalendarDateRangeIcon />}
-        text="Total de agendamentos"
-        count={analytics?.totalAppointments}
-      />
-      <Card
-        icon={<UserPlusIcon />}
-        text="Novos agendamentos"
-        count={analytics?.newAppointments}
-      />
-      <Card
-        icon={<CheckBadgeIcon />}
-        text="Agendamentos finalizados"
-        count={analytics?.finishedAppointments}
-      />
-      <Card
-        icon={<UserGroupIcon />}
-        text="Total de clientes"
-        count={analytics?.totalCustomers}
-      />
-      <Card
-        icon={<ScissorsIcon />}
-        text="Total de serviços"
-        count={analytics?.numberOfServices}
-      />
-      {userType === 'MANAGER' && (
+    <div className="my-6">
+      <h2 className="text-2xl font-bold text-primary-100 mb-6">Dashboard</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <Card
-          icon={<BriefcaseIcon />}
-          text="Profissionais"
-          count={analytics?.numberOfProfessionals ?? 0}
+          icon={<CalendarDateRangeIcon />}
+          text="Total de agendamentos"
+          count={analytics?.totalAppointments || 0}
         />
-      )}
-      <Card
-        icon={<CurrencyDollarIcon />}
-        text="Faturamento total"
-        count={analytics?.totalRevenue.toFixed(2)}
-      />
+        <Card
+          icon={<UserPlusIcon />}
+          text="Novos agendamentos"
+          count={analytics?.newAppointments || 0}
+        />
+        <Card
+          icon={<CheckBadgeIcon />}
+          text="Agendamentos finalizados"
+          count={analytics?.finishedAppointments || 0}
+        />
+        <Card
+          icon={<UserGroupIcon />}
+          text="Total de clientes"
+          count={analytics?.totalCustomers || 0}
+        />
+        <Card
+          icon={<CurrencyDollarIcon />}
+          text="Faturamento semanal"
+          count={
+            totalRevenueData?.totalRevenue
+              ? `R$ ${totalRevenueData.totalRevenue.toFixed(2)}`
+              : 'R$ 0.00'
+          }
+        />
+      </div>
     </div>
   )
 }
