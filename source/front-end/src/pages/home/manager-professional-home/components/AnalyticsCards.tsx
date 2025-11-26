@@ -10,6 +10,8 @@ import {
 import { analyticsAPI } from '../../../../store/analytics/analytics-api'
 import Card from './Card'
 import { authAPI } from '../../../../store/auth/auth-api'
+import { reportAPI } from '../../../../store/reports/report-api'
+import dayjs from 'dayjs'
 
 const CardSkeleton = () => (
   <div className="text-primary-100 flex items-center gap-2.5 animate-pulse">
@@ -23,6 +25,11 @@ const AnalyticsCards = () => {
   const { data: userData } = authAPI.useFetchUserInfoQuery()
   const userType = userData?.user?.userType
   const id = userData?.user?.id
+
+  // Get current week date range
+  const now = dayjs()
+  const startOfWeek = now.startOf('week')
+  const endOfWeek = now.endOf('week')
 
   const managerQuery = analyticsAPI.useFetchAnalyticsQuery(undefined, {
     skip: userType !== 'MANAGER',
@@ -38,7 +45,20 @@ const AnalyticsCards = () => {
   const activeQuery = userType === 'MANAGER' ? managerQuery : professionalQuery
   const { data: analytics, isLoading, error } = activeQuery
 
-  if (isLoading) {
+  // Fetch total revenue for current week
+  const { data: totalRevenueData, isLoading: isRevenueLoading } =
+    reportAPI.useGetTotalRevenueQuery(
+      {
+        startDate: startOfWeek.toISOString(),
+        endDate: endOfWeek.toISOString(),
+        professionalId: userType === 'PROFESSIONAL' ? id : undefined,
+      },
+      {
+        skip: userType === 'PROFESSIONAL' && !id,
+      },
+    )
+
+  if (isLoading || isRevenueLoading) {
     const skeletonIds = [
       'total',
       'new',
@@ -96,21 +116,13 @@ const AnalyticsCards = () => {
         count={analytics?.totalCustomers}
       />
       <Card
-        icon={<ScissorsIcon />}
-        text="Total de serviços"
-        count={analytics?.numberOfServices}
-      />
-      {userType === 'MANAGER' && (
-        <Card
-          icon={<BriefcaseIcon />}
-          text="Profissionais"
-          count={analytics?.numberOfProfessionals ?? 0}
-        />
-      )}
-      <Card
         icon={<CurrencyDollarIcon />}
         text="Faturamento total"
-        count={analytics?.totalRevenue.toFixed(2)}
+        count={
+          totalRevenueData?.totalRevenue
+            ? `R$ ${totalRevenueData.totalRevenue.toFixed(2)}`
+            : 'R$ 0.00'
+        }
       />
     </div>
   )
