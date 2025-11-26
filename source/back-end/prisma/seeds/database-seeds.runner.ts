@@ -10,6 +10,7 @@ import { notificationTemplateSeeder } from './notification-template-seeder.servi
 import { notificationSeeder } from './notification-seeder.service'
 import { ratingSeeder } from './rating-seeder.service'
 import { salonInfoSeeder } from './salon-info-seeder.service'
+import { paymentRecordSeeder } from './payment-record-seeder.service'
 
 export async function runDatabaseSeeds(): Promise<void> {
   const logger = AppLoggerInstance
@@ -28,6 +29,7 @@ export async function runDatabaseSeeds(): Promise<void> {
     await shiftSeeder.seedShifts()
     await appointmentSeeder.seedAppointments()
     await ratingSeeder.seedRatings()
+    await paymentRecordSeeder.seedPaymentRecords()
     await salonInfoSeeder.seedSalonInfo()
 
     logger.info('Database seeding completed successfully', {
@@ -63,6 +65,7 @@ export async function verifyDatabaseSeeds(): Promise<boolean> {
     await shiftSeeder.verifyShifts()
     await appointmentSeeder.verifyAppointments()
     await ratingSeeder.verifyRatings()
+    await paymentRecordSeeder.verifyPaymentRecords()
     await notificationSeeder.verifyNotifications()
 
     const allValid = permissionsValid && professionalsValid && customersValid && servicesValid && offersValid
