@@ -27,31 +27,31 @@ const WEEK_DAYS: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY
   'SATURDAY'
 ]
 
-const SHIFT_TIMES = [
-  { start: '12:00:00', end: '15:00:00' },
-  { start: '17:00:00', end: '21:00:00' }
-] as const
+const SHIFT_TIME = { start: '12:00:00', end: '21:00:00' } as const
 
 function createShift(
   professionalName: string,
-  weekDay: typeof WEEK_DAYS[number],
-  shiftTime: typeof SHIFT_TIMES[number]
+  weekDay: typeof WEEK_DAYS[number]
 ): ShiftSeedData {
+  const [startHours] = SHIFT_TIME.start.split(':').map(Number)
+  const [endHours] = SHIFT_TIME.end.split(':').map(Number)
+
+  // If end hour is less than start hour, shift crosses midnight (use next day)
+  const endDay = endHours < startHours ? 2 : 1
+
   return {
     weekDay,
     isBusy: false,
-    shiftStart: new Date(`2024-01-01T${shiftTime.start}.000Z`),
-    shiftEnd: new Date(`2024-01-01T${shiftTime.end}.000Z`),
+    shiftStart: new Date(`2024-01-01T${SHIFT_TIME.start}.000Z`),
+    shiftEnd: new Date(`2024-01-0${endDay}T${SHIFT_TIME.end}.000Z`),
     professionalName
   }
 }
 
 export function generateShiftsData(): ShiftSeedData[] {
   return PROFESSIONALS.flatMap(professionalName =>
-    WEEK_DAYS.flatMap(weekDay =>
-      SHIFT_TIMES.map(shiftTime =>
-        createShift(professionalName, weekDay, shiftTime)
-      )
+    WEEK_DAYS.map(weekDay =>
+      createShift(professionalName, weekDay)
     )
   )
 }
