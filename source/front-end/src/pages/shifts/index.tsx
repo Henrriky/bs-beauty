@@ -83,16 +83,15 @@ const Shifts = () => {
           const normalize = (t: string) => (t || '00:00').slice(0, 5)
 
           const convertLocalTimeToUTC = (time: string): string => {
-            const [hours, minutes] = time.split(':').map(Number)
-            const localDateTime = DateTime.local().set({
-              hour: hours,
-              minute: minutes,
-              second: 0,
-              millisecond: 0,
+            const normalized = (time || '00:00').slice(0, 5)
+
+            const localDateTime = DateTime.fromFormat(normalized, 'HH:mm', {
+              zone: DateTime.local().zoneName,
             })
-            const utcDateTime = localDateTime.plus({ hours: 3 })
-            return utcDateTime.toFormat('HH:mm')
+
+            return localDateTime.toUTC().toFormat('HH:mm')
           }
+
 
           const payload = {
             weekDay: backendDay,
@@ -130,20 +129,25 @@ const Shifts = () => {
     if (!m) {
       m = /T(\d{2}):(\d{2})/.exec(time)
     }
-
     if (!m) return ''
 
-    const [_, hours, minutes] = m
-    const utcDateTime = DateTime.local().set({
-      hour: parseInt(hours),
-      minute: parseInt(minutes),
+    const [, hours, minutes] = m
+
+    const utcDateTime = DateTime.fromObject(
+      {
+        hour: parseInt(hours, 10),
+        minute: parseInt(minutes, 10),
       second: 0,
       millisecond: 0,
-    })
-    const localDateTime = utcDateTime.minus({ hours: 3 })
+      },
+      { zone: 'utc' }
+    )
 
-    return localDateTime.toFormat('HH:mm')
+    return utcDateTime
+      .setZone(DateTime.local().zoneName)
+      .toFormat('HH:mm')
   }
+
 
   const validateShifts = (): boolean => {
     let isValid = true

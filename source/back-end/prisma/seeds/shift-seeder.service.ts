@@ -14,7 +14,6 @@ export class ShiftSeederService extends BaseRelationSeederService {
 
     const shifts = generateShiftsData()
     let createdCount = 0
-    let updatedCount = 0
 
     for (const shift of shifts) {
       const professional = await this.prismaClient.professional.findFirst({
@@ -29,18 +28,13 @@ export class ShiftSeederService extends BaseRelationSeederService {
       const existingShift = await this.prismaClient.shift.findFirst({
         where: {
           professionalId: professional.id,
-          weekDay: shift.weekDay,
-          shiftStart: shift.shiftStart,
-          shiftEnd: shift.shiftEnd
+          weekDay: shift.weekDay
         }
       })
 
       if (existingShift) {
-        await this.prismaClient.shift.update({
-          where: { id: existingShift.id },
-          data: { isBusy: shift.isBusy }
-        })
-        updatedCount++
+        this.logWarning(this.entityName, `Shift already exists for professional "${shift.professionalName}" on "${shift.weekDay}"`)
+        continue;
       } else {
         await this.prismaClient.shift.create({
           data: {
@@ -55,7 +49,7 @@ export class ShiftSeederService extends BaseRelationSeederService {
       }
     }
 
-    this.logSeedingComplete(this.entityName, { createdCount, updatedCount })
+    this.logSeedingComplete(this.entityName, { createdCount })
   }
 
   async verifyShifts(): Promise<void> {

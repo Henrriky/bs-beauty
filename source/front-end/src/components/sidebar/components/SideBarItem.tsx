@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router'
 import useAppDispatch from '../../../hooks/use-app-dispatch'
 import { serverLogout } from '../../../store/auth/server-logout'
 import { ReactNode } from 'react'
+import { toast } from 'react-toastify'
 
 interface SideBarItemProps {
   path: string
@@ -19,6 +20,7 @@ function SideBarItem(props: Readonly<SideBarItemProps>) {
   const handleClick = async () => {
     if (props.children === 'Sair') {
       await dispatch(serverLogout())
+      toast.success('Saída realizada com sucesso. Volte sempre!')
       navigate('/', { replace: true })
     } else {
       navigate(`${props.path}`)

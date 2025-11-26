@@ -48,26 +48,28 @@ function SideBar() {
         </section>
 
         {isSideBarOpen && (
-          <div className="transition-all flex flex-row w-full h-full absolute left-0 top-0">
-            <nav className="bg-primary-900 mb-5 h-full w-9/12 z-20">
-              <div className="text-[12px] transition-all pl-4 pr-4 mt-11 flex flex-col gap-5">
-                <button
-                  className="transition-all w-[25px] text-primary-400 hover:w-[30px] hover:text-primary-200 place-self-end mr-5 absolute"
-                  onClick={toggleSideBar}
-                  aria-label="Fechar menu"
-                >
-                  <XMarkIcon />
-                </button>
+          <div className="transition-all flex flex-row w-full h-full fixed left-0 top-0 z-30">
+            <nav className="bg-primary-900 h-full w-9/12 z-20 overflow-y-auto flex flex-col">
+              <div className="text-[12px] transition-all pl-4 pr-4 mt-11 flex flex-col gap-5 flex-shrink-0">
+                <div className="flex justify-between items-start">
+                  <div
+                    className="hover:cursor-pointer w-9"
+                    onClick={() => navigate('/profile')}
+                  >
+                    <ProfilePicture
+                      profilePhotoUrl={currentUserPhotoUrl ?? ''}
+                      size="sm"
+                      displayName={currentUserDisplayName || undefined}
+                    />
+                  </div>
 
-                <div
-                  className="hover:cursor-pointer w-9"
-                  onClick={() => navigate('/profile')}
-                >
-                  <ProfilePicture
-                    profilePhotoUrl={currentUserPhotoUrl ?? ''}
-                    size="sm"
-                    displayName={currentUserDisplayName || undefined}
-                  />
+                  <button
+                    className="transition-all w-[25px] text-primary-400 hover:w-[30px] hover:text-primary-200"
+                    onClick={toggleSideBar}
+                    aria-label="Fechar menu"
+                  >
+                    <XMarkIcon />
+                  </button>
                 </div>
 
                 <h2 className="text-primary-0 mb-9 text-sm capitalize">
@@ -77,9 +79,9 @@ function SideBar() {
                 </h2>
               </div>
 
-              <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
+              <hr className="block h-[1px] border-spacing-0 border-t-secondary-400 flex-shrink-0" />
 
-              <ul className="text-primary-200 mt-8 text-[12px]">
+              <ul className="text-primary-200 mt-8 text-[12px] pb-6">
                 <SideBarItems
                   items={items}
                   currentPagePathName={currentPagePathInfo}
@@ -99,37 +101,41 @@ function SideBar() {
 
       {/* SIDEBAR DESKTOP */}
       <div className="hidden lg:grid lg:grid-cols-[16rem_1fr] lg:min_h-[100dvh]">
-        <aside className="bg-primary-900 border-r border-white/10 sticky top-0 h-[100dvh] w-64 px-4 py-6">
-          <button
-            className="flex items-center gap-3 mb-6 hover:opacity-90 w-full pl-3"
-            onClick={() => navigate('/profile')}
-            aria-label="Abrir perfil"
-          >
-            <ProfilePicture
-              profilePhotoUrl={currentUserPhotoUrl ?? ''}
-              displayName={currentUserDisplayName || undefined}
-              size="sm"
-            />
-            <div className="min-w-0 text-left ml-1">
-              <span
-                className="block truncate text-primary-0 text-sm capitalize"
-                title={currentUserDisplayName || undefined}
-              >
-                {currentUserDisplayName}
-              </span>
-            </div>
-          </button>
+        <aside className="bg-primary-900 border-r border-white/10 sticky top-0 h-[100dvh] w-64 flex flex-col">
+          <div className="px-4 py-6 flex-shrink-0">
+            <button
+              className="flex items-center gap-3 mb-6 hover:opacity-90 w-full pl-3"
+              onClick={() => navigate('/profile')}
+              aria-label="Abrir perfil"
+            >
+              <ProfilePicture
+                profilePhotoUrl={currentUserPhotoUrl ?? ''}
+                displayName={currentUserDisplayName || undefined}
+                size="sm"
+              />
+              <div className="min-w-0 text-left ml-1">
+                <span
+                  className="block truncate text-primary-0 text-sm capitalize"
+                  title={currentUserDisplayName || undefined}
+                >
+                  {currentUserDisplayName}
+                </span>
+              </div>
+            </button>
 
-          <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
+            <hr className="block h-[1px] border-spacing-0 border-t-secondary-400" />
+          </div>
 
-          <ul className="text-primary-200 mt-6 text-[13px] space-y-1">
-            <SideBarItems
-              items={items}
-              currentPagePathName={currentPagePathInfo}
-              toggleSideBar={toggleSideBar}
-              isMobile={false}
-            />
-          </ul>
+          <div className="overflow-y-auto flex-1 px-4">
+            <ul className="text-primary-200 mt-6 text-[13px] space-y-1 pb-6">
+              <SideBarItems
+                items={items}
+                currentPagePathName={currentPagePathInfo}
+                toggleSideBar={toggleSideBar}
+                isMobile={false}
+              />
+            </ul>
+          </div>
         </aside>
 
         <main className="px-8 py-6">
