@@ -334,6 +334,7 @@ class AnalyticsController {
 
       const analyticsUseCase = makeAnalyticsUseCaseFactory()
       const cancelationRate = await analyticsUseCase.executeGetAppointmentCancelationRateByProfessional(user, parsedStartDate, parsedEndDate, data.professionalId, data.serviceIds)
+      
       res.json(cancelationRate)
     } catch (error) {
       next(error)
