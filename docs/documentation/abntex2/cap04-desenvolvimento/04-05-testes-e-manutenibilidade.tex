@@ -127,6 +127,38 @@ A pontuação A confirma que a aplicação segue rigorosamente as boas práticas
 \end{figure}
 \FloatBarrier
 
+\paragraph{Teste de Segurança SSL/TLS (\textit{SSL Test})}
+Além da validação dos cabeçalhos de segurança HTTP, a aplicação foi submetida a testes de configuração SSL/TLS utilizando a ferramenta \textbf{\textit{SSL Labs}}~\cite{ssllabs-2025}, desenvolvida pela Qualys. 
+Esta ferramenta realiza uma análise abrangente da camada de transporte criptografada, avaliando a robustez da implementação HTTPS e identificando possíveis vulnerabilidades na configuração do servidor.
+
+O teste SSL/TLS verifica aspectos críticos da segurança de transporte, incluindo:
+
+\begin{itemize}
+	\item \textbf{Versões de protocolo:} Validação das versões TLS suportadas (TLS 1.2, TLS 1.3) e detecção de protocolos obsoletos e inseguros (SSL 2.0, SSL 3.0, TLS 1.0, TLS 1.1).
+	\item \textbf{\textit{Cipher Suites}:} Análise dos conjuntos de cifras habilitados, priorizando algoritmos modernos e seguros (\textit{ECDHE}, \textit{AES-GCM}) e identificando cifras fracas ou depreciadas.
+	\item \textbf{Certificados digitais:} Verificação da validade, cadeia de confiança, algoritmos de assinatura e conformidade com padrões da indústria.
+	\item \textbf{Vulnerabilidades conhecidas:} Detecção de falhas como \textit{POODLE}, \textit{BEAST}, \textit{Heartbleed}, \textit{CRIME}, \textit{BREACH} e outras explorações de protocolo.
+	\item \textbf{Configurações avançadas:} Avaliação de recursos como \textit{Perfect Forward Secrecy} (PFS), \textit{OCSP Stapling}, e resistência a ataques de \textit{downgrade}.
+\end{itemize}
+
+A realização periódica desses testes é fundamental para assegurar que a comunicação entre cliente e servidor seja realizada de forma segura, protegendo dados sensíveis contra interceptação, modificação ou vazamento. 
+Além disso, a conformidade com padrões modernos de criptografia contribui para o cumprimento de regulamentações de proteção de dados, como a Lei Geral de Proteção de Dados (LGPD) no Brasil.
+
+A Figura~\ref{fig:ssl-test} apresenta o resultado da avaliação SSL/TLS realizada pela ferramenta SSL Labs, demonstrando a configuração de segurança implementada na aplicação:
+
+\begin{figure}[htb]
+	\centering
+	\caption{Resultado do Teste de Segurança SSL/TLS}
+	\includegraphics[width=\textwidth]{cap04-desenvolvimento/images/4-5-ssl-test.jpg}
+	\label{fig:ssl-test}
+	\fonte{Produzido pelos autores}
+\end{figure}
+
+A aplicação obteve classificação \textbf{A+}, a pontuação máxima possível na avaliação do SSL Labs. 
+Essa nota representa o mais alto nível de conformidade com as melhores práticas de segurança SSL/TLS, 
+indicando que o servidor está configurado com protocolos modernos, cifras robustas, certificados válidos e proteções contra vulnerabilidades conhecidas.
+\FloatBarrier
+
 \subsection{Testes automatizados}
 
 Os testes automatizados deste projeto estão integrados ao fluxo de integração
