@@ -24,7 +24,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/luxon": "^3.7.1",
     "async-mutex": "^0.5.0",
-    "axios": "^1.7.7",
+    "axios": "^1.13.5",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.18",
